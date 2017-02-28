@@ -67,7 +67,6 @@ class FtpService extends MX_Controller {
 	}
 
 	public function analysis(){
-		$message = '';
         $ftp_config['hostname'] = $this->config->item('hostname');
         $ftp_config['username'] = $this->config->item('username');
         $ftp_config['password'] = $this->config->item('password');
@@ -82,57 +81,63 @@ class FtpService extends MX_Controller {
 			$local_file = str_ireplace($this->config->item('pending_dir'), $this->config->item('local_upload_dir'), $remote_file);
 			$this->ftp->download($remote_file, $local_file, 'ascii');
 			//Extract data from local file
-			$status = $this->extract_data($local_file);
+			$response = $this->extract_data($local_file);
 			$this->benchmark->mark('stop');
 			$finish_time = gmdate("H:i:s", $this->benchmark->elapsed_time('start', 'stop'));
-			if($status){
+			if($response['status']){
 				//Move file to completed
 				$new_remote_file = str_ireplace($this->config->item('pending_dir'), $this->config->item('completed_dir'), $remote_file);
 				if($this->ftp->move($remote_file, $new_remote_file)){
-					$message .= 'Success: '.basename($local_file).' was analyzed in ['.$finish_time.'] and moved to COMPLETED<br/>';
+					$response['message'] =  'Success: '.basename($local_file).' was analyzed in ['.$finish_time.'] and moved to COMPLETED<br/>';
 				}else{
-					$message .= 'Success: '.basename($local_file).' was analyzed in ['.$finish_time.'] but still in PENDING<br/>';
+					$response['message'] =  'Success: '.basename($local_file).' was analyzed in ['.$finish_time.'] but still in PENDING<br/>';
 				}
 			}else{
-				$message .= 'Error: '.basename($local_file).' File failed in ['.$finish_time.']<br/>';
+				$response['message'] =  'Error: '.basename($local_file).' File failed in ['.$finish_time.']<br/>';
 			}
 			//Delete file from local server
 			@unlink($local_file);
+			//Show response
+			echo "<pre>";
+			echo json_encode($response, JSON_PRETTY_PRINT);
+			echo "</pre>";
 		}
 
 		$this->ftp->close();
-		echo $message;
 	}
 
 	public function extract_data($file_name)
 	{	
-		$status = FALSE;
+		$status = array('status' => FALSE, 'sheets' => array());
 		$status_data = array();
 		$inputFileType = PHPExcel_IOFactory::identify($file_name);
 		$objReader = PHPExcel_IOFactory::createReader($inputFileType);
 		$objPHPExcel = $objReader -> load($file_name);
 		$target_sheets = $this->config->item('target_sheets');
+		$all_sheets = $objReader->listWorksheetNames($file_name);
+		$sheets = array_intersect($all_sheets, $target_sheets);
 		
-		foreach ($target_sheets as $sheet_name) {
+		foreach ($sheets as $sheet_name) {
 			$arr = $objPHPExcel->getSheetByName($sheet_name)->toArray(null, true, true, true);
 			$highestColumm = $objPHPExcel->getSheetByName($sheet_name)->getHighestColumn();
 			$highestRow = $objPHPExcel->getSheetByName($sheet_name)->getHighestRow();
 			if($sheet_name == 'Ordering Points'){
-				$status_data[] = $this->get_ordering_points($arr, $highestColumm, $highestRow);
+				$status_data[$sheet_name] = $this->get_ordering_points($arr, $highestColumm, $highestRow); 
 			}else if($sheet_name == 'Current patients by ART site'){
-				$status_data[] = $this->get_current_art_patients($arr, $highestColumm, $highestRow);
+				$status_data[$sheet_name] = $this->get_current_art_patients($arr, $highestColumm, $highestRow);
 			}else if($sheet_name == 'Pipeline Commodity Consumption'){
-				$status_data[] = $this->get_pipeline_consumption($arr, $highestColumm, $highestRow);	
+				$status_data[$sheet_name] = $this->get_pipeline_consumption($arr, $highestColumm, $highestRow);	
 			}else if($sheet_name == 'Facility Cons by ARV Medicine'){
-				$status_data[] = $this->get_facility_consumption($arr, $highestColumm, $highestRow);
+				$status_data[$sheet_name] = $this->get_facility_consumption($arr, $highestColumm, $highestRow);
 			}else if($sheet_name == 'Facility SOH by ARV Medicine'){
-				$status_data[] = $this->get_facility_soh($arr, $highestColumm, $highestRow);	
+				$status_data[$sheet_name] = $this->get_facility_soh($arr, $highestColumm, $highestRow);	
 			}
 		}
 
-		if(!in_array(FALSE, $status_data)){
-			$status = TRUE;
+		if(!in_array(FALSE, array_values($status_data))){
+			$status['status'] = TRUE;
 		}
+		$status['sheets'] = $status_data;
 		return $status;
 	}
 
@@ -158,6 +163,7 @@ class FtpService extends MX_Controller {
 				}
 			}
 		}
+		return $status;
 	}
 
 	public function get_current_art_patients($arr, $highestColumm, $highestRow){
