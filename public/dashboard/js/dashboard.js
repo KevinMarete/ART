@@ -1,154 +1,39 @@
 var chartURL = 'dashboard/load_chart'
 var filterURL = 'dashboard/get_filter/'
-var customfilterURL = 'dashboard/get_custom_filter/'
-var tableURL = 'dashboard/get_table_data/'
-var defaultTab = 'products'
-var defaultMetric = 'quantity'
-var defaultOrder = 'desc'
-var defaultLimit = '5'
-var defaultFilter = []
-var filters = [] //Similar to charts
-filters['products'] = ['atc_code', 'route', 'dosage_form', 'country', 'manufacturer', 'importer']
-filters['premises'] = ['county', 'cadre']
-var customFilters = [] //Custom filters
-customFilters['products'] = ['data_month', 'data_year', 'metric']
-customFilters['premises'] = ['data_year', 'metric']
+var filterDIVClass = '.auto_filter'
+var tab = 'commodities'
+var metric = 'total'
+var order = 'desc'
+var limit = '5'
+var exemptedTabs = ['upload']
+var filters = []
+var charts = []
+charts['commodities'] = ['pipeline_consumption', 'facility_consumption', 'facility_soh']
+charts['patients'] = ['adult_art', 'paed_art', 'oi', 'patient_regimen_category', 'patient_site']
 
 $(function() {
-    /*Load Chart Heading*/
-    LoadHeading('.heading', defaultOrder, defaultLimit)
-    /*Load Filters*/
-    LoadFilters(defaultTab, filters[defaultTab])
-    LoadSelectBox('.order', JSON.stringify([{ id: 'asc', text: 'Bottom' }]), 'classic')
-    LoadSelectBox('.limit', JSON.stringify([{ id: '10', text: '10' }]), 'classic')
     /*Load Charts*/
-    $.each(filters[defaultTab], function(key, chartName) {
+    $.each(charts[tab], function(key, chartName) {
         chartID = '#'+chartName+'_chart'
-        tableID = '#'+chartName+'_table'
-        LoadChart(chartID, chartURL, chartName, defaultMetric, defaultFilter, defaultOrder, defaultLimit)
-        LoadTable(tableID, tableURL, chartName, defaultMetric, defaultFilter)
+        LoadChart(chartID, chartURL, chartName, metric, filters, order, limit)
     });
-    /*ChartFilter Change Event*/
-    $("#filter_btn").on("click", ChartFilterHandler);
+    /*Load Chart Heading*/
+    LoadHeading('.heading', order, limit)
     /*Tab Change Event*/
     $("#main_tabs a").on("click", TabFilterHandler);
+    /*Load Filters on Filter Modal Show Event*/
+    $('#filterModal').on('show.bs.modal', LoadFilters);
+    /*ChartFilter Change Event*/
+    $("#filter_btn").on("click", ChartFilterHandler);
     /*Clear Filter Click Event*/
-    $("#clear_filter_btn").on("click", ClearFilterHandler)
+    $(".clear_filter_btn").on("click", ClearFilterHandler)
 });
 
-
-function ClearFilterHandler(){
-    //Clear all filter elements
-    $(".filter").val(null).trigger("change");
-    //Clear DOM filters
-    $('.metric').val(defaultMetric).trigger("change");
-    $('.order').val(defaultOrder).trigger("change");
-    $('.limit').val(defaultLimit).trigger("change");
-    //CLick filter_btn
-    $("#filter_btn").trigger('click');
-}
-
-function TabFilterHandler(e){
-    var filtername = $(e.target).attr('href')
-    defaultTab = filtername.replace('#','')
-    /*Load Filters*/
-    LoadFilters(defaultTab, filters[defaultTab])
-    /*Load Charts*/
-    $.each(filters[defaultTab], function(key, chartName) {
-        chartID = '#'+chartName+'_chart'
-        tableID = '#'+chartName+'_table'
-        LoadChart(chartID, chartURL, chartName, defaultMetric, defaultFilter, defaultOrder, defaultLimit)
-        LoadTable(tableID, tableURL, chartName, defaultMetric, defaultFilter)
-    });
-}
-
-function LoadFilters(tabname, chartFilters){
-    var filterhtml = '';
-    //Clear filterDIV
-    $('.auto_filter').html(filterhtml);
-    //Generate filter html content
-    $.each(chartFilters, function(i, filter){
-        //Chart filters
-        var filtername = filter.replace('_',' ').toUpperCase();
-        filterhtml += '<div class="form-group">'
-        filterhtml += '<label for="'+filter+'" class="col-sm-2 control-label">'+filtername+'</label>'
-        filterhtml += '<div class="col-sm-10">'
-        filterhtml += ' <select class="form-control filter '+filter+'" multiple="multiple" id="'+filter+'"></select>'
-        filterhtml += '</div>'
-        filterhtml += '</div> ';
-        //Load data
-        $.get(filterURL+tabname+'/'+filter, function(data) {
-            //Append data to Select2
-            LoadSelectBox('.'+filter, data, 'classic')
-        });
-    }); 
-    //Generate Custom filter html content
-    $.each(customFilters[tabname], function(i, filter){
-        //Price filter fix for premises tab
-        if(filter == 'metric'){
-            if(tabname == 'premises'){
-                $(".metric option[value='price']").remove();
-            }else{
-                LoadSelectBox('.metric', JSON.stringify([{ id: 'price', text: 'Price' }]), 'classic')
-            }
-        }else{
-            //Chart filters
-            var filtername = filter.replace('data_',' ').toUpperCase();
-            filterhtml += '<div class="form-group">'
-            filterhtml += '<label for="'+filter+'" class="col-sm-2 control-label">'+filtername+'</label>'
-            filterhtml += '<div class="col-sm-10">'
-            filterhtml += ' <select class="form-control filter '+filter+'" multiple="multiple" id="'+filter+'"></select>'
-            filterhtml += '</div>'
-            filterhtml += '</div> ';
-            //Load data
-            $.get(customfilterURL+tabname+'/'+filter, function(data) {
-                //Append data to Select2
-                LoadSelectBox('.'+filter, data, 'classic')
-            });
-        }
-    }); 
-    //Append filters to DOM
-    $('.auto_filter').html(filterhtml);
-}
-
-function LoadSelectBox(divClass, data, theme){
-    $(divClass).select2({
-        theme: theme,
-        data: jQuery.parseJSON(data),
-        width: '450px',
-        tags: true
-    })
-}
-    
-function LoadChart(divID, chartURL, chartName, metric, selectedfilters, order, limit){
+function LoadChart(divID, chartURL, chartName, metric, selectedcharts, order, limit){
     /*Load Spinner*/
     LoadSpinner(divID)
     /*Load Chart*/
-    $(divID).load(chartURL, {'name':chartName, 'metric': metric, 'selectedfilters': selectedfilters, 'order':order, 'limit':limit})
-}
-
-function LoadTable(tableID, tableURL, tableName, metric, selectedfilters){
-    /*Load Spinner on table*/
-    LoadSpinner(tableID)
-    //Load Data
-    $.ajax({
-        'method': 'POST',
-        'url': tableURL,
-        'data': {'name':tableName, 'metric': metric, 'selectedfilters': selectedfilters},
-        'success':function(data){
-            //Clear table spinner
-            $(tableID).empty('')
-            //Load data to dataTable
-            $(tableID).DataTable({
-                "destroy": true,
-                "data": $.parseJSON(data),
-                columns: [
-                    {title: tableName.toUpperCase()},
-                    {title: metric.toUpperCase()}
-                ]
-            });
-        }
-    });
+    $(divID).load(chartURL, {'name':chartName, 'metric': metric, 'selectedcharts': selectedcharts, 'order':order, 'limit':limit})
 }
 
 function LoadSpinner(divID){
@@ -158,35 +43,6 @@ function LoadSpinner(divID){
     $(divID).append(spinner.el)
 }
 
-function ChartFilterHandler(){
-    //Main filters
-    var metric = $('.metric').val()
-    var order = $('.order').val()
-    var limit = $('.limit').val()
-    //Dynamic Filters
-    var selectedfilters = {}
-    //Combine and check ChartFilters and CustomFilters
-    $.each(filters[defaultTab].concat(customFilters[defaultTab]), function(i, v){
-        if(v != 'metric'){
-            var filterata = $('.'+v).val()
-            if(filterata != null){
-                selectedfilters[v] = filterata
-            }
-        }
-    });
-    //Load Chart Heading
-    LoadHeading('.heading', order, limit)
-    //Load Charts
-    $.each(filters[defaultTab], function(key, chartName) {
-        chartID = '#'+chartName+'_chart'
-        tableID = '#'+chartName+'_table'
-        LoadChart(chartID, chartURL, chartName, metric, selectedfilters, order, limit)
-        LoadTable(tableID, tableURL, chartName, metric, selectedfilters)
-    });
-    //Close modal
-    $('#filterModal').modal('hide');
-}
-
 function LoadHeading(spanClass, order, limit){
     var titles = new Array();
     titles['desc'] = 'Top'
@@ -194,3 +50,89 @@ function LoadHeading(spanClass, order, limit){
     message = titles[order]+' '+limit
     $(spanClass).text(message)
 }
+
+function TabFilterHandler(e){
+    var filtername = $(e.target).attr('href')
+    tab = filtername.replace('#','')
+    if($.inArray(tab, exemptedTabs) == -1){ 
+        /*Load Charts*/
+        $.each(charts[tab], function(key, chartName) {
+            chartID = '#'+chartName+'_chart'
+            LoadChart(chartID, chartURL, chartName, metric, filters, order, limit)
+        });
+    }
+}
+
+function LoadFilters(e){
+    var chartName = e.relatedTarget.id.replace('_filter','')
+    /*Load Spinner*/
+    LoadSpinner(filterDIVClass)
+    /*Append chart filter name to modal*/
+    
+    var filter_text = chartName.replace(/_/g,' ').toUpperCase()
+    $('.filter_text').html(filter_text)
+    //Get filters and content
+    $.getJSON(filterURL+chartName, function(filters) {
+        //Clear Spinner
+        $(filterDIVClass).html('');
+        $.each(filters, function(filter, filter_values){
+            var filterhtml = '';
+            var filtername = filter.replace(/DATA|_/gi,' ').toUpperCase();
+            filterhtml += '<div class="form-group">'
+            filterhtml += '<label for="'+filter+'" class="col-sm-2 control-label">'+filtername+'</label>'
+            filterhtml += '<div class="col-sm-8">'
+            filterhtml += '<select class="form-control filter '+filter+'" multiple="multiple" id="'+filter+'">'
+            filterhtml += '</select></div></div>';
+            //Append filter to DOM
+            $('.auto_filter').append(filterhtml);
+            LoadSelectBox('.'+filter, filter_values, 'classic')
+        });
+    });
+}
+
+function LoadSelectBox(divClass, data, theme){
+    $(divClass).select2({
+        theme: theme,
+        data: data,
+        tags: true
+    })
+}
+
+function ChartFilterHandler(){
+    //Main charts
+    var metric = $('.metric').val()
+    var order = $('.order').val()
+    var limit = $('.limit').val()
+    //Dynamic charts
+    var selectedcharts = {}
+    //Combine and check Chartcharts and Customcharts
+    $.each(charts[tab].concat(customcharts[tab]), function(i, v){
+        if(v != 'metric'){
+            var filterata = $('.'+v).val()
+            if(filterata != null){
+                selectedcharts[v] = filterata
+            }
+        }
+    });
+    //Load Chart Heading
+    LoadHeading('.heading', order, limit)
+    //Load Charts
+    $.each(charts[tab], function(key, chartName) {
+        chartID = '#'+chartName+'_chart'
+        LoadChart(chartID, chartURL, chartName, metric, selectedcharts, order, limit)
+    });
+    //Close modal
+    $('#filterModal').modal('hide');
+}
+
+function ClearFilterHandler(){
+    //Clear all filter elements
+    $(".filter").val(null).trigger("change");
+    //Clear DOM charts
+    $('.metric').val(metric).trigger("change");
+    $('.order').val(order).trigger("change");
+    $('.limit').val(limit).trigger("change");
+    //CLick filter_btn
+    $(".filter_btn").trigger('click');
+}
+

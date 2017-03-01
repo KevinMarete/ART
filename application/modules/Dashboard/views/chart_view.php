@@ -25,7 +25,7 @@
             text: '<?php echo $chart_title; ?>'
         },
         subtitle: {
-            text: 'Source: www.pharmacyboardkenya.org'
+            text: '<?php echo $chart_source; ?>'
         },
         xAxis: {
             categories: <?php echo $chart_columns; ?>,
@@ -52,12 +52,13 @@
                 allowPointSelect: true,
                 cursor: 'pointer',
                 dataLabels: {
-                    enabled: true,
+                    enabled: false,
                     format: '<b>{point.name}</b>: {point.percentage:.1f} %',
                     style: {
                         color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                     }
-                }
+                },
+                showInLegend: true
             },
             series: {
                 cursor: 'pointer',

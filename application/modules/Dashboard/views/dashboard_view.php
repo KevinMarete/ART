@@ -31,343 +31,244 @@
 			    <a class="navbar-brand" href="#">
 			      	<span class="glyphicon glyphicon-dashboard"></span>
 			    </a>
-		    	<a class="navbar-brand" href="#">ART Dashboard</a>
+		    	<a class="navbar-brand" href="#">ART DASHBOARD</a>
 			</div> 
 			<nav class="collapse navbar-collapse" id="filter-navbar"> 
-				<!--filter_frm-->
-				<div class="nav navbar-nav navbar-form navbar-right">
-					<!--clear_filter_btn-->
-					<button type="button" class="btn btn-danger btn-md" id="clear_filter_btn">
-						<span class="glyphicon glyphicon-refresh"></span> Reset</button>
-					</button>
-				  	<!--filter_modal-->
-					<button type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#filterModal">
-						<span class="glyphicon glyphicon-filter"></span> Filter</button>
-					</button>
-				</div>
-	            
+				<!--Tab Links-->
+				<ul class="nav navbar-nav navbar-left" id="main_tabs">
+		          <li class="active"><a href="#commodities" aria-controls="commodities" role="tab" data-toggle="tab">DRUGS</a></li>
+		          <li><a href="#patients" aria-controls="patients" role="tab" data-toggle="tab">REGIMENS</a></li>
+		          <li><a href="#upload" aria-controls="upload" role="tab" data-toggle="tab">UPLOADS</a></li>
+		        </ul>
 			</nav> 
 		</div>
 	</div>
-	<!--Tab headings-->
-	<ul class="nav nav-tabs" role="tablist" id="main_tabs">
-		<li role="presentation" class="active"><a href="#products" aria-controls="products" role="tab" data-toggle="tab">Products</a></li>
-		<li role="presentation"><a href="#premises" aria-controls="premises" role="tab" data-toggle="tab">Premises</a></li>
-	</ul>
 	 <!-- Tab panes -->
 	<div class="tab-content">
-		<div role="tabpanel" class="tab-pane active" id="products">
+		<div role="tabpanel" class="tab-pane active" id="commodities">
 			<div class="container-fluid">
 				<!--toprow-->
 				<div class="row">
-					<!--atc_code_chart-->
-					<div class="col-sm-4">
-						<div class="chart-wrapper">
+				  	<div class="col-sm-12">
+				  		<!--pipeline_consumption_chart-->
+				    	<div class="chart-wrapper">
 							<div class="chart-title">
-								ATC Code(USP)
-							</div>
-							<div class="chart-stage">
-								<ul class="nav nav-tabs navbar-right" role="tablist" id="atc_code_tabs">
-								    <li role="presentation" class="active">
-								    	<a href="#summary_atc_code" aria-controls="summary_atc_code" role="tab" data-toggle="tab">Summary</a>
-								    </li>
-								    <li role="presentation">
-								    	<a href="#list_atc_code" aria-controls="list_atc_code" role="tab" data-toggle="tab">Data List</a>
-								    </li>
-								</ul>
-								<div class="tab-content">
-									<div role="tabpanel" class="tab-pane active" id="summary_atc_code">
-										<div class="container-fluid">
-											<div class="row">
-												<div id="atc_code_chart"></div>
-											</div>
-										</div>
-									</div>
-									<div role="tabpanel" class="tab-pane" id="list_atc_code">
-										<div class="container-fluid">
-											<div class="row">
-												<table id="atc_code_table" class="display" cellspacing="0" width="100%"></table>
-											</div>
-										</div>
-									</div>
+								Total Commodity Consumption at Pipeline
+								<!--filter_frm-->
+								<div class="nav navbar-right">
+									<!--clear_filter_btn-->
+									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="pipeline_consumption_clear">
+										<span class="glyphicon glyphicon-refresh"></span>
+									</button>
+								  	<!--filter_modal-->
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="pipeline_consumption_filter">
+										<span class="glyphicon glyphicon-filter"></span>
+									</button>
 								</div>
 							</div>
-							<div class="chart-notes">
-								<span class="heading"></span> ATC Codes
-							</div>
-						</div>
-					</div>
-					<!--route_chart-->
-					<div class="col-sm-4">
-						<div class="chart-wrapper">
-							<div class="chart-title">
-								Route of Admin
-							</div>
 							<div class="chart-stage">
-								<ul class="nav nav-tabs navbar-right" role="tablist" id="route_tabs">
-								    <li role="presentation" class="active">
-								    	<a href="#summary_route" aria-controls="summary_route" role="tab" data-toggle="tab">Summary</a>
-								    </li>
-								    <li role="presentation">
-								    	<a href="#list_route" aria-controls="list_route" role="tab" data-toggle="tab">Data List</a>
-								    </li>
-								</ul>
-								<div class="tab-content">
-									<div role="tabpanel" class="tab-pane active" id="summary_route">
-										<div class="container-fluid">
-											<div class="row">
-												<div id="route_chart"></div>
-											</div>
-										</div>
-									</div>
-									<div role="tabpanel" class="tab-pane" id="list_route">
-										<div class="container-fluid">
-											<div class="row">
-												<table id="route_table" class="display" cellspacing="0" width="100%"></table>
-											</div>
-										</div>
-									</div>
-								</div>
+								<div id="pipeline_consumption_chart"></div>
 							</div>
 							<div class="chart-notes">
-								<span class="heading"></span> Routes of Admin
+								<span class="heading"></span> Pipeline Consumption
 							</div>
 						</div>
-					</div>
-					<!--dosage_chart-->
-					<div class="col-sm-4">
-						<div class="chart-wrapper">
-							<div class="chart-title">
-								Dosage Form
-							</div>
-							<div class="chart-stage">
-								<ul class="nav nav-tabs navbar-right" role="tablist" id="dosage_form_tabs">
-								    <li role="presentation" class="active">
-								    	<a href="#summary_dosage_form" aria-controls="summary_dosage_form" role="tab" data-toggle="tab">Summary</a>
-								    </li>
-								    <li role="presentation">
-								    	<a href="#list_dosage_form" aria-controls="list_dosage_form" role="tab" data-toggle="tab">Data List</a>
-								    </li>
-								</ul>
-								<div class="tab-content">
-									<div role="tabpanel" class="tab-pane active" id="summary_dosage_form">
-										<div class="container-fluid">
-											<div class="row">
-												<div id="dosage_form_chart"></div>
-											</div>
-										</div>
-									</div>
-									<div role="tabpanel" class="tab-pane" id="list_dosage_form">
-										<div class="container-fluid">
-											<div class="row">
-												<table id="dosage_form_table" class="display" cellspacing="0" width="100%"></table>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="chart-notes">
-								<span class="heading"></span> Dosage Form
-							</div>
-						</div>
-					</div>
+				 	</div>
 				</div>
 				<!--bottomrow-->
 				<div class="row">
-					<!--country_chart-->
-					<div class="col-sm-4">
-						<div class="chart-wrapper">
+					<div class="col-sm-6">
+				  		<!--facility_consumption_chart-->
+				    	<div class="chart-wrapper">
 							<div class="chart-title">
-								Country of Origin
-							</div>
-							<div class="chart-stage">
-								<ul class="nav nav-tabs navbar-right" role="tablist" id="country_tabs">
-								    <li role="presentation" class="active">
-								    	<a href="#summary_country" aria-controls="summary_country" role="tab" data-toggle="tab">Summary</a>
-								    </li>
-								    <li role="presentation">
-								    	<a href="#list_country" aria-controls="list_country" role="tab" data-toggle="tab">Data List</a>
-								    </li>
-								</ul>
-								<div class="tab-content">
-									<div role="tabpanel" class="tab-pane active" id="summary_country">
-										<div class="container-fluid">
-											<div class="row">
-												<div id="country_chart"></div>
-											</div>
-										</div>
-									</div>
-									<div role="tabpanel" class="tab-pane" id="list_country">
-										<div class="container-fluid">
-											<div class="row">
-												<table id="country_table" class="display" cellspacing="0" width="100%"></table>
-											</div>
-										</div>
-									</div>
+								Total Commodity Consumption at Facility
+								<!--filter_frm-->
+								<div class="nav navbar-right">
+									<!--clear_filter_btn-->
+									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="facility_consumption_clear">
+										<span class="glyphicon glyphicon-refresh"></span>
+									</button>
+								  	<!--filter_modal-->
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="facility_consumption_filter">
+										<span class="glyphicon glyphicon-filter"></span>
+									</button>
 								</div>
 							</div>
+							<div class="chart-stage">
+								<div id="facility_consumption_chart"></div>
+							</div>
 							<div class="chart-notes">
-								<span class="heading"></span> Country of Origin
+								<span class="heading"></span> Facility Consumption
 							</div>
 						</div>
-					</div>
-					<!--manufacturer_chart-->
-					<div class="col-sm-4">
-						<div class="chart-wrapper">
+				 	</div>
+				 	<div class="col-sm-6">
+				  		<!--facility_soh_chart-->
+				    	<div class="chart-wrapper">
 							<div class="chart-title">
-								Manufacturer
-							</div>
-							<div class="chart-stage">
-								<ul class="nav nav-tabs navbar-right" role="tablist" id="manufacturer_tabs">
-								    <li role="presentation" class="active">
-								    	<a href="#summary_manufacturer" aria-controls="summary_manufacturer" role="tab" data-toggle="tab">Summary</a>
-								    </li>
-								    <li role="presentation">
-								    	<a href="#list_manufacturer" aria-controls="list_manufacturer" role="tab" data-toggle="tab">Data List</a>
-								    </li>
-								</ul>
-								<div class="tab-content">
-									<div role="tabpanel" class="tab-pane active" id="summary_manufacturer">
-										<div class="container-fluid">
-											<div class="row">
-												<div id="manufacturer_chart"></div>
-											</div>
-										</div>
-									</div>
-									<div role="tabpanel" class="tab-pane" id="list_manufacturer">
-										<div class="container-fluid">
-											<div class="row">
-												<table id="manufacturer_table" class="display" cellspacing="0" width="100%"></table>
-											</div>
-										</div>
-									</div>
+								Total Commodity Stock on Hand(SOH) at Facility
+								<!--filter_frm-->
+								<div class="nav navbar-right">
+									<!--clear_filter_btn-->
+									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="facility_soh_clear">
+										<span class="glyphicon glyphicon-refresh"></span>
+									</button>
+								  	<!--filter_modal-->
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="facility_soh_filter">
+										<span class="glyphicon glyphicon-filter"></span>
+									</button>
 								</div>
 							</div>
-							<div class="chart-notes">
-								<span class="heading"></span> Manufacturers
-							</div>
-						</div>
-					</div>
-					<!--importer_chart-->
-					<div class="col-sm-4">
-						<div class="chart-wrapper">
-							<div class="chart-title">
-								Importer
-							</div>
 							<div class="chart-stage">
-								<ul class="nav nav-tabs navbar-right" role="tablist" id="importer_tabs">
-								    <li role="presentation" class="active">
-								    	<a href="#summary_importer" aria-controls="summary_importer" role="tab" data-toggle="tab">Summary</a>
-								    </li>
-								    <li role="presentation">
-								    	<a href="#list_importer" aria-controls="list_importer" role="tab" data-toggle="tab">Data List</a>
-								    </li>
-								</ul>
-								<div class="tab-content">
-									<div role="tabpanel" class="tab-pane active" id="summary_importer">
-										<div class="container-fluid">
-											<div class="row">
-												<div id="importer_chart"></div>
-											</div>
-										</div>
-									</div>
-									<div role="tabpanel" class="tab-pane" id="list_importer">
-										<div class="container-fluid">
-											<div class="row">
-												<table id="importer_table" class="display" cellspacing="0" width="100%"></table>
-											</div>
-										</div>
-									</div>
-								</div>
+								<div id="facility_soh_chart"></div>
 							</div>
 							<div class="chart-notes">
-								<span class="heading"></span> Importers
+								<span class="heading"></span> Facility SOH
 							</div>
 						</div>
-					</div>
+				 	</div>
 				</div>
 			</div>
 		</div>
-		<div role="tabpanel" class="tab-pane" id="premises">
+		<div role="tabpanel" class="tab-pane" id="patients">
 			<div class="container-fluid">
 				<!--toprow-->
-				<div class="row">
-					<!--county_chart-->
-					<div class="col-sm-6">
+    			<div class="row">
+    				<!--top_left-->
+					<div class="col-sm-4">
+						<!--adult_art_chart-->
 						<div class="chart-wrapper">
 							<div class="chart-title">
-								County
-							</div>
-							<div class="chart-stage">
-								<ul class="nav nav-tabs navbar-right" role="tablist" id="county_tabs">
-								    <li role="presentation" class="active">
-								    	<a href="#summary_county" aria-controls="summary_county" role="tab" data-toggle="tab">Summary</a>
-								    </li>
-								    <li role="presentation">
-								    	<a href="#list_county" aria-controls="list_county" role="tab" data-toggle="tab">Data List</a>
-								    </li>
-								</ul>
-								<div class="tab-content">
-									<div role="tabpanel" class="tab-pane active" id="summary_county">
-										<div class="container-fluid">
-											<div class="row">
-												<div id="county_chart"></div>
-											</div>
-										</div>
-									</div>
-									<div role="tabpanel" class="tab-pane" id="list_county">
-										<div class="container-fluid">
-											<div class="row">
-												<table id="county_table" class="display" cellspacing="0" width="100%"></table>
-											</div>
-										</div>
-									</div>
+								Total Adult ART Patients, By Regimen
+								<!--filter_frm-->
+								<div class="nav navbar-right">
+									<!--clear_filter_btn-->
+									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="adult_art_clear">
+										<span class="glyphicon glyphicon-refresh"></span>
+									</button>
+								  	<!--filter_modal-->
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="adult_art_filter">
+										<span class="glyphicon glyphicon-filter"></span>
+									</button>
 								</div>
 							</div>
+							<div class="chart-stage">
+								<div id="adult_art_chart"></div>
+							</div>
 							<div class="chart-notes">
-								<span class="heading"></span> Counties
+								<span class="heading"></span> Adult ART Patients
 							</div>
 						</div>
 					</div>
-					<!--cadre_chart-->
-					<div class="col-sm-6">
+					<div class="col-sm-4">
+       					<!--paed_art_chart-->
+						<div class="chart-wrapper">
+						  	<div class="chart-title">
+						    	Total Paediatric ART Patients, By Regimen
+						    	<!--filter_frm-->
+								<div class="nav navbar-right">
+									<!--clear_filter_btn-->
+									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="paed_art_clear">
+										<span class="glyphicon glyphicon-refresh"></span>
+									</button>
+								  	<!--filter_modal-->
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="paed_art_filter">
+										<span class="glyphicon glyphicon-filter"></span>
+									</button>
+								</div>
+						  	</div>
+						  	<div class="chart-stage">
+						    	<div id="paed_art_chart"></div>
+						  	</div>
+						  	<div class="chart-notes">
+						    	<span class="heading"></span> Paediatric ART Patients
+						  	</div>
+						</div>
+       				</div>
+       				<div class="col-sm-4">
+       					<!--oi_chart-->
 						<div class="chart-wrapper">
 							<div class="chart-title">
-								Cadre
-							</div>
-							<div class="chart-stage">
-								<ul class="nav nav-tabs navbar-right" role="tablist" id="cadre_tabs">
-								    <li role="presentation" class="active">
-								    	<a href="#summary_cadre" aria-controls="summary_cadre" role="tab" data-toggle="tab">Summary</a>
-								    </li>
-								    <li role="presentation">
-								    	<a href="#list_cadre" aria-controls="list_cadre" role="tab" data-toggle="tab">Data List</a>
-								    </li>
-								</ul>
-								<div class="tab-content">
-									<div role="tabpanel" class="tab-pane active" id="summary_cadre">
-										<div class="container-fluid">
-											<div class="row">
-												<div id="cadre_chart"></div>
-											</div>
-										</div>
-									</div>
-									<div role="tabpanel" class="tab-pane" id="list_cadre">
-										<div class="container-fluid">
-											<div class="row">
-												<table id="cadre_table" class="display" cellspacing="0" width="100%"></table>
-											</div>
-										</div>
-									</div>
+								Total OI Patients, By Regimen
+								<!--filter_frm-->
+								<div class="nav navbar-right">
+									<!--clear_filter_btn-->
+									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="oi_clear">
+										<span class="glyphicon glyphicon-refresh"></span>
+									</button>
+								  	<!--filter_modal-->
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="oi_filter">
+										<span class="glyphicon glyphicon-filter"></span>
+									</button>
 								</div>
 							</div>
+							<div class="chart-stage">
+								<div id="oi_chart"></div>
+							</div>
 							<div class="chart-notes">
-								<span class="heading"></span> Cadres
+								<span class="heading"></span> OI Patients
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
+    			</div>
+    			<!--bottomrow-->
+    			<div class="row">
+    				<!--bottom_left-->
+    				<div class="col-sm-6">
+    					<!--patient_regimen_category_chart-->
+						<div class="chart-wrapper">
+							<div class="chart-title">
+								Total Patient By Regimen Category
+								<!--filter_frm-->
+								<div class="nav navbar-right">
+									<!--clear_filter_btn-->
+									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="patient_regimen_category_clear">
+										<span class="glyphicon glyphicon-refresh"></span>
+									</button>
+								  	<!--filter_modal-->
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="patient_regimen_category_filter">
+										<span class="glyphicon glyphicon-filter"></span>
+									</button>
+								</div>
+							</div>
+							<div class="chart-stage">
+								<div id="patient_regimen_category_chart"></div>
+							</div>
+							<div class="chart-notes">
+								<span class="heading"></span> Patient By Regimen Category
+							</div>
+						</div>
+    				</div>
+    				<!--bottom_right-->
+    				<div class="col-sm-6">
+    					<!--patient_site_chart-->
+						<div class="chart-wrapper">
+							<div class="chart-title">
+								Total Patient By Sites
+								<!--filter_frm-->
+								<div class="nav navbar-right">
+									<!--clear_filter_btn-->
+									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="patient_site_clear">
+										<span class="glyphicon glyphicon-refresh"></span>
+									</button>
+								  	<!--filter_modal-->
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="patient_site_filter">
+										<span class="glyphicon glyphicon-filter"></span>
+									</button>
+								</div>
+							</div>
+							<div class="chart-stage">
+								<div id="patient_site_chart"></div>
+							</div>
+							<div class="chart-notes">
+								<span class="heading"></span> Patient By Sites
+							</div>
+						</div>
+    				</div>
+    			</div>
+  			</div>
+		</div>
+		<div role="tabpanel" class="tab-pane" id="upload">
 		</div>
 	</div>
 	<!--footer-->
@@ -379,14 +280,14 @@
 	    	<div class="modal-content">
 				<div class="modal-header alert-success">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="filterModalLabel"><span class="glyphicon glyphicon-filter"></span> Dashboard Filter</h4>
+					<h4 class="modal-title" id="filterModalLabel"><span class="glyphicon glyphicon-filter"></span> Dashboard Filter: <b><span class="filter_text"></span></b></h4>
 				</div>
 	      		<div class="modal-body">
 					<div id="filter_frm" class="form-horizontal">
 						<div class="auto_filter"></div><!--auto_filter-->
 						<div class="form-group">
 							<label for="metric" class="col-sm-2 control-label">METRIC</label>
-							<div class="col-sm-10">
+							<div class="col-sm-8">
 								<select class="form-control metric" id="metric">
 		                            <option value="quantity" selected="selected">Quantity</option>
 		                        </select>
@@ -395,7 +296,7 @@
 						<!--common_filters-->
 						<div class="form-group">
 							<label for="order" class="col-sm-2 control-label">ORDER</label>
-							<div class="col-sm-10">
+							<div class="col-sm-8">
 								<select class="order form-control" id="order">
 									<option value="desc" selected="selected">Top</option>
 								</select>
@@ -403,7 +304,7 @@
 						</div>
 						<div class="form-group">
 							<label for="limit" class="col-sm-2 control-label">LIMIT</label>
-							<div class="col-sm-10">
+							<div class="col-sm-8">
 								<select class="limit form-control" id="limit">
 									<option value="5" selected="selected">5</option>
 								</select>
