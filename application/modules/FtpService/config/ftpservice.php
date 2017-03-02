@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $config['hostname'] = 'localhost';
 $config['username'] = 'kemsa';
 $config['password'] = 'kemsa';
-$config['debug'] = TRUE;
+$config['debug'] = FALSE;
 $config['pending_dir'] = '/pending/';
 $config['completed_dir'] = '/completed/';
 $config['allowed_extensions'] = array('xls', 'xlsx');

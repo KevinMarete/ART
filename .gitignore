@@ -1,2 +1,8 @@
 application/config/database.php
 application/logs/*
+
+# exclude everything
+public/uploads/*
+
+# exception to the rule
+!public/uploads/.gitkeep 

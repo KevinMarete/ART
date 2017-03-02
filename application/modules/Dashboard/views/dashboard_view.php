@@ -14,8 +14,6 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url().'public/dashboard/css/keen-dashboards.css';?>" />
 	<!--select2-->
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url().'public/dashboard/lib/select2/css/select2.min.css';?>" />
-	<!--dataTables-->
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url().'public/dashboard/lib/dataTables/css/jquery.dataTables.min.css';?>" />
 </head>
 <body class="application">
 	<!--navbar-->
@@ -38,8 +36,13 @@
 				<ul class="nav navbar-nav navbar-left" id="main_tabs">
 		          <li class="active"><a href="#commodities" aria-controls="commodities" role="tab" data-toggle="tab">DRUGS</a></li>
 		          <li><a href="#patients" aria-controls="patients" role="tab" data-toggle="tab">REGIMENS</a></li>
-		          <li><a href="#upload" aria-controls="upload" role="tab" data-toggle="tab">UPLOADS</a></li>
 		        </ul>
+		        <!--upload_link-->
+				<div class="nav navbar-nav navbar-form navbar-right">
+					<a href="<?php echo base_url().'ftp';?>" target="_blank" class="btn btn-warning btn-md">
+						<span class="glyphicon glyphicon-upload"></span> UPLOADS
+					</a>
+				</div>
 			</nav> 
 		</div>
 	</div>
@@ -70,7 +73,7 @@
 								<div id="pipeline_consumption_chart"></div>
 							</div>
 							<div class="chart-notes">
-								<span class="heading"></span> Pipeline Consumption
+								<span class="pipeline_consumption_heading"></span> Pipeline Consumption
 							</div>
 						</div>
 				 	</div>
@@ -98,7 +101,7 @@
 								<div id="facility_consumption_chart"></div>
 							</div>
 							<div class="chart-notes">
-								<span class="heading"></span> Facility Consumption
+								<span class="facility_consumption_heading"></span> Facility Consumption
 							</div>
 						</div>
 				 	</div>
@@ -123,7 +126,7 @@
 								<div id="facility_soh_chart"></div>
 							</div>
 							<div class="chart-notes">
-								<span class="heading"></span> Facility SOH
+								<span class="facility_soh_heading"></span> Facility SOH
 							</div>
 						</div>
 				 	</div>
@@ -156,7 +159,7 @@
 								<div id="adult_art_chart"></div>
 							</div>
 							<div class="chart-notes">
-								<span class="heading"></span> Adult ART Patients
+								<span class="adult_art_heading"></span> Adult ART Patients
 							</div>
 						</div>
 					</div>
@@ -181,7 +184,7 @@
 						    	<div id="paed_art_chart"></div>
 						  	</div>
 						  	<div class="chart-notes">
-						    	<span class="heading"></span> Paediatric ART Patients
+						    	<span class="paed_art_heading"></span> Paediatric ART Patients
 						  	</div>
 						</div>
        				</div>
@@ -206,7 +209,7 @@
 								<div id="oi_chart"></div>
 							</div>
 							<div class="chart-notes">
-								<span class="heading"></span> OI Patients
+								<span class="oi_heading"></span> OI Patients
 							</div>
 						</div>
 					</div>
@@ -235,7 +238,7 @@
 								<div id="patient_regimen_category_chart"></div>
 							</div>
 							<div class="chart-notes">
-								<span class="heading"></span> Patient By Regimen Category
+								<span class="patient_regimen_category_heading"></span> Patient By Regimen Category
 							</div>
 						</div>
     				</div>
@@ -261,14 +264,12 @@
 								<div id="patient_site_chart"></div>
 							</div>
 							<div class="chart-notes">
-								<span class="heading"></span> Patient By Sites
+								<span class="patient_site_heading"></span> Patient By Sites
 							</div>
 						</div>
     				</div>
     			</div>
   			</div>
-		</div>
-		<div role="tabpanel" class="tab-pane" id="upload">
 		</div>
 	</div>
 	<!--footer-->
@@ -289,7 +290,7 @@
 							<label for="metric" class="col-sm-2 control-label">METRIC</label>
 							<div class="col-sm-8">
 								<select class="form-control metric" id="metric">
-		                            <option value="quantity" selected="selected">Quantity</option>
+		                            <option value="total" selected="selected">Total</option>
 		                        </select>
 							</div>
 						</div>
@@ -299,6 +300,7 @@
 							<div class="col-sm-8">
 								<select class="order form-control" id="order">
 									<option value="desc" selected="selected">Top</option>
+									<option value="asc">Bottom</option>
 								</select>
 							</div>
 						</div>
@@ -307,6 +309,9 @@
 							<div class="col-sm-8">
 								<select class="limit form-control" id="limit">
 									<option value="5" selected="selected">5</option>
+									<option value="10">10</option>
+									<option value="20">20</option>
+									<option value="">All</option>
 								</select>
 							</div>
 						</div>
@@ -314,7 +319,7 @@
 	      		</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-success" id="filter_btn"><i class="glyphicon glyphicon-filter" aria-hidden="true"></i> Filter</button>
+					<button type="button" class="btn btn-success" id="filter_btn" data-filter=""><i class="glyphicon glyphicon-filter" aria-hidden="true"></i> Filter</button>
 				</div>
 	    	</div>
 		</div>
@@ -332,8 +337,6 @@
 	<script type="text/javascript" src="<?php echo base_url().'public/dashboard/js/spin.min.js';?>"></script>
 	<!--select2-->
 	<script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/select2/js/select2.full.min.js';?>"></script>
-	<!--dataTables-->
-	<script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/dataTables/js/jquery.dataTables.min.js';?>"></script>
 	<!--disable_back_button-->
 	<script type="text/javascript" src="<?php echo base_url().'public/dashboard/js/disable_back_button.js';?>"></script>
 	<!--dashboard-->

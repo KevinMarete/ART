@@ -25,3 +25,5 @@ AddType text/cache-manifest .appcache
 </IfModule>
 
 php_value max_input_vars 10000
+php_value post_max_size 15M
+php_value upload_max_filesize 10M

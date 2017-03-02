@@ -49,7 +49,10 @@ class FtpService extends MX_Controller {
 	            //Delete file from local server
 	            @unlink($source);
 	            //Embed message
-	            $message .= 'Success: '.$file_name.' was uploaded!<br/>';
+	            $message .= '<div class="alert alert-success alert-dismissible alert-msg" role="alert">
+				  				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				  				<strong>Success!</strong> '.$file_name.' was uploaded!
+							</div>';
             }
 	    }
 
@@ -57,7 +60,10 @@ class FtpService extends MX_Controller {
 	        $errors = $data['errors'];
 	        foreach ($data['errors'] as $index => $errors) {
 	        	foreach ($errors as $error) {
-	        		$message .= 'Error: File not uploaded because '.$error.'!<br/>';
+	        		$message .= '<div class="alert alert-danger alert-dismissible alert-msg" role="alert">
+					  				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					  				<strong>Error!</strong> File not uploaded because, '.$error.'!
+								</div>';
 	        	}
 	        }
 	    }
@@ -66,44 +72,73 @@ class FtpService extends MX_Controller {
 	    redirect('ftp');
 	}
 
-	public function analysis(){
-        $ftp_config['hostname'] = $this->config->item('hostname');
+
+	public function get_files($directory){
+		$ftp_config['hostname'] = $this->config->item('hostname');
         $ftp_config['username'] = $this->config->item('username');
         $ftp_config['password'] = $this->config->item('password');
         $ftp_config['debug'] = $this->config->item('debug');
 
 		$this->ftp->connect($ftp_config);
 
-		$remote_files = $this->ftp->list_files($this->config->item('pending_dir'));
-		foreach ($remote_files as $remote_file) {
-			$this->benchmark->mark('start');
-			//Download file from ftp to local server
-			$local_file = str_ireplace($this->config->item('pending_dir'), $this->config->item('local_upload_dir'), $remote_file);
-			$this->ftp->download($remote_file, $local_file, 'ascii');
-			//Extract data from local file
-			$response = $this->extract_data($local_file);
-			$this->benchmark->mark('stop');
-			$finish_time = gmdate("H:i:s", $this->benchmark->elapsed_time('start', 'stop'));
-			if($response['status']){
-				//Move file to completed
-				$new_remote_file = str_ireplace($this->config->item('pending_dir'), $this->config->item('completed_dir'), $remote_file);
-				if($this->ftp->move($remote_file, $new_remote_file)){
-					$response['message'] =  'Success: '.basename($local_file).' was analyzed in ['.$finish_time.'] and moved to COMPLETED<br/>';
+		$files = $this->ftp->list_files($this->config->item($directory));
+
+		$data = array('data' => array());
+		foreach ($files as $file) {
+			$data['data'][] = array(basename($file));
+		}	
+		echo json_encode($data);
+	}
+
+	public function analysis(){
+		$pending_dir = $this->config->item('pending_dir');
+		$local_upload_dir = $this->config->item('local_upload_dir');
+		$completed_dir = $this->config->item('completed_dir');
+
+		//FTP configuration
+		$ftp_config['hostname'] = $this->config->item('hostname');
+        $ftp_config['username'] = $this->config->item('username');
+        $ftp_config['password'] = $this->config->item('password');
+        $ftp_config['debug'] = $this->config->item('debug');
+
+		$this->ftp->connect($ftp_config);
+
+		$remote_files = $this->ftp->list_files($pending_dir);
+		if(!empty($remote_files)){
+			foreach ($remote_files as $remote_file) {
+				$remote_file_base = basename($remote_file);
+				$this->benchmark->mark('start');
+				//Download file from ftp to local server
+				$local_file = str_ireplace($pending_dir, $local_upload_dir, $remote_file);
+				$this->ftp->download($remote_file, $local_file, 'ascii');
+				//Extract data from local file
+				$response[$remote_file_base] = $this->extract_data($local_file);
+				$this->benchmark->mark('stop');
+				$finish_time = gmdate("H:i:s", $this->benchmark->elapsed_time('start', 'stop'));
+				if($response[$remote_file_base]['status']){
+					//Move file to completed
+					$new_remote_file = str_ireplace($pending_dir, $completed_dir, $remote_file);
+					if(!$this->ftp->move($remote_file, $new_remote_file)){
+						//If cannot overwrite then delete the existing one
+						$this->ftp->delete_file($new_remote_file);
+						//Then move new file to 'completed'
+						$this->ftp->move($remote_file, $new_remote_file);
+					}
+					$response[$remote_file_base]['message'] =  'SUCCESS: '.basename($local_file).' analyzed in ['.$finish_time.']<br/>';
 				}else{
-					$response['message'] =  'Success: '.basename($local_file).' was analyzed in ['.$finish_time.'] but still in PENDING<br/>';
+					$response[$remote_file_base]['message'] =  'ERROR: '.basename($local_file).' File failed in ['.$finish_time.']<br/>';
 				}
-			}else{
-				$response['message'] =  'Error: '.basename($local_file).' File failed in ['.$finish_time.']<br/>';
+				//Delete file from local server
+				@unlink($local_file);
 			}
-			//Delete file from local server
-			@unlink($local_file);
-			//Show response
-			echo "<pre>";
-			echo json_encode($response, JSON_PRETTY_PRINT);
-			echo "</pre>";
+		}else{
+			$response = array('NO FILES' => array('status' => FALSE, 'sheets' => array(), 'message' => 'INFO: There are no pending files to be processed'));
 		}
 
+		//Close FTP Conncetion
 		$this->ftp->close();
+
+		echo json_encode($response);
 	}
 
 	public function extract_data($file_name)
@@ -122,7 +157,7 @@ class FtpService extends MX_Controller {
 			$highestColumm = $objPHPExcel->getSheetByName($sheet_name)->getHighestColumn();
 			$highestRow = $objPHPExcel->getSheetByName($sheet_name)->getHighestRow();
 			if($sheet_name == 'Ordering Points'){
-				$status_data[$sheet_name] = $this->get_ordering_points($arr, $highestColumm, $highestRow); 
+				$status_data[$sheet_name] = $this->get_ordering_points($arr, $highestColumm, $highestRow);
 			}else if($sheet_name == 'Current patients by ART site'){
 				$status_data[$sheet_name] = $this->get_current_art_patients($arr, $highestColumm, $highestRow);
 			}else if($sheet_name == 'Pipeline Commodity Consumption'){
@@ -132,6 +167,7 @@ class FtpService extends MX_Controller {
 			}else if($sheet_name == 'Facility SOH by ARV Medicine'){
 				$status_data[$sheet_name] = $this->get_facility_soh($arr, $highestColumm, $highestRow);	
 			}
+
 		}
 
 		if(!in_array(FALSE, array_values($status_data))){

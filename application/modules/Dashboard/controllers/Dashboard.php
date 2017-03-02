@@ -51,6 +51,7 @@ class Dashboard extends MX_Controller {
 		$data['chart_columns'] = json_encode($chart_columns);
 		$data['chart_data'] = json_encode(array(array('name' => $chart_name, 'colorByPoint' => $color_point, 'data' => array_values($chart_data))));
 		$data['chart_source'] = 'Source: www.nascop.org' ;
+		$data['chart_x_variable'] = $chart_x_variable;
 
 		$this->load->view('chart_view', $data);
 	}

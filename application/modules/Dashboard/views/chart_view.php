@@ -16,6 +16,7 @@
     });
 
     var chartName = '<?php echo $chart_name; ?>'
+    var filter_item = '<?php echo $chart_x_variable; ?>'
 
     $('#<?php echo $chart_name; ?>_container').highcharts({
         chart: {
@@ -69,21 +70,6 @@
                             if(filterName == null){
                                 filterName = this.category
                             }
-                            //Filter Module
-                            var filterData = []
-                            var selectedValues = $('#'+chartName).val()
-                            //if filter not null 
-                            if(selectedValues != null){
-                                filterData = selectedValues
-                            }
-                            //Add new filter to current filter values
-                            filterData.push(filterName) 
-                            //Assign filter values to filter element
-                            $('#'+chartName).val(filterData) 
-                            //Trigger Change on select2 box
-                            $('#'+chartName).trigger('change');
-                            //Click filter button
-                            $("#filter_btn").trigger('click');
                         }
                     }
                 }

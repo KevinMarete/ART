@@ -69,8 +69,8 @@ DELIMITER //
 CREATE OR REPLACE PROCEDURE proc_save_pipeline_consumption(
 	IN drug_name VARCHAR(150), 
 	IN packsize VARCHAR(10),
-	IN period_year INT(4),
-	IN period_month VARCHAR(3),
+	IN p_year INT(4),
+	IN p_month VARCHAR(3),
 	IN consumption_total INT(10)
 	)
 BEGIN
@@ -81,10 +81,10 @@ BEGIN
     	INSERT INTO tbl_drug(name, pack_size)VALUES(drug_name, packsize);
     	SET drug = LAST_INSERT_ID();
     END IF;
-    IF NOT EXISTS(SELECT * FROM tbl_consumption_pipeline WHERE period_year = period_year AND period_month = period_month AND drug_id = drug) THEN
-        INSERT INTO tbl_consumption_pipeline(total, period_year, period_month, drug_id) VALUES(consumption_total, period_year, period_month, drug);
+    IF NOT EXISTS(SELECT * FROM tbl_consumption_pipeline WHERE period_year = p_year AND period_month = p_month AND drug_id = drug) THEN
+        INSERT INTO tbl_consumption_pipeline(total, period_year, period_month, drug_id) VALUES(consumption_total, p_year, p_month, drug);
     ELSE
-        UPDATE tbl_consumption_pipeline SET total = consumption_total WHERE period_year = period_year AND period_month = period_month AND drug_id = drug; 
+        UPDATE tbl_consumption_pipeline SET total = consumption_total WHERE period_year = p_year AND period_month = p_month AND drug_id = drug; 
     END IF;
 END//
 DELIMITER ;
@@ -95,8 +95,8 @@ CREATE OR REPLACE PROCEDURE proc_save_facility_consumption(
     IN facility_name VARCHAR(150),
     IN drug_name VARCHAR(150), 
     IN packsize VARCHAR(10),
-    IN period_year INT(4),
-    IN period_month VARCHAR(3),
+    IN p_year INT(4),
+    IN p_month VARCHAR(3),
     IN consumption_total INT(10)
     )
 BEGIN
@@ -113,10 +113,10 @@ BEGIN
         INSERT INTO tbl_drug(name, pack_size)VALUES(drug_name, packsize);
         SET drug = LAST_INSERT_ID();
     END IF;
-    IF NOT EXISTS(SELECT * FROM tbl_consumption_facility WHERE period_year = period_year AND period_month = period_month AND facility_id = facility AND drug_id = drug) THEN
-        INSERT INTO tbl_consumption_facility(total, period_year, period_month, facility_id, drug_id) VALUES(consumption_total, period_year, period_month, facility, drug);
+    IF NOT EXISTS(SELECT * FROM tbl_consumption_facility WHERE period_year = p_year AND period_month = p_month AND facility_id = facility AND drug_id = drug) THEN
+        INSERT INTO tbl_consumption_facility(total, period_year, period_month, facility_id, drug_id) VALUES(consumption_total, p_year, p_month, facility, drug);
     ELSE
-        UPDATE tbl_consumption_facility SET total = consumption_total WHERE period_year = period_year AND period_month = period_month AND facility_id = facility AND drug_id = drug; 
+        UPDATE tbl_consumption_facility SET total = consumption_total WHERE period_year = p_year AND period_month = p_month AND facility_id = facility AND drug_id = drug; 
     END IF;
 END//
 DELIMITER ;
@@ -127,8 +127,8 @@ CREATE OR REPLACE PROCEDURE proc_save_facility_soh(
     IN facility_name VARCHAR(150),
     IN drug_name VARCHAR(150), 
     IN packsize VARCHAR(10),
-    IN period_year INT(4),
-    IN period_month VARCHAR(3),
+    IN p_year INT(4),
+    IN p_month VARCHAR(3),
     IN soh_total INT(10)
     )
 BEGIN
@@ -145,10 +145,10 @@ BEGIN
         INSERT INTO tbl_drug(name, pack_size)VALUES(drug_name, packsize);
         SET drug = LAST_INSERT_ID();
     END IF;
-    IF NOT EXISTS(SELECT * FROM tbl_soh_facility WHERE period_year = period_year AND period_month = period_month AND facility_id = facility AND drug_id = drug) THEN
-        INSERT INTO tbl_soh_facility(total, period_year, period_month, facility_id, drug_id) VALUES(soh_total, period_year, period_month, facility, drug);
+    IF NOT EXISTS(SELECT * FROM tbl_soh_facility WHERE period_year = p_year AND period_month = p_month AND facility_id = facility AND drug_id = drug) THEN
+        INSERT INTO tbl_soh_facility(total, period_year, period_month, facility_id, drug_id) VALUES(soh_total, p_year, p_month, facility, drug);
     ELSE
-        UPDATE tbl_soh_facility SET total = soh_total WHERE period_year = period_year AND period_month = period_month AND facility_id = facility AND drug_id = drug; 
+        UPDATE tbl_soh_facility SET total = soh_total WHERE period_year = p_year AND period_month = p_month AND facility_id = facility AND drug_id = drug; 
     END IF;
 END//
 DELIMITER ;
