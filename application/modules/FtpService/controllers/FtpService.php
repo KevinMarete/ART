@@ -118,7 +118,8 @@ class FtpService extends MX_Controller {
 				if($response[$remote_file_base]['status']){
 					//Move file to completed
 					$new_remote_file = str_ireplace($pending_dir, $completed_dir, $remote_file);
-					if(!$this->ftp->move($remote_file, $new_remote_file)){
+					$move_status = $this->ftp->move($remote_file, $new_remote_file);
+					if(!$move_status){
 						//If cannot overwrite then delete the existing one
 						$this->ftp->delete_file($new_remote_file);
 						//Then move new file to 'completed'

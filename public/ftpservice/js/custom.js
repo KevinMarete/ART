@@ -45,9 +45,9 @@ $(document).ready(function(){
 				var inner_msg = '<strong><u>'+file+'</u></strong><br/>'+data.message
 				$.each(data.sheets, function(sheet, status){
 					if(status){
-						inner_msg += 'SUCCESS: '+sheet
+						inner_msg += 'SUCCESS: '+sheet+'<br/>'
 					}else{
-						inner_msg += 'FAILED: '+sheet
+						inner_msg += 'FAILED: '+sheet+'<br/>'
 					}
 				});
 				var message = '<div class="alert alert-info alert-dismissible alert-msg" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+inner_msg+'</div>'
