@@ -1,14 +1,15 @@
-var chartURL = 'dashboard/load_chart'
+var chartURL = 'dashboard/get_chart'
 var filterURL = 'dashboard/get_filter/'
 var filterDIVClass = '.auto_filter'
 var tab = 'commodities'
 var metric = 'total'
 var order = 'desc'
-var limit = '5'
+var limit = '10'
 var exemptedTabs = []
 var filters = {}
 var charts = []
-charts['commodities'] = ['pipeline_consumption', 'facility_consumption', 'facility_soh']
+charts['commodities'] = ['pipeline_consumption']
+//charts['commodities'] = ['pipeline_consumption', 'facility_consumption', 'facility_soh']
 charts['patients'] = ['adult_art', 'paed_art', 'oi', 'patient_regimen_category', 'patient_site']
 
 $(function() {

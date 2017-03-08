@@ -329,6 +329,7 @@
 	<!--highcharts-->
 	<script src="<?php echo base_url().'public/dashboard/lib/highcharts/highcharts.js';?>"></script>
 	<script src="<?php echo base_url().'public/dashboard/lib/highcharts/exporting.js';?>"></script>
+	<script src="<?php echo base_url().'public/dashboard/lib/highcharts/drilldown.js';?>"></script>
 	<!--bootstrap-->
 	<script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/bootstrap/dist/js/bootstrap.min.js';?>"></script>
 	<!--bootstrap-toggle-->

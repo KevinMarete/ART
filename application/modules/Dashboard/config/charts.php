@@ -70,5 +70,5 @@ $config['patient_site_total_chart_metric_title'] = 'total';
 $config['patient_site_total_metric_prefix'] = ' (Patients)';
 $config['patient_site_view_name'] = 'vw_patients_site';
 $config['patient_site_color_point'] = TRUE;
-$config['patient_site_x_variable'] = 'facility';
+$config['patient_site_x_variable'] = 'county';
 $config['patient_site_filters'] = array('regimen', 'facility', 'sub_county', 'county', 'data_month', 'data_year');

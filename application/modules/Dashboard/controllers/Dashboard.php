@@ -3,6 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Dashboard extends MX_Controller {
 
+	function __construct() {
+		ini_set("max_execution_time", "100000");
+		ini_set("memory_limit", '2048M');
+	}
+
 	public function index()
 	{	
 		$data['page_title'] = 'Commodities | Dashboard';
@@ -69,6 +74,31 @@ class Dashboard extends MX_Controller {
 			}
 		}
 		echo json_encode($data);
+	}
+
+
+	public function get_chart($drilldown = TRUE){
+		//$main_data = $this->patient_model->get_county_total('2017', 'Jan');
+		//$main_data = $this->regimen_model->get_category_total('2017', 'Jan');
+		//$main_data = $this->scaleup_model->get_category_total();
+		#Build chart
+		$data['chart_name'] = 'patient_numbers_county';
+		$data['chart_type'] = 'column';
+		$data['chart_title'] = 'Patients Numbers by County';
+		$data['chart_metric_title'] = 'No. of Patients';
+		$data['chart_source'] = 'Source: www.nascop.org' ;
+		if($drilldown){
+			$data['chart_x_variable'] = 'County';
+			$data['chart_color_by_point'] = true;
+			$data['chart_series_data'] = json_encode($main_data['main'], JSON_NUMERIC_CHECK);
+			$data['chart_drilldown_data'] = json_encode($main_data['drilldown'], JSON_NUMERIC_CHECK);
+			$this->load->view('drilldown_view', $data);
+		}else{
+			$data['chart_series_data'] =  json_encode($main_data['main'], JSON_NUMERIC_CHECK);
+			$data['chart_categories'] =  json_encode($main_data['columns'], JSON_NUMERIC_CHECK);
+			$this->load->view('combined_view', $data);
+		}
+
 	}
 
 }

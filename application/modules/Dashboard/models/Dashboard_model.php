@@ -26,5 +26,11 @@ class Dashboard_model extends CI_Model {
         $query = $this->db->query($sql);
         return $query->result_array();
 	}
+
+
+
+	public function get_county_patients(){
+		$this->db->select('county,sum(total) total', FALSE);
+	}
 	
 }
