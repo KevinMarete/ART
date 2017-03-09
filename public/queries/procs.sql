@@ -64,9 +64,9 @@ END//
 DELIMITER ;
 
 
-/*Pipeline MOS*/
+/*National MOS*/
 DELIMITER //
-CREATE OR REPLACE PROCEDURE proc_save_pipeline_mos(
+CREATE OR REPLACE PROCEDURE proc_save_national_mos(
 	IN drug_name VARCHAR(150), 
 	IN packsize VARCHAR(10),
 	IN p_year INT(4),
@@ -84,10 +84,10 @@ BEGIN
     	INSERT INTO tbl_drug(name, pack_size)VALUES(drug_name, packsize);
     	SET drug = LAST_INSERT_ID();
     END IF;
-    IF NOT EXISTS(SELECT * FROM tbl_pipeline_mos WHERE period_year = p_year AND period_month = p_month AND drug_id = drug) THEN
-        INSERT INTO tbl_pipeline_mos(issue_total, soh_total, supplier_total, received_total, period_year, period_month, drug_id) VALUES(issue, soh, supplier, received, p_year, p_month, drug);
+    IF NOT EXISTS(SELECT * FROM tbl_national_mos WHERE period_year = p_year AND period_month = p_month AND drug_id = drug) THEN
+        INSERT INTO tbl_national_mos(issue_total, soh_total, supplier_total, received_total, period_year, period_month, drug_id) VALUES(issue, soh, supplier, received, p_year, p_month, drug);
     ELSE
-        UPDATE tbl_pipeline_mos SET issue_total = issue, soh_total = soh, supplier_total = supplier, received_total = received WHERE period_year = p_year AND period_month = p_month AND drug_id = drug; 
+        UPDATE tbl_national_mos SET issue_total = issue, soh_total = soh, supplier_total = supplier, received_total = received WHERE period_year = p_year AND period_month = p_month AND drug_id = drug; 
     END IF;
 END//
 DELIMITER ;

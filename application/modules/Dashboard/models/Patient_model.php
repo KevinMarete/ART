@@ -3,33 +3,35 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Patient_model extends CI_Model {
 
-	public function get_county_total($year, $month){
+	public function get_county_total($year, $month, $regimen_category){
 		$sql = "SELECT 
 				    CONCAT(UCASE(SUBSTRING(county, 1, 1)),LOWER(SUBSTRING(county, 2))) name,
 				    SUM(total) y,
 				    LOWER(REPLACE(county, ' ', '_')) drilldown
-				FROM vw_patients_site
+				FROM vw_facility_patient_regimen
 				WHERE data_year = ?
 				AND data_month = ?
+				AND regimen_category IN ?
 				GROUP BY name
 				ORDER BY y DESC";
-		$query = $this->db->query($sql, array($year, $month));
-		return $this->get_county_drilldown_subcounty(array('main' => $query->result_array()), $year, $month);
+		$query = $this->db->query($sql, array($year, $month, $regimen_category));
+		return $this->get_county_drilldown_subcounty(array('main' => $query->result_array()), $year, $month, $regimen_category);
 	}
 
-	public function get_county_drilldown_subcounty($main_data, $year, $month){
+	public function get_county_drilldown_subcounty($main_data, $year, $month, $regimen_category){
 		$drilldown_data = array();
 		$sql = "SELECT
 					LOWER(REPLACE(county, ' ', '_')) county,
 					CONCAT(UCASE(SUBSTRING(sub_county, 1, 1)),LOWER(SUBSTRING(sub_county, 2))) name,
 					SUM(total) y,
 					LOWER(CONCAT_WS('_',REPLACE(county, ' ', '_'), REPLACE(sub_county, ' ', '_'))) drilldown
-				FROM vw_patients_site
+				FROM vw_facility_patient_regimen
 				WHERE data_year = ?
 				AND data_month = ?
+				AND regimen_category IN ?
 				GROUP BY drilldown
 				ORDER BY y DESC";
-		$sub_data = $this->db->query($sql, array($year, $month))->result_array();
+		$sub_data = $this->db->query($sql, array($year, $month, $regimen_category))->result_array();
 
 		foreach ($main_data['main'] as $counter => $main) {
 			$county_name = $main['drilldown'];
@@ -46,22 +48,23 @@ class Patient_model extends CI_Model {
 			}
 		}
 
-		$drilldown_data = $this->get_county_drilldown_facility($drilldown_data, $year, $month);
+		$drilldown_data = $this->get_county_drilldown_facility($drilldown_data, $year, $month, $regimen_category);
 		return array_merge($main_data, $drilldown_data);
 	}
 
-	public function get_county_drilldown_facility($drilldown_data, $year, $month){
+	public function get_county_drilldown_facility($drilldown_data, $year, $month, $regimen_category){
 		$sql = "SELECT
 					LOWER(CONCAT_WS('_',REPLACE(county, ' ', '_'), REPLACE(sub_county, ' ', '_'))) county_sub,
 					CONCAT(UCASE(SUBSTRING(facility, 1, 1)),LOWER(SUBSTRING(facility, 2))) name,
 					SUM(total) y
-				FROM vw_patients_site
+				FROM vw_facility_patient_regimen
 				WHERE data_year = ?
 				AND data_month = ?
+				AND regimen_category IN ?
 				GROUP BY name
 				ORDER BY y DESC";
 
-		$facility_data = $this->db->query($sql, array($year, $month))->result_array();
+		$facility_data = $this->db->query($sql, array($year, $month, $regimen_category))->result_array();
 
 		$counter = sizeof($drilldown_data['drilldown']);
 		foreach ($drilldown_data['drilldown'] as $main_data) {

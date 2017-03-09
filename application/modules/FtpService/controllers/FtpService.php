@@ -158,11 +158,11 @@ class FtpService extends MX_Controller {
 			$highestColumm = $objPHPExcel->getSheetByName($sheet_name)->getHighestColumn();
 			$highestRow = $objPHPExcel->getSheetByName($sheet_name)->getHighestRow();
 			if($sheet_name == 'Ordering Points'){
-				$status_data[$sheet_name] = $this->get_ordering_points($arr, $highestColumm, $highestRow);
+				$status_data[$sheet_name] = $this->get_facility_ordering_sites($arr, $highestColumm, $highestRow);
 			}else if($sheet_name == 'Current patients by ART site'){
-				$status_data[$sheet_name] = $this->get_current_art_patients($arr, $highestColumm, $highestRow);
+				$status_data[$sheet_name] = $this->get_facility_patients($arr, $highestColumm, $highestRow);
 			}else if($sheet_name == 'Stock Status'){
-				$status_data[$sheet_name] = $this->get_mos_pipeline($arr, $highestColumm, $highestRow);	
+				$status_data[$sheet_name] = $this->get_national_mos($arr, $highestColumm, $highestRow);	
 			}else if($sheet_name == 'Facility Cons by ARV Medicine'){
 				$status_data[$sheet_name] = $this->get_facility_consumption($arr, $highestColumm, $highestRow);
 			}else if($sheet_name == 'Facility SOH by ARV Medicine'){
@@ -176,9 +176,9 @@ class FtpService extends MX_Controller {
 		return $status;
 	}
 
-	public function get_ordering_points($arr, $highestColumm, $highestRow){
+	public function get_facility_ordering_sites($arr, $highestColumm, $highestRow){
 		$status = FALSE;
-		$cfg = $this->config->item('ordering_points_cfg');	
+		$cfg = $this->config->item('facility_ordering_sites_cfg');	
 		$start_row = $cfg['first_row'];
 		$id_col = $cfg['id_col'];
 		$code_col = $cfg['code_col'];
@@ -201,9 +201,9 @@ class FtpService extends MX_Controller {
 		return $status;
 	}
 
-	public function get_current_art_patients($arr, $highestColumm, $highestRow){
+	public function get_facility_patients($arr, $highestColumm, $highestRow){
 		$status = FALSE;
-		$cfg = $this->config->item('current_art_patients_cfg');
+		$cfg = $this->config->item('facility_patients_cfg');
 		$start_row = $cfg['first_row'];
 		$period = explode($cfg['period_splitter'], $arr[$cfg['period_row']][$cfg['period_col']]);
 		$period_month = ucwords($period[0]);
@@ -234,9 +234,9 @@ class FtpService extends MX_Controller {
 		return $status;
 	}
 
-	public function get_mos_pipeline($arr, $highestColumm, $highestRow){
+	public function get_national_mos($arr, $highestColumm, $highestRow){
 		$status = FALSE;
-		$cfg = $this->config->item('mos_pipeline_cfg');
+		$cfg = $this->config->item('national_mos_cfg');
 		$start_row = $cfg['first_row'];
 		$id_col = $cfg['id_col'];
 		$drug_col = $cfg['drug_col'];

@@ -8,7 +8,7 @@ class Regimen_model extends CI_Model {
 				    regimen_category name,
 				    SUM(total) y,
 				    LOWER(REPLACE(regimen_category, ' ', '_')) drilldown
-				FROM vw_patients_regimen_category
+				FROM vw_facility_patient_regimen
 				WHERE data_year = ?
 				AND data_month = ?
 				GROUP BY name
@@ -23,7 +23,7 @@ class Regimen_model extends CI_Model {
 					LOWER(REPLACE(regimen_category, ' ', '_')) category,
 					regimen name,
 					SUM(total) y
-				FROM vw_patients_regimen_category
+				FROM vw_facility_patient_regimen
 				WHERE data_year = ?
 				AND data_month = ?
 				GROUP BY name

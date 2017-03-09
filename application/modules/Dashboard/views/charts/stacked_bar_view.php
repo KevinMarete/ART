@@ -1,23 +1,40 @@
 <!--chart_container-->
-<div id="container"></div>
+<div id="<?php echo $chart_name; ?>_container"></div>
 
 <!--highcharts_configuration-->
 <script type="text/javascript">
     $(function () {
-        Highcharts.chart('container', {
+        var chartDIV = '<?php echo $chart_name."_container"; ?>'
+
+        Highcharts.setOptions({
+            global: {
+                useUTC: false,
+                
+            },
+            lang: {
+              decimalPoint: '.',
+              thousandsSep: ','
+            }
+        });
+
+        Highcharts.chart(chartDIV, {
             chart: {
                 type: 'bar'
             },
             title: {
                 text: '<?php echo $chart_title; ?>'
             },
+            subtitle: {
+                text: '<?php echo $chart_source; ?>'
+            },
+            credits: false,
             xAxis: {
                 categories: <?php echo $chart_categories; ?>
             },
             yAxis: {
                 min: 0,
                 title: {
-                    text: '<?php echo $chart_metric_title; ?>'
+                    text: '<?php echo $chart_yaxis_title; ?>'
                 },
                 plotLines: [{
                     color: 'red',
@@ -49,5 +66,6 @@
                 enabled: false 
             }
         });
+        
     });
 </script>

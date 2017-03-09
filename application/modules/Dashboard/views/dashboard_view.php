@@ -29,18 +29,18 @@
 			    <a class="navbar-brand" href="#">
 			      	<span class="glyphicon glyphicon-dashboard"></span>
 			    </a>
-		    	<a class="navbar-brand" href="#">ART DASHBOARD</a>
+		    	<a class="navbar-brand" href="#">ADT DASHBOARD</a>
 			</div> 
 			<nav class="collapse navbar-collapse" id="filter-navbar"> 
 				<!--Tab Links-->
 				<ul class="nav navbar-nav navbar-left" id="main_tabs">
-		          <li class="active"><a href="#commodities" aria-controls="commodities" role="tab" data-toggle="tab">DRUGS</a></li>
-		          <li><a href="#patients" aria-controls="patients" role="tab" data-toggle="tab">REGIMENS</a></li>
+		          <li class="active"><a href="#commodities" aria-controls="commodities" role="tab" data-toggle="tab">COMMODITIES</a></li>
+		          <li><a href="#patients" aria-controls="patients" role="tab" data-toggle="tab">PATIENTS</a></li>
 		        </ul>
 		        <!--upload_link-->
 				<div class="nav navbar-nav navbar-form navbar-right">
 					<a href="<?php echo base_url().'ftp';?>" target="_blank" class="btn btn-warning btn-md">
-						<span class="glyphicon glyphicon-upload"></span> UPLOADS
+						<span class="glyphicon glyphicon-upload"></span>
 					</a>
 				</div>
 			</nav> 
@@ -52,164 +52,86 @@
 			<div class="container-fluid">
 				<!--toprow-->
 				<div class="row">
-				  	<div class="col-sm-12">
-				  		<!--pipeline_consumption_chart-->
+				  	<div class="col-sm-6">
+				  		<!--national_mos_chart-->
 				    	<div class="chart-wrapper">
 							<div class="chart-title">
-								Total Commodity Consumption at Pipeline
+								NATIONAL MONTHS OF STOCK (MOS) 
 								<!--filter_frm-->
 								<div class="nav navbar-right">
 									<!--clear_filter_btn-->
-									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="pipeline_consumption_clear">
+									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="national_mos_clear">
 										<span class="glyphicon glyphicon-refresh"></span>
 									</button>
 								  	<!--filter_modal-->
-									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="pipeline_consumption_filter">
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="national_mos_filter">
 										<span class="glyphicon glyphicon-filter"></span>
 									</button>
 								</div>
 							</div>
 							<div class="chart-stage">
-								<div id="pipeline_consumption_chart"></div>
+								<div id="national_mos_chart"></div>
 							</div>
 							<div class="chart-notes">
-								<span class="pipeline_consumption_heading"></span> Pipeline Consumption
+								Filtered By: <span class="national_mos_heading"></span>
 							</div>
 						</div>
 				 	</div>
-				</div>
-				<!--bottomrow-->
-				<div class="row">
 					<div class="col-sm-6">
-				  		<!--facility_consumption_chart-->
+				  		<!--drug_consumption_trend_chart-->
 				    	<div class="chart-wrapper">
 							<div class="chart-title">
-								Total Commodity Consumption at Facility
+								DRUG CONSUMPTION TREND
 								<!--filter_frm-->
 								<div class="nav navbar-right">
 									<!--clear_filter_btn-->
-									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="facility_consumption_clear">
+									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="drug_consumption_trend_clear">
 										<span class="glyphicon glyphicon-refresh"></span>
 									</button>
 								  	<!--filter_modal-->
-									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="facility_consumption_filter">
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="drug_consumption_trend_filter">
 										<span class="glyphicon glyphicon-filter"></span>
 									</button>
 								</div>
 							</div>
 							<div class="chart-stage">
-								<div id="facility_consumption_chart"></div>
+								<div id="drug_consumption_trend_chart"></div>
 							</div>
 							<div class="chart-notes">
-								<span class="facility_consumption_heading"></span> Facility Consumption
+								Filtered By: <span class="drug_consumption_trend_heading"></span>
 							</div>
 						</div>
 				 	</div>
-				 	<div class="col-sm-6">
-				  		<!--facility_soh_chart-->
-				    	<div class="chart-wrapper">
-							<div class="chart-title">
-								Total Commodity Stock on Hand(SOH) at Facility
-								<!--filter_frm-->
-								<div class="nav navbar-right">
-									<!--clear_filter_btn-->
-									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="facility_soh_clear">
-										<span class="glyphicon glyphicon-refresh"></span>
-									</button>
-								  	<!--filter_modal-->
-									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="facility_soh_filter">
-										<span class="glyphicon glyphicon-filter"></span>
-									</button>
-								</div>
-							</div>
-							<div class="chart-stage">
-								<div id="facility_soh_chart"></div>
-							</div>
-							<div class="chart-notes">
-								<span class="facility_soh_heading"></span> Facility SOH
-							</div>
-						</div>
-				 	</div>
-				</div>
-			</div>
+			    </div>
+		    </div>
 		</div>
 		<div role="tabpanel" class="tab-pane" id="patients">
 			<div class="container-fluid">
 				<!--toprow-->
     			<div class="row">
     				<!--top_left-->
-					<div class="col-sm-4">
-						<!--adult_art_chart-->
+					<div class="col-sm-12">
+						<!--patient_in_care_chart-->
 						<div class="chart-wrapper">
 							<div class="chart-title">
-								Total Adult ART Patients, By Regimen
+								PATIENTS IN CARE &amp; TREATMENT 
 								<!--filter_frm-->
 								<div class="nav navbar-right">
 									<!--clear_filter_btn-->
-									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="adult_art_clear">
+									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="patient_in_care_clear">
 										<span class="glyphicon glyphicon-refresh"></span>
 									</button>
 								  	<!--filter_modal-->
-									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="adult_art_filter">
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="patient_in_care_filter">
 										<span class="glyphicon glyphicon-filter"></span>
 									</button>
 								</div>
 							</div>
 							<div class="chart-stage">
-								<div id="adult_art_chart"></div>
+								<div id="patient_in_care_chart"></div>
 							</div>
 							<div class="chart-notes">
-								<span class="adult_art_heading"></span> Adult ART Patients
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-4">
-       					<!--paed_art_chart-->
-						<div class="chart-wrapper">
-						  	<div class="chart-title">
-						    	Total Paediatric ART Patients, By Regimen
-						    	<!--filter_frm-->
-								<div class="nav navbar-right">
-									<!--clear_filter_btn-->
-									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="paed_art_clear">
-										<span class="glyphicon glyphicon-refresh"></span>
-									</button>
-								  	<!--filter_modal-->
-									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="paed_art_filter">
-										<span class="glyphicon glyphicon-filter"></span>
-									</button>
-								</div>
-						  	</div>
-						  	<div class="chart-stage">
-						    	<div id="paed_art_chart"></div>
-						  	</div>
-						  	<div class="chart-notes">
-						    	<span class="paed_art_heading"></span> Paediatric ART Patients
-						  	</div>
-						</div>
-       				</div>
-       				<div class="col-sm-4">
-       					<!--oi_chart-->
-						<div class="chart-wrapper">
-							<div class="chart-title">
-								Total OI Patients, By Regimen
-								<!--filter_frm-->
-								<div class="nav navbar-right">
-									<!--clear_filter_btn-->
-									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="oi_clear">
-										<span class="glyphicon glyphicon-refresh"></span>
-									</button>
-								  	<!--filter_modal-->
-									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="oi_filter">
-										<span class="glyphicon glyphicon-filter"></span>
-									</button>
-								</div>
-							</div>
-							<div class="chart-stage">
-								<div id="oi_chart"></div>
-							</div>
-							<div class="chart-notes">
-								<span class="oi_heading"></span> OI Patients
+								Filtered By: <span class="patient_in_care_heading"></span>
 							</div>
 						</div>
 					</div>
@@ -221,7 +143,7 @@
     					<!--patient_regimen_category_chart-->
 						<div class="chart-wrapper">
 							<div class="chart-title">
-								Total Patient By Regimen Category
+								PATIENTS BY AGE &amp; REGIMEN CATEGORY
 								<!--filter_frm-->
 								<div class="nav navbar-right">
 									<!--clear_filter_btn-->
@@ -238,36 +160,36 @@
 								<div id="patient_regimen_category_chart"></div>
 							</div>
 							<div class="chart-notes">
-								<span class="patient_regimen_category_heading"></span> Patient By Regimen Category
+								Filtered By: <span class="patient_regimen_category_heading"></span>
 							</div>
 						</div>
     				</div>
     				<!--bottom_right-->
     				<div class="col-sm-6">
-    					<!--patient_site_chart-->
+						<!--art_scaleup_chart-->
 						<div class="chart-wrapper">
 							<div class="chart-title">
-								Total Patient By Sites
+								ART PATIENT SCALEUP TREND
 								<!--filter_frm-->
 								<div class="nav navbar-right">
 									<!--clear_filter_btn-->
-									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="patient_site_clear">
+									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="art_scaleup_clear">
 										<span class="glyphicon glyphicon-refresh"></span>
 									</button>
 								  	<!--filter_modal-->
-									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="patient_site_filter">
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="art_scaleup_filter">
 										<span class="glyphicon glyphicon-filter"></span>
 									</button>
 								</div>
 							</div>
 							<div class="chart-stage">
-								<div id="patient_site_chart"></div>
+								<div id="art_scaleup_chart"></div>
 							</div>
 							<div class="chart-notes">
-								<span class="patient_site_heading"></span> Patient By Sites
+								Filtered By: <span class="art_scaleup_heading"></span>
 							</div>
 						</div>
-    				</div>
+					</div>
     			</div>
   			</div>
 		</div>
@@ -286,35 +208,6 @@
 	      		<div class="modal-body">
 					<div id="filter_frm" class="form-horizontal">
 						<div class="auto_filter"></div><!--auto_filter-->
-						<div class="form-group">
-							<label for="metric" class="col-sm-2 control-label">METRIC</label>
-							<div class="col-sm-8">
-								<select class="form-control metric" id="metric">
-		                            <option value="total" selected="selected">Total</option>
-		                        </select>
-							</div>
-						</div>
-						<!--common_filters-->
-						<div class="form-group">
-							<label for="order" class="col-sm-2 control-label">ORDER</label>
-							<div class="col-sm-8">
-								<select class="order form-control" id="order">
-									<option value="desc" selected="selected">Top</option>
-									<option value="asc">Bottom</option>
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="limit" class="col-sm-2 control-label">LIMIT</label>
-							<div class="col-sm-8">
-								<select class="limit form-control" id="limit">
-									<option value="5" selected="selected">5</option>
-									<option value="10">10</option>
-									<option value="20">20</option>
-									<option value="">All</option>
-								</select>
-							</div>
-						</div>
 					</div>
 	      		</div>
 				<div class="modal-footer">

@@ -17,7 +17,7 @@ $config['target_sheets'] = array(
 	'Facility Cons by ARV Medicine', 
 	'Facility SOH by ARV Medicine'
 );
-$config['ordering_points_cfg'] = array(
+$config['facility_ordering_sites_cfg'] = array(
 	'first_row' => 9,
 	'id_col' => 'L',
 	'code_col' => 'M',
@@ -25,7 +25,7 @@ $config['ordering_points_cfg'] = array(
 	'county_col' => 'O',
 	'proc_name' => 'proc_save_site_ordering'
 );
-$config['current_art_patients_cfg'] = array(
+$config['facility_patients_cfg'] = array(
 	'first_row' => 7,
 	'id_col' => 'A',
 	'facility_col' => 'B',
@@ -36,7 +36,7 @@ $config['current_art_patients_cfg'] = array(
 	'first_col' => 'D',
 	'proc_name' => 'proc_save_patient_current'
 );
-$config['mos_pipeline_cfg'] = array(
+$config['national_mos_cfg'] = array(
 	'first_row' => 5,
 	'id_col' => 'A',
 	'drug_col' => 'B',
@@ -49,7 +49,7 @@ $config['mos_pipeline_cfg'] = array(
 	'supplier_index' => 2,
 	'received_index' => 3,
 	'first_col' => 'D',
-	'proc_name' => 'proc_save_pipeline_mos'
+	'proc_name' => 'proc_save_national_mos'
 );
 $config['facility_consumption_cfg'] = array(
 	'first_row' => 9,

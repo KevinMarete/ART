@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pipeline_model extends CI_Model {
+class National_model extends CI_Model {
 
 	public function get_mos_total($year, $month){
 		$columns = array();
@@ -12,7 +12,7 @@ class Pipeline_model extends CI_Model {
 		);
 
 		$sql = "SELECT drug, facility_mos, cms_mos, supplier_mos
-				FROM vw_pipeline_mos
+				FROM vw_national_mos
 				WHERE data_year = ?
 				AND data_month = ?
 				GROUP BY drug

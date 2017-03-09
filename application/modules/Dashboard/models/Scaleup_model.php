@@ -16,7 +16,7 @@ class Scaleup_model extends CI_Model {
 				    SUM(IF(regimen_category = 'Adult ART', total, NULL)) adult_total,
 				    SUM(IF(regimen_category = 'Paediatric ART', total, NULL)) paed_total,
 				    SUM(total) combined_total
-				FROM vw_patients_regimen_category
+				FROM vw_facility_patient_regimen
 				WHERE regimen_category IN ('Adult ART', 'Paediatric ART')
 				GROUP BY period
 				ORDER BY period DESC";

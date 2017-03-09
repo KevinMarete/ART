@@ -2,23 +2,18 @@ var chartURL = 'dashboard/get_chart'
 var filterURL = 'dashboard/get_filter/'
 var filterDIVClass = '.auto_filter'
 var tab = 'commodities'
-var metric = 'total'
-var order = 'desc'
-var limit = '10'
-var exemptedTabs = []
 var filters = {}
 var charts = []
-charts['commodities'] = ['pipeline_consumption']
-//charts['commodities'] = ['pipeline_consumption', 'facility_consumption', 'facility_soh']
-charts['patients'] = ['adult_art', 'paed_art', 'oi', 'patient_regimen_category', 'patient_site']
+charts['commodities'] = ['national_mos', 'drug_consumption_trend']
+charts['patients'] = ['patient_in_care', 'patient_regimen_category', 'art_scaleup']
 
 $(function() {
     /*Load Charts*/
     $.each(charts[tab], function(key, chartName) {
         chartID = '#'+chartName+'_chart'
         chartHeadingClass = '.'+chartName+'_heading'
-        LoadChart(chartID, chartURL, chartName, metric, filters, order, limit)
-        LoadHeading(chartHeadingClass, order, limit)
+        LoadChart(chartID, chartURL, chartName, filters)
+        //LoadHeading(chartHeadingClass, order, limit)
     });
     /*Tab Change Event*/
     $("#main_tabs a").on("click", TabFilterHandler);
@@ -30,11 +25,11 @@ $(function() {
     $(".clear_filter_btn").on("click", ClearFilterHandler)
 });
 
-function LoadChart(divID, chartURL, chartName, metric, selectedfilters, order, limit){
+function LoadChart(divID, chartURL, chartName, selectedfilters){
     /*Load Spinner*/
     LoadSpinner(divID)
     /*Load Chart*/
-    $(divID).load(chartURL, {'name':chartName, 'metric': metric, 'selectedfilters': selectedfilters, 'order':order, 'limit':limit})
+    $(divID).load(chartURL, {'name':chartName, 'selectedfilters': selectedfilters})
 }
 
 function LoadSpinner(divID){
@@ -44,27 +39,27 @@ function LoadSpinner(divID){
     $(divID).append(spinner.el)
 }
 
+/*
 function LoadHeading(spanClass, order, limit){
     var titles = new Array();
     titles['desc'] = 'Top'
     titles['asc'] = 'Bottom'
     message = titles[order]+' '+limit
     $(spanClass).text(message)
-}
+}*/
 
 function TabFilterHandler(e){
     var filtername = $(e.target).attr('href')
     var filters = {}
     tab = filtername.replace('#','')
-    if($.inArray(tab, exemptedTabs) == -1){ 
-        /*Load Charts*/
-        $.each(charts[tab], function(key, chartName) {
-            chartID = '#'+chartName+'_chart'
-            chartHeadingClass = '.'+chartName+'_heading'
-            LoadChart(chartID, chartURL, chartName, metric, filters, order, limit)
-            LoadHeading(chartHeadingClass, order, limit)
-        });
-    }
+
+    /*Load Charts*/
+    $.each(charts[tab], function(key, chartName) {
+        chartID = '#'+chartName+'_chart'
+        chartHeadingClass = '.'+chartName+'_heading'
+        LoadChart(chartID, chartURL, chartName, filters)
+        //LoadHeading(chartHeadingClass, order, limit)
+    });
 }
 
 function LoadFilterHandler(e){
@@ -120,10 +115,6 @@ function ChartFilterHandler(e){
     var chartName = $("#filter_btn").attr('data-filter')
     var chartHeadingClass = '.'+chartName+'_heading'
     var chartID = '#'+chartName+'_chart'
-    /*Static filters*/
-    var metric = $('.metric').val()
-    var order = $('.order').val()
-    var limit = $('.limit').val()
     /*Reset filters array*/
     filters = {}
     /*Dynamic filters*/
@@ -135,9 +126,9 @@ function ChartFilterHandler(e){
         }
     }).promise().done(function () { 
         //Load Chart Heading
-        LoadHeading(chartHeadingClass, order, limit)
+        //LoadHeading(chartHeadingClass, order, limit)
         //Load Chart
-        LoadChart(chartID, chartURL, chartName, metric, filters, order, limit)
+        LoadChart(chartID, chartURL, chartName, filters)
         //Close modal
         $('#filterModal').modal('hide');
     });
@@ -171,9 +162,5 @@ function ClearFilterData(){
     //Clear all filter elements
     filters = {}
     $(".filter").val(null).trigger("change");
-    //Clear DOM charts
-    $('.metric').val(metric).trigger("change");
-    $('.order').val(order).trigger("change");
-    $('.limit').val(limit).trigger("change");
 }
 
