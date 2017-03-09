@@ -77,10 +77,11 @@ class Dashboard extends MX_Controller {
 	}
 
 
-	public function get_chart($drilldown = TRUE){
+	public function get_chart($drilldown = FALSE){
 		//$main_data = $this->patient_model->get_county_total('2017', 'Jan');
 		//$main_data = $this->regimen_model->get_category_total('2017', 'Jan');
 		//$main_data = $this->scaleup_model->get_category_total();
+		$main_data = $this->pipeline_model->get_mos_total('2016', 'Oct');
 		#Build chart
 		$data['chart_name'] = 'patient_numbers_county';
 		$data['chart_type'] = 'column';
@@ -96,7 +97,8 @@ class Dashboard extends MX_Controller {
 		}else{
 			$data['chart_series_data'] =  json_encode($main_data['main'], JSON_NUMERIC_CHECK);
 			$data['chart_categories'] =  json_encode($main_data['columns'], JSON_NUMERIC_CHECK);
-			$this->load->view('combined_view', $data);
+			//$this->load->view('combined_view', $data);
+			$this->load->view('stacked_bar_chart_view', $data);
 		}
 
 	}

@@ -161,16 +161,14 @@ class FtpService extends MX_Controller {
 				$status_data[$sheet_name] = $this->get_ordering_points($arr, $highestColumm, $highestRow);
 			}else if($sheet_name == 'Current patients by ART site'){
 				$status_data[$sheet_name] = $this->get_current_art_patients($arr, $highestColumm, $highestRow);
-			}else if($sheet_name == 'Pipeline Commodity Consumption'){
-				$status_data[$sheet_name] = $this->get_pipeline_consumption($arr, $highestColumm, $highestRow);	
+			}else if($sheet_name == 'Stock Status'){
+				$status_data[$sheet_name] = $this->get_mos_pipeline($arr, $highestColumm, $highestRow);	
 			}else if($sheet_name == 'Facility Cons by ARV Medicine'){
 				$status_data[$sheet_name] = $this->get_facility_consumption($arr, $highestColumm, $highestRow);
 			}else if($sheet_name == 'Facility SOH by ARV Medicine'){
 				$status_data[$sheet_name] = $this->get_facility_soh($arr, $highestColumm, $highestRow);	
 			}
-
 		}
-
 		if(!in_array(FALSE, array_values($status_data))){
 			$status['status'] = TRUE;
 		}
@@ -236,16 +234,16 @@ class FtpService extends MX_Controller {
 		return $status;
 	}
 
-	public function get_pipeline_consumption($arr, $highestColumm, $highestRow){
+	public function get_mos_pipeline($arr, $highestColumm, $highestRow){
 		$status = FALSE;
-		$cfg = $this->config->item('pipeline_consumption_cfg');
+		$cfg = $this->config->item('mos_pipeline_cfg');
 		$start_row = $cfg['first_row'];
 		$id_col = $cfg['id_col'];
 		$drug_col = $cfg['drug_col'];
 		$packsize_col = $cfg['packsize_col'];
 		$first_col = $cfg['first_col'];
 		$cols = $this->excel_column_range($first_col, $highestColumm);
-		$year_row = $cfg['year_row'];
+		$period_year = $arr[$cfg['year_row']][$cfg['year_col']];
 		$month_row = $cfg['month_row'];
 
 		for($i = $start_row; $i <= $highestRow; $i++){
@@ -253,18 +251,26 @@ class FtpService extends MX_Controller {
 			$drug_name = $arr[$i][$drug_col];
 			$packsize = $arr[$i][$packsize_col];
 			if($id){
-				foreach ($cols as $col) {
-				    $period_year = $arr[$year_row][$col];
-				    $period_month = date('M', strtotime($arr[$month_row][$col]));
-				    if($period_year && $period_month){
-				    	$consumption_total = $arr[$i][$col];
-				    	//run proc
-				    	$proc_sql = "CALL ".$cfg['proc_name']."('".$drug_name."','".$packsize."','".$period_year."','".$period_month."','".$consumption_total."')";
+				foreach ($cols as $index => $col) {
+					if($arr[$month_row][$col]){
+						$period_month = ucwords(strtolower($arr[$month_row][$col]));
+						//set total indices
+						$issue_col = $cols[$index+$cfg['issue_index']];
+						$soh_col = $cols[$index+$cfg['soh_index']];
+						$supplier_col = $cols[$index+$cfg['supplier_index']];
+						$received_col = $cols[$index+$cfg['received_index']];
+						//get totals
+						$issues_total = $arr[$i][$issue_col];
+						$soh_total = $arr[$i][$soh_col];
+						$supplier_total = $arr[$i][$supplier_col];
+						$received_total = $arr[$i][$received_col];
+						//run proc
+				    	$proc_sql = "CALL ".$cfg['proc_name']."('".$drug_name."','".$packsize."','".$period_year."','".$period_month."','".$issues_total."','".$soh_total."','".$supplier_total."','".$received_total."')";
 				    	if ($this->db->simple_query($proc_sql)){
 							$status = TRUE;
 						}
-				    }
-				}
+					}
+				}	
 			}
 		}
 		return $status;

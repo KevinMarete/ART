@@ -13,7 +13,7 @@ $config['local_upload_dir'] = 'public/uploads/';
 $config['target_sheets'] = array(
 	'Ordering Points', 
 	'Current patients by ART site', 
-	'Pipeline Commodity Consumption', 
+	'Stock Status', 
 	'Facility Cons by ARV Medicine', 
 	'Facility SOH by ARV Medicine'
 );
@@ -23,7 +23,7 @@ $config['ordering_points_cfg'] = array(
 	'code_col' => 'M',
 	'facility_col' => 'N',
 	'county_col' => 'O',
-	'proc_name' => 'proc_save_ordering_sites'
+	'proc_name' => 'proc_save_site_ordering'
 );
 $config['current_art_patients_cfg'] = array(
 	'first_row' => 7,
@@ -34,17 +34,22 @@ $config['current_art_patients_cfg'] = array(
 	'period_col' => 'B',
 	'period_splitter' => '/',
 	'first_col' => 'D',
-	'proc_name' => 'proc_save_current_art_patients'
+	'proc_name' => 'proc_save_patient_current'
 );
-$config['pipeline_consumption_cfg'] = array(
-	'first_row' => 10,
+$config['mos_pipeline_cfg'] = array(
+	'first_row' => 5,
 	'id_col' => 'A',
 	'drug_col' => 'B',
 	'packsize_col' => 'C',
-	'year_row' => 6,
-	'month_row' => 7,
+	'year_col' => 'C',
+	'year_row' => 2,
+	'month_row' => 3,
+	'issue_index' => 0, 
+	'soh_index' => 1,
+	'supplier_index' => 2,
+	'received_index' => 3,
 	'first_col' => 'D',
-	'proc_name' => 'proc_save_pipeline_consumption'
+	'proc_name' => 'proc_save_pipeline_mos'
 );
 $config['facility_consumption_cfg'] = array(
 	'first_row' => 9,

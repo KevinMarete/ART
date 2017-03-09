@@ -1,3 +1,17 @@
+/*Pipeline MOS*/
+CREATE OR REPLACE VIEW vw_pipeline_mos AS
+    SELECT 
+        CONCAT_WS('(', d.name,CONCAT(d.pack_size, ')')) AS drug,
+        pm.period_month AS data_month,
+        pm.period_year AS data_year,
+        IFNULL(ROUND(SUM(fs.total)/fn_get_pipeline_amc(pm.drug_id, CONCAT(CONCAT_WS('-', pm.period_year, DATE_FORMAT(str_to_date(pm.period_month,'%b'), '%m')), '-01')),1),0) AS facility_mos,
+        IFNULL(ROUND(pm.soh_total/fn_get_pipeline_amc(pm.drug_id, CONCAT(CONCAT_WS('-', pm.period_year, DATE_FORMAT(str_to_date(pm.period_month,'%b'), '%m')), '-01')),1),0) AS cms_mos,
+        IFNULL(ROUND(pm.supplier_total/fn_get_pipeline_amc(pm.drug_id, CONCAT(CONCAT_WS('-', pm.period_year, DATE_FORMAT(str_to_date(pm.period_month,'%b'), '%m')), '-01')),1),0) AS supplier_mos
+    FROM tbl_pipeline_mos pm
+    INNER JOIN tbl_drug d ON d.id = pm.drug_id
+    INNER JOIN tbl_facility_soh fs ON fs.drug_id = pm.drug_id AND fs.period_month = pm.period_month AND fs.period_year = pm.period_year
+    GROUP BY drug, data_month, data_year
+
 /*Pipeline Consumption*/
 CREATE OR REPLACE VIEW vw_consumption_pipeline AS
     SELECT 
@@ -10,7 +24,7 @@ CREATE OR REPLACE VIEW vw_consumption_pipeline AS
     GROUP by drug,data_month,data_year,total;
 
 /*Facility Consumption*/
-CREATE OR REPLACE VIEW vw_consumption_facility AS
+CREATE OR REPLACE VIEW vw_facility_consumption AS
     SELECT 
         CONCAT_WS('(', d.name,CONCAT(d.pack_size, ')')) AS drug,
         f.name AS facility,
@@ -19,7 +33,7 @@ CREATE OR REPLACE VIEW vw_consumption_facility AS
         cf.period_month AS data_month,
         cf.period_year AS data_year,
         SUM(cf.total) AS total
-    FROM tbl_consumption_facility cf 
+    FROM tbl_facility_consumption cf 
     INNER JOIN tbl_drug d ON cf.drug_id = d.id
     INNER JOIN tbl_facility f ON cf.facility_id = f.id
     INNER JOIN tbl_facility_master fm ON fm.id = f.master_id
