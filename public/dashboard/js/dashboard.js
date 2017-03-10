@@ -1,5 +1,5 @@
-var chartURL = 'dashboard/get_chart'
-var filterURL = 'dashboard/get_filter/'
+var chartURL = 'Dashboard/get_chart'
+var filterURL = 'Dashboard/get_filter/'
 var filterDIVClass = '.auto_filter'
 var tab = 'commodities'
 var filters = {}
