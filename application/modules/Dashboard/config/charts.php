@@ -10,6 +10,17 @@ $config['national_mos_has_drilldown'] = FALSE;
 $config['national_mos_xaxis_title'] = '';
 $config['national_mos_view_name'] = 'vw_national_mos';
 $config['national_mos_filters'] = array('drug', 'data_month', 'data_year');
+$config['national_mos_filters_default'] = array(
+	'data_year' => array('2016'), 
+	'data_month' => array('Oct'), 
+	'drug' => array(
+		'Zidovudine/Lamivudine/Nevirapine (AZT/3TC/NVP) FDC 60/30/50mg tabs(60)',
+		'Zidovudine/Lamivudine/Nevirapine (AZT/3TC/NVP) FDC 300/150/200mg tabs(60)',
+		'Zidovudine/Lamivudine(AZT/3TC) 60 mg/30mg FDC tabs(60)',
+		'Zidovudine/Lamivudine (AZT/3TC) FDC 300/150mg tabs(60)',
+		'Zidovudine liquid (AZT) 10mg/ml(1 * 240ml)'
+	)
+);
 
 /*drug_consumption_trend_chart*/
 $config['drug_consumption_trend_chartview'] = 'charts/line_view';
@@ -20,6 +31,12 @@ $config['drug_consumption_trend_has_drilldown'] = FALSE;
 $config['drug_consumption_trend_xaxis_title'] = '';
 $config['drug_consumption_trend_view_name'] = 'vw_facility_consumption';
 $config['drug_consumption_trend_filters'] = array('drug');
+$config['drug_consumption_trend_filters_default'] = array(
+	'drug' => array(
+		'Abacavir (ABC) 300mg tabs(60)', 
+		'Lamivudine (3TC) 150mg Tabs(60)'
+	)
+);
 
 /*patient_in_care_chart*/
 $config['patient_in_care_chartview'] = 'charts/drilldown_view';
@@ -30,6 +47,11 @@ $config['patient_in_care_has_drilldown'] = TRUE;
 $config['patient_in_care_xaxis_title'] = 'County';
 $config['patient_in_care_view_name'] = 'vw_facility_patient_regimen';
 $config['patient_in_care_filters'] = array('regimen_category', 'regimen', 'data_month', 'data_year');
+$config['patient_in_care_filters_default'] = array(
+	'data_year' => array('2017'), 
+	'data_month' => array('Jan'), 
+	'regimen_category' => array('Adult ART')
+);
 
 /*patient_regimen_category_chart*/
 $config['patient_regimen_category_chartview'] = 'charts/drilldown_view';
@@ -40,6 +62,10 @@ $config['patient_regimen_category_has_drilldown'] = TRUE;
 $config['patient_regimen_category_xaxis_title'] = 'Regimen Category';
 $config['patient_regimen_category_view_name'] = 'vw_facility_patient_regimen';
 $config['patient_regimen_category_filters'] = array('facility', 'sub_county', 'county', 'data_month', 'data_year');
+$config['patient_regimen_category_filters_default'] = array(
+	'data_year' => array('2017'), 
+	'data_month' => array('Jan')
+);
 
 /*art_scaleup_chart*/
 $config['art_scaleup_chartview'] = 'charts/combined_view';
@@ -50,3 +76,4 @@ $config['art_scaleup_has_drilldown'] = FALSE;
 $config['art_scaleup_xaxis_title'] = '';
 $config['art_scaleup_view_name'] = 'vw_facility_patient_regimen';
 $config['art_scaleup_filters'] = array('facility', 'sub_county', 'county');
+$config['art_scaleup_filters_default'] = array();

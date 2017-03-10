@@ -11,9 +11,7 @@ $(function() {
     /*Load Charts*/
     $.each(charts[tab], function(key, chartName) {
         chartID = '#'+chartName+'_chart'
-        chartHeadingClass = '.'+chartName+'_heading'
         LoadChart(chartID, chartURL, chartName, filters)
-        //LoadHeading(chartHeadingClass, order, limit)
     });
     /*Tab Change Event*/
     $("#main_tabs a").on("click", TabFilterHandler);
@@ -29,7 +27,9 @@ function LoadChart(divID, chartURL, chartName, selectedfilters){
     /*Load Spinner*/
     LoadSpinner(divID)
     /*Load Chart*/
-    $(divID).load(chartURL, {'name':chartName, 'selectedfilters': selectedfilters})
+    $(divID).load(chartURL, {'name':chartName, 'selectedfilters': selectedfilters}, function(){
+        LoadHeading(chartName)
+    });
 }
 
 function LoadSpinner(divID){
@@ -39,26 +39,52 @@ function LoadSpinner(divID){
     $(divID).append(spinner.el)
 }
 
-/*
-function LoadHeading(spanClass, order, limit){
-    var titles = new Array();
-    titles['desc'] = 'Top'
-    titles['asc'] = 'Bottom'
-    message = titles[order]+' '+limit
-    $(spanClass).text(message)
-}*/
+function LoadHeading(chartName){
+    var chartHeadingClass = '.'+chartName+'_heading'
+    var filter_length = $('.filter').length
+    var current_filter = $("#filter_btn").attr('data-filter')
+    var message = ''
+
+    LoadSpinner(chartHeadingClass)
+    
+    if(filter_length > 0 && current_filter != ''){
+        $('.filter').each(function() {
+            var element = $(this)
+            var filterData = element.val()
+            var filterName = element.attr('id')
+            if(filterData != null){
+                filterName = filterName.replace(/DATA|_/gi,' ')
+                message += '<br/><b><u>'+toTitleCase(filterName)+'</u></b><br/>'+filterData.join('<br/>');
+            }
+        });
+        $(chartHeadingClass).html(message) 
+    }else{
+        $.getJSON(filterURL+chartName, function(filters) {
+            if(typeof Object.keys(filters.default) !== 'undefined' && Object.keys(filters.default).length > 0){
+                $.each(filters.default, function(filter, filter_values){
+                    filter = filter.replace(/DATA|_/gi,' ')
+                    message += '<br/><b><u>'+toTitleCase(filter)+'</u></b><br/>'+filter_values.join('<br/>');
+                });
+            }else{
+                message = 'No Filter!'
+            }
+            $(chartHeadingClass).html(message) 
+        });
+    }   
+}
 
 function TabFilterHandler(e){
     var filtername = $(e.target).attr('href')
     var filters = {}
-    tab = filtername.replace('#','')
+    tab = filtername.replace('#', '')
+
+    //Reset filter identifier
+    $("#filter_btn").attr('data-filter', '')
 
     /*Load Charts*/
     $.each(charts[tab], function(key, chartName) {
         chartID = '#'+chartName+'_chart'
-        chartHeadingClass = '.'+chartName+'_heading'
         LoadChart(chartID, chartURL, chartName, filters)
-        //LoadHeading(chartHeadingClass, order, limit)
     });
 }
 
@@ -76,10 +102,10 @@ function LoadFilterHandler(e){
         var filter_text = toTitleCase(chartName.replace(/_/g,' '))
         $('.filter_text').html(filter_text)
         //Get filters and content
-        $.getJSON(filterURL+chartName, function(filters) {
+        $.getJSON(filterURL+chartName+'/0', function(filters) {
             //Clear Spinner
             $(filterDIVClass).html('');
-            $.each(filters, function(filter, filter_values){
+            $.each(filters.all, function(filter, filter_values){
                 var filterhtml = '';
                 var filtername = filter.replace(/DATA|_/gi,' ').toUpperCase();
                 filterhtml += '<div class="form-group">'
@@ -91,10 +117,14 @@ function LoadFilterHandler(e){
                 $('.auto_filter').append(filterhtml);
                 LoadSelectBox('.'+filter, filter_values, 'classic')
             });
+            //Autoselect defaults
+            $.each(filters.default, function(filter, filter_values){
+                $('.'+filter).val(filter_values).trigger('change');
+            });
         });
         //Add chartName to filter_btn
         $("#filter_btn").attr('data-filter', chartName)
-    }
+    } 
 }
 
 function LoadSelectBox(divClass, data, theme){
@@ -102,7 +132,7 @@ function LoadSelectBox(divClass, data, theme){
         theme: theme,
         data: data,
         tags: true
-    })
+    });
 }
 
 function toTitleCase(str) {
@@ -125,8 +155,6 @@ function ChartFilterHandler(e){
             filters[element.attr('id')] = filterData
         }
     }).promise().done(function () { 
-        //Load Chart Heading
-        //LoadHeading(chartHeadingClass, order, limit)
         //Load Chart
         LoadChart(chartID, chartURL, chartName, filters)
         //Close modal
@@ -138,24 +166,34 @@ function ClearFilterHandler(e){
     var previousChartName = $("#filter_btn").attr('data-filter')
     var chartName = e.currentTarget.id.replace('_clear','')
     var filters_tmp = filters
+
+    /*Load Spinner*/
+    LoadSpinner('#'+chartName+'_chart')
+
     //Set new chartName
     $("#filter_btn").attr('data-filter', chartName)
 
-    //Clear filter data fields
+    //Clear filter fields
     ClearFilterData()
 
-    //Click filter_btn
-    $("#filter_btn").trigger('click');
-
-    //Reset the previous chartname and selected_items
-    if(previousChartName != chartName){
-        filters = filters_tmp
-        $.each(filters, function(element, values){
-            $("#"+element).val(values).trigger("change");
+    //Autoselect defaults
+    $.getJSON(filterURL+chartName, function(filters) {
+        //set chartName default filters
+        $.each(filters.default, function(filter, filter_values){
+            $('.'+filter).val(filter_values).trigger('change');
         });
-        $("#filter_btn").attr('data-filter', previousChartName)
-    }
+        //Click filter_btn
+        $("#filter_btn").trigger('click');
 
+        //Reset the previous chartname and selected_items
+        if(previousChartName != chartName){
+            filters = filters_tmp
+            $.each(filters, function(element, values){
+                $("#"+element).val(values).trigger("change");
+            });
+            $("#filter_btn").attr('data-filter', previousChartName)
+        }
+    });
 }
 
 function ClearFilterData(){
@@ -163,4 +201,3 @@ function ClearFilterData(){
     filters = {}
     $(".filter").val(null).trigger("change");
 }
-
