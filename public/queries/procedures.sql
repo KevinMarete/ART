@@ -148,10 +148,10 @@ BEGIN
         INSERT INTO tbl_drug(name, pack_size)VALUES(drug_name, packsize);
         SET drug = LAST_INSERT_ID();
     END IF;
-    IF NOT EXISTS(SELECT * FROM tbl_soh_facility WHERE period_year = p_year AND period_month = p_month AND facility_id = facility AND drug_id = drug) THEN
-        INSERT INTO tbl_soh_facility(total, period_year, period_month, facility_id, drug_id) VALUES(soh_total, p_year, p_month, facility, drug);
+    IF NOT EXISTS(SELECT * FROM tbl_facility_soh WHERE period_year = p_year AND period_month = p_month AND facility_id = facility AND drug_id = drug) THEN
+        INSERT INTO tbl_facility_soh(total, period_year, period_month, facility_id, drug_id) VALUES(soh_total, p_year, p_month, facility, drug);
     ELSE
-        UPDATE tbl_soh_facility SET total = soh_total WHERE period_year = p_year AND period_month = p_month AND facility_id = facility AND drug_id = drug; 
+        UPDATE tbl_facility_soh SET total = soh_total WHERE period_year = p_year AND period_month = p_month AND facility_id = facility AND drug_id = drug; 
     END IF;
 END//
 DELIMITER ;

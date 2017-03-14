@@ -4,20 +4,6 @@ CREATE OR REPLACE VIEW vw_national_mos AS
         CONCAT_WS('(', d.name,CONCAT(d.pack_size, ')')) AS drug,
         pm.period_month AS data_month,
         pm.period_year AS data_year,
-        IFNULL(ROUND(SUM(fs.total)/fn_get_national_amc(pm.drug_id, CONCAT(CONCAT_WS('-', pm.period_year, DATE_FORMAT(str_to_date(pm.period_month,'%b'), '%m')), '-01')),1),0) AS facility_mos,
-        IFNULL(ROUND(pm.soh_total/fn_get_national_amc(pm.drug_id, CONCAT(CONCAT_WS('-', pm.period_year, DATE_FORMAT(str_to_date(pm.period_month,'%b'), '%m')), '-01')),1),0) AS cms_mos,
-        IFNULL(ROUND(pm.supplier_total/fn_get_national_amc(pm.drug_id, CONCAT(CONCAT_WS('-', pm.period_year, DATE_FORMAT(str_to_date(pm.period_month,'%b'), '%m')), '-01')),1),0) AS supplier_mos
-    FROM tbl_national_mos pm
-    INNER JOIN tbl_drug d ON d.id = pm.drug_id
-    INNER JOIN tbl_facility_soh fs ON fs.drug_id = pm.drug_id AND fs.period_month = pm.period_month AND fs.period_year = pm.period_year
-    GROUP BY drug, data_month, data_year;
-
-/*National MOS(5.7.12)*/
-CREATE OR REPLACE VIEW vw_national_mos AS
-    SELECT 
-        CONCAT_WS('(', d.name,CONCAT(d.pack_size, ')')) AS drug,
-        pm.period_month AS data_month,
-        pm.period_year AS data_year,
         IFNULL(ROUND(SUM(fs.total)/fn_get_national_amc(pm.drug_id, DATE_FORMAT(str_to_date(CONCAT(CONCAT(pm.period_year,pm.period_month),'01'),'%Y%b%d'),'%Y-%m-%d') ),1),0) AS facility_mos,
         IFNULL(ROUND(pm.soh_total/fn_get_national_amc(pm.drug_id, DATE_FORMAT(str_to_date(CONCAT(CONCAT(pm.period_year,pm.period_month),'01'),'%Y%b%d'),'%Y-%m-%d') ),1),0) AS cms_mos,
         IFNULL(ROUND(pm.supplier_total/fn_get_national_amc(pm.drug_id, DATE_FORMAT(str_to_date(CONCAT(CONCAT(pm.period_year,pm.period_month),'01'),'%Y%b%d'),'%Y-%m-%d')),1),0) AS supplier_mos
@@ -25,8 +11,6 @@ CREATE OR REPLACE VIEW vw_national_mos AS
     INNER JOIN tbl_drug d ON d.id = pm.drug_id
     INNER JOIN tbl_facility_soh fs ON fs.drug_id = pm.drug_id AND fs.period_month = pm.period_month AND fs.period_year = pm.period_year
     GROUP BY drug, data_month, data_year;
-
-
 
 /*Facility Consumption*/
 CREATE OR REPLACE VIEW vw_facility_consumption AS
