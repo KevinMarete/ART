@@ -1,15 +1,25 @@
+/*National Consumption*/
+CREATE OR REPLACE VIEW vw_national_soh AS
+    SELECT
+        fs.drug_id,
+        fs.period_month,
+        fs.period_year,
+        SUM(fs.total) as total
+    FROM tbl_facility_soh fs
+    GROUP BY fs.drug_id, fs.period_month, fs.period_year
+
 /*National MOS*/
 CREATE OR REPLACE VIEW vw_national_mos AS
     SELECT 
         CONCAT_WS('(', d.name,CONCAT(d.pack_size, ')')) AS drug,
         pm.period_month AS data_month,
         pm.period_year AS data_year,
-        IFNULL(ROUND(SUM(fs.total)/fn_get_national_amc(pm.drug_id, DATE_FORMAT(str_to_date(CONCAT(CONCAT(pm.period_year,pm.period_month),'01'),'%Y%b%d'),'%Y-%m-%d') ),1),0) AS facility_mos,
+        IFNULL(ROUND(fs.total/fn_get_national_amc(pm.drug_id, DATE_FORMAT(str_to_date(CONCAT(CONCAT(pm.period_year,pm.period_month),'01'),'%Y%b%d'),'%Y-%m-%d') ),1),0) AS facility_mos,
         IFNULL(ROUND(pm.soh_total/fn_get_national_amc(pm.drug_id, DATE_FORMAT(str_to_date(CONCAT(CONCAT(pm.period_year,pm.period_month),'01'),'%Y%b%d'),'%Y-%m-%d') ),1),0) AS cms_mos,
         IFNULL(ROUND(pm.supplier_total/fn_get_national_amc(pm.drug_id, DATE_FORMAT(str_to_date(CONCAT(CONCAT(pm.period_year,pm.period_month),'01'),'%Y%b%d'),'%Y-%m-%d')),1),0) AS supplier_mos
     FROM tbl_national_mos pm
     INNER JOIN tbl_drug d ON d.id = pm.drug_id
-    INNER JOIN tbl_facility_soh fs ON fs.drug_id = pm.drug_id AND fs.period_month = pm.period_month AND fs.period_year = pm.period_year
+    INNER JOIN vw_national_soh fs ON fs.drug_id = pm.drug_id AND fs.period_month = pm.period_month AND fs.period_year = pm.period_year
     GROUP BY drug, data_month, data_year;
 
 /*Facility Consumption*/

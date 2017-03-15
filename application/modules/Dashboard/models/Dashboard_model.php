@@ -49,7 +49,7 @@ class Dashboard_model extends CI_Model {
 			}
 		}
 		$this->db->group_by('drug, period');
-		$this->db->order_by('period', 'DESC');
+		$this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
 		$query = $this->db->get('vw_facility_consumption');
 		$results = $query->result_array();
 
@@ -208,7 +208,7 @@ class Dashboard_model extends CI_Model {
 		}
 		$this->db->where_in('regimen_category', array('Adult ART', 'Paediatric ART'));
 		$this->db->group_by('period');
-		$this->db->order_by('period', 'DESC');
+		$this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
 		$query = $this->db->get('vw_facility_patient_regimen');
 		$results = $query->result_array();
 
