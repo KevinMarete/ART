@@ -8,7 +8,7 @@ class Dashboard_model extends CI_Model {
 		$columns = array();
 		$scaleup_data = array(
 			array('name' => 'Pending Orders', 'data' => array()),
-			array('name' => 'CMS', 'data' => array()),
+			array('name' => 'KEMSA', 'data' => array()),
 			array('name' => 'Facilities', 'data' => array())
 		);
 
@@ -28,7 +28,7 @@ class Dashboard_model extends CI_Model {
 			foreach ($scaleup_data as $index => $scaleup) {
 				if($scaleup['name'] == 'Facilities'){
 					array_push($scaleup_data[$index]['data'], $result['facility_mos']);
-				}else if($scaleup['name'] == 'CMS'){
+				}else if($scaleup['name'] == 'KEMSA'){
 					array_push($scaleup_data[$index]['data'], $result['cms_mos']);
 				}else if($scaleup['name'] == 'Pending Orders'){
 					array_push($scaleup_data[$index]['data'], $result['supplier_mos']);	
@@ -77,7 +77,8 @@ class Dashboard_model extends CI_Model {
 		$this->db->group_by('name');
 		$this->db->order_by('y', 'DESC');
 		$query = $this->db->get('vw_facility_patient_regimen');
-		return $this->get_patient_regimen_category_drilldown_level1(array('main' => $query->result_array()), $filters);
+		//return $this->get_patient_regimen_category_drilldown_level1(array('main' => $query->result_array()), $filters);
+		return array('main' => $query->result_array(), 'drilldown' => array());
 	}
 
 	public function get_patient_regimen_category_drilldown_level1($main_data, $filters){
@@ -121,7 +122,8 @@ class Dashboard_model extends CI_Model {
 		$this->db->group_by('name');
 		$this->db->order_by('y', 'DESC');
 		$query = $this->db->get('vw_facility_patient_regimen');
-		return $this->get_patient_in_care_drilldown_level1(array('main' => $query->result_array()), $filters);
+		//return $this->get_patient_in_care_drilldown_level1(array('main' => $query->result_array()), $filters);
+		return array('main' => $query->result_array(), 'drilldown' => array());
 	}
 
 	public function get_patient_in_care_drilldown_level1($main_data, $filters){

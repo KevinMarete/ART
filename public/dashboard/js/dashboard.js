@@ -5,7 +5,8 @@ var tab = 'commodities'
 var filters = {}
 var charts = []
 charts['commodities'] = ['national_mos', 'drug_consumption_trend']
-charts['patients'] = ['patient_in_care', 'patient_regimen_category', 'art_scaleup']
+//charts['patients'] = ['patient_in_care', 'patient_regimen_category', 'art_scaleup']
+charts['patients'] = ['art_scaleup']
 
 $(function() {
     /*Load Charts*/

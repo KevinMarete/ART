@@ -10,7 +10,7 @@ class Dashboard extends MX_Controller {
 
 	public function index()
 	{	
-		$data['page_title'] = 'ADT | Dashboard';
+		$data['page_title'] = 'ART | Dashboard';
 		$this->load->view('dashboard_view', $data);
 	}
 

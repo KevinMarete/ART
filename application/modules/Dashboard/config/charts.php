@@ -30,7 +30,7 @@ $config['drug_consumption_trend_source'] = 'Source: www.nascop.org';
 $config['drug_consumption_trend_has_drilldown'] = FALSE;
 $config['drug_consumption_trend_xaxis_title'] = '';
 $config['drug_consumption_trend_view_name'] = 'vw_facility_consumption';
-$config['drug_consumption_trend_filters'] = array('drug');
+$config['drug_consumption_trend_filters'] = array('drug', 'facility', 'sub_county', 'county');
 $config['drug_consumption_trend_filters_default'] = array(
 	'drug' => array(
 		'Abacavir (ABC) 300mg tabs(60)', 

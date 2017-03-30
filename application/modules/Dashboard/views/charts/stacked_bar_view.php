@@ -14,7 +14,8 @@
             lang: {
               decimalPoint: '.',
               thousandsSep: ','
-            }
+            },
+            colors: ['green', 'red', 'blue']
         });
 
         Highcharts.chart(chartDIV, {
@@ -40,7 +41,7 @@
                     color: 'red',
                     dashStyle: 'longdashdot',
                     value: 9,
-                    width: 2    
+                    width: 2
                 },
                 {
                     color: 'purple',

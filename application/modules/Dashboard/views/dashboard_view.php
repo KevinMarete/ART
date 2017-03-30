@@ -29,13 +29,13 @@
 			    <a class="navbar-brand" href="#">
 			      	<span class="glyphicon glyphicon-dashboard"></span>
 			    </a>
-		    	<a class="navbar-brand" href="#">ADT DASHBOARD</a>
+		    	<a class="navbar-brand" href="#">ART DASHBOARD</a>
 			</div> 
 			<nav class="collapse navbar-collapse" id="filter-navbar"> 
 				<!--Tab Links-->
 				<ul class="nav navbar-nav navbar-left" id="main_tabs">
-		          <li class="active"><a href="#commodities" aria-controls="commodities" role="tab" data-toggle="tab">COMMODITIES</a></li>
-		          <li><a href="#patients" aria-controls="patients" role="tab" data-toggle="tab">PATIENTS</a></li>
+		          <li class="active"><a href="#commodities" aria-controls="commodities" role="tab" data-toggle="tab">ARV/OI DRUGS</a></li>
+		          <li><a href="#patients" aria-controls="patients" role="tab" data-toggle="tab">ART PATIENT STATISTICS</a></li>
 		        </ul>
 		        <!--upload_link-->
 				<div class="nav navbar-nav navbar-form navbar-right">
@@ -196,7 +196,7 @@
 	</div>
 	<!--footer-->
 	<hr>
-	<p class="small text-muted">Built by <a href="http://www.clintonhealthaccess.org" target="_blank">CHAI</a></p>
+	<p class="small text-muted">NASCOP &copy <?php echo date('Y'); ?>. All Rights Reserved</p>
 	<!-- filter_modal -->
 	<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel">
 	  	<div class="modal-dialog modal-lg" role="document">

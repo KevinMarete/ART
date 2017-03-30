@@ -65,7 +65,10 @@
                 column: {
                     pointPadding: 0.2,
                     borderWidth: 0,
-                    colorByPoint: true
+                    colorByPoint: true,
+                    dataLabels: {
+                        enabled: true
+                    }
                 },
                 pie: {
                     allowPointSelect: true,
