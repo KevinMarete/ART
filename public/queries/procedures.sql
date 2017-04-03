@@ -155,3 +155,77 @@ BEGIN
     END IF;
 END//
 DELIMITER ;
+
+/*Create Dashboard Tables intead of views*/
+DELIMITER //
+CREATE OR REPLACE PROCEDURE proc_create_dashboard_tables()
+BEGIN
+    /*National MOS*/
+    TRUNCATE tbl_dashboard_mos;
+    INSERT INTO tbl_dashboard_mos(drug, data_month, data_year, facility_mos, cms_mos, supplier_mos)
+    SELECT 
+        CONCAT_WS('(', d.name,CONCAT(d.pack_size, ')')) AS drug,
+        pm.period_month AS data_month,
+        pm.period_year AS data_year,
+        IFNULL(ROUND(fs.total/fn_get_national_amc(pm.drug_id, DATE_FORMAT(str_to_date(CONCAT(CONCAT(pm.period_year,pm.period_month),'01'),'%Y%b%d'),'%Y-%m-%d') ),1),0) AS facility_mos,
+        IFNULL(ROUND(pm.soh_total/fn_get_national_amc(pm.drug_id, DATE_FORMAT(str_to_date(CONCAT(CONCAT(pm.period_year,pm.period_month),'01'),'%Y%b%d'),'%Y-%m-%d') ),1),0) AS cms_mos,
+        IFNULL(ROUND(pm.supplier_total/fn_get_national_amc(pm.drug_id, DATE_FORMAT(str_to_date(CONCAT(CONCAT(pm.period_year,pm.period_month),'01'),'%Y%b%d'),'%Y-%m-%d')),1),0) AS supplier_mos
+    FROM tbl_national_mos pm
+    INNER JOIN tbl_drug d ON d.id = pm.drug_id
+    INNER JOIN vw_national_soh fs ON fs.drug_id = pm.drug_id AND fs.period_month = pm.period_month AND fs.period_year = pm.period_year
+    GROUP BY drug, data_month, data_year;
+    /*Facility Consumption*/
+    TRUNCATE tbl_dashboard_consumption;
+    INSERT INTO tbl_dashboard_consumption(drug, facility, county, sub_county, data_month, data_year, total)
+    SELECT 
+        CONCAT_WS('(', d.name,CONCAT(d.pack_size, ')')) AS drug,
+        f.name AS facility,
+        c.name AS county,
+        cs.name AS sub_county,
+        cf.period_month AS data_month,
+        cf.period_year AS data_year,
+        SUM(cf.total) AS total
+    FROM tbl_facility_consumption cf 
+    INNER JOIN tbl_drug d ON cf.drug_id = d.id
+    INNER JOIN tbl_facility f ON cf.facility_id = f.id
+    INNER JOIN tbl_facility_master fm ON fm.id = f.master_id
+    INNER JOIN tbl_county_sub cs ON cs.id = fm.county_sub_id
+    INNER JOIN tbl_county c ON c.id = cs.county_id
+    GROUP by drug,facility,county,sub_county,data_month,data_year,total;
+    /*Facility Patients*/
+    TRUNCATE tbl_dashboard_patient;
+    INSERT INTO tbl_dashboard_patient(regimen_category, drug_base, regimen, facility, county, sub_county, data_month, data_year, total)
+    SELECT 
+        CASE 
+            WHEN r.code  LIKE 'A%' THEN 'Adult ART' 
+            WHEN r.code  LIKE 'C%' THEN 'Paediatric ART'
+            WHEN r.code  LIKE 'PA%' THEN 'PEP Adult'
+            WHEN r.code  IN ('PC1A', 'PC3A', 'PC4X') THEN 'PEP Child'
+            WHEN r.code  IN ('PC6', 'PC7', 'PC8', 'PC9', 'PC1X')THEN 'PMTCT Child'
+            WHEN r.code LIKE 'PM%' THEN 'PMTCT Mother'
+            WHEN r.code IN('OI1A', 'OI1C', 'OI2A', 'OI2C') THEN 'OI:Universal prophylaxis'
+            WHEN r.code IN('OI4AN', 'OI4CN') THEN 'OI:IPT'
+            WHEN r.code IN('OI5A', 'OI5C') THEN 'OI:Fluconazole(treatment & prophylaxis)'
+        END AS regimen_category,
+        CASE 
+            WHEN mr.name LIKE 'AZT%' THEN 'AZT-Based'
+            WHEN mr.name LIKE 'TDF%' THEN 'TDF-Based'
+            WHEN mr.name LIKE 'ABC%' THEN 'ABC-Based'
+        END AS drug_base,
+        CONCAT_WS(' | ', mr.code, mr.name) AS regimen,
+        f.name AS facility,
+        c.name AS county,
+        cs.name AS sub_county,
+        rp.period_month AS data_month,
+        rp.period_year AS data_year,
+        SUM(rp.total) AS total
+    FROM tbl_regimen_patient rp
+    INNER JOIN tbl_regimen r ON rp.regimen_id = r.id
+    INNER JOIN tbl_regimen_master mr ON mr.id = r.master_id
+    INNER JOIN tbl_facility f ON rp.facility_id = f.id
+    INNER JOIN tbl_facility_master fm ON fm.id = f.master_id
+    INNER JOIN tbl_county_sub cs ON cs.id = fm.county_sub_id
+    INNER JOIN tbl_county c ON c.id = cs.county_id
+    GROUP by regimen_category,regimen,facility,county,sub_county,data_month,data_year,total;
+END//
+DELIMITER ;

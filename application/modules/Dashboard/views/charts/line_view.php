@@ -46,7 +46,7 @@
             },
             series: <?php echo $chart_series_data; ?>,
             exporting: { 
-                enabled: false 
+                enabled: true 
             }
         });
         

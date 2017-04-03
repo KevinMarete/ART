@@ -98,7 +98,7 @@
                 series: <?php echo $chart_drilldown_data; ?>
             },
             exporting: { 
-                enabled: false 
+                enabled: true 
             }
         });
 

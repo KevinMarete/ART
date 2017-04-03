@@ -13,12 +13,14 @@ $(document).ready(function(){
 
 	/*Load Pending Files*/
 	var ftp_pending_table = $('#ftp_pending').DataTable({
-        "ajax": 'files/pending_dir'
+        "ajax": 'files/pending_dir',
+        "pageLength": 5
     });
 
 	/*Load Completed Files*/
    	var ftp_completed_table = $('#ftp_completed').DataTable({
-        "ajax": 'files/completed_dir'
+        "ajax": 'files/completed_dir',
+        "pageLength": 5
     });
 
 	/*Prevent Double Submission*/

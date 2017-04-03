@@ -15,13 +15,13 @@
               decimalPoint: '.',
               thousandsSep: ','
             },
-            colors: ['green', 'red', 'blue']
         });
 
         Highcharts.chart(chartDIV, {
             chart: {
                 type: 'bar'
             },
+            colors: ['green', 'red', 'blue'],
             title: {
                 text: '<?php echo $chart_title; ?>'
             },
@@ -64,7 +64,7 @@
             },
             series: <?php echo $chart_series_data; ?>,
             exporting: { 
-                enabled: false 
+                enabled: true 
             }
         });
         

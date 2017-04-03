@@ -20,7 +20,7 @@ class Dashboard_model extends CI_Model {
 		}
 		$this->db->group_by('drug');
 		$this->db->order_by('drug', 'DESC');
-		$query = $this->db->get('vw_national_mos');
+		$query = $this->db->get('tbl_dashboard_mos');
 		$results = $query->result_array();
 
 		foreach ($results as $result) {
@@ -50,7 +50,7 @@ class Dashboard_model extends CI_Model {
 		}
 		$this->db->group_by('drug, period');
 		$this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
-		$query = $this->db->get('vw_facility_consumption');
+		$query = $this->db->get('tbl_dashboard_consumption');
 		$results = $query->result_array();
 
 		foreach ($results as $result) {
@@ -67,51 +67,6 @@ class Dashboard_model extends CI_Model {
 		return array('main' => $consumption_data, 'columns' => array_values(array_unique($columns)));
 	}
 
-	public function get_patient_regimen_category($filters){
-		$this->db->select("regimen_category name, SUM(total) y, LOWER(REPLACE(regimen_category, ' ', '_')) drilldown", FALSE);
-		if(!empty($filters)){
-			foreach ($filters as $category => $filter) {
-				$this->db->where_in($category, $filter);
-			}
-		}
-		$this->db->group_by('name');
-		$this->db->order_by('y', 'DESC');
-		$query = $this->db->get('vw_facility_patient_regimen');
-		//return $this->get_patient_regimen_category_drilldown_level1(array('main' => $query->result_array()), $filters);
-		return array('main' => $query->result_array(), 'drilldown' => array());
-	}
-
-	public function get_patient_regimen_category_drilldown_level1($main_data, $filters){
-		$drilldown_data = array();
-
-		$this->db->select("LOWER(REPLACE(regimen_category, ' ', '_')) category, regimen name, SUM(total) y", FALSE);
-		if(!empty($filters)){
-			foreach ($filters as $category => $filter) {
-				$this->db->where_in($category, $filter);
-			}
-		}
-		$this->db->group_by('name');
-		$this->db->order_by('y', 'DESC');
-		$query = $this->db->get('vw_facility_patient_regimen');
-		$sub_data = $query->result_array();
-
-		foreach ($main_data['main'] as $counter => $main) {
-			$category = $main['drilldown'];
-
-			$drilldown_data['drilldown'][$counter]['id'] = $category;
-			$drilldown_data['drilldown'][$counter]['name'] = ucwords($category);
-			$drilldown_data['drilldown'][$counter]['colorByPoint'] = true;
-
-			foreach ($sub_data as $sub) {
-				if($category == $sub['category']){
-					unset($sub['category']);
-					$drilldown_data['drilldown'][$counter]['data'][] = $sub;	
-				}
-			}
-		}
-		return array_merge($main_data, $drilldown_data);
-	}
-
 	public function get_patient_in_care($filters){
 		$this->db->select("CONCAT(UCASE(SUBSTRING(county, 1, 1)),LOWER(SUBSTRING(county, 2))) name, SUM(total) y, LOWER(REPLACE(county, ' ', '_')) drilldown", FALSE);
 		if(!empty($filters)){
@@ -121,9 +76,8 @@ class Dashboard_model extends CI_Model {
 		}
 		$this->db->group_by('name');
 		$this->db->order_by('y', 'DESC');
-		$query = $this->db->get('vw_facility_patient_regimen');
-		//return $this->get_patient_in_care_drilldown_level1(array('main' => $query->result_array()), $filters);
-		return array('main' => $query->result_array(), 'drilldown' => array());
+		$query = $this->db->get('tbl_dashboard_patient');
+		return $this->get_patient_in_care_drilldown_level1(array('main' => $query->result_array()), $filters);
 	}
 
 	public function get_patient_in_care_drilldown_level1($main_data, $filters){
@@ -137,7 +91,7 @@ class Dashboard_model extends CI_Model {
 		}
 		$this->db->group_by('drilldown');
 		$this->db->order_by('y', 'DESC');
-		$query = $this->db->get('vw_facility_patient_regimen');
+		$query = $this->db->get('tbl_dashboard_patient');
 		$sub_data = $query->result_array();
 
 		foreach ($main_data['main'] as $counter => $main) {
@@ -168,7 +122,7 @@ class Dashboard_model extends CI_Model {
 		}
 		$this->db->group_by('name');
 		$this->db->order_by('y', 'DESC');
-		$query = $this->db->get('vw_facility_patient_regimen');
+		$query = $this->db->get('tbl_dashboard_patient');
 		$facility_data = $query->result_array();
 
 		$counter = sizeof($drilldown_data['drilldown']);
@@ -194,6 +148,96 @@ class Dashboard_model extends CI_Model {
 		return $drilldown_data;
 	}
 
+	public function get_patient_regimen_category($filters){
+		$this->db->select("regimen_category name, SUM(total) y, LOWER(REPLACE(regimen_category, ' ', '_')) drilldown", FALSE);
+		if(!empty($filters)){
+			foreach ($filters as $category => $filter) {
+				$this->db->where_in($category, $filter);
+			}
+		}
+		$this->db->where('regimen_category !=', '');
+		$this->db->group_by('name');
+		$this->db->order_by('y', 'DESC');
+		$query = $this->db->get('tbl_dashboard_patient');
+		return $this->get_patient_regimen_category_drilldown_level1(array('main' => $query->result_array()), $filters);
+	}
+
+	public function get_patient_regimen_category_drilldown_level1($main_data, $filters){
+		$drilldown_data = array();
+
+		$this->db->select("LOWER(REPLACE(regimen_category, ' ', '_')) category, regimen name, SUM(total) y", FALSE);
+		if(!empty($filters)){
+			foreach ($filters as $category => $filter) {
+				$this->db->where_in($category, $filter);
+			}
+		}
+		$this->db->group_by('name');
+		$this->db->order_by('y', 'DESC');
+		$query = $this->db->get('tbl_dashboard_patient');
+		$sub_data = $query->result_array();
+
+		foreach ($main_data['main'] as $counter => $main) {
+			$category = $main['drilldown'];
+
+			$drilldown_data['drilldown'][$counter]['id'] = $category;
+			$drilldown_data['drilldown'][$counter]['name'] = ucwords($category);
+			$drilldown_data['drilldown'][$counter]['colorByPoint'] = true;
+
+			foreach ($sub_data as $sub) {
+				if($category == $sub['category']){
+					unset($sub['category']);
+					$drilldown_data['drilldown'][$counter]['data'][] = $sub;	
+				}
+			}
+		}
+		return array_merge($main_data, $drilldown_data);
+	}
+
+	public function get_drugs_in_regimen($filters){
+		$this->db->select("drug_base name, SUM(total) y, LOWER(REPLACE(drug_base, ' ', '_')) drilldown", FALSE);
+		if(!empty($filters)){
+			foreach ($filters as $category => $filter) {
+				$this->db->where_in($category, $filter);
+			}
+		}
+		$this->db->where('drug_base !=', '');
+		$this->db->group_by('name');
+		$this->db->order_by('y', 'DESC');
+		$query = $this->db->get('tbl_dashboard_patient');
+		return $this->get_drugs_in_regimen_drilldown_level1(array('main' => $query->result_array()), $filters);
+	}
+
+	public function get_drugs_in_regimen_drilldown_level1($main_data, $filters){
+		$drilldown_data = array();
+
+		$this->db->select("LOWER(REPLACE(drug_base, ' ', '_')) category, regimen name, SUM(total) y", FALSE);
+		if(!empty($filters)){
+			foreach ($filters as $category => $filter) {
+				$this->db->where_in($category, $filter);
+			}
+		}
+		$this->db->group_by('name');
+		$this->db->order_by('y', 'DESC');
+		$query = $this->db->get('tbl_dashboard_patient');
+		$sub_data = $query->result_array();
+
+		foreach ($main_data['main'] as $counter => $main) {
+			$category = $main['drilldown'];
+
+			$drilldown_data['drilldown'][$counter]['id'] = $category;
+			$drilldown_data['drilldown'][$counter]['name'] = ucwords($category);
+			$drilldown_data['drilldown'][$counter]['colorByPoint'] = true;
+
+			foreach ($sub_data as $sub) {
+				if($category == $sub['category']){
+					unset($sub['category']);
+					$drilldown_data['drilldown'][$counter]['data'][] = $sub;	
+				}
+			}
+		}
+		return array_merge($main_data, $drilldown_data);
+	}
+
 	public function get_art_scaleup($filters){
 		$columns = array();
 		$scaleup_data = array(
@@ -211,7 +255,7 @@ class Dashboard_model extends CI_Model {
 		$this->db->where_in('regimen_category', array('Adult ART', 'Paediatric ART'));
 		$this->db->group_by('period');
 		$this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
-		$query = $this->db->get('vw_facility_patient_regimen');
+		$query = $this->db->get('tbl_dashboard_patient');
 		$results = $query->result_array();
 
 		foreach ($results as $result) {

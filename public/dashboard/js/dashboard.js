@@ -1,12 +1,12 @@
 var chartURL = 'Dashboard/get_chart'
 var filterURL = 'Dashboard/get_filter/'
 var filterDIVClass = '.auto_filter'
-var tab = 'commodities'
+var tab = 'summary'
 var filters = {}
 var charts = []
+charts['summary'] = []
 charts['commodities'] = ['national_mos', 'drug_consumption_trend']
-//charts['patients'] = ['patient_in_care', 'patient_regimen_category', 'art_scaleup']
-charts['patients'] = ['art_scaleup']
+charts['patients'] = ['patient_in_care', 'patient_regimen_category', 'drugs_in_regimen', 'art_scaleup']
 
 $(function() {
     /*Load Charts*/
