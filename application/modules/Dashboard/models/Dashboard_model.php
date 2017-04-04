@@ -3,6 +3,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Dashboard_model extends CI_Model {
 
+	public function get_patient_regimen_numbers($filters){
+		$columns = array();
+
+		$this->db->select("regimen_category, regimen, SUM(total) total", FALSE);
+		if(!empty($filters)){
+			foreach ($filters as $category => $filter) {
+				$this->db->where_in($category, $filter);
+			}
+		}
+		$this->db->where('regimen_category !=', '');
+		$this->db->group_by('regimen');
+		$this->db->order_by('regimen_category, regimen', 'ASC');
+		$query = $this->db->get('tbl_dashboard_patient');
+		return array('main' => $query->result_array(), 'columns' => $columns);
+	}
+
 	public function get_national_mos($filters)
 	{
 		$columns = array();

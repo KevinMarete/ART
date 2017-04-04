@@ -44,7 +44,11 @@ class Dashboard extends MX_Controller {
 
 	public function get_data($chartname, $filters)
 	{	
-		if($chartname == 'national_mos'){
+		if($chartname == 'patient_by_regimen'){
+			$main_data = $this->dashboard_model->get_patient_regimen_numbers($filters);
+		}else if($chartname == 'stock_status'){
+			$main_data = $this->dashboard_model->get_national_mos($filters);
+		}else if($chartname == 'national_mos'){
 			$main_data = $this->dashboard_model->get_national_mos($filters);
 		}else if($chartname == 'drug_consumption_trend'){
 			$main_data = $this->dashboard_model->get_drug_consumption_trend($filters);

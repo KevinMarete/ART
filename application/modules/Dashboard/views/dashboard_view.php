@@ -54,13 +54,59 @@
 				<!--toprow-->
 				<div class="row">
 				  	<div class="col-sm-6">
+				  		<!--patient_by_regimen_chart-->
+				    	<div class="chart-wrapper">
+							<div class="chart-title">
+								ART PATIENTS BY REGIMEN
+								<!--filter_frm-->
+								<div class="nav navbar-right">
+									<!--clear_filter_btn-->
+									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="patient_by_regimen_clear">
+										<span class="glyphicon glyphicon-refresh"></span>
+									</button>
+								  	<!--filter_modal-->
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="patient_by_regimen_filter">
+										<span class="glyphicon glyphicon-filter"></span>
+									</button>
+								</div>
+							</div>
+							<div class="chart-stage">
+								<div id="patient_by_regimen_chart"></div>
+							</div>
+							<div class="chart-notes">
+								Filtered By: <span class="patient_by_regimen_heading"></span>
+							</div>
+						</div>
 				 	</div>
 					<div class="col-sm-6">
+						<!--stock_status_chart-->
+				    	<div class="chart-wrapper">
+							<div class="chart-title">
+								ARV/OI STOCK STATUS
+								<!--filter_frm-->
+								<div class="nav navbar-right">
+									<!--clear_filter_btn-->
+									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="stock_status_clear">
+										<span class="glyphicon glyphicon-refresh"></span>
+									</button>
+								  	<!--filter_modal-->
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="stock_status_filter">
+										<span class="glyphicon glyphicon-filter"></span>
+									</button>
+								</div>
+							</div>
+							<div class="chart-stage">
+								<div id="stock_status_chart"></div>
+							</div>
+							<div class="chart-notes">
+								Filtered By: <span class="stock_status_heading"></span>
+							</div>
+						</div>
 				 	</div>
 			    </div>
 		    </div>
 		</div>
-		<div role="tabpanel" class="tab-pane active" id="commodities">
+		<div role="tabpanel" class="tab-pane" id="commodities">
 			<div class="container-fluid">
 				<!--toprow-->
 				<div class="row">
