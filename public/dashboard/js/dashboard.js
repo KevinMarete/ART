@@ -111,8 +111,8 @@ function LoadFilterHandler(e){
                 var filtername = filter.replace(/DATA|_/gi,' ').toUpperCase();
                 filterhtml += '<div class="form-group">'
                 filterhtml += '<label for="'+filter+'" class="col-sm-2 control-label">'+filtername+'</label>'
-                filterhtml += '<div class="col-sm-8">'
-                filterhtml += '<select class="form-control filter '+filter+'" multiple="multiple" id="'+filter+'">'
+                filterhtml += '<div class="col-sm-9">'
+                filterhtml += '<select class="form-control filter '+filter+'" multiple="multiple" style="width: 100%" id="'+filter+'">'
                 filterhtml += '</select></div></div>';
                 //Append filter to DOM
                 $('.auto_filter').append(filterhtml);
@@ -130,9 +130,9 @@ function LoadFilterHandler(e){
 
 function LoadSelectBox(divClass, data, theme){
     $(divClass).select2({
-        theme: theme,
         data: data,
-        tags: true
+        tags: true,
+        placeholder: "Select Filter"
     });
 }
 
