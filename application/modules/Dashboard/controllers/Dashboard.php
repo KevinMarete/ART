@@ -86,9 +86,21 @@ class Dashboard extends MX_Controller {
 			foreach ($filters as $column) {
 				$filter_data = $this->dashboard_model->get_filters($column, $view_name);
 				foreach ($filter_data as $item) {
-					$data['all'][$column][] = array('id'=> $item['filter'], 'text' =>  strtoupper($item['filter']));
+					$data['all'][$column][] = array('label' => strtoupper($item['filter']), 'title' => $item['filter'], 'value' => $item['filter']);
 				}
 			}
+		}
+		echo json_encode($data);
+	}
+
+	public function get_specific_filter(){
+		$data = array();
+		$filter_name = $this->input->post('filter_name');
+		$selected_options = $this->input->post('selected_options');
+
+		$filter_data = $this->dashboard_model->get_specific_filter($filter_name, $selected_options);
+		foreach ($filter_data as $item) {
+			$data[] = array('label' => strtoupper($item['filter']), 'title' => $item['filter'], 'value' => $item['filter']);
 		}
 		echo json_encode($data);
 	}

@@ -290,9 +290,34 @@ class Dashboard_model extends CI_Model {
 	}
 
 	public function get_filters($column_name, $view_name){
-		$sql = "SELECT DISTINCT($column_name) AS filter FROM ".$view_name." WHERE $column_name IS NOT NULL";
+		//Order filtering
+		if($column_name == 'data_month'){
+			$order_by = "ORDER BY FIELD(".$column_name.", 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )";
+		}else if($column_name == 'data_year'){
+			$order_by = "ORDER BY ".$column_name." DESC";
+		}else{
+			$order_by = "ORDER BY ".$column_name;
+		}
+		$sql = "SELECT DISTINCT($column_name) AS filter FROM ".$view_name." WHERE $column_name IS NOT NULL ".$order_by;
         $query = $this->db->query($sql);
         return $query->result_array();
+	}
+
+	public function get_specific_filter($filter_name, $selected_options){
+		//Set filter text
+		$filter_text = "";
+		if(is_array($selected_options)){
+			$selected_options = implode("','", $selected_options);
+			$filter_text = "WHERE c.name IN ('".$selected_options."')";
+		}
+		//Fetch data based on filter text
+		if($filter_name == 'county'){
+			$sql = "SELECT sc.name AS filter FROM tbl_county_sub sc INNER JOIN tbl_county c ON c.id = sc.county_id $filter_text GROUP BY filter ORDER BY filter";
+		}else if($filter_name == 'sub_county'){
+			$sql = "SELECT f.name AS filter FROM tbl_facility f INNER JOIN tbl_facility_master fm ON fm.id = f.master_id INNER JOIN tbl_county_sub c ON c.id = fm.county_sub_id $filter_text GROUP BY filter ORDER BY filter";
+		}
+		$query = $this->db->query($sql);
+		return $query->result_array();
 	}
 
 }

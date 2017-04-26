@@ -1,5 +1,6 @@
 var chartURL = 'Dashboard/get_chart'
 var filterURL = 'Dashboard/get_filter/'
+var specificFilterURL = 'Dashboard/get_specific_filter/'
 var filterDIVClass = '.auto_filter'
 var tab = 'summary'
 var filters = {}
@@ -53,9 +54,13 @@ function LoadHeading(chartName){
             var element = $(this)
             var filterData = element.val()
             var filterName = element.attr('id')
-            if(filterData != null){
+            if(filterData != null && filterData != 0){
                 filterName = filterName.replace(/DATA|_/gi,' ')
-                message += '<br/><b><u>'+toTitleCase(filterName)+'</u></b><br/>'+filterData.join('<br/>');
+                if($.isArray(filterData)){
+                    message += '<br/><b><u>'+toTitleCase(filterName)+'</u></b><br/>'+filterData.join('<br/>');
+                }else{
+                    message += '<br/><b><u>'+toTitleCase(filterName)+'</u></b><br/>'+filterData;
+                }
             }
         });
         $(chartHeadingClass).html(message) 
@@ -112,15 +117,21 @@ function LoadFilterHandler(e){
                 filterhtml += '<div class="form-group">'
                 filterhtml += '<label for="'+filter+'" class="col-sm-2 control-label">'+filtername+'</label>'
                 filterhtml += '<div class="col-sm-9">'
-                filterhtml += '<select class="form-control filter '+filter+'" multiple="multiple" style="width: 100%" id="'+filter+'">'
+                //Check for multiple option
+                var none_multiple_options = ['data_year', 'data_month']
+                if($.inArray(filter, none_multiple_options) == -1){ //not found
+                    filterhtml += '<select class="form-control filter '+filter+'" multiple="multiple" id="'+filter+'">'
+                }else{
+                    filterhtml += '<select class="form-control filter '+filter+'" id="'+filter+'">'
+                }
                 filterhtml += '</select></div></div>';
                 //Append filter to DOM
                 $('.auto_filter').append(filterhtml);
-                LoadSelectBox('.'+filter, filter_values, 'classic')
+                LoadSelectBox('.'+filter, filter_values)
             });
             //Autoselect defaults
             $.each(filters.default, function(filter, filter_values){
-                $('.'+filter).val(filter_values).trigger('change');
+                $('.'+filter).val(filter_values).multiselect('refresh');
             });
         });
         //Add chartName to filter_btn
@@ -128,12 +139,26 @@ function LoadFilterHandler(e){
     } 
 }
 
-function LoadSelectBox(divClass, data, theme){
-    $(divClass).select2({
-        data: data,
-        tags: true,
-        placeholder: "Select Filter"
+function LoadSelectBox(divClass, data){
+    $(divClass).multiselect({
+        enableCaseInsensitiveFiltering: true,
+        enableFiltering: true,
+        includeSelectAllOption: true,
+        disableIfEmpty: true,
+        maxHeight: 400,
+        buttonWidth: '100%',
+        nonSelectedText: 'None selected',
+        onChange: function(option, checked) {
+            var selectID = $(option).parent().attr('id');
+            var filterable_options = ['county', 'sub_county']
+            if($.inArray(selectID, filterable_options) != -1){ //found
+                var selectedOptions = $('.'+selectID).val();
+                //Filter specific data
+                getFilterData(selectID, selectedOptions)
+            }
+        }
     });
+    $(divClass).multiselect('dataprovider', data);
 }
 
 function toTitleCase(str) {
@@ -152,7 +177,7 @@ function ChartFilterHandler(e){
     $('.filter').each(function() {
         var element = $(this)
         var filterData = element.val()
-        if(filterData != null){
+        if(filterData != null && filterData != 0){
             filters[element.attr('id')] = filterData
         }
     }).promise().done(function () { 
@@ -181,7 +206,7 @@ function ClearFilterHandler(e){
     $.getJSON(filterURL+chartName, function(filters) {
         //set chartName default filters
         $.each(filters.default, function(filter, filter_values){
-            $('.'+filter).val(filter_values).trigger('change');
+            $('.'+filter).val(filter_values).multiselect('refresh');
         });
         //Click filter_btn
         $("#filter_btn").trigger('click');
@@ -200,5 +225,20 @@ function ClearFilterHandler(e){
 function ClearFilterData(){
     //Clear all filter elements
     filters = {}
-    $(".filter").val(null).trigger("change");
+    $(".filter").multiselect('deselectAll', false);
+    $(".filter").multiselect('updateButtonText');
+    $(".filter").multiselect('rebuild');
+}
+
+function getFilterData(filtername, selectedOptions){
+    $.post(specificFilterURL, {'filter_name':filtername, 'selected_options': selectedOptions}, function(filterData){
+        filterData = $.parseJSON(filterData)
+        if(filtername == 'county'){
+            filtername = 'sub_county'
+        }else if(filtername == 'sub_county'){
+            filtername = 'facility'
+        }
+        $('.'+filtername).multiselect('destroy');
+        LoadSelectBox('.'+filtername, filterData)
+    });
 }

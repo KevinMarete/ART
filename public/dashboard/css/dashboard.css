@@ -1,0 +1,9 @@
+/*Fix long dropdwon text*/
+.dropdown-menu {
+    width: 100%;
+}
+
+.dropdown-menu li a {
+    word-wrap: break-word;
+    white-space: normal;
+}

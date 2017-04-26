@@ -12,8 +12,10 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url().'public/dashboard/lib/bootstrap-toggle/css/bootstrap-toggle.min.css';?>" />
 	<!--keen-->
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url().'public/dashboard/css/keen-dashboards.css';?>" />
-	<!--select2-->
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url().'public/dashboard/lib/select2/css/select2.min.css';?>" />
+	<!--bootstrap-multiselect-->
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url().'public/dashboard/lib/bootstrap-multiselect/css/bootstrap-multiselect.css';?>" />
+	<!--dashboard-->
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url().'public/dashboard/css/dashboard.css';?>" />
 </head>
 <body class="application">
 	<!--navbar-->
@@ -317,8 +319,8 @@
 	<script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/bootstrap-toggle/js/bootstrap-toggle.min.js';?>"></script>
 	<!--spin-->
 	<script type="text/javascript" src="<?php echo base_url().'public/dashboard/js/spin.min.js';?>"></script>
-	<!--select2-->
-	<script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/select2/js/select2.full.min.js';?>"></script>
+	<!--bootstrap-multiselect-->
+	<script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/bootstrap-multiselect/js/bootstrap-multiselect.js';?>"></script>
 	<!--disable_back_button-->
 	<script type="text/javascript" src="<?php echo base_url().'public/dashboard/js/disable_back_button.js';?>"></script>
 	<!--dashboard-->
