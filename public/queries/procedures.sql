@@ -194,18 +194,19 @@ BEGIN
     GROUP by drug,facility,county,sub_county,data_month,data_year,total;
     /*Facility Patients*/
     TRUNCATE tbl_dashboard_patient;
-    INSERT INTO tbl_dashboard_patient(regimen_category, drug_base, regimen, facility, county, sub_county, data_month, data_year, total)
+    INSERT INTO tbl_dashboard_patient(regimen_category, drug_base, regimen_line, regimen, facility, county, sub_county, data_month, data_year, total)
     SELECT 
         CASE 
             WHEN r.code  LIKE 'A%' THEN 'Adult ART' 
-            WHEN r.code  LIKE 'C%' THEN 'Paediatric ART'
+            WHEN r.code  LIKE 'CF%' OR r.code  LIKE 'CS%' OR r.code  LIKE 'CT%' THEN 'Paediatric ART'
             WHEN r.code  LIKE 'PA%' THEN 'PEP Adult'
             WHEN r.code  IN ('PC1A', 'PC3A', 'PC4X') THEN 'PEP Child'
-            WHEN r.code  IN ('PC6', 'PC7', 'PC8', 'PC9', 'PC1X')THEN 'PMTCT Child'
+            WHEN r.code  IN ('PC6', 'PC7', 'PC8', 'PC9', 'PC1X') THEN 'PMTCT Child'
             WHEN r.code LIKE 'PM%' THEN 'PMTCT Mother'
             WHEN r.code IN('OI1A', 'OI1C', 'OI2A', 'OI2C') THEN 'OI:Universal prophylaxis'
             WHEN r.code IN('OI4AN', 'OI4CN') THEN 'OI:IPT'
             WHEN r.code IN('OI5A', 'OI5C') THEN 'OI:Fluconazole(treatment & prophylaxis)'
+            WHEN r.code LIKE 'CM3%' OR r.code LIKE 'OI3%' THEN 'OIs Medicines {CM} and {OC} For Diflucan Donation'
         END AS regimen_category,
         CASE 
             WHEN mr.name LIKE 'AZT%' THEN 'AZT-Based'
@@ -216,6 +217,17 @@ BEGIN
             WHEN mr.name LIKE 'ATV/r%' THEN 'ATV/r-Based'
             WHEN mr.name LIKE 'LPV/r%' THEN 'LPV/r-Based' 
         END AS drug_base,
+        CASE    
+            WHEN r.code LIKE 'AF%' OR r.code LIKE 'CF%' THEN '1st-Line'
+            WHEN r.code LIKE 'AS%' OR r.code LIKE 'CS%' THEN '2nd-Line'
+            WHEN r.code LIKE 'AT%' OR r.code LIKE 'CT%' THEN '3rd-Line'
+            WHEN r.code LIKE 'HPB%' THEN 'HPB-ONLY'
+            WHEN r.code LIKE 'O%' OR r.code LIKE 'CM3%' OR r.code LIKE 'OI3%' THEN 'OI-ONLY'
+            WHEN r.code LIKE 'PA%' THEN 'PEP-Adult-ONLY'
+            WHEN r.code IN ('PC1A', 'PC3A', 'PC4X') THEN 'PEP-Child-ONLY'
+            WHEN r.code LIKE 'PM%' THEN 'PMTCT-Mother-ONLY'
+            WHEN r.code IN ('PC6', 'PC7', 'PC8', 'PC9', 'PC1X') THEN 'PMTCT-Child-ONLY'
+        END AS regimen_line,
         CONCAT_WS(' | ', mr.code, mr.name) AS regimen,
         f.name AS facility,
         c.name AS county,

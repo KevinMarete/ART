@@ -159,7 +159,6 @@ class Dashboard_model extends CI_Model {
 				}
 				$counter += 1;
 			}
-			
 		}
 		return $drilldown_data;
 	}
@@ -180,14 +179,13 @@ class Dashboard_model extends CI_Model {
 
 	public function get_patient_regimen_category_drilldown_level1($main_data, $filters){
 		$drilldown_data = array();
-
-		$this->db->select("LOWER(REPLACE(regimen_category, ' ', '_')) category, regimen name, SUM(total) y", FALSE);
+		$this->db->select("LOWER(REPLACE(regimen_category, ' ', '_')) category, regimen_line name, SUM(total) y, LOWER(CONCAT_WS('_', REPLACE(regimen_category, ' ', '_'), REPLACE(regimen_line, ' ', '_'))) drilldown", FALSE);
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				$this->db->where_in($category, $filter);
 			}
 		}
-		$this->db->group_by('name');
+		$this->db->group_by('drilldown');
 		$this->db->order_by('y', 'DESC');
 		$query = $this->db->get('tbl_dashboard_patient');
 		$sub_data = $query->result_array();
@@ -206,7 +204,42 @@ class Dashboard_model extends CI_Model {
 				}
 			}
 		}
+		$drilldown_data = $this->get_patient_regimen_category_drilldown_level2($drilldown_data, $filters);
 		return array_merge($main_data, $drilldown_data);
+	}
+
+	public function get_patient_regimen_category_drilldown_level2($drilldown_data, $filters){
+		$this->db->select("LOWER(CONCAT_WS('_', REPLACE(regimen_category, ' ', '_'), REPLACE(regimen_line, ' ', '_'))) line, regimen name, SUM(total) y", FALSE);
+		if(!empty($filters)){
+			foreach ($filters as $category => $filter) {
+				$this->db->where_in($category, $filter);
+			}
+		}
+		$this->db->group_by('name');
+		$this->db->order_by('y', 'DESC');
+		$query = $this->db->get('tbl_dashboard_patient');
+		$regimen_data = $query->result_array();
+
+		$counter = sizeof($drilldown_data['drilldown']);
+		foreach ($drilldown_data['drilldown'] as $main_data) {
+			foreach ($main_data['data'] as $item) {
+				$filter_value = $item['name'];
+				$filter_name = $item['drilldown'];
+
+				$drilldown_data['drilldown'][$counter]['id'] = $filter_name;
+				$drilldown_data['drilldown'][$counter]['name'] = ucwords($filter_name);
+				$drilldown_data['drilldown'][$counter]['colorByPoint'] = true;
+
+				foreach ($regimen_data as $regimen) {
+					if($filter_name == $regimen['line']){
+						unset($regimen['line']);
+						$drilldown_data['drilldown'][$counter]['data'][] = $regimen;
+					}
+				}
+				$counter += 1;
+			}
+		}
+		return $drilldown_data;
 	}
 
 	public function get_drugs_in_regimen($filters){
