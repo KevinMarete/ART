@@ -211,6 +211,10 @@ BEGIN
             WHEN mr.name LIKE 'AZT%' THEN 'AZT-Based'
             WHEN mr.name LIKE 'TDF%' THEN 'TDF-Based'
             WHEN mr.name LIKE 'ABC%' THEN 'ABC-Based'
+            WHEN mr.name LIKE 'EFV%' THEN 'EFV-Based'
+            WHEN mr.name LIKE 'NVP%' THEN 'NVP-Based'
+            WHEN mr.name LIKE 'ATV/r%' THEN 'ATV/r-Based'
+            WHEN mr.name LIKE 'LPV/r%' THEN 'LPV/r-Based' 
         END AS drug_base,
         CONCAT_WS(' | ', mr.code, mr.name) AS regimen,
         f.name AS facility,
