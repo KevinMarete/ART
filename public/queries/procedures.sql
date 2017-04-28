@@ -194,14 +194,14 @@ BEGIN
     GROUP by drug,facility,county,sub_county,data_month,data_year,total;
     /*Facility Patients*/
     TRUNCATE tbl_dashboard_patient;
-    INSERT INTO tbl_dashboard_patient(regimen_category, drug_base, regimen_line, regimen, facility, county, sub_county, data_month, data_year, total)
+    INSERT INTO tbl_dashboard_patient(regimen_category, drug_base, regimen_line, regimen_service, age_category, regimen, facility, county, sub_county, data_month, data_year, total)
     SELECT 
         CASE 
-            WHEN r.code  LIKE 'A%' THEN 'Adult ART' 
-            WHEN r.code  LIKE 'CF%' OR r.code  LIKE 'CS%' OR r.code  LIKE 'CT%' THEN 'Paediatric ART'
-            WHEN r.code  LIKE 'PA%' THEN 'PEP Adult'
-            WHEN r.code  IN ('PC1A', 'PC3A', 'PC4X') THEN 'PEP Child'
-            WHEN r.code  IN ('PC6', 'PC7', 'PC8', 'PC9', 'PC1X') THEN 'PMTCT Child'
+            WHEN r.code LIKE 'A%' THEN 'Adult ART' 
+            WHEN r.code LIKE 'CF%' OR r.code  LIKE 'CS%' OR r.code  LIKE 'CT%' THEN 'Paediatric ART'
+            WHEN r.code LIKE 'PA%' THEN 'PEP Adult'
+            WHEN r.code IN ('PC1A', 'PC3A', 'PC4X') THEN 'PEP Child'
+            WHEN r.code IN ('PC6', 'PC7', 'PC8', 'PC9', 'PC1X') THEN 'PMTCT Child'
             WHEN r.code LIKE 'PM%' THEN 'PMTCT Mother'
             WHEN r.code IN('OI1A', 'OI1C', 'OI2A', 'OI2C') THEN 'OI:Universal prophylaxis'
             WHEN r.code IN('OI4AN', 'OI4CN') THEN 'OI:IPT'
@@ -228,6 +228,21 @@ BEGIN
             WHEN r.code LIKE 'PM%' THEN 'PMTCT-Mother-ONLY'
             WHEN r.code IN ('PC6', 'PC7', 'PC8', 'PC9', 'PC1X') THEN 'PMTCT-Child-ONLY'
         END AS regimen_line,
+        CASE 
+            WHEN r.code LIKE 'A%' OR r.code LIKE 'CF%' OR r.code LIKE 'CS%' OR r.code LIKE 'CT%' THEN 'ART'
+            WHEN r.code LIKE 'PA%' OR r.code IN ('PC1A', 'PC3A', 'PC4X') THEN 'PEP'
+            WHEN r.code LIKE 'PM%' OR r.code IN ('PC6', 'PC7', 'PC8', 'PC9', 'PC1X') THEN 'PMTCT'
+            ELSE NULL
+        END AS regimen_service,
+        CASE 
+            WHEN r.code LIKE 'A%' THEN 'adult' 
+            WHEN r.code LIKE 'CF%' OR r.code  LIKE 'CS%' OR r.code  LIKE 'CT%' THEN 'paed'
+            WHEN r.code LIKE 'PA%' THEN 'adult'
+            WHEN r.code IN ('PC1A', 'PC3A', 'PC4X') THEN 'paed'
+            WHEN r.code IN ('PC6', 'PC7', 'PC8', 'PC9', 'PC1X') THEN 'paed'
+            WHEN r.code LIKE 'PM%' THEN 'adult'
+            ELSE NULL
+        END AS age_category,
         CONCAT_WS(' | ', mr.code, mr.name) AS regimen,
         f.name AS facility,
         c.name AS county,

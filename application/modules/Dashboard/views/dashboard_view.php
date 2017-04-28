@@ -256,27 +256,27 @@
     			<!--bottomrow-->
     			<div class="row">
     				<div class="col-sm-12">
-						<!--art_scaleup_chart-->
+						<!--patient_scaleup_chart-->
 						<div class="chart-wrapper">
 							<div class="chart-title">
-								ART PATIENT SCALEUP TREND
+								PATIENT SCALEUP TREND
 								<!--filter_frm-->
 								<div class="nav navbar-right">
 									<!--clear_filter_btn-->
-									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="art_scaleup_clear">
+									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="patient_scaleup_clear">
 										<span class="glyphicon glyphicon-refresh"></span>
 									</button>
 								  	<!--filter_modal-->
-									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="art_scaleup_filter">
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="patient_scaleup_filter">
 										<span class="glyphicon glyphicon-filter"></span>
 									</button>
 								</div>
 							</div>
 							<div class="chart-stage">
-								<div id="art_scaleup_chart"></div>
+								<div id="patient_scaleup_chart"></div>
 							</div>
 							<div class="chart-notes">
-								Filtered By: <span class="art_scaleup_heading"></span>
+								Filtered By: <span class="patient_scaleup_heading"></span>
 							</div>
 						</div>
 					</div>

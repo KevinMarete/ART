@@ -126,13 +126,15 @@ $config['drugs_in_regimen_filters_default'] = array(
 	'data_month' => array('Jan')
 );
 
-/*art_scaleup_chart*/
-$config['art_scaleup_chartview'] = 'charts/combined_view';
-$config['art_scaleup_title'] = 'ART Patient Scaleup Trend';
-$config['art_scaleup_yaxis_title'] = 'No. of Patients';
-$config['art_scaleup_source'] = 'Source: www.nascop.org';
-$config['art_scaleup_has_drilldown'] = FALSE;
-$config['art_scaleup_xaxis_title'] = '';
-$config['art_scaleup_view_name'] = 'tbl_dashboard_patient';
-$config['art_scaleup_filters'] = array('county', 'sub_county', 'facility');
-$config['art_scaleup_filters_default'] = array();
+/*patient_scaleup_chart*/
+$config['patient_scaleup_chartview'] = 'charts/combined_view';
+$config['patient_scaleup_title'] = 'Patient Scaleup Trend';
+$config['patient_scaleup_yaxis_title'] = 'No. of Patients';
+$config['patient_scaleup_source'] = 'Source: www.nascop.org';
+$config['patient_scaleup_has_drilldown'] = FALSE;
+$config['patient_scaleup_xaxis_title'] = '';
+$config['patient_scaleup_view_name'] = 'tbl_dashboard_patient';
+$config['patient_scaleup_filters'] = array('county', 'sub_county', 'facility', 'regimen_service');
+$config['patient_scaleup_filters_default'] = array(
+	'regimen_service' => array('ART')
+);

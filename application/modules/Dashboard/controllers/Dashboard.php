@@ -58,8 +58,8 @@ class Dashboard extends MX_Controller {
 			$main_data = $this->dashboard_model->get_patient_regimen_category($filters);
 		}else if($chartname == 'drugs_in_regimen'){
 			$main_data = $this->dashboard_model->get_drugs_in_regimen($filters);
-		}else if($chartname == 'art_scaleup'){
-			$main_data = $this->dashboard_model->get_art_scaleup($filters);
+		}else if($chartname == 'patient_scaleup'){
+			$main_data = $this->dashboard_model->get_patient_scaleup($filters);
 		}
 		return $main_data;
 	}

@@ -287,21 +287,20 @@ class Dashboard_model extends CI_Model {
 		return array_merge($main_data, $drilldown_data);
 	}
 
-	public function get_art_scaleup($filters){
+	public function get_patient_scaleup($filters){
 		$columns = array();
 		$scaleup_data = array(
-			array('type' => 'column', 'name' => 'Adult ART', 'data' => array()),
-			array('type' => 'column', 'name' => 'Paediatric ART', 'data' => array()),
-			array('type' => 'spline', 'name' => 'Total ART', 'data' => array())
+			array('type' => 'column', 'name' => 'Adult', 'data' => array()),
+			array('type' => 'column', 'name' => 'Paediatric', 'data' => array()),
+			array('type' => 'spline', 'name' => 'Total', 'data' => array())
 		);
 
-		$this->db->select("CONCAT_WS('/', data_month, data_year) period, SUM(IF(regimen_category = 'Adult ART', total, NULL)) adult_total, SUM(IF(regimen_category = 'Paediatric ART', total, NULL)) paed_total, SUM(total) combined_total", FALSE);
+		$this->db->select("CONCAT_WS('/', data_month, data_year) period, SUM(IF(age_category = 'adult', total, NULL)) adult_total, SUM(IF(age_category = 'paed', total, NULL)) paed_total, SUM(total) combined_total", FALSE);
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				$this->db->where_in($category, $filter);
 			}
 		}
-		$this->db->where_in('regimen_category', array('Adult ART', 'Paediatric ART'));
 		$this->db->group_by('period');
 		$this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
 		$query = $this->db->get('tbl_dashboard_patient');
@@ -310,11 +309,11 @@ class Dashboard_model extends CI_Model {
 		foreach ($results as $result) {
 			$columns[] = $result['period'];
 			foreach ($scaleup_data as $index => $scaleup) {
-				if($scaleup['name'] == 'Adult ART'){
+				if($scaleup['name'] == 'Adult'){
 					array_push($scaleup_data[$index]['data'], $result['adult_total']);
-				}else if($scaleup['name'] == 'Paediatric ART'){
+				}else if($scaleup['name'] == 'Paediatric'){
 					array_push($scaleup_data[$index]['data'], $result['paed_total']);
-				}else if($scaleup['name'] == 'Total ART'){
+				}else if($scaleup['name'] == 'Total'){
 					array_push($scaleup_data[$index]['data'], $result['combined_total']);	
 				}
 			}
@@ -331,7 +330,7 @@ class Dashboard_model extends CI_Model {
 		}else{
 			$order_by = "ORDER BY ".$column_name;
 		}
-		$sql = "SELECT DISTINCT($column_name) AS filter FROM ".$view_name." WHERE $column_name IS NOT NULL ".$order_by;
+		$sql = "SELECT DISTINCT($column_name) AS filter FROM ".$view_name." WHERE $column_name != '' ".$order_by;
         $query = $this->db->query($sql);
         return $query->result_array();
 	}
