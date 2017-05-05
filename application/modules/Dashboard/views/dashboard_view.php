@@ -289,7 +289,7 @@
 	<p class="small text-muted">NASCOP &copy <?php echo date('Y'); ?>. All Rights Reserved</p>
 	<!-- filter_modal -->
 	<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel">
-	  	<div class="modal-dialog modal-lg" role="document">
+	  	<div class="modal-dialog modal-md" role="document">
 	    	<div class="modal-content">
 				<div class="modal-header alert-success">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
