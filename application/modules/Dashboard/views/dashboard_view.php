@@ -202,6 +202,61 @@
     			<div class="row">
     				<!--middle_left-->
     				<div class="col-sm-6">
+    					<!--nntri_drug_in_regimen_chart-->
+						<div class="chart-wrapper">
+							<div class="chart-title">
+								NNRTI DRUGS IN REGIMEN <span class="label label-warning">Drilldown</span>
+								<!--filter_frm-->
+								<div class="nav navbar-right">
+									<!--clear_filter_btn-->
+									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="nntri_drugs_in_regimen_clear">
+										<span class="glyphicon glyphicon-refresh"></span>
+									</button>
+								  	<!--filter_modal-->
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="nnrti_drugs_in_regimen_filter">
+										<span class="glyphicon glyphicon-filter"></span>
+									</button>
+								</div>
+							</div>
+							<div class="chart-stage">
+								<div id="nnrti_drugs_in_regimen_chart"></div>
+							</div>
+							<div class="chart-notes">
+								Filtered By: <span class="nnrti_drugs_in_regimen_heading"></span>
+							</div>
+						</div>
+    				</div>
+    				<!--middle_right-->
+    				<div class="col-sm-6">
+    					<!--nrti_drug_in_regimen_chart-->
+						<div class="chart-wrapper">
+							<div class="chart-title">
+								NRTI DRUGS IN REGIMEN <span class="label label-warning">Drilldown</span>
+								<!--filter_frm-->
+								<div class="nav navbar-right">
+									<!--clear_filter_btn-->
+									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="nrti_drugs_in_regimen_clear">
+										<span class="glyphicon glyphicon-refresh"></span>
+									</button>
+								  	<!--filter_modal-->
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="nrti_drugs_in_regimen_filter">
+										<span class="glyphicon glyphicon-filter"></span>
+									</button>
+								</div>
+							</div>
+							<div class="chart-stage">
+								<div id="nrti_drugs_in_regimen_chart"></div>
+							</div>
+							<div class="chart-notes">
+								Filtered By: <span class="nrti_drugs_in_regimen_heading"></span>
+							</div>
+						</div>
+    				</div>
+    			</div>
+    			<!--bottomrow-->
+    			<div class="row">
+    				<!--bottom_left-->
+    				<div class="col-sm-6">
     					<!--patient_regimen_category_chart-->
 						<div class="chart-wrapper">
 							<div class="chart-title">
@@ -226,36 +281,8 @@
 							</div>
 						</div>
     				</div>
-    				<!--middle_right-->
+    				<!--bottom_right-->
     				<div class="col-sm-6">
-    					<!--drug_in_regimen_chart-->
-						<div class="chart-wrapper">
-							<div class="chart-title">
-								DRUGS IN REGIMEN <span class="label label-warning">Drilldown</span>
-								<!--filter_frm-->
-								<div class="nav navbar-right">
-									<!--clear_filter_btn-->
-									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="drugs_in_regimen_clear">
-										<span class="glyphicon glyphicon-refresh"></span>
-									</button>
-								  	<!--filter_modal-->
-									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="drugs_in_regimen_filter">
-										<span class="glyphicon glyphicon-filter"></span>
-									</button>
-								</div>
-							</div>
-							<div class="chart-stage">
-								<div id="drugs_in_regimen_chart"></div>
-							</div>
-							<div class="chart-notes">
-								Filtered By: <span class="drugs_in_regimen_heading"></span>
-							</div>
-						</div>
-    				</div>
-    			</div>
-    			<!--bottomrow-->
-    			<div class="row">
-    				<div class="col-sm-12">
 						<!--patient_scaleup_chart-->
 						<div class="chart-wrapper">
 							<div class="chart-title">

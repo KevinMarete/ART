@@ -110,17 +110,19 @@ class Dashboard_model extends CI_Model {
 		$query = $this->db->get('tbl_dashboard_patient');
 		$sub_data = $query->result_array();
 
-		foreach ($main_data['main'] as $counter => $main) {
-			$county_name = $main['drilldown'];
+		if($main_data){
+			foreach ($main_data['main'] as $counter => $main) {
+				$county_name = $main['drilldown'];
 
-			$drilldown_data['drilldown'][$counter]['id'] = $county_name;
-			$drilldown_data['drilldown'][$counter]['name'] = ucwords($county_name);
-			$drilldown_data['drilldown'][$counter]['colorByPoint'] = true;
+				$drilldown_data['drilldown'][$counter]['id'] = $county_name;
+				$drilldown_data['drilldown'][$counter]['name'] = ucwords($county_name);
+				$drilldown_data['drilldown'][$counter]['colorByPoint'] = true;
 
-			foreach ($sub_data as $sub) {
-				if($county_name == $sub['county']){
-					unset($sub['county']);
-					$drilldown_data['drilldown'][$counter]['data'][] = $sub;	
+				foreach ($sub_data as $sub) {
+					if($county_name == $sub['county']){
+						unset($sub['county']);
+						$drilldown_data['drilldown'][$counter]['data'][] = $sub;	
+					}
 				}
 			}
 		}
@@ -141,23 +143,25 @@ class Dashboard_model extends CI_Model {
 		$query = $this->db->get('tbl_dashboard_patient');
 		$facility_data = $query->result_array();
 
-		$counter = sizeof($drilldown_data['drilldown']);
-		foreach ($drilldown_data['drilldown'] as $main_data) {
-			foreach ($main_data['data'] as $item) {
-				$filter_value = $item['name'];
-				$filter_name = $item['drilldown'];
+		if($drilldown_data){
+			$counter = sizeof($drilldown_data['drilldown']);
+			foreach ($drilldown_data['drilldown'] as $main_data) {
+				foreach ($main_data['data'] as $item) {
+					$filter_value = $item['name'];
+					$filter_name = $item['drilldown'];
 
-				$drilldown_data['drilldown'][$counter]['id'] = $filter_name;
-				$drilldown_data['drilldown'][$counter]['name'] = ucwords($filter_name);
-				$drilldown_data['drilldown'][$counter]['colorByPoint'] = true;
+					$drilldown_data['drilldown'][$counter]['id'] = $filter_name;
+					$drilldown_data['drilldown'][$counter]['name'] = ucwords($filter_name);
+					$drilldown_data['drilldown'][$counter]['colorByPoint'] = true;
 
-				foreach ($facility_data as $facility) {
-					if($filter_name == $facility['county_sub']){
-						unset($facility['county_sub']);
-						$drilldown_data['drilldown'][$counter]['data'][] = $facility;
+					foreach ($facility_data as $facility) {
+						if($filter_name == $facility['county_sub']){
+							unset($facility['county_sub']);
+							$drilldown_data['drilldown'][$counter]['data'][] = $facility;
+						}
 					}
+					$counter += 1;
 				}
-				$counter += 1;
 			}
 		}
 		return $drilldown_data;
@@ -190,17 +194,19 @@ class Dashboard_model extends CI_Model {
 		$query = $this->db->get('tbl_dashboard_patient');
 		$sub_data = $query->result_array();
 
-		foreach ($main_data['main'] as $counter => $main) {
-			$category = $main['drilldown'];
+		if($main_data){
+			foreach ($main_data['main'] as $counter => $main) {
+				$category = $main['drilldown'];
 
-			$drilldown_data['drilldown'][$counter]['id'] = $category;
-			$drilldown_data['drilldown'][$counter]['name'] = ucwords($category);
-			$drilldown_data['drilldown'][$counter]['colorByPoint'] = true;
+				$drilldown_data['drilldown'][$counter]['id'] = $category;
+				$drilldown_data['drilldown'][$counter]['name'] = ucwords($category);
+				$drilldown_data['drilldown'][$counter]['colorByPoint'] = true;
 
-			foreach ($sub_data as $sub) {
-				if($category == $sub['category']){
-					unset($sub['category']);
-					$drilldown_data['drilldown'][$counter]['data'][] = $sub;	
+				foreach ($sub_data as $sub) {
+					if($category == $sub['category']){
+						unset($sub['category']);
+						$drilldown_data['drilldown'][$counter]['data'][] = $sub;	
+					}
 				}
 			}
 		}
@@ -220,46 +226,48 @@ class Dashboard_model extends CI_Model {
 		$query = $this->db->get('tbl_dashboard_patient');
 		$regimen_data = $query->result_array();
 
-		$counter = sizeof($drilldown_data['drilldown']);
-		foreach ($drilldown_data['drilldown'] as $main_data) {
-			foreach ($main_data['data'] as $item) {
-				$filter_value = $item['name'];
-				$filter_name = $item['drilldown'];
+		if($drilldown_data){
+			$counter = sizeof($drilldown_data['drilldown']);
+			foreach ($drilldown_data['drilldown'] as $main_data) {
+				foreach ($main_data['data'] as $item) {
+					$filter_value = $item['name'];
+					$filter_name = $item['drilldown'];
 
-				$drilldown_data['drilldown'][$counter]['id'] = $filter_name;
-				$drilldown_data['drilldown'][$counter]['name'] = ucwords($filter_name);
-				$drilldown_data['drilldown'][$counter]['colorByPoint'] = true;
+					$drilldown_data['drilldown'][$counter]['id'] = $filter_name;
+					$drilldown_data['drilldown'][$counter]['name'] = ucwords($filter_name);
+					$drilldown_data['drilldown'][$counter]['colorByPoint'] = true;
 
-				foreach ($regimen_data as $regimen) {
-					if($filter_name == $regimen['line']){
-						unset($regimen['line']);
-						$drilldown_data['drilldown'][$counter]['data'][] = $regimen;
+					foreach ($regimen_data as $regimen) {
+						if($filter_name == $regimen['line']){
+							unset($regimen['line']);
+							$drilldown_data['drilldown'][$counter]['data'][] = $regimen;
+						}
 					}
+					$counter += 1;
 				}
-				$counter += 1;
 			}
 		}
 		return $drilldown_data;
 	}
 
-	public function get_drugs_in_regimen($filters){
-		$this->db->select("drug_base name, SUM(total) y, LOWER(REPLACE(drug_base, ' ', '_')) drilldown", FALSE);
+	public function get_nnrti_drugs_in_regimen($filters){
+		$this->db->select("nnrti_drug name, SUM(total) y, LOWER(REPLACE(nnrti_drug, ' ', '_')) drilldown", FALSE);
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				$this->db->where_in($category, $filter);
 			}
 		}
-		$this->db->where('drug_base !=', '');
+		$this->db->where('nnrti_drug !=', '');
 		$this->db->group_by('name');
 		$this->db->order_by('y', 'DESC');
 		$query = $this->db->get('tbl_dashboard_patient');
-		return $this->get_drugs_in_regimen_drilldown_level1(array('main' => $query->result_array()), $filters);
+		return $this->get_nnrti_drugs_in_regimen_drilldown_level1(array('main' => $query->result_array()), $filters);
 	}
 
-	public function get_drugs_in_regimen_drilldown_level1($main_data, $filters){
+	public function get_nnrti_drugs_in_regimen_drilldown_level1($main_data, $filters){
 		$drilldown_data = array();
 
-		$this->db->select("LOWER(REPLACE(drug_base, ' ', '_')) category, regimen name, SUM(total) y", FALSE);
+		$this->db->select("LOWER(REPLACE(nnrti_drug, ' ', '_')) category, regimen name, SUM(total) y", FALSE);
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				$this->db->where_in($category, $filter);
@@ -270,17 +278,66 @@ class Dashboard_model extends CI_Model {
 		$query = $this->db->get('tbl_dashboard_patient');
 		$sub_data = $query->result_array();
 
-		foreach ($main_data['main'] as $counter => $main) {
-			$category = $main['drilldown'];
+		if($main_data){
+			foreach ($main_data['main'] as $counter => $main) {
+				$category = $main['drilldown'];
 
-			$drilldown_data['drilldown'][$counter]['id'] = $category;
-			$drilldown_data['drilldown'][$counter]['name'] = ucwords($category);
-			$drilldown_data['drilldown'][$counter]['colorByPoint'] = true;
+				$drilldown_data['drilldown'][$counter]['id'] = $category;
+				$drilldown_data['drilldown'][$counter]['name'] = ucwords($category);
+				$drilldown_data['drilldown'][$counter]['colorByPoint'] = true;
 
-			foreach ($sub_data as $sub) {
-				if($category == $sub['category']){
-					unset($sub['category']);
-					$drilldown_data['drilldown'][$counter]['data'][] = $sub;	
+				foreach ($sub_data as $sub) {
+					if($category == $sub['category']){
+						unset($sub['category']);
+						$drilldown_data['drilldown'][$counter]['data'][] = $sub;	
+					}
+				}
+			}
+		}
+		return array_merge($main_data, $drilldown_data);
+	}
+
+	public function get_nrti_drugs_in_regimen($filters){
+		$this->db->select("nrti_drug name, SUM(total) y, LOWER(REPLACE(nrti_drug, ' ', '_')) drilldown", FALSE);
+		if(!empty($filters)){
+			foreach ($filters as $category => $filter) {
+				$this->db->where_in($category, $filter);
+			}
+		}
+		$this->db->where('nrti_drug !=', '');
+		$this->db->group_by('name');
+		$this->db->order_by('y', 'DESC');
+		$query = $this->db->get('tbl_dashboard_patient');
+		return $this->get_nrti_drugs_in_regimen_drilldown_level1(array('main' => $query->result_array()), $filters);
+	}
+
+	public function get_nrti_drugs_in_regimen_drilldown_level1($main_data, $filters){
+		$drilldown_data = array();
+
+		$this->db->select("LOWER(REPLACE(nrti_drug, ' ', '_')) category, regimen name, SUM(total) y", FALSE);
+		if(!empty($filters)){
+			foreach ($filters as $category => $filter) {
+				$this->db->where_in($category, $filter);
+			}
+		}
+		$this->db->group_by('name');
+		$this->db->order_by('y', 'DESC');
+		$query = $this->db->get('tbl_dashboard_patient');
+		$sub_data = $query->result_array();
+
+		if($main_data){
+			foreach ($main_data['main'] as $counter => $main) {
+				$category = $main['drilldown'];
+
+				$drilldown_data['drilldown'][$counter]['id'] = $category;
+				$drilldown_data['drilldown'][$counter]['name'] = ucwords($category);
+				$drilldown_data['drilldown'][$counter]['colorByPoint'] = true;
+
+				foreach ($sub_data as $sub) {
+					if($category == $sub['category']){
+						unset($sub['category']);
+						$drilldown_data['drilldown'][$counter]['data'][] = $sub;	
+					}
 				}
 			}
 		}
@@ -306,15 +363,17 @@ class Dashboard_model extends CI_Model {
 		$query = $this->db->get('tbl_dashboard_patient');
 		$results = $query->result_array();
 
-		foreach ($results as $result) {
-			$columns[] = $result['period'];
-			foreach ($scaleup_data as $index => $scaleup) {
-				if($scaleup['name'] == 'Adult'){
-					array_push($scaleup_data[$index]['data'], $result['adult_total']);
-				}else if($scaleup['name'] == 'Paediatric'){
-					array_push($scaleup_data[$index]['data'], $result['paed_total']);
-				}else if($scaleup['name'] == 'Total'){
-					array_push($scaleup_data[$index]['data'], $result['combined_total']);	
+		if($results){
+			foreach ($results as $result) {
+				$columns[] = $result['period'];
+				foreach ($scaleup_data as $index => $scaleup) {
+					if($scaleup['name'] == 'Adult'){
+						array_push($scaleup_data[$index]['data'], $result['adult_total']);
+					}else if($scaleup['name'] == 'Paediatric'){
+						array_push($scaleup_data[$index]['data'], $result['paed_total']);
+					}else if($scaleup['name'] == 'Total'){
+						array_push($scaleup_data[$index]['data'], $result['combined_total']);	
+					}
 				}
 			}
 		}

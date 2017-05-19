@@ -34,9 +34,9 @@ class Dashboard extends MX_Controller {
 		$main_data = $this->get_data($chartname, $selectedfilters);
 		$data['chart_series_data'] = json_encode($main_data['main'], JSON_NUMERIC_CHECK);
 		if($has_drilldown){
-			$data['chart_drilldown_data'] = json_encode($main_data['drilldown'], JSON_NUMERIC_CHECK);
+			$data['chart_drilldown_data'] = json_encode(@$main_data['drilldown'], JSON_NUMERIC_CHECK);
 		}else{
-			$data['chart_categories'] =  json_encode($main_data['columns'], JSON_NUMERIC_CHECK);
+			$data['chart_categories'] =  json_encode(@$main_data['columns'], JSON_NUMERIC_CHECK);
 		}
 		//Load chart
 		$this->load->view($chartview, $data);
@@ -56,8 +56,10 @@ class Dashboard extends MX_Controller {
 			$main_data = $this->dashboard_model->get_patient_in_care($filters);
 		}else if($chartname == 'patient_regimen_category'){
 			$main_data = $this->dashboard_model->get_patient_regimen_category($filters);
-		}else if($chartname == 'drugs_in_regimen'){
-			$main_data = $this->dashboard_model->get_drugs_in_regimen($filters);
+		}else if($chartname == 'nnrti_drugs_in_regimen'){
+			$main_data = $this->dashboard_model->get_nnrti_drugs_in_regimen($filters);
+		}else if($chartname == 'nrti_drugs_in_regimen'){
+			$main_data = $this->dashboard_model->get_nrti_drugs_in_regimen($filters);
 		}else if($chartname == 'patient_scaleup'){
 			$main_data = $this->dashboard_model->get_patient_scaleup($filters);
 		}
@@ -86,7 +88,11 @@ class Dashboard extends MX_Controller {
 			foreach ($filters as $column) {
 				$filter_data = $this->dashboard_model->get_filters($column, $view_name);
 				foreach ($filter_data as $item) {
-					$data['all'][$column][] = array('label' => strtoupper($item['filter']), 'title' => $item['filter'], 'value' => $item['filter']);
+					$data['all'][$column][] = array(
+						'label' => utf8_encode(strtoupper($item['filter'])), 
+						'title' => utf8_encode($item['filter']), 
+						'value' => utf8_encode($item['filter'])
+					);
 				}
 			}
 		}
@@ -100,7 +106,11 @@ class Dashboard extends MX_Controller {
 
 		$filter_data = $this->dashboard_model->get_specific_filter($filter_name, $selected_options);
 		foreach ($filter_data as $item) {
-			$data[] = array('label' => strtoupper($item['filter']), 'title' => $item['filter'], 'value' => $item['filter']);
+			$data[] = array(
+				'label' => utf8_encode(strtoupper($item['filter'])), 
+				'title' => utf8_encode($item['filter']), 
+				'value' => utf8_encode($item['filter'])
+			);
 		}
 		echo json_encode($data);
 	}

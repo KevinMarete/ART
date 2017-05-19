@@ -7,7 +7,7 @@ var filters = {}
 var charts = []
 charts['summary'] = ['patient_by_regimen', 'stock_status']
 charts['commodities'] = ['national_mos', 'drug_consumption_trend']
-charts['patients'] = ['patient_in_care', 'patient_regimen_category', 'drugs_in_regimen', 'patient_scaleup']
+charts['patients'] = ['patient_in_care', 'patient_regimen_category', 'nnrti_drugs_in_regimen', 'nrti_drugs_in_regimen', 'patient_scaleup']
 
 $(function() {
     /*Load Charts*/
@@ -119,7 +119,8 @@ function LoadFilterHandler(e){
                 filterhtml += '<div class="col-sm-9">'
                 //Check for multiple option
                 var none_multiple_options = ['data_year', 'data_month']
-                if($.inArray(filter, none_multiple_options) == -1){ //not found
+                var excluded_charts = ['patient_scaleup']
+                if($.inArray(filter, none_multiple_options) == -1 || $.inArray(chartName, excluded_charts) != -1){ //not found or excluded chart
                     filterhtml += '<select class="form-control filter '+filter+'" multiple="multiple" id="'+filter+'">'
                 }else{
                     filterhtml += '<select class="form-control filter '+filter+'" id="'+filter+'">'

@@ -84,7 +84,7 @@ $config['drug_consumption_trend_filters_default'] = array(
 );
 
 /*patient_in_care_chart*/
-$config['patient_in_care_chartview'] = 'charts/drilldown_view';
+$config['patient_in_care_chartview'] = 'charts/column_drilldown_view';
 $config['patient_in_care_title'] = 'Patients Numbers in Treatment';
 $config['patient_in_care_yaxis_title'] = 'No. of Patients';
 $config['patient_in_care_source'] = 'Source: www.nascop.org';
@@ -99,7 +99,7 @@ $config['patient_in_care_filters_default'] = array(
 );
 
 /*patient_regimen_category_chart*/
-$config['patient_regimen_category_chartview'] = 'charts/drilldown_view';
+$config['patient_regimen_category_chartview'] = 'charts/bar_drilldown_view';
 $config['patient_regimen_category_title'] = 'Patients Numbers By Age & Regimen Category';
 $config['patient_regimen_category_yaxis_title'] = 'No. of Patients';
 $config['patient_regimen_category_source'] = 'Source: www.nascop.org';
@@ -112,19 +112,34 @@ $config['patient_regimen_category_filters_default'] = array(
 	'data_month' => array('Jan')
 );
 
-/*drugs_in_regimen_chart*/
-$config['drugs_in_regimen_chartview'] = 'charts/pie_view';
-$config['drugs_in_regimen_title'] = 'Patients Numbers By Drugs in Regimen';
-$config['drugs_in_regimen_yaxis_title'] = 'No. of Patients';
-$config['drugs_in_regimen_source'] = 'Source: www.nascop.org';
-$config['drugs_in_regimen_has_drilldown'] = TRUE;
-$config['drugs_in_regimen_xaxis_title'] = 'Drugs';
-$config['drugs_in_regimen_view_name'] = 'tbl_dashboard_patient';
-$config['drugs_in_regimen_filters'] = array('data_year', 'data_month', 'county', 'sub_county', 'facility', 'drug_base');
-$config['drugs_in_regimen_filters_default'] = array(
+/*nnrti_drugs_in_regimen_chart*/
+$config['nnrti_drugs_in_regimen_chartview'] = 'charts/pie_view';
+$config['nnrti_drugs_in_regimen_title'] = 'Patient Proportions By NNRTI Drugs in Regimen';
+$config['nnrti_drugs_in_regimen_yaxis_title'] = 'No. of Patients';
+$config['nnrti_drugs_in_regimen_source'] = 'Source: www.nascop.org';
+$config['nnrti_drugs_in_regimen_has_drilldown'] = TRUE;
+$config['nnrti_drugs_in_regimen_xaxis_title'] = 'Drugs';
+$config['nnrti_drugs_in_regimen_view_name'] = 'tbl_dashboard_patient';
+$config['nnrti_drugs_in_regimen_filters'] = array('data_year', 'data_month', 'county', 'sub_county', 'facility', 'nnrti_drug');
+$config['nnrti_drugs_in_regimen_filters_default'] = array(
 	'data_year' => array('2017'), 
 	'data_month' => array('Jan')
 );
+
+/*nrti_drugs_in_regimen_chart*/
+$config['nrti_drugs_in_regimen_chartview'] = 'charts/pie_view';
+$config['nrti_drugs_in_regimen_title'] = 'Patient Proportions By NRTI Drugs in Regimen';
+$config['nrti_drugs_in_regimen_yaxis_title'] = 'No. of Patients';
+$config['nrti_drugs_in_regimen_source'] = 'Source: www.nascop.org';
+$config['nrti_drugs_in_regimen_has_drilldown'] = TRUE;
+$config['nrti_drugs_in_regimen_xaxis_title'] = 'Drugs';
+$config['nrti_drugs_in_regimen_view_name'] = 'tbl_dashboard_patient';
+$config['nrti_drugs_in_regimen_filters'] = array('data_year', 'data_month', 'county', 'sub_county', 'facility', 'nrti_drug');
+$config['nrti_drugs_in_regimen_filters_default'] = array(
+	'data_year' => array('2017'), 
+	'data_month' => array('Jan')
+);
+
 
 /*patient_scaleup_chart*/
 $config['patient_scaleup_chartview'] = 'charts/combined_view';
@@ -134,7 +149,8 @@ $config['patient_scaleup_source'] = 'Source: www.nascop.org';
 $config['patient_scaleup_has_drilldown'] = FALSE;
 $config['patient_scaleup_xaxis_title'] = '';
 $config['patient_scaleup_view_name'] = 'tbl_dashboard_patient';
-$config['patient_scaleup_filters'] = array('county', 'sub_county', 'facility', 'regimen_service');
+$config['patient_scaleup_filters'] = array('data_year', 'county', 'sub_county', 'facility', 'regimen_service');
 $config['patient_scaleup_filters_default'] = array(
+	'data_year' => array('2016', '2017'), 
 	'regimen_service' => array('ART')
 );
