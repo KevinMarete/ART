@@ -112,20 +112,6 @@ $config['patient_regimen_category_filters_default'] = array(
 	'data_month' => array('Jan')
 );
 
-/*nnrti_drugs_in_regimen_chart*/
-$config['nnrti_drugs_in_regimen_chartview'] = 'charts/pie_view';
-$config['nnrti_drugs_in_regimen_title'] = 'Patient Proportions By NNRTI Drugs in Regimen';
-$config['nnrti_drugs_in_regimen_yaxis_title'] = 'No. of Patients';
-$config['nnrti_drugs_in_regimen_source'] = 'Source: www.nascop.org';
-$config['nnrti_drugs_in_regimen_has_drilldown'] = TRUE;
-$config['nnrti_drugs_in_regimen_xaxis_title'] = 'Drugs';
-$config['nnrti_drugs_in_regimen_view_name'] = 'tbl_dashboard_patient';
-$config['nnrti_drugs_in_regimen_filters'] = array('data_year', 'data_month', 'county', 'sub_county', 'facility', 'nnrti_drug');
-$config['nnrti_drugs_in_regimen_filters_default'] = array(
-	'data_year' => array('2017'), 
-	'data_month' => array('Jan')
-);
-
 /*nrti_drugs_in_regimen_chart*/
 $config['nrti_drugs_in_regimen_chartview'] = 'charts/pie_view';
 $config['nrti_drugs_in_regimen_title'] = 'Patient Proportions By NRTI Drugs in Regimen';
@@ -140,6 +126,19 @@ $config['nrti_drugs_in_regimen_filters_default'] = array(
 	'data_month' => array('Jan')
 );
 
+/*nnrti_drugs_in_regimen_chart*/
+$config['nnrti_drugs_in_regimen_chartview'] = 'charts/pie_view';
+$config['nnrti_drugs_in_regimen_title'] = 'Patient Proportions By NNRTI/PI/INSTI Drugs in Regimen';
+$config['nnrti_drugs_in_regimen_yaxis_title'] = 'No. of Patients';
+$config['nnrti_drugs_in_regimen_source'] = 'Source: www.nascop.org';
+$config['nnrti_drugs_in_regimen_has_drilldown'] = TRUE;
+$config['nnrti_drugs_in_regimen_xaxis_title'] = 'Drugs';
+$config['nnrti_drugs_in_regimen_view_name'] = 'tbl_dashboard_patient';
+$config['nnrti_drugs_in_regimen_filters'] = array('data_year', 'data_month', 'county', 'sub_county', 'facility', 'nnrti_drug');
+$config['nnrti_drugs_in_regimen_filters_default'] = array(
+	'data_year' => array('2017'), 
+	'data_month' => array('Jan')
+);
 
 /*patient_scaleup_chart*/
 $config['patient_scaleup_chartview'] = 'charts/combined_view';

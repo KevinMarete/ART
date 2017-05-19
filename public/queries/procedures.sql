@@ -194,7 +194,7 @@ BEGIN
     GROUP by drug,facility,county,sub_county,data_month,data_year,total;
     /*Facility Patients*/
     TRUNCATE tbl_dashboard_patient;
-    INSERT INTO tbl_dashboard_patient(regimen_category, nnrti_drug, nrti_drug, regimen_line, regimen_service, age_category, regimen, facility, county, sub_county, data_month, data_year, total)
+    INSERT INTO tbl_dashboard_patient(regimen_category, nrti_drug, nnrti_drug, regimen_line, regimen_service, age_category, regimen, facility, county, sub_county, data_month, data_year, total)
     SELECT 
         CASE 
             WHEN r.code LIKE 'A%' THEN 'Adult ART' 
@@ -212,14 +212,14 @@ BEGIN
             WHEN mr.name LIKE 'AZT%' THEN 'AZT-Based'
             WHEN mr.name LIKE 'TDF%' THEN 'TDF-Based'
             WHEN mr.name LIKE 'ABC%' THEN 'ABC-Based'
-        END AS nnrti_drug,
+        END AS nrti_drug,
         CASE 
             WHEN mr.name LIKE '%EFV' THEN 'EFV-Based'
             WHEN mr.name LIKE '%NVP' THEN 'NVP-Based'
             WHEN mr.name LIKE '%ATV/r' THEN 'ATV/r-Based'
             WHEN mr.name LIKE '%LPV/r' THEN 'LPV/r-Based' 
             WHEN mr.name LIKE '%DTG' THEN 'DTG-Based'
-        END AS nrti_drug,
+        END AS nnrti_drug,
         CASE    
             WHEN r.code LIKE 'AF%' OR r.code LIKE 'CF%' THEN '1st-Line'
             WHEN r.code LIKE 'AS%' OR r.code LIKE 'CS%' THEN '2nd-Line'

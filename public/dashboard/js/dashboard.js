@@ -7,7 +7,7 @@ var filters = {}
 var charts = []
 charts['summary'] = ['patient_by_regimen', 'stock_status']
 charts['commodities'] = ['national_mos', 'drug_consumption_trend']
-charts['patients'] = ['patient_in_care', 'patient_regimen_category', 'nnrti_drugs_in_regimen', 'nrti_drugs_in_regimen', 'patient_scaleup']
+charts['patients'] = ['patient_in_care', 'patient_regimen_category', 'nrti_drugs_in_regimen', 'nnrti_drugs_in_regimen', 'patient_scaleup']
 
 $(function() {
     /*Load Charts*/

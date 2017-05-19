@@ -202,40 +202,14 @@
     			<div class="row">
     				<!--middle_left-->
     				<div class="col-sm-6">
-    					<!--nntri_drug_in_regimen_chart-->
-						<div class="chart-wrapper">
-							<div class="chart-title">
-								NNRTI DRUGS IN REGIMEN <span class="label label-warning">Drilldown</span>
-								<!--filter_frm-->
-								<div class="nav navbar-right">
-									<!--clear_filter_btn-->
-									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="nntri_drugs_in_regimen_clear">
-										<span class="glyphicon glyphicon-refresh"></span>
-									</button>
-								  	<!--filter_modal-->
-									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="nnrti_drugs_in_regimen_filter">
-										<span class="glyphicon glyphicon-filter"></span>
-									</button>
-								</div>
-							</div>
-							<div class="chart-stage">
-								<div id="nnrti_drugs_in_regimen_chart"></div>
-							</div>
-							<div class="chart-notes">
-								Filtered By: <span class="nnrti_drugs_in_regimen_heading"></span>
-							</div>
-						</div>
-    				</div>
-    				<!--middle_right-->
-    				<div class="col-sm-6">
-    					<!--nrti_drug_in_regimen_chart-->
+    					<!--ntri_drug_in_regimen_chart-->
 						<div class="chart-wrapper">
 							<div class="chart-title">
 								NRTI DRUGS IN REGIMEN <span class="label label-warning">Drilldown</span>
 								<!--filter_frm-->
 								<div class="nav navbar-right">
 									<!--clear_filter_btn-->
-									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="nrti_drugs_in_regimen_clear">
+									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="ntri_drugs_in_regimen_clear">
 										<span class="glyphicon glyphicon-refresh"></span>
 									</button>
 								  	<!--filter_modal-->
@@ -249,6 +223,32 @@
 							</div>
 							<div class="chart-notes">
 								Filtered By: <span class="nrti_drugs_in_regimen_heading"></span>
+							</div>
+						</div>
+    				</div>
+    				<!--middle_right-->
+    				<div class="col-sm-6">
+    					<!--nrnti_drug_in_regimen_chart-->
+						<div class="chart-wrapper">
+							<div class="chart-title">
+								NNRTI/PI/INSTI DRUGS IN REGIMEN <span class="label label-warning">Drilldown</span>
+								<!--filter_frm-->
+								<div class="nav navbar-right">
+									<!--clear_filter_btn-->
+									<button type="button" class="btn btn-danger btn-xs clear_filter_btn" id="nnrti_drugs_in_regimen_clear">
+										<span class="glyphicon glyphicon-refresh"></span>
+									</button>
+								  	<!--filter_modal-->
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#filterModal" id="nnrti_drugs_in_regimen_filter">
+										<span class="glyphicon glyphicon-filter"></span>
+									</button>
+								</div>
+							</div>
+							<div class="chart-stage">
+								<div id="nnrti_drugs_in_regimen_chart"></div>
+							</div>
+							<div class="chart-notes">
+								Filtered By: <span class="nnrti_drugs_in_regimen_heading"></span>
 							</div>
 						</div>
     				</div>
@@ -313,7 +313,7 @@
 	</div>
 	<!--footer-->
 	<hr>
-	<p class="small text-muted">NASCOP &copy <?php echo date('Y'); ?>. All Rights Reserved</p>
+	<p class="small text-muted">NASCOP &copy; <?php echo date('Y'); ?>. All Rights Reserved</p>
 	<!-- filter_modal -->
 	<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel">
 	  	<div class="modal-dialog modal-md" role="document">

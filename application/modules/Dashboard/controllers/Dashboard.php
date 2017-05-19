@@ -56,10 +56,10 @@ class Dashboard extends MX_Controller {
 			$main_data = $this->dashboard_model->get_patient_in_care($filters);
 		}else if($chartname == 'patient_regimen_category'){
 			$main_data = $this->dashboard_model->get_patient_regimen_category($filters);
-		}else if($chartname == 'nnrti_drugs_in_regimen'){
-			$main_data = $this->dashboard_model->get_nnrti_drugs_in_regimen($filters);
 		}else if($chartname == 'nrti_drugs_in_regimen'){
 			$main_data = $this->dashboard_model->get_nrti_drugs_in_regimen($filters);
+		}else if($chartname == 'nnrti_drugs_in_regimen'){
+			$main_data = $this->dashboard_model->get_nnrti_drugs_in_regimen($filters);
 		}else if($chartname == 'patient_scaleup'){
 			$main_data = $this->dashboard_model->get_patient_scaleup($filters);
 		}
@@ -74,7 +74,7 @@ class Dashboard extends MX_Controller {
 		if(!empty($def_filters)){
 			foreach ($def_filters as $filter_name => $filter_items) {
 				foreach ($filter_items as $filter_item) {
-					$data['default'][$filter_name][] = $filter_item;
+					$data['default'][$filter_name][] = utf8_encode($filter_item);
 				}
 			}
 		}else{

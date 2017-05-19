@@ -250,24 +250,24 @@ class Dashboard_model extends CI_Model {
 		return $drilldown_data;
 	}
 
-	public function get_nnrti_drugs_in_regimen($filters){
-		$this->db->select("nnrti_drug name, SUM(total) y, LOWER(REPLACE(nnrti_drug, ' ', '_')) drilldown", FALSE);
+	public function get_nrti_drugs_in_regimen($filters){
+		$this->db->select("nrti_drug name, SUM(total) y, LOWER(REPLACE(nrti_drug, ' ', '_')) drilldown", FALSE);
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				$this->db->where_in($category, $filter);
 			}
 		}
-		$this->db->where('nnrti_drug !=', '');
+		$this->db->where('nrti_drug !=', '');
 		$this->db->group_by('name');
 		$this->db->order_by('y', 'DESC');
 		$query = $this->db->get('tbl_dashboard_patient');
-		return $this->get_nnrti_drugs_in_regimen_drilldown_level1(array('main' => $query->result_array()), $filters);
+		return $this->get_nrti_drugs_in_regimen_drilldown_level1(array('main' => $query->result_array()), $filters);
 	}
 
-	public function get_nnrti_drugs_in_regimen_drilldown_level1($main_data, $filters){
+	public function get_nrti_drugs_in_regimen_drilldown_level1($main_data, $filters){
 		$drilldown_data = array();
 
-		$this->db->select("LOWER(REPLACE(nnrti_drug, ' ', '_')) category, regimen name, SUM(total) y", FALSE);
+		$this->db->select("LOWER(REPLACE(nrti_drug, ' ', '_')) category, regimen name, SUM(total) y", FALSE);
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				$this->db->where_in($category, $filter);
@@ -297,24 +297,24 @@ class Dashboard_model extends CI_Model {
 		return array_merge($main_data, $drilldown_data);
 	}
 
-	public function get_nrti_drugs_in_regimen($filters){
-		$this->db->select("nrti_drug name, SUM(total) y, LOWER(REPLACE(nrti_drug, ' ', '_')) drilldown", FALSE);
+	public function get_nnrti_drugs_in_regimen($filters){
+		$this->db->select("nnrti_drug name, SUM(total) y, LOWER(REPLACE(nnrti_drug, ' ', '_')) drilldown", FALSE);
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				$this->db->where_in($category, $filter);
 			}
 		}
-		$this->db->where('nrti_drug !=', '');
+		$this->db->where('nnrti_drug !=', '');
 		$this->db->group_by('name');
 		$this->db->order_by('y', 'DESC');
 		$query = $this->db->get('tbl_dashboard_patient');
-		return $this->get_nrti_drugs_in_regimen_drilldown_level1(array('main' => $query->result_array()), $filters);
+		return $this->get_nnrti_drugs_in_regimen_drilldown_level1(array('main' => $query->result_array()), $filters);
 	}
 
-	public function get_nrti_drugs_in_regimen_drilldown_level1($main_data, $filters){
+	public function get_nnrti_drugs_in_regimen_drilldown_level1($main_data, $filters){
 		$drilldown_data = array();
 
-		$this->db->select("LOWER(REPLACE(nrti_drug, ' ', '_')) category, regimen name, SUM(total) y", FALSE);
+		$this->db->select("LOWER(REPLACE(nnrti_drug, ' ', '_')) category, regimen name, SUM(total) y", FALSE);
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				$this->db->where_in($category, $filter);
