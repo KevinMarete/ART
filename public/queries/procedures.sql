@@ -9,9 +9,9 @@ BEGIN
     DECLARE county,master,subcounty,facility INT DEFAULT NULL;
     SET facility_name = REPLACE(facility_name, "'", "");
     SET county_name = REPLACE(county_name, "'", "");
-    SELECT id INTO county FROM tbl_county WHERE name LIKE CONCAT('%', county_name , '%');
-    SELECT id INTO master FROM tbl_facility_master WHERE code LIKE CONCAT('%', facility_code , '%') AND name LIKE CONCAT('%', facility_name , '%');
-    SELECT id INTO facility FROM tbl_facility WHERE name LIKE CONCAT('%', facility_name , '%');
+    SELECT id INTO county FROM tbl_county WHERE name LIKE CONCAT('%', county_name , '%') LIMIT 1;
+    SELECT id INTO master FROM tbl_facility_master WHERE code LIKE CONCAT('%', facility_code , '%') AND name LIKE CONCAT('%', facility_name , '%') LIMIT 1;
+    SELECT id INTO facility FROM tbl_facility WHERE name LIKE CONCAT('%', facility_name , '%') LIMIT 1;
     IF (county IS NULL) THEN 
         INSERT INTO tbl_county(name)VALUES(LOWER(county_name));
         SET county = LAST_INSERT_ID();
@@ -36,24 +36,24 @@ DELIMITER ;
 /*Patients Current*/
 DELIMITER //
 CREATE OR REPLACE PROCEDURE proc_save_patient_current(
-	IN facility_name VARCHAR(150), 
-	IN regimen_code VARCHAR(6),
-	IN patient_total INT(11),
-	IN p_month VARCHAR(3),
-	IN p_year INT(4)
-	)
+    IN facility_name VARCHAR(150), 
+    IN regimen_code VARCHAR(6),
+    IN patient_total INT(11),
+    IN p_month VARCHAR(3),
+    IN p_year INT(4)
+    )
 BEGIN
-	DECLARE facility,regimen INT DEFAULT NULL;
+    DECLARE facility,regimen INT DEFAULT NULL;
     SET facility_name = REPLACE(facility_name, "'", "");
-    SELECT id INTO facility FROM tbl_facility WHERE name LIKE CONCAT('%', facility_name , '%');
-    SELECT id INTO regimen FROM tbl_regimen WHERE code LIKE CONCAT('%', regimen_code , '%');
+    SELECT id INTO facility FROM tbl_facility WHERE name LIKE CONCAT('%', facility_name , '%') LIMIT 1;
+    SELECT id INTO regimen FROM tbl_regimen WHERE code LIKE CONCAT('%', regimen_code , '%') LIMIT 1;
     IF (facility IS NULL) THEN 
-    	INSERT INTO tbl_facility(name)VALUES(facility_name);
-    	SET facility = LAST_INSERT_ID();
+        INSERT INTO tbl_facility(name)VALUES(facility_name);
+        SET facility = LAST_INSERT_ID();
     END IF;
     IF (regimen IS NULL) THEN 
-    	INSERT INTO tbl_regimen(code)VALUES(regimen_code);
-    	SET regimen = LAST_INSERT_ID();
+        INSERT INTO tbl_regimen(code)VALUES(regimen_code);
+        SET regimen = LAST_INSERT_ID();
     END IF;
     IF NOT EXISTS(SELECT * FROM tbl_regimen_patient WHERE period_year = p_year AND period_month = p_month AND regimen_id = regimen AND facility_id = facility) THEN
         INSERT INTO tbl_regimen_patient(total, period_year, period_month, regimen_id, facility_id) VALUES(patient_total, p_year, p_month, regimen, facility);
@@ -67,22 +67,22 @@ DELIMITER ;
 /*National MOS*/
 DELIMITER //
 CREATE OR REPLACE PROCEDURE proc_save_national_mos(
-	IN drug_name VARCHAR(150), 
-	IN packsize VARCHAR(10),
-	IN p_year INT(4),
-	IN p_month VARCHAR(3),
-	IN issue INT(10),
+    IN drug_name VARCHAR(150), 
+    IN packsize VARCHAR(10),
+    IN p_year INT(4),
+    IN p_month VARCHAR(3),
+    IN issue INT(10),
     IN soh INT(10),
     IN supplier INT(10),
     IN received INT(10)
-	)
+    )
 BEGIN
-	DECLARE drug INT DEFAULT NULL;
+    DECLARE drug INT DEFAULT NULL;
     SET drug_name = REPLACE(drug_name, "'", "");
-    SELECT id INTO drug FROM tbl_drug WHERE name LIKE CONCAT('%', drug_name , '%') AND pack_size LIKE CONCAT('%', packsize , '%');
+    SELECT id INTO drug FROM tbl_drug WHERE name LIKE CONCAT('%', drug_name , '%') AND pack_size LIKE CONCAT('%', packsize , '%') LIMIT 1;
     IF (drug IS NULL) THEN 
-    	INSERT INTO tbl_drug(name, pack_size)VALUES(drug_name, packsize);
-    	SET drug = LAST_INSERT_ID();
+        INSERT INTO tbl_drug(name, pack_size)VALUES(drug_name, packsize);
+        SET drug = LAST_INSERT_ID();
     END IF;
     IF NOT EXISTS(SELECT * FROM tbl_national_mos WHERE period_year = p_year AND period_month = p_month AND drug_id = drug) THEN
         INSERT INTO tbl_national_mos(issue_total, soh_total, supplier_total, received_total, period_year, period_month, drug_id) VALUES(issue, soh, supplier, received, p_year, p_month, drug);
@@ -106,8 +106,8 @@ BEGIN
     DECLARE facility,drug INT DEFAULT NULL;
     SET facility_name = REPLACE(facility_name, "'", "");
     SET drug_name = REPLACE(drug_name, "'", "");
-    SELECT id INTO facility FROM tbl_facility WHERE name LIKE CONCAT('%', facility_name , '%');
-    SELECT id INTO drug FROM tbl_drug WHERE name LIKE CONCAT('%', drug_name , '%') AND pack_size LIKE CONCAT('%', packsize , '%');
+    SELECT id INTO facility FROM tbl_facility WHERE name LIKE CONCAT('%', facility_name , '%') LIMIT 1;
+    SELECT id INTO drug FROM tbl_drug WHERE name LIKE CONCAT('%', drug_name , '%') AND pack_size LIKE CONCAT('%', packsize , '%') LIMIT 1;
     IF (facility IS NULL) THEN 
         INSERT INTO tbl_facility(name)VALUES(facility_name);
         SET facility = LAST_INSERT_ID();
@@ -138,8 +138,8 @@ BEGIN
     DECLARE facility,drug INT DEFAULT NULL;
     SET facility_name = REPLACE(facility_name, "'", "");
     SET drug_name = REPLACE(drug_name, "'", "");
-    SELECT id INTO facility FROM tbl_facility WHERE name LIKE CONCAT('%', facility_name , '%');
-    SELECT id INTO drug FROM tbl_drug WHERE name LIKE CONCAT('%', drug_name , '%') AND pack_size LIKE CONCAT('%', packsize , '%');
+    SELECT id INTO facility FROM tbl_facility WHERE name LIKE CONCAT('%', facility_name , '%') LIMIT 1;
+    SELECT id INTO drug FROM tbl_drug WHERE name LIKE CONCAT('%', drug_name , '%') AND pack_size LIKE CONCAT('%', packsize , '%') LIMIT 1;
     IF (facility IS NULL) THEN 
         INSERT INTO tbl_facility(name)VALUES(facility_name);
         SET facility = LAST_INSERT_ID();
