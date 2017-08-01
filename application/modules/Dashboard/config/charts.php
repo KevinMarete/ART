@@ -8,21 +8,11 @@ $config['patient_by_regimen_yaxis_title'] = 'No. of Patients';
 $config['patient_by_regimen_source'] = 'Source: www.nascop.org';
 $config['patient_by_regimen_has_drilldown'] = FALSE;
 $config['patient_by_regimen_xaxis_title'] = '';
-$config['patient_by_regimen_view_name'] = 'tbl_dashboard_patient';
-$config['patient_by_regimen_filters'] = array('data_year', 'data_month', 'county', 'sub_county', 'facility', 'regimen');
+$config['patient_by_regimen_filters'] = array('period_year', 'period_month', 'c.id', 'sb.id', 'f.id', 'r.id');
 $config['patient_by_regimen_filters_default'] = array(
-	'data_year' => array('2016'), 
-	'data_month' => array('Oct'),
-	'regimen' => array(
-		'AF1A | AZT + 3TC + NVP',
-		'AF1B | AZT + 3TC + EFV',
-		'AF2A | TDF + 3TC + NVP',
-		'AF2B | TDF + 3TC + EFV',
-		'CF1A | AZT + 3TC + NVP',
-		'CF1B | AZT + 3TC + EFV',
-		'CF2A | ABC + 3TC + NVP',
-		'CF2B | ABC + 3TC + EFV'
-	)
+	'period_year' => array('2017'), 
+	'period_month' => array('May'),
+	'r.id' => array(1, 2, 3, 4, 22, 23, 26, 27)
 );
 
 /*stock_status_chart*/
@@ -32,18 +22,11 @@ $config['stock_status_yaxis_title'] = 'Months of Stock(MOS)';
 $config['stock_status_source'] = 'Source: www.nascop.org';
 $config['stock_status_has_drilldown'] = FALSE;
 $config['stock_status_xaxis_title'] = '';
-$config['stock_status_view_name'] = 'tbl_dashboard_mos';
-$config['stock_status_filters'] = array('data_year', 'data_month', 'drug');
+$config['stock_status_filters'] = array('period_year', 'period_month', 'drug_id');
 $config['stock_status_filters_default'] = array(
-	'data_year' => array('2016'), 
-	'data_month' => array('Oct'), 
-	'drug' => array(
-		'Zidovudine/Lamivudine/Nevirapine (AZT/3TC/NVP) FDC 60/30/50mg tabs(60)',
-		'Zidovudine/Lamivudine/Nevirapine (AZT/3TC/NVP) FDC 300/150/200mg tabs(60)',
-		'Zidovudine/Lamivudine(AZT/3TC) 60 mg/30mg FDC tabs(60)',
-		'Zidovudine/Lamivudine (AZT/3TC) FDC 300/150mg tabs(60)',
-		'Zidovudine liquid (AZT) 10mg/ml(1 * 240ml)'
-	)
+	'period_year' => array('2017'), 
+	'period_month' => array('May'), 
+	'drug_id' => array(69, 70, 67, 68, 66)
 );
 
 /*national_mos_chart*/
@@ -53,18 +36,11 @@ $config['national_mos_yaxis_title'] = 'Months of Stock(MOS)';
 $config['national_mos_source'] = 'Source: www.nascop.org';
 $config['national_mos_has_drilldown'] = FALSE;
 $config['national_mos_xaxis_title'] = '';
-$config['national_mos_view_name'] = 'tbl_dashboard_mos';
-$config['national_mos_filters'] = array('data_year', 'data_month', 'drug');
+$config['national_mos_filters'] = array('period_year', 'period_month', 'drug_id');
 $config['national_mos_filters_default'] = array(
-	'data_year' => array('2016'), 
-	'data_month' => array('Oct'), 
-	'drug' => array(
-		'Zidovudine/Lamivudine/Nevirapine (AZT/3TC/NVP) FDC 60/30/50mg tabs(60)',
-		'Zidovudine/Lamivudine/Nevirapine (AZT/3TC/NVP) FDC 300/150/200mg tabs(60)',
-		'Zidovudine/Lamivudine(AZT/3TC) 60 mg/30mg FDC tabs(60)',
-		'Zidovudine/Lamivudine (AZT/3TC) FDC 300/150mg tabs(60)',
-		'Zidovudine liquid (AZT) 10mg/ml(1 * 240ml)'
-	)
+	'period_year' => array('2017'), 
+	'period_month' => array('May'), 
+	'drug_id' => array(69, 70, 67, 68, 66)
 );
 
 /*drug_consumption_trend_chart*/
@@ -74,13 +50,10 @@ $config['drug_consumption_trend_yaxis_title'] = 'No. of Packs';
 $config['drug_consumption_trend_source'] = 'Source: www.nascop.org';
 $config['drug_consumption_trend_has_drilldown'] = FALSE;
 $config['drug_consumption_trend_xaxis_title'] = '';
-$config['drug_consumption_trend_view_name'] = 'tbl_dashboard_consumption';
-$config['drug_consumption_trend_filters'] = array('county', 'sub_county', 'facility', 'drug');
+$config['drug_consumption_trend_view_name'] = 'tbl_consumption';
+$config['drug_consumption_trend_filters'] = array('county_id', 'subcounty_id', 'facility_id', 'drug_id');
 $config['drug_consumption_trend_filters_default'] = array(
-	'drug' => array(
-		'Abacavir (ABC) 300mg tabs(60)', 
-		'Lamivudine (3TC) 150mg Tabs(60)'
-	)
+	'drug_id' => array(1, 38)
 );
 
 /*patient_in_care_chart*/
@@ -94,7 +67,7 @@ $config['patient_in_care_view_name'] = 'tbl_dashboard_patient';
 $config['patient_in_care_filters'] = array('data_year', 'data_month', 'regimen_category', 'regimen');
 $config['patient_in_care_filters_default'] = array(
 	'data_year' => array('2017'), 
-	'data_month' => array('Jan'), 
+	'data_month' => array('May'), 
 	'regimen_category' => array('Adult ART')
 );
 
@@ -147,9 +120,8 @@ $config['patient_scaleup_yaxis_title'] = 'No. of Patients';
 $config['patient_scaleup_source'] = 'Source: www.nascop.org';
 $config['patient_scaleup_has_drilldown'] = FALSE;
 $config['patient_scaleup_xaxis_title'] = '';
-$config['patient_scaleup_view_name'] = 'tbl_dashboard_patient';
-$config['patient_scaleup_filters'] = array('data_year', 'county', 'sub_county', 'facility', 'regimen_service');
+$config['patient_scaleup_filters'] = array('period_year', 'county_id', 'subcounty_id', 'facility_id', 'service_id');
 $config['patient_scaleup_filters_default'] = array(
-	'data_year' => array('2016', '2017'), 
-	'regimen_service' => array('ART')
+	'period_year' => array('2017'), 
+	'service_id' => array(1)
 );

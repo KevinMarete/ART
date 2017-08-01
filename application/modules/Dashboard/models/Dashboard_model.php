@@ -6,16 +6,23 @@ class Dashboard_model extends CI_Model {
 	public function get_patient_regimen_numbers($filters){
 		$columns = array();
 
-		$this->db->select("regimen_category, regimen, SUM(total) total", FALSE);
+		$this->db->select('UPPER(ct.name) regimen_category, UPPER(r.code) code, UPPER(r.name) regimen, SUM(total) total', FALSE);
+		$this->db->from('tbl_patient p');
+		$this->db->join('tbl_regimen r', 'r.id = p.regimen_id');
+		$this->db->join('tbl_category ct', 'ct.id = r.category_id');
+		$this->db->join('tbl_facility f', 'f.id = p.facility_id');
+		$this->db->join('tbl_subcounty sb', 'sb.id = f.subcounty_id');
+		$this->db->join('tbl_county c', 'c.id = sb.county_id');
+
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				$this->db->where_in($category, $filter);
 			}
 		}
-		$this->db->where('regimen_category !=', '');
-		$this->db->group_by('regimen');
-		$this->db->order_by('regimen_category, regimen', 'ASC');
-		$query = $this->db->get('tbl_dashboard_patient');
+
+		$this->db->group_by('code');
+		$this->db->order_by('regimen_category, code', 'ASC');
+		$query = $this->db->get();
 		return array('main' => $query->result_array(), 'columns' => $columns);
 	}
 
@@ -28,19 +35,21 @@ class Dashboard_model extends CI_Model {
 			array('name' => 'Facilities', 'data' => array())
 		);
 
-		$this->db->select('drug, facility_mos, cms_mos, supplier_mos');
+		$this->db->select('dvw.name drug_id, facility_mos, cms_mos, supplier_mos');
+		$this->db->from('tbl_mos m');
+		$this->db->join('vw_drug_list dvw', 'dvw.id = m.drug_id');
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				$this->db->where_in($category, $filter);
 			}
 		}
-		$this->db->group_by('drug');
-		$this->db->order_by('drug', 'DESC');
-		$query = $this->db->get('tbl_dashboard_mos');
+		$this->db->group_by('drug_id');
+		$this->db->order_by('drug_id', 'DESC');
+		$query = $this->db->get();
 		$results = $query->result_array();
 
 		foreach ($results as $result) {
-			$columns[] = $result['drug'];
+			$columns[] = $result['drug_id'];
 			foreach ($scaleup_data as $index => $scaleup) {
 				if($scaleup['name'] == 'Facilities'){
 					array_push($scaleup_data[$index]['data'], $result['facility_mos']);
@@ -58,20 +67,22 @@ class Dashboard_model extends CI_Model {
 		$columns = array();
 		$tmp_data = array();
 
-		$this->db->select("drug, CONCAT_WS('/', data_month, data_year) period, SUM(total) total", FALSE);
+		$this->db->select("dvw.name drug_id, CONCAT_WS('/', period_month, period_year) period, SUM(total) total", FALSE);
+		$this->db->from('tbl_consumption cs');
+		$this->db->join('vw_drug_list dvw', 'dvw.id = cs.drug_id');
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				$this->db->where_in($category, $filter);
 			}
 		}
-		$this->db->group_by('drug, period');
-		$this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
-		$query = $this->db->get('tbl_dashboard_consumption');
+		$this->db->group_by('drug_id, period');
+		$this->db->order_by("period_year ASC, FIELD( period_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
+		$query = $this->db->get();
 		$results = $query->result_array();
 
 		foreach ($results as $result) {
 			array_push($columns, $result['period']);
-			$tmp_data[$result['drug']]['data'][] = $result['total'];
+			$tmp_data[$result['drug_id']]['data'][] = $result['total'];
 		}
 
 		$counter = 0;
@@ -352,15 +363,22 @@ class Dashboard_model extends CI_Model {
 			array('type' => 'spline', 'name' => 'Total', 'data' => array())
 		);
 
-		$this->db->select("CONCAT_WS('/', data_month, data_year) period, SUM(IF(age_category = 'adult', total, NULL)) adult_total, SUM(IF(age_category = 'paed', total, NULL)) paed_total, SUM(total) combined_total", FALSE);
+		$this->db->select("CONCAT_WS('/', period_month, period_year) period, SUM(IF(ct.name LIKE '%adult%', p.total, NULL)) adult_total, SUM(IF(ct.name LIKE '%paed%' OR ct.name LIKE '%child %', p.total, NULL)) paed_total, SUM(p.total) combined_total", FALSE);
+		$this->db->from('tbl_patient p');
+		$this->db->join('tbl_regimen r', 'r.id = p.regimen_id');
+		$this->db->join('tbl_category ct', 'ct.id = r.category_id');
+		$this->db->join('tbl_facility f', 'f.id = p.facility_id');
+		$this->db->join('tbl_subcounty sb', 'sb.id = f.subcounty_id');
+		$this->db->join('tbl_county c', 'c.id = sb.county_id');
+
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				$this->db->where_in($category, $filter);
 			}
 		}
 		$this->db->group_by('period');
-		$this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
-		$query = $this->db->get('tbl_dashboard_patient');
+		$this->db->order_by("period_year ASC, FIELD( period_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
+		$query = $this->db->get();
 		$results = $query->result_array();
 
 		if($results){
