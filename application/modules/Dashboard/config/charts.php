@@ -36,7 +36,7 @@ $config['stock_status_view_name'] = 'dsh_mos';
 $config['stock_status_filters'] = array('data_year', 'data_month', 'drug');
 $config['stock_status_filters_default'] = array(
 	'data_year' => array('2017'), 
-	'data_month' => array('May'), 
+	'data_month' => array('Jun'), 
 	'drug' => array(
 		'Zidovudine/Lamivudine/Nevirapine (AZT/3TC/NVP) 60/30/50mg FDC Tabs',
 		'Zidovudine/Lamivudine/Nevirapine (AZT/3TC/NVP) 300/150/200mg FDC Tabs',
@@ -57,7 +57,7 @@ $config['national_mos_view_name'] = 'dsh_mos';
 $config['national_mos_filters'] = array('data_year', 'data_month', 'drug');
 $config['national_mos_filters_default'] = array(
 	'data_year' => array('2017'), 
-	'data_month' => array('May'), 
+	'data_month' => array('Jun'), 
 	'drug' => array(
 		'Zidovudine/Lamivudine/Nevirapine (AZT/3TC/NVP) 60/30/50mg FDC Tabs',
 		'Zidovudine/Lamivudine/Nevirapine (AZT/3TC/NVP) 300/150/200mg FDC Tabs',
