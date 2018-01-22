@@ -1,11 +1,23 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-/* variables declaration */
+
+/* default values */
 $data_year = '2017';
 $data_month = 'Sep';
-$data_date = '2017-Sep';
-$config['data_date'] = $data_date;
+$data_date = $data_year.'-'.$data_month;
 $counties = ['baringo','bomet','bungoma','busia','elgeyo marakwet','embu','garissa','homa bay','isiolo','kajiado','kakamega','kericho','kiambu','kilifi','kirinyaga','kisii','kisumu','kitui','kwale','laikipia','lamu','machakos','makueni','mandera','marsabit','meru','migori','mombasa','muranga','nairobi','nakuru','nandi','narok','nyamira','nyandarua','nyeri','samburu','siaya','taita taveta','tana river','tharaka nithi','trans nzoia','turkana','uasin gishu','vihiga','wajir','west pokot'];
+$selected_regimen = 'AF2B | TDF + 3TC + EFV';
+$selected_drugs_mos = ['Zidovudine/Lamivudine/Nevirapine (AZT/3TC/NVP) 60/30/50mg FDC Tabs','Zidovudine/Lamivudine/Nevirapine (AZT/3TC/NVP) 300/150/200mg FDC Tabs','Zidovudine/Lamivudine (AZT/3TC) 60/30mg FDC Tabs','Zidovudine/Lamivudine (AZT/3TC) 300/150mg FDC Tabs','Zidovudine (AZT) 10mg/ml Liquid'];
+$selected_cms_drug = 'Abacavir (ABC) 300mg Tabs';
+$selected_drugs_com_consumption = ['Abacavir (ABC) 300mg Tabs', 'Lamivudine (3TC) 150mg Tabs'];
+
+$config['data_date'] = $data_date;
+$config['counties'] = $counties;
+$config['selected_regimen_patients_on_regimen'] = $selected_regimen;
+$config['selected_drugs_mos'] = $selected_drugs_mos;
+$config['selected_cms_drug'] = $selected_cms_drug;
+$config['selected_drugs_com_consumption'] = $selected_drugs_com_consumption;
+
 
 /*patient_scaleup_chart*/
 $config['patient_scaleup_chart_chartview'] = 'charts/grouped_stacked_view';
@@ -17,7 +29,7 @@ $config['patient_scaleup_chart_xaxis_title'] = '';
 $config['patient_scaleup_chart_view_name'] = 'dsh_patient';
 $config['patient_scaleup_chart_filters'] = array('data_date','county', 'regimen_service');
 $config['patient_scaleup_chart_filters_default'] = array(
-	'county' => array('baringo','bomet','bungoma','busia','elgeyo marakwet','embu','garissa','homa bay','isiolo','kajiado','kakamega','kericho','kiambu','kilifi','kirinyaga','kisii','kisumu','kitui','kwale','laikipia','lamu','machakos','makueni','mandera','marsabit','meru','migori','mombasa','muranga','nairobi','nakuru','nandi','narok','nyamira','nyandarua','nyeri','samburu','siaya','taita taveta','tana river','tharaka nithi','trans nzoia','turkana','uasin gishu','vihiga','wajir','west pokot'), 
+	'county' => $counties,
 	'data_date'=> $data_date,
 	'regimen_service' => array('ART')
 );
@@ -49,11 +61,7 @@ $config['national_mos_chart_filters_default'] = array(
 	'data_year' => $data_year, 
 	'data_month' => $data_month, 
 	'drug' => array(
-		'Zidovudine/Lamivudine/Nevirapine (AZT/3TC/NVP) 60/30/50mg FDC Tabs',
-		'Zidovudine/Lamivudine/Nevirapine (AZT/3TC/NVP) 300/150/200mg FDC Tabs',
-		'Zidovudine/Lamivudine (AZT/3TC) 60/30mg FDC Tabs',
-		'Zidovudine/Lamivudine (AZT/3TC) 300/150mg FDC Tabs',
-		'Zidovudine (AZT) 10mg/ml Liquid'
+		$selected_drugs_mos
 	)
 );
 
@@ -68,8 +76,7 @@ $config['commodity_consumption_chart_view_name'] = 'dsh_consumption';
 $config['commodity_consumption_chart_filters'] = array('data_date', 'drug', 'county');
 $config['commodity_consumption_chart_filters_default'] = array(
 	'drug' => array(
-		'Abacavir (ABC) 300mg Tabs', 
-		'Lamivudine (3TC) 150mg Tabs'
+		$selected_drugs_com_consumption
 	),
 	'data_date'=> $data_date,
 	'county' => $counties
@@ -86,7 +93,7 @@ $config['patients_regimen_chart_view_name'] = 'dsh_patient';
 $config['patients_regimen_chart_filters'] = array('patient_regimen','data_date', 'county');
 $config['patients_regimen_chart_filters_default'] = array(
 	'patient_regimen' => array(
-		'AF2B | TDF + 3TC + EFV',
+		$selected_regimen,
 	),
 	'data_date'=> $data_date,
 	'county' => $counties
@@ -103,7 +110,7 @@ $config['commodity_month_stock_chart_view_name'] = 'dsh_patient';
 $config['commodity_month_stock_chart_filters'] = array('data_date', 'cms_drug');
 $config['commodity_month_stock_chart_filters_default'] = array(
 	'cms_drug' => array(
-		'Abacavir (ABC) 300mg Tabs', 
+		$selected_cms_drug
 	),
 	'data_date'=> $data_date,
 );

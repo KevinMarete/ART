@@ -63,6 +63,7 @@
 						            	selectAllNumber: true,
 						            	enableCaseInsensitiveFiltering: true,
 							        });
+							    });
 							</script>
 						</div>
 						<div id="patients_regimen_chart"></div>
@@ -108,12 +109,13 @@
 							                }
 							            }
 							        });
+							    });
 							</script>
 						</div>
 						<div id="commodity_month_stock_chart"></div>
 					</div>
 					<div class="chart-notes">
-						Filtered By: <span class="commodity_month_stock_heading"><b>Abacavir (ABC) 300mg Tabs</b></span>
+						Filtered By: <span class="commodity_month_stock_heading" id="selected-cms-drug"></span>
 					</div>
 				</div>
 		 	</div>

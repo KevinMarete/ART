@@ -2,14 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Dashboard_model extends CI_Model {
-	//get the latest records date
-	public function get_latest_date(){
-
-		$this->db->select_max('data_date');
-		$query = $this->db->get('dsh_mos');  
-		
-		return $query->result();
-	}
 
 	public function get_patient_scaleup($filters){
 		$columns = array();

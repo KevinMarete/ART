@@ -14,6 +14,7 @@ class Dashboard extends MX_Controller {
 		$this->load->view('template/dashboard_view', $data);
 	}
 
+	/* load the defaults */
 	public function get_latest_date()
 	{	
 		$data_date = $this->config->item('data_date');
@@ -22,6 +23,46 @@ class Dashboard extends MX_Controller {
 
 		header('Content-Type: application/json');
 		echo json_encode($default_date);
+	}
+
+	public function get_selected_regimen() 
+	{
+		$selected_regimen = $this->config->item('selected_regimen_patients_on_regimen');
+
+		header('Content-Type: application/json');
+		echo json_encode($selected_regimen);
+	}
+
+	public function get_selected_counties() 
+	{
+		$counties = $this->config->item('counties');
+
+		header('Content-Type: application/json');
+		echo json_encode($counties);
+	}
+
+	public function get_selected_drugs_mos() 
+	{
+		$drugs = $this->config->item('selected_drugs_mos');
+
+		header('Content-Type: application/json');
+		echo json_encode($drugs);
+	}
+
+	public function get_selected_cms_drug() 
+	{
+		$cms_drug = $this->config->item('selected_cms_drug');
+
+		header('Content-Type: application/json');
+		echo json_encode($cms_drug);
+	}
+
+	public function get_selected_drugs_com_consumption() 
+	{
+		$drugs = $this->config->item('selected_drugs_com_consumption');
+
+		header('Content-Type: application/json');
+		echo json_encode($drugs);
 	}
 
 	public function get_filter($chartname, $selectedfilters)
@@ -56,7 +97,7 @@ class Dashboard extends MX_Controller {
 		$chartname = $this->input->post('name');
 		$selectedfilters = $this->get_filter($chartname,$this->input->post('selectedfilters'));
 
-		// print_r($selectedfilters); exit;
+		print_r($selectedfilters); exit;
 		//Get default filters
 		//Get chart configuration
 		$data['chart_name']  = $chartname;
