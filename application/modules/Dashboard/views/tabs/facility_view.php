@@ -4,9 +4,22 @@
 			<div class="col-sm-4">
 				<!--commodities analysis-->
 				<div class="form-group">
-					<select name="single_facility_filter" id="single_facility_filter" data-filter_type="facility" class="form-control single_facility_filter">
-						<option value="">-- Select Facility --</option>
-					</select>
+					<!-- facility select button -->
+					<select id="single_facility_filter" class="single_facility_filter"></select>
+					<script type="text/javascript">
+					    $(document).ready(function() {
+					        $('#single_facility_filter').multiselect({
+					        	nonSelectedText: '--Select Facility--',
+					        	disableIfEmpty: true,
+				            	enableFiltering: true,
+				            	maxHeight: 200,
+				            	buttonWidth: '400px',
+				            	includeSelectAllOption: true,
+				            	selectAllNumber: true,
+				            	enableCaseInsensitiveFiltering: true,
+					        });
+					    });
+					</script>
 					<!-- clear button -->
 					<button id="facility_clear_btn" class="hidden">clear</button>
 				</div>

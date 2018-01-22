@@ -345,6 +345,7 @@ $(function() {
             cb+='<option value="'+data.facility+'">'+data.facility+'</option>';
         });
         $("#single_facility_filter").append(cb);
+        $('#single_facility_filter').multiselect('rebuild');
     });
 
 });
