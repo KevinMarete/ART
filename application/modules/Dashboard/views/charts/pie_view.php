@@ -45,9 +45,9 @@
                 colorByPoint: true,
                 data: <?php echo $chart_series_data; ?>
             }],
-            drilldown: {
-                series: <?php echo $chart_drilldown_data; ?>
-            },
+            // drilldown: {
+            //     series: <?php // echo $chart_drilldown_data; ?>
+            // },
             exporting: { 
                 enabled: true 
             }

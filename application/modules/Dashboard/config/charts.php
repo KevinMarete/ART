@@ -1,61 +1,49 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+/* variables declaration */
+$data_date = '2017-Sep';
+$config['data_date'] = $data_date;
+$counties = ['baringo','bomet','bungoma','busia','elgeyo marakwet','embu','garissa','homa bay','isiolo','kajiado','kakamega','kericho','kiambu','kilifi','kirinyaga','kisii','kisumu','kitui','kwale','laikipia','lamu','machakos','makueni','mandera','marsabit','meru','migori','mombasa','muranga','nairobi','nakuru','nandi','narok','nyamira','nyandarua','nyeri','samburu','siaya','taita taveta','tana river','tharaka nithi','trans nzoia','turkana','uasin gishu','vihiga','wajir','west pokot'];
 
-/*patient_by_regimen_chart*/
-$config['patient_by_regimen_chartview'] = 'table_view';
-$config['patient_by_regimen_title'] = 'Patient Numbers by Regimen';
-$config['patient_by_regimen_yaxis_title'] = 'No. of Patients';
-$config['patient_by_regimen_source'] = 'Source: www.nascop.org';
-$config['patient_by_regimen_has_drilldown'] = FALSE;
-$config['patient_by_regimen_xaxis_title'] = '';
-$config['patient_by_regimen_view_name'] = 'dsh_patient';
-$config['patient_by_regimen_filters'] = array('data_year', 'data_month', 'county', 'sub_county', 'facility', 'regimen');
-$config['patient_by_regimen_filters_default'] = array(
-	'data_year' => array('2017'), 
-	'data_month' => array('Jun'),
-	'regimen' => array(
-		'AF1A | AZT + 3TC + NVP',
-		'AF1B | AZT + 3TC + EFV',
-		'AF2A | TDF + 3TC + NVP',
-		'AF2B | TDF + 3TC + EFV',
-		'CF1A | AZT + 3TC + NVP',
-		'CF1B | AZT + 3TC + EFV',
-		'CF2A | ABC + 3TC + NVP',
-		'CF2B | ABC + 3TC + EFV'
-	)
+/*patient_scaleup_chart*/
+$config['patient_scaleup_chart_chartview'] = 'charts/grouped_stacked_view';
+$config['patient_scaleup_chart_title'] = 'Patient Scaleup Trend';
+$config['patient_scaleup_chart_yaxis_title'] = 'No. of Patients';
+$config['patient_scaleup_chart_source'] = 'Source: www.nascop.org';
+$config['patient_scaleup_chart_has_drilldown'] = FALSE;
+$config['patient_scaleup_chart_xaxis_title'] = '';
+$config['patient_scaleup_chart_view_name'] = 'dsh_patient';
+$config['patient_scaleup_chart_filters'] = array('data_date','county', 'regimen_service');
+$config['patient_scaleup_chart_filters_default'] = array(
+	'county' => array('baringo','bomet','bungoma','busia','elgeyo marakwet','embu','garissa','homa bay','isiolo','kajiado','kakamega','kericho','kiambu','kilifi','kirinyaga','kisii','kisumu','kitui','kwale','laikipia','lamu','machakos','makueni','mandera','marsabit','meru','migori','mombasa','muranga','nairobi','nakuru','nandi','narok','nyamira','nyandarua','nyeri','samburu','siaya','taita taveta','tana river','tharaka nithi','trans nzoia','turkana','uasin gishu','vihiga','wajir','west pokot'), 
+	'data_date'=> $data_date,
+	'regimen_service' => array('ART')
 );
 
-/*stock_status_chart*/
-$config['stock_status_chartview'] = 'charts/stacked_bar_view';
-$config['stock_status_title'] = 'National Stock Status';
-$config['stock_status_yaxis_title'] = 'Months of Stock(MOS)';
-$config['stock_status_source'] = 'Source: www.nascop.org';
-$config['stock_status_has_drilldown'] = FALSE;
-$config['stock_status_xaxis_title'] = '';
-$config['stock_status_view_name'] = 'dsh_mos';
-$config['stock_status_filters'] = array('data_year', 'data_month', 'drug');
-$config['stock_status_filters_default'] = array(
-	'data_year' => array('2017'), 
-	'data_month' => array('Jun'), 
-	'drug' => array(
-		'Zidovudine/Lamivudine/Nevirapine (AZT/3TC/NVP) 60/30/50mg FDC Tabs',
-		'Zidovudine/Lamivudine/Nevirapine (AZT/3TC/NVP) 300/150/200mg FDC Tabs',
-		'Zidovudine/Lamivudine (AZT/3TC) 60/30mg FDC Tabs',
-		'Zidovudine/Lamivudine (AZT/3TC) 300/150mg FDC Tabs',
-		'Zidovudine (AZT) 10mg/ml Liquid'
-	)
+
+/*patient_services_by_county_chart*/
+$config['patient_services_chart_chartview'] = 'charts/stacked_column_view';
+$config['patient_services_chart_title'] = 'Patient Services by County';
+$config['patient_services_chart_yaxis_title'] = 'No. of Patients';
+$config['patient_services_chart_source'] = 'Source: www.nascop.org';
+$config['patient_services_chart_has_drilldown'] = FALSE;
+$config['patient_services_chart_xaxis_title'] = '';
+$config['patient_services_chart_view_name'] = 'dsh_patient';
+$config['patient_services_chart_filters'] = array('county');
+$config['patient_services_chart_filters_default'] = array(
+	'county' => $counties
 );
 
 /*national_mos_chart*/
-$config['national_mos_chartview'] = 'charts/stacked_bar_view';
-$config['national_mos_title'] = 'National Commodity Months of Stock(MOS)';
-$config['national_mos_yaxis_title'] = 'Months of Stock(MOS)';
-$config['national_mos_source'] = 'Source: www.nascop.org';
-$config['national_mos_has_drilldown'] = FALSE;
-$config['national_mos_xaxis_title'] = '';
-$config['national_mos_view_name'] = 'dsh_mos';
-$config['national_mos_filters'] = array('data_year', 'data_month', 'drug');
-$config['national_mos_filters_default'] = array(
+$config['national_mos_chart_chartview'] = 'charts/stacked_bar_view';
+$config['national_mos_chart_title'] = 'National Commodity Months of Stock(MOS)';
+$config['national_mos_chart_yaxis_title'] = 'Months of Stock(MOS)';
+$config['national_mos_chart_source'] = 'Source: www.nascop.org';
+$config['national_mos_chart_has_drilldown'] = FALSE;
+$config['national_mos_chart_xaxis_title'] = '';
+$config['national_mos_chart_view_name'] = 'dsh_mos';
+$config['national_mos_chart_filters'] = array('data_year', 'data_month', 'drug');
+$config['national_mos_chart_filters_default'] = array(
 	'data_year' => array('2017'), 
 	'data_month' => array('Jun'), 
 	'drug' => array(
@@ -67,89 +55,318 @@ $config['national_mos_filters_default'] = array(
 	)
 );
 
-/*drug_consumption_trend_chart*/
-$config['drug_consumption_trend_chartview'] = 'charts/line_view';
-$config['drug_consumption_trend_title'] = 'Commodity Consumption Trend';
-$config['drug_consumption_trend_yaxis_title'] = 'No. of Packs';
-$config['drug_consumption_trend_source'] = 'Source: www.nascop.org';
-$config['drug_consumption_trend_has_drilldown'] = FALSE;
-$config['drug_consumption_trend_xaxis_title'] = '';
-$config['drug_consumption_trend_view_name'] = 'dsh_consumption';
-$config['drug_consumption_trend_filters'] = array('county', 'sub_county', 'facility', 'drug');
-$config['drug_consumption_trend_filters_default'] = array(
+/*commodity_consumption_chart*/
+$config['commodity_consumption_chart_chartview'] = 'charts/line_view';
+$config['commodity_consumption_chart_title'] = 'Commodity Consumption Trend';
+$config['commodity_consumption_chart_yaxis_title'] = 'No. of Packs';
+$config['commodity_consumption_chart_source'] = 'Source: www.nascop.org';
+$config['commodity_consumption_chart_has_drilldown'] = FALSE;
+$config['commodity_consumption_chart_xaxis_title'] = 'Regimens';
+$config['commodity_consumption_chart_view_name'] = 'dsh_consumption';
+$config['commodity_consumption_chart_filters'] = array('data_date', 'drug', 'county');
+$config['commodity_consumption_chart_filters_default'] = array(
 	'drug' => array(
 		'Abacavir (ABC) 300mg Tabs', 
 		'Lamivudine (3TC) 150mg Tabs'
-	)
+	),
+	'data_date'=> $data_date,
+	'county' => $counties
 );
 
-/*patient_in_care_chart*/
-$config['patient_in_care_chartview'] = 'charts/column_drilldown_view';
-$config['patient_in_care_title'] = 'Patients Numbers in Treatment';
-$config['patient_in_care_yaxis_title'] = 'No. of Patients';
-$config['patient_in_care_source'] = 'Source: www.nascop.org';
-$config['patient_in_care_has_drilldown'] = TRUE;
-$config['patient_in_care_xaxis_title'] = 'County';
-$config['patient_in_care_view_name'] = 'dsh_patient';
-$config['patient_in_care_filters'] = array('data_year', 'data_month', 'regimen_category', 'regimen');
-$config['patient_in_care_filters_default'] = array(
+/*patients_regimen_chart*/
+$config['patients_regimen_chart_chartview'] = 'charts/basic_column_view';
+$config['patients_regimen_chart_title'] = 'Patients on Regimen';
+$config['patients_regimen_chart_yaxis_title'] = 'No. of Patients';
+$config['patients_regimen_chart_source'] = 'Source: www.nascop.org';
+$config['patients_regimen_chart_has_drilldown'] = FALSE;
+$config['patients_regimen_chart_xaxis_title'] = '';
+$config['patients_regimen_chart_view_name'] = 'dsh_patient';
+$config['patients_regimen_chart_filters'] = array('patient_regimen','data_date', 'county');
+$config['patients_regimen_chart_filters_default'] = array(
+	'patient_regimen' => array(
+		'AF2B | TDF + 3TC + EFV',
+	),
+	'data_date'=> $data_date,
+	'county' => $counties
+);
+
+/*commodity_month_stock_chart*/
+$config['commodity_month_stock_chart_chartview'] = 'charts/basic_stacked_view';
+$config['commodity_month_stock_chart_title'] = 'Commodity Month of Stock';
+$config['commodity_month_stock_chart_yaxis_title'] = 'No. of Commodities';
+$config['commodity_month_stock_chart_source'] = 'Source: www.nascop.org';
+$config['commodity_month_stock_chart_has_drilldown'] = FALSE;
+$config['commodity_month_stock_chart_xaxis_title'] = '';
+$config['commodity_month_stock_chart_view_name'] = 'dsh_patient';
+$config['commodity_month_stock_chart_filters'] = array('data_date', 'cms_drug');
+$config['commodity_month_stock_chart_filters_default'] = array(
+	'cms_drug' => array(
+		'Abacavir (ABC) 300mg Tabs', 
+	),
+	'data_date'=> $data_date,
+);
+
+/*county_patient_distribution_chart*/
+$config['county_patient_distribution_chart_chartview'] = 'charts/column_view';
+$config['county_patient_distribution_chart_title'] = 'County Patient Numbers';
+$config['county_patient_distribution_chart_yaxis_title'] = 'No. of Patients';
+$config['county_patient_distribution_chart_source'] = 'Source: www.nascop.org';
+$config['county_patient_distribution_chart_has_drilldown'] = FALSE;
+$config['county_patient_distribution_chart_xaxis_title'] = 'County';
+$config['county_patient_distribution_chart_view_name'] = 'dsh_patient';
+$config['county_patient_distribution_chart_filters'] = array('data_date', 'county');
+$config['county_patient_distribution_chart_filters_default'] = array(
+	'data_date'=> $data_date,
+	'county' => $counties
+);
+
+/*county_patient_distribution_table*/
+$config['county_patient_distribution_table_chartview'] = 'charts/table_view';
+$config['county_patient_distribution_table_title'] = 'Counties';
+$config['county_patient_distribution_table_yaxis_title'] = 'No. of Patients';
+$config['county_patient_distribution_table_source'] = 'Source: www.nascop.org';
+$config['county_patient_distribution_table_has_drilldown'] = FALSE;
+$config['county_patient_distribution_table_xaxis_title'] = '';
+$config['county_patient_distribution_table_view_name'] = 'dsh_patient';
+$config['county_patient_distribution_table_filters'] = array('data_date', 'county');
+$config['county_patient_distribution_table_filters_default'] = array(
+	'data_date'=> $data_date,
+	'county' => $counties
+);
+
+/*subcounty_patient_distribution_chart*/
+$config['subcounty_patient_distribution_chart_chartview'] = 'charts/column_view';
+$config['subcounty_patient_distribution_chart_title'] = 'Subcounty Patient Numbers';
+$config['subcounty_patient_distribution_chart_yaxis_title'] = 'No. of Patients';
+$config['subcounty_patient_distribution_chart_source'] = 'Source: www.nascop.org';
+$config['subcounty_patient_distribution_chart_has_drilldown'] = FALSE;
+$config['subcounty_patient_distribution_chart_xaxis_title'] = 'Subcounty';
+$config['subcounty_patient_distribution_chart_view_name'] = 'dsh_patient';
+$config['subcounty_patient_distribution_chart_filters'] = array('data_date', 'county');
+$config['subcounty_patient_distribution_chart_filters_default'] = array(
+	'data_date'=> $data_date,
+	'county' => $counties
+);
+
+/*subcounty_patient_distribution_table*/
+$config['subcounty_patient_distribution_table_chartview'] = 'charts/table_view';
+$config['subcounty_patient_distribution_table_title'] = 'Subcounty Patient Numbers';
+$config['subcounty_patient_distribution_table_yaxis_title'] = 'No. of Patients';
+$config['subcounty_patient_distribution_table_source'] = 'Source: www.nascop.org';
+$config['subcounty_patient_distribution_table_has_drilldown'] = FALSE;
+$config['subcounty_patient_distribution_table_xaxis_title'] = 'Subcounty';
+$config['subcounty_patient_distribution_table_view_name'] = 'dsh_patient';
+$config['subcounty_patient_distribution_table_filters'] = array('data_date', 'county');
+$config['subcounty_patient_distribution_table_filters_default'] = array(
+	'data_date'=> $data_date,
+	'county' => $counties
+);
+
+/*facility_patient_distribution_chart*/
+$config['facility_patient_distribution_chart_chartview'] = 'charts/basic_stacked_view';
+$config['facility_patient_distribution_chart_title'] = 'Facility Patient Numbers';
+$config['facility_patient_distribution_chart_yaxis_title'] = 'No. of Patients';
+$config['facility_patient_distribution_chart_source'] = 'Source: www.nascop.org';
+$config['facility_patient_distribution_chart_has_drilldown'] = FALSE;
+$config['facility_patient_distribution_chart_xaxis_title'] = 'Facility';
+$config['facility_patient_distribution_chart_view_name'] = 'dsh_patient';
+$config['facility_patient_distribution_chart_filters'] = array('data_year', 'data_month', 'regimen_category', 'regimen','county');
+$config['facility_patient_distribution_chart_filters_default'] = array(
 	'data_year' => array('2017'), 
-	'data_month' => array('Jun'), 
-	'regimen_category' => array('Adult First Line', 'Adult Second Line', 'Adult Third Line', 'Other Adult ART')
+	'data_month' => array('Sep'),
+	'county' => $counties
+);
+// facility other charts
+/*facility_patients_distribution_service_chart*/
+// $config['facility_patients_distribution_service_chart_chartview'] = 'charts/basic_column_view';
+// $config['facility_patients_distribution_service_chart_title'] = 'Patients Distribution by Services';
+// $config['facility_patients_distribution_service_chart_yaxis_title'] = 'No. of Patients';
+// $config['facility_patients_distribution_service_chart_source'] = 'Source: www.nascop.org';
+// $config['facility_patients_distribution_service_chart_has_drilldown'] = FALSE;
+// $config['facility_patients_distribution_service_chart_xaxis_title'] = 'Services';
+// $config['facility_patients_distribution_service_chart_view_name'] = 'dsh_patient';
+// $config['facility_patients_distribution_service_chart_filters'] = array('data_year', 'data_month', 'regimen_category', 'facility');
+// $config['facility_patients_distribution_service_chart_filters_default'] = array(
+// 	'data_year' => array('2017'), 
+// 	'data_month' => array('Jun'),
+// 	'facility' => 'ahero county hospital'
+// );
+
+/*facility_regimen_distribution_chart*/
+$config['facility_regimen_distribution_chart_chartview'] = 'charts/drilldown_column_view';
+$config['facility_regimen_distribution_chart_title'] = 'Facility Patient Numbers';
+$config['facility_regimen_distribution_chart_yaxis_title'] = 'No. of Patients';
+$config['facility_regimen_distribution_chart_source'] = 'Source: www.nascop.org';
+$config['facility_regimen_distribution_chart_has_drilldown'] = TRUE;
+$config['facility_regimen_distribution_chart_xaxis_title'] = 'Facility';
+$config['facility_regimen_distribution_chart_view_name'] = 'dsh_patient';
+$config['facility_regimen_distribution_chart_filters'] = array('data_year', 'data_month', 'regimen_category', 'facility');
+$config['facility_regimen_distribution_chart_filters_default'] = array(
+	'data_year' => array('2017'), 
+	'data_month' => array('Sep'),
+	'facility' => 'ahero county hospital'
 );
 
-/*patient_regimen_category_chart*/
-$config['patient_regimen_category_chartview'] = 'charts/bar_drilldown_view';
-$config['patient_regimen_category_title'] = 'Patients Numbers By Age & Regimen Category';
-$config['patient_regimen_category_yaxis_title'] = 'No. of Patients';
-$config['patient_regimen_category_source'] = 'Source: www.nascop.org';
-$config['patient_regimen_category_has_drilldown'] = TRUE;
-$config['patient_regimen_category_xaxis_title'] = 'Regimen Category';
-$config['patient_regimen_category_view_name'] = 'dsh_patient';
-$config['patient_regimen_category_filters'] = array('data_year', 'data_month', 'county', 'sub_county', 'facility');
-$config['patient_regimen_category_filters_default'] = array(
+/*facility_commodity_consumption_chart*/
+$config['facility_commodity_consumption_chart_chartview'] = 'charts/line_view';
+$config['facility_commodity_consumption_chart_title'] = 'Commodity Consumption in the Facility';
+$config['facility_commodity_consumption_chart_yaxis_title'] = 'No. of Packets';
+$config['facility_commodity_consumption_chart_source'] = 'Source: www.nascop.org';
+$config['facility_commodity_consumption_chart_has_drilldown'] = FALSE;
+$config['facility_commodity_consumption_chart_xaxis_title'] = 'Facility';
+$config['facility_commodity_consumption_chart_view_name'] = 'dsh_patient';
+$config['facility_commodity_consumption_chart_filters'] = array('data_year', 'data_month', 'regimen_category', 'facility');
+$config['facility_commodity_consumption_chart_filters_default'] = array(
+	'drug' => array(
+		'Abacavir (ABC) 300mg Tabs', 
+		'Lamivudine (3TC) 150mg Tabs'
+	),
+	'facility' => 'ahero county hospital',
+	'data_date' => $data_date
+);
+
+/*facility_patient_distribution_table*/
+$config['facility_patient_distribution_table_chartview'] = 'charts/table_view';
+$config['facility_patient_distribution_table_title'] = 'Facility Patient Numbers';
+$config['facility_patient_distribution_table_yaxis_title'] = 'No. of Patients';
+$config['facility_patient_distribution_table_source'] = 'Source: www.nascop.org';
+$config['facility_patient_distribution_table_has_drilldown'] = FALSE;
+$config['facility_patient_distribution_table_xaxis_title'] = 'Facility';
+$config['facility_patient_distribution_table_view_name'] = 'dsh_patient';
+$config['facility_patient_distribution_table_filters'] = array('county','data_year', 'data_month', 'regimen_category', 'regimen');
+$config['facility_patient_distribution_table_filters_default'] = array(
+	'data_year' => array('2017'), 
+	'data_month' => array('Jun'),
+	'county' => $counties
+);
+
+/*partner_patient_distribution_chart*/
+$config['partner_patient_distribution_chart_chartview'] = 'charts/column_view';
+$config['partner_patient_distribution_chart_title'] = 'Partner Patient Numbers';
+$config['partner_patient_distribution_chart_yaxis_title'] = 'No. of Patients';
+$config['partner_patient_distribution_chart_source'] = 'Source: www.nascop.org';
+$config['partner_patient_distribution_chart_has_drilldown'] = FALSE;
+$config['partner_patient_distribution_chart_xaxis_title'] = 'Partner';
+$config['partner_patient_distribution_chart_view_name'] = 'dsh_patient';
+$config['partner_patient_distribution_chart_filters'] = array('data_year', 'data_month', 'regimen_category', 'regimen');
+$config['partner_patient_distribution_chart_filters_default'] = array(
 	'data_year' => array('2017'), 
 	'data_month' => array('Jun')
 );
 
-/*nrti_drugs_in_regimen_chart*/
-$config['nrti_drugs_in_regimen_chartview'] = 'charts/pie_view';
-$config['nrti_drugs_in_regimen_title'] = 'Patient Proportions By NRTI Drugs in Regimen';
-$config['nrti_drugs_in_regimen_yaxis_title'] = 'No. of Patients';
-$config['nrti_drugs_in_regimen_source'] = 'Source: www.nascop.org';
-$config['nrti_drugs_in_regimen_has_drilldown'] = TRUE;
-$config['nrti_drugs_in_regimen_xaxis_title'] = 'Drugs';
-$config['nrti_drugs_in_regimen_view_name'] = 'dsh_patient';
-$config['nrti_drugs_in_regimen_filters'] = array('data_year', 'data_month', 'county', 'sub_county', 'facility', 'nrti_drug');
-$config['nrti_drugs_in_regimen_filters_default'] = array(
+/*partner_patient_distribution_table*/
+$config['partner_patient_distribution_table_chartview'] = 'charts/table_view';
+$config['partner_patient_distribution_table_title'] = 'Partner Patient Numbers';
+$config['partner_patient_distribution_table_yaxis_title'] = 'No. of Patients';
+$config['partner_patient_distribution_table_source'] = 'Source: www.nascop.org';
+$config['partner_patient_distribution_table_has_drilldown'] = FALSE;
+$config['partner_patient_distribution_table_xaxis_title'] = 'Partner';
+$config['partner_patient_distribution_table_view_name'] = 'dsh_patient';
+$config['partner_patient_distribution_table_filters'] = array('data_year', 'data_month', 'regimen_category', 'regimen');
+$config['partner_patient_distribution_table_filters_default'] = array(
 	'data_year' => array('2017'), 
 	'data_month' => array('Jun')
 );
 
-/*nnrti_drugs_in_regimen_chart*/
-$config['nnrti_drugs_in_regimen_chartview'] = 'charts/pie_view';
-$config['nnrti_drugs_in_regimen_title'] = 'Patient Proportions By NNRTI/PI/INSTI Drugs in Regimen';
-$config['nnrti_drugs_in_regimen_yaxis_title'] = 'No. of Patients';
-$config['nnrti_drugs_in_regimen_source'] = 'Source: www.nascop.org';
-$config['nnrti_drugs_in_regimen_has_drilldown'] = TRUE;
-$config['nnrti_drugs_in_regimen_xaxis_title'] = 'Drugs';
-$config['nnrti_drugs_in_regimen_view_name'] = 'dsh_patient';
-$config['nnrti_drugs_in_regimen_filters'] = array('data_year', 'data_month', 'county', 'sub_county', 'facility', 'nnrti_drug');
-$config['nnrti_drugs_in_regimen_filters_default'] = array(
-	'data_year' => array('2017'), 
-	'data_month' => array('Jun')
+/*regimen_patient_chart*/
+$config['regimen_patient_chart_chartview'] = 'charts/basic_column_view';
+$config['regimen_patient_chart_title'] = 'Patients on Regimens';
+$config['regimen_patient_chart_yaxis_title'] = 'No. of Patients';
+$config['regimen_patient_chart_source'] = 'Source: www.nascop.org';
+$config['regimen_patient_chart_has_drilldown'] = FALSE;
+$config['regimen_patient_chart_xaxis_title'] = 'Drugs';
+$config['regimen_patient_chart_view_name'] = 'commodities';
+$config['regimen_patient_chart_filters'] = array('data_date', 'county');
+$config['regimen_patient_chart_filters_default'] = array(
+	'data_date'=> $data_date,
+	'county' => $counties
 );
 
-/*patient_scaleup_chart*/
-$config['patient_scaleup_chartview'] = 'charts/combined_view';
-$config['patient_scaleup_title'] = 'Patient Scaleup Trend';
-$config['patient_scaleup_yaxis_title'] = 'No. of Patients';
-$config['patient_scaleup_source'] = 'Source: www.nascop.org';
-$config['patient_scaleup_has_drilldown'] = FALSE;
-$config['patient_scaleup_xaxis_title'] = '';
-$config['patient_scaleup_view_name'] = 'dsh_patient';
-$config['patient_scaleup_filters'] = array('data_year', 'county', 'sub_county', 'facility', 'regimen_service');
-$config['patient_scaleup_filters_default'] = array(
-	'data_year' => array('2017'), 
-	'regimen_service' => array('ART')
+// drug_regimen_consumption_chart
+
+$config['drug_regimen_consumption_chart_chartview'] = 'charts/basic_stacked_view';
+$config['drug_regimen_consumption_chart_title'] = 'Drugs used in regimen';
+$config['drug_regimen_consumption_chart_yaxis_title'] = 'Consumption';
+$config['drug_regimen_consumption_chart_source'] = 'Source: www.nascop.org';
+$config['drug_regimen_consumption_chart_has_drilldown'] = FALSE;
+$config['drug_regimen_consumption_chart_xaxis_title'] = 'Drugs';
+$config['drug_regimen_consumption_chart_view_name'] = 'commodities';
+$config['drug_regimen_consumption_chart_filters'] = array('period_year', 'period_month', 'county', 'regimen');
+$config['drug_regimen_consumption_chart_filters_default'] = array(
+	'data_date'=> '2017-Jun',
+	'regimen'=> ''
 );
+
+// regimen_patients_counties_chart
+$config['regimen_patients_counties_chart_chartview'] = 'charts/basic_column_view';
+$config['regimen_patients_counties_chart_title'] = 'Patients on regimen by County';
+$config['regimen_patients_counties_chart_yaxis_title'] = 'Patients';
+$config['regimen_patients_counties_chart_source'] = 'Source: www.nascop.org';
+$config['regimen_patients_counties_chart_has_drilldown'] = FALSE;
+$config['regimen_patients_counties_chart_xaxis_title'] = 'Drugs';
+$config['regimen_patients_counties_chart_view_name'] = 'commodities';
+$config['regimen_patients_counties_chart_filters'] = array('data_date','county', 'regimen');
+$config['regimen_patients_counties_chart_filters_default'] = array(
+	'county' => $counties, 
+	'data_date' => $data_date,
+	'regimen' => ''
+);
+
+// drug_consumption_chart
+$config['drug_consumption_chart_chartview'] = 'charts/basic_stacked_view';
+$config['drug_consumption_chart_title'] = 'Regimen Drugs Consumption';
+$config['drug_consumption_chart_yaxis_title'] = 'Consumption';
+$config['drug_consumption_chart_source'] = 'Source: www.nascop.org';
+$config['drug_consumption_chart_has_drilldown'] = FALSE;
+$config['drug_consumption_chart_xaxis_title'] = 'Drugs';
+$config['drug_consumption_chart_view_name'] = 'commodities';
+$config['drug_consumption_chart_filters'] = array('period_year','regimen ', 'period_month', 'sub_county');
+$config['drug_consumption_chart_filters_default'] = array(
+	'regimen' => ''
+
+);
+/*adt_version_distribution_chart*/
+$config['adt_version_distribution_chart_chartview'] = 'charts/stacked_column_view';
+$config['adt_version_distribution_chart_title'] = 'ADT Versions intalled';
+$config['adt_version_distribution_chart_yaxis_title'] = 'No. of installs';
+$config['adt_version_distribution_chart_source'] = 'Source: www.nascop.org';
+$config['adt_version_distribution_chart_has_drilldown'] = FALSE;
+$config['adt_version_distribution_chart_xaxis_title'] = 'Sites';
+$config['adt_version_distribution_chart_view_name'] = 'dsh_site';
+$config['adt_version_distribution_chart_filters'] = array('partner', 'facility', 'internet', 'backup');
+$config['adt_version_distribution_chart_filters_default'] = array();
+
+
+/*adt_site_distribution_chart*/
+$config['adt_site_distribution_chart_chartview'] = 'charts/stacked_column_view';
+$config['adt_site_distribution_chart_title'] = 'ADT Site Numbers';
+$config['adt_site_distribution_chart_yaxis_title'] = '% of Sites';
+$config['adt_site_distribution_chart_source'] = 'Source: www.nascop.org';
+$config['adt_site_distribution_chart_has_drilldown'] = FALSE;
+$config['adt_site_distribution_chart_xaxis_title'] = 'Sites';
+$config['adt_site_distribution_chart_view_name'] = 'dsh_site';
+$config['adt_site_distribution_chart_filters'] = array('partner', 'facility', 'internet', 'backup');
+$config['adt_site_distribution_chart_filters_default'] = array();
+
+/*adt_site_distribution_table*/
+$config['adt_site_distribution_table_chartview'] = 'charts/table_view';
+$config['adt_site_distribution_table_title'] = 'ADT Site Numbers';
+$config['adt_site_distribution_table_yaxis_title'] = 'No. of Sites';
+$config['adt_site_distribution_table_source'] = 'Source: www.nascop.org';
+$config['adt_site_distribution_table_has_drilldown'] = FALSE;
+$config['adt_site_distribution_table_xaxis_title'] = 'Sites';
+$config['adt_site_distribution_table_view_name'] = 'dsh_site';
+$config['adt_site_distribution_table_filters'] = array('partner', 'facility', 'internet', 'backup');
+$config['adt_site_distribution_table_filters_default'] = array();
+
+// adt_sites_overview_chart
+
+$config['adt_sites_overview_chart_chartview'] = 'charts/activitygauge_view';
+$config['adt_sites_overview_chart_title'] = 'ADT Installs Overview';
+$config['adt_sites_overview_chart_yaxis_title'] = 'Consumption';
+$config['adt_sites_overview_chart_source'] = 'Source: www.nascop.org';
+$config['adt_sites_overview_chart_has_drilldown'] = FALSE;
+$config['adt_sites_overview_chart_xaxis_title'] = '';
+$config['adt_sites_overview_chart_view_name'] = '';
+$config['adt_sites_overview_chart_filters'] = array();
+$config['adt_sites_overview_chart_filters_default'] = array();

@@ -1,0 +1,41 @@
+Summary
+------------
+1. Patient Scaleup Trend
+
+Trend
+------------
+1. Commodity Consumption Trend
+
+County
+-----------
+1. Treatment Numbers
+2. County Table Name, Sites, Patients
+
+Subcounty
+-----------
+1. Treatment Numbers
+2. Filter 
+		-> 1. Commodity Consumption Trend
+		-> 2. Facilities Table MflCode, Name, Patients
+
+Facility
+------------
+1. Treatment Numbers
+2. Filter
+
+Partner
+------------
+1. Summary
+2. Trends
+3. Facilities
+4. Regimens
+5. Counties
+
+ADT Sites
+------------
+1. Kenyan Map
+2. Site Table Name, MflCode, County, Sub-County, Parter, Internet, EMRs, Patients
+3. Trends 
+		-> 1. Coverage
+		-> 2. Partners
+
