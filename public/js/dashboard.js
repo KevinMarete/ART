@@ -201,10 +201,10 @@ $(function() {
         $('#facility_commodity_consumption_modal').modal('hide');
 
         /*Load Charts based on tab*/
-        $.each(charts[tab], function(key, chartName) {
-            chartID = '#'+chartName
-            LoadChart(chartID, chartURL, chartName, filters)
-        });
+        chartName = 'facility_commodity_consumption_chart';
+        chartID = '#'+chartName
+
+        LoadChart(chartID, chartURL, chartName, filters)
     });
 
     $('#btn-filter-clear').click(function(e){

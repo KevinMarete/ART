@@ -60,7 +60,7 @@
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
 						Commodity Consumption in Facility
-						<button class="btn btn-default" data-toggle="modal" data-target="#facility_commodity_consumption_modal">Filter</button>
+						<button class="btn btn-warning" data-toggle="modal" data-target="#facility_commodity_consumption_modal">Filter</button>
 					</div>
 					<div class="chart-stage">
 						<script type="text/javascript">
@@ -104,7 +104,7 @@
 		            	<form id="facility_commodity_consumption_frm">
 		                	<select id="facility_commodity_consumption" multiple="multiple" class="drug_list"></select>
 		                	<button type="reset" class="btn btn-default">Reset</button>
-		                	<button type="submit" class="btn btn-success">Filter</button>
+		                	<button type="submit" class="btn btn-warning">Filter</button>
 		            	</form>
 		            </div>
 		        </div>

@@ -6,7 +6,7 @@
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
 						Commodity Consumption Trend
-						<button class="btn btn-default" data-toggle="modal" data-target="#commodity_consumption_modal">Filter</button>
+						<button class="btn btn-warning" data-toggle="modal" data-target="#commodity_consumption_modal">Filter</button>
 					</div>
 					<div class="chart-stage">
 						<div id="commodity_consumption_filter">
@@ -48,7 +48,7 @@
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
 						PATIENTS ON REGIMEN
-						<button class="btn btn-default" data-toggle="modal" data-target="#patients_regm_modal">Filter</button>
+						<button class="btn btn-warning" data-toggle="modal" data-target="#patients_regm_modal">Filter</button>
 					</div>
 					<div class="chart-stage">
 						<div id="patients_regimen_filter">
@@ -63,15 +63,6 @@
 						            	selectAllNumber: true,
 						            	enableCaseInsensitiveFiltering: true,
 							        });
-							        // reset button
-						            $('#patient_regimen_filter_frm').on('reset', function() {
-							            $('#regimen option:selected').each(function() {
-							                $(this).prop('selected', false);
-							            })
-							 
-							            $('#regimen').multiselect('refresh');
-							        });
-							    });
 							</script>
 						</div>
 						<div id="patients_regimen_chart"></div>
@@ -89,7 +80,7 @@
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
 						COMMODITY MONTHS OF STOCK
-						<button class="btn btn-default" data-toggle="modal" data-target="#commodity_month_stock_modal">Filter</button>
+						<button class="btn btn-warning" data-toggle="modal" data-target="#commodity_month_stock_modal">Filter</button>
 					</div>
 					<div class="chart-stage">
 						<div id="commodity_month_stock">
@@ -117,16 +108,6 @@
 							                }
 							            }
 							        });
-
-							        // reset button
-						            $('#commodity_stock_filter_frm').on('reset', function() {
-							            $('#commodity_stock option:selected').each(function() {
-							                $(this).prop('selected', false);
-							            })
-							 
-							            $('#commodity_stock').multiselect('refresh');
-							        });
-							    });
 							</script>
 						</div>
 						<div id="commodity_month_stock_chart"></div>
@@ -151,7 +132,7 @@
 		            	<form id="trend_view_filter_frm">
 		            		<select id="drugs" multiple="multiple" class="drug_list"></select>
 							<button type="reset" class="btn btn-default">Reset</button>
-		                	<button type="submit" class="btn btn-success">Filter</button>
+		                	<button type="submit" class="btn btn-warning">Filter</button>
 		            	</form>
 		            </div>
 		        </div>
@@ -169,8 +150,7 @@
 		            <div class="modal-body">
 		            	<form id="patient_regimen_filter_frm">
 		            		<select id="regimen" class="regimen_list"></select>
-			                <button type="reset" class="btn btn-default">Reset</button>
-		                	<button type="submit" class="btn btn-success">Filter</button>
+		                	<button type="submit" class="btn btn-warning">Filter</button>
 		            	</form>
 		            </div>
 		        </div>
@@ -188,9 +168,7 @@
 		            <div class="modal-body">
 		            	<form id="commodity_stock_filter_frm">
 		            		<select id="commodity_stock" class="cms_drug_list"></select>
-
-							<button type="reset" class="btn btn-default">Reset</button>
-		                	<button type="submit" class="btn btn-success">Filter</button>
+		                	<button type="submit" class="btn btn-warning">Filter</button>
 		            	</form>
 		            </div>
 		        </div>
