@@ -302,7 +302,7 @@ $(function() {
         cb = '';
         $.each(jsonData, function(i,data){
             // set the default selected
-            if (data.regimen === 'CF4B | TDF + 3TC + EFV') {
+            if (data.regimen === 'AF2B | TDF + 3TC + EFV') {
                     cb+='<option value="'+data.regimen+'" selected>'+data.regimen+'</option>';
             } else {
                 cb+='<option value="'+data.regimen+'">'+data.regimen+'</option>';

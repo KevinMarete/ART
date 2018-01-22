@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 /* variables declaration */
+$data_year = '2017';
+$data_month = 'Sep';
 $data_date = '2017-Sep';
 $config['data_date'] = $data_date;
 $counties = ['baringo','bomet','bungoma','busia','elgeyo marakwet','embu','garissa','homa bay','isiolo','kajiado','kakamega','kericho','kiambu','kilifi','kirinyaga','kisii','kisumu','kitui','kwale','laikipia','lamu','machakos','makueni','mandera','marsabit','meru','migori','mombasa','muranga','nairobi','nakuru','nandi','narok','nyamira','nyandarua','nyeri','samburu','siaya','taita taveta','tana river','tharaka nithi','trans nzoia','turkana','uasin gishu','vihiga','wajir','west pokot'];
@@ -44,8 +46,8 @@ $config['national_mos_chart_xaxis_title'] = '';
 $config['national_mos_chart_view_name'] = 'dsh_mos';
 $config['national_mos_chart_filters'] = array('data_year', 'data_month', 'drug');
 $config['national_mos_chart_filters_default'] = array(
-	'data_year' => array('2017'), 
-	'data_month' => array('Jun'), 
+	'data_year' => $data_year, 
+	'data_month' => $data_month, 
 	'drug' => array(
 		'Zidovudine/Lamivudine/Nevirapine (AZT/3TC/NVP) 60/30/50mg FDC Tabs',
 		'Zidovudine/Lamivudine/Nevirapine (AZT/3TC/NVP) 300/150/200mg FDC Tabs',
@@ -172,25 +174,10 @@ $config['facility_patient_distribution_chart_xaxis_title'] = 'Facility';
 $config['facility_patient_distribution_chart_view_name'] = 'dsh_patient';
 $config['facility_patient_distribution_chart_filters'] = array('data_year', 'data_month', 'regimen_category', 'regimen','county');
 $config['facility_patient_distribution_chart_filters_default'] = array(
-	'data_year' => array('2017'), 
-	'data_month' => array('Sep'),
+	'data_year' => $data_year, 
+	'data_month' => $data_month,
 	'county' => $counties
 );
-// facility other charts
-/*facility_patients_distribution_service_chart*/
-// $config['facility_patients_distribution_service_chart_chartview'] = 'charts/basic_column_view';
-// $config['facility_patients_distribution_service_chart_title'] = 'Patients Distribution by Services';
-// $config['facility_patients_distribution_service_chart_yaxis_title'] = 'No. of Patients';
-// $config['facility_patients_distribution_service_chart_source'] = 'Source: www.nascop.org';
-// $config['facility_patients_distribution_service_chart_has_drilldown'] = FALSE;
-// $config['facility_patients_distribution_service_chart_xaxis_title'] = 'Services';
-// $config['facility_patients_distribution_service_chart_view_name'] = 'dsh_patient';
-// $config['facility_patients_distribution_service_chart_filters'] = array('data_year', 'data_month', 'regimen_category', 'facility');
-// $config['facility_patients_distribution_service_chart_filters_default'] = array(
-// 	'data_year' => array('2017'), 
-// 	'data_month' => array('Jun'),
-// 	'facility' => 'ahero county hospital'
-// );
 
 /*facility_regimen_distribution_chart*/
 $config['facility_regimen_distribution_chart_chartview'] = 'charts/drilldown_column_view';
@@ -202,8 +189,8 @@ $config['facility_regimen_distribution_chart_xaxis_title'] = 'Facility';
 $config['facility_regimen_distribution_chart_view_name'] = 'dsh_patient';
 $config['facility_regimen_distribution_chart_filters'] = array('data_year', 'data_month', 'regimen_category', 'facility');
 $config['facility_regimen_distribution_chart_filters_default'] = array(
-	'data_year' => array('2017'), 
-	'data_month' => array('Sep'),
+	'data_year' => $data_year, 
+	'data_month' => $data_month,
 	'facility' => 'ahero county hospital'
 );
 
@@ -235,8 +222,8 @@ $config['facility_patient_distribution_table_xaxis_title'] = 'Facility';
 $config['facility_patient_distribution_table_view_name'] = 'dsh_patient';
 $config['facility_patient_distribution_table_filters'] = array('county','data_year', 'data_month', 'regimen_category', 'regimen');
 $config['facility_patient_distribution_table_filters_default'] = array(
-	'data_year' => array('2017'), 
-	'data_month' => array('Jun'),
+	'data_year' => $data_year, 
+	'data_month' => $data_month,
 	'county' => $counties
 );
 
@@ -250,8 +237,8 @@ $config['partner_patient_distribution_chart_xaxis_title'] = 'Partner';
 $config['partner_patient_distribution_chart_view_name'] = 'dsh_patient';
 $config['partner_patient_distribution_chart_filters'] = array('data_year', 'data_month', 'regimen_category', 'regimen');
 $config['partner_patient_distribution_chart_filters_default'] = array(
-	'data_year' => array('2017'), 
-	'data_month' => array('Jun')
+	'data_year' => $data_year, 
+	'data_month' => $data_month
 );
 
 /*partner_patient_distribution_table*/
@@ -264,8 +251,8 @@ $config['partner_patient_distribution_table_xaxis_title'] = 'Partner';
 $config['partner_patient_distribution_table_view_name'] = 'dsh_patient';
 $config['partner_patient_distribution_table_filters'] = array('data_year', 'data_month', 'regimen_category', 'regimen');
 $config['partner_patient_distribution_table_filters_default'] = array(
-	'data_year' => array('2017'), 
-	'data_month' => array('Jun')
+	'data_year' => $data_year, 
+	'data_month' => $data_month
 );
 
 /*regimen_patient_chart*/
@@ -278,7 +265,8 @@ $config['regimen_patient_chart_xaxis_title'] = 'Drugs';
 $config['regimen_patient_chart_view_name'] = 'commodities';
 $config['regimen_patient_chart_filters'] = array('data_date', 'county');
 $config['regimen_patient_chart_filters_default'] = array(
-	'data_date'=> $data_date,
+	'data_year' => $data_year, 
+	'data_month' => $data_month,
 	'county' => $counties
 );
 
@@ -293,7 +281,7 @@ $config['drug_regimen_consumption_chart_xaxis_title'] = 'Drugs';
 $config['drug_regimen_consumption_chart_view_name'] = 'commodities';
 $config['drug_regimen_consumption_chart_filters'] = array('period_year', 'period_month', 'county', 'regimen');
 $config['drug_regimen_consumption_chart_filters_default'] = array(
-	'data_date'=> '2017-Jun',
+	'data_date'=> $data_date,
 	'regimen'=> ''
 );
 
