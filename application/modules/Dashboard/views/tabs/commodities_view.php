@@ -24,9 +24,24 @@
 			<div class="col-sm-4">
 				<!--commodities analysis-->
 				<div class="form-group">
-					<select name="single_regimen_filter" id="single_regimen_filter" data-filter_type="regimen" class="form-control regimen_filter">
+					<!-- <select name="single_regimen_filter" id="single_regimen_filter" data-filter_type="regimen" class="form-control regimen_filter">
 						<option value="">-- Select Regimen --</option>
-					</select>
+					</select> -->
+					<select id="single_regimen_filter" class="regimen_filter"></select>
+					<script type="text/javascript">
+					    $(document).ready(function() {
+					        $('#single_regimen_filter').multiselect({
+					        	nonSelectedText: '-- Select Regimen --',
+					        	disableIfEmpty: true,
+				            	enableFiltering: true,
+				            	maxHeight: 200,
+				            	buttonWidth: '400px',
+				            	includeSelectAllOption: true,
+				            	selectAllNumber: true,
+				            	enableCaseInsensitiveFiltering: true,
+					        });
+					    });
+					</script>
 				</div>
 			</div>
 			<div class="col-sm-12">

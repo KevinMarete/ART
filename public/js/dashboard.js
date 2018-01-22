@@ -335,6 +335,7 @@ $(function() {
             cb+='<option value="'+data.name+'">'+data.name+'</option>';
         });
         $("#regimen_filter,#single_regimen_filter").append(cb);
+        $('#single_regimen_filter').multiselect('rebuild');
     });
 
     //get all the facilities
