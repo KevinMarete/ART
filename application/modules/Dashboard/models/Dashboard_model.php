@@ -1282,7 +1282,7 @@ class Dashboard_model extends CI_Model {
 	public function get_facility_patient_distribution_numbers($filters){
 		$columns = array();
 
-		$this->db->select("CONCAT(UCASE(SUBSTRING(facility, 1, 1)),LOWER(SUBSTRING(facility, 2))) name, 1 sites, SUM(IF(age_category='adult', total, NULL)) adult, SUM(IF(age_category='paed', total, NULL)) paed, SUM(total) total", FALSE);
+		$this->db->select("CONCAT(UCASE(SUBSTRING(facility, 1, 1)),LOWER(SUBSTRING(facility, 2))) name, SUM(IF(regimen_service = 'ART', total, NULL)) ART, SUM(IF(regimen_service = 'PrEP', total, NULL)) PREP, SUM(IF(regimen_service = 'PEP', total, NULL)) PEP, SUM(CASE WHEN regimen_service = 'PMTCT' AND age_category = 'adult' THEN total ELSE 0 END) PMTCT_MOTHER,SUM(CASE WHEN regimen_service = 'PMTCT' AND age_category = 'paed' THEN total ELSE 0 END) PMTCT_CHILD", FALSE);
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				$this->db->where_in($category, $filter);
