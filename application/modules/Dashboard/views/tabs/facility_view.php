@@ -5,7 +5,7 @@
 				<!--commodities analysis-->
 				<div class="form-group">
 					<!-- facility select button -->
-					<select id="single_facility_filter" class="single_facility_filter"></select>
+					<select id="single_facility_filter" class="single_facility_filter" size="2"></select>
 					<script type="text/javascript">
 					    $(document).ready(function() {
 					        $('#single_facility_filter').multiselect({

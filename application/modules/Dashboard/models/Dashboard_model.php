@@ -344,15 +344,17 @@ class Dashboard_model extends CI_Model {
    		$patient_services_data = array(
 			array('type' => 'column',  'name' => 'ART' , 'data' =>array()),
 			array('type' => 'column',  'name' => 'PEP' , 'data' =>array()),
-			array('type' => 'column',  'name' => 'PMTCT' , 'data' =>array()),
+			array('type' => 'column',  'name' => 'PMTCT MOTHER' , 'data' =>array()),
+			array('type' => 'column',  'name' => 'PMTCT CHILD' , 'data' =>array()),
 			array('type' => 'column',  'name' => 'PrEP' , 'data' =>array())
 		);
 
 		$this->db->select("CONCAT(UCASE(SUBSTRING(facility, 1, 1)),LOWER(SUBSTRING(facility, 2))) name,
-			SUM(IF(regimen_service= 'ART', total, NULL)) art,
-			SUM(IF(regimen_service= 'PMTCT', total, NULL)) pmtct,
-			SUM(IF(regimen_service= 'PrEP', total, NULL)) prep,
-			SUM(IF(regimen_service= 'PEP', total, NULL)) pep", FALSE);
+			SUM(CASE WHEN regimen_service = 'ART' THEN total ELSE 0 END) art,
+			SUM(CASE WHEN regimen_service = 'PMTCT' AND age_category = 'adult' THEN total ELSE 0 END) pmtct_mother,
+			SUM(CASE WHEN regimen_service = 'PMTCT' AND age_category = 'paed' THEN total ELSE 0 END) pmtct_paed,
+			SUM(CASE WHEN regimen_service= 'PrEP' THEN total ELSE 0 END) prep,
+			SUM(CASE WHEN regimen_service= 'PEP' THEN total ELSE 0 END) pep", FALSE);
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				$this->db->where_in($category, $filter);
@@ -372,8 +374,10 @@ class Dashboard_model extends CI_Model {
 						array_push($patient_services_data[$index]['data'], $result['art']);
 					}else if($scaleup['name'] == 'PEP'){
 						array_push($patient_services_data[$index]['data'], $result['pep']);	
-					}else if($scaleup['name'] == 'PMTCT'){
-						array_push($patient_services_data[$index]['data'], $result['pmtct']);	
+					}else if($scaleup['name'] == 'PMTCT MOTHER'){
+						array_push($patient_services_data[$index]['data'], $result['pmtct_mother']);	
+					}else if($scaleup['name'] == 'PMTCT CHILD'){
+						array_push($patient_services_data[$index]['data'], $result['pmtct_paed']);	
 					}else if($scaleup['name'] == 'PrEP'){
 						array_push($patient_services_data[$index]['data'], $result['prep']);	
 					}
@@ -382,39 +386,6 @@ class Dashboard_model extends CI_Model {
 		}
 		return array('main' => $patient_services_data, 'columns' => $columns);
 	}
-
-	//other facility charts
-	// public function get_facility_patient_distribution_service($filters) {
-	// 	$columns = array();
-	// 	$data = array();
-
-	// 	$this->db->select("facility, regimen_service, sum(total) as total", FALSE);
-	// 	if(!empty($filters)){
-	// 		foreach ($filters as $category => $filter) {
-	// 			$this->db->where_in($category, $filter);
-	// 		}
-	// 	}
-	// 	$this->db->group_by('regimen_service');
-	// 	// $this->db->order_by("data_date ASC");
-	// 	$query = $this->db->get('dsh_patient');
-	// 	$results = $query->result_array();
-
-	// 	foreach ($results as $result) {
-	// 		array_push($data, $result['total']);
-	// 	}
-
-	// 	foreach ($results as $result) {
-	// 		array_push($columns, $result['regimen_service']);
-	// 	}
-
-	// 	return array('main' =>  array(
-	// 		array(
-	// 			'type' => 'column', 
-	// 			'name' => $result['facility'],
-	// 			'data' => $data
-	// 		))
-	// 	, 'columns' => $columns);
-	// }
 
 	public function get_facility_regimen_distribution($filters) {
 		//level 1 data..regimen services
