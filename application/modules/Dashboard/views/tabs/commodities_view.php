@@ -24,10 +24,7 @@
 			<div class="col-sm-4">
 				<!--commodities analysis-->
 				<div class="form-group">
-					<!-- <select name="single_regimen_filter" id="single_regimen_filter" data-filter_type="regimen" class="form-control regimen_filter">
-						<option value="">-- Select Regimen --</option>
-					</select> -->
-					<select id="single_regimen_filter" class="regimen_filter"></select>
+					<select id="single_regimen_filter" class="regimen_filter" size="2"></select>
 					<script type="text/javascript">
 					    $(document).ready(function() {
 					        $('#single_regimen_filter').multiselect({

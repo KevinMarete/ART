@@ -31,7 +31,7 @@ $config['patient_scaleup_chart_filters'] = array('data_date','county', 'regimen_
 $config['patient_scaleup_chart_filters_default'] = array(
 	'county' => $counties,
 	'data_date'=> $data_date,
-	'regimen_service' => array('ART')
+	// 'regimen_service' => array('ART')
 );
 
 
@@ -60,9 +60,7 @@ $config['national_mos_chart_filters'] = array('data_year', 'data_month', 'drug')
 $config['national_mos_chart_filters_default'] = array(
 	'data_year' => $data_year, 
 	'data_month' => $data_month, 
-	'drug' => array(
-		$selected_drugs_mos
-	)
+	'drug' => $selected_drugs_mos
 );
 
 /*commodity_consumption_chart*/
@@ -75,9 +73,7 @@ $config['commodity_consumption_chart_xaxis_title'] = 'Regimens';
 $config['commodity_consumption_chart_view_name'] = 'dsh_consumption';
 $config['commodity_consumption_chart_filters'] = array('data_date', 'drug', 'county');
 $config['commodity_consumption_chart_filters_default'] = array(
-	'drug' => array(
-		$selected_drugs_com_consumption
-	),
+	'drug' => $selected_drugs_com_consumption,
 	'data_date'=> $data_date,
 	'county' => $counties
 );
@@ -92,9 +88,7 @@ $config['patients_regimen_chart_xaxis_title'] = '';
 $config['patients_regimen_chart_view_name'] = 'dsh_patient';
 $config['patients_regimen_chart_filters'] = array('patient_regimen','data_date', 'county');
 $config['patients_regimen_chart_filters_default'] = array(
-	'patient_regimen' => array(
-		$selected_regimen,
-	),
+	'patient_regimen' => $selected_regimen,
 	'data_date'=> $data_date,
 	'county' => $counties
 );
@@ -109,9 +103,7 @@ $config['commodity_month_stock_chart_xaxis_title'] = '';
 $config['commodity_month_stock_chart_view_name'] = 'dsh_patient';
 $config['commodity_month_stock_chart_filters'] = array('data_date', 'cms_drug');
 $config['commodity_month_stock_chart_filters_default'] = array(
-	'cms_drug' => array(
-		$selected_cms_drug
-	),
+	'cms_drug' => $selected_cms_drug,
 	'data_date'=> $data_date,
 );
 
@@ -211,10 +203,7 @@ $config['facility_commodity_consumption_chart_xaxis_title'] = 'Facility';
 $config['facility_commodity_consumption_chart_view_name'] = 'dsh_patient';
 $config['facility_commodity_consumption_chart_filters'] = array('data_year', 'data_month', 'regimen_category', 'facility');
 $config['facility_commodity_consumption_chart_filters_default'] = array(
-	'drug' => array(
-		'Abacavir (ABC) 300mg Tabs', 
-		'Lamivudine (3TC) 150mg Tabs'
-	),
+	'drug' => $selected_drugs_com_consumption,
 	'facility' => 'ahero county hospital',
 	'data_date' => $data_date
 );
@@ -278,7 +267,6 @@ $config['regimen_patient_chart_filters_default'] = array(
 );
 
 // drug_regimen_consumption_chart
-
 $config['drug_regimen_consumption_chart_chartview'] = 'charts/basic_stacked_view';
 $config['drug_regimen_consumption_chart_title'] = 'Drugs used in regimen';
 $config['drug_regimen_consumption_chart_yaxis_title'] = 'Consumption';

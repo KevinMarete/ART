@@ -13,11 +13,10 @@ class Dashboard_model extends CI_Model {
 
 		$this->db->select("CONCAT_WS('/', data_month, data_year) period,
 			SUM(IF(age_category = 'paed', total, NULL)) paed_total, 
-			SUM(IF(age_category = 'adult', total, NULL)) adult_total,
-			forecast", FALSE);
+			SUM(IF(age_category = 'adult', total, NULL)) adult_total", FALSE);
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
-				if ($category == 'data_date' && (strlen($filter)>3)){
+				if ($category == 'data_date'){
 					$this->db->where("data_date <=",date('Y-m',strtotime($filter)).'-01');
 					continue;
 				}
@@ -37,12 +36,40 @@ class Dashboard_model extends CI_Model {
 						array_push($scaleup_data[$index]['data'], $result['adult_total']);
 					}else if($scaleup['name'] == 'Paediatric'){
 						array_push($scaleup_data[$index]['data'], $result['paed_total']);
-					}else if($scaleup['name'] == 'Forecast'){
-						array_push($scaleup_data[$index]['data'], $result['forecast']);	
+					}
+					// else if($scaleup['name'] == 'Forecast'){
+					// 	array_push($scaleup_data[$index]['data'], $result['forecast']);
+					// }
+				}
+			}
+		}
+
+		// get forecast data
+		$this->db->select("CONCAT_WS('/', data_month, data_year) period, avg(forecast) forecast", FALSE);
+		if(!empty($filters)){
+			foreach ($filters as $category => $filter) {
+				if ($category == 'data_date'){
+					$this->db->where("data_date <=",date('Y-m',strtotime($filter)).'-01');
+					continue;
+				}
+				$this->db->where_in($category, $filter);
+			}
+		}
+		$this->db->group_by('period');
+		$this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
+		$query = $this->db->get('dsh_forecast');
+		$results = $query->result_array();
+
+		if($results){
+			foreach ($results as $result) {
+				foreach ($scaleup_data as $index => $scaleup) {
+					if($scaleup['name'] == 'Forecast'){
+						array_push($scaleup_data[$index]['data'], $result['forecast']);
 					}
 				}
 			}
 		}
+
 		return array('main' => $scaleup_data, 'columns' => $columns);
 	}
 
