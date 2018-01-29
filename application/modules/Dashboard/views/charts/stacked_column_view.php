@@ -78,7 +78,7 @@
                 renderTo: chartDIV,
                 type: 'column'
             },
-            colors: ['#5cb85c', '#f0ad4e', '#5bc0de'],
+            colors: ['#5cb85c', '#434348', '#5bc0de', '#f7a35c', '#8085e9'],
             title: {
                 text: '<?php echo $chart_title; ?>'
             },

@@ -97,7 +97,7 @@ class Dashboard extends MX_Controller {
 		$chartname = $this->input->post('name');
 		$selectedfilters = $this->get_filter($chartname,$this->input->post('selectedfilters'));
 
-		print_r($selectedfilters); exit;
+		// print_r($selectedfilters); exit;
 		//Get default filters
 		//Get chart configuration
 		$data['chart_name']  = $chartname;

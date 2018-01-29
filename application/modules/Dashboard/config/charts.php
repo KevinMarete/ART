@@ -164,7 +164,7 @@ $config['subcounty_patient_distribution_table_filters_default'] = array(
 );
 
 /*facility_patient_distribution_chart*/
-$config['facility_patient_distribution_chart_chartview'] = 'charts/basic_stacked2_view';
+$config['facility_patient_distribution_chart_chartview'] = 'charts/stacked_column_view';
 $config['facility_patient_distribution_chart_title'] = 'Facility Patient Numbers';
 $config['facility_patient_distribution_chart_yaxis_title'] = 'No. of Patients';
 $config['facility_patient_distribution_chart_source'] = 'Source: www.nascop.org';

@@ -44,11 +44,29 @@
 	    	"order": [[ 1, "desc" ]],
 	    	"pagingType": "full_numbers",
 
-	    	   dom: 'Bfrtip',
-        buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ]
-
+		   	dom: 'Bfrtip',
+	        buttons: [
+	            'copy', 
+	            {
+	            	extend: 'csvHtml5',
+	            	filename: 'Facilities Patient Numbers By Service Report',
+	            	title: ''
+	            }, 
+	            {
+	            	extend: 'excelHtml5',
+	            	filename: 'Facilities Patient Numbers By Service Report',
+	            	title: ''
+	            },
+	            {
+	            	extend: 'pdfHtml5',
+	            	filename: 'Facilities Patient Numbers By Service Report',
+	            	title: ''
+	            },
+	            {
+	            	extend: 'print',
+	            	title: ''
+	            }
+	        ]
 	    });
 	});
 </script>
