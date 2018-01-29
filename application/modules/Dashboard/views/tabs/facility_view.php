@@ -5,7 +5,6 @@
 				<!--commodities analysis-->
 				<div class="form-group">
 					<!-- facility select button -->
-					<select id="single_facility_filter" class="single_facility_filter" size="2"></select>
 					<script type="text/javascript">
 					    $(document).ready(function() {
 					        $('#single_facility_filter').multiselect({
@@ -18,10 +17,22 @@
 				            	selectAllNumber: true,
 				            	enableCaseInsensitiveFiltering: true,
 					        });
+
+					        //reset the form
+					        $('#facilities_filter_frm').on('reset', function() {
+					            $('#single_facility_filter option:selected').each(function() {
+					                $(this).prop('selected', false);
+					            })
+					 
+					            $('#single_facility_filter').multiselect('refresh');
+					        });
 					    });
 					</script>
-					<!-- clear button -->
-					<button id="facility_clear_btn" class="btn btn-info btn-md hidden"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+					<form id="facilities_filter_frm">
+						<select id="single_facility_filter" class="single_facility_filter" size="2"></select>
+						<!-- clear button -->
+						<button id="facility_clear_btn" class="btn btn-info btn-md hidden" type="reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+					</form>
 				</div>
 			</div>
 		  	<div class="col-sm-12" id="facility_chart_one">
