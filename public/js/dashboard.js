@@ -214,9 +214,7 @@ $(function() {
 
         filters['county'] = default_county;
         filters['regimen'] = $("#regimen_filter").val();
-
-
-
+        
         /*Load Charts based on tab*/
         $.each(charts[tab], function(key, chartName) {
             chartID = '#'+chartName
@@ -399,6 +397,22 @@ function TabFilterHandler(e){
     if(tab){
         //Reset filter identifier
         $("#filter_tab").val(tab)
+        
+        /*Reset the filters on tab change*/
+        $("#filter_month").val("");
+        $("#filter_year").val("");
+        $(".county_filter").val("");
+
+        // reset county multi-select
+        $('#filter_item option:selected').each(function() {
+            $(this).prop('selected', false);
+        })
+        $('#filter_item').multiselect('refresh');
+
+        // reset to the default selected filters
+        $("#month-filter a, #year-filter a").css("color", "#31B0D5");
+        $('#month-filter .active-tab, #year-filter .active-tab').css("color", "#f00");
+
         /*Load Charts*/
         if (tab == 'drug'){
             filters['regimen'] = $("#regimen_filter").val();

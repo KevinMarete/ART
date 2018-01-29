@@ -96,7 +96,7 @@ $config['patients_regimen_chart_filters_default'] = array(
 /*commodity_month_stock_chart*/
 $config['commodity_month_stock_chart_chartview'] = 'charts/basic_stacked_view';
 $config['commodity_month_stock_chart_title'] = 'Commodity Month of Stock';
-$config['commodity_month_stock_chart_yaxis_title'] = 'No. of Commodities';
+$config['commodity_month_stock_chart_yaxis_title'] = 'Months of Stock';
 $config['commodity_month_stock_chart_source'] = 'Source: www.nascop.org';
 $config['commodity_month_stock_chart_has_drilldown'] = FALSE;
 $config['commodity_month_stock_chart_xaxis_title'] = '';
