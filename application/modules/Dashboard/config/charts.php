@@ -79,7 +79,7 @@ $config['commodity_consumption_chart_filters_default'] = array(
 );
 
 /*patients_regimen_chart*/
-$config['patients_regimen_chart_chartview'] = 'charts/basic_column_view';
+$config['patients_regimen_chart_chartview'] = 'charts/basic_column2_view';
 $config['patients_regimen_chart_title'] = 'Patients on Regimen';
 $config['patients_regimen_chart_yaxis_title'] = 'No. of Patients';
 $config['patients_regimen_chart_source'] = 'Source: www.nascop.org';
