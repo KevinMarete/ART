@@ -1454,7 +1454,7 @@ class Dashboard_model extends CI_Model {
 		$columns = array();
 		$data = array();
 
-		$this->db->select("regimen, SUM(total) total", FALSE);
+		$this->db->select("regimen, SUM(total) total", FALSE)->where("regimen NOT LIKE 'OI%'");
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				if ($category == 'data_date'){
