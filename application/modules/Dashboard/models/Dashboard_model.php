@@ -1572,7 +1572,7 @@ class Dashboard_model extends CI_Model {
 		$columns = array();
 		$data = array();
 
-		$this->db->select("county, count(county) as total  ", FALSE);
+		$this->db->select("county, SUM(total) total", FALSE);
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				if ($category == 'data_date'){
