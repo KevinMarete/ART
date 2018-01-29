@@ -37,7 +37,7 @@
             <a href="#" class="filter-month" data-value="Dec"> Dec</a>
           </div>
         </div>
-        <button type="submit" id="btn-filter-clear" class="btn btn-info btn-md"><span class="glyphicon glyphicon-refresh"></span> </button>
+        <button type="submit" id="btn-filter-clear" class="btn btn-info btn-md"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
         <button type="submit" id="btn-filter-pending" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-filter"></span> Filter</button>
       </form>
     </div>

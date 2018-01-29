@@ -14,6 +14,8 @@
                 type: 'column'
             },
 
+            colors: ['#7cb5ec', '#434348', '#90ed7d', '#f7a35c', '#8085e9'],
+
             title: {
                 text: '<?php echo $chart_title; ?>'
             },

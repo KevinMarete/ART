@@ -131,7 +131,7 @@ $(function() {
         cb = '';
         $.each(jsonData, function(i,data){
             // set the default selected
-            if (data.regimen === selected_regimen) {
+            if (data.regimen == selected_regimen) {
                     cb+='<option value="'+data.regimen+'" selected>'+data.regimen+'</option>';
             } else {
                 cb+='<option value="'+data.regimen+'">'+data.regimen+'</option>';

@@ -6,7 +6,7 @@
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
 						Commodity Consumption Trend
-						<button class="btn btn-warning" data-toggle="modal" data-target="#commodity_consumption_modal">Filter</button>
+						<button data-toggle="modal" data-target="#commodity_consumption_modal" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-filter"></span> Filter</button>
 					</div>
 					<div class="chart-stage">
 						<div id="commodity_consumption_filter">
@@ -48,7 +48,7 @@
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
 						PATIENTS ON REGIMEN
-						<button class="btn btn-warning" data-toggle="modal" data-target="#patients_regm_modal">Filter</button>
+						<button data-toggle="modal" data-target="#patients_regm_modal" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-filter"></span> Filter</button>
 					</div>
 					<div class="chart-stage">
 						<div id="patients_regimen_filter">
@@ -81,7 +81,7 @@
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
 						COMMODITY MONTHS OF STOCK
-						<button class="btn btn-warning" data-toggle="modal" data-target="#commodity_month_stock_modal">Filter</button>
+						<button data-toggle="modal" data-target="#commodity_month_stock_modal" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-filter"></span> Filter</button>
 					</div>
 					<div class="chart-stage">
 						<div id="commodity_month_stock">
@@ -133,8 +133,8 @@
 		            <div class="modal-body">
 		            	<form id="trend_view_filter_frm">
 		            		<select id="drugs" multiple="multiple" class="drug_list"></select>
-							<button type="reset" class="btn btn-default">Reset</button>
-		                	<button type="submit" class="btn btn-warning">Filter</button>
+							<!-- <button type="reset" class="btn btn-info btn-md"><span class="glyphicon glyphicon-refresh"></span> Reset</button> -->
+		                	<button type="submit" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-filter"></span> Filter</button>
 		            	</form>
 		            </div>
 		        </div>
@@ -152,7 +152,7 @@
 		            <div class="modal-body">
 		            	<form id="patient_regimen_filter_frm">
 		            		<select id="regimen" class="regimen_list"></select>
-		                	<button type="submit" class="btn btn-warning">Filter</button>
+		                	<button type="submit" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-filter"></span> Filter</button>
 		            	</form>
 		            </div>
 		        </div>
@@ -170,7 +170,7 @@
 		            <div class="modal-body">
 		            	<form id="commodity_stock_filter_frm">
 		            		<select id="commodity_stock" class="cms_drug_list"></select>
-		                	<button type="submit" class="btn btn-warning">Filter</button>
+		                	<button type="submit" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-filter"></span> Filter</button>
 		            	</form>
 		            </div>
 		        </div>

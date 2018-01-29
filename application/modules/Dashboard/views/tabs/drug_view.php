@@ -5,7 +5,7 @@
 				<!--commodities analysis-->
 				<div class="form-group">
 					<select name="regimen_filter" id="regimen_filter" data-filter_type="regimen" class="form-control regimen_filter">
-						<option value="">-- Select Regimen --</option>
+						<option value="">Select Regimen</option>
 					</select>
 				</div>
 			</div>

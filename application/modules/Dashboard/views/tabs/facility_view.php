@@ -9,7 +9,7 @@
 					<script type="text/javascript">
 					    $(document).ready(function() {
 					        $('#single_facility_filter').multiselect({
-					        	nonSelectedText: '--Select Facility--',
+					        	nonSelectedText: 'Select Facility',
 					        	disableIfEmpty: true,
 				            	enableFiltering: true,
 				            	maxHeight: 200,
@@ -21,7 +21,7 @@
 					    });
 					</script>
 					<!-- clear button -->
-					<button id="facility_clear_btn" class="hidden">clear</button>
+					<button id="facility_clear_btn" class="btn btn-info btn-md hidden"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
 				</div>
 			</div>
 		  	<div class="col-sm-12" id="facility_chart_one">
@@ -73,7 +73,7 @@
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
 						Commodity Consumption in Facility
-						<button class="btn btn-warning" data-toggle="modal" data-target="#facility_commodity_consumption_modal">Filter</button>
+						<button data-toggle="modal" data-target="#facility_commodity_consumption_modal" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-filter"></span> Filter</button>
 					</div>
 					<div class="chart-stage">
 						<script type="text/javascript">
@@ -111,13 +111,13 @@
 		        <div class="modal-content">
 		            <div class="modal-header">
 		                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-		                <h4 class="modal-title">Facility Commodity Consumption Modal</h4>
+		                <h4 class="modal-title">Facility Commodity Consumption Filter</h4>
 		            </div>
 		            <div class="modal-body">
 		            	<form id="facility_commodity_consumption_frm">
 		                	<select id="facility_commodity_consumption" multiple="multiple" class="drug_list"></select>
-		                	<button type="reset" class="btn btn-default">Reset</button>
-		                	<button type="submit" class="btn btn-warning">Filter</button>
+		                	<!-- <button type="reset" class="btn btn-info btn-md"><span class="glyphicon glyphicon-refresh"></span> Reset</button> -->
+		                	<button type="submit" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-filter"></span> Filter</button>
 		            	</form>
 		            </div>
 		        </div>

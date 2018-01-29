@@ -39,7 +39,7 @@
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
 						NATIONAL MONTHS OF STOCK (MOS) 
-						<button class="btn btn-warning" data-toggle="modal" data-target="#mos_filter_modal">Filter</button>
+						<button data-toggle="modal" data-target="#mos_filter_modal" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-filter"></span> Filter</button>
 					</div>
 					<div class="chart-stage">
 						<div id="mos-filter">
@@ -86,8 +86,8 @@
 		            <div class="modal-body">
 		            	<form id="mos_filter_frm">
 		            		<select id="mos_filter" multiple="multiple" class="mos_drug_list"></select>
-							<button type="reset" class="btn btn-default">Reset</button>
-		                	<button type="submit" class="btn btn-warning">Filter</button>
+							<!-- <button type="reset" class="btn btn-info btn-md"><span class="glyphicon glyphicon-refresh"></span> Reset</button> -->
+		                	<button type="submit" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-filter"></span> Filter</button>
 		            	</form>
 		            </div>
 		        </div>
