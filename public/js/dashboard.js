@@ -17,9 +17,7 @@ charts['subcounty'] = ['subcounty_patient_distribution_chart', 'subcounty_patien
 charts['facility'] = ['facility_patient_distribution_chart', 'facility_patient_distribution_table','facility_regimen_distribution_chart','facility_commodity_consumption_chart']
 charts['partner_summary'] = ['partner_patient_distribution_chart', 'partner_patient_distribution_table']
 charts['adt_site'] = ['adt_version_distribution_chart','adt_site_distribution_chart', 'adt_site_distribution_table']
-charts['commodity'] = ['regimen_patient_chart']
-charts['drug'] = ['drug_consumption_chart','drug_regimen_consumption_chart','regimen_patients_counties_chart']
-
+charts['commodity'] = ['regimen_patient_chart','drug_consumption_chart','drug_regimen_consumption_chart','regimen_patients_counties_chart']
 
 $(function() {
     
@@ -74,10 +72,6 @@ $(function() {
     $("#filter_tab").val(tab)
     /*Tab Change Event*/
     $("#main_tabs a").on("click", TabFilterHandler);    
-
-    // on regimen change. load regimen page
-    $("#single_regimen_filter").on("change", TabFilterHandler);
-    $("#regimen_filter").on("change", TabFilterHandler);
 
     //dropdown drug list commodity trend
     $.getJSON("Dashboard/get_consmp_drug_dropdowns", function(jsonData){
@@ -340,6 +334,36 @@ $(function() {
         $("#facility_clear_btn").addClass('hidden');
     });
 
+    //regimen tab select specific facility
+    $("#single_regimen_filter").on("change", function(){
+        filters['regimen'] = $("#single_regimen_filter").val();
+        
+        $('#regimen_chart_one').addClass('hidden');
+        $('#regimen_chart_two, #regimen_chart_three, #regimen_chart_four').removeClass('hidden');
+
+        $("#regimen_clear_btn").removeClass('hidden');
+
+        $.each(charts[tab], function(key, chartName) {
+            chartID = '#'+chartName
+            LoadChart(chartID, chartURL, chartName, filters)
+        });
+    });
+
+    //clear selected filter on regimen
+    $("#regimen_clear_btn").on("click", function(){
+        filters['regimen'] = $("#single_regimen_filter").val();
+        
+        $('#regimen_chart_one').removeClass('hidden');
+        $('#regimen_chart_two, #regimen_chart_three, #regimen_chart_four').addClass('hidden');
+
+        $.each(charts[tab], function(key, chartName) {
+            chartID = '#'+chartName
+            LoadChart(chartID, chartURL, chartName, filters)
+        });
+        
+        $("#regimen_clear_btn").addClass('hidden');
+    });
+
     $('#btn-filter-clear').click(function(e){
       //*Prevent submission*/
       $('.county_filter').val("");
@@ -390,7 +414,7 @@ function LoadSpinner(divID){
 }
 
 function TabFilterHandler(e){
-    var filtername = ($(e.target).attr('href') !== undefined ) ? $(e.target).attr('href') :  '#drug'; 
+    var filtername = $(e.target).attr('href'); 
     var filters = {}
 
     tab = filtername.replace('#', '')
@@ -413,10 +437,6 @@ function TabFilterHandler(e){
         $("#month-filter a, #year-filter a").css("color", "#31B0D5");
         $('#month-filter .active-tab, #year-filter .active-tab').css("color", "#f00");
 
-        /*Load Charts*/
-        if (tab == 'drug'){
-            filters['regimen'] = $("#regimen_filter").val();
-        }
         $.each(charts[tab], function(key, chartName) {
             chartID = '#'+chartName
             LoadChart(chartID, chartURL, chartName, filters)

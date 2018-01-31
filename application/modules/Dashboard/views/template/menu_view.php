@@ -38,15 +38,7 @@
 					</ul>
 				</li>
 
-				<li class="dropdown">
-	          		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-	          			Regimen
-	          			<span class="caret"></span>
-	          		</a>
-	          		<ul class="dropdown-menu">
-						<li><a href="#commodity" aria-controls="commodity" role="tab" data-toggle="tab">Summary</a></li>
-					</ul>
-				</li>
+				<li><a href="#commodity" aria-controls="commodity" role="tab" data-toggle="tab">Regimen</a></li>
 
 	          	<li><a href="#drug" aria-controls="drug" role="tab" data-toggle="tab" style="display: none">drug</a></li>
 	          	<li><a href="#adt_site" aria-controls="adt_site" role="tab" data-toggle="tab">ADT Sites</a></li>

@@ -33,7 +33,7 @@
 						        });
 						    </script>
 						</div>
-						<!-- <div id="commodity_consumption_chart"></div> -->
+						<div id="commodity_consumption_chart"></div>
 					</div>
 					<div class="chart-notes">
 						Filtered By: <span class="commodity_consumption_heading"></span>
@@ -112,7 +112,7 @@
 							    });
 							</script>
 						</div>
-						<!-- <div id="commodity_month_stock_chart"></div> -->
+						<div id="commodity_month_stock_chart"></div>
 					</div>
 					<div class="chart-notes">
 						Filtered By: <span class="commodity_month_stock_heading" id="selected-cms-drug"></span>
