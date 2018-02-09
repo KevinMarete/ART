@@ -18,6 +18,6 @@
         <?php $this->load->view($content_view); ?>
     </div>
     <!--Scripts-->
-    <?php $this->load->view('styles_view'); ?>
+    <?php $this->load->view('scripts_view'); ?>
 </body>
 </html>

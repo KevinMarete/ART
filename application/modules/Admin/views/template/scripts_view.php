@@ -10,7 +10,6 @@
 <!-- Morris Charts JavaScript -->
 <script src="<?php echo base_url().'public/lib/sbadmin2/vendor/raphael/raphael.min.js';?>"></script>
 <script src="<?php echo base_url().'public/lib/sbadmin2/vendor/morrisjs/morris.min.js';?>"></script>
-<script src="<?php echo base_url().'public/lib/sbadmin2/data/morris-data.js';?>"></script>
 
 <!-- Custom Theme JavaScript -->
 <script src="<?php echo base_url().'public/lib/sbadmin2/dist/js/sb-admin-2.js';?>"></script>

@@ -14,5 +14,12 @@ class Admin extends MX_Controller {
 		$data['page_title'] = 'ART Dashboard | Admin';
 		$this->load->view('template/template_view', $data);
 	}
+
+	public function rollout()
+	{
+		$data['content_view'] = 'rollout_view';
+		$data['page_title'] = 'ART Dashboard | Rollout';
+		$this->load->view('template/template_view', $data);
+	}
 	
 }
