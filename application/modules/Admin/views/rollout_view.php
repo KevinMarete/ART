@@ -3,6 +3,9 @@
         <div class="col-lg-12">
             <h3 class="page-header">FACILITY REGISTRATION FORM</h3>
         </div>
+        <?php
+//      print_r($search_name);
+        ?>
         <!-- /.col-lg-12 -->
     </div>
     <!-- /.row -->
@@ -18,19 +21,38 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label>Facility Name</label>
-                                    <input class="form-control" placeholder="Kenyatta National Hospital">
+                                    <!--<input class="form-control facility_name">-->
+<!--                                    <input class="form-control facility_name" placeholder="Kenyatta National Hospital">-->
+                                    <select class="form-control" name="facility_name">
+                                        <?php
+                                        foreach ($search_name as $fac_name) {
+                                            echo '<option value="' . $fac_name->name . '">' . $fac_name->name . '</option>';
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label>MFL Code</label>
-                                    <input class="form-control" placeholder="13023">
+                                    <input class="form-control mfl_code" name="mfl_code" placeholder="13023">
                                 </div>
                                 <div class="form-group">
                                     <label>County</label>
-                                    <input class="form-control" placeholder="Nairobi">
+                                    <!--<input class="form-control county" placeholder="Nairobi" onselect="getSubcounties()">-->
+                                    <select class="form-control" name="county">
+                                        <!--<option value="">Select County-->
+                                        <?php
+                                        foreach ($get_county as $county) {
+                                            echo '<option value="' . $county->name . '">' . $county->name . '</option>';
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Subcounty</label>
-                                    <input class="form-control" placeholder="Dagoretti South">
+                                    <!--<input class="form-control sub_county" placeholder="Dagoretti South">-->
+                                    <select class="form-control" name="subcounty">
+
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Classification</label>
@@ -46,29 +68,37 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Partner</label>
-                                    <input class="form-control" placeholder="CHS">
+                                    <!--<input class="form-control" placeholder="CHS">-->
+                                    <select class="form-control" name="partner">
+                                        <!--<option value="">Select County-->
+                                        <?php
+                                        foreach ($partner as $partner) {
+                                            echo '<option value="' . $partner->name . '">' . $partner->name . '</option>';
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Contact Name</label>
-                                    <input class="form-control" placeholder="Dr.Sample">
+                                    <input class="form-control" name="contactName" placeholder="Dr.Sample">
                                 </div>
                                 <div class="form-group">
                                     <label>Contact Phone</label>
-                                    <input class="form-control" placeholder="0722123456">
+                                    <input class="form-control" name="contactPhone" placeholder="0722123456">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label>ADT Version</label>
-                                    <input class="form-control" placeholder="3.2.1">
+                                    <input class="form-control" name="adtVersion" placeholder="3.2.1">
                                 </div>
                                 <div class="form-group">
                                     <label>Setup Date</label>
-                                    <input class="form-control" placeholder="2017-02-05">
+                                    <input class="form-control datepicker" name="setDate" type="date" id="set_date" placeholder="2017-02-05">
                                 </div>
                                 <div class="form-group">
                                     <label>Upgrade Date</label>
-                                    <input class="form-control" placeholder="2018-02-08">
+                                    <input class="form-control datepicker" name="upgradeDate" type="date" placeholder="2018-02-08">
                                 </div>
                                 <div class="form-group">
                                     <label>Is System used?</label>
@@ -90,7 +120,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>EMRS Used</label>
-                                    <select multiple class="form-control">
+                                    <select multiple class="form-control" name="emrsUsed">
                                         <option>IQCARE</option>
                                         <option>CPAD</option>
                                         <option>KENYAEMR</option>
@@ -100,11 +130,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Active Patients</label>
-                                    <input class="form-control" placeholder="1400">
+                                    <input class="form-control" name="activePatient" placeholder="1400">
                                 </div>
                                 <div class="form-group">
                                     <label>Assigned To</label>
-                                    <input class="form-control" placeholder="Alfred">
+                                    <input class="form-control" name="assignedTo" placeholder="Alfred">
                                 </div>
 
                             </div>
@@ -125,3 +155,20 @@
     </div>
     <!-- /.row -->
 </div>
+
+<script type="text/javascript">
+
+    //datepicker
+    $('.datepicker').datepicker({
+        autoclose: true,
+        format: "yyyy-mm-dd",
+        todayHighlight: true,
+        orientation: "top auto",
+        todayBtn: true,
+        todayHighlight: true,
+    });
+
+    function getSubcounties(id) {
+        // get_sub_county(id)
+    }
+</script>

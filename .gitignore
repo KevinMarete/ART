@@ -7,3 +7,4 @@ public/uploads/*
 
 # exception to the rule
 !public/uploads/.gitkeep 
+/nbproject/private/
