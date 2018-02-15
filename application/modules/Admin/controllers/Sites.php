@@ -12,7 +12,9 @@ class Sites extends MX_Controller {
 
     public function save() {
         //Stub to save install
-        redirect('sites');
+        echo '<pre>';
+        print_r($this->input->post());
+        //redirect('sites');
     }
 
     public function update() {

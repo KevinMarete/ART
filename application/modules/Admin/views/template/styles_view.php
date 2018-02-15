@@ -6,12 +6,14 @@
 <link href="<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/morrisjs/morris.css'; ?>" rel="stylesheet">
 <!-- Custom Fonts -->
 <link href="<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/font-awesome/css/font-awesome.min.css'; ?>" rel="stylesheet" type="text/css">
-<!--datepicker-->
-<link href="<?php echo base_url() . 'public/admin/lib/bootstrap-datepicker/css/bootstrap-datepicker3.min.css'; ?>" rel="stylesheet" type="text/css">
 <!-- DataTables CSS -->
 <link href="<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables-plugins/dataTables.bootstrap.css'; ?>" rel="stylesheet">
 <!-- DataTables Responsive CSS -->
 <link href=".<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables-responsive/dataTables.responsive.css'; ?>" rel="stylesheet">
+<!--datepicker-->
+<link href="<?php echo base_url() . 'public/admin/lib/bootstrap-datepicker-1.6.4/css/bootstrap-datepicker.min.css'; ?>" rel="stylesheet" type="text/css">
+<!--bootstrap-multiselect-->
+<link rel="stylesheet" type="text/css" href="<?php echo base_url().'public/dashboard/lib/bootstrap-multiselect/css/bootstrap-multiselect.css';?>" />
 <!-- Custom CSS -->
 <link href="<?php echo base_url() . 'public/admin/lib/sbadmin2/dist/css/sb-admin-2.css'; ?>" rel="stylesheet">
 <!--favicon-->

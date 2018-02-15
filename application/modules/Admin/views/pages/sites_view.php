@@ -33,85 +33,94 @@
                                                 </button>
                                             </div>
                                             <div class="panel-body">
-                                                <form role="form">
+                                                <form role="form" action="<?php echo base_url().'Admin/Sites/save';?>" method="POST">
                                                     <div class="row">
                                                         <div class="col-lg-6">
                                                             <div class="form-group">
                                                                 <label>Facility Name</label>
-                                                                <input class="form-control facility_name" name="facility_name" placeholder="Kenyatta National Hospital">
+                                                                <select class="form-control" id="facility" name="facility_id" required=""></select>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label>MFL Code</label>
-                                                                <input class="form-control mfl_code" name="mfl_code" placeholder="13023">
+                                                                <input class="form-control" id="mflcode" name="mflcode" placeholder="mflcode" readonly="">
                                                             </div>
                                                             <div class="form-group">
                                                                 <label>County</label>
-                                                                <input class="form-control county" placeholder="Nairobi">
+                                                                <select class="form-control" id="county" name="county_id"></select>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label>Subcounty</label>
-                                                                <input class="form-control sub_county" placeholder="Dagoretti South">
+                                                                <select class="form-control" id="subcounty" name="subcounty_id" required=""></select>
                                                             </div>
                                                             <div class="form-group">
-                                                                <label>Classification</label>
+                                                                <label>Category</label>
                                                                 <label class="radio-inline">
-                                                                    <input type="radio" name="classification" id="central" value="Central" checked>Central
+                                                                    <input type="radio" name="category" id="central" value="central" checked>Central
                                                                 </label>
                                                                 <label class="radio-inline">
-                                                                    <input type="radio" name="classification" id="satellite" value="satellite">Satellite
+                                                                    <input type="radio" name="category" id="satellite" value="satellite">Satellite
                                                                 </label>
                                                                 <label class="radio-inline">
-                                                                    <input type="radio" name="classification" id="standalone" value="standalone">Standalone
+                                                                    <input type="radio" name="category" id="standalone" value="standalone">Standalone
                                                                 </label>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label>Partner</label>
-                                                                <input class="form-control" placeholder="CHS">
-
+                                                                <select class="form-control" id="partner" name="partner_id" required=""></select>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label>Contact Name</label>
-                                                                <input class="form-control" name="contactName" placeholder="Dr.Sample">
+                                                                <input class="form-control" id="contact_name" name="contact_name" placeholder="Contact Name" required="">
                                                             </div>
                                                             <div class="form-group">
                                                                 <label>Contact Phone</label>
-                                                                <input class="form-control" name="contactPhone" placeholder="0722123456">
+                                                                <input class="form-control" id="contact_phone" name="contact_phone" placeholder="Contact Phone" required="">
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-6">
                                                             <div class="form-group">
                                                                 <label>ADT Version</label>
-                                                                <input class="form-control" name="adtVersion" placeholder="3.2.1">
+                                                                <input class="form-control" id="version" name="version" placeholder="version">
                                                             </div>
                                                             <div class="form-group">
                                                                 <label>Setup Date</label>
-                                                                <input class="form-control datepicker" name="setDate" type="date" id="set_date" placeholder="2017-02-05">
+                                                                <div class="input-group date" data-provide="datepicker">
+                                                                    <input type="text" class="form-control" id="setup_date" name="setup_date" required="">
+                                                                    <div class="input-group-addon">
+                                                                        <span class="glyphicon glyphicon-th"></span>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label>Upgrade Date</label>
-                                                                <input class="form-control datepicker" name="upgradeDate" type="date" placeholder="2018-02-08">
+                                                                <div class="input-group date" data-provide="datepicker">
+                                                                    <input type="text" class="form-control" id="update_date" name="update_date" required="">
+                                                                    <div class="input-group-addon">
+                                                                        <span class="glyphicon glyphicon-th"></span>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label>Is System used?</label>
                                                                 <label class="radio-inline">
-                                                                    <input type="radio" name="in_use" id="in_use_yes" value="1" checked>Yes
+                                                                    <input type="radio" name="is_usage" id="is_usage_1" value="1" checked>Yes
                                                                 </label>
                                                                 <label class="radio-inline">
-                                                                    <input type="radio" name="in_use" id="in_use_no" value="0">No
+                                                                    <input type="radio" name="is_usage" id="is_usage_0" value="0">No
                                                                 </label>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label>Is there Internet?</label>
                                                                 <label class="radio-inline">
-                                                                    <input type="radio" name="internet" id="internet_yes" value="1">Yes
+                                                                    <input type="radio" name="is_internet" id="is_internet_1" value="1">Yes
                                                                 </label>
                                                                 <label class="radio-inline">
-                                                                    <input type="radio" name="internet" id="internet_no" value="0" checked>No
+                                                                    <input type="radio" name="is_internet" id="is_internet_0" value="0" checked>No
                                                                 </label>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label>EMRS Used</label>
-                                                                <select multiple class="form-control" name="emrsUsed">
+                                                                <select multiple class="form-control" name="emrs_used[]" id="emrs_used">
                                                                     <option>IQCARE</option>
                                                                     <option>CPAD</option>
                                                                     <option>KENYAEMR</option>
@@ -121,11 +130,11 @@
                                                             </div>
                                                             <div class="form-group">
                                                                 <label>Active Patients</label>
-                                                                <input class="form-control" name="activePatient" placeholder="1400">
+                                                                <input class="form-control" name="active_patients" id="active_patients" placeholder="1400">
                                                             </div>
                                                             <div class="form-group">
                                                                 <label>Assigned To</label>
-                                                                <input class="form-control" name="assignedTo" placeholder="Alfred">
+                                                                <select class="form-control" id="user" name="user_id" required=""></select>
                                                             </div>
 
                                                         </div>

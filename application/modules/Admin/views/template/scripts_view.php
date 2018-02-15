@@ -10,6 +10,8 @@
 <script src="<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables-plugins/dataTables.bootstrap.min.js'; ?>"></script>
 <script src="<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables-responsive/dataTables.responsive.js'; ?>"></script>
 <!--datepicker-->
-<script src="<?php echo base_url() . 'public/admin/lib/bootstrap-datepicker/js/bootstrap-datepicker.min.js'; ?>"></script>
+<script src="<?php echo base_url() . 'public/admin/lib/bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.min.js'; ?>"></script>
+<!--bootstrap-multiselect-->
+<script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/bootstrap-multiselect/js/bootstrap-multiselect.js';?>"></script>
 <!-- Custom Theme JavaScript -->
 <script src="<?php echo base_url() . 'public/admin/lib/sbadmin2/dist/js/sb-admin-2.js'; ?>"></script>
