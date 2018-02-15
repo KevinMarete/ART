@@ -1,37 +1,409 @@
 var chartURL = 'Dashboard/get_chart'
-var filterURL = 'Dashboard/get_filter/'
-var specificFilterURL = 'Dashboard/get_specific_filter/'
-var filterDIVClass = '.auto_filter'
 var tab = 'summary'
 var filters = {}
 var charts = []
-charts['summary'] = ['patient_by_regimen', 'stock_status']
-charts['commodities'] = ['national_mos', 'drug_consumption_trend']
-charts['patients'] = ['patient_in_care', 'patient_regimen_category', 'nrti_drugs_in_regimen', 'nnrti_drugs_in_regimen', 'patient_scaleup']
+var selected_year
+var selected_month
+var counties = []
+var selected_regimen
+var selected_drugs_mos = []
+var selected_cms_drug
+var selected_drugs_com_consumption = []
+
+charts['summary'] = ['patient_scaleup_chart','patient_services_chart', 'national_mos_chart']
+charts['trend'] = ['commodity_consumption_chart', 'patients_regimen_chart', 'commodity_month_stock_chart']
+charts['county'] = ['county_patient_distribution_chart', 'county_patient_distribution_table']
+charts['subcounty'] = ['subcounty_patient_distribution_chart', 'subcounty_patient_distribution_table']
+charts['facility'] = ['facility_patient_distribution_chart', 'facility_patient_distribution_table','facility_regimen_distribution_chart','facility_commodity_consumption_chart']
+charts['partner_summary'] = ['partner_patient_distribution_chart', 'partner_patient_distribution_table']
+charts['adt_site'] = ['adt_version_distribution_chart','adt_site_distribution_chart', 'adt_site_distribution_table']
+charts['commodity'] = ['regimen_patient_chart','drug_consumption_chart','drug_regimen_consumption_chart','regimen_patients_counties_chart']
 
 $(function() {
+    
+    // get selected date and year
+    $.getJSON("Dashboard/get_latest_date", function(jsonData){
+        selected_year = jsonData.year;
+        selected_month = jsonData.month;
+
+        //set filter values active
+        $(".filter-year[data-value='" + selected_year + "']").addClass("active-tab");
+        $(".filter-month[data-value='" + selected_month + "']").addClass("active-tab");   
+    });
+
+    //get selected counties
+    $.getJSON("Dashboard/get_selected_counties", function(jsonData){
+        counties = jsonData;
+
+        cb = '';
+        $.each(jsonData, function(i,data){
+            cb+='<option value="'+data+'">'+data+'</option>';
+        });
+        $(".county_filter").append(cb);
+        $('#filter_item').multiselect('rebuild');
+    });
+
+    //get selected regimen --patients on regimen chart
+    $.getJSON("Dashboard/get_selected_regimen", function(jsonData){
+        selected_regimen = jsonData
+    });
+
+    //get selected drugs mos
+    $.getJSON("Dashboard/get_selected_drugs_mos", function(jsonData){
+        selected_drugs_mos = jsonData;
+    });
+
+    //get selected cms drug
+    $.getJSON("Dashboard/get_selected_cms_drug", function(jsonData){
+        selected_cms_drug = jsonData;
+    });
+
+    //get selected commodity consumption drugs
+    $.getJSON("Dashboard/get_selected_drugs_com_consumption", function(jsonData){
+        selected_drugs_com_consumption = jsonData;
+    });
+
     /*Load Charts*/
     $.each(charts[tab], function(key, chartName) {
-        chartID = '#'+chartName+'_chart'
+        chartID = '#'+chartName
         LoadChart(chartID, chartURL, chartName, filters)
     });
+    /*Set selected tab*/
+    $("#filter_tab").val(tab)
     /*Tab Change Event*/
-    $("#main_tabs a").on("click", TabFilterHandler);
-    /*Load Filters on Filter Modal Show Event*/
-    $('#filterModal').on('show.bs.modal', LoadFilterHandler);
-    /*ChartFilter Change Event*/
-    $("#filter_btn").on("click", ChartFilterHandler);
-    /*Clear Filter Click Event*/
-    $(".clear_filter_btn").on("click", ClearFilterHandler)
+    $("#main_tabs a").on("click", TabFilterHandler);    
+
+    //dropdown drug list commodity trend
+    $.getJSON("Dashboard/get_consmp_drug_dropdowns", function(jsonData){
+        drugs = '';
+        $.each(jsonData, function(i,data){
+            // set the default selected
+            if (selected_drugs_com_consumption.includes(data.drug)) {
+                    drugs+='<option value="'+data.drug+'" selected>'+data.drug+'</option>';
+            } else {
+                drugs+='<option value="'+data.drug+'">'+data.drug+'</option>';
+            }
+        });
+        $(".drug_list").append(drugs);
+        $('#drugs').multiselect('rebuild');
+        $('#commodity_stock').multiselect('rebuild');
+        $('#facility_commodity_consumption').multiselect('rebuild');
+    });
+
+    //dropdown drug list commodity month stock
+    $.getJSON("Dashboard/get_stock_drug_dropdowns", function(jsonData){
+        drugs = '';
+        $.each(jsonData, function(i,data){
+            // set the default selected
+            if (data.drug === selected_cms_drug) {
+                    drugs+='<option value="'+data.drug+'" selected>'+data.drug+'</option>';
+            } else {
+                drugs+='<option value="'+data.drug+'">'+data.drug+'</option>';
+            }
+        });
+        $(".cms_drug_list").append(drugs);
+        $("#selected-cms-drug").text(selected_cms_drug).css('font-weight', 'bold');
+        $('#commodity_stock').multiselect('rebuild');
+    });
+    
+    //dropdown drug list national MOS
+    $.getJSON("Dashboard/get_stock_drug_dropdowns", function(jsonData){
+        drugs = '';
+        $.each(jsonData, function(i,data){
+            // set the default selected
+            if (selected_drugs_mos.includes(data.drug)) {
+                    drugs+='<option value="'+data.drug+'" selected>'+data.drug+'</option>';
+            } else {
+                drugs+='<option value="'+data.drug+'">'+data.drug+'</option>';
+            }
+        });
+        $(".mos_drug_list").append(drugs);
+        $('#mos_filter').multiselect('rebuild');
+    });
+    
+    $.getJSON("Dashboard/get_regimen_dropdowns", function(jsonData){
+        cb = '';
+        $.each(jsonData, function(i,data){
+            // set the default selected
+            if (data.regimen == selected_regimen) {
+                    cb+='<option value="'+data.regimen+'" selected>'+data.regimen+'</option>';
+            } else {
+                cb+='<option value="'+data.regimen+'">'+data.regimen+'</option>';
+            }
+        });
+        $(".regimen_list").append(cb);
+        $('#regimen').multiselect('rebuild');
+    });
+
+    $.getJSON("Dashboard/get_sites", function(jsonData){
+        $('.total_sites').text(jsonData.summary.total_sites);
+        $('.internet_sites').text(jsonData.summary.internet_sites);
+        $('.internet_percentage').text(jsonData.summary.internet_percentage+'%');
+        $('.backup_sites').text(jsonData.summary.backup_sites);
+        $('.backup_percentage').text(jsonData.summary.backup_percentage+'%');
+        $('.installed_sites').text(jsonData.summary.installed);
+
+        $('.total_sites_no').text(jsonData.overview.total_facilities);
+        $('.ordering_sites_no').text(jsonData.overview.ordering_sites);
+
+
+        $('.facilities_percentage').text(jsonData.overview.ordering_sites_percentage);
+        $('.facilities_percentage').css("width:",jsonData.overview.ordering_sites_percentage);
+    });
+
+    $.getJSON("Dashboard/get_regimens", function(jsonData){
+        cb = '';
+        $.each(jsonData, function(i,data){
+            // set the default selected
+            cb+='<option value="'+data.name+'">'+data.name+'</option>';
+        });
+        $("#regimen_filter,#single_regimen_filter").append(cb);
+        $('#single_regimen_filter').multiselect('rebuild');
+    });
+
+    //get all the facilities
+    $.getJSON("Dashboard/get_facilities", function(jsonData){
+        cb = '';
+        $.each(jsonData, function(i,data){
+            // set the default selected
+            cb+='<option value="'+data.facility+'">'+data.facility+'</option>';
+        });
+        $("#single_facility_filter").append(cb);
+        $('#single_facility_filter').multiselect('rebuild');
+    });
+
+        /*Filter Month*/
+    $(".filter-month").on("click", function(){
+        // style the default selected month on the filter
+        $("#month-filter a").css("color", "#31B0D5");
+        $(this).css("color", "#f00");
+
+        month_selected = $(this).data('value');
+        $("#filter_month").val(month_selected);
+    });
+    /*Filter Year*/
+    $(".filter-year").on("click", function(){
+        // style the default selected year on the filter
+        $("#year-filter a").css("color", "#31B0D5");
+        $(this).css("color", "#f00");
+
+        year_selected = $(this).data('value');
+        $("#filter_year").val(year_selected);
+
+
+    });
+
+    /*Filter Submit*/
+    $("#filter_frm").on("submit", function(e){
+        var default_year = ($("#filter_year").val() == "" ? selected_year : $("#filter_year").val());
+        var default_month = ($("#filter_month").val() == "" ? selected_month : $("#filter_month").val());
+        var default_county = ($(".county_filter").val() == null ? counties : $(".county_filter").val());
+
+        //*Prevent submission*/
+        e.preventDefault();
+        /*Set filters*/
+        filters['data_month'] = default_month;
+        filters['data_year'] = default_year;
+        filters['data_date'] = default_year + '-'+ default_month;
+
+        filters['county'] = default_county;
+        filters['regimen'] = $("#regimen_filter").val();
+        
+        /*Load Charts based on tab*/
+        $.each(charts[tab], function(key, chartName) {
+            chartID = '#'+chartName
+            LoadChart(chartID, chartURL, chartName, filters)
+        });
+    });
+    
+    /*Commodity consumption trend filter*/
+    $("#trend_view_filter_frm").on("submit", function(e){
+        //*Prevent submission*/
+        e.preventDefault();
+        /*Set filters*/
+        filters['drug'] = $("#drugs").val();
+
+        /*close modal*/
+        $('#commodity_consumption_modal').modal('hide');
+        /*Load Charts based on tab*/
+       
+        chartName = 'commodity_consumption_chart';
+        chartID = '#'+chartName
+
+        LoadChart(chartID, chartURL, chartName, filters)
+    });
+
+    /*Patients Regimen filter*/
+    $("#patient_regimen_filter_frm").on("submit", function(e){
+        //*Prevent submission*/
+        e.preventDefault();
+        /*Set filters*/
+        filters['patient_regimen'] = $("#regimen").val();
+
+        /*close modal*/
+        $('#patients_regm_modal').modal('hide');
+        
+        /*Load Charts based on tab*/
+        chartName = 'patients_regimen_chart';
+        chartID = '#'+chartName
+        
+        LoadChart(chartID, chartURL, chartName, filters)
+    });
+
+    /*Commodity Month Stock filter*/
+    $("#commodity_stock_filter_frm").on("submit", function(e){
+        //*Prevent submission*/
+        e.preventDefault();
+        /*Set filters*/
+        filters['cms_drug'] = $("#commodity_stock").val();
+
+        /*close modal*/
+        $('#commodity_month_stock_modal').modal('hide');
+
+        /*show filter method*/
+        $('.commodity_month_stock_heading').text($("#commodity_stock").val()).css('font-weight', 'bold');
+
+        /*Load Charts based on tab*/
+        chartName = 'commodity_month_stock_chart';
+        chartID = '#'+chartName
+        
+        LoadChart(chartID, chartURL, chartName, filters)
+    });
+
+    /*National MOS filter*/
+    $("#mos_filter_frm").on("submit", function(e){
+        //*Prevent submission*/
+        e.preventDefault();
+        /*Set filters*/
+        filters['drug'] = $("#mos_filter").val();
+
+        /*close modal*/
+        $('#mos_filter_modal').modal('hide');
+
+        /*Load Charts based on tab*/
+        
+        chartName = 'national_mos_chart';
+        chartID = '#'+chartName
+        LoadChart(chartID, chartURL, chartName, filters)
+    });
+
+    /*Facility Consumption Filter*/
+    $("#facility_commodity_consumption_frm").on("submit", function(e){
+        //*Prevent submission*/
+        e.preventDefault();
+        /*Set filters*/
+        filters['drug'] = $("#facility_commodity_consumption").val();
+
+        /*close modal*/
+        $('#facility_commodity_consumption_modal').modal('hide');
+
+        /*Load Charts based on tab*/
+        chartName = 'facility_commodity_consumption_chart';
+        chartID = '#'+chartName
+
+        LoadChart(chartID, chartURL, chartName, filters)
+    });
+
+    //facilities tab select specific facility
+    $("#single_facility_filter").on("change", function(){
+        filters['facility'] = $("#single_facility_filter").val();
+        
+        $('#facility_chart_one, #facility_chart_two').addClass('hidden');
+        $('#facility_chart_four, #facility_chart_five').removeClass('hidden');
+
+        $("#facility_clear_btn").removeClass('hidden');
+
+        $.each(charts[tab], function(key, chartName) {
+            chartID = '#'+chartName
+            LoadChart(chartID, chartURL, chartName, filters)
+        });
+    });
+
+    //clear selected filter on facility
+    $("#facility_clear_btn").on("click", function(){
+        filters['facility'] = $("#single_facility_filter").val();
+        
+        $('#facility_chart_one, #facility_chart_two').removeClass('hidden');
+        $('#facility_chart_four, #facility_chart_five').addClass('hidden');
+
+        $.each(charts[tab], function(key, chartName) {
+            chartID = '#'+chartName
+            LoadChart(chartID, chartURL, chartName, filters)
+        });
+        
+        $("#facility_clear_btn").addClass('hidden');
+    });
+
+    //regimen tab select specific facility
+    $("#single_regimen_filter").on("change", function(){
+        filters['regimen'] = $("#single_regimen_filter").val();
+        
+        $('#regimen_chart_one').addClass('hidden');
+        $('#regimen_chart_two, #regimen_chart_three, #regimen_chart_four').removeClass('hidden');
+
+        $("#regimen_clear_btn").removeClass('hidden');
+
+        $.each(charts[tab], function(key, chartName) {
+            chartID = '#'+chartName
+            LoadChart(chartID, chartURL, chartName, filters)
+        });
+    });
+
+    //clear selected filter on regimen
+    $("#regimen_clear_btn").on("click", function(){
+        filters['regimen'] = $("#single_regimen_filter").val();
+        
+        $('#regimen_chart_one').removeClass('hidden');
+        $('#regimen_chart_two, #regimen_chart_three, #regimen_chart_four').addClass('hidden');
+
+        $.each(charts[tab], function(key, chartName) {
+            chartID = '#'+chartName
+            LoadChart(chartID, chartURL, chartName, filters)
+        });
+        
+        $("#regimen_clear_btn").addClass('hidden');
+    });
+
+    $('#btn-filter-clear').click(function(e){
+      //*Prevent submission*/
+      $('.county_filter').val("");
+      $("#filter_month").val("");
+      $("#filter_year").val("");
+      $(".county_filter").val("");
+      
+      e.preventDefault();
+      // /*clearSet filters*/
+      clearfilters = {};
+      // retain regimen id if set 
+      clearfilters['regimen'] = $("#regimen_filter").val();
+
+       /*reset filter method on commodity month stock chart*/
+       $('.commodity_month_stock_heading').text(selected_cms_drug).css('font-weight', 'bold');
+       
+       // reset county multi-select
+       $('#filter_item option:selected').each(function() {
+            $(this).prop('selected', false);
+        })
+        $('#filter_item').multiselect('refresh');
+
+        // reset to the default selected filters
+        $("#month-filter a, #year-filter a").css("color", "#31B0D5");
+        $('#month-filter .active-tab, #year-filter .active-tab').css("color", "#f00");
+
+      /*Load Charts based on tab*/
+      $.each(charts[tab], function(key, chartName) {
+        chartID = '#'+chartName
+        LoadChart(chartID, chartURL, chartName, clearfilters)
+    });  
+
+  }); 
 });
 
 function LoadChart(divID, chartURL, chartName, selectedfilters){
     /*Load Spinner*/
     LoadSpinner(divID)
     /*Load Chart*/
-    $(divID).load(chartURL, {'name':chartName, 'selectedfilters': selectedfilters}, function(){
-        LoadHeading(chartName)
-    });
+    $(divID).load(chartURL, {'name':chartName, 'selectedfilters': selectedfilters});
 }
 
 function LoadSpinner(divID){
@@ -41,205 +413,37 @@ function LoadSpinner(divID){
     $(divID).append(spinner.el)
 }
 
-function LoadHeading(chartName){
-    var chartHeadingClass = '.'+chartName+'_heading'
-    var filter_length = $('.filter').length
-    var current_filter = $("#filter_btn").attr('data-filter')
-    var message = ''
-
-    LoadSpinner(chartHeadingClass)
-    
-    if(filter_length > 0 && current_filter != ''){
-        $('.filter').each(function() {
-            var element = $(this)
-            var filterData = element.val()
-            var filterName = element.attr('id')
-            if(filterData != null && filterData != 0){
-                filterName = filterName.replace(/DATA|_/gi,' ')
-                if($.isArray(filterData)){
-                    message += '<br/><b><u>'+toTitleCase(filterName)+'</u></b><br/>'+filterData.join('<br/>');
-                }else{
-                    message += '<br/><b><u>'+toTitleCase(filterName)+'</u></b><br/>'+filterData;
-                }
-            }
-        });
-        $(chartHeadingClass).html(message) 
-    }else{
-        $.getJSON(filterURL+chartName, function(filters) {
-            if(typeof Object.keys(filters.default) !== 'undefined' && Object.keys(filters.default).length > 0){
-                $.each(filters.default, function(filter, filter_values){
-                    filter = filter.replace(/DATA|_/gi,' ')
-                    message += '<br/><b><u>'+toTitleCase(filter)+'</u></b><br/>'+filter_values.join('<br/>');
-                });
-            }else{
-                message = 'No Filter!'
-            }
-            $(chartHeadingClass).html(message) 
-        });
-    }   
-}
-
 function TabFilterHandler(e){
-    var filtername = $(e.target).attr('href')
+    var filtername = $(e.target).attr('href'); 
     var filters = {}
+
     tab = filtername.replace('#', '')
+    if(tab){
+        //Reset filter identifier
+        $("#filter_tab").val(tab)
+        
+        /*Reset the filters on tab change*/
+        $("#filter_month").val("");
+        $("#filter_year").val("");
+        $(".county_filter").val("");
 
-    //Reset filter identifier
-    $("#filter_btn").attr('data-filter', '')
+        // reset county multi-select
+        $('#filter_item option:selected').each(function() {
+            $(this).prop('selected', false);
+        })
+        $('#filter_item').multiselect('refresh');
 
-    /*Load Charts*/
-    $.each(charts[tab], function(key, chartName) {
-        chartID = '#'+chartName+'_chart'
-        LoadChart(chartID, chartURL, chartName, filters)
-    });
-}
+        // reset to the default selected filters
+        $("#month-filter a, #year-filter a").css("color", "#31B0D5");
+        $('#month-filter .active-tab, #year-filter .active-tab').css("color", "#f00");
 
-function LoadFilterHandler(e){
-    var chartName = e.relatedTarget.id.replace('_filter','')
-    var current_filter = $("#filter_btn").attr('data-filter')
-    if(current_filter != chartName){
-        /*Clear previous filter*/
-        ClearFilterData()
-        /*Load previous unfiltered chart*/
-        ChartFilterHandler()
-        /*Load Spinner*/
-        LoadSpinner(filterDIVClass)
-        /*Append chart filter name to modal*/
-        var filter_text = toTitleCase(chartName.replace(/_/g,' '))
-        $('.filter_text').html(filter_text)
-        //Get filters and content
-        $.getJSON(filterURL+chartName+'/0', function(filters) {
-            //Clear Spinner
-            $(filterDIVClass).html('');
-            $.each(filters.all, function(filter, filter_values){
-                var filterhtml = '';
-                var filtername = filter.replace(/DATA|_/gi,' ').toUpperCase();
-                filterhtml += '<div class="form-group">'
-                filterhtml += '<label for="'+filter+'" class="col-sm-2 control-label">'+filtername+'</label>'
-                filterhtml += '<div class="col-sm-9">'
-                //Check for multiple option
-                var none_multiple_options = ['data_year', 'data_month']
-                var excluded_charts = ['patient_scaleup']
-                if($.inArray(filter, none_multiple_options) == -1 || $.inArray(chartName, excluded_charts) != -1){ //not found or excluded chart
-                    filterhtml += '<select class="form-control filter '+filter+'" multiple="multiple" id="'+filter+'">'
-                }else{
-                    filterhtml += '<select class="form-control filter '+filter+'" id="'+filter+'">'
-                }
-                filterhtml += '</select></div></div>';
-                //Append filter to DOM
-                $('.auto_filter').append(filterhtml);
-                LoadSelectBox('.'+filter, filter_values)
-            });
-            //Autoselect defaults
-            $.each(filters.default, function(filter, filter_values){
-                $('.'+filter).val(filter_values).multiselect('refresh');
-            });
+        $.each(charts[tab], function(key, chartName) {
+            chartID = '#'+chartName
+            LoadChart(chartID, chartURL, chartName, filters)
         });
-        //Add chartName to filter_btn
-        $("#filter_btn").attr('data-filter', chartName)
-    } 
+    }
 }
 
-function LoadSelectBox(divClass, data){
-    $(divClass).multiselect({
-        enableCaseInsensitiveFiltering: true,
-        enableFiltering: true,
-        includeSelectAllOption: true,
-        disableIfEmpty: true,
-        maxHeight: 400,
-        buttonWidth: '100%',
-        nonSelectedText: 'None selected',
-        onChange: function(option, checked) {
-            var selectID = $(option).parent().attr('id');
-            var filterable_options = ['county', 'sub_county']
-            if($.inArray(selectID, filterable_options) != -1){ //found
-                var selectedOptions = $('.'+selectID).val();
-                //Filter specific data
-                getFilterData(selectID, selectedOptions)
-            }
-        }
-    });
-    $(divClass).multiselect('dataprovider', data);
-}
+function setFilter(className, hiddenID){
 
-function toTitleCase(str) {
-    return str.replace(/(?:^|\s)\w/g, function(match) {
-        return match.toUpperCase();
-    });
-}
-
-function ChartFilterHandler(e){
-    var chartName = $("#filter_btn").attr('data-filter')
-    var chartHeadingClass = '.'+chartName+'_heading'
-    var chartID = '#'+chartName+'_chart'
-    /*Reset filters array*/
-    filters = {}
-    /*Dynamic filters*/
-    $('.filter').each(function() {
-        var element = $(this)
-        var filterData = element.val()
-        if(filterData != null && filterData != 0){
-            filters[element.attr('id')] = filterData
-        }
-    }).promise().done(function () { 
-        //Load Chart
-        LoadChart(chartID, chartURL, chartName, filters)
-        //Close modal
-        $('#filterModal').modal('hide');
-    });
-}
-
-function ClearFilterHandler(e){
-    var previousChartName = $("#filter_btn").attr('data-filter')
-    var chartName = e.currentTarget.id.replace('_clear','')
-    var filters_tmp = filters
-
-    /*Load Spinner*/
-    LoadSpinner('#'+chartName+'_chart')
-
-    //Set new chartName
-    $("#filter_btn").attr('data-filter', chartName)
-
-    //Clear filter fields
-    ClearFilterData()
-
-    //Autoselect defaults
-    $.getJSON(filterURL+chartName, function(filters) {
-        //set chartName default filters
-        $.each(filters.default, function(filter, filter_values){
-            $('.'+filter).val(filter_values).multiselect('refresh');
-        });
-        //Click filter_btn
-        $("#filter_btn").trigger('click');
-
-        //Reset the previous chartname and selected_items
-        if(previousChartName != chartName){
-            filters = filters_tmp
-            $.each(filters, function(element, values){
-                $("#"+element).val(values).trigger("change");
-            });
-            $("#filter_btn").attr('data-filter', previousChartName)
-        }
-    });
-}
-
-function ClearFilterData(){
-    //Clear all filter elements
-    filters = {}
-    $(".filter").multiselect('deselectAll', false);
-    $(".filter").multiselect('updateButtonText');
-    $(".filter").multiselect('rebuild');
-}
-
-function getFilterData(filtername, selectedOptions){
-    $.post(specificFilterURL, {'filter_name':filtername, 'selected_options': selectedOptions}, function(filterData){
-        filterData = $.parseJSON(filterData)
-        if(filtername == 'county'){
-            filtername = 'sub_county'
-        }else if(filtername == 'sub_county'){
-            filtername = 'facility'
-        }
-        $('.'+filtername).multiselect('destroy');
-        LoadSelectBox('.'+filtername, filterData)
-    });
 }

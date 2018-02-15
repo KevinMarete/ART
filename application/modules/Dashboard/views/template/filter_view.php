@@ -57,4 +57,3 @@
         });
     });
 </script>
-<script type="text/javascript" src="<?php echo base_url().'public/js/filter.js';?>"></script>

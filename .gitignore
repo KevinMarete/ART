@@ -6,5 +6,5 @@ application/logs/*
 public/uploads/*
 
 # exception to the rule
-!public/uploads/.gitkeep 
-/nbproject/private/
+!public/ftpservice/uploads/.gitkeep 
+/nbproject/*

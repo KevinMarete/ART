@@ -6,8 +6,6 @@
 	<title><?php echo $page_title; ?></title>
 	<!--styles-->
 	<?php $this->load->view('template/style_view'); ?>
-	<!--jquery-->
-	<script type="text/javascript" src="<?php echo base_url().'public/lib/jquery/dist/jquery.min.js';?>"></script>
 </head>
 <body class="application">
 	<!--navbar-->
