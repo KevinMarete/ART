@@ -7,7 +7,7 @@ class Admin extends MX_Controller {
     function __construct() {
         ini_set("max_execution_time", "100000");
         ini_set("memory_limit", '2048M');
-        $this->load->model('Admin_model');
+//        $this->load->model('Admin_model');
     }
 
     public function index() {

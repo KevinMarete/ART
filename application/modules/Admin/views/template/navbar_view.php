@@ -6,7 +6,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="<?php echo base_url().'admin/home'?>">ART Dashboard v1.0</a>
+        <a class="navbar-brand" href="<?php echo base_url().'Admin/home'?>">ART Dashboard v1.0</a>
     </div>
     <!-- /.navbar-header -->
 
@@ -19,7 +19,7 @@
                 <li><a href="#"><i class="fa fa-user fa-fw"></i> Profile</a>
                 </li>
                 <li class="divider"></li>
-                <li><a href="<?php echo base_url().'admin'; ?>"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                <li><a href="<?php echo base_url().'Admin'; ?>"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                 </li>
             </ul>
             <!-- /.dropdown-user -->
@@ -35,7 +35,7 @@
                     <a href="#"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                 </li>
                 <li>
-                    <a href="<?php echo base_url().'admin/sites';?>"><i class="fa fa-edit fa-fw"></i> Sites</a>
+                    <a href="<?php echo base_url().'Admin/sites';?>"><i class="fa fa-edit fa-fw"></i> Sites</a>
                 </li>
                 <li>
                     <a href="#"><i class="fa fa-files-o fa-fw"></i> Backups</a>

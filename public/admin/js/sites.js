@@ -1,4 +1,4 @@
-var siteURL = '../api/install'
+var siteURL = '../API/install'
 $(function() {
 	$.getJSON(siteURL, function(data){
 		var siteData = []
