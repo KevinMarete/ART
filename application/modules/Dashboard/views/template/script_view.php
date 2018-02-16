@@ -14,7 +14,6 @@
 <script type="text/javascript" src="<?php echo base_url().'public/dashboard/js/disable_back_button.js';?>"></script>
 <!--datatables-->
 <script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/datatables/js/datatables.min.js';?>"></script>
-<script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/datatables/js/buttons.flash.min.js';?>"></script>
 <script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/datatables/js/dataTables.buttons.min.js';?>"></script>
 <script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/datatables/js/buttons.flash.min.js';?>"></script>
 <script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/datatables/js/jszip.min.js';?>"></script>

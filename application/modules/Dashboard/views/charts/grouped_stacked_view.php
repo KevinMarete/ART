@@ -7,18 +7,17 @@
         var chartDIV = '<?php echo $chart_name."_container"; ?>';
 
         Highcharts.setOptions({
-            colors: ['#2f7ed8', '#0d233a', '#8bbc21']
+            colors: ['#5cb85c', '#f0ad4e', '#5bc0de']
         });
 
         Highcharts.chart(chartDIV, {
                 legend: {
                 enabled: true
             },
+            
             chart: {
                 type: 'column'
             },
-
-            colors: ['#5cb85c', '#f0ad4e', '#5bc0de'],
 
             title: {
                 text: '<?php echo $chart_title; ?>'
@@ -41,16 +40,17 @@
             },
 
             tooltip: {
-                formatter: function () {
-                    return '<b>' + this.x + '</b><br/>' +
-                        this.series.name + ': ' + this.y + '<br/>' +
-                        'Total: ' + this.point.stackTotal;
-                }
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '{series.name}: {point.y:,.0f}<br/>Total: {point.stackTotal:,.0f}<br />{point.otherdata}'
             },
 
             plotOptions: {
                 column: {
-                    stacking: 'normal'
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true,
+                        color: 'black'
+                    }
                 }
             },
 

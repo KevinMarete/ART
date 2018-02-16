@@ -9,6 +9,12 @@ class Drug_model extends CI_Model {
 		return $query->result_array();
 	}
 
+	public function read_list()
+	{
+		$query = $this->db->get('vw_drug_list');
+		return $query->result_array();
+	}
+
 	public function insert($data)
 	{	
 		$this->db->insert('tbl_drug',	$data);

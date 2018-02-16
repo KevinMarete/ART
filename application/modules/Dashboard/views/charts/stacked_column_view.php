@@ -18,7 +18,6 @@
                 return ser.visible;
             })[0];
             $.each(ser.data, function(dataIndex, datum) {
-                // console.log(datum.category + ": " + datum.stackTotal);
                 var obj = {
                     name: datum.category,
                     index: dataIndex,
@@ -47,9 +46,6 @@
         categories = $.map(categories, function(category, index) {
             return category.name;
         });
-        
-        // console.log(categories);
-        // console.log(mappedIndex);
         axis.setCategories(categories);
         
         $.each(series, function(seriesIndex, ser) {
@@ -78,7 +74,7 @@
                 renderTo: chartDIV,
                 type: 'column'
             },
-            colors: ['#5cb85c', '#434348', '#5bc0de', '#f7a35c', '#8085e9'],
+            colors: ['#5cb85c', '#434348', '#5bc0de', '#f7a35c', '#8085e9', '#ff4d4d'],
             title: {
                 text: '<?php echo $chart_title; ?>'
             },
@@ -103,7 +99,7 @@
             },
             tooltip: {
                 headerFormat: '<b>{point.x}</b><br/>',
-                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}<br />{point.otherdata}'
+                pointFormat: '{series.name}: {point.y:,.0f}<br/>Total: {point.stackTotal:,.0f}<br />{point.otherdata}'
             },
             legend: {
                 align: 'right',

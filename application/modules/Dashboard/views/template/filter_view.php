@@ -1,16 +1,9 @@
 <div class="navbar navbar-inverse">
-  <style scoped>
-    .active-tab {
-      color: #f00;
-    }
-  </style>
   <div class="container">
     <div class="navbar-collapse collapse" id="navbar-filter">
-      <form class="navbar-form" role="search" id="filter_frm">
+      <div class="navbar-form" role="search">
         <div class="form-group">
-          <!-- multiple select dropdown -->
-          <select id="filter_item" multiple="multiple" name="filter_item" data-filter_type="county" class="form-control county_filter"></select>
-
+          <select id="filter_item" multiple="multiple" name="filter_item[]" data-filter_type="" class="form-control"></select>
         </div>
         <div class="form-group">
           <div class="filter form-control" id="year-filter">
@@ -37,23 +30,9 @@
             <a href="#" class="filter-month" data-value="Dec"> Dec</a>
           </div>
         </div>
-        <button type="submit" id="btn-filter-clear" class="btn btn-info btn-md"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
-        <button type="submit" id="btn-filter-pending" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-filter"></span> Filter</button>
-      </form>
+        <button id="btn_clear" class="btn btn-danger btn-md"><span class="glyphicon glyphicon-refresh"></span> Clear</button>
+        <button id="btn_filter" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+      </div>
     </div>
   </div>
 </div>        
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#filter_item').multiselect({
-          nonSelectedText: 'National',
-          maxHeight: 600,
-          enableFiltering: true,
-          buttonWidth: '200px',
-          includeSelectAllOption: true,
-          selectAllNumber: true,
-          enableCaseInsensitiveFiltering: true,
-          enableFullValueFiltering: true,
-        });
-    });
-</script>

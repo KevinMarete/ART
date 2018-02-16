@@ -3,6 +3,10 @@
     width: 100%;
 }
 
+.active-tab {
+	color: #f00;
+}
+
 .dropdown-menu li a {
     word-wrap: break-word;
     white-space: normal;
