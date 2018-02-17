@@ -36,12 +36,16 @@
                     text: '<?php echo $chart_yaxis_title; ?>'
                 }
             },
+            tooltip: {
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '<span>{series.name}</span>: <b>{point.y}</b><br/>',
+                shared: true
+            },
             plotOptions: {
                 line: {
                     dataLabels: {
                         enabled: true
-                    },
-                    enableMouseTracking: false
+                    }
                 }
             },
             series: <?php echo $chart_series_data; ?>,

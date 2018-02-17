@@ -7,8 +7,9 @@
         var chartDIV = '<?php echo $chart_name."_container"; ?>';
 
         Highcharts.chart(chartDIV, {
-                legend: {
-                enabled: true
+            legend: {
+                enabled: true,
+                reversed: true
             },
             chart: {
                 type: 'column'
@@ -37,16 +38,18 @@
             },
 
             tooltip: {
-                formatter: function () {
-                    return '<b>' + this.x + '</b><br/>' +
-                        this.series.name + ': ' + this.y + '<br/>' +
-                        'Total: ' + this.point.stackTotal;
-                }
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
+                footerFormat: 'Total: <b>{point.total:,.1f}</b>',
+                shared: true
             },
 
             plotOptions: {
                 column: {
-                    stacking: 'normal'
+                    stacking: 'percent',
+                    dataLabels: {
+                        enabled: true
+                    }
                 }
             },
 

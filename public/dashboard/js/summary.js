@@ -1,7 +1,3 @@
-var countyURL = 'API/county'
-var drugListURL = 'API/drug/list'
-var charts = ['patient_scaleup_chart', 'patient_services_chart', 'national_mos_chart']
-
 $(function() {
     //Get counties
     $.getJSON(countyURL, function(data){
@@ -34,7 +30,7 @@ $(function() {
         $("#national_mos_chart_filter").data('filter_type', 'drug')
     }).promise().done(function () { 
         //Load charts
-        $.each(charts, function(key, chartName) {
+        $.each(charts['summary'], function(key, chartName) {
             chartID = '#'+chartName
             LoadChart(chartID, chartURL, chartName, filters)
         });

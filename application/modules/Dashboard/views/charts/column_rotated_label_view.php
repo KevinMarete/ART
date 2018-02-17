@@ -40,15 +40,15 @@
             },
             tooltip: {
                 formatter: function () {
-                    // get the percentage change
+                    //Get growth rate
                     var prevPoint = this.point.x == 0 ? null : this.series.data[this.point.x - 1];
-                    var rV = this.x +
-                        '<br><b>Total:</b> ' + this.y;
+                    var rV = '<b>' + this.x + '</b><br/>'
+                    rV += '<span style="color:'+ this.series.color + '"><b>Total</b></span>: ' + Highcharts.numberFormat(this.y, 0) + '<br/>'
                     if (prevPoint){
                         var diff = this.y - prevPoint.y;
                         var percentage = (diff / prevPoint.y) * 100;
-                        var formated = percentage.toFixed(2);
-                        rV += '<br><b>Growth:</b> ' + formated + ' %';
+                        var formated = percentage.toFixed(1);
+                        rV += '<br><b>Growth:</b> ' + formated + ' %'
                     }
                     return rV;
                 }
@@ -59,7 +59,12 @@
                     borderWidth: 0,
                     colorByPoint: true,
                     dataLabels: {
-                        enabled: true
+                        enabled: true,
+                        rotation: -90,
+                        color: '#FFFFFF',
+                        align: 'right',
+                        format: '{point.y:,.0f}',
+                        y: 10
                     }
                 },
             },

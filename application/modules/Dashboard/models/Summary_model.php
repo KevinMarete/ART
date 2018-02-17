@@ -85,8 +85,7 @@ class Summary_model extends CI_Model {
 		}
 		return array('main' => $patient_services_data, 'columns' => $columns);
 	}
-
-
+	
 	public function get_national_mos($filters){
 		$columns = array();
 		$scaleup_data = array(

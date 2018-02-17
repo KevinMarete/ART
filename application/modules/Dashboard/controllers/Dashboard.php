@@ -68,6 +68,12 @@ class Dashboard extends MX_Controller {
 			$main_data = $this->summary_model->get_patient_services($filters);
 		}else if($chartname == 'national_mos_chart'){
 			$main_data = $this->summary_model->get_national_mos($filters);
+		}else if($chartname == 'commodity_consumption_chart'){
+			$main_data = $this->trend_model->get_commodity_consumption($filters);
+		}else if($chartname == 'patients_regimen_chart'){
+			$main_data = $this->trend_model->get_patients_regimen($filters);
+		}else if($chartname == 'commodity_month_stock_chart'){
+			$main_data = $this->trend_model->get_commodity_month_stock($filters);
 		}
 		return $main_data;
 	}
