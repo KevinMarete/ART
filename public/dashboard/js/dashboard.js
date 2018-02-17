@@ -18,7 +18,14 @@ function LoadChart(divID, chartURL, chartName, selectedfilters){
     //Load Spinner
     LoadSpinner(divID)
     //Load Chart*
-    $(divID).load(chartURL, {'name':chartName, 'selectedfilters': selectedfilters});
+    $(divID).load(chartURL, {'name':chartName, 'selectedfilters': selectedfilters}, function(){
+        //Pre-select filters for charts
+        $.each($(divID + '_filters').data('filters'), function(key, data){
+            if($.inArray(key, ['data_year', 'data_month', 'data_date']) == -1){
+                $(divID + "_filter").val(data).multiselect('refresh');
+            }
+        });
+    });
 }
 
 function LoadSpinner(divID){

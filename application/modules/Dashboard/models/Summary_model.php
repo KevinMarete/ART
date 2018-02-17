@@ -7,11 +7,10 @@ class Summary_model extends CI_Model {
 		$columns = array();
 		$scaleup_data = array(
 			array('type' => 'column', 'name' => 'Paediatric', 'data' => array()),
-			array('type' => 'column', 'name' => 'Adult', 'data' => array()),
-			array('type' => 'spline', 'name' => 'Forecast', 'data' => array())
+			array('type' => 'column', 'name' => 'Adult', 'data' => array())
 		);
 
-		$this->db->select("CONCAT_WS('/', data_month, data_year) period, SUM(IF(age_category = 'paed', total, NULL)) paed_total, SUM(IF(age_category = 'adult', total, NULL)) adult_total, ROUND(RAND()*150000)+650000  forecast", FALSE);
+		$this->db->select("CONCAT_WS('/', data_month, data_year) period, SUM(IF(age_category = 'paed', total, NULL)) paed_total, SUM(IF(age_category = 'adult', total, NULL)) adult_total", FALSE);
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				if ($category == 'data_date'){
@@ -21,10 +20,11 @@ class Summary_model extends CI_Model {
                 }
 			}
 		}
+		$this->db->where_in('regimen_service', 'ART');
 		$this->db->group_by('period');
 		$this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
 		$query = $this->db->get('dsh_patient');
-        $results = $query->result_array();
+		$results = $query->result_array();
 
 		if($results){
 			foreach ($results as $result) {
@@ -34,8 +34,6 @@ class Summary_model extends CI_Model {
 						array_push($scaleup_data[$index]['data'], $result['adult_total']);
 					}else if($scaleup['name'] == 'Paediatric'){
 						array_push($scaleup_data[$index]['data'], $result['paed_total']);
-					}else if($scaleup['name'] == 'Forecast'){
-						array_push($scaleup_data[$index]['data'], $result['forecast']);
 					}
 				}
 			}

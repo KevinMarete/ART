@@ -1,5 +1,6 @@
 <!--chart_container-->
 <div id="<?php echo $chart_name; ?>_container"></div>
+<input type="hidden" data-filters="<?php echo $selectedfilters; ?>" id="<?php echo $chart_name; ?>_filters"/>
 
 <!--highcharts_configuration-->
 <script type="text/javascript">
@@ -99,7 +100,9 @@
             },
             tooltip: {
                 headerFormat: '<b>{point.x}</b><br/>',
-                pointFormat: '{series.name}: {point.y:,.0f}<br/>Total: {point.stackTotal:,.0f}<br />{point.otherdata}'
+                pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
+                footerFormat: 'Total: <b>{point.total:,.0f}</b>',
+                shared: true
             },
             legend: {
                 align: 'right',

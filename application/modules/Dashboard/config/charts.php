@@ -7,8 +7,8 @@ $config['data_month'] = 'Dec';
 $config['data_date'] = '2017-12-01';
 
 //patient_scaleup_chart
-$config['patient_scaleup_chart_chartview'] = 'charts/grouped_stacked_view';
-$config['patient_scaleup_chart_title'] = 'Patient Scaleup Trend';
+$config['patient_scaleup_chart_chartview'] = 'charts/combined_column_line_view';
+$config['patient_scaleup_chart_title'] = 'Patient (ART) Scaleup Trend';
 $config['patient_scaleup_chart_yaxis_title'] = 'No. of Patients';
 $config['patient_scaleup_chart_source'] = 'Source: www.commodities.nascop.org';
 $config['patient_scaleup_chart_has_drilldown'] = FALSE;

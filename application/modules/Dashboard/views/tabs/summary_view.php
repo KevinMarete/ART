@@ -38,10 +38,9 @@
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
 						NATIONAL MONTHS OF STOCK (MOS) 
-						<button data-toggle="modal" data-target="#mos_filter_modal" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+						<button data-toggle="modal" data-target="#national_mos_chart_filter_modal" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-filter"></span> Filter</button>
 					</div>
 					<div class="chart-stage">
-						<div id="mos-filter"></div>
 						<div id="national_mos_chart"></div>
 					</div>
 					<div class="chart-notes">
@@ -51,7 +50,7 @@
 		 	</div>
 	    </div>
 	    <!--filter-modal-->
-	    <div class="modal fade" id="mos_filter_modal">
+	    <div class="modal fade" id="national_mos_chart_filter_modal">
 		    <div class="modal-dialog">
 		        <div class="modal-content">
 		            <div class="modal-header">
@@ -59,10 +58,10 @@
 		                <h4 class="modal-title">National MOS Drug Filter</h4>
 		            </div>
 		            <div class="modal-body">
-		            	<div id="mos_filter_frm">
-		            		<select id="mos_filter" multiple="multiple" name="mos_drug_list[]" class="mos_drug_list"></select>
-							<button id="mos_clear_btn" class="btn btn-danger btn-md"><span class="glyphicon glyphicon-refresh"></span> Clear</button>
-		                	<button id="mos_filter_btn" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+		            	<div id="national_mos_chart_filter_frm">
+		            		<select id="national_mos_chart_filter" multiple="multiple"></select>
+							<button id="national_mos_chart_filter_clear_btn" class="btn btn-danger btn-md"><span class="glyphicon glyphicon-refresh"></span> Clear</button>
+		                	<button id="national_mos_chart_filter_btn" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-filter"></span> Filter</button>
 		            	</div>
 		            </div>
 		        </div>
@@ -70,5 +69,5 @@
 		</div>
     </div>
 </div>
-
+<!--summary-->
 <script src="<?php echo base_url() . 'public/dashboard/js/summary.js'; ?>"></script>

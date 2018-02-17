@@ -38,6 +38,7 @@ class Dashboard extends MX_Controller {
 		}else{
 			$data['chart_categories'] =  json_encode(@$main_data['columns'], JSON_NUMERIC_CHECK);
 		}
+		$data['selectedfilters'] = htmlspecialchars(json_encode($selectedfilters), ENT_QUOTES, 'UTF-8');
         $data['chart_series_data'] = json_encode($main_data['main'], JSON_NUMERIC_CHECK);
         //Load chart
 		$this->load->view($this->config->item($chartname.'_chartview'), $data);
