@@ -8,6 +8,15 @@
 <link href="<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/font-awesome/css/font-awesome.min.css'; ?>" rel="stylesheet" type="text/css">
 <!-- DataTables CSS -->
 <link href="<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables-plugins/dataTables.bootstrap.css'; ?>" rel="stylesheet">
+
+<!--Jquery DataTables-->
+<link href=".<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables/css/jquery.dataTables.min.css'; ?>" rel="stylesheet">
+<!--DataTables buttons--->
+<link href=".<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables/css/buttons.dataTables.min.css'; ?>" rel="stylesheet">
+<!---DataTables select css-->
+<link href=".<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables/css/select.dataTables.min.css'; ?>" rel="stylesheet">
+<!--DataTables editor-->
+<link href=".<?php // echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables/css/editor.dataTables.min.css'; ?>" rel="stylesheet">
 <!-- DataTables Responsive CSS -->
 <link href=".<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables-responsive/dataTables.responsive.css'; ?>" rel="stylesheet">
 <!--datepicker-->
