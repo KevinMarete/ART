@@ -1,7 +1,8 @@
-<div id="page-wrapper">
+F<div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
             <h2 class="page-header">ADT Installed Sites</h2>
+            <p><?php echo $this->session->flashdata('success'); ?></p>
         </div>
         <!-- /.col-lg-12 -->
     </div>
@@ -12,7 +13,7 @@
                 <div class="panel-heading">
                     Sites Installed Listing
 
-                    <!-- Button trigger modal -->
+                    <!-- Button trigger modal Add site -->
                     <button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#exampleModal">
                         <i class="fa fa-plus"></i> Add Site
                     </button>
@@ -33,7 +34,7 @@
                                                 </button>
                                             </div>
                                             <div class="panel-body">
-                                                <form role="form" action="<?php echo base_url().'Admin/Sites/save';?>" method="POST">
+                                                <form role="form" action="<?php echo base_url() . 'Admin/Sites/save'; ?>" method="POST">
                                                     <div class="row">
                                                         <div class="col-lg-6">
                                                             <div class="form-group">
@@ -162,18 +163,19 @@
                 <div class="panel-body">
                     <table width="100%" class="table table-striped table-bordered table-hover" id="sites_listing">
                         <thead>
-                            <tr>
-                                <th>Facility</th>
-                                <th>Version</th>
-                                <th>Setup Date</th>
-                                <th>Active Patients</th>
-                                <th>Contact Person</th>
-                                <th>Contact Phone</th>
-                            </tr>
+                        <th></th>
+                        <th>Facility</th>
+                        <th>Version</th>
+                        <th>Setup Date</th>
+                        <th>Active Patients</th>
+                        <th>Contact Person</th>
+                        <th>Contact Phone</th>
+                        </tr>
                         </thead>
                         <tbody></tbody>
                         <tfoot>
                             <tr>
+                                <th></th>
                                 <th>Facility</th>
                                 <th>Version</th>
                                 <th>Setup Date</th>

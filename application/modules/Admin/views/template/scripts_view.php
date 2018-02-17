@@ -6,9 +6,14 @@
 <script src="<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/raphael/raphael.min.js'; ?>"></script>
 <script src="<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/morrisjs/morris.min.js'; ?>"></script>
 <!-- DataTables JavaScript -->
+<!--<script src="<?php // echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables/js/jquery-1.12.4.js';?>"></script>-->
 <script src="<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables/js/jquery.dataTables.min.js'; ?>"></script>
 <script src="<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables-plugins/dataTables.bootstrap.min.js'; ?>"></script>
 <script src="<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables-responsive/dataTables.responsive.js'; ?>"></script>
+<script src="<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables/js/dataTables.altEditor.free.js';?>"></script>
+<script src="<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables/js/dataTables.buttons.min.js';?>"></script>
+<script src="<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables/js/dataTables.select.min.js';?>"></script>
+<!--<script src="<?php // echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables/js/dataTables.editor.min.js';?>"></script>-->
 <!--datepicker-->
 <script src="<?php echo base_url() . 'public/admin/lib/bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.min.js'; ?>"></script>
 <!--bootstrap-multiselect-->
