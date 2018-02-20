@@ -39,6 +39,11 @@
                     text: '<?php echo $chart_yaxis_title; ?>'
                 },
                 plotLines: [{
+                    color: 'green',
+                    dashStyle: 'longdashdot',
+                    value: 3,
+                    width: 2    
+                },{
                     color: 'red',
                     dashStyle: 'longdashdot',
                     value: 9,

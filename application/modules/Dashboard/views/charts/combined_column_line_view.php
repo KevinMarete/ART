@@ -13,7 +13,8 @@
 
         Highcharts.chart(chartDIV, {
             legend: {
-                enabled: true
+                enabled: true,
+                reversed: true
             },
 
             chart: {

@@ -1,7 +1,9 @@
 <!--highcharts-->
-<script src="<?php echo base_url().'public/dashboard/lib/highcharts/highcharts.js';?>"></script>
-<script src="<?php echo base_url().'public/dashboard/lib/highcharts/exporting.js';?>"></script>
-<script src="<?php echo base_url().'public/dashboard/lib/highcharts/drilldown.js';?>"></script>
+<script src="<?php echo base_url().'public/dashboard/lib/highcharts/js/highcharts.js';?>"></script>
+<script src="<?php echo base_url().'public/dashboard/lib/highcharts/js/exporting.js';?>"></script>
+<script src="<?php echo base_url().'public/dashboard/lib/highcharts/js/offline-exporting.js';?>"></script>
+<script src="<?php echo base_url().'public/dashboard/lib/highcharts/js/drilldown.js';?>"></script>
+<script src="<?php echo base_url().'public/dashboard/lib/highcharts/js/export-data.js';?>"></script>
 <!--bootstrap-->
 <script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/bootstrap/dist/js/bootstrap.min.js';?>"></script>
 <!--bootstrap-toggle-->
@@ -23,5 +25,3 @@
 <script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/datatables/js/buttons.print.min.js';?>"></script>
 <!--dashboard-->
 <script type="text/javascript" src="<?php echo base_url().'public/dashboard/js/dashboard.js';?>"></script>
-<!--filter-->
-<script type="text/javascript" src="<?php echo base_url().'public/dashboard/js/filter.js';?>"></script>

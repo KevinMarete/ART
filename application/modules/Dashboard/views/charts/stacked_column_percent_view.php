@@ -1,5 +1,6 @@
 <!--chart_container-->
 <div id="<?php echo $chart_name; ?>_container"></div>
+<input type="hidden" data-filters="<?php echo $selectedfilters; ?>" id="<?php echo $chart_name; ?>_filters"/>
 
 <!--highcharts_configuration-->
 <script type="text/javascript">
@@ -34,7 +35,24 @@
                 min: 0,
                 title: {
                     text: '<?php echo $chart_yaxis_title; ?>',
-                }
+                },                
+                plotLines: [{
+                    color: 'green',
+                    dashStyle: 'longdashdot',
+                    value: 25,
+                    width: 2    
+                },{
+                    color: 'red',
+                    dashStyle: 'longdashdot',
+                    value: 50,
+                    width: 2
+                },
+                {
+                    color: 'purple',
+                    dashStyle: 'longdashdot',
+                    value: 75,
+                    width: 2    
+                }]
             },
 
             tooltip: {
