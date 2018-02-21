@@ -48,8 +48,7 @@
                     if (prevPoint){
                         var diff = this.y - prevPoint.y;
                         var percentage = (diff / prevPoint.y) * 100;
-                        var formated = percentage.toFixed(1);
-                        rV += '<br><b>Growth:</b> ' + formated + ' %'
+                        rV += '<br><b>Growth:</b> ' + Highcharts.numberFormat(percentage, 1) + ' %'
                     }
                     return rV;
                 }

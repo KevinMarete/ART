@@ -19,14 +19,14 @@ var charts = {
     'trend': ['commodity_consumption_chart', 'patients_regimen_chart', 'commodity_month_stock_chart']
 }
 var filters = {}
-var defaultTab = 'summary'
+var tabName = 'summary'
 
 //Autoload
 $(function() {
     //Set default period
     setDefaultPeriod(LatestDateURL)
     //Load default tab charts
-    LoadTabContent(defaultTab)
+    LoadTabContent(tabName)
     //Tab change Event
     $("#main_tabs a").on("click", TabFilterHandler);
     //Filter click Event
@@ -34,21 +34,13 @@ $(function() {
     //Clear click Event
     $(".clear_btn").on("click", ClearBtnHandler);
     //Year click event
-    $('.filter-year').on('click', function(){
-        $("#filter_year").val($(this).data('value'))
-    });
+    $('.filter-year').on('click', function(){ $("#filter_year").val($(this).data('value')) });
     //Month click event
-    $('.filter-month').on('click', function(){
-        $("#filter_month").val($(this).data('value'))
-    });
+    $('.filter-month').on('click', function(){ $("#filter_month").val($(this).data('value')) });
     //Main filter click event
-    $('#btn_filter').click(function(){
-        filterRequest()
-    });
+    $('#btn_filter').on("click", MainFilterHandler);
     //Main clear click event 
-    $('#btn_clear').click(function(){
-        clearRequest()
-    });
+    $('#btn_clear').on("click", MainClearHandler);
 });
 
 function LoadTabContent(tabName){
@@ -88,26 +80,25 @@ function setMainFilter(tabName){
 }
 
 function setTabFilter(tabName){
-    $.ajaxSetup({
-        async: false
-    });
     $.each(tabFiltersURLs[tabName], function(key, value){
-        $.getJSON(value.link, function(data){
-            $.each(value.filters, function(index, filterID){
-                //Create multiselect box
-                CreateSelectBox(filterID)
-                //Add data to selectbox
-                $(filterID+ " option").remove();
-                $.each(data, function(i, v) {
-                    $(filterID).append($("<option value='" + v.name + "'>" + v.name.toUpperCase() + "</option>"));
+        $.ajax({
+            url: value.link,
+            datatype: 'JSON',
+            async: false,
+            success: function(data){
+                $.each(value.filters, function(index, filterID){
+                    //Create multiselect box
+                    CreateSelectBox(filterID)
+                    //Add data to selectbox
+                    $(filterID+ " option").remove();
+                    $.each(data, function(i, v) {
+                        $(filterID).append($("<option value='" + v.name + "'>" + v.name.toUpperCase() + "</option>"));
+                    });
+                    $(filterID).multiselect('rebuild');
+                    $(filterID).data('filter_type', value.type);
                 });
-                $(filterID).multiselect('rebuild');
-                $(filterID).data('filter_type', value.type)
-            });
+            }
         });
-    });
-    $.ajaxSetup({
-        async: true
     });
 }
 
@@ -147,8 +138,9 @@ function LoadSpinner(divID){
 
 function TabFilterHandler(e){
     var filtername = $(e.target).attr('href')
-    var tabName = filtername.replace('#', '')
     var filters = {}
+    //Set tabName
+    tabName = filtername.replace('#', '')
     //Set default period
     setDefaultPeriod(LatestDateURL)
     //Load selected tab charts
@@ -198,12 +190,11 @@ function ClearBtnHandler(e){
     //Clear filterType
     filters[filterType] = {}
 
-    //Clear filter_item dropdown multi-select
-    $(filterID+' option:selected').each(function() {
-        $(this).prop('selected', false);
-    });
+    //Filter multiple multiselect
+    $(filterID).multiselect('deselectAll', false);
+    $(filterID).multiselect('updateButtonText');
     $(filterID).multiselect('refresh');
-
+    
     //Trigger filter event
     $(filterID+'_btn').trigger('click');
 }
@@ -212,11 +203,14 @@ function getMonth(monthStr){
     return new Date(monthStr+'-1-01').getMonth()+1
 }
 
-function filterRequest(){
+function MainFilterHandler(e){
+    var filter_year = $("#filter_year").val()
+    var filter_month = $("#filter_month").val()
+
     //Add filters to request
-    filters['data_year'] = $("#filter_year").val()
-    filters['data_month'] = $("#filter_month").val()
-    filters['data_date'] = $("#filter_year").val() + '-' + getMonth($("#filter_month").val()) + '-01'
+    filters['data_year'] = filter_year
+    filters['data_month'] = filter_month
+    filters['data_date'] = filter_year + '-' + getMonth(filter_month) + '-01'
 
     if($("#filter_item").val() != null){
         filters[$("#filter_item").data('filter_type')] = $("#filter_item").val()
@@ -225,7 +219,7 @@ function filterRequest(){
     if(filters['data_year'] != '' || filters['data_month'] != '')
     {   
         //Load charts
-        $.each(charts, function(key, chartName) {
+        $.each(charts[tabName], function(key, chartName) {
             chartID = '#'+chartName
             LoadChart(chartID, chartURL, chartName, filters)
             //Remove active-tab class
@@ -240,7 +234,7 @@ function filterRequest(){
     }
 }
 
-function clearRequest(){
+function MainClearHandler(e){
     //Clear filters
     var filters = {}
     //Get default month and year
@@ -255,8 +249,8 @@ function clearRequest(){
         $('#filter_item option:selected').each(function() {
             $(this).prop('selected', false);
         });
-        $('#filter_item').multiselect('refresh');
-        //Set filters
-        filterRequest();
+        $("#filter_item").multiselect("refresh");
+        //Trigger filter event
+        $("#btn_filter").trigger("click");
     });
 }
