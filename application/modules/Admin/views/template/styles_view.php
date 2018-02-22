@@ -15,8 +15,6 @@
 <link href=".<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables/css/buttons.dataTables.min.css'; ?>" rel="stylesheet">
 <!---DataTables select css-->
 <link href=".<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables/css/select.dataTables.min.css'; ?>" rel="stylesheet">
-<!--DataTables editor-->
-<link href=".<?php // echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables/css/editor.dataTables.min.css'; ?>" rel="stylesheet">
 <!-- DataTables Responsive CSS -->
 <link href=".<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables-responsive/dataTables.responsive.css'; ?>" rel="stylesheet">
 <!--datepicker-->
@@ -29,4 +27,5 @@
 <link rel="shortcut icon" type="text/css" href="<?php echo base_url() . 'public/dashboard/img/favicon.ico'; ?>">
 
 <!-- jQuery -->
-<script src="<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/jquery/jquery.min.js'; ?>"></script>
+<script src="<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables/js/jquery-1.12.4.js';?>"></script>
+<!--<script src="<?php // echo base_url() . 'public/admin/lib/sbadmin2/vendor/jquery/jquery.min.js'; ?>"></script>-->

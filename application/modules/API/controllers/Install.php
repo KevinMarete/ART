@@ -92,7 +92,7 @@ class Install extends \API\Libraries\REST_Controller  {
         $data = array(
             'version' => $this->post('version'),
             'setup_date' => $this->post('setup_date'),
-            'upgrade_date' => $this->post('upgrade_date'),
+            'upgrade_date' => $this->post('update_date'),
             'comments' => $this->post('comments'),
             'contact_name' => $this->post('contact_name'),
             'contact_phone' => $this->post('contact_phone'),

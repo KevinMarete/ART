@@ -1,46 +1,40 @@
-var siteURL = '../API/install'
-var facilityURL = '../API/facility'
-var countyURL = '../API/county'
-var subcountyURL = '../API/subcounty'
-var partnerURL = '../API/partner'
-var userURL = '../API/user'
+var siteURL = '../API/install';
+var facilityURL = '../API/facility';
+var countyURL = '../API/county';
+var subcountyURL = '../API/subcounty';
+var partnerURL = '../API/partner';
+var userURL = '../API/user';
 
 $(function () {
-    //Gets installed sites
-    $.getJSON(siteURL, function (data) {
-        var siteData = []
-        $.each(data, function (i, v) {
-            siteData[i] = [v[''], v['facility_id'], v['version'], v['setup_date'], v['active_patients'], v['contact_name'], v['contact_phone']]
-        });
-        $('#sites_listing').DataTable({
+//     Gets installed sites  
+//    $.getJSON(siteURL, function (data) {
+//        var siteData = [];
+//        $.each(data, function (i, v) {
+//            siteData[i] = [v['facility_id'], v['version'], v['setup_date'], v['active_patients'], v['contact_name'], v['contact_phone'], v['']];
+//        });
+//        var table = $('#sites_listing').DataTable({
+//
+//            data: siteData,
+//            responsive: true,
+//            "columnDefs": [{
+//                    "targets": -1,
+//                    "data": null,
+//                    "render": function (facility_id, type, full, meta) {
+//                        return '<a href="Sites/pages/update_site' + facility_id + '"><i class="fa fa-pencil"></i></a>';
+//                    }}]
+//             "defaultContent": "<button>Edit</button>"
+//        });
+//
+//        $('#sites_listing tbody').on('click', 'tr', function () {
+////            var rowData = table.row(this).data();
+//            // ... do something with `rowData`
+//            var data = table.row($(this).parents('tr')).data();
+//            alert(data[0] + "'s salary is: " + data[ 5 ]);
+////            alert(rowData)
+////            console.log(rowData);
+//        });
+//    });
 
-            data: siteData,
-            'columnDefs': [{
-                    'targets': 0,
-                    'searchable': false,
-                    'orderable': true,
-                    'className': 'dt-body-center',
-                    'render': function (data, type, full, meta) {
-                        return '<input type="checkbox" name="facility_id[]" value="' + $('<div/>').text(data).html() + '">';
-                    }
-                }],
-            'order': [[1, 'asc']]
-            ,
-            dom: 'Bfrtip',
-            select: 'single', // enable single row selection
-            responsive: true, // enable responsiveness
-            altEditor: true, // Enable altEditor ****
-            buttons: [
-                {
-                    extend: 'selected',
-                    text: 'Edit',
-                    name: 'edit'
-                }]
-        });
-
-    });
-
-    //Gets all facilities
     $.getJSON(facilityURL, function (data) {
         $("#facility option").remove();
         $("#facility").append($("<option value=''>Select Facility</option>"));
@@ -87,8 +81,8 @@ $(function () {
 
     //Add mflcode when facility is selected
     $('#facility').on('change', function () {
-        $('#mflcode').val($(this).find(':selected').attr('mflcode'))
-        $('#subcounty').val($(this).find(':selected').attr('subcountyid'))
+        $('#mflcode').val($(this).find(':selected').attr('mflcode'));
+        $('#subcounty').val($(this).find(':selected').attr('subcountyid'));
         $("#county").val($('#subcounty').find(':selected').attr('countyid'));
         $("#partner").val($(this).find(':selected').attr('partnerid'));
     });
@@ -109,6 +103,30 @@ $(function () {
     $('#update_date').datepicker({
     });
 
-
+    //Gets all installed sites
+    $('#sites_listing').DataTable();
 
 });
+function deleteSite(id)
+{
+    if (confirm('Are you sure delete this data?'))
+    {
+        // ajax delete data from database
+        $.ajax({
+            url: "<?php echo base_url('Admin/Sites/deleteSite')?>/" + id,
+            type: "POST",
+            dataType: "JSON",
+            success: function (data)
+            {
+                console.log(data);
+                location.reload();
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                console.log(data);
+                alert('Error deleting data');
+            }
+        });
+
+    }
+}
