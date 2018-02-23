@@ -11,7 +11,12 @@
 			if($count == 0){
 				$thead .= "<th>".ucwords($key)."</th>";
 			}
-			$tbody .= "<td>".ucwords($value)."</td>";
+			//Body
+			if(gettype($value) == 'string'){
+				$tbody .= "<td>".ucwords($value)."</td>";
+			}else{
+				$tbody .= "<td>".number_format($value)."</td>";
+			}
 		}
 		$tbody .= "</tr>";
 		$count++;
@@ -23,31 +28,31 @@
 	$dyn_table .= "</table>";
  	echo $dyn_table;
 ?>
+<input type="hidden" data-filters="<?php echo $selectedfilters; ?>" id="<?php echo $chart_name; ?>_filters"/>
 
 <script type="text/javascript">
 	$(function() {
 	    /*DataTable*/
 	    $('.distribution_table').DataTable({
 	    	"bDestroy": true,
-	    	"order": [[ 1, "desc" ]],
+	    	"order": [[ 4, "desc" ]],
 	    	"pagingType": "full_numbers",
-
 		   	dom: 'Bfrtip',
 	        buttons: [
 	            'copy', 
 	            {
 	            	extend: 'csvHtml5',
-	            	filename: 'Facilities Patient Numbers By Service Report',
+	            	filename: '<?php echo $chart_title; ?>',
 	            	title: ''
 	            }, 
 	            {
 	            	extend: 'excelHtml5',
-	            	filename: 'Facilities Patient Numbers By Service Report',
+	            	filename: '<?php echo $chart_title; ?>',
 	            	title: ''
 	            },
 	            {
 	            	extend: 'pdfHtml5',
-	            	filename: 'Facilities Patient Numbers By Service Report',
+	            	filename: '<?php echo $chart_title; ?>',
 	            	title: ''
 	            },
 	            {

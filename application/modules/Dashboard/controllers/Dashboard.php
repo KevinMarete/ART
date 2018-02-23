@@ -74,6 +74,14 @@ class Dashboard extends MX_Controller {
 			$main_data = $this->trend_model->get_patients_regimen($filters);
 		}else if($chartname == 'commodity_month_stock_chart'){
 			$main_data = $this->trend_model->get_commodity_month_stock($filters);
+		}else if($chartname == 'county_patient_distribution_chart'){
+			$main_data = $this->county_model->get_county_patient_distribution($filters);
+		}else if($chartname == 'county_patient_distribution_table'){
+			$main_data = $this->county_model->get_county_patient_distribution_numbers($filters);
+		}else if($chartname == 'subcounty_patient_distribution_chart'){
+			$main_data = $this->subcounty_model->get_subcounty_patient_distribution($filters);
+		}else if($chartname == 'subcounty_patient_distribution_table'){
+			$main_data = $this->subcounty_model->get_subcounty_patient_distribution_numbers($filters);
 		}
 		return $main_data;
 	}

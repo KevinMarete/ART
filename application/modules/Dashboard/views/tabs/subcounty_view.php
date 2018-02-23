@@ -11,7 +11,7 @@
 						<div id="subcounty_patient_distribution_chart"></div>
 					</div>
 					<div class="chart-notes">
-						Filtered By: <span class="subcounty_patient_distribution_heading"></span>
+						<span class="subcounty_patient_distribution_chart_heading"></span>
 					</div>
 				</div>
 		 	</div>
@@ -21,13 +21,13 @@
 		  		<!--subcounty_patient_distribution_table-->
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
-						Subcounty
+						Subcounty Patient Distibution (By Facilties and AgeGroup)
 					</div>
 					<div class="chart-stage">
 						<div id="subcounty_patient_distribution_table"></div>
 					</div>
 					<div class="chart-notes">
-						Filtered By: <span class="subcounty_patient_distribution_heading"></span>
+						<span class="subcounty_patient_distribution_table_heading"></span>
 					</div>
 				</div>
 		 	</div>

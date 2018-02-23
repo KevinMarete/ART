@@ -1,5 +1,6 @@
 <!--chart_container-->
 <div id="<?php echo $chart_name; ?>_container"></div>
+<input type="hidden" data-filters="<?php echo $selectedfilters; ?>" id="<?php echo $chart_name; ?>_filters"/>
 
 <!--highcharts_configuration-->
 <script type="text/javascript">
@@ -45,16 +46,17 @@
             },
             plotOptions: {
                 column: {
-                    pointPadding: 0.2,
+                    pointPadding: 0.1,
                     borderWidth: 0,
                     colorByPoint: true,
                     dataLabels: {
-                        enabled: true
+                        enabled: true,
+                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'black'
                     }
                 },
             },
             series: [{
-                name: '<?php echo $chart_xaxis_title; ?>',
+                showInLegend: false, 
                 colorByPoint: true,
                 data: <?php echo $chart_series_data; ?>
             }],

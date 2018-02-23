@@ -20,7 +20,6 @@ class Summary_model extends CI_Model {
                 }
 			}
 		}
-		$this->db->where_in('regimen_service', 'ART');
 		$this->db->group_by('period');
 		$this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
 		$query = $this->db->get('dsh_patient');

@@ -1,22 +1,33 @@
 var countyURL = 'API/county'
+var subcountyURL = 'API/subcounty'
+var facilityURL = 'API/facility'
 var drugListURL = 'API/drug/list'
 var regimenListURL = 'API/regimen/list'
 var chartURL = 'Dashboard/get_chart'
 var LatestDateURL = 'Dashboard/get_default_period'
 var mainFilterURLs = {
     'summary': [{'link': countyURL, 'type': 'county' }], 
-    'trend': [{'link': countyURL, 'type': 'county'}]
+    'trend': [{'link': countyURL, 'type': 'county'}],
+    'county': [{'link': countyURL, 'type': 'county'}],
+    'subcounty': [{'link': subcountyURL, 'type': 'sub_county'}],
+    'facility': [{'link': facilityURL, 'type': 'facility'}],
 }
 var tabFiltersURLs = {
     'summary': [{'link': drugListURL, 'type': 'drug', 'filters': ['#national_mos_chart_filter']}],
     'trend': [
         {'link': drugListURL, 'type': 'drug', 'filters': ['#commodity_consumption_chart_filter', '#commodity_month_stock_chart_filter']}, 
         {'link': regimenListURL, 'type': 'regimen', 'filters': ['#patients_regimen_chart_filter']}
-    ]
+    ],
+    'county': [],
+    'subcounty': [],
+    'facility': []
 }
 var charts = {
     'summary': ['patient_scaleup_chart', 'patient_services_chart', 'national_mos_chart'],
-    'trend': ['commodity_consumption_chart', 'patients_regimen_chart', 'commodity_month_stock_chart']
+    'trend': ['commodity_consumption_chart', 'patients_regimen_chart', 'commodity_month_stock_chart'],
+    'county': ['county_patient_distribution_chart', 'county_patient_distribution_table'],
+    'subcounty': ['subcounty_patient_distribution_chart', 'subcounty_patient_distribution_table'],
+    'facility': ['facility_patient_distribution_chart', 'facility_patient_distribution_table','facility_regimen_distribution_chart','facility_commodity_consumption_chart']
 }
 var filters = {}
 var tabName = 'summary'
@@ -83,27 +94,29 @@ function setMainFilter(tabName){
 }
 
 function setTabFilter(tabName){
-    $.each(tabFiltersURLs[tabName], function(key, value){
-        $.ajax({
-            url: value.link,
-            datatype: 'JSON',
-            global: false,
-            async: false,
-            success: function(data){
-                $.each(value.filters, function(index, filterID){
-                    //Create multiselect box
-                    CreateSelectBox(filterID, '100%')
-                    //Add data to selectbox
-                    $(filterID+ " option").remove();
-                    $.each(data, function(i, v) {
-                        $(filterID).append($("<option value='" + v.name + "'>" + v.name.toUpperCase() + "</option>"));
+    if(tabFiltersURLs[tabName].length !== 0){
+        $.each(tabFiltersURLs[tabName], function(key, value){
+            $.ajax({
+                url: value.link,
+                datatype: 'JSON',
+                global: false,
+                async: false,
+                success: function(data){
+                    $.each(value.filters, function(index, filterID){
+                        //Create multiselect box
+                        CreateSelectBox(filterID, '100%')
+                        //Add data to selectbox
+                        $(filterID+ " option").remove();
+                        $.each(data, function(i, v) {
+                            $(filterID).append($("<option value='" + v.name + "'>" + v.name.toUpperCase() + "</option>"));
+                        });
+                        $(filterID).multiselect('rebuild');
+                        $(filterID).data('filter_type', value.type);
                     });
-                    $(filterID).multiselect('rebuild');
-                    $(filterID).data('filter_type', value.type);
-                });
-            }
+                }
+            });
         });
-    });
+    }
 }
 
 function CreateSelectBox(elementID, width){
@@ -141,13 +154,15 @@ function LoadSpinner(divID){
 
 function TabFilterHandler(e){
     var filtername = $(e.target).attr('href')
-    var filters = {}
-    //Set tabName
-    tabName = filtername.replace('#', '')
-    //Set default period
-    setDefaultPeriod(LatestDateURL)
-    //Load selected tab charts
-    LoadTabContent(tabName)
+    if(filtername !== '#'){
+        var filters = {}
+        //Set tabName
+        tabName = filtername.replace('#', '')
+        //Set default period
+        setDefaultPeriod(LatestDateURL)
+        //Load selected tab charts
+        LoadTabContent(tabName)
+    }
 }
 
 function FilterBtnHandler(e){
