@@ -27,21 +27,19 @@
 						<li><a href="#subcounty" aria-controls="subcounty" role="tab" data-toggle="tab">Subcounty</a></li>
 					</ul>
 				</li>
-	          	<li><a href="#facility" aria-controls="facility" role="tab" data-toggle="tab">Facilities</a></li>
-	          	<li class="dropdown">
+				<li><a href="#facility" aria-controls="facility" role="tab" data-toggle="tab">Facilities</a></li>
+				<li><a href="#partner" aria-controls="partner" role="tab" data-toggle="tab">Partners</a></li>
+				<li><a href="#regimen" aria-controls="regimen" role="tab" data-toggle="tab">Regimen</a></li>
+				<li class="dropdown">
 	          		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-	          			Partners
+	          			ADT
 	          			<span class="caret"></span>
 	          		</a>
 	          		<ul class="dropdown-menu">
-						<li><a href="#partner_summary" aria-controls="partner" role="tab" data-toggle="tab">Summary</a></li>
+						<li><a href="#adt_sites" aria-controls="adt_sites" role="tab" data-toggle="tab">Sites</a></li>
+						<li><a href="#adt_reports" aria-controls="adt_reports" role="tab" data-toggle="tab">Reports</a></li>
 					</ul>
 				</li>
-
-				<li><a href="#commodity" aria-controls="commodity" role="tab" data-toggle="tab">Regimen</a></li>
-
-	          	<li><a href="#drug" aria-controls="drug" role="tab" data-toggle="tab" style="display: none">drug</a></li>
-	          	<li><a href="#adt_site" aria-controls="adt_site" role="tab" data-toggle="tab">ADT Sites</a></li>
 	          	<li>
 	          		<a href="<?php echo base_url().'admin'; ?>" target="_blank" class="btn btn-success">
 	          			<span class="glyphicon glyphicon-log-in"></span> Login

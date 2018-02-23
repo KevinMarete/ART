@@ -1,5 +1,6 @@
 <!--chart_container-->
 <div id="<?php echo $chart_name; ?>_container"></div>
+<input type="hidden" data-filters="<?php echo $selectedfilters; ?>" id="<?php echo $chart_name; ?>_filters"/>
 
 <!--highcharts_configuration-->
 <script type="text/javascript">

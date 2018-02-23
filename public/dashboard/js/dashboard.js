@@ -1,6 +1,7 @@
 var countyURL = 'API/county'
 var subcountyURL = 'API/subcounty'
 var facilityURL = 'API/facility'
+var partnerURL = 'API/partner'
 var drugListURL = 'API/drug/list'
 var regimenListURL = 'API/regimen/list'
 var chartURL = 'Dashboard/get_chart'
@@ -11,6 +12,7 @@ var mainFilterURLs = {
     'county': [{'link': countyURL, 'type': 'county'}],
     'subcounty': [{'link': subcountyURL, 'type': 'sub_county'}],
     'facility': [{'link': facilityURL, 'type': 'facility'}],
+    'partner': [{'link': partnerURL, 'type': 'partner'}]
 }
 var tabFiltersURLs = {
     'summary': [{'link': drugListURL, 'type': 'drug', 'filters': ['#national_mos_chart_filter']}],
@@ -20,14 +22,16 @@ var tabFiltersURLs = {
     ],
     'county': [],
     'subcounty': [],
-    'facility': []
+    'facility': [],
+    'partner': []
 }
 var charts = {
     'summary': ['patient_scaleup_chart', 'patient_services_chart', 'national_mos_chart'],
     'trend': ['commodity_consumption_chart', 'patients_regimen_chart', 'commodity_month_stock_chart'],
     'county': ['county_patient_distribution_chart', 'county_patient_distribution_table'],
     'subcounty': ['subcounty_patient_distribution_chart', 'subcounty_patient_distribution_table'],
-    'facility': ['facility_patient_distribution_chart', 'facility_patient_distribution_table','facility_regimen_distribution_chart','facility_commodity_consumption_chart']
+    'facility': ['facility_patient_distribution_chart', 'facility_patient_distribution_table','facility_regimen_distribution_chart','facility_commodity_consumption_chart'],
+    'partner': ['partner_patient_distribution_chart', 'partner_patient_distribution_table']
 }
 var filters = {}
 var tabName = 'summary'

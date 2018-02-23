@@ -87,11 +87,11 @@ $config['commodity_month_stock_chart_filters_default'] = array(
 	'drug' => 'Tenofovir/Lamivudine/Efavirenz (TDF/3TC/EFV) 300/300/600mg FDC Tabs'
 );
 
-/*county_patient_distribution_chart*/
+//county_patient_distribution_chart
 $config['county_patient_distribution_chart_chartview'] = 'charts/column_view';
 $config['county_patient_distribution_chart_title'] = 'County Patient (ART) Numbers';
 $config['county_patient_distribution_chart_yaxis_title'] = 'No. of Patients';
-$config['county_patient_distribution_chart_source'] = 'Source: www.nascop.org';
+$config['county_patient_distribution_chart_source'] = 'Source: www.commodities.nascop.org';
 $config['county_patient_distribution_chart_has_drilldown'] = FALSE;
 $config['county_patient_distribution_chart_filters'] = array('data_year', 'data_month', 'county', 'regimen_service');
 $config['county_patient_distribution_chart_filters_default'] = array(
@@ -100,11 +100,11 @@ $config['county_patient_distribution_chart_filters_default'] = array(
     'regimen_service' => 'ART' 
 );
 
-/*county_patient_distribution_table*/
+//county_patient_distribution_table
 $config['county_patient_distribution_table_chartview'] = 'charts/table_view';
 $config['county_patient_distribution_table_title'] = 'County Patient Distibution (By Facilties and AgeGroup)';
 $config['county_patient_distribution_table_yaxis_title'] = 'No. of Patients';
-$config['county_patient_distribution_table_source'] = 'Source: www.nascop.org';
+$config['county_patient_distribution_table_source'] = 'Source: www.commodities.nascop.org';
 $config['county_patient_distribution_table_has_drilldown'] = FALSE;
 $config['county_patient_distribution_table_filters'] = array('data_year', 'data_month', 'county', 'regimen_service');
 $config['county_patient_distribution_table_filters_default'] = array(
@@ -113,28 +113,105 @@ $config['county_patient_distribution_table_filters_default'] = array(
     'regimen_service' => 'ART'  
 );
 
-/*subcounty_patient_distribution_chart*/
+//subcounty_patient_distribution_chart
 $config['subcounty_patient_distribution_chart_chartview'] = 'charts/column_view';
 $config['subcounty_patient_distribution_chart_title'] = 'Subcounty Patient (ART) Numbers';
 $config['subcounty_patient_distribution_chart_yaxis_title'] = 'No. of Patients';
-$config['subcounty_patient_distribution_chart_source'] = 'Source: www.nascop.org';
+$config['subcounty_patient_distribution_chart_source'] = 'Source: www.commodities.nascop.org';
 $config['subcounty_patient_distribution_chart_has_drilldown'] = FALSE;
-$config['subcounty_patient_distribution_chart_filters'] = array('data_year', 'data_month', 'sub_county');
+$config['subcounty_patient_distribution_chart_filters'] = array('data_year', 'data_month', 'sub_county', 'regimen_service');
 $config['subcounty_patient_distribution_chart_filters_default'] = array(
     'data_year' => $config['data_year'], 
     'data_month' => $config['data_month'],
     'regimen_service' => 'ART'  
 );
 
-/*subcounty_patient_distribution_table*/
+//subcounty_patient_distribution_table
 $config['subcounty_patient_distribution_table_chartview'] = 'charts/table_view';
 $config['subcounty_patient_distribution_table_title'] = 'Subcounty Patient Distibution (By Facilties and AgeGroup)';
 $config['subcounty_patient_distribution_table_yaxis_title'] = 'No. of Patients';
-$config['subcounty_patient_distribution_table_source'] = 'Source: www.nascop.org';
+$config['subcounty_patient_distribution_table_source'] = 'Source: www.commodities.nascop.org';
 $config['subcounty_patient_distribution_table_has_drilldown'] = FALSE;
-$config['subcounty_patient_distribution_table_filters'] = array('data_year', 'data_month', 'sub_county');
+$config['subcounty_patient_distribution_table_filters'] = array('data_year', 'data_month', 'sub_county', 'regimen_service');
 $config['subcounty_patient_distribution_table_filters_default'] = array(
     'data_year' => $config['data_year'], 
     'data_month' => $config['data_month'],
     'regimen_service' => 'ART'   
+);
+
+//facility_patient_distribution_chart
+$config['facility_patient_distribution_chart_chartview'] = 'charts/stacked_column_view';
+$config['facility_patient_distribution_chart_title'] = 'Facility Patient Numbers';
+$config['facility_patient_distribution_chart_yaxis_title'] = 'No. of Patients';
+$config['facility_patient_distribution_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['facility_patient_distribution_chart_has_drilldown'] = FALSE;
+$config['facility_patient_distribution_chart_filters'] = array('data_year', 'data_month', 'facility', 'regimen_service');
+$config['facility_patient_distribution_chart_filters_default'] = array(
+	'data_year' => $config['data_year'], 
+    'data_month' => $config['data_month'],
+	'regimen_service' => 'ART'
+);
+
+//facility_regimen_distribution_chart
+$config['facility_regimen_distribution_chart_chartview'] = 'charts/drilldown_column_view';
+$config['facility_regimen_distribution_chart_title'] = 'Facility Patient Numbers';
+$config['facility_regimen_distribution_chart_yaxis_title'] = 'No. of Patients';
+$config['facility_regimen_distribution_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['facility_regimen_distribution_chart_has_drilldown'] = TRUE;
+$config['facility_regimen_distribution_chart_filters'] = array('data_year', 'data_month', 'facility', 'regimen_service');
+$config['facility_regimen_distribution_chart_filters_default'] = array(
+	'data_year' => $config['data_year'], 
+    'data_month' => $config['data_month'],
+	'facility' => 'ahero county hospital'
+);
+
+//facility_commodity_consumption_chart
+$config['facility_commodity_consumption_chart_chartview'] = 'charts/line_view';
+$config['facility_commodity_consumption_chart_title'] = 'Commodity Consumption in the Facility';
+$config['facility_commodity_consumption_chart_yaxis_title'] = 'No. of Packets';
+$config['facility_commodity_consumption_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['facility_commodity_consumption_chart_has_drilldown'] = FALSE;
+$config['facility_commodity_consumption_chart_filters'] = array('data_date', 'facility', 'drug');
+$config['facility_commodity_consumption_chart_filters_default'] = array(
+    'data_date' => $config['data_month'],
+    'facility' => 'ahero county hospital'
+);
+
+//facility_patient_distribution_table
+$config['facility_patient_distribution_table_chartview'] = 'charts/table_view';
+$config['facility_patient_distribution_table_title'] = 'Facility Patient Numbers';
+$config['facility_patient_distribution_table_yaxis_title'] = 'No. of Patients';
+$config['facility_patient_distribution_table_source'] = 'Source: www.commodities.nascop.org';
+$config['facility_patient_distribution_table_has_drilldown'] = FALSE;
+$config['facility_patient_distribution_table_filters'] = array('county','data_year', 'data_month', 'facility', 'regimen_service');
+$config['facility_patient_distribution_table_filters_default'] = array(
+    'data_year' => $config['data_year'], 
+    'data_month' => $config['data_month'],
+	'regimen_service' => 'ART'
+);
+
+//partner_patient_distribution_chart
+$config['partner_patient_distribution_chart_chartview'] = 'charts/column_view';
+$config['partner_patient_distribution_chart_title'] = 'Partner Patient Numbers';
+$config['partner_patient_distribution_chart_yaxis_title'] = 'No. of Patients';
+$config['partner_patient_distribution_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['partner_patient_distribution_chart_has_drilldown'] = FALSE;
+$config['partner_patient_distribution_chart_filters'] = array('data_year', 'data_month', 'partner', 'regimen_service');
+$config['partner_patient_distribution_chart_filters_default'] = array(
+    'data_year' => $config['data_year'], 
+    'data_month' => $config['data_month'],
+	'regimen_service' => 'ART'
+);
+
+//partner_patient_distribution_table
+$config['partner_patient_distribution_table_chartview'] = 'charts/table_view';
+$config['partner_patient_distribution_table_title'] = 'Partner Patient Numbers';
+$config['partner_patient_distribution_table_yaxis_title'] = 'No. of Patients';
+$config['partner_patient_distribution_table_source'] = 'Source: www.commodities.nascop.org';
+$config['partner_patient_distribution_table_has_drilldown'] = FALSE;
+$config['partner_patient_distribution_table_filters'] = array('data_year', 'data_month', 'partner', 'regimen_service');
+$config['partner_patient_distribution_table_filters_default'] = array(
+    'data_year' => $config['data_year'], 
+    'data_month' => $config['data_month'],
+	'regimen_service' => 'ART'
 );

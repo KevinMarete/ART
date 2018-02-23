@@ -25,13 +25,13 @@
 		<!--facility-tab-->
 		<?php $this->load->view('tabs/facility_view'); ?>
 		<!--partner_summary-tab-->
-		<?php $this->load->view('tabs/partner_summary_view'); ?>
+		<?php $this->load->view('tabs/partner_view'); ?>
 		<!-- commodities tab -->
-		<?php $this->load->view('tabs/commodities_view'); ?>
+		<?php //$this->load->view('tabs/commodities_view'); ?>
 		<!-- Drug tab -->
-		<?php $this->load->view('tabs/drug_view'); ?>
+		<?php //$this->load->view('tabs/drug_view'); ?>
 		<!--site-tab-->
-		<?php $this->load->view('tabs/adt_site_view'); ?>
+		<?php //$this->load->view('tabs/adt_site_view'); ?>
 	</div>
 	<!--footer-->
 	<hr>
