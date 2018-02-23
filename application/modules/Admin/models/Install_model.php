@@ -6,9 +6,6 @@ class Install_model extends CI_Model {
 
     //Get installed sites
     public function read() {
-//		$query = $this->db->get('tbl_install');
-//		return $query->result();
-
         $this->db->select('tbl_install.id,tbl_facility.name,tbl_install.version,tbl_install.setup_date,tbl_install.active_patients,tbl_install.contact_name,tbl_install.contact_phone');
         $this->db->from('tbl_install');
         $this->db->join('tbl_facility', 'tbl_install.facility_id=tbl_facility.id', 'inner');
@@ -20,7 +17,7 @@ class Install_model extends CI_Model {
             return FALSE;
         }
     }
-
+    //function add site
     public function insert($data) {
         $this->db->insert('tbl_install', $data);
         $count = $this->db->affected_rows();
@@ -32,18 +29,29 @@ class Install_model extends CI_Model {
         }
         return $data;
     }
-
+    //function get site information
     function getSiteInfo($id) {
-        $this->db->select('*');
+        $this->db->select('tbl_install.id as install_id,tbl_install.version,tbl_install.setup_date,tbl_install.upgrade_date,tbl_install.comments,'
+                . 'tbl_install.contact_name,tbl_install.contact_phone,tbl_install.emrs_used,tbl_install.active_patients,tbl_install.is_internet,'
+                . 'tbl_install.is_usage,tbl_install.user_id,tbl_facility.name,tbl_facility.mflcode,tbl_facility.category,tbl_facility.subcounty_id,tbl_subcounty.id,'
+                . 'tbl_subcounty.name as subcounty_name,tbl_user.name as user_name,tbl_county.name as county_name');
         $this->db->from('tbl_install');
-        $this->db->where('id', $id);
+        $this->db->join('tbl_facility', 'tbl_install.facility_id=tbl_facility.id');
+        $this->db->join('tbl_subcounty', 'tbl_facility.subcounty_id=tbl_subcounty.id');
+        $this->db->join('tbl_county', 'tbl_subcounty.county_id=tbl_county.id');
+        $this->db->join('tbl_user', 'tbl_user.id=tbl_install.user_id');
+        $this->db->where('tbl_install.id', $id);
         $query = $this->db->get();
-
-        return $query->result();
+        $result = $query->result();
+        if ($result) {
+            return $result;
+        } else {
+            return FALSE;
+        }
     }
-
+    //function update
     public function update($id, $data) {
-        $this->db->update('tbl_install', $data, array('id' => $id));
+        $this->db->update('tbl_install', $data, array('id' =>$id));
         $count = $this->db->affected_rows();
         if ($count > 0) {
             $data['status'] = TRUE;

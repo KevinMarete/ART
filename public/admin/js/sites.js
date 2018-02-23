@@ -107,23 +107,23 @@ $(function () {
     $('#sites_listing').DataTable();
 
 });
+
 function deleteSite(id)
 {
-    if (confirm('Are you sure delete this data?'))
+    if (confirm('Are you sure you want to delete this data ?'))
     {
         // ajax delete data from database
         $.ajax({
-            url: "<?php echo base_url('Admin/Sites/deleteSite')?>/" + id,
+            url: "<?php echo base_url('Admin/Sites/delete_site')?>/"+id,
             type: "POST",
             dataType: "JSON",
             success: function (data)
             {
-                console.log(data);
+//                console.log(data);
                 location.reload();
             },
-            error: function (jqXHR, textStatus, errorThrown)
+            error: function (jqXHR,textStatus,errorThrown)
             {
-                console.log(data);
                 alert('Error deleting data');
             }
         });

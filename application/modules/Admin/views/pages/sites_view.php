@@ -181,8 +181,8 @@
                                             <td><?= $Inst_sites->contact_name ?></td>
                                             <td><?= $Inst_sites->contact_phone ?></td>                                        
                                             <td class="center">
-                                                <a class="button btn-sm btn-info updateSite" href="<?php echo base_url() . 'Admin/Sites/updateSite/' . $Inst_sites->id; ?>"><i class="fa fa-pencil"></i></a>
-                                                <a class="button btn-sm btn-danger" onclick="deleteSite(<?php echo $Inst_sites->id; ?>)"><i class="fa fa-trash"></i></a>
+                                                <a class="button btn-sm btn-info updateSite" href="<?php echo base_url() . 'Admin/Sites/editSite/' . $Inst_sites->id; ?>"><i class="fa fa-pencil"></i></a>
+                                                <a class="button btn-sm btn-danger delete" onclick="deleteSite(<?php echo $Inst_sites->id; ?>)"><i class="fa fa-trash"></i></a>
                                             </td>
                                         </tr>
                                     <?php endforeach ?>
@@ -213,3 +213,27 @@
         <!-- /#page-wrapper -->
 
         <script src="<?php echo base_url() . 'public/admin/js/sites.js'; ?>"></script>
+        <script>
+                                                    function deleteSite(id)
+                                                    {
+                                                        if (confirm('Are you sure you want to delete this data?'))
+                                                        {
+                                                            // ajax delete data from database
+                                                            $.ajax({
+                                                                url: "<?php echo base_url('Admin/Sites/delete_site') ?>/" + id,
+                                                                type: "POST",
+                                                                dataType: "JSON",
+                                                                success: function (data)
+                                                                {
+//                                                                    console.log(data);
+                                                                    location.reload();
+                                                                },
+                                                                error: function (jqXHR, textStatus, errorThrown)
+                                                                {
+                                                                    alert('Error deleting data');
+                                                                }
+                                                            });
+
+                                                        }
+                                                    }
+        </script>

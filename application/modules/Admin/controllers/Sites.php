@@ -27,7 +27,6 @@ class Sites extends MX_Controller {
             'comments' => $this->input->post('category'),
             'contact_name' => $this->input->post('contact_name'),
             'contact_phone' => $this->input->post('contact_phone'),
-//            'emrs_used' => $this->input->post('emrs_used'),
             'emrs_used' => $emrs_used,
             'active_patients' => $this->input->post('active_patients'),
             'is_internet' => $this->input->post('is_internet'),
@@ -37,25 +36,53 @@ class Sites extends MX_Controller {
         );
 
         $result = $this->Install_model->insert($data);
-        if ($result == TRUE) {
-            $this->session->set_flashdata('success', 'Installation Success');
+        if ($result==TRUE) {
+            $this->session->set_flashdata('msg', 'Installation Success');
         } else {
-            $this->session->set_flashdata('err', 'Installation Fail');
+            
         }
 
         redirect('Admin/Sites');
     }
 
     //function update site
-    function updateSite($id = Null) {
+    function editSite($id = Null) {
         $data['content_view'] = 'pages/site_update';
         $data['page_title'] = 'ART Dashboard | Sites';
         $data['getSiteInfo'] = $this->Install_model->getSiteInfo($id);
         $this->load->view('template/template_view', $data);
     }
 
+    //function updateSite
+    function updateSite() {
+        $id = $this->input->post('install_id');
+        $emrs_used = implode(',', $this->input->post('emrs_used'));
+        $data = array(
+            'version' => $this->input->post('version'),
+            'setup_date' => $this->input->post('setup_date'),
+            'upgrade_date' => $this->input->post('update_date'),
+            'comments' => $this->input->post('comments'),
+            'contact_name' => $this->input->post('contact_name'),
+            'contact_phone' => $this->input->post('contact_phone'),
+            'emrs_used' => $emrs_used,
+            'active_patients' => $this->input->post('active_patients'),
+            'is_internet' => $this->input->post('is_internet'),
+            'is_usage' => $this->input->post('is_usage'),
+        );
+
+        $result = $this->Install_model->update($id, $data);
+        if ($result) {
+            redirect('Admin/Sites');
+        } else {
+            return FALSE;
+        }
+    }
+
     //function ajax_delete
-    function deleteSite($id) {
+    function delete_site($id) {
+//        $id = $this->input->post('install_id');
+//        print_r($this->Install_model->delete($id));
+//        die();
         $this->Install_model->delete($id);
         echo json_encode(array("status" => TRUE));
     }
