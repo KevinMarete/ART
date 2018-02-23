@@ -69,6 +69,9 @@ function setDefaultPeriod(URL){
 function setMainFilter(tabName){
     $.each(mainFilterURLs[tabName], function(key, value){
         $.getJSON(value.link, function(data){
+            //Create multiselect box
+            CreateSelectBox("#filter_item", "250px")
+            //Add data to selectbox
             $("#filter_item option").remove();
             $.each(data, function(i, v) {
                 $("#filter_item").append($("<option value='" + v.name + "'>" + v.name.toUpperCase() + "</option>"));
@@ -84,11 +87,12 @@ function setTabFilter(tabName){
         $.ajax({
             url: value.link,
             datatype: 'JSON',
+            global: false,
             async: false,
             success: function(data){
                 $.each(value.filters, function(index, filterID){
                     //Create multiselect box
-                    CreateSelectBox(filterID)
+                    CreateSelectBox(filterID, '100%')
                     //Add data to selectbox
                     $(filterID+ " option").remove();
                     $.each(data, function(i, v) {
@@ -102,15 +106,14 @@ function setTabFilter(tabName){
     });
 }
 
-function CreateSelectBox(elementID){
+function CreateSelectBox(elementID, width){
     $(elementID).val('').multiselect({
         enableCaseInsensitiveFiltering: true,
         enableFiltering: true,
         includeSelectAllOption: true,
         disableIfEmpty: true,
         maxHeight: 300,
-        buttonWidth: '400px',
-        buttonWidth: '100%',
+        buttonWidth: width,
         nonSelectedText: 'None selected'
     });
 }
