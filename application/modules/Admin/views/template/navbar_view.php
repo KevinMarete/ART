@@ -32,7 +32,7 @@
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
                 <li>
-                    <a href="#"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                    <a href="<?php echo base_url().'Admin/home'?>"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                 </li>
                 <li>
                     <a href="<?php echo base_url().'Admin/sites';?>"><i class="fa fa-edit fa-fw"></i> Sites</a>
@@ -44,13 +44,13 @@
                     <a href="#"><i class="fa fa-wrench fa-fw"></i> Settings<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="#">County</a>
+                            <a href="<?php echo base_url('Admin/Settings/County');?>">County</a>
                         </li>
                         <li>
-                            <a href="#">Subcounty</a>
+                            <a href="<?php echo base_url('Admin/Settings/Subcounty');?>">Subcounty</a>
                         </li>
                         <li>
-                            <a href="#">Facility</a>
+                            <a href="<?php echo base_url('Admin/Settings/Facility');?>">Facility</a>
                         </li>
                         <li>
                             <a href="#">Regimen</a>
@@ -59,7 +59,7 @@
                             <a href="#">Drug</a>
                         </li>
                         <li>
-                            <a href="#">User</a>
+                            <a href="<?php echo base_url('Admin/Settings/User');?>">User</a>
                         </li>
                     </ul>
                     <!-- /.nav-second-level -->

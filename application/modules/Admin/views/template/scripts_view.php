@@ -17,4 +17,4 @@
 <!--bootstrap-multiselect-->
 <script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/bootstrap-multiselect/js/bootstrap-multiselect.js';?>"></script>
 <!-- Custom Theme JavaScript -->
-<!--<script src="<?php // echo base_url() . 'public/admin/lib/sbadmin2/dist/js/sb-admin-2.js'; ?>"></script>-->
+<script src="<?php echo base_url() . 'public/admin/lib/sbadmin2/dist/js/sb-admin-2.js'; ?>"></script>

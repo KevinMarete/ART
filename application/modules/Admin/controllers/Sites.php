@@ -7,6 +7,8 @@ class Sites extends MX_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Install_model');
+        $this->load->model('User_model');
+        $this->load->model('Partner_model');
     }
 
     public function index() {
@@ -18,7 +20,7 @@ class Sites extends MX_Controller {
     }
 
     //function install Site
-    function saveSite() {
+    public function saveSite() {
         $emrs_used = implode(',', $this->input->post('emrs_used'));
         $data = array(
             'version' => $this->input->post('version'),
@@ -36,7 +38,7 @@ class Sites extends MX_Controller {
         );
 
         $result = $this->Install_model->insert($data);
-        if ($result==TRUE) {
+        if ($result == TRUE) {
             $this->session->set_flashdata('msg', 'Installation Success');
         } else {
             
@@ -46,15 +48,17 @@ class Sites extends MX_Controller {
     }
 
     //function update site
-    function editSite($id = Null) {
+    public function editSite($id = Null) {
         $data['content_view'] = 'pages/site_update';
         $data['page_title'] = 'ART Dashboard | Sites';
         $data['getSiteInfo'] = $this->Install_model->getSiteInfo($id);
+        $data['assigned_username'] = $this->User_model->get_username();
+        $data['get_partner'] = $this->Partner_model->get_partner();
         $this->load->view('template/template_view', $data);
     }
 
     //function updateSite
-    function updateSite() {
+    public function updateSite() {
         $id = $this->input->post('install_id');
         $emrs_used = implode(',', $this->input->post('emrs_used'));
         $data = array(
@@ -62,12 +66,14 @@ class Sites extends MX_Controller {
             'setup_date' => $this->input->post('setup_date'),
             'upgrade_date' => $this->input->post('update_date'),
             'comments' => $this->input->post('comments'),
+//            'partner' => $this->input->post('partner_id'),
             'contact_name' => $this->input->post('contact_name'),
             'contact_phone' => $this->input->post('contact_phone'),
             'emrs_used' => $emrs_used,
             'active_patients' => $this->input->post('active_patients'),
             'is_internet' => $this->input->post('is_internet'),
             'is_usage' => $this->input->post('is_usage'),
+            'user_id' => $this->input->post('user_id'),
         );
 
         $result = $this->Install_model->update($id, $data);
@@ -79,10 +85,7 @@ class Sites extends MX_Controller {
     }
 
     //function ajax_delete
-    function delete_site($id) {
-//        $id = $this->input->post('install_id');
-//        print_r($this->Install_model->delete($id));
-//        die();
+    public function delete_site($id) {
         $this->Install_model->delete($id);
         echo json_encode(array("status" => TRUE));
     }

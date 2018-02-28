@@ -110,19 +110,21 @@ $(function () {
 
 function deleteSite(id)
 {
-    if (confirm('Are you sure you want to delete this data ?'))
+    if (confirm('Are you sure you want to delete this site?'))
     {
         // ajax delete data from database
         $.ajax({
-            url: "<?php echo base_url('Admin/Sites/delete_site')?>/"+id,
+            url: "Sites/delete_site/" + id,
             type: "POST",
             dataType: "JSON",
             success: function (data)
             {
-//                console.log(data);
+//                                                                    console.log(data);
                 location.reload();
+//                                                                    alert('Deletion Success');
+
             },
-            error: function (jqXHR,textStatus,errorThrown)
+            error: function (jqXHR, textStatus, errorThrown)
             {
                 alert('Error deleting data');
             }

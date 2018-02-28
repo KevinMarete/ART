@@ -1,7 +1,13 @@
 <div id="page-wrapper">
     <div class="row">
-        <div class="col-lg-12">
-            <h3 class="page-header">ADT INSTALLED SITES</h3>
+        <div class="col-lg-4">
+            <h3 class="">ADT INSTALLED SITES</h3>
+        </div>
+        <div class="col-lg-8">
+            <ol class="breadcrumb">
+                <li><a href="<?php echo base_url('Admin/home'); ?>">Dashboard</a></li>
+                <li class="active ">Sites</li>
+            </ol>
             <!-- /.col-lg-12 -->
         </div>
         <!-- /.row -->
@@ -21,7 +27,7 @@
                                     <div class="modal-body">
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <div class="panel panel-default">
+                                                <div class="panel panel-info">
                                                     <div class="panel-heading">
                                                         INSTALLATION/UPGRADE DETAILS
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -158,7 +164,7 @@
                         <div class="panel-body">
                             <table class="table table-striped table-bordered table-hover" id="sites_listing">
                                 <thead>
-                                <th>Site</th>
+                                <th>Site ID</th>
                                 <th>Facility Name</th>
                                 <th>Version</th>
                                 <th>Setup Date</th>
@@ -189,7 +195,7 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th>Site</th>
+                                        <th>Site ID</th>
                                         <th>Facility Name</th>
                                         <th>Version</th>
                                         <th>Setup Date</th>
@@ -211,29 +217,7 @@
             <!-- /.row -->
         </div>
         <!-- /#page-wrapper -->
+    </div>
+</div>
 
         <script src="<?php echo base_url() . 'public/admin/js/sites.js'; ?>"></script>
-        <script>
-                                                    function deleteSite(id)
-                                                    {
-                                                        if (confirm('Are you sure you want to delete this data?'))
-                                                        {
-                                                            // ajax delete data from database
-                                                            $.ajax({
-                                                                url: "<?php echo base_url('Admin/Sites/delete_site') ?>/" + id,
-                                                                type: "POST",
-                                                                dataType: "JSON",
-                                                                success: function (data)
-                                                                {
-//                                                                    console.log(data);
-                                                                    location.reload();
-                                                                },
-                                                                error: function (jqXHR, textStatus, errorThrown)
-                                                                {
-                                                                    alert('Error deleting data');
-                                                                }
-                                                            });
-
-                                                        }
-                                                    }
-        </script>
