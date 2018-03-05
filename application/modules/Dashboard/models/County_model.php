@@ -27,7 +27,7 @@ class County_model extends CI_Model {
 	public function get_county_patient_distribution_numbers($filters){
 		$columns = array();
 
-		$this->db->select("CONCAT(UCASE(SUBSTRING(county, 1, 1)),UPPER(SUBSTRING(county, 2))) name, COUNT(DISTINCT facility) facilities, SUM(IF(age_category='adult', total, NULL)) adult, SUM(IF(age_category='paed', total, NULL)) child, SUM(total) total", FALSE);
+		$this->db->select("county name, COUNT(DISTINCT facility) facilities, SUM(IF(age_category='adult', total, NULL)) adult, SUM(IF(age_category='paed', total, NULL)) child, SUM(total) total", FALSE);
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				$this->db->where_in($category, $filter);

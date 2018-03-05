@@ -84,10 +84,6 @@ class Dashboard extends MX_Controller {
 			$main_data = $this->subcounty_model->get_subcounty_patient_distribution_numbers($filters);
 		}else if($chartname == 'facility_patient_distribution_chart'){
 			$main_data = $this->facility_model->get_facility_patient_distribution($filters);
-		}else if($chartname == 'facility_regimen_distribution_chart'){
-			$main_data = $this->facility_model->get_facility_regimen_distribution($filters);
-		}else if($chartname == 'facility_commodity_consumption_chart'){
-			$main_data = $this->facility_model->get_facility_commodity_consumption($filters);
 		}else if($chartname == 'facility_patient_distribution_table'){
 			$main_data = $this->facility_model->get_facility_patient_distribution_numbers($filters);
 		}else if($chartname == 'partner_patient_distribution_chart'){

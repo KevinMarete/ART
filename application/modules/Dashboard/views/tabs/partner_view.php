@@ -21,8 +21,7 @@
 		  		<!--facility_patient_distribution_table-->
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
-						Partner Patient Distibution (By Facilties and AgeGroup)
-					</div>
+						Partner Patient Distibution (By Facilties and Services)
 					</div>
 					<div class="chart-stage">
 						<div id="partner_patient_distribution_table"></div>

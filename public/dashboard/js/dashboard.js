@@ -30,7 +30,7 @@ var charts = {
     'trend': ['commodity_consumption_chart', 'patients_regimen_chart', 'commodity_month_stock_chart'],
     'county': ['county_patient_distribution_chart', 'county_patient_distribution_table'],
     'subcounty': ['subcounty_patient_distribution_chart', 'subcounty_patient_distribution_table'],
-    'facility': ['facility_patient_distribution_chart', 'facility_patient_distribution_table','facility_regimen_distribution_chart','facility_commodity_consumption_chart'],
+    'facility': ['facility_patient_distribution_chart', 'facility_patient_distribution_table'],
     'partner': ['partner_patient_distribution_chart', 'partner_patient_distribution_table']
 }
 var filters = {}
@@ -49,13 +49,13 @@ $(function() {
     //Clear click Event
     $(".clear_btn").on("click", ClearBtnHandler);
     //Year click event
-    $('.filter-year').on('click', function(){ $("#filter_year").val($(this).data('value')) });
+    $(".filter-year").on("click", function(){ $("#filter_year").val($(this).data("value")) });
     //Month click event
-    $('.filter-month').on('click', function(){ $("#filter_month").val($(this).data('value')) });
+    $(".filter-month").on("click", function(){ $("#filter_month").val($(this).data("value")) });
     //Main filter click event
-    $('#btn_filter').on("click", MainFilterHandler);
+    $("#btn_filter").on("click", MainFilterHandler);
     //Main clear click event 
-    $('#btn_clear').on("click", MainClearHandler);
+    $("#btn_clear").on("click", MainClearHandler);
 });
 
 function LoadTabContent(tabName){
@@ -228,14 +228,14 @@ function getMonth(monthStr){
 function MainFilterHandler(e){
     var filter_year = $("#filter_year").val()
     var filter_month = $("#filter_month").val()
-
+    
     //Add filters to request
     filters['data_year'] = filter_year
     filters['data_month'] = filter_month
     filters['data_date'] = filter_year + '-' + getMonth(filter_month) + '-01'
 
     if($("#filter_item").val() != null){
-        filters[$("#filter_item").data('filter_type')] = $("#filter_item").val()
+        filters[$("#filter_item").data("filter_type")] = $("#filter_item").val()
     }
 
     if(filters['data_year'] != '' || filters['data_month'] != '')
@@ -258,7 +258,7 @@ function MainFilterHandler(e){
 
 function MainClearHandler(e){
     //Clear filters
-    var filters = {}
+    filters = {}
     //Get default month and year
     $.getJSON(LatestDateURL, function(data){
         //Set hidden values

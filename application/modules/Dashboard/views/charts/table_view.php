@@ -9,7 +9,7 @@
 		foreach ($row_data as $key => $value) {
 			//Header
 			if($count == 0){
-				$thead .= "<th>".ucwords($key)."</th>";
+				$thead .= "<th>".strtoupper(str_ireplace('_', ' ', $key))."</th>";
 			}
 			//Body
 			if(gettype($value) == 'string'){
@@ -35,10 +35,11 @@
 	    /*DataTable*/
 	    $('.distribution_table').DataTable({
 	    	"bDestroy": true,
-	    	"order": [[ 4, "desc" ]],
-	    	"pagingType": "full_numbers",
-		   	dom: 'Bfrtip',
-	        buttons: [
+			"pagingType": "full_numbers",
+			"ordering": false,
+			"responsive": true,
+		   	"dom": 'Bfrtip',
+	        "buttons": [
 	            'copy', 
 	            {
 	            	extend: 'csvHtml5',
@@ -51,7 +52,8 @@
 	            	title: ''
 	            },
 	            {
-	            	extend: 'pdfHtml5',
+					extend: 'pdfHtml5',
+					orientation: 'landscape',
 	            	filename: '<?php echo $chart_title; ?>',
 	            	title: ''
 	            },
@@ -60,6 +62,6 @@
 	            	title: ''
 	            }
 	        ]
-	    });
+		});
 	});
 </script>
