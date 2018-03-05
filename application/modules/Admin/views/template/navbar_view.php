@@ -6,7 +6,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="<?php echo base_url().'Admin/home'?>">ART Dashboard v1.0</a>
+        <a class="navbar-brand" href="<?php echo base_url() . 'Admin/home' ?>">ART Dashboard v1.0</a>
     </div>
     <!-- /.navbar-header -->
 
@@ -19,7 +19,7 @@
                 <li><a href="#"><i class="fa fa-user fa-fw"></i> Profile</a>
                 </li>
                 <li class="divider"></li>
-                <li><a href="<?php echo base_url().'Admin'; ?>"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                <li><a href="<?php echo base_url() . 'Admin'; ?>"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                 </li>
             </ul>
             <!-- /.dropdown-user -->
@@ -32,34 +32,58 @@
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
                 <li>
-                    <a href="<?php echo base_url().'Admin/home'?>"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                    <a href="<?php echo base_url() . 'Admin/home' ?>"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                 </li>
                 <li>
-                    <a href="<?php echo base_url().'Admin/sites';?>"><i class="fa fa-edit fa-fw"></i> Sites</a>
+                    <a href="<?php echo base_url() . 'Admin/sites'; ?>"><i class="fa fa-edit fa-fw"></i> Sites</a>
                 </li>
                 <li>
                     <a href="#"><i class="fa fa-files-o fa-fw"></i> Backups</a>
                 </li>
                 <li>
                     <a href="#"><i class="fa fa-wrench fa-fw"></i> Settings<span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
+                    <ul class="nav nav-second-level" id="list">
                         <li>
-                            <a href="<?php echo base_url('Admin/Settings/County');?>">County</a>
+                            <a href="<?php echo base_url('Admin/Settings/County'); ?>">County</a>
                         </li>
                         <li>
-                            <a href="<?php echo base_url('Admin/Settings/Subcounty');?>">Subcounty</a>
+                            <a href="<?php echo base_url('Admin/Settings/Subcounty'); ?>">Subcounty</a>
                         </li>
                         <li>
-                            <a href="<?php echo base_url('Admin/Settings/Facility');?>">Facility</a>
+                            <a href="<?php echo base_url('Admin/Settings/Facility'); ?>">Facility</a>
                         </li>
                         <li>
-                            <a href="#">Regimen</a>
+                            <a href="<?php echo base_url('Admin/Settings/Generic'); ?>">Generic</a>
                         </li>
                         <li>
-                            <a href="#">Drug</a>
+                            <a href="<?php echo base_url('Admin/Settings/Formulation'); ?>">Formulation</a>
                         </li>
                         <li>
-                            <a href="<?php echo base_url('Admin/Settings/User');?>">User</a>
+                            <a href="<?php echo base_url('Admin/Settings/Service'); ?>">Service</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo base_url('Admin/Settings/Category'); ?>">Category</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo base_url('Admin/Settings/Line'); ?>">Line</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo base_url('Admin/Settings/Status'); ?>">Status</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo base_url('Admin/Settings/Change_reason'); ?>">Change Reason</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo base_url('Admin/Settings/Purpose'); ?>">Purpose</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo base_url('Admin/Settings/Regimen'); ?>">Regimen</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo base_url('Admin/Settings/Drug'); ?>">Drug</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo base_url('Admin/Settings/User'); ?>">User</a>
                         </li>
                     </ul>
                     <!-- /.nav-second-level -->
@@ -73,3 +97,6 @@
     </div>
     <!-- /.navbar-static-side -->
 </nav>
+
+<!---script to sort settings nav links alphabetically--->
+<script src="<?php echo base_url() . 'public/admin/js/settings_sort_nav_links.js'; ?>"></script>

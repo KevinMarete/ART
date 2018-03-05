@@ -7,11 +7,11 @@ class Facility_model extends CI_Model {
     var $table = 'tbl_facility';
     var $column_order = array('tbl_facility.name', 'tbl_facility.mflcode');
     var $column_search = array('tbl_facility.name', 'tbl_facility.mflcode');
-    var $order = array('tbl_facility.id' => 'asc');
+    var $order = array('tbl_facility.id' => 'desc');
 
     private function _get_datatables_query() {
-        $this->db->select('tbl_facility.id as facility_id,tbl_facility.name,tbl_facility.mflcode,tbl_subcounty.name as subcounty_name,'
-                . 'tbl_partner.name as partner_name');
+        $this->db->select('tbl_facility.id as facility_id,tbl_facility.name,tbl_facility.mflcode,tbl_facility.category,tbl_facility.dhiscode,'
+                . 'tbl_facility.longitude,tbl_facility.latitude,tbl_subcounty.name as subcounty_name,tbl_partner.name as partner_name');
         $this->db->from($this->table);
         $this->db->join('tbl_subcounty', 'tbl_facility.subcounty_id=tbl_subcounty.id');
         $this->db->join('tbl_partner', 'tbl_partner.id=tbl_facility.partner_id');
@@ -21,7 +21,8 @@ class Facility_model extends CI_Model {
         foreach ($this->column_search as $item) { // loop column 
             if ($_POST['search']['value']) { // if datatable send POST for search
                 if ($i === 0) { // first loop
-                    $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
+                    // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
+                    $this->db->group_start();
                     $this->db->like($item, $_POST['search']['value']);
                 } else {
                     $this->db->or_like($item, $_POST['search']['value']);

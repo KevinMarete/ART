@@ -51,9 +51,9 @@ class Sites extends MX_Controller {
     public function editSite($id = Null) {
         $data['content_view'] = 'pages/site_update';
         $data['page_title'] = 'ART Dashboard | Sites';
-        $data['getSiteInfo'] = $this->Install_model->getSiteInfo($id);
+        $data['get_siteInfo'] = $this->Install_model->get_siteInfo($id);
         $data['assigned_username'] = $this->User_model->get_username();
-        $data['get_partner'] = $this->Partner_model->get_partner();
+        $data['get_partner'] = $this->Partner_model->read();
         $this->load->view('template/template_view', $data);
     }
 

@@ -2,11 +2,11 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class County_model extends CI_Model {
+class Generic_model extends CI_Model {
 
-    var $table = 'tbl_county';
-    var $column_order = array('name');
-    var $column_search = array('name');
+    var $table = 'tbl_generic';
+    var $column_order = array('name','abbreviation');
+    var $column_search = array('name','abbreviation');
     var $order = array('id' => 'desc');
 
     private function _get_datatables_query() {
@@ -78,8 +78,9 @@ class County_model extends CI_Model {
         $this->db->where('id', $id);
         $this->db->delete($this->table);
     }
-
-    public function read() {
+    
+    public function read()
+    {
         $this->db->select('*');
         $this->db->from($this->table);
         $query = $this->db->get();

@@ -3,16 +3,16 @@
         <div class="col-lg-6">
             <div class="row">
                 <div class="col-md-5">
-                    <h3>COUNTIES</h3>
+                    <h3>CHANGE REASONS</h3>
                 </div>
                 <div class="col-md-7">
                     <ol class="breadcrumb">
                         <li><a href="<?php echo base_url('Admin/home'); ?>">Dashboard</a></li>
-                        <li class="active ">County</li>
+                        <li class="active ">Change Reason</li>
                     </ol>
                 </div>
             </div>
-            <button class="btn btn-primary" onclick="add_county()"><i class="glyphicon glyphicon-plus"></i> Add County</button>
+            <button class="btn btn-primary" onclick="add_change_reason()"><i class="glyphicon glyphicon-plus"></i> Add Change Reason</button>
             <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
             <br/>
             <br/>
@@ -20,7 +20,7 @@
                 <thead>
                     <tr>
                         <th>C_ID</th>
-                        <th>County Name</th>
+                        <th>Change Reason</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -30,7 +30,7 @@
                 <tfoot>
                     <tr>
                         <th>C_ID</th>
-                        <th>County Name</th>
+                        <th>Change Reason</th>
                         <th>Action</th>
                     </tr>
                 </tfoot>
@@ -42,9 +42,9 @@
 
 </div>
 
-<script src="<?php echo base_url() . 'public/admin/js/settings_county.js'; ?>"></script>
+<script src="<?php echo base_url() . 'public/admin/js/settings_change_reason.js'; ?>"></script>
 
-<!-- Add or Edit County modal -->
+<!-- Add or Edit Change Reason modal -->
 <div class="modal fade" id="modal_form" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -57,9 +57,9 @@
                     <input type="hidden" value="" name="id"/> 
                     <div class="form-body">
                         <div class="form-group">
-                            <label class="control-label col-md-3">County Name</label>
+                            <label class="control-label col-md-3">Change Reason</label>
                             <div class="col-md-9">
-                                <input name="name" placeholder="County Name" class="form-control" type="text">
+                                <input name="name" placeholder="Change Reason Name" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>

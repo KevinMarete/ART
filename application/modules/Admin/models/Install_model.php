@@ -31,7 +31,7 @@ class Install_model extends CI_Model {
         return $data;
     }
     //function get site information
-    function getSiteInfo($id) {
+    function get_siteInfo($id) {
         $this->db->select('tbl_install.id as install_id,tbl_install.version,tbl_install.setup_date,tbl_install.upgrade_date,tbl_install.comments,'
                 . 'tbl_install.contact_name,tbl_install.contact_phone,tbl_install.emrs_used,tbl_install.active_patients,tbl_install.is_internet,'
                 . 'tbl_install.is_usage,tbl_install.user_id,tbl_facility.name,tbl_facility.mflcode,tbl_facility.category,tbl_facility.subcounty_id,'
