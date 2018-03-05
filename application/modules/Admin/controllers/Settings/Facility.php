@@ -29,6 +29,10 @@ class Facility extends CI_Controller {
             $row[] = $facility_list->facility_id;
             $row[] = $facility_list->name;
             $row[] = $facility_list->mflcode;
+            $row[] = $facility_list->category;
+            $row[] = $facility_list->dhiscode;
+            $row[] = $facility_list->longitude;
+            $row[] = $facility_list->latitude;
             $row[] = $facility_list->subcounty_name;
             $row[] = $facility_list->partner_name;
             //add html for action
@@ -57,11 +61,14 @@ class Facility extends CI_Controller {
         $data = array(
             'name' => $this->input->post('name'),
             'mflcode' => $this->input->post('mflcode'),
+            'category' => $this->input->post('category'),
+            'dhiscode' => $this->input->post('dhiscode'),
+            'longitude' => $this->input->post('longitude'),
+            'latitude' => $this->input->post('latitude'),
             'subcounty_id' => $this->input->post('subcounty_id'),
             'partner_id' => $this->input->post('partner_id')
         );
-//        print_r($data);
-//        die();
+        
         $insert = $this->facility_listing->save($data);
         echo json_encode(array("status" => TRUE));
     }
@@ -70,7 +77,13 @@ class Facility extends CI_Controller {
         $this->_validate();
         $data = array(
             'name' => $this->input->post('name'),
-            'mflcode' => $this->input->post('mflcode')
+            'mflcode' => $this->input->post('mflcode'),
+            'category' => $this->input->post('category'),
+            'dhiscode' => $this->input->post('dhiscode'),
+            'longitude' => $this->input->post('longitude'),
+            'latitude' => $this->input->post('latitude'),
+            'subcounty_id' => $this->input->post('subcounty_id'),
+            'partner_id' => $this->input->post('partner_id')
         );
         $this->facility_listing->update(array('id' => $this->input->post('id')), $data);
         echo json_encode(array("status" => TRUE));
@@ -98,13 +111,37 @@ class Facility extends CI_Controller {
             $data['error_string'][] = 'MflCode is Required';
             $data['status'] = FALSE;
         }
-        
+
+        if ($this->input->post('category') == '') {
+            $data['inputerror'][] = 'category';
+            $data['error_string'][] = 'Category is Required';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('dhiscode') == '') {
+            $data['inputerror'][] = 'dhiscode';
+            $data['error_string'][] = 'DhisCode is Required';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('longitude') == '') {
+            $data['inputerror'][] = 'longitude';
+            $data['error_string'][] = 'Longitude is Required';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('latitude') == '') {
+            $data['inputerror'][] = 'latitude';
+            $data['error_string'][] = 'Latitude is Required';
+            $data['status'] = FALSE;
+        }
+
         if ($this->input->post('subcounty_id') == '') {
             $data['inputerror'][] = 'subcounty_id';
             $data['error_string'][] = 'Sub County is Required';
             $data['status'] = FALSE;
         }
-        
+
         if ($this->input->post('partner_id') == '') {
             $data['inputerror'][] = 'partner_id';
             $data['error_string'][] = 'Partner Name is Required';

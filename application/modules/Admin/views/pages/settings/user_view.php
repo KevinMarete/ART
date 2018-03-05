@@ -16,7 +16,7 @@
             <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
             <br/>
             <br/>
-            <table id="table" class="table table-striped table-bordered table-responsive">
+            <table id="table" class="table table-striped table-bordered table-responsive table-condensed">
                 <thead>
                     <tr>
                         <th>U_ID</th>
@@ -52,7 +52,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title"></h3>
+                <h4 class="modal-title"></h4>
             </div>
             <div class="modal-body form">
                 <form action="#" id="form" class="form-horizontal">

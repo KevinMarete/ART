@@ -2,16 +2,18 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class County_model extends CI_Model {
+class Drug_model extends CI_Model {
 
-    var $table = 'tbl_county';
-    var $column_order = array('name');
-    var $column_search = array('name');
+    var $table = 'tbl_drug';
+    var $column_order = array('strength','packsize');
+    var $column_search = array('strength','packsize');
     var $order = array('id' => 'desc');
 
     private function _get_datatables_query() {
-        $this->db->select('*');
+        $this->db->select('tbl_drug.id,tbl_drug.strength,tbl_drug.packsize,tbl_generic.name as generic_name,tbl_formulation.name as formulation_name');
         $this->db->from($this->table);
+        $this->db->join('tbl_generic','tbl_drug.generic_id=tbl_generic.id');
+        $this->db->join('tbl_formulation','tbl_drug.formulation_id=tbl_formulation.id');
         $i = 0;
 
         foreach ($this->column_search as $item) { // loop column 
@@ -40,7 +42,7 @@ class County_model extends CI_Model {
     function get_datatables() {
         $this->_get_datatables_query();
         if ($_POST['length'] != -1)
-        $this->db->limit($_POST['length'], $_POST['start']);
+            $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
         return $query->result();
     }
@@ -77,13 +79,6 @@ class County_model extends CI_Model {
     public function delete_by_id($id) {
         $this->db->where('id', $id);
         $this->db->delete($this->table);
-    }
-
-    public function read() {
-        $this->db->select('*');
-        $this->db->from($this->table);
-        $query = $this->db->get();
-        return $query->result();
     }
 
 }

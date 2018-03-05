@@ -1,6 +1,6 @@
 <div id="page-wrapper">
     <div class="row">
-        <div class="col-lg-5">
+        <div class="col-lg-6">
             <div class="row">
                 <div class="col-md-5">
                     <h3>SUBCOUNTIES</h3>
@@ -16,7 +16,7 @@
             <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
             <br/>
             <br/>
-            <table id="table" class="table table-striped table-bordered table-responsive" cellspacing="0" width="100%">
+            <table id="table" class="table table-striped table-bordered table-responsive table-condensed" cellspacing="0" width="100%">
                 <thead>
                     <tr>
                         <th>S_ID</th>
@@ -38,7 +38,7 @@
                 </tfoot>
             </table>
         </div>
-        <div class="col-lg-7">
+        <div class="col-lg-6">
 
         </div>
     </div>
@@ -61,7 +61,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Subcounty Name</label>
                             <div class="col-md-9">
-                                <input name="name" id="name" placeholder="Name" class="form-control" type="text">
+                                <input name="name" id="name" placeholder="SubCounty Name" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>

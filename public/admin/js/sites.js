@@ -104,7 +104,16 @@ $(function () {
     });
 
     //Gets all installed sites
-    $('#sites_listing').DataTable();
+    $('#sites_listing').DataTable(
+            {
+        //Set column definition initialisation properties.
+        "columnDefs": [
+            {
+                "targets": [-1], //last column
+                "orderable": false
+            }
+        ]
+            });
 
 });
 
@@ -119,9 +128,8 @@ function deleteSite(id)
             dataType: "JSON",
             success: function (data)
             {
-//                                                                    console.log(data);
+
                 location.reload();
-//                                                                    alert('Deletion Success');
 
             },
             error: function (jqXHR, textStatus, errorThrown)

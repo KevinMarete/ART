@@ -1,8 +1,8 @@
-
 var save_method; //for save method string
 var table;
 
 $(document).ready(function () {
+
     //datatables
     table = $('#table').DataTable({
 
@@ -12,7 +12,7 @@ $(document).ready(function () {
 
         // Load data for the table's content from an Ajax source
         "ajax": {
-            "url": "Facility/ajax_list",
+            "url": "Regimen/ajax_list",
             "type": "POST"
         },
 
@@ -34,19 +34,17 @@ $(document).ready(function () {
 
 });
 
-
-
-function add_facility()
+function add_regimen()
 {
     save_method = 'add';
     $('#form')[0].reset(); // reset form on modals
     $('.form-group').removeClass('has-error');
     $('.help-block').empty();
     $('#modal_form').modal('show');
-    $('.modal-title').text('ADD FACILITY');
+    $('.modal-title').text('ADD REGIMEN');
 }
 
-function edit_facility_listing(id)
+function edit_regimen(id)
 {
     save_method = 'update';
     $('#form')[0].reset(); // reset form on modals
@@ -55,21 +53,22 @@ function edit_facility_listing(id)
 
     //Ajax Load data from ajax
     $.ajax({
-        url: "Facility/ajax_edit/" + id,
+        url: "Regimen/ajax_edit/" + id,
         type: "GET",
         dataType: "JSON",
         success: function (data)
         {
 
             $('[name="id"]').val(data.id);
+            $('[name="code"]').val(data.code);
             $('[name="name"]').val(data.name);
-            $('[name="mflcode"]').val(data.mflcode);
-            $('[name="category"]').val(data.category);
-            $('[name="subcounty_id"]').val(data.subcounty_id);
-            $('[name="partner_id"]').val(data.partner_id);
+            $('[name="description"]').val(data.description);
+            $('[name="category_id"]').val(data.category_id);
+            $('[name="service_id"]').val(data.service_id);
+            $('[name="line_id"]').val(data.line_id);
 
             $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
-            $('.modal-title').text('EDIT FACILITY'); // Set title to Bootstrap modal title
+            $('.modal-title').text('EDIT REGIMEN'); // Set title to Bootstrap modal title
 
         },
         error: function (jqXHR, textStatus, errorThrown)
@@ -91,9 +90,9 @@ function save()
     var url;
 
     if (save_method == 'add') {
-        url = "Facility/ajax_add";
+        url = "Regimen/ajax_add";
     } else {
-        url = "Facility/ajax_update";
+        url = "Regimen/ajax_update";
     }
 
     // ajax adding data to database
@@ -132,13 +131,13 @@ function save()
     });
 }
 
-function delete_facility_listing(id)
+function delete_regimen(id)
 {
-    if (confirm('Are you sure you want to delete this facility?'))
+    if (confirm('Are you sure you want to delete this Regimen?'))
     {
         // ajax delete data to database
         $.ajax({
-            url: "Facility/ajax_delete/" + id,
+            url: "Regimen/ajax_delete/" + id,
             type: "POST",
             dataType: "JSON",
             success: function (data)

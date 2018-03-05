@@ -7,7 +7,7 @@ class Subcounty_model extends CI_Model {
     var $table = 'tbl_subcounty';
     var $column_order = array('tbl_subcounty.name');
     var $column_search = array('tbl_subcounty.name','tbl_county.name');
-    var $order = array('tbl_subcounty.id' => 'asc');
+    var $order = array('tbl_subcounty.id' => 'desc');
 
     private function _get_datatables_query() {
         $this->db->select('tbl_subcounty.id,tbl_subcounty.name as subcounty_name, tbl_county.name as county_name');

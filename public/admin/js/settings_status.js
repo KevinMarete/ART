@@ -3,6 +3,7 @@ var save_method; //for save method string
 var table;
 
 $(document).ready(function () {
+
     //datatables
     table = $('#table').DataTable({
 
@@ -12,7 +13,7 @@ $(document).ready(function () {
 
         // Load data for the table's content from an Ajax source
         "ajax": {
-            "url": "Facility/ajax_list",
+            "url": "Status/ajax_list",
             "type": "POST"
         },
 
@@ -34,19 +35,17 @@ $(document).ready(function () {
 
 });
 
-
-
-function add_facility()
+function add_status()
 {
     save_method = 'add';
     $('#form')[0].reset(); // reset form on modals
     $('.form-group').removeClass('has-error');
     $('.help-block').empty();
     $('#modal_form').modal('show');
-    $('.modal-title').text('ADD FACILITY');
+    $('.modal-title').text('ADD STATUS');
 }
 
-function edit_facility_listing(id)
+function edit_status(id)
 {
     save_method = 'update';
     $('#form')[0].reset(); // reset form on modals
@@ -55,7 +54,7 @@ function edit_facility_listing(id)
 
     //Ajax Load data from ajax
     $.ajax({
-        url: "Facility/ajax_edit/" + id,
+        url: "Status/ajax_edit/" + id,
         type: "GET",
         dataType: "JSON",
         success: function (data)
@@ -63,13 +62,9 @@ function edit_facility_listing(id)
 
             $('[name="id"]').val(data.id);
             $('[name="name"]').val(data.name);
-            $('[name="mflcode"]').val(data.mflcode);
-            $('[name="category"]').val(data.category);
-            $('[name="subcounty_id"]').val(data.subcounty_id);
-            $('[name="partner_id"]').val(data.partner_id);
 
             $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
-            $('.modal-title').text('EDIT FACILITY'); // Set title to Bootstrap modal title
+            $('.modal-title').text('EDIT STATUS'); // Set title to Bootstrap modal title
 
         },
         error: function (jqXHR, textStatus, errorThrown)
@@ -91,9 +86,9 @@ function save()
     var url;
 
     if (save_method == 'add') {
-        url = "Facility/ajax_add";
+        url = "Status/ajax_add";
     } else {
-        url = "Facility/ajax_update";
+        url = "Status/ajax_update";
     }
 
     // ajax adding data to database
@@ -132,13 +127,13 @@ function save()
     });
 }
 
-function delete_facility_listing(id)
+function delete_status(id)
 {
-    if (confirm('Are you sure you want to delete this facility?'))
+    if (confirm('Are you sure you want to delete this Status?'))
     {
         // ajax delete data to database
         $.ajax({
-            url: "Facility/ajax_delete/" + id,
+            url: "Status/ajax_delete/" + id,
             type: "POST",
             dataType: "JSON",
             success: function (data)

@@ -2,9 +2,9 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class County_model extends CI_Model {
+class Category_model extends CI_Model {
 
-    var $table = 'tbl_county';
+    var $table = 'tbl_category';
     var $column_order = array('name');
     var $column_search = array('name');
     var $order = array('id' => 'desc');

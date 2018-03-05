@@ -3,24 +3,25 @@
         <div class="col-lg-6">
             <div class="row">
                 <div class="col-md-5">
-                    <h3>COUNTIES</h3>
+                    <h3>GENERIC</h3>
                 </div>
                 <div class="col-md-7">
                     <ol class="breadcrumb">
                         <li><a href="<?php echo base_url('Admin/home'); ?>">Dashboard</a></li>
-                        <li class="active ">County</li>
+                        <li class="active ">Generic</li>
                     </ol>
                 </div>
             </div>
-            <button class="btn btn-primary" onclick="add_county()"><i class="glyphicon glyphicon-plus"></i> Add County</button>
+            <button class="btn btn-primary" onclick="add_generic()"><i class="glyphicon glyphicon-plus"></i> Add Generic</button>
             <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
             <br/>
             <br/>
             <table id="table" class="table table-striped table-bordered table-responsive table-condensed">
                 <thead>
                     <tr>
-                        <th>C_ID</th>
-                        <th>County Name</th>
+                        <th>G_ID</th>
+                        <th>Generic Name</th>
+                        <th>Abbreviation</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -29,12 +30,14 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th>C_ID</th>
-                        <th>County Name</th>
+                        <th>G_ID</th>
+                        <th>Generic Name</th>
+                        <th>Abbreviation</th>
                         <th>Action</th>
                     </tr>
                 </tfoot>
-            </table>        </div>
+            </table>        
+        </div>
         <div class="col-md-6">
 
         </div>
@@ -42,7 +45,7 @@
 
 </div>
 
-<script src="<?php echo base_url() . 'public/admin/js/settings_county.js'; ?>"></script>
+<script src="<?php echo base_url() . 'public/admin/js/settings_generic.js'; ?>"></script>
 
 <!-- Add or Edit County modal -->
 <div class="modal fade" id="modal_form" role="dialog">
@@ -57,9 +60,16 @@
                     <input type="hidden" value="" name="id"/> 
                     <div class="form-body">
                         <div class="form-group">
-                            <label class="control-label col-md-3">County Name</label>
+                            <label class="control-label col-md-3">Generic Name</label>
                             <div class="col-md-9">
-                                <input name="name" placeholder="County Name" class="form-control" type="text">
+                                <input name="name" placeholder="Generic Name" class="form-control" type="text">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Abbreviation</label>
+                            <div class="col-md-9">
+                                <input name="abbreviation" placeholder="Abbreviation Name" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -73,3 +83,5 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+

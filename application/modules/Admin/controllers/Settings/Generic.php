@@ -2,42 +2,39 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Subcounty extends CI_Controller {
+class Generic extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('Subcounty_model', 'subcounty');
-        $this->load->model('County_model');
+        $this->load->model('Generic_model', 'generic');
     }
 
     public function index() {
-        $data['content_view'] = 'pages/settings/subcounty_view';
+        $data['content_view'] = 'pages/settings/generic_view';
         $data['page_title'] = 'ART Dashboard | Settings';
-        $data['get_county']= $this->County_model->read();
         $this->load->view('template/template_view', $data);
     }
 
     public function ajax_list() {
-        $list = $this->subcounty->get_datatables();
+        $list = $this->generic->get_datatables();
         $data = array();
         $no = '';
-        foreach ($list as $subcounty) {
+        foreach ($list as $generic) {
             $no++;
             $row = array();
-            $row[] = $subcounty->id;
-            $row[] = $subcounty->subcounty_name;
-            $row[] = $subcounty->county_name;
-            
+            $row[] = $generic->id;
+            $row[] = $generic->name;
+            $row[] = $generic->abbreviation;
             //add html for action
-            $row[] = '<a class="btn btn-sm btn-primary glyphicon glyphicon-pencil" href="javascript:void(0)" title="Edit" onclick="edit_subcounty(' . "'" . $subcounty->id . "'" . ')"></a>
-				  <a class="btn btn-sm btn-danger glyphicon glyphicon-trash" href="javascript:void(0)" title="Delete" onclick="delete_subcounty(' . "'" . $subcounty->id . "'" . ')"></a>';
+            $row[] = '<a class="btn btn-sm btn-primary glyphicon glyphicon-pencil" href="javascript:void(0)" title="Edit" onclick="edit_generic(' . "'" . $generic->id . "'" . ')"></a>
+				  <a class="btn btn-sm btn-danger glyphicon glyphicon-trash" href="javascript:void(0)" title="Delete" onclick="delete_generic(' . "'" . $generic->id . "'" . ')"></a>';
 
             $data[] = $row;
         }
 
         $output = array(
-            "recordsTotal" => $this->subcounty->count_all(),
-            "recordsFiltered" => $this->subcounty->count_filtered(),
+            "recordsTotal" => $this->generic->count_all(),
+            "recordsFiltered" => $this->generic->count_filtered(),
             "data" => $data,
         );
         //output to json format
@@ -45,7 +42,7 @@ class Subcounty extends CI_Controller {
     }
 
     public function ajax_edit($id) {
-        $data = $this->subcounty->get_by_id($id);
+        $data = $this->generic->get_by_id($id);
         echo json_encode($data);
     }
 
@@ -53,9 +50,9 @@ class Subcounty extends CI_Controller {
         $this->_validate();
         $data = array(
             'name' => $this->input->post('name'),
-            'county_id' => $this->input->post('county_id')
+            'abbreviation' => $this->input->post('abbreviation')
         );
-        $insert = $this->subcounty->save($data);
+        $insert = $this->generic->save($data);
         echo json_encode(array("status" => TRUE));
     }
 
@@ -63,14 +60,14 @@ class Subcounty extends CI_Controller {
         $this->_validate();
         $data = array(
             'name' => $this->input->post('name'),
-            'county_id' => $this->input->post('county_id')
+            'abbreviation' => $this->input->post('abbreviation')
         );
-        $this->subcounty->update(array('id' => $this->input->post('id')), $data);
+        $this->generic->update(array('id' => $this->input->post('id')), $data);
         echo json_encode(array("status" => TRUE));
     }
 
     public function ajax_delete($id) {
-        $this->subcounty->delete_by_id($id);
+        $this->generic->delete_by_id($id);
         echo json_encode(array("status" => TRUE));
     }
 
@@ -82,14 +79,13 @@ class Subcounty extends CI_Controller {
 
         if ($this->input->post('name') == '') {
             $data['inputerror'][] = 'name';
-            $data['error_string'][] = 'SubCounty Name is required';
+            $data['error_string'][] = 'Generic Name is required';
             $data['status'] = FALSE;
         }
 
-
-        if ($this->input->post('county_id') == '') {
-            $data['inputerror'][] = 'county_id';
-            $data['error_string'][] = 'County Name is required';
+        if ($this->input->post('abbreviation') == '') {
+            $data['inputerror'][] = 'abbreviation';
+            $data['error_string'][] = 'Abbreviation Name is required';
             $data['status'] = FALSE;
         }
 

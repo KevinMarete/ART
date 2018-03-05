@@ -2,16 +2,21 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class County_model extends CI_Model {
+class Regimen_model extends CI_Model {
 
-    var $table = 'tbl_county';
-    var $column_order = array('name');
-    var $column_search = array('name');
-    var $order = array('id' => 'desc');
+    var $table = 'tbl_regimen';
+    var $column_order = array('tbl_regimen.code', 'tbl_regimen.name', 'tbl_regimen.description', 'tbl_category.name', 'tbl_line.name', 'tbl_service.name');
+    var $column_search = array('tbl_regimen.code', 'tbl_regimen.name', 'tbl_regimen.description', 'tbl_category.name', 'tbl_line.name', 'tbl_service.name');
+    var $order = array('tbl_regimen.id' => 'desc');
 
     private function _get_datatables_query() {
-        $this->db->select('*');
+        $this->db->select('tbl_regimen.id,tbl_regimen.code,tbl_regimen.name,tbl_regimen.description, tbl_category.name as category_name,'
+                . 'tbl_service.name as service_name, tbl_line.name as line_name');
         $this->db->from($this->table);
+        $this->db->join('tbl_category', 'tbl_category.id=tbl_regimen.category_id');
+        $this->db->join('tbl_service', 'tbl_service.id=tbl_regimen.service_id');
+        $this->db->join('tbl_line', 'tbl_line.id=tbl_regimen.line_id');
+
         $i = 0;
 
         foreach ($this->column_search as $item) { // loop column 
@@ -39,7 +44,6 @@ class County_model extends CI_Model {
 
     function get_datatables() {
         $this->_get_datatables_query();
-        if ($_POST['length'] != -1)
         $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
         return $query->result();
@@ -77,13 +81,6 @@ class County_model extends CI_Model {
     public function delete_by_id($id) {
         $this->db->where('id', $id);
         $this->db->delete($this->table);
-    }
-
-    public function read() {
-        $this->db->select('*');
-        $this->db->from($this->table);
-        $query = $this->db->get();
-        return $query->result();
     }
 
 }

@@ -7,7 +7,7 @@ class User_model extends CI_Model {
     var $table = 'tbl_user';
     var $column_order = array('name', 'phone');
     var $column_search = array('name', 'phone');
-    var $order = array('id' => 'asc');
+    var $order = array('id' => 'desc');
 
     private function _get_datatables_query() {
         $this->db->select('*');
