@@ -55,5 +55,6 @@ $route['ftp'] = 'FtpService';
 $route['upload'] = 'FtpService/upload';
 $route['files/(:any)'] = 'FtpService/get_files/$1';
 $route['analysis'] = 'FtpService/analysis';
+$route['admin'] = 'Admin';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
