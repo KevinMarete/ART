@@ -109,8 +109,8 @@ function setTabFilter(tabName){
             $.ajax({
                 url: value.link,
                 datatype: 'JSON',
-                //global: false,
-                //async: false,
+                global: false,
+                async: false,
                 success: function(data){
                     $.each(value.filters, function(index, filterID){
                         //Create multiselect box
