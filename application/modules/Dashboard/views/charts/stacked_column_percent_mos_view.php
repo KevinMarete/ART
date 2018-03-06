@@ -9,7 +9,8 @@
 
         Highcharts.chart(chartDIV, {
             legend: {
-                enabled: true
+                enabled: true,
+                reversed: true
             },
             chart: {
                 type: 'column'
@@ -34,7 +35,24 @@
                 min: 0,
                 title: {
                     text: '<?php echo $chart_yaxis_title; ?>',
-                }
+                },                
+                plotLines: [{
+                    color: 'green',
+                    dashStyle: 'longdashdot',
+                    value: 25,
+                    width: 2    
+                },{
+                    color: 'red',
+                    dashStyle: 'longdashdot',
+                    value: 50,
+                    width: 2
+                },
+                {
+                    color: 'purple',
+                    dashStyle: 'longdashdot',
+                    value: 75,
+                    width: 2    
+                }]
             },
 
             tooltip: {

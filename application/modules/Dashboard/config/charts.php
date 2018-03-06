@@ -76,7 +76,7 @@ $config['patients_regimen_chart_filters_default'] = array(
 );
 
 //commodity_month_stock_chart
-$config['commodity_month_stock_chart_chartview'] = 'charts/stacked_column_percent_view';
+$config['commodity_month_stock_chart_chartview'] = 'charts/stacked_column_percent_mos_view';
 $config['commodity_month_stock_chart_title'] = 'Commodity Month of Stock';
 $config['commodity_month_stock_chart_yaxis_title'] = 'Months of Stock';
 $config['commodity_month_stock_chart_source'] = 'Source: www.commodities.nascop.org';
@@ -186,3 +186,96 @@ $config['partner_patient_distribution_table_filters_default'] = array(
     'data_year' => $config['data_year'], 
     'data_month' => $config['data_month']
 );
+
+//regimen_patient_chart
+$config['regimen_patient_chart_chartview'] = 'charts/bar_drilldown_view';
+$config['regimen_patient_chart_title'] = 'Regimen Patient Numbers';
+$config['regimen_patient_chart_yaxis_title'] = 'No. of Patients';
+$config['regimen_patient_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['regimen_patient_chart_has_drilldown'] = TRUE;
+$config['regimen_patient_chart_filters'] = array('data_year', 'data_month', 'regimen');
+$config['regimen_patient_chart_filters_default'] = array(
+    'data_year' => $config['data_year'], 
+    'data_month' => $config['data_month']
+);
+
+//regimen_nrti_drugs_chart
+$config['regimen_nrti_drugs_chart_chartview'] = 'charts/pie_drilldown_view';
+$config['regimen_nrti_drugs_chart_title'] = 'Patient Proportions By NRTI Drugs in Regimen';
+$config['regimen_nrti_drugs_chart_yaxis_title'] = 'No. of Patients';
+$config['regimen_nrti_drugs_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['regimen_nrti_drugs_chart_has_drilldown'] = TRUE;
+$config['regimen_nrti_drugs_chart_filters'] = array('data_year', 'data_month', 'regimen');
+$config['regimen_nrti_drugs_chart_filters_default'] = array(
+    'data_year' => $config['data_year'], 
+    'data_month' => $config['data_month']
+);
+
+//regimen_nnrti_drugs_chart
+$config['regimen_nnrti_drugs_chart_chartview'] = 'charts/pie_drilldown_view';
+$config['regimen_nnrti_drugs_chart_title'] = 'Patient Proportions By NNRTI/PI/INSTI Drugs in Regimen';
+$config['regimen_nnrti_drugs_chart_yaxis_title'] = 'No. of Patients';
+$config['regimen_nnrti_drugs_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['regimen_nnrti_drugs_chart_has_drilldown'] = TRUE;
+$config['regimen_nnrti_drugs_chart_filters'] = array('data_year', 'data_month', 'regimen');
+$config['regimen_nnrti_drugs_chart_filters_default'] = array(
+    'data_year' => $config['data_year'], 
+    'data_month' => $config['data_month']
+);
+
+//regimen_patient_table
+$config['regimen_drug_table_chartview'] = 'charts/table_view';
+$config['regimen_drug_table_title'] = 'Regimen Drug Consumption';
+$config['regimen_drug_table_yaxis_title'] = 'No. of Patients';
+$config['regimen_drug_table_source'] = 'Source: www.commodities.nascop.org';
+$config['regimen_drug_table_has_drilldown'] = FALSE;
+$config['regimen_drug_table_filters'] = array('data_year', 'data_month', 'regimen');
+$config['regimen_drug_table_filters_default'] = array(
+    'data_year' => $config['data_year'], 
+    'data_month' => $config['data_month']
+);
+
+//adt_sites_version_chart
+$config['adt_sites_version_chart_chartview'] = 'charts/column_view';
+$config['adt_sites_version_chart_title'] = 'ADT Site(s) Installation (By Version)';
+$config['adt_sites_version_chart_yaxis_title'] = 'No. of installations';
+$config['adt_sites_version_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['adt_sites_version_chart_has_drilldown'] = FALSE;
+$config['adt_sites_version_chart_filters'] = array('county');
+$config['adt_sites_version_chart_filters_default'] = array();
+
+//adt_sites_internet_chart
+$config['adt_sites_internet_chart_chartview'] = 'charts/pie_view';
+$config['adt_sites_internet_chart_title'] = 'Internet Availability';
+$config['adt_sites_internet_chart_yaxis_title'] = '% of Internet Available';
+$config['adt_sites_internet_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['adt_sites_internet_chart_has_drilldown'] = FALSE;
+$config['adt_sites_internet_chart_filters'] = array('county');
+$config['adt_sites_internet_chart_filters_default'] = array();
+
+//adt_sites_backup_chart
+$config['adt_sites_backup_chart_chartview'] = 'charts/pie_view';
+$config['adt_sites_backup_chart_title'] = 'Backup Availability';
+$config['adt_sites_backup_chart_yaxis_title'] = '% of Backup Available';
+$config['adt_sites_backup_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['adt_sites_backup_chart_has_drilldown'] = FALSE;
+$config['adt_sites_backup_chart_filters'] = array('county');
+$config['adt_sites_backup_chart_filters_default'] = array();
+
+//adt_sites_distribution_chart
+$config['adt_sites_distribution_chart_chartview'] = 'charts/stacked_column_percent_view';
+$config['adt_sites_distribution_chart_title'] = 'ADT Central Site(s) Installation (By County)';
+$config['adt_sites_distribution_chart_yaxis_title'] = '% of Site Installations';
+$config['adt_sites_distribution_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['adt_sites_distribution_chart_has_drilldown'] = FALSE;
+$config['adt_sites_distribution_chart_filters'] = array('county');
+$config['adt_sites_distribution_chart_filters_default'] = array();
+
+//adt_sites_distribution_table
+$config['adt_sites_distribution_table_chartview'] = 'charts/table_view';
+$config['adt_sites_distribution_table_title'] = 'ADT Site(s) Installation Numbers';
+$config['adt_sites_distribution_table_yaxis_title'] = 'No. of Installations';
+$config['adt_sites_distribution_table_source'] = 'Source: www.commodities.nascop.org';
+$config['adt_sites_distribution_table_has_drilldown'] = FALSE;
+$config['adt_sites_distribution_table_filters'] = array('county');
+$config['adt_sites_distribution_table_filters_default'] = array();

@@ -24,14 +24,12 @@
 		<?php $this->load->view('tabs/subcounty_view'); ?>
 		<!--facility-tab-->
 		<?php $this->load->view('tabs/facility_view'); ?>
-		<!--partner_summary-tab-->
+		<!--partner-tab-->
 		<?php $this->load->view('tabs/partner_view'); ?>
-		<!-- commodities tab -->
-		<?php //$this->load->view('tabs/commodities_view'); ?>
-		<!-- Drug tab -->
-		<?php //$this->load->view('tabs/drug_view'); ?>
-		<!--site-tab-->
-		<?php //$this->load->view('tabs/adt_site_view'); ?>
+		<!--regimen-tab-->
+		<?php $this->load->view('tabs/regimen_view'); ?>
+		<!--adt_sites-tab-->
+		<?php $this->load->view('tabs/adt_sites_view'); ?>
 	</div>
 	<!--footer-->
 	<hr>

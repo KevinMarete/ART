@@ -1,5 +1,6 @@
 <!--chart_container-->
 <div id="<?php echo $chart_name; ?>_container"></div>
+<input type="hidden" data-filters="<?php echo $selectedfilters; ?>" id="<?php echo $chart_name; ?>_filters"/>
 
 <!--highcharts_configuration-->
 <script type="text/javascript">
@@ -40,6 +41,7 @@
                     }
                 }
             },
+            colors: ['#5cb85c', '#434348', '#5bc0de', '#f7a35c', '#8085e9', '#ff4d4d', '#bdb76b'],
             title: {
                 text: '<?php echo $chart_title; ?>'
             },
@@ -90,7 +92,7 @@
                 }
             },
             series: [{
-                name: '<?php echo $chart_xaxis_title; ?>',
+                name: '<?php echo $chart_yaxis_title; ?>',
                 colorByPoint: true,
                 data: <?php echo $chart_series_data; ?>
             }],

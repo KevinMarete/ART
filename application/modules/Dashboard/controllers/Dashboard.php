@@ -2,12 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Dashboard extends MX_Controller {
-
-	function __construct() {
-		ini_set("max_execution_time", "100000");
-		ini_set("memory_limit", '2048M');
-	}
-
+	
 	public function index()
 	{	
 		$data['page_title'] = 'ART | Dashboard';
@@ -90,6 +85,22 @@ class Dashboard extends MX_Controller {
 			$main_data = $this->partner_model->get_partner_patient_distribution($filters);
 		}else if($chartname == 'partner_patient_distribution_table'){
 			$main_data = $this->partner_model->get_partner_patient_distribution_numbers($filters);
+		}else if($chartname == 'regimen_patient_chart'){
+			$main_data = $this->regimen_model->get_patient_regimen_category($filters);
+		}else if($chartname == 'regimen_nrti_drugs_chart'){
+			$main_data = $this->regimen_model->get_nrti_drugs_in_regimen($filters);
+		}else if($chartname == 'regimen_nnrti_drugs_chart'){
+			$main_data = $this->regimen_model->get_nnrti_drugs_in_regimen($filters);
+		}else if($chartname == 'adt_sites_version_chart'){
+			$main_data = $this->art_sites_model->get_adt_sites_versions($filters);
+		}else if($chartname == 'adt_sites_internet_chart'){
+			$main_data = $this->art_sites_model->get_adt_sites_internet($filters);
+		}else if($chartname == 'adt_sites_backup_chart'){
+			$main_data = $this->art_sites_model->get_adt_sites_backup($filters);
+		}else if($chartname == 'adt_sites_distribution_chart'){
+			$main_data = $this->art_sites_model->get_adt_sites_distribution($filters);
+		}else if($chartname == 'adt_sites_distribution_table'){
+			$main_data = $this->art_sites_model->get_adt_sites_distribution_numbers($filters);
 		}
 		return $main_data;
 	}

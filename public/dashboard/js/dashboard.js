@@ -12,7 +12,9 @@ var mainFilterURLs = {
     'county': [{'link': countyURL, 'type': 'county'}],
     'subcounty': [{'link': subcountyURL, 'type': 'sub_county'}],
     'facility': [{'link': facilityURL, 'type': 'facility'}],
-    'partner': [{'link': partnerURL, 'type': 'partner'}]
+    'partner': [{'link': partnerURL, 'type': 'partner'}],
+    'regimen': [{'link': regimenListURL, 'type': 'regimen'}],
+    'adt_sites': [{'link': countyURL, 'type': 'county'}]
 }
 var tabFiltersURLs = {
     'summary': [{'link': drugListURL, 'type': 'drug', 'filters': ['#national_mos_chart_filter']}],
@@ -23,7 +25,9 @@ var tabFiltersURLs = {
     'county': [],
     'subcounty': [],
     'facility': [],
-    'partner': []
+    'partner': [],
+    'regimen': [],
+    'adt_sites': [],
 }
 var charts = {
     'summary': ['patient_scaleup_chart', 'patient_services_chart', 'national_mos_chart'],
@@ -31,7 +35,9 @@ var charts = {
     'county': ['county_patient_distribution_chart', 'county_patient_distribution_table'],
     'subcounty': ['subcounty_patient_distribution_chart', 'subcounty_patient_distribution_table'],
     'facility': ['facility_patient_distribution_chart', 'facility_patient_distribution_table'],
-    'partner': ['partner_patient_distribution_chart', 'partner_patient_distribution_table']
+    'partner': ['partner_patient_distribution_chart', 'partner_patient_distribution_table'],
+    'regimen': ['regimen_patient_chart', 'regimen_nrti_drugs_chart', 'regimen_nnrti_drugs_chart'],
+    'adt_sites': ['adt_sites_version_chart', 'adt_sites_internet_chart', 'adt_sites_backup_chart', 'adt_sites_distribution_chart', 'adt_sites_distribution_table']
 }
 var filters = {}
 var tabName = 'summary'
@@ -103,8 +109,8 @@ function setTabFilter(tabName){
             $.ajax({
                 url: value.link,
                 datatype: 'JSON',
-                global: false,
-                async: false,
+                //global: false,
+                //async: false,
                 success: function(data){
                     $.each(value.filters, function(index, filterID){
                         //Create multiselect box
