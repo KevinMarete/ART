@@ -38,7 +38,7 @@
                     <a href="<?php echo base_url() . 'Admin/sites'; ?>"><i class="fa fa-edit fa-fw"></i> Sites</a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-files-o fa-fw"></i> Backups</a>
+                    <a href="<?php echo base_url('Admin/Backup');?>"><i class="fa fa-files-o fa-fw"></i> Backups</a>
                 </li>
                 <li>
                     <a href="#"><i class="fa fa-wrench fa-fw"></i> Settings<span class="fa arrow"></span></a>

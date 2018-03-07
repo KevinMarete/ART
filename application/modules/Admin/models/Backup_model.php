@@ -2,27 +2,23 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Facility_model extends CI_Model {
+class Backup_model extends CI_Model {
 
-    var $table = 'tbl_facility';
-    var $column_order = array('tbl_facility.name', 'tbl_facility.mflcode');
-    var $column_search = array('tbl_facility.name', 'tbl_facility.mflcode');
-    var $order = array('tbl_facility.id' => 'desc');
+    var $table = 'tbl_backup';
+    var $column_order = array('tbl_facility.name,tbl_backup.filename,tbl_backup.adt_version,tbl_backup.run_time');
+    var $column_search = array('tbl_facility.name,tbl_backup.filename,tbl_backup.adt_version,tbl_backup.run_time');
+    var $order = array('tbl_backup.id' => 'desc');
 
     private function _get_datatables_query() {
-        $this->db->select('tbl_facility.id as facility_id,tbl_facility.name,tbl_facility.mflcode,tbl_facility.category,tbl_facility.dhiscode,'
-                . 'tbl_facility.longitude,tbl_facility.latitude,tbl_subcounty.name as subcounty_name,tbl_partner.name as partner_name');
+        $this->db->select('tbl_facility.name,tbl_backup.id,tbl_backup.filename,tbl_backup.adt_version,tbl_backup.run_time');
         $this->db->from($this->table);
-        $this->db->join('tbl_subcounty', 'tbl_facility.subcounty_id=tbl_subcounty.id');
-        $this->db->join('tbl_partner', 'tbl_partner.id=tbl_facility.partner_id');
-
+        $this->db->join('tbl_facility','tbl_facility.id=tbl_backup.facility_id');
         $i = 0;
 
         foreach ($this->column_search as $item) { // loop column 
             if ($_POST['search']['value']) { // if datatable send POST for search
                 if ($i === 0) { // first loop
-                    // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
-                    $this->db->group_start();
+                    $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
                     $this->db->like($item, $_POST['search']['value']);
                 } else {
                     $this->db->or_like($item, $_POST['search']['value']);
@@ -82,21 +78,6 @@ class Facility_model extends CI_Model {
     public function delete_by_id($id) {
         $this->db->where('id', $id);
         $this->db->delete($this->table);
-    }
-
-    //function get user_names
-    public function get_username() {
-        $this->db->select('id, name');
-        $this->db->from('tbl_user');
-        $query = $this->db->get();
-        return $query->result();
-    }
-
-    public function read() {
-        $this->db->select('id,name');
-        $this->db->from($this->table);
-        $query = $this->db->get();
-        return $query->result();
     }
 
 }
