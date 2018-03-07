@@ -1,12 +1,12 @@
 <div id="page-wrapper">
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-5">
             <h3 class="">ADT INSTALLED SITES</h3>
         </div>
-        <div class="col-lg-8">
+        <div class="col-lg-7">
             <ol class="breadcrumb">
-                <li><a href="<?php echo base_url('Admin/home'); ?>">Dashboard</a></li>
-                <li class="active ">Sites</li>
+                <li class="breadcrumb-item"><a href="<?php echo base_url('Admin/home'); ?>">Dashboard</a></li>
+                <li class="active breadcrumb-item"><i class="fa fa-angle-double-right mx-2 white-text" aria-hidden="true"></i> Sites</li>
             </ol>
             <!-- /.col-lg-12 -->
         </div>

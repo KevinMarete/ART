@@ -6,7 +6,7 @@
         <div class="col-md-7">
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url('Admin/home'); ?>">Dashboard</a></li>
-                <li class="active ">Formulation</li>
+                <li class="active breadcrumb-item"><i class="fa fa-angle-double-right mx-2 white-text" aria-hidden="true"></i> Formulation</li>
             </ol>
         </div>
     </div>

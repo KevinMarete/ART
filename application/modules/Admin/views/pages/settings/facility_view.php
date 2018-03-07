@@ -1,12 +1,12 @@
 <div id="page-wrapper">
     <div class="row">
-        <div class="col-md-3">
-            <h3>FACILITY LISTINGS</h3>
+        <div class="col-md-5">
+            <h3>FACILITY LISTING</h3>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-7">
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url('Admin/home'); ?>">Dashboard</a></li>
-                <li class="active ">Facility Listing</li>
+                <li class="active breadcrumb-item"><i class="fa fa-angle-double-right mx-2 white-text" aria-hidden="true"></i> Facility Listing</li>
             </ol>
             <!-- /.col-lg-12 -->
         </div>

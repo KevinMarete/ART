@@ -1,17 +1,33 @@
-.navbar-default{
-    background-color: #ffffff
+.sidebar{
+    background-color: #FFFFFF
 }
-.breadcrumb{
-    background-color: #ffffff
-
+.navbar-static-top{
+    background-color: #163758
 }
-.breadcrumb > li + li::before {
+.navbar-default .navbar-brand {
+    color: #FFFFFF;
+}
+a {
+    color: #000;
+    text-decoration: none;
+}
+.navbar-top-links li a {
+    color: #FFFFFF;
+    padding: 15px;
+    min-height: 50px;
+}
+.navbar-top-links .dropdown-menu li a {
+    padding: 3px 20px;
+    min-height: 0;
+    color: #000
+}
 
+.breadcrumb > li + li::before {    
     padding: 0 5px;
-    color: #0073b7;
-    content: ">>";
+    color: #B0BED9;
+    content: "";
 }
 
 #wrapper{
-    background-color: #ffffff
+    background-color: #222d32
 }

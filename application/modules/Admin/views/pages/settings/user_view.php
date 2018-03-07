@@ -1,12 +1,12 @@
 <div id="page-wrapper">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-5">
             <h3>USER INFO</h3>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-7">
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url('Admin/home'); ?>">Dashboard</a></li>
-                <li class="active ">User</li>
+                <li class="active breadcrumb-item"><i class="fa fa-angle-double-right mx-2 white-text" aria-hidden="true"></i> User</li>
             </ol>
         </div>
     </div>
