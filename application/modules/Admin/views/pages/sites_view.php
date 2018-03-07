@@ -164,7 +164,6 @@
                         <div class="panel-body">
                             <table class="table table-striped table-bordered table-hover" id="sites_listing">
                                 <thead>
-                                <th>Site ID</th>
                                 <th>Facility Name</th>
                                 <th>Version</th>
                                 <th>Setup Date</th>
@@ -179,7 +178,6 @@
                                     foreach ($Installed_sites as $Inst_sites):
                                         ?>
                                         <tr>
-                                            <td><?= $Inst_sites->id ?></td>
                                             <td><?= $Inst_sites->name ?></td>
                                             <td><?= $Inst_sites->version ?></td>
                                             <td><?= $Inst_sites->setup_date ?></td>
@@ -195,7 +193,6 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th>Site ID</th>
                                         <th>Facility Name</th>
                                         <th>Version</th>
                                         <th>Setup Date</th>
@@ -220,4 +217,4 @@
     </div>
 </div>
 
-        <script src="<?php echo base_url() . 'public/admin/js/sites.js'; ?>"></script>
+<script src="<?php echo base_url() . 'public/admin/js/sites.js'; ?>"></script>

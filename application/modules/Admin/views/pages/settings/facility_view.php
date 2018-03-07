@@ -15,10 +15,9 @@
     <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
     <br/>
     <br/>
-    <table id="table" class="table table-striped table-bordered table-responsive table-condensed">
+    <table id="table" class="table table-striped table-bordered table-responsive table-condensed" width="100%">
         <thead>
             <tr>
-                <th>F_ID</th>
                 <th>Facility Name</th>
                 <th>MflCode</th>
                 <th>Category</th>
@@ -36,7 +35,6 @@
 
         <tfoot>
             <tr>
-                <th>F_ID</th>
                 <th>Facility Name</th>
                 <th>MflCode</th>
                 <th>Category</th>

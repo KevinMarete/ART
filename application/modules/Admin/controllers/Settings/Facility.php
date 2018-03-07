@@ -26,7 +26,6 @@ class Facility extends CI_Controller {
         foreach ($list as $facility_list) {
             $no++;
             $row = array();
-            $row[] = $facility_list->facility_id;
             $row[] = $facility_list->name;
             $row[] = $facility_list->mflcode;
             $row[] = $facility_list->category;

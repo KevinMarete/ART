@@ -26,7 +26,6 @@ class Drug extends CI_Controller {
         foreach ($list as $drug) {
             $no++;
             $row = array();
-            $row[] = $drug->id;
             $row[] = $drug->strength;
             $row[] = $drug->packsize;
             $row[] = $drug->generic_name;

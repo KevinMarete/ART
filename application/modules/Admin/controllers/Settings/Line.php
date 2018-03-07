@@ -22,7 +22,6 @@ class Line extends CI_Controller {
         foreach ($list as $line) {
             $no++;
             $row = array();
-            $row[] = $line->id;
             $row[] = $line->name;
             //add html for action
             $row[] = '<a class="btn btn-sm btn-primary glyphicon glyphicon-pencil" href="javascript:void(0)" title="Edit" onclick="edit_line(' . "'" . $line->id . "'" . ')"></a>

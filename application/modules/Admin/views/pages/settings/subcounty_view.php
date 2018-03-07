@@ -1,47 +1,38 @@
 <div id="page-wrapper">
     <div class="row">
-        <div class="col-lg-6">
-            <div class="row">
-                <div class="col-md-5">
-                    <h3>SUBCOUNTIES</h3>
-                </div>
-                <div class="col-md-7">
-                    <ol class="breadcrumb">
-                        <li><a href="<?php echo base_url('Admin/home'); ?>">Dashboard</a></li>
-                        <li class="active ">SubCounty</li>
-                    </ol>
-                </div>
-            </div>
-            <button class="btn btn-primary" onclick="add_subcounty()"><i class="glyphicon glyphicon-plus"></i> Add Subcounty</button>
-            <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
-            <br/>
-            <br/>
-            <table id="table" class="table table-striped table-bordered table-responsive table-condensed" cellspacing="0" width="100%">
-                <thead>
-                    <tr>
-                        <th>S_ID</th>
-                        <th>SubCounty Name</th>
-                        <th>County Name</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-
-                <tfoot>
-                    <tr>
-                        <th>S_ID</th>
-                        <th>SubCounty Name</th>
-                        <th>County Name</th>
-                        <th>Action</th>
-                    </tr>
-                </tfoot>
-            </table>
+        <div class="col-md-5">
+            <h3>SUBCOUNTIES</h3>
         </div>
-        <div class="col-lg-6">
-
+        <div class="col-md-7">
+            <ol class="breadcrumb">
+                <li><a href="<?php echo base_url('Admin/home'); ?>">Dashboard</a></li>
+                <li class="active ">SubCounty</li>
+            </ol>
         </div>
     </div>
+    <button class="btn btn-primary" onclick="add_subcounty()"><i class="glyphicon glyphicon-plus"></i> Add Subcounty</button>
+    <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
+    <br/>
+    <br/>
+    <table id="table" class="table table-striped table-bordered table-responsive table-condensed" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th class="col-lg-5 col-md-5 col-xs-4">SubCounty Name</th>
+                <th class="col-lg-5 col-md-5 col-xs-4">County Name</th>
+                <th class="col-lg-1 col-md-2 col-xs-4">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <th class="col-lg-5 col-md-5 col-xs-4">SubCounty Name</th>
+                <th class="col-lg-5 col-md-5 col-xs-4">County Name</th>
+                <th class="col-lg-1 col-md-2 col-xs-4">Action</th>
+            </tr>
+        </tfoot>
+    </table>
 </div>
 
 <script src="<?php echo base_url() . 'public/admin/js/settings_subcounty.js'; ?>"></script>

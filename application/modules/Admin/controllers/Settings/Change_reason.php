@@ -22,7 +22,6 @@ class Change_reason extends CI_Controller {
         foreach ($list as $change_reason) {
             $no++;
             $row = array();
-            $row[] = $change_reason->id;
             $row[] = $change_reason->name;
             //add html for action
             $row[] = '<a class="btn btn-sm btn-primary glyphicon glyphicon-pencil" href="javascript:void(0)" title="Edit" onclick="edit_change_reason(' . "'" . $change_reason->id . "'" . ')"></a>

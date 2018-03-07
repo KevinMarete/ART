@@ -65,6 +65,9 @@ function edit_facility_listing(id)
             $('[name="name"]').val(data.name);
             $('[name="mflcode"]').val(data.mflcode);
             $('[name="category"]').val(data.category);
+            $('[name="dhiscode"]').val(data.dhiscode);
+            $('[name="longitude"]').val(data.longitude);
+            $('[name="latitude"]').val(data.latitude);
             $('[name="subcounty_id"]').val(data.subcounty_id);
             $('[name="partner_id"]').val(data.partner_id);
 

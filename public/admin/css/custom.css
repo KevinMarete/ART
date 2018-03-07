@@ -1,0 +1,17 @@
+.navbar-default{
+    background-color: #ffffff
+}
+.breadcrumb{
+    background-color: #ffffff
+
+}
+.breadcrumb > li + li::before {
+
+    padding: 0 5px;
+    color: #0073b7;
+    content: ">>";
+}
+
+#wrapper{
+    background-color: #ffffff
+}

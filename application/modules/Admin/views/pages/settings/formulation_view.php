@@ -1,45 +1,36 @@
 <div id="page-wrapper">
     <div class="row">
-        <div class="col-lg-6">
-            <div class="row">
-                <div class="col-md-5">
-                    <h3>FORMULATION</h3>
-                </div>
-                <div class="col-md-7">
-                    <ol class="breadcrumb">
-                        <li><a href="<?php echo base_url('Admin/home'); ?>">Dashboard</a></li>
-                        <li class="active ">Formulation</li>
-                    </ol>
-                </div>
-            </div>
-            <button class="btn btn-primary" onclick="add_formulation()"><i class="glyphicon glyphicon-plus"></i> Add Formulation</button>
-            <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
-            <br/>
-            <br/>
-            <table id="table" class="table table-striped table-bordered table-responsive table-condensed">
-                <thead>
-                    <tr>
-                        <th>F_ID</th>
-                        <th>Formulation Name</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th>F_ID</th>
-                        <th>Formulation Name</th>
-                        <th>Action</th>
-                    </tr>
-                </tfoot>
-            </table>        
+        <div class="col-md-5">
+            <h3>FORMULATION</h3>
         </div>
-        <div class="col-md-6">
-
+        <div class="col-md-7">
+            <ol class="breadcrumb">
+                <li><a href="<?php echo base_url('Admin/home'); ?>">Dashboard</a></li>
+                <li class="active ">Formulation</li>
+            </ol>
         </div>
     </div>
+    <button class="btn btn-primary" onclick="add_formulation()"><i class="glyphicon glyphicon-plus"></i> Add Formulation</button>
+    <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
+    <br/>
+    <br/>
+    <table id="table" class="table table-striped table-bordered table-responsive table-condensed" width="100%">
+        <thead>
+            <tr>
+                <th class="col-md-8">Formulation Name</th>
+                <th class="col-md-1">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <th class="col-md-8">Formulation Name</th>
+                <th class="col-md-1">Action</th>
+            </tr>
+        </tfoot>
+    </table>
 
 </div>
 
@@ -58,7 +49,7 @@
                     <input type="hidden" value="" name="id"/> 
                     <div class="form-body">
                         <div class="form-group">
-                            <label class="control-label col-md-3">Formulation Name</label>
+                            <label class="control-label col-md-3">Formulation</label>
                             <div class="col-md-9">
                                 <input name="name" placeholder="Formulation Name" class="form-control" type="text">
                                 <span class="help-block"></span>

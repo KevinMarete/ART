@@ -23,7 +23,6 @@ class User extends CI_Controller {
         foreach ($list as $user) {
             $no++;
             $row = array();
-            $row[]=$user->id;
             $row[] = $user->name;
             $row[] = $user->phone;
 

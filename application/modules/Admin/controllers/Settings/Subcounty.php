@@ -24,7 +24,6 @@ class Subcounty extends CI_Controller {
         foreach ($list as $subcounty) {
             $no++;
             $row = array();
-            $row[] = $subcounty->id;
             $row[] = $subcounty->subcounty_name;
             $row[] = $subcounty->county_name;
             

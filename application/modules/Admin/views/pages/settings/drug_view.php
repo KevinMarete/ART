@@ -1,51 +1,42 @@
 <div id="page-wrapper">
     <div class="row">
-        <div class="col-lg-7">
-            <div class="row">
-                <div class="col-md-5">
-                    <h3>DRUG</h3>
-                </div>
-                <div class="col-md-7">
-                    <ol class="breadcrumb">
-                        <li><a href="<?php echo base_url('Admin/home'); ?>">Dashboard</a></li>
-                        <li class="active ">Drug</li>
-                    </ol>
-                </div>
-            </div>
-            <button class="btn btn-primary" onclick="add_drug()"><i class="glyphicon glyphicon-plus"></i> Add Drug</button>
-            <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
-            <br/>
-            <br/>
-            <table id="table" class="table table-striped table-bordered table-responsive table-condensed">
-                <thead>
-                    <tr>
-                        <th>D_ID</th>
-                        <th>Strength</th>
-                        <th>Pack Size</th>
-                        <th>Generic Name</th>
-                        <th>Formulation</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th>D_ID</th>
-                        <th>Strength</th>
-                        <th>Pack Size</th>
-                        <th>Generic Name</th>
-                        <th>Formulation</th>
-                        <th>Action</th>
-                    </tr>
-                </tfoot>
-            </table>        
-        </div>
         <div class="col-md-5">
-
+            <h3>DRUG</h3>
+        </div>
+        <div class="col-md-7">
+            <ol class="breadcrumb">
+                <li><a href="<?php echo base_url('Admin/home'); ?>">Dashboard</a></li>
+                <li class="active ">Drug</li>
+            </ol>
         </div>
     </div>
+    <button class="btn btn-primary" onclick="add_drug()"><i class="glyphicon glyphicon-plus"></i> Add Drug</button>
+    <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
+    <br/>
+    <br/>
+    <table id="table" class="table table-striped table-bordered table-responsive table-condensed" width="100%">
+        <thead>
+            <tr>
+                <th class="col-md-3">Strength</th>
+                <th class="col-md-3">Pack Size</th>
+                <th class="col-md-3">Generic Name</th>
+                <th class="col-md-2">Formulation</th>
+                <th class="col-md-1">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <th class="col-md-3">Strength</th>
+                <th class="col-md-3">Pack Size</th>
+                <th class="col-md-3">Generic Name</th>
+                <th class="col-md-2">Formulation</th>
+                <th class="col-md-1">Action</th>
+            </tr>
+        </tfoot>
+    </table> 
 
 </div>
 

@@ -1,47 +1,38 @@
 <div id="page-wrapper">
     <div class="row">
-        <div class="col-lg-6">
-            <div class="row">
-                <div class="col-md-4">
-                    <h3>USER INFO</h3>
-                </div>
-                <div class="col-md-8">
-                    <ol class="breadcrumb">
-                        <li><a href="<?php echo base_url('Admin/home'); ?>">Dashboard</a></li>
-                        <li class="active ">User</li>
-                    </ol>
-                </div>
-            </div>
-            <button class="btn btn-primary" onclick="add_user()"><i class="glyphicon glyphicon-plus"></i> Add User</button>
-            <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
-            <br/>
-            <br/>
-            <table id="table" class="table table-striped table-bordered table-responsive table-condensed">
-                <thead>
-                    <tr>
-                        <th>U_ID</th>
-                        <th>User Name</th>
-                        <th>Phone Number</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-
-                <tfoot>
-                    <tr>
-                        <th>U_ID</th>
-                        <th>User Name</th>
-                        <th>Phone Number</th>
-                        <th>Action</th>
-                    </tr>
-                </tfoot>
-            </table>
+        <div class="col-md-4">
+            <h3>USER INFO</h3>
         </div>
-        <div class="col-lg-6">
-
+        <div class="col-md-8">
+            <ol class="breadcrumb">
+                <li><a href="<?php echo base_url('Admin/home'); ?>">Dashboard</a></li>
+                <li class="active ">User</li>
+            </ol>
         </div>
     </div>
+    <button class="btn btn-primary" onclick="add_user()"><i class="glyphicon glyphicon-plus"></i> Add User</button>
+    <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
+    <br/>
+    <br/>
+    <table id="table" class="table table-responsive table-striped table-bordered table-condensed" width="100%">
+        <thead>
+            <tr>
+                <th class="col-lg-4 col-md-4">User Name</th>
+                <th class="col-lg-6 col-md-4">Phone Number</th>
+                <th class="col-lg-2 col-md-4">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <th class="col-lg-4 col-md-4">User Name</th>
+                <th class="col-lg-6 col-md-4">Phone Number</th>
+                <th class="col-lg-2 col-md-4">Action</th>
+            </tr>
+        </tfoot>
+    </table>
 </div>
 
 <script src="<?php echo base_url() . 'public/admin/js/settings_user.js'; ?>"></script>

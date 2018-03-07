@@ -1,45 +1,36 @@
 <div id="page-wrapper">
     <div class="row">
-        <div class="col-lg-6">
-            <div class="row">
-                <div class="col-md-5">
-                    <h3>CHANGE REASONS</h3>
-                </div>
-                <div class="col-md-7">
-                    <ol class="breadcrumb">
-                        <li><a href="<?php echo base_url('Admin/home'); ?>">Dashboard</a></li>
-                        <li class="active ">Change Reason</li>
-                    </ol>
-                </div>
-            </div>
-            <button class="btn btn-primary" onclick="add_change_reason()"><i class="glyphicon glyphicon-plus"></i> Add Change Reason</button>
-            <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
-            <br/>
-            <br/>
-            <table id="table" class="table table-striped table-bordered table-responsive table-condensed">
-                <thead>
-                    <tr>
-                        <th>C_ID</th>
-                        <th>Change Reason</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th>C_ID</th>
-                        <th>Change Reason</th>
-                        <th>Action</th>
-                    </tr>
-                </tfoot>
-            </table>        </div>
-        <div class="col-md-6">
-
+        <div class="col-md-5">
+            <h3>CHANGE REASON</h3>
+        </div>
+        <div class="col-md-7">
+            <ol class="breadcrumb">
+                <li><a href="<?php echo base_url('Admin/home'); ?>">Dashboard</a></li>
+                <li class="active ">Change Reason</li>
+            </ol>
         </div>
     </div>
+    <button class="btn btn-primary" onclick="add_change_reason()"><i class="glyphicon glyphicon-plus"></i> Add Change Reason</button>
+    <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
+    <br/>
+    <br/>
+    <table id="table" class="table table-striped table-bordered table-responsive table-condensed" width="100%">
+        <thead>
+            <tr>
+                <th class="col-md-8">Change Reason</th>
+                <th class="col-md-1">Action</th>
+            </tr>
+        </thead>
+        <tbody>
 
+        </tbody>
+        <tfoot>
+            <tr>
+                <th class="col-md-8">Change Reason</th>
+                <th class="col-md-1">Action</th>
+            </tr>
+        </tfoot>
+    </table>   
 </div>
 
 <script src="<?php echo base_url() . 'public/admin/js/settings_change_reason.js'; ?>"></script>

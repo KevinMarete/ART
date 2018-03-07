@@ -122,11 +122,6 @@ if (!empty($get_siteInfo)) {
                 <div class="form-group">
                     <label>EMRS Used</label>
                     <select multiple class="form-control" name="emrs_used[]" id="emrs_used" >
-                        <!--                        <option selected="selected" >IQCARE</option>
-                                                <option selected="selected" >CPAD</option>
-                                                <option selected="selected" >KENYAEMR</option>
-                                                <option selected="selected" >OPENMRS</option>
-                                                <option selected="selected" >EDITT</option>-->
                         <option value="IQCare" <?php if ($siteInfo->emrs_used == 'IQCare') echo 'selected="selected"'; ?> >IQCARE</option>
                         <option value="CPAD" <?php if ($siteInfo->emrs_used == 'CPAD') echo 'selected="selected"'; ?> >CPAD</option>
                         <option value="KenyaEMR" <?php if ($siteInfo->emrs_used == 'KenyaEMR') echo 'selected="selected"'; ?> >KENYAEMR</option>

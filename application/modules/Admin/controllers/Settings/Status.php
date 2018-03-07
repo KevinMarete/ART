@@ -22,7 +22,6 @@ class Status extends CI_Controller {
         foreach ($list as $status) {
             $no++;
             $row = array();
-            $row[] = $status->id;
             $row[] = $status->name;
             //add html for action
             $row[] = '<a class="btn btn-sm btn-primary glyphicon glyphicon-pencil" href="javascript:void(0)" title="Edit" onclick="edit_status(' . "'" . $status->id . "'" . ')"></a>

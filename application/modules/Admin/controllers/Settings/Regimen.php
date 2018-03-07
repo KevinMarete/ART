@@ -28,7 +28,6 @@ class Regimen extends CI_Controller {
         foreach ($list as $regimen) {
             $no++;
             $row = array();
-            $row[] = $regimen->id;
             $row[] = $regimen->code;
             $row[] = $regimen->name;
             $row[] = $regimen->description;

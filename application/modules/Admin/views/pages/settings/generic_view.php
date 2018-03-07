@@ -1,48 +1,38 @@
 <div id="page-wrapper">
     <div class="row">
-        <div class="col-lg-6">
-            <div class="row">
-                <div class="col-md-5">
-                    <h3>GENERIC</h3>
-                </div>
-                <div class="col-md-7">
-                    <ol class="breadcrumb">
-                        <li><a href="<?php echo base_url('Admin/home'); ?>">Dashboard</a></li>
-                        <li class="active ">Generic</li>
-                    </ol>
-                </div>
-            </div>
-            <button class="btn btn-primary" onclick="add_generic()"><i class="glyphicon glyphicon-plus"></i> Add Generic</button>
-            <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
-            <br/>
-            <br/>
-            <table id="table" class="table table-striped table-bordered table-responsive table-condensed">
-                <thead>
-                    <tr>
-                        <th>G_ID</th>
-                        <th>Generic Name</th>
-                        <th>Abbreviation</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th>G_ID</th>
-                        <th>Generic Name</th>
-                        <th>Abbreviation</th>
-                        <th>Action</th>
-                    </tr>
-                </tfoot>
-            </table>        
+        <div class="col-md-5">
+            <h3>GENERIC</h3>
         </div>
-        <div class="col-md-6">
-
+        <div class="col-md-7">
+            <ol class="breadcrumb">
+                <li><a href="<?php echo base_url('Admin/home'); ?>">Dashboard</a></li>
+                <li class="active ">Generic</li>
+            </ol>
         </div>
     </div>
+    <button class="btn btn-primary" onclick="add_generic()"><i class="glyphicon glyphicon-plus"></i> Add Generic</button>
+    <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
+    <br/>
+    <br/>
+    <table id="table" class="table table-striped table-bordered table-responsive table-condensed" width="100%">
+        <thead>
+            <tr>
+                <th class="col-lg-5 col-md-5 col-xs-4">Generic Name</th>
+                <th class="col-lg-5 col-md-5 col-xs-4">Abbreviation</th>
+                <th class="col-lg-1 col-md-2 col-xs-4">Action</th>
+            </tr>
+        </thead>
+        <tbody>
 
+        </tbody>
+        <tfoot>
+            <tr>
+                <th class="col-lg-5 col-md-5 col-xs-4">Generic Name</th>
+                <th class="col-lg-5 col-md-5 col-xs-4">Abbreviation</th>
+                <th class="col-lg-1 col-md-2 col-xs-4">Action</th>
+            </tr>
+        </tfoot>
+    </table> 
 </div>
 
 <script src="<?php echo base_url() . 'public/admin/js/settings_generic.js'; ?>"></script>

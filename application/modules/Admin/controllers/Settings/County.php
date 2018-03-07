@@ -22,7 +22,6 @@ class County extends CI_Controller {
         foreach ($list as $county) {
             $no++;
             $row = array();
-            $row[] = $county->id;
             $row[] = $county->name;
             //add html for action
             $row[] = '<a class="btn btn-sm btn-primary glyphicon glyphicon-pencil" href="javascript:void(0)" title="Edit" onclick="edit_county(' . "'" . $county->id . "'" . ')"></a>

@@ -22,7 +22,6 @@ class Generic extends CI_Controller {
         foreach ($list as $generic) {
             $no++;
             $row = array();
-            $row[] = $generic->id;
             $row[] = $generic->name;
             $row[] = $generic->abbreviation;
             //add html for action
