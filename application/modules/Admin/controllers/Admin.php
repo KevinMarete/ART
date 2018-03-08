@@ -13,5 +13,9 @@ class Admin extends MX_Controller {
         $data['page_title'] = 'ART Dashboard | Admin';
         $this->load->view('template/template_view', $data);
     }
-    
+
+    public function register() {
+        $this->load->view('pages/registration_view');
+    }
+
 }

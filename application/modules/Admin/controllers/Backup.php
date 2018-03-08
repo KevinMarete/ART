@@ -52,7 +52,9 @@ class Backup extends CI_Controller {
     public function ajax_add() {
         $this->_validate();
         $data = array(
-            'name' => $this->input->post('name'),
+            'facility_id' => $this->input->post('name'),
+            'filename' => $this->input->post('filename'),
+            'adt_version' => $this->input->post('adt_version'),
         );
         $insert = $this->backup->save($data);
         echo json_encode(array("status" => TRUE));
@@ -84,11 +86,11 @@ class Backup extends CI_Controller {
             $data['status'] = FALSE;
         }
 
-        if ($this->input->post('filename') == '') {
-            $data['inputerror'][] = 'filename';
-            $data['error_string'][] = 'File Backup is required';
-            $data['status'] = FALSE;
-        }
+//        if ($this->input->post('filename') == '') {
+//            $data['inputerror'][] = 'filename';
+//            $data['error_string'][] = 'File Backup is required';
+//            $data['status'] = FALSE;
+//        }
 
         if ($this->input->post('adt_version') == '') {
             $data['inputerror'][] = 'adt_version';
