@@ -10,37 +10,41 @@
             </ol>
         </div>
     </div>
-    <button class="btn btn-primary" onclick="add_regimen()"><i class="glyphicon glyphicon-plus"></i> Add Regimen</button>
-    <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
-    <br/>
-    <br/>
-    <table id="table" class="table table-striped table-bordered table-responsive table-condensed" width="100%">
-        <thead>
-            <tr>
-                <th>Code</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Category</th>
-                <th>Service</th>
-                <th>Line</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <button class="btn btn-primary" onclick="add_regimen()"><i class="glyphicon glyphicon-plus"></i> Add Regimen</button>
+            <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
+            <br/>
+            <br/>
+            <table id="table" class="table table-striped table-bordered table-responsive table-condensed" width="100%">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Service</th>
+                        <th>Line</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-        </tbody>
-        <tfoot>
-            <tr>
-                <th>Code</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Category</th>
-                <th>Service</th>
-                <th>Line</th>
-                <th>Action</th>
-            </tr>
-        </tfoot>
-    </table>  
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Service</th>
+                        <th>Line</th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
+            </table> 
+        </div>
+    </div> 
 
 </div>
 

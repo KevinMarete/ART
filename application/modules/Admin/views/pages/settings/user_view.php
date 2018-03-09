@@ -10,29 +10,33 @@
             </ol>
         </div>
     </div>
-    <button class="btn btn-primary" onclick="add_user()"><i class="glyphicon glyphicon-plus"></i> Add User</button>
-    <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
-    <br/>
-    <br/>
-    <table id="table" class="table table-responsive table-striped table-bordered table-condensed" width="100%">
-        <thead>
-            <tr>
-                <th class="col-lg-4 col-md-4">User Name</th>
-                <th class="col-lg-6 col-md-4">Phone Number</th>
-                <th class="col-lg-2 col-md-4">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <button class="btn btn-primary" onclick="add_user()"><i class="glyphicon glyphicon-plus"></i> Add User</button>
+            <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
+            <br/>
+            <br/>
+            <table id="table" class="table table-responsive table-striped table-bordered table-condensed" width="100%">
+                <thead>
+                    <tr>
+                        <th class="col-lg-4 col-md-4">User Name</th>
+                        <th class="col-lg-6 col-md-4">Phone Number</th>
+                        <th class="col-lg-2 col-md-4">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
 
-        <tfoot>
-            <tr>
-                <th class="col-lg-4 col-md-4">User Name</th>
-                <th class="col-lg-6 col-md-4">Phone Number</th>
-                <th class="col-lg-2 col-md-4">Action</th>
-            </tr>
-        </tfoot>
-    </table>
+                <tfoot>
+                    <tr>
+                        <th class="col-lg-4 col-md-4">User Name</th>
+                        <th class="col-lg-6 col-md-4">Phone Number</th>
+                        <th class="col-lg-2 col-md-4">Action</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
 </div>
 
 <script src="<?php echo base_url() . 'public/admin/js/settings_user.js'; ?>"></script>

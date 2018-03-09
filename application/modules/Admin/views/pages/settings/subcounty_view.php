@@ -10,29 +10,33 @@
             </ol>
         </div>
     </div>
-    <button class="btn btn-primary" onclick="add_subcounty()"><i class="glyphicon glyphicon-plus"></i> Add Subcounty</button>
-    <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
-    <br/>
-    <br/>
-    <table id="table" class="table table-striped table-bordered table-responsive table-condensed" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th class="col-lg-5 col-md-5 col-xs-4">SubCounty Name</th>
-                <th class="col-lg-5 col-md-5 col-xs-4">County Name</th>
-                <th class="col-lg-1 col-md-2 col-xs-4">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <button class="btn btn-primary" onclick="add_subcounty()"><i class="glyphicon glyphicon-plus"></i> Add Subcounty</button>
+            <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
+            <br/>
+            <br/>
+            <table id="table" class="table table-striped table-bordered table-responsive table-condensed" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th class="col-lg-5 col-md-5 col-xs-4">SubCounty Name</th>
+                        <th class="col-lg-5 col-md-5 col-xs-4">County Name</th>
+                        <th class="col-lg-1 col-md-2 col-xs-4">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
 
-        <tfoot>
-            <tr>
-                <th class="col-lg-5 col-md-5 col-xs-4">SubCounty Name</th>
-                <th class="col-lg-5 col-md-5 col-xs-4">County Name</th>
-                <th class="col-lg-1 col-md-2 col-xs-4">Action</th>
-            </tr>
-        </tfoot>
-    </table>
+                <tfoot>
+                    <tr>
+                        <th class="col-lg-5 col-md-5 col-xs-4">SubCounty Name</th>
+                        <th class="col-lg-5 col-md-5 col-xs-4">County Name</th>
+                        <th class="col-lg-1 col-md-2 col-xs-4">Action</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
 </div>
 
 <script src="<?php echo base_url() . 'public/admin/js/settings_subcounty.js'; ?>"></script>

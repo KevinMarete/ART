@@ -10,33 +10,37 @@
             </ol>
         </div>
     </div>
-    <button class="btn btn-primary" onclick="add_drug()"><i class="glyphicon glyphicon-plus"></i> Add Drug</button>
-    <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
-    <br/>
-    <br/>
-    <table id="table" class="table table-striped table-bordered table-responsive table-condensed" width="100%">
-        <thead>
-            <tr>
-                <th class="col-md-3">Strength</th>
-                <th class="col-md-3">Pack Size</th>
-                <th class="col-md-3">Generic Name</th>
-                <th class="col-md-2">Formulation</th>
-                <th class="col-md-1">Action</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <button class="btn btn-primary" onclick="add_drug()"><i class="glyphicon glyphicon-plus"></i> Add Drug</button>
+            <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
+            <br/>
+            <br/>
+            <table id="table" class="table table-striped table-bordered table-responsive table-condensed" width="100%">
+                <thead>
+                    <tr>
+                        <th class="col-md-3">Strength</th>
+                        <th class="col-md-3">Pack Size</th>
+                        <th class="col-md-3">Generic Name</th>
+                        <th class="col-md-2">Formulation</th>
+                        <th class="col-md-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-        </tbody>
-        <tfoot>
-            <tr>
-                <th class="col-md-3">Strength</th>
-                <th class="col-md-3">Pack Size</th>
-                <th class="col-md-3">Generic Name</th>
-                <th class="col-md-2">Formulation</th>
-                <th class="col-md-1">Action</th>
-            </tr>
-        </tfoot>
-    </table> 
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th class="col-md-3">Strength</th>
+                        <th class="col-md-3">Pack Size</th>
+                        <th class="col-md-3">Generic Name</th>
+                        <th class="col-md-2">Formulation</th>
+                        <th class="col-md-1">Action</th>
+                    </tr>
+                </tfoot>
+            </table> 
+        </div>
+    </div>
 
 </div>
 

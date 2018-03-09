@@ -11,42 +11,46 @@
             <!-- /.col-lg-12 -->
         </div>
     </div>
-    <button class="btn btn-primary" onclick="add_facility()"><i class="glyphicon glyphicon-plus"></i> Add Facility</button>
-    <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
-    <br/>
-    <br/>
-    <table id="table" class="table table-striped table-bordered table-responsive table-condensed" width="100%">
-        <thead>
-            <tr>
-                <th>Facility Name</th>
-                <th>MflCode</th>
-                <th>Category</th>
-                <th>DhisCode</th>
-                <th>Longitude</th>
-                <th>Latitude</th>
-                <th>SubCounty Name</th>
-                <th>Partner Name</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <button class="btn btn-primary" onclick="add_facility()"><i class="glyphicon glyphicon-plus"></i> Add Facility</button>
+            <button class="btn btn-success" onclick="reload_table()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
+            <br/>
+            <br/>
+            <table id="table" class="table table-striped table-bordered table-responsive table-condensed" width="100%">
+                <thead>
+                    <tr>
+                        <th>Facility Name</th>
+                        <th>MflCode</th>
+                        <th>Category</th>
+                        <th>DhisCode</th>
+                        <th>Longitude</th>
+                        <th>Latitude</th>
+                        <th>SubCounty Name</th>
+                        <th>Partner Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
 
 
-        <tfoot>
-            <tr>
-                <th>Facility Name</th>
-                <th>MflCode</th>
-                <th>Category</th>
-                <th>DhisCode</th>
-                <th>Longitude</th>
-                <th>Latitude</th>
-                <th>SubCounty Name</th>
-                <th>Partner Name</th>
-                <th>Action</th>
-            </tr>
-        </tfoot>
-    </table>
+                <tfoot>
+                    <tr>
+                        <th>Facility Name</th>
+                        <th>MflCode</th>
+                        <th>Category</th>
+                        <th>DhisCode</th>
+                        <th>Longitude</th>
+                        <th>Latitude</th>
+                        <th>SubCounty Name</th>
+                        <th>Partner Name</th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
 </div>
 
 <script src="<?php echo base_url() . 'public/admin/js/settings_facility.js'; ?>"></script>

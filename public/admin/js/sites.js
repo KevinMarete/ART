@@ -102,21 +102,9 @@ $(function () {
     $.fn.datepicker.defaults.endDate = '0d';
     $('#update_date').datepicker({
     });
-
-    //Gets all installed sites
-    $('#sites_listing').DataTable(
-            {
-                //Set column definition initialisation properties.
-                "columnDefs": [
-                    {
-                        "targets": [-1], //last column
-                        "orderable": false
-                    }
-                ]
-            });
-
 });
 
+//Gets all installed sites
 var table;
 
 $(document).ready(function () {
