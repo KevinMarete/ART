@@ -54,7 +54,8 @@ if (!empty($get_siteInfo)) {
                 </div>
                 <div class="form-group">
                     <label>Partner</label>
-                    <select name="partner_id" id="partner" class="form-control">
+                    <input name="partner_id" id="partner" class="form-control" value="<?php echo $siteInfo->partner_name; ?>" readonly="">
+<!--                    <select>
                         <?php foreach ($get_partner as $partner) { ?>
                             <option value="<?php echo $partner->id ?>"
                             <?php
@@ -64,7 +65,7 @@ if (!empty($get_siteInfo)) {
                             ?>>
                                 <?php echo $partner->name ?></option>
                         <?php } ?>
-                    </select>
+                    </select>-->
                 </div>
                 <div class="form-group">
                     <label>Contact Name</label>
@@ -125,7 +126,7 @@ if (!empty($get_siteInfo)) {
                         <option value="IQCare" <?php if ($siteInfo->emrs_used == 'IQCare') echo 'selected="selected"'; ?> >IQCARE</option>
                         <option value="CPAD" <?php if ($siteInfo->emrs_used == 'CPAD') echo 'selected="selected"'; ?> >CPAD</option>
                         <option value="KenyaEMR" <?php if ($siteInfo->emrs_used == 'KenyaEMR') echo 'selected="selected"'; ?> >KENYAEMR</option>
-                        <option value="OpenMRS" <?php if ($siteInfo->emrs_used == 'OpenMRS') echo 'selected="selected'; ?>" >OPENMRS</option>
+                        <option value="OpenMRS" <?php if ($siteInfo->emrs_used == 'OpenMRS') echo 'selected="selected'; ?> >OPENMRS</option>
                         <option value="EDITT" <?php if ($siteInfo->emrs_used == 'EDITT') echo 'selected="selected"'; ?> >EDITT</option>
                     </select>
                 </div>

@@ -122,7 +122,7 @@
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label>EMRS Used</label>
-                                                                        <select multiple class="form-control" name="emrs_used[]" id="emrs_used">
+                                                                        <select multiple class="form-control" name="emrs_used[]" id="emrs_used" required="">
                                                                             <option>IQCARE</option>
                                                                             <option>CPAD</option>
                                                                             <option>KENYAEMR</option>
@@ -162,7 +162,7 @@
 
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <table class="table table-striped table-bordered table-hover" id="sites_listing">
+                            <table class="table table-striped table-bordered table-hover" id="table">
                                 <thead>
                                 <th>Facility Name</th>
                                 <th>Version</th>
@@ -174,22 +174,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <?php
-                                    foreach ($Installed_sites as $Inst_sites):
-                                        ?>
-                                        <tr>
-                                            <td><?= $Inst_sites->name ?></td>
-                                            <td><?= $Inst_sites->version ?></td>
-                                            <td><?= $Inst_sites->setup_date ?></td>
-                                            <td><?= $Inst_sites->active_patients ?></td>
-                                            <td><?= $Inst_sites->contact_name ?></td>
-                                            <td><?= $Inst_sites->contact_phone ?></td>                                        
-                                            <td class="center">
-                                                <a class="button btn-sm btn-info updateSite" href="<?php echo base_url() . 'Admin/Sites/editSite/' . $Inst_sites->id; ?>"><i class="fa fa-pencil"></i></a>
-                                                <a class="button btn-sm btn-danger delete" onclick="deleteSite(<?php echo $Inst_sites->id; ?>)"><i class="fa fa-trash"></i></a>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach ?>
+                                    
                                 </tbody>
                                 <tfoot>
                                     <tr>

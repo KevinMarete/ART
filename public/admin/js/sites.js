@@ -106,14 +106,45 @@ $(function () {
     //Gets all installed sites
     $('#sites_listing').DataTable(
             {
+                //Set column definition initialisation properties.
+                "columnDefs": [
+                    {
+                        "targets": [-1], //last column
+                        "orderable": false
+                    }
+                ]
+            });
+
+});
+
+var table;
+
+$(document).ready(function () {
+    //datatables
+    table = $('#table').DataTable({
+
+        "processing": true,
+        "language": {
+            processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+        },
+        "serverSide": true,
+        "order": [],
+
+        // Load data for the table's content from an Ajax source
+        "ajax": {
+            "url": "Sites/ajax_list",
+            "type": "POST"
+        },
+
         //Set column definition initialisation properties.
         "columnDefs": [
             {
                 "targets": [-1], //last column
-                "orderable": false
-            }
-        ]
-            });
+                "orderable": false,
+            },
+        ],
+
+    });
 
 });
 

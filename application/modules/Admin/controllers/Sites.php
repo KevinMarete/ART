@@ -14,9 +14,36 @@ class Sites extends MX_Controller {
     public function index() {
         $data['content_view'] = 'pages/sites_view';
         $data['page_title'] = 'ART Dashboard | Sites';
-        $this->Install_model->read();
-        $data['Installed_sites'] = $this->Install_model->read();
         $this->load->view('template/template_view', $data);
+    }
+
+    public function ajax_list() {
+        $list = $this->Install_model->get_datatables();
+        $data = array();
+        $no = '';
+        foreach ($list as $install_list) {
+            $no++;
+            $row = array();
+            $row[] = $install_list->name;
+            $row[] = $install_list->version;
+            $row[] = $install_list->setup_date;
+            $row[] = $install_list->active_patients;
+            $row[] = $install_list->contact_name;
+            $row[] = $install_list->contact_phone;
+            //add html for action
+            $row[] = '<a class="button btn-sm btn-primary glyphicon glyphicon-pencil" href="Sites/editSite/'. $install_list->id .'" title="Edit"></a>
+				  <a class="button btn-sm btn-danger glyphicon glyphicon-trash" href="javascript:void(0)" title="Delete" onclick="deleteSite(' . "'" . $install_list->id . "'" . ')"></a>';
+
+            $data[] = $row;
+        }
+
+        $output = array(
+            "recordsTotal" => $this->Install_model->count_all(),
+            "recordsFiltered" => $this->Install_model->count_filtered(),
+            "data" => $data,
+        );
+        //output to json format
+        echo json_encode($output);
     }
 
     //function install Site
@@ -39,7 +66,7 @@ class Sites extends MX_Controller {
 
         $result = $this->Install_model->insert($data);
         if ($result == TRUE) {
-            $this->session->set_flashdata('msg', 'Installation Success');
+            
         } else {
             
         }
@@ -47,7 +74,7 @@ class Sites extends MX_Controller {
         redirect('Admin/Sites');
     }
 
-    //function update site
+    //function editSite
     public function editSite($id = Null) {
         $data['content_view'] = 'pages/site_update';
         $data['page_title'] = 'ART Dashboard | Sites';
@@ -66,7 +93,7 @@ class Sites extends MX_Controller {
             'setup_date' => $this->input->post('setup_date'),
             'upgrade_date' => $this->input->post('update_date'),
             'comments' => $this->input->post('comments'),
-//            'partner' => $this->input->post('partner_id'),
+//            'partner_id' => $this->input->post('partner_id'),
             'contact_name' => $this->input->post('contact_name'),
             'contact_phone' => $this->input->post('contact_phone'),
             'emrs_used' => $emrs_used,
