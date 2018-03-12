@@ -19,7 +19,7 @@
                 <li><a href="#"><i class="fa fa-user fa-fw"></i> Profile</a>
                 </li>
                 <li class="divider"></li>
-                <li><a href="<?php echo base_url() . 'Admin'; ?>"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                <li><a href="<?php echo base_url() . 'Admin/Auth/Auth_login/user_logout'; ?>"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                 </li>
             </ul>
             <!-- /.dropdown-user -->

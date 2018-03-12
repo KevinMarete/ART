@@ -7,6 +7,10 @@
     </div>
     <!-- /.row -->
     <div class="row">
+        <?php echo $this->session->userdata('last_name'); ?>
+        <?php echo $this->session->userdata('email'); ?>
+    </div>
+    <div class="row">
         <div class="col-lg-3 col-md-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
