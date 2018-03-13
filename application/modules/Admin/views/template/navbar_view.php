@@ -38,6 +38,9 @@
                     <a href="<?php echo base_url() . 'Admin/sites'; ?>"><i class="fa fa-edit fa-fw"></i> Sites</a>
                 </li>
                 <li>
+                    <a href="<?php echo base_url('Admin/User_listing');?>"><i class="fa fa-user fa-fw"></i> User Listing</a>
+                </li>
+                <li>
                     <a href="<?php echo base_url('Admin/Backup');?>"><i class="fa fa-files-o fa-fw"></i> Backups</a>
                 </li>
                 <li>

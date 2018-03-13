@@ -9,6 +9,7 @@
     <div class="row">
         <?php echo $this->session->userdata('last_name'); ?>
         <?php echo $this->session->userdata('email'); ?>
+        <?php echo $this->session->userdata('mobile');?>
     </div>
     <div class="row">
         <div class="col-lg-3 col-md-6">

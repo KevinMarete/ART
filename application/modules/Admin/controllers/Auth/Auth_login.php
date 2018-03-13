@@ -20,13 +20,14 @@ class Auth_login extends CI_Controller {
         );
 
         $data = $this->Auth_login_model->login_user($user_login['email'], $user_login['password']);
-        if ($data) {
+        if ($data || $this->isLoggedIn()) {
             $this->session->set_userdata('email', $data['email']);
             $this->session->set_userdata('last_name', $data['last_name']);
             $this->session->set_userdata('mobile', $data['mobile']);
 
             //function load dashboard_view
             $this->home();
+            
         } else {
             $this->session->set_flashdata('error_msg', 'Error occured,Try again.');
             $this->load->view("Admin/pages/auth/login_view");
@@ -38,6 +39,19 @@ class Auth_login extends CI_Controller {
         $data['content_view'] = 'pages/dashboard_view';
         $data['page_title'] = 'ART Dashboard | Admin';
         $this->load->view('template/template_view', $data);
+    }
+
+    /**
+     * This function used to check the user is logged in or not
+     */
+    public function isLoggedIn() {
+        $isLoggedIn = $this->session->userdata('isLoggedIn');
+
+        if (!isset($isLoggedIn) || $isLoggedIn != TRUE) {
+            $this->load->view("Admin/pages/auth/login_view");
+        } else {
+            $this->home();
+        }
     }
 
     //function logout and load login_view
