@@ -5,13 +5,13 @@
 		  		<!--facility_patient_distribution_chart-->
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
-						Facility Patient Distribution
+						<strong>FACILITY PATIENT DISTRIBUTION</strong>
 					</div>
 					<div class="chart-stage">
 						<div id="facility_patient_distribution_chart"></div>
 					</div>
 					<div class="chart-notes">
-						<span class="facility_patient_distribution_chart_heading"></span>
+						<span class="facility_patient_distribution_chart_heading heading"></span>
 					</div>
 				</div>
 		 	</div>
@@ -21,13 +21,13 @@
 		  		<!--facility_patient_distribution_table-->
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
-						Facility Patient Distibution (By Services)
+						<strong>FACILITY PATIENT DISTRIBUTION (BY SERVICES)</strong>
 					</div>
 					<div class="chart-stage">
 						<div id="facility_patient_distribution_table"></div>
 					</div>
 					<div class="chart-notes">
-						<span class="facility_patient_distribution_table_heading"></span>
+						<span class="facility_patient_distribution_table_heading heading"></span>
 					</div>
 				</div>
 	 		</div>

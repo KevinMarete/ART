@@ -11,7 +11,8 @@
             Year: 
             <a href="#" class="filter-year" data-value="2015"> 2015 </a>|
             <a href="#" class="filter-year" data-value="2016"> 2016 </a>|
-            <a href="#" class="filter-year" data-value="2017"> 2017 </a>
+            <a href="#" class="filter-year" data-value="2017"> 2017 </a>|
+            <a href="#" class="filter-year" data-value="2018"> 2018 </a>
           </div>
           <div class="filter form-control" id="month-filter">
             <input type="hidden" name="filter_month" id="filter_month" value="" />
@@ -30,8 +31,8 @@
             <a href="#" class="filter-month" data-value="Dec"> Dec</a>
           </div>
         </div>
-        <button id="btn_clear" class="btn btn-danger btn-md"><span class="glyphicon glyphicon-refresh"></span> Clear</button>
-        <button id="btn_filter" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+        <button id="btn_clear" class="btn btn-danger btn-md"><span class="glyphicon glyphicon-refresh"></span></button>
+        <button id="btn_filter" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-filter"></span></button>
       </div>
     </div>
   </div>

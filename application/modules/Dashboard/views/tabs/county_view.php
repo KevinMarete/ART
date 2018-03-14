@@ -5,13 +5,13 @@
 		  		<!--county_patient_distribution_chart-->
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
-						County Patient Distribution
+						<strong>COUNTY PATIENT DISTRIBUTION</strong>
 					</div>
 					<div class="chart-stage">
 						<div id="county_patient_distribution_chart"></div>
 					</div>
 					<div class="chart-notes">
-						<span class="county_patient_distribution_chart_heading"></span>
+						<span class="county_patient_distribution_chart_heading heading"></span>
 					</div>
 				</div>
 		 	</div>
@@ -21,13 +21,13 @@
 		  		<!--county_patient_distribution_table-->
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
-						County Patient Distibution (By Facilties and AgeGroup)
+						<strong>COUNTY PATIENT DISTRIBUTION (BY FACILITIES AND AGEGROUP)</strong>
 					</div>
 					<div class="chart-stage">
 						<div id="county_patient_distribution_table"></div>
 					</div>
 					<div class="chart-notes">
-						<span class="county_patient_distribution_table_heading"></span>
+						<span class="county_patient_distribution_table_heading heading"></span>
 					</div>
 				</div>
 		 	</div>

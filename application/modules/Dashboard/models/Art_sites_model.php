@@ -102,13 +102,13 @@ class Art_sites_model extends CI_Model {
 	public function get_adt_sites_distribution_numbers($filters){
 		$columns = array();
 
-		$this->db->select("facility, county, subcounty, partner, adt_version version, has_internet internet, has_backup backup, active_patients patients", FALSE);
+		$this->db->select("facility, county, subcounty, partner, adt_version version, has_internet internet, has_backup backup, active_patients total_patients", FALSE);
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				$this->db->where_in($category, $filter);
 			}
 		}
-		$this->db->order_by('active_patients', 'DESC');
+		$this->db->order_by('total_patients', 'DESC');
 		$query = $this->db->get('vw_install_list');
 		return array('main' => $query->result_array(), 'columns' => $columns);
 

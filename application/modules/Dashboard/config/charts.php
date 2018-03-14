@@ -201,7 +201,7 @@ $config['regimen_patient_chart_filters_default'] = array(
 
 //regimen_nrti_drugs_chart
 $config['regimen_nrti_drugs_chart_chartview'] = 'charts/pie_drilldown_view';
-$config['regimen_nrti_drugs_chart_title'] = 'Patient Proportions By NRTI Drugs in Regimen';
+$config['regimen_nrti_drugs_chart_title'] = 'NRTI Drugs in Regimen';
 $config['regimen_nrti_drugs_chart_yaxis_title'] = 'No. of Patients';
 $config['regimen_nrti_drugs_chart_source'] = 'Source: www.commodities.nascop.org';
 $config['regimen_nrti_drugs_chart_has_drilldown'] = TRUE;
@@ -213,7 +213,7 @@ $config['regimen_nrti_drugs_chart_filters_default'] = array(
 
 //regimen_nnrti_drugs_chart
 $config['regimen_nnrti_drugs_chart_chartview'] = 'charts/pie_drilldown_view';
-$config['regimen_nnrti_drugs_chart_title'] = 'Patient Proportions By NNRTI/PI/INSTI Drugs in Regimen';
+$config['regimen_nnrti_drugs_chart_title'] = 'NNRTI/PI/INSTI Drugs in Regimen';
 $config['regimen_nnrti_drugs_chart_yaxis_title'] = 'No. of Patients';
 $config['regimen_nnrti_drugs_chart_source'] = 'Source: www.commodities.nascop.org';
 $config['regimen_nnrti_drugs_chart_has_drilldown'] = TRUE;
@@ -223,7 +223,7 @@ $config['regimen_nnrti_drugs_chart_filters_default'] = array(
     'data_month' => $config['data_month']
 );
 
-//regimen_patient_table
+//regimen_drug_table
 $config['regimen_drug_table_chartview'] = 'charts/table_view';
 $config['regimen_drug_table_title'] = 'Regimen Drug Consumption';
 $config['regimen_drug_table_yaxis_title'] = 'No. of Patients';

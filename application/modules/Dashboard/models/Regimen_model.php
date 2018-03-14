@@ -85,7 +85,7 @@ class Regimen_model extends CI_Model {
 		return $drilldown_data;
 	}
 
-    public function get_nrti_drugs_in_regimen($filters){
+	public function get_nrti_drugs_in_regimen($filters){
 		$this->db->select("nrti_drug name, SUM(total) y, LOWER(REPLACE(nrti_drug, ' ', '_')) drilldown", FALSE);
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
@@ -96,7 +96,49 @@ class Regimen_model extends CI_Model {
 		$this->db->group_by('name');
 		$this->db->order_by('y', 'DESC');
 		$query = $this->db->get('dsh_patient');
-		return $this->get_nrti_drugs_in_regimen_drilldown_level1(array('main' => $query->result_array()), $filters);
+		return $this->get_drugs_in_regimen_drilldown(array('main' => $query->result_array()), $filters);
+	}
+
+	public function get_nnrti_drugs_in_regimen($filters){
+		$this->db->select("nnrti_drug name, SUM(total) y, LOWER(REPLACE(nnrti_drug, ' ', '_')) drilldown", FALSE);
+		if(!empty($filters)){
+			foreach ($filters as $category => $filter) {
+				$this->db->where_in($category, $filter);
+			}
+		}
+		$this->db->where('nnrti_drug !=', '');
+		$this->db->group_by('name');
+		$this->db->order_by('y', 'DESC');
+		$query = $this->db->get('dsh_patient');
+		return $this->get_drugs_in_regimen_drilldown(array('main' => $query->result_array()), $filters);
+	}
+
+	public function get_drugs_in_regimen_drilldown($main_data, $filters){
+		$drilldown_data = array();
+
+		if($main_data){
+			foreach ($main_data['main'] as $counter => $main) {
+				$base = $main['name'];
+
+				$this->db->select("drug name, SUM(total) y", FALSE);
+				$this->db->like('drug', $base);
+				if(!empty($filters)){
+					foreach ($filters as $category => $filter) {
+						$this->db->where_in($category, $filter);
+					}
+				}
+				$this->db->group_by('name');
+				$this->db->order_by('y', 'DESC');
+				$query = $this->db->get('dsh_consumption');
+
+				$drilldown_data['drilldown'][$counter]['id'] = strtolower($base);
+				$drilldown_data['drilldown'][$counter]['name'] = ucwords($base);
+				$drilldown_data['drilldown'][$counter]['colorByPoint'] = true;
+				$drilldown_data['drilldown'][$counter]['data'] = $query->result_array();	
+			}
+		}
+
+		return array_merge($main_data, $drilldown_data);
 	}
 
 	public function get_nrti_drugs_in_regimen_drilldown_level1($main_data, $filters){
@@ -130,20 +172,6 @@ class Regimen_model extends CI_Model {
 			}
 		}
 		return array_merge($main_data, $drilldown_data);
-	}
-
-	public function get_nnrti_drugs_in_regimen($filters){
-		$this->db->select("nnrti_drug name, SUM(total) y, LOWER(REPLACE(nnrti_drug, ' ', '_')) drilldown", FALSE);
-		if(!empty($filters)){
-			foreach ($filters as $category => $filter) {
-				$this->db->where_in($category, $filter);
-			}
-		}
-		$this->db->where('nnrti_drug !=', '');
-		$this->db->group_by('name');
-		$this->db->order_by('y', 'DESC');
-		$query = $this->db->get('dsh_patient');
-		return $this->get_nnrti_drugs_in_regimen_drilldown_level1(array('main' => $query->result_array()), $filters);
 	}
 
 	public function get_nnrti_drugs_in_regimen_drilldown_level1($main_data, $filters){

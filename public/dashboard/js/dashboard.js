@@ -49,7 +49,7 @@ $(function() {
     //Load default tab charts
     LoadTabContent(tabName)
     //Tab change Event
-    $("#main_tabs a").on("click", TabFilterHandler);
+    $("#main_tabs li a").on("click", TabFilterHandler);
     //Filter click Event
     $(".filter_btn").on("click", FilterBtnHandler);
     //Clear click Event
@@ -62,6 +62,8 @@ $(function() {
     $("#btn_filter").on("click", MainFilterHandler);
     //Main clear click event 
     $("#btn_clear").on("click", MainClearHandler);
+    //Add This to Block SHIFT Key for multiselect 
+    disableShiftKey()
 });
 
 function LoadTabContent(tabName){
@@ -69,11 +71,6 @@ function LoadTabContent(tabName){
     setMainFilter(tabName)
     //Set tab filter
     setTabFilter(tabName)
-    //Load charts
-    $.each(charts[tabName], function(key, chartName) {
-        chartID = '#'+chartName
-        LoadChart(chartID, chartURL, chartName, filters)
-    });
 }
 
 function setDefaultPeriod(URL){
@@ -91,7 +88,7 @@ function setMainFilter(tabName){
     $.each(mainFilterURLs[tabName], function(key, value){
         $.getJSON(value.link, function(data){
             //Create multiselect box
-            CreateSelectBox("#filter_item", "250px")
+            CreateSelectBox("#filter_item", "250px", 10)
             //Add data to selectbox
             $("#filter_item option").remove();
             $.each(data, function(i, v) {
@@ -109,12 +106,10 @@ function setTabFilter(tabName){
             $.ajax({
                 url: value.link,
                 datatype: 'JSON',
-                global: false,
-                async: false,
                 success: function(data){
                     $.each(value.filters, function(index, filterID){
                         //Create multiselect box
-                        CreateSelectBox(filterID, '100%')
+                        CreateSelectBox(filterID, '100%', 10)
                         //Add data to selectbox
                         $(filterID+ " option").remove();
                         $.each(data, function(i, v) {
@@ -123,23 +118,71 @@ function setTabFilter(tabName){
                         $(filterID).multiselect('rebuild');
                         $(filterID).data('filter_type', value.type);
                     });
+                },
+                complete: function(){
+                    //Load charts after filter options
+                    $.each(charts[tabName], function(key, chartName) {
+                        chartID = '#'+chartName
+                        LoadChart(chartID, chartURL, chartName, filters)
+                    });
                 }
             });
+        });
+    }else{
+        //Load charts without filter options
+        $.each(charts[tabName], function(key, chartName) {
+            chartID = '#'+chartName
+            LoadChart(chartID, chartURL, chartName, filters)
         });
     }
 }
 
-function CreateSelectBox(elementID, width){
+function CreateSelectBox(elementID, width, limit){
     $(elementID).val('').multiselect({
         enableCaseInsensitiveFiltering: true,
         enableFiltering: true,
-        includeSelectAllOption: true,
         disableIfEmpty: true,
         maxHeight: 300,
         buttonWidth: width,
-        nonSelectedText: 'None selected'
+        nonSelectedText: 'None selected',
+        includeSelectAllOption: false,
+        selectAll: false, 
+        onChange: function(option, checked) {
+            //Get selected options.
+            var selectedOptions = $(elementID + ' option:selected');
+            if (selectedOptions.length >= limit) {
+                //Disable all other checkboxes.
+                var nonSelectedOptions = $(elementID + ' option').filter(function() {
+                    return !$(this).is(':selected');
+                });
+                nonSelectedOptions.each(function() {
+                    var input = $('input[value="' + $(this).val() + '"]');
+                    input.prop('disabled', true);
+                    input.parent('li').addClass('disabled');
+                });
+            }
+            else {
+                //Enable all checkboxes.
+                $(elementID + ' option').each(function() {
+                    var input = $('input[value="' + $(this).val() + '"]');
+                    input.prop('disabled', false);
+                    input.parent('li').addClass('disabled');
+                });
+            }
+        }
     });
 }
+
+function disableShiftKey(){   
+    var shiftClick = $.Event("click");
+    shiftClick.shiftKey = true;
+    $(".multiselect-container li *").click(function(event) {
+        if (event.shiftKey) {
+            event.preventDefault();
+            return false;
+        }
+    });
+}   
 
 function LoadChart(divID, chartURL, chartName, selectedfilters){
     //Load Spinner
@@ -150,6 +193,14 @@ function LoadChart(divID, chartURL, chartName, selectedfilters){
         $.each($(divID + '_filters').data('filters'), function(key, data){
             if($.inArray(key, ['data_year', 'data_month', 'data_date']) == -1){
                 $(divID + "_filter").val(data).multiselect('refresh');
+                //Output filters
+                var filtermsg = '<b><u>'+key.toUpperCase()+':</u></b><br/>'
+                if($.isArray(data)){
+                    filtermsg += data.join('<br/>')
+                }else{
+                    filtermsg += data
+                }
+                $("."+chartName+"_heading").html(filtermsg) 
             }
         });
     });
@@ -163,11 +214,13 @@ function LoadSpinner(divID){
 }
 
 function TabFilterHandler(e){
-    var filtername = $(e.target).attr('href')
+    var filtername = $(e.target).attr('href');
     if(filtername !== '#'){
-        var filters = {}
+        filters = {}
         //Set tabName
-        tabName = filtername.replace('#', '')
+        tabName = filtername.replace('#', '');
+        //Clear heading
+        $(".heading").empty();
         //Set default period
         setDefaultPeriod(LatestDateURL)
         //Load selected tab charts

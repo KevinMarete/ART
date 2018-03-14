@@ -5,13 +5,13 @@
 				<!--adt_sites_version_chart-->
 				<div class="chart-wrapper">
 					<div class="chart-title">
-						ADT Site(s) Installation (By Version)
+						<strong>ADT SITE(S) INSTALLATION (BY VERSION)</strong>
 					</div>
 					<div class="chart-stage">
 						<div id="adt_sites_version_chart"></div>
 					</div>					
 					<div class="chart-notes">
-						<span class="adt_sites_version_chart_heading"></span>
+						<span class="adt_sites_version_chart_heading heading"></span>
 					</div>
 				</div>
 			</div>
@@ -19,13 +19,13 @@
 				<!--adt_sites_internet_chart-->
 				<div class="chart-wrapper">
 					<div class="chart-title">
-						ADT Site(s) Installation (Internet Available)
+						<strong>ADT SITE(S) INSTALLATION (INTERNET AVAILABLE)</strong>
 					</div>
 					<div class="chart-stage">
 						<div id="adt_sites_internet_chart"></div>
 					</div>
 					<div class="chart-notes">
-						<span class="adt_sites_internet_chart_heading"></span>
+						<span class="adt_sites_internet_chart_heading heading"></span>
 					</div>
 				</div>
 			</div>
@@ -33,13 +33,13 @@
 				<!--adt_sites_backup_chart-->
 				<div class="chart-wrapper">
 					<div class="chart-title">
-						ADT Site(s) Installation (Backup Available)
+						<strong>ADT SITE(S) INSTALLATION (BACKUP AVAILABLE)</strong>
 					</div>
 					<div class="chart-stage">
 						<div id="adt_sites_backup_chart"></div>
 					</div>
 					<div class="chart-notes">
-						<span class="adt_sites_backup_chart_heading"></span>
+						<span class="adt_sites_backup_chart_heading heading"></span>
 					</div>
 				</div>
 			</div>
@@ -49,7 +49,7 @@
 				<!--adt_sites_distribution_chart-->
 				<div class="chart-wrapper">
 					<div class="chart-title">
-						ADT Site(s) Installation (By County)
+						<strong>ADT SITE(S) INSTALLATION (BY COUNTY)</strong>
 					</div>
 					<div class="chart-stage">
 						<div id="adt_sites_distribution_chart"></div>
@@ -65,7 +65,7 @@
 				<!--adt_sites_distribution_table-->
 				<div class="chart-wrapper">
 					<div class="chart-title">
-						ADT Site(s) Installation Numbers
+						<strong>ADT SITE(S) INSTALLATION NUMBERS</strong>
 					</div>
 					<div class="chart-stage">
 						<div id="adt_sites_distribution_table"></div>
