@@ -68,9 +68,11 @@ $(function() {
 
 function LoadTabContent(tabName){
     //Refresh tab chart(s)
-    $.each(charts[tabName], function(key, chartName) {
-        LoadSpinner('#'+chartName)
-    });
+    if(charts[tabName].length > 0){
+        $.each(charts[tabName], function(key, chartName) {
+            LoadSpinner('#'+chartName)
+        });
+    }
     //Set main filter
     setMainFilter(tabName)
     //Set tab filter
@@ -105,7 +107,7 @@ function setMainFilter(tabName){
 }
 
 function setTabFilter(tabName){
-    if(tabFiltersURLs[tabName].length !== 0){
+    if(tabFiltersURLs[tabName].length > 0){
         $.each(tabFiltersURLs[tabName], function(key, value){
             $.ajax({
                 url: value.link,
@@ -134,10 +136,12 @@ function setTabFilter(tabName){
         });
     }else{
         //Load charts without filter options
-        $.each(charts[tabName], function(key, chartName) {
-            chartID = '#'+chartName
-            LoadChart(chartID, chartURL, chartName, filters)
-        });
+        if(charts[tabName].length > 0){
+            $.each(charts[tabName], function(key, chartName) {
+                chartID = '#'+chartName
+                LoadChart(chartID, chartURL, chartName, filters)
+            });
+        }
     }
 }
 
@@ -219,7 +223,7 @@ function LoadSpinner(divID){
 
 function TabFilterHandler(e){
     var filtername = $(e.target).attr('href');
-    if(filtername !== '#'){
+    if(filtername !== '#' && filtername.charAt(0) == "#"){
         filters = {}
         //Set tabName
         tabName = filtername.replace('#', '');
