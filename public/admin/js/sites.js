@@ -6,41 +6,13 @@ var partnerURL = '../API/partner';
 var userURL = '../API/user';
 
 $(function () {
-//     Gets installed sites  
-//    $.getJSON(siteURL, function (data) {
-//        var siteData = [];
-//        $.each(data, function (i, v) {
-//            siteData[i] = [v['facility_id'], v['version'], v['setup_date'], v['active_patients'], v['contact_name'], v['contact_phone'], v['']];
-//        });
-//        var table = $('#sites_listing').DataTable({
-//
-//            data: siteData,
-//            responsive: true,
-//            "columnDefs": [{
-//                    "targets": -1,
-//                    "data": null,
-//                    "render": function (facility_id, type, full, meta) {
-//                        return '<a href="Sites/pages/update_site' + facility_id + '"><i class="fa fa-pencil"></i></a>';
-//                    }}]
-//             "defaultContent": "<button>Edit</button>"
-//        });
-//
-//        $('#sites_listing tbody').on('click', 'tr', function () {
-////            var rowData = table.row(this).data();
-//            // ... do something with `rowData`
-//            var data = table.row($(this).parents('tr')).data();
-//            alert(data[0] + "'s salary is: " + data[ 5 ]);
-////            alert(rowData)
-////            console.log(rowData);
-//        });
-//    });
-
     $.getJSON(facilityURL, function (data) {
         $("#facility option").remove();
         $("#facility").append($("<option value=''>Select Facility</option>"));
         $.each(data, function (i, v) {
-            $("#facility").append($("<option value='" + v.id + "' mflcode='" + v.mflcode + "' subcountyid='" + v.subcounty_id + "' partnerid='" + v.partner_id + "' >" + v.name + "</option>"));
+            $("#facility").append($("<option value='" + v.id + "' mflcode='" + v.mflcode + "' subcountyid='" + v.subcounty_id + "' partnerid='" + v.partner_id + "' >" + v.name + " ("+ v.mflcode +")</option>"));
         });
+        $("#facility").chosen({width: "100%"});
     });
 
     //Gets all subcounties

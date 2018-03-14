@@ -67,6 +67,10 @@ $(function() {
 });
 
 function LoadTabContent(tabName){
+    //Refresh tab chart(s)
+    $.each(charts[tabName], function(key, chartName) {
+        LoadSpinner('#'+chartName)
+    });
     //Set main filter
     setMainFilter(tabName)
     //Set tab filter
