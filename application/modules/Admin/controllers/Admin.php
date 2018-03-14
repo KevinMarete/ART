@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Admin extends MX_Controller {
 
     public function index() {
-        $this->load->view('pages/login_view');
+        $this->load->view('pages/auth/login_view');
     }
 
     public function home() {
@@ -15,7 +15,7 @@ class Admin extends MX_Controller {
     }
 
     public function register() {
-        $this->load->view('pages/registration_view');
+        $this->load->view('pages/auth/registration_view');
     }
 
 }
