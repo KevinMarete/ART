@@ -16,7 +16,7 @@
 						<div id="commodity_consumption_chart"></div>
 					</div>
 					<div class="chart-notes">
-						<span class="commodity_consumption_chart_heading"></span>
+						<span class="commodity_consumption_chart_heading heading"></span>
 					</div>
 				</div>
 		 	</div>
@@ -37,7 +37,7 @@
 						<div id="patients_regimen_chart"></div>
 					</div>
 					<div class="chart-notes">
-						<span class="patients_regimen_chart_heading"></span>
+						<span class="patients_regimen_chart_heading heading"></span>
 					</div>
 				</div>
 		 	</div>
@@ -58,7 +58,7 @@
 						<div id="commodity_month_stock_chart"></div>
 					</div>
 					<div class="chart-notes">
-						<span class="commodity_month_stock_chart_heading"></span>
+						<span class="commodity_month_stock_chart_heading heading"></span>
 					</div>
 				</div>
 		 	</div>

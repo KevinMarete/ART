@@ -4,6 +4,7 @@
 	$table_data = json_decode($chart_series_data, TRUE);
 	$count = 0;
 	$tbody = "<tbody>";
+	$overall = array_sum(array_column($table_data, 'total_patients'));
 	foreach ($table_data as $row_data) {
 		$tbody .= "<tr>";
 		foreach ($row_data as $key => $value) {
@@ -18,9 +19,14 @@
 				$tbody .= "<td>".number_format($value)."</td>";
 			}
 		}
+		$percentage = round(($value/$overall)*100, 2);
+		$progress_bar = '<div class="progress"><div class="progress-bar-info" role="progressbar" aria-valuenow="'.$percentage.'" aria-valuemin="0" aria-valuemax="100" style="width:'.$percentage.'%">'.$percentage.'%</div></div>';
+		$tbody .= "<td>".$progress_bar."</td>";
 		$tbody .= "</tr>";
 		$count++;
 	}
+	//Add for percentage
+	$thead .= "<th>OVERALL PERCENTAGE</th>";
 	$thead .= "</tr></thead>";
 	$tbody .= "</tbody>";
 	$dyn_table .= $thead;

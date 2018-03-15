@@ -45,19 +45,19 @@ class Summary_model extends CI_Model {
 		$patient_services_data = array(
 			array('type' => 'column',  'name' => 'ART' , 'data' =>array()),
 			array('type' => 'column',  'name' => 'HepB' , 'data' =>array()),
-			array('type' => 'column',  'name' => 'OI Only' , 'data' =>array()),
 			array('type' => 'column',  'name' => 'PEP' , 'data' =>array()),
 			array('type' => 'column',  'name' => 'PMTCT Mother' , 'data' =>array()),
 			array('type' => 'column',  'name' => 'PMTCT Child' , 'data' =>array()),
 			array('type' => 'column',  'name' => 'PrEP' , 'data' =>array())
 		);
 
-		$this->db->select("UPPER(county) county, SUM(IF(regimen_service= 'ART', total, 0)) art, SUM(IF(regimen_service= 'PMTCT' AND age_category = 'adult', total, 0)) pmtct_mother, SUM(IF(regimen_service= 'PMTCT' AND age_category = 'paed', total, 0)) pmtct_child, SUM(IF(regimen_service= 'OI Only', total, 0)) oi, SUM(IF(regimen_service= 'HepB', total, 0)) hepb, SUM(IF(regimen_service= 'PrEP', total, 0)) prep, SUM(IF(regimen_service= 'PEP', total, 0)) pep", FALSE);
+		$this->db->select("UPPER(county) county, SUM(IF(regimen_service= 'ART', total, 0)) art, SUM(IF(regimen_service= 'PMTCT' AND age_category = 'adult', total, 0)) pmtct_mother, SUM(IF(regimen_service= 'PMTCT' AND age_category = 'paed', total, 0)) pmtct_child, SUM(IF(regimen_service= 'HepB', total, 0)) hepb, SUM(IF(regimen_service= 'PrEP', total, 0)) prep, SUM(IF(regimen_service= 'PEP', total, 0)) pep", FALSE);
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				$this->db->where_in($category, $filter);
 			}
 		}
+		$this->db->where_not_in('regimen_service', 'OI Only');
 		$this->db->group_by('county');
 		$this->db->order_by("county, regimen_service asc");
 		$query = $this->db->get('dsh_patient');
@@ -71,8 +71,6 @@ class Summary_model extends CI_Model {
 						array_push($patient_services_data[$index]['data'], $result['art']);
 					}else if($scaleup['name'] == 'HepB'){
 						array_push($patient_services_data[$index]['data'], $result['hepb']);
-					}else if($scaleup['name'] == 'OI Only'){
-						array_push($patient_services_data[$index]['data'], $result['oi']);	
 					}else if($scaleup['name'] == 'PEP'){
 						array_push($patient_services_data[$index]['data'], $result['pep']);	
 					}else if($scaleup['name'] == 'PMTCT Mother'){

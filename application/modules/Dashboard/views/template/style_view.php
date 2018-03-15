@@ -12,6 +12,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo base_url().'public/dashboard/lib/datatables/css/datatables.min.css';?>"/>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url().'public/dashboard/lib/datatables/css/jquery.dataTables.min.css';?>"/>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url().'public/dashboard/lib/datatables/css/buttons.dataTables.min.css';?>"/>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url().'public/dashboard/lib/datatables/css/dataTables.bootstrap.min.css';?>" />
 <!--dashboard-->
 <link rel="stylesheet" type="text/css" href="<?php echo base_url().'public/dashboard/css/dashboard.css';?>" />
 

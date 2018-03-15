@@ -10,7 +10,7 @@
 <link href="<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables-plugins/dataTables.bootstrap.css'; ?>" rel="stylesheet">
 <!--Jquery DataTables-->
 <link href=".<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables/css/jquery.dataTables.min.css'; ?>" rel="stylesheet">
-<!--DataTables buttons--->
+<!--DataTables buttons-->
 <link href=".<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables/css/buttons.dataTables.min.css'; ?>" rel="stylesheet">
 <!---DataTables select css-->
 <link href=".<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables/css/select.dataTables.min.css'; ?>" rel="stylesheet">
@@ -24,8 +24,9 @@
 <link href="<?php echo base_url() . 'public/admin/lib/sbadmin2/dist/css/sb-admin-2.css'; ?>" rel="stylesheet">
 <!--favicon-->
 <link rel="shortcut icon" type="text/css" href="<?php echo base_url() . 'public/dashboard/img/favicon.ico'; ?>">
-<!--Custom navbar css--->
+<!--Custom navbar css-->
 <link href="<?php echo base_url() . 'public/admin/css/custom.css'; ?>" rel="stylesheet" type="text/css">
+<!--chosen-->
+<link href="<?php echo base_url() . 'public/admin/lib/chosen_v1.8.3/chosen.min.css'; ?>" rel="stylesheet" type="text/css">
 <!-- jQuery -->
 <script src="<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables/js/jquery-1.12.4.js'; ?>"></script>
-<!--<script src="<?php // echo base_url() . 'public/admin/lib/sbadmin2/vendor/jquery/jquery.min.js';  ?>"></script>-->

@@ -11,7 +11,7 @@
 						<div id="patient_scaleup_chart"></div>
 					</div>
 					<div class="chart-notes">
-						<span class="patient_scaleup_chart_heading"></span>
+						<span class="patient_scaleup_chart_heading heading"></span>
 					</div>
 				</div>
 		 	</div>
@@ -27,7 +27,7 @@
 						<div id="patient_services_chart"></div>
 					</div>
 					<div class="chart-notes">
-						<span class="patient_services_chart_heading"></span>
+						<span class="patient_services_chart_heading heading"></span>
 					</div>
 				</div>
 		 	</div>
@@ -48,7 +48,7 @@
 						<div id="national_mos_chart"></div>
 					</div>
 					<div class="chart-notes">
-						<span class="national_mos_chart_heading"></span>
+						<span class="national_mos_chart_heading heading"></span>
 					</div>
 				</div>
 		 	</div>

@@ -5,13 +5,13 @@
 		  		<!--subcounty_patient_distribution_chart-->
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
-						Subcounty Patient Distribution
+						<strong>SUBCOUNTY PATIENT DISTRIBUTION</strong>
 					</div>
 					<div class="chart-stage">
 						<div id="subcounty_patient_distribution_chart"></div>
 					</div>
 					<div class="chart-notes">
-						<span class="subcounty_patient_distribution_chart_heading"></span>
+						<span class="subcounty_patient_distribution_chart_heading heading"></span>
 					</div>
 				</div>
 		 	</div>
@@ -21,13 +21,13 @@
 		  		<!--subcounty_patient_distribution_table-->
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
-						Subcounty Patient Distibution (By Facilties and AgeGroup)
+						<strong>SUBCOUNTY PATIENT DISTRIBUTION (BY FACILITIES AND AGEGROUP)</strong>
 					</div>
 					<div class="chart-stage">
 						<div id="subcounty_patient_distribution_table"></div>
 					</div>
 					<div class="chart-notes">
-						<span class="subcounty_patient_distribution_table_heading"></span>
+						<span class="subcounty_patient_distribution_table_heading heading"></span>
 					</div>
 				</div>
 		 	</div>

@@ -5,7 +5,7 @@
 		  		<!--partner_summary_chart-->
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
-						Partner Patient Distribution
+						<strong>PARTNER PATIENT DISTRIBUTION</strong>
 					</div>
 					<div class="chart-stage">
 						<div id="partner_patient_distribution_chart"></div>
@@ -21,7 +21,7 @@
 		  		<!--facility_patient_distribution_table-->
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
-						Partner Patient Distibution (By Facilties and Services)
+						<strong>PARTNER PATIENT DISTRIBUTION (BY FACILITIES AND SERVICES)</strong>
 					</div>
 					<div class="chart-stage">
 						<div id="partner_patient_distribution_table"></div>
