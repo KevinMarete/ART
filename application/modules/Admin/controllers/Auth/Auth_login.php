@@ -2,9 +2,8 @@
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
-require APPPATH . '/libraries/BaseController.php';
 
-class Auth_login extends BaseController {
+class Auth_login extends CI_Controller {
 
     public function __construct() {
 

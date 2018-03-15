@@ -122,7 +122,7 @@
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label>EMRS Used</label>
-                                                                        <select multiple class="form-control" name="emrs_used[]" id="emrs_used" required="">
+                                                                        <select multiple class="form-control" name="emrs_used[]" id="emrs_used">
                                                                             <option>IQCARE</option>
                                                                             <option>CPAD</option>
                                                                             <option>KENYAEMR</option>
