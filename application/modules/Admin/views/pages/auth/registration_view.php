@@ -47,7 +47,7 @@
                         ?>
 
                         <div class="panel-body">
-                            <form role="form" action="<?php echo base_url() . 'Admin/Auth/Auth_register'; ?>" method="POST">
+                            <form role="form" action="<?php echo base_url() . 'Admin/Auth/Auth_user'; ?>" method="POST">
                                 <fieldset>
                                     <div class="form-group">
                                         <label class="control-label col-md-3">First Name</label>
@@ -103,7 +103,7 @@
                                 <b>Already registered ?</b> 
                                 <br>
                                 </b>
-                                <a href="<?php echo base_url('Admin/index'); ?>">Login here <i class="fa fa-arrow-circle-o-right"></i></a>
+                                <a href="<?php echo base_url('Admin'); ?>">Login here <i class="fa fa-arrow-circle-o-right"></i></a>
                             </center>
                         </div>
                     </div>

@@ -3,14 +3,18 @@
         <div class="col-lg-12">
             <h1 class="page-header">Dashboard</h1>
         </div>
+        <div class="row">
+            test<br>
+            {
+            <?php echo $this->session->userdata('last_name'); ?>
+            <?php echo $this->session->userdata('email'); ?>
+            <?php echo $this->session->userdata('mobile'); ?>
+            <?php echo $this->session->userdata('first_name'); ?>
+            <?php echo $this->session->userdata('roleId'); ?>}
+        </div>
         <!-- /.col-lg-12 -->
     </div>
     <!-- /.row -->
-    <div class="row">
-        <?php echo $this->session->userdata('last_name'); ?>
-        <?php echo $this->session->userdata('email'); ?>
-        <?php echo $this->session->userdata('mobile');?>
-    </div>
     <div class="row">
         <div class="col-lg-3 col-md-6">
             <div class="panel panel-primary">

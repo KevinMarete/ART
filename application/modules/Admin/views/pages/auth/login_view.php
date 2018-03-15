@@ -45,24 +45,23 @@
                             <?php
                         }
                         ?>
-
                         <div class="panel-body">
-                            <form role="form" action="<?php echo base_url() . 'Admin/Auth/Auth_login'; ?>" method="POST">
+                            <form role="form" action="<?php echo base_url() . 'Admin/Auth/Auth_login/loginMe'; ?>" method="POST">
                                 <fieldset>
                                     <div class="form-group">
-                                        <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus>
+                                        <input class="form-control" placeholder="E-mail" name="email" id="email" type="email" autofocus required>
+                                        <span class="help-block"></span>
                                     </div>
                                     <div class="form-group">
-                                        <input class="form-control" placeholder="Password" name="password" type="password" value="">
+                                        <input class="form-control" placeholder="Password" name="password" id="password" type="password" autofocus required>
+                                        <span class="help-block"></span>
                                     </div>
                                     <div class="checkbox">
                                         <label>
                                             <input name="remember" type="checkbox" value="Remember Me">Remember Me
                                         </label>
                                     </div>
-                                    <!-- Change this to a button or input when using this as a form -->
-                                    <!--<a href="<?php echo base_url() . 'Admin/home'; ?>" class="btn btn-lg btn-primary btn-block">Login</a>-->
-                                    <input class="btn btn-lg btn-primary btn-block" type="submit" value="Login" name="login" >
+                                    <input class="btn btn-lg btn-primary btn-block" type="submit" value="Login" name="login" id="login_button">
                                 </fieldset>
                             </form>
                             <center><b>Not yet registered ?</b> 

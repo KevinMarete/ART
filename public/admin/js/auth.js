@@ -16,9 +16,9 @@ function checkPasswordMatch() {
 }
 
 //flash delay
-$(function() {
-   $('.alert').delay(500).fadeIn(1000, 
-   function() {
-      $(this).delay(500).fadeOut(1000);
-   });
+$(function () {
+    $('.alert').delay(500).fadeIn(1500,
+            function () {
+                $(this).delay(500).fadeOut(1500);
+            });
 });

@@ -67,22 +67,22 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">First Name</label>
                             <div class="col-md-9">
-                                <input class="form-control" placeholder="First Name" name="first_name" type="text" autofocus required="">
+                                <input class="form-control" placeholder="First Name" name="first_name" type="text" autofocus>
                                 <span class="help-block"></span>
                             </div>
                         </div>  
                         <div class="form-group">
                             <label class="control-label col-md-3">Last Name</label>
                             <div class="col-md-9">
-                                <input class="form-control" placeholder="Last Name" name="last_name" type="text" autofocus required="">
+                                <input class="form-control" placeholder="Last Name" name="last_name" type="text" autofocus>
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">E-mail</label>
                             <div class="col-md-9">
-                                <input class="form-control" placeholder="E-mail" name="user_email" type="email" autofocus required="">
-                                <span class="help-block"></span>
+                                <input class="form-control" placeholder="E-mail" name="user_email" id="user_email" type="email" autofocus>
+                                <span class="help-block" id="error"></span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -95,7 +95,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Password</label>
                             <div class="col-md-9">
-                                <input class="form-control" placeholder="Password" name="user_password" id="user_password" type="password" required="">
+                                <input class="form-control" placeholder="Password" name="user_password" id="user_password" type="password">
                                 <span class="help-block"></span>
                             </div>
                         </div>
