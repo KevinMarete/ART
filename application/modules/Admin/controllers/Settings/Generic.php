@@ -1,11 +1,13 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require APPPATH . '/libraries/BaseController.php';
 
-class Generic extends CI_Controller {
+class Generic extends BaseController {
 
     public function __construct() {
         parent::__construct();
+        $this->isLoggedIn();
         $this->load->model('Generic_model', 'generic');
     }
 

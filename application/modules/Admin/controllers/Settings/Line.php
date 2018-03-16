@@ -1,11 +1,13 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require APPPATH . '/libraries/BaseController.php';
 
-class Line extends CI_Controller {
+class Line extends BaseController {
 
     public function __construct() {
         parent::__construct();
+        $this->isLoggedIn();
         $this->load->model('Line_model', 'line');
     }
 

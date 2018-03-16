@@ -7,7 +7,6 @@ class Admin extends BaseController {
 
     public function __construct() {
         parent::__construct();
-//        $this->isLoggedIn();
     }
 
     public function index() {

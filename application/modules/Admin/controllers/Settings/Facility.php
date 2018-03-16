@@ -1,11 +1,13 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require APPPATH . '/libraries/BaseController.php';
 
-class Facility extends CI_Controller {
+class Facility extends BaseController {
 
     public function __construct() {
         parent::__construct();
+        $this->isLoggedIn();
         $this->load->model('Facility_model', 'facility_listing');
         $this->load->model('Subcounty_model');
         $this->load->model('Partner_model');
@@ -67,7 +69,7 @@ class Facility extends CI_Controller {
             'subcounty_id' => $this->input->post('subcounty_id'),
             'partner_id' => $this->input->post('partner_id')
         );
-        
+
         $insert = $this->facility_listing->save($data);
         echo json_encode(array("status" => TRUE));
     }

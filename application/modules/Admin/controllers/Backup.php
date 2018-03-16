@@ -1,11 +1,13 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require APPPATH . '/libraries/BaseController.php';
 
-class Backup extends CI_Controller {
+class Backup extends BaseController {
 
     public function __construct() {
         parent::__construct();
+        $this->isLoggedIn();
         $this->load->model('Backup_model', 'backup');
         $this->load->model('Facility_model');
     }

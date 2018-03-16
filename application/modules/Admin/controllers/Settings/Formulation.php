@@ -1,11 +1,13 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require APPPATH . '/libraries/BaseController.php';
 
-class Formulation extends CI_Controller {
+class Formulation extends BaseController {
 
     public function __construct() {
         parent::__construct();
+        $this->isLoggedIn();
         $this->load->model('Formulation_model', 'formulation');
     }
 

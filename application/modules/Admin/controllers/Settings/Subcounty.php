@@ -1,11 +1,13 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require APPPATH . '/libraries/BaseController.php';
 
-class Subcounty extends CI_Controller {
+class Subcounty extends BaseController {
 
     public function __construct() {
         parent::__construct();
+        $this->isLoggedIn();
         $this->load->model('Subcounty_model', 'subcounty');
         $this->load->model('County_model');
     }
@@ -13,7 +15,7 @@ class Subcounty extends CI_Controller {
     public function index() {
         $data['content_view'] = 'pages/settings/subcounty_view';
         $data['page_title'] = 'ART Dashboard | Settings';
-        $data['get_county']= $this->County_model->read();
+        $data['get_county'] = $this->County_model->read();
         $this->load->view('template/template_view', $data);
     }
 
@@ -26,7 +28,7 @@ class Subcounty extends CI_Controller {
             $row = array();
             $row[] = $subcounty->subcounty_name;
             $row[] = $subcounty->county_name;
-            
+
             //add html for action
             $row[] = '<a class="btn btn-sm btn-primary glyphicon glyphicon-pencil" href="javascript:void(0)" title="Edit" onclick="edit_subcounty(' . "'" . $subcounty->id . "'" . ')"></a>
 				  <a class="btn btn-sm btn-danger glyphicon glyphicon-trash" href="javascript:void(0)" title="Delete" onclick="delete_subcounty(' . "'" . $subcounty->id . "'" . ')"></a>';

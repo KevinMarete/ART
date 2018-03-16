@@ -1,11 +1,12 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
-
-class Change_reason extends CI_Controller {
+require APPPATH . '/libraries/BaseController.php';
+class Change_reason extends BaseController {
 
     public function __construct() {
         parent::__construct();
+        $this->isLoggedIn();
         $this->load->model('Change_reason_model', 'change_reason');
     }
 

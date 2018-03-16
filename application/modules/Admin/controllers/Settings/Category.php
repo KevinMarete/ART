@@ -1,11 +1,12 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
-
-class Category extends CI_Controller {
+require APPPATH . '/libraries/BaseController.php';
+class Category extends BaseController {
 
     public function __construct() {
         parent::__construct();
+        $this->isLoggedIn();
         $this->load->model('Category_model', 'category');
     }
 

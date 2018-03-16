@@ -1,11 +1,13 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require APPPATH . '/libraries/BaseController.php';
 
-class Regimen extends CI_Controller {
+class Regimen extends BaseController {
 
     public function __construct() {
         parent::__construct();
+        $this->isLoggedIn();
         $this->load->model('Regimen_model', 'regimen');
         $this->load->model('Category_model');
         $this->load->model('Service_model');

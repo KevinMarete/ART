@@ -1,11 +1,13 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require APPPATH . '/libraries/BaseController.php';
 
-class Drug extends CI_Controller {
+class Drug extends BaseController {
 
     public function __construct() {
         parent::__construct();
+        $this->isLoggedIn();
         $this->load->model('Drug_model', 'drug');
         $this->load->model('Generic_model');
         $this->load->model('Formulation_model');
