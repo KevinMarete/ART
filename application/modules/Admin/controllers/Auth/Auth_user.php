@@ -3,7 +3,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Auth_user extends BaseController {
+class Auth_user extends CI_Controller {
 
     public function __construct() {
 
@@ -25,7 +25,7 @@ class Auth_user extends BaseController {
 
         $email_check = $this->Auth_user_model->email_check($user['email']);
         //check if email is already registered, if not register user
-        if ($email_check==FALSE) {
+        if ($email_check==TRUE) {
             $this->Auth_user_model->register_user($user);
             $this->session->set_flashdata('success_msg', 'Registration Successfully.Now login to your account.');
             $this->load->view('Admin/pages/auth/login_view');

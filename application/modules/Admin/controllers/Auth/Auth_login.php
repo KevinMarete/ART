@@ -28,13 +28,18 @@ class Auth_login extends CI_Controller {
             //check email password match and if matches login in user
             $data = $this->Auth_login_model->login_user($user_login['email'], $user_login['password']);
             if (!empty($data)) {
-                $this->session->set_userdata('email', $data['email']);
-                $this->session->set_userdata('last_name', $data['last_name']);
-                $this->session->set_userdata('mobile', $data['mobile']);
-                $this->session->set_userdata('first_name', $data['first_name']);
-                $this->session->set_userdata('roleId', $data['roleId']);
-
+                //Array to store session data
+                $sessionArray = array(
+                    'email' => $data['email'],
+                    'last_name' => $data['last_name'],
+                    'mobile' => $data['mobile'],
+                    'first_name' => $data['first_name'],
+                    'roleId' => $data['roleId'],
+                    'isLoggedIn' => TRUE
+                );
+                $this->session->set_userdata($sessionArray);
                 //function load dashboard_view if email password match
+                print_r($sessionArray);
                 $this->home();
             } else {
                 //login fails if user does not provide matching registered email and password

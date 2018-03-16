@@ -24,7 +24,9 @@
                 <div class="col-md-6 col-md-offset-3"><!--col-md-4 is used to create the no of colums in the grid also use for medimum and large devices-->
                     <div class="login-panel panel panel-default">
                         <div class="panel-heading text-center">
-                            <h2 class="panel-title"> <b>PLEASE SIGN UP</b></h2>
+                            <img src="<?php echo base_url() . 'public/login/img/user_favicon.ico'; ?>" class="img-responsive center-block" alt="USER">
+                            <h1>ART</h1>
+                            <h2 class="panel-title"> <b>Please Sign Up</b></h2>
                         </div>
                         <?php
                         $success_msg = $this->session->flashdata('success_msg');

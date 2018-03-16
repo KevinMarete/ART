@@ -29,6 +29,17 @@
     <!-- /.navbar-top-links -->
 
     <div class="navbar-default sidebar" role="navigation">
+        <div class="row">
+            test<br>
+            {
+            <?php echo $this->session->userdata('last_name'); ?>
+            <?php echo $this->session->userdata('email'); ?>
+            <?php echo $this->session->userdata('mobile'); ?>
+            <?php echo $this->session->userdata('first_name'); ?>
+            <?php echo $this->session->userdata('roleId'); ?>
+            }
+            <?php echo $this->session->userdata('isLoggedIn'); ?>
+        </div>
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
                 <li>
@@ -38,10 +49,10 @@
                     <a href="<?php echo base_url() . 'Admin/sites'; ?>"><i class="fa fa-edit fa-fw"></i> Sites</a>
                 </li>
                 <li>
-                    <a href="<?php echo base_url('Admin/User_listing');?>"><i class="fa fa-user fa-fw"></i> User Listing</a>
+                    <a href="<?php echo base_url('Admin/User_listing'); ?>"><i class="fa fa-user fa-fw"></i> User Listing</a>
                 </li>
                 <li>
-                    <a href="<?php echo base_url('Admin/Backup');?>"><i class="fa fa-files-o fa-fw"></i> Backups</a>
+                    <a href="<?php echo base_url('Admin/Backup'); ?>"><i class="fa fa-files-o fa-fw"></i> Backups</a>
                 </li>
                 <li>
                     <a href="#"><i class="fa fa-wrench fa-fw"></i> Settings<span class="fa arrow"></span></a>

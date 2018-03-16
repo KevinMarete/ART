@@ -24,7 +24,9 @@
                 <div class="col-md-4 col-md-offset-4">
                     <div class="login-panel panel panel-default">
                         <div class="panel-heading text-center">
-                            <h3 class="panel-title"><b>PLEASE SIGN IN</b></h3>
+                            <img src="<?php echo base_url() . 'public/login/img/user_favicon.ico'; ?>" class="img-responsive center-block" alt="USER">
+                            <h1>ART</h1>
+                            <h3 class="panel-title"><b>Please Sign In</b></h3>
                         </div>
                         <?php
                         $success_msg = $this->session->flashdata('success_msg');
