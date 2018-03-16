@@ -113,3 +113,4 @@
 
 <!---script to sort settings nav links alphabetically--->
 <script src = "<?php echo base_url() . 'public/admin/js/settings_sort_nav_links.js'; ?>"></script>
+<script src = "<?php echo base_url() . 'public/admin/js/nav_dropdown.js'; ?>"></script>
