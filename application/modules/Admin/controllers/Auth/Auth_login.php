@@ -39,7 +39,6 @@ class Auth_login extends CI_Controller {
                 );
                 $this->session->set_userdata($sessionArray);
                 //function load dashboard_view if email password match
-                print_r($sessionArray);
                 $this->home();
             } else {
                 //login fails if user does not provide matching registered email and password

@@ -87,7 +87,6 @@ define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
 /* * ** USER DEFINED CONSTANTS ********* */
-
 define('ROLE_ADMIN', '1');
 define('ROLE_MANAGER', '2');
 define('ROLE_NORMALUSER', '3');

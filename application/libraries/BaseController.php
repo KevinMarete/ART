@@ -12,7 +12,6 @@ class BaseController extends CI_Controller {
     protected $id = '';
     protected $mobile = '';
     protected $last_name = '';
-    protected $global = array();
     protected $first_name = '';
 
     /**
@@ -41,13 +40,6 @@ class BaseController extends CI_Controller {
             $this->mobile = $this->session->userdata('mobile');
             $this->last_name = $this->session->userdata('last_name');
             $this->first_name = $this->session->userdata('first_name');
-            print_r($this->mobile);
-            print_r($this->last_name);
-            print_r($this->roleId);
-//                        die();
-            $this->global ['roleId'] = $this->roleId;
-            $this->global ['last_name'] = $this->last_name;
-            $this->global ['first_name'] = $this->first_name;
         }
     }
 

@@ -3,18 +3,19 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . '/libraries/BaseController.php';
 
-
 class Admin extends BaseController {
 
     public function __construct() {
         parent::__construct();
-        $this->isLoggedIn();
+//        $this->isLoggedIn();
     }
 
     public function index() {
         $this->load->view('pages/auth/login_view');
     }
+
     public function home() {
+        $this->isLoggedIn();
         $data['content_view'] = 'pages/dashboard_view';
         $data['page_title'] = 'ART Dashboard | Admin';
         $this->load->view('template/template_view', $data);
