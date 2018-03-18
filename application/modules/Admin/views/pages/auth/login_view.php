@@ -50,13 +50,13 @@
                         <div class="panel-body">
                             <form role="form" action="<?php echo base_url() . 'Admin/Auth/Auth_login/loginMe'; ?>" method="POST">
                                 <fieldset>
-                                    <div class="form-group">
+                                    <div class="form-group has-feedback">
                                         <input class="form-control" placeholder="E-mail" name="email" id="email" type="email" autofocus required>
-                                        <span class="help-block"></span>
+                                        <span class="help-block glyphicon glyphicon-envelope form-control-feedback"></span>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group has-feedback">
                                         <input class="form-control" placeholder="Password" name="password" id="password" type="password" autofocus required>
-                                        <span class="help-block"></span>
+                                        <span class="help-block glyphicon glyphicon-lock form-control-feedback"></span>
                                     </div>
                                     <div class="checkbox">
                                         <label>

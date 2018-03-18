@@ -45,6 +45,27 @@ function add_regimen()
     $('.help-block').empty();
     $('#modal_form').modal('show');
     $('.modal-title').text('ADD REGIMEN');
+
+    //select2 for Category
+    $("#category_id").select2({
+        placeholder: "---Select Category---",
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
+
+    //select2 for Service
+    $("#service_id").select2({
+        placeholder: "---Select Service---",
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
+
+    //select2 for Line
+    $("#line_id").select2({
+        placeholder: "---Select Line---",
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
 }
 
 function edit_regimen(id)
@@ -53,6 +74,24 @@ function edit_regimen(id)
     $('#form')[0].reset(); // reset form on modals
     $('.form-group').removeClass('has-error'); // clear error class
     $('.help-block').empty(); // clear error string
+
+    //select2 for Category
+    $("#category_id").select2({
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
+
+    //select2 for Service
+    $("#service_id").select2({
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
+
+    //select2 for Line
+    $("#line_id").select2({
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
 
     //Ajax Load data from ajax
     $.ajax({
@@ -66,9 +105,9 @@ function edit_regimen(id)
             $('[name="code"]').val(data.code);
             $('[name="name"]').val(data.name);
             $('[name="description"]').val(data.description);
-            $('[name="category_id"]').val(data.category_id);
-            $('[name="service_id"]').val(data.service_id);
-            $('[name="line_id"]').val(data.line_id);
+            $('[name="category_id"]').val(data.category_id).trigger('change');
+            $('[name="service_id"]').val(data.service_id).trigger('change');
+            $('[name="line_id"]').val(data.line_id).trigger('change');
 
             $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
             $('.modal-title').text('EDIT REGIMEN'); // Set title to Bootstrap modal title

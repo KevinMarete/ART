@@ -48,6 +48,13 @@ function add_subcounty()
     $('.help-block').empty();
     $('#modal_form').modal('show');
     $('.modal-title').text('ADD SUBCOUNTY');
+
+    //select2 for County
+    $("#county").select2({
+        placeholder: "---Select County---",
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
 }
 
 function edit_subcounty(id)
@@ -56,6 +63,12 @@ function edit_subcounty(id)
     $('#form')[0].reset(); // reset form on modals
     $('.form-group').removeClass('has-error'); // clear error class
     $('.help-block').empty(); // clear error string
+    
+    //select2 for County
+    $("#county").select2({
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
 
     //Ajax Load data from ajax
     $.ajax({
@@ -67,7 +80,7 @@ function edit_subcounty(id)
 
             $('[name="id"]').val(data.id);
             $('[name="name"]').val(data.name);
-            $('[name="county_id"]').val(data.county_id);
+            $('[name="county_id"]').val(data.county_id).trigger('change');
 
             $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
             $('.modal-title').text('EDIT SUBCOUNTY'); // Set title to Bootstrap modal title

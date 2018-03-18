@@ -56,15 +56,15 @@ if (!empty($get_siteInfo)) {
                     <label>Partner</label>
                     <input name="partner_id" id="partner" class="form-control" value="<?php echo $siteInfo->partner_name; ?>" readonly="">
 <!--                    <select>
-                        <?php foreach ($get_partner as $partner) { ?>
-                            <option value="<?php echo $partner->id ?>"
-                            <?php
-                            if ($partner->name == $siteInfo->partner_name) {
-                                echo "selected=selected";
-                            }
-                            ?>>
-                                <?php echo $partner->name ?></option>
-                        <?php } ?>
+                    <?php foreach ($get_partner as $partner) { ?>
+                                <option value="<?php echo $partner->id ?>"
+                        <?php
+                        if ($partner->name == $siteInfo->partner_name) {
+                            echo "selected=selected";
+                        }
+                        ?>>
+                        <?php echo $partner->name ?></option>
+                    <?php } ?>
                     </select>-->
                 </div>
                 <div class="form-group">
@@ -136,7 +136,7 @@ if (!empty($get_siteInfo)) {
                 </div>
                 <div class="form-group">
                     <label>Assigned To</label>
-                    <select type="text" name="user_id" id="user" class="form-control">
+                    <select type="text" name="user_id" id="user_edit" class="form-control">
                         <?php foreach ($assigned_username as $name) { ?>
                             <option value="<?php echo $name->id ?>"
                             <?php
@@ -148,13 +148,10 @@ if (!empty($get_siteInfo)) {
                         <?php } ?>
                     </select>
                 </div>
-
-
-                <!--</div>-->
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-offset-4 col-lg-8">
                         <div class="form-group">
-                            <input type="submit" class="btn btn-primary" value="Submit" />
+                            <input type="submit" class="btn btn-block btn-primary" value="Save" />
                         </div>
                     </div>
 

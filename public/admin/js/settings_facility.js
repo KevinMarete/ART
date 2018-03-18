@@ -47,6 +47,26 @@ function add_facility()
     $('.help-block').empty();
     $('#modal_form').modal('show');
     $('.modal-title').text('ADD FACILITY');
+
+    //select2 for Category
+    $("#category_id").select2({
+        placeholder: "---Select Category---",
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
+
+    //select2 for Subcounty
+    $("#subcounty").select2({
+        placeholder: "---Select SubCounty---",
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
+    //select2 for Partner
+    $("#partner").select2({
+        placeholder: "---Select Partner---",
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
 }
 
 function edit_facility_listing(id)
@@ -56,6 +76,23 @@ function edit_facility_listing(id)
     $('.form-group').removeClass('has-error'); // clear error class
     $('.help-block').empty(); // clear error string
 
+    //select2 for Category
+    $("#category_id").select2({
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
+
+    //select2 for Subcounty
+    $("#subcounty").select2({
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
+    //select2 for Partner
+    $("#partner").select2({
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
+    
     //Ajax Load data from ajax
     $.ajax({
         url: "Facility/ajax_edit/" + id,
@@ -67,12 +104,12 @@ function edit_facility_listing(id)
             $('[name="id"]').val(data.id);
             $('[name="name"]').val(data.name);
             $('[name="mflcode"]').val(data.mflcode);
-            $('[name="category"]').val(data.category);
+            $('[name="category"]').val(data.category).trigger('change');
             $('[name="dhiscode"]').val(data.dhiscode);
             $('[name="longitude"]').val(data.longitude);
             $('[name="latitude"]').val(data.latitude);
-            $('[name="subcounty_id"]').val(data.subcounty_id);
-            $('[name="partner_id"]').val(data.partner_id);
+            $('[name="subcounty_id"]').val(data.subcounty_id).trigger('change');
+            $('[name="partner_id"]').val(data.partner_id).trigger('change');
 
             $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
             $('.modal-title').text('EDIT FACILITY'); // Set title to Bootstrap modal title

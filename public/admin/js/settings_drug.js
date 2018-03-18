@@ -45,6 +45,19 @@ function add_drug()
     $('.help-block').empty();
     $('#modal_form').modal('show');
     $('.modal-title').text('ADD DRUG');
+
+    //select2 for Generic
+    $("#generic_id").select2({
+        placeholder: "---Select Generic---",
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
+    //select2 for Formulation
+    $("#formulation_id").select2({
+        placeholder: "---Select Formulation---",
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
 }
 
 function edit_drug(id)
@@ -53,6 +66,17 @@ function edit_drug(id)
     $('#form')[0].reset(); // reset form on modals
     $('.form-group').removeClass('has-error'); // clear error class
     $('.help-block').empty(); // clear error string
+
+    //select2 for Generic
+    $("#generic_id").select2({
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
+    //select2 for Formulation
+    $("#formulation_id").select2({
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
 
     //Ajax Load data from ajax
     $.ajax({
@@ -65,8 +89,8 @@ function edit_drug(id)
             $('[name="id"]').val(data.id);
             $('[name="strength"]').val(data.strength);
             $('[name="packsize"]').val(data.packsize);
-            $('[name="generic_id"]').val(data.generic_id);
-            $('[name="formulation_id"]').val(data.formulation_id);
+            $('[name="generic_id"]').val(data.generic_id).trigger('change');
+            $('[name="formulation_id"]').val(data.formulation_id).trigger('change');
 
             $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
             $('.modal-title').text('EDIT DRUG'); // Set title to Bootstrap modal title

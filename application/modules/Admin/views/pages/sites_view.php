@@ -29,7 +29,7 @@
                                             <div class="col-lg-12">
                                                 <div class="panel panel-info">
                                                     <div class="panel-heading">
-                                                        INSTALLATION/UPGRADE DETAILS
+                                                        INSTALLATION DETAILS
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -48,11 +48,11 @@
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label>County</label>
-                                                                        <select class="form-control" id="county" name="county_id"></select>
+                                                                        <select class="form-control" id="county" name="county_id" style="width: 100%"></select>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label>Subcounty</label>
-                                                                        <select class="form-control" id="subcounty" name="subcounty_id" required=""></select>
+                                                                        <select class="form-control" id="subcounty" name="subcounty_id" required="" style="width: 100%"></select>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label>Category</label>
@@ -68,7 +68,7 @@
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label>Partner</label>
-                                                                        <select class="form-control" id="partner" name="partner_id" required=""></select>
+                                                                        <select class="js_partner form-control" id="partner" name="partner_id" required style="width: 100%"></select>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label>Contact Name</label>
@@ -136,7 +136,7 @@
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label>Assigned To</label>
-                                                                        <select class="form-control" id="user" name="user_id" required=""></select>
+                                                                        <select class="form-control" id="user" name="user_id" required="" style="width: 100%"></select>
                                                                     </div>
 
                                                                 </div>
@@ -174,7 +174,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    
+
                                 </tbody>
                                 <tfoot>
                                     <tr>

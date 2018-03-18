@@ -16,11 +16,6 @@ class BaseController extends CI_Controller {
 
     /**
      * Takes mixed data and optionally a status code, then creates the response
-     *
-     * @access public
-     * @param array|NULL $data
-     *        	Data to output to the user
-     *        	running the script; otherwise, exit
      */
     public function response($data = NULL) {
         $this->output->set_status_header(200)->set_content_type('application/json', 'utf-8')->set_output(json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))->_display();

@@ -45,6 +45,13 @@ function add_user_listing()
     $('.help-block').empty();
     $('#modal_form').modal('show');
     $('.modal-title').text('ADD USER');
+
+    //select2 for User
+    $("#roleId").select2({
+        placeholder: "---Select User Role---",
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
 }
 
 function edit_user_listing(id)
@@ -54,6 +61,12 @@ function edit_user_listing(id)
     $('.form-group').removeClass('has-error'); // clear error class
     $('.help-block').empty(); // clear error string
 
+    //select2 for User
+    $("#roleId").select2({
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
+    
     //Ajax Load data from ajax
     $.ajax({
         url: "User_listing/ajax_edit/" + id,
@@ -67,7 +80,7 @@ function edit_user_listing(id)
             $('[name="last_name"]').val(data.last_name);
             $('[name="user_email"]').val(data.email);
             $('[name="user_mobile"]').val(data.mobile);
-            $('[name="roleId"]').val(data.roleId);
+            $('[name="roleId"]').val(data.roleId).trigger('change');
 
             $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
             $('.modal-title').text('EDIT USER'); // Set title to Bootstrap modal title

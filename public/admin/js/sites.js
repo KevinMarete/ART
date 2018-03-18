@@ -10,7 +10,7 @@ $(function () {
         $("#facility option").remove();
         $("#facility").append($("<option value=''>Select Facility</option>"));
         $.each(data, function (i, v) {
-            $("#facility").append($("<option value='" + v.id + "' mflcode='" + v.mflcode + "' subcountyid='" + v.subcounty_id + "' partnerid='" + v.partner_id + "' >" + v.name + " ("+ v.mflcode +")</option>"));
+            $("#facility").append($("<option value='" + v.id + "' mflcode='" + v.mflcode + "' subcountyid='" + v.subcounty_id + "' partnerid='" + v.partner_id + "' >" + v.name + " (" + v.mflcode + ")</option>"));
         });
         $("#facility").chosen({width: "100%"});
     });
@@ -62,6 +62,32 @@ $(function () {
     //EMRS Used multiselect
     $('#emrs_used').multiselect();
 
+    //Select2 for county
+    $("#county").select2({
+        placeholder: "Select County",
+        allowClear: true,
+        dropdownParent: $("#exampleModal")
+    });
+
+    //select2 for Subcounty
+    $("#subcounty").select2({
+        placeholder: "Select Subcounty",
+        allowClear: true,
+        dropdownParent: $("#exampleModal")
+    });
+    //select2 for partner
+    $("#partner").select2({
+        placeholder: "Select Partner",
+        allowClear: true,
+        dropdownParent: $("#exampleModal")
+    });
+
+    //select2 for assignee
+    $("#user").select2({
+        placeholder: "Select Assignee",
+        allowClear: true,
+        dropdownParent: $("#exampleModal")
+    });
 
     //Date picker setup_date
     $.fn.datepicker.defaults.format = "yyyy/mm/dd";
@@ -131,3 +157,5 @@ function deleteSite(id)
 
     }
 }
+//select2 for assignee_edit
+$("#user_edit").select2();

@@ -45,6 +45,13 @@ function add_backup()
     $('.help-block').empty();
     $('#modal_form').modal('show');
     $('.modal-title').text('ADD BACKUP');
+
+    //select2 for Backup
+    $("#name").select2({
+        placeholder: "---Select Facility---",
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
 }
 
 function edit_backup(id)
@@ -53,6 +60,13 @@ function edit_backup(id)
     $('#form')[0].reset(); // reset form on modals
     $('.form-group').removeClass('has-error'); // clear error class
     $('.help-block').empty(); // clear error string
+
+    //select2 for Basckup
+    $("#name").select2({
+        placeholder: "---Select Facility---",
+        allowClear: true,
+        dropdownParent: $("#modal_form")
+    });
 
     //Ajax Load data from ajax
     $.ajax({
@@ -63,7 +77,7 @@ function edit_backup(id)
         {
 
             $('[name="id"]').val(data.id);
-            $('[name="name"]').val(data.facility_id);
+            $('[name="name"]').val(data.facility_id).trigger('change');
             $('[name="filename"]').val(data.filename);
             $('[name="adt_version"]').val(data.adt_version);
 

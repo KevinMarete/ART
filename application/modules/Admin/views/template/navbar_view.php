@@ -17,8 +17,8 @@
             </a>
             <ul class="dropdown-menu dropdown-user">
                 <li><a href="#"><i class="fa fa-user fa-fw"></i> 
-                        <?php echo $this->session->userdata('first_name'); ?>
-                        <?php echo $this->session->userdata('last_name'); ?>
+                        <?= $this->session->userdata('first_name'); ?>
+                        <?= $this->session->userdata('last_name'); ?>
                     </a>                   
                 </li>
                 <li class="divider"></li>

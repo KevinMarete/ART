@@ -109,7 +109,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">User Role</label>
                             <div class="col-md-9">
-                                <select name="roleId" id="roleId" class="form-control">
+                                <select name="roleId" id="roleId" class="form-control" style="width: 100%">
                                     <option value="">---Select User Role----</option>
                                     <?php foreach ($get_roles as $row) { ?>
                                         <option value="<?= $row->roleId ?>"><?= $row->role ?></option>

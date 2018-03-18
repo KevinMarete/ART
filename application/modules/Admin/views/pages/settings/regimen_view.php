@@ -86,7 +86,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Category Name</label>
                             <div class="col-md-9">
-                                <select name="category_id" id="category_id" class="form-control">
+                                <select name="category_id" id="category_id" class="form-control" style="width: 100%">
                                     <option value="">---Select Category----</option>
                                     <?php foreach ($get_category as $row) { ?>
                                         <option value="<?= $row->id ?>"><?= $row->name ?></option>
@@ -98,7 +98,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Service Name</label>
                             <div class="col-md-9">
-                                <select name="service_id" id="service_id" class="form-control">
+                                <select name="service_id" id="service_id" class="form-control" style="width: 100%">
                                     <option value="">---Select Service----</option>
                                     <?php foreach ($get_service as $row) { ?>
                                         <option value="<?= $row->id ?>"><?= $row->name ?></option>
@@ -110,7 +110,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Line Name</label>
                             <div class="col-md-9">
-                                <select name="line_id" id="line_id" class="form-control">
+                                <select name="line_id" id="line_id" class="form-control" style="width: 100%">
                                     <option value="">---Select Line----</option>
                                     <?php foreach ($get_line as $row) { ?>
                                         <option value="<?= $row->id ?>"><?= $row->name ?></option>

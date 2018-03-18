@@ -64,7 +64,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">County Name</label>
                             <div class="col-md-9">
-                                <select name="county_id" id="county" class="form-control">
+                                <select name="county_id" id="county" class="form-control" style="width: 100%">
                                     <option value="">---Select County----</option>
                                     <?php foreach ($get_county as $row) { ?>
                                         <option value="<?= $row->id ?>"><?= $row->name ?></option>

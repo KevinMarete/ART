@@ -75,7 +75,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Generic</label>
                             <div class="col-md-9">
-                                <select name="generic_id" id="generic_id" class="form-control">
+                                <select name="generic_id" id="generic_id" class="form-control" style="width: 100%">
                                     <option value="">---Select Generic----</option>
                                     <?php foreach ($get_generic as $row) { ?>
                                         <option value="<?= $row->id ?>"><?= $row->name ?></option>
@@ -87,7 +87,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Formulation</label>
                             <div class="col-md-9">
-                                <select name="formulation_id" id="formulation_id" class="form-control">
+                                <select name="formulation_id" id="formulation_id" class="form-control" style="width: 100%">
                                     <option value="">---Select Formulation----</option>
                                     <?php foreach ($get_formulation as $row) { ?>
                                         <option value="<?= $row->id ?>"><?= $row->name ?></option>

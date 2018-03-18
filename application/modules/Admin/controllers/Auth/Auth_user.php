@@ -20,12 +20,13 @@ class Auth_user extends CI_Controller {
             'mobile' => $this->input->post('user_mobile'),
             'password' => md5($this->input->post('user_password')),
             'roleId' => $this->input->post('roleId'),
-            'createdDtm' => date('Y-m-d H:i:s')
+            'createdDtm' => date('Y-m-d H:i:s'),
+            'updatedDtm' => date('Y-m-d H:i:s')
         );
 
         $email_check = $this->Auth_user_model->email_check($user['email']);
         //check if email is already registered, if not register user
-        if ($email_check==TRUE) {
+        if ($email_check == TRUE) {
             $this->Auth_user_model->register_user($user);
             $this->session->set_flashdata('success_msg', 'Registration Successfully.Now login to your account.');
             $this->load->view('Admin/pages/auth/login_view');

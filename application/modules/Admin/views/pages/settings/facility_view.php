@@ -84,7 +84,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Category</label>
                             <div class="col-md-9">
-                                <select name="category" class="form-control">
+                                <select name="category" id="category_id" class="form-control" style="width: 100%">
                                     <option value="">---Select Category---</option>
                                     <option value="central">Central</option>
                                     <option value="satellite">Satellite</option>
@@ -118,7 +118,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Sub County</label>
                             <div class="col-md-9">
-                                <select name="subcounty_id" id="subcounty" class="form-control">
+                                <select name="subcounty_id" id="subcounty" class="form-control" style="width: 100%">
                                     <option value="">----Select SubCounty---</option>
                                     <?php foreach ($get_subcounty as $row) { ?>                                        
                                         <option value="<?= $row->id ?>"><?= $row->name ?></option>
@@ -130,7 +130,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Partner Name</label>
                             <div class="col-md-9">
-                                <select name="partner_id" id="partner" class="form-control">
+                                <select name="partner_id" id="partner" class="form-control" style="width: 100%">
                                     <option value="">----Select Partner----</option>
                                     <?php foreach ($get_partner as $row) { ?>
                                         <option value="<?= $row->id ?>"><?= $row->name ?></option>

@@ -57,7 +57,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Facility Name</label>
                             <div class="col-md-9">
-                                <select name="name" id="name" class="form-control">
+                                <select name="name" id="name" class="form-control" style="width: 100%">
                                     <option value="">---Select Facility----</option>
                                     <?php foreach ($get_facility as $row) { ?>
                                         <option value="<?= $row->id ?>"><?= $row->name ?></option>
