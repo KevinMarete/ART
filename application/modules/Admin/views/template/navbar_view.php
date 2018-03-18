@@ -54,34 +54,31 @@
                         <a href="#"><i class="fa fa-wrench fa-fw"></i> Settings<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level" id="list">
                             <li>
+                                <a href="<?php echo base_url('Admin/Settings/Category'); ?>">Category</a>
+                            </li>
+                            <li>
+                                <a href="<?php echo base_url('Admin/Settings/Change_reason'); ?>">Change Reason</a>
+                            </li>
+                            <li>
                                 <a href="<?php echo base_url('Admin/Settings/County'); ?>">County</a>
                             </li>
                             <li>
-                                <a href="<?php echo base_url('Admin/Settings/Subcounty'); ?>">Subcounty</a>
+                                <a href="<?php echo base_url('Admin/Settings/Drug'); ?>">Drug</a>
                             </li>
                             <li>
                                 <a href="<?php echo base_url('Admin/Settings/Facility'); ?>">Facility</a>
                             </li>
                             <li>
-                                <a href="<?php echo base_url('Admin/Settings/Generic'); ?>">Generic</a>
-                            </li>
-                            <li>
                                 <a href="<?php echo base_url('Admin/Settings/Formulation'); ?>">Formulation</a>
                             </li>
                             <li>
-                                <a href="<?php echo base_url('Admin/Settings/Service'); ?>">Service</a>
-                            </li>
-                            <li>
-                                <a href="<?php echo base_url('Admin/Settings/Category'); ?>">Category</a>
+                                <a href="<?php echo base_url('Admin/Settings/Generic'); ?>">Generic</a>
                             </li>
                             <li>
                                 <a href="<?php echo base_url('Admin/Settings/Line'); ?>">Line</a>
                             </li>
                             <li>
-                                <a href="<?php echo base_url('Admin/Settings/Status'); ?>">Status</a>
-                            </li>
-                            <li>
-                                <a href="<?php echo base_url('Admin/Settings/Change_reason'); ?>">Change Reason</a>
+                                <a href="<?php echo base_url('Admin/Settings/Partner'); ?>">Partner</a>
                             </li>
                             <li>
                                 <a href="<?php echo base_url('Admin/Settings/Purpose'); ?>">Purpose</a>
@@ -90,7 +87,13 @@
                                 <a href="<?php echo base_url('Admin/Settings/Regimen'); ?>">Regimen</a>
                             </li>
                             <li>
-                                <a href="<?php echo base_url('Admin/Settings/Drug'); ?>">Drug</a>
+                                <a href="<?php echo base_url('Admin/Settings/Status'); ?>">Status</a>
+                            </li>
+                            <li>
+                                <a href="<?php echo base_url('Admin/Settings/Service'); ?>">Service</a>
+                            </li>
+                            <li>
+                                <a href="<?php echo base_url('Admin/Settings/Subcounty'); ?>">SubCounty</a>
                             </li>
                             <li>
                                 <a href="<?php echo base_url('Admin/Settings/User'); ?>">User</a>
