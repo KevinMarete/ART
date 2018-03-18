@@ -33,3 +33,5 @@
 
 <!-- jQuery js-->
 <script src="<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/datatables/js/jquery-1.12.4.js'; ?>"></script>
+<!--select2 js--->
+<script src="<?php echo base_url() . 'public/admin/select2/js/select2.js'; ?>"></script>

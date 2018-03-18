@@ -34,11 +34,11 @@ if (!empty($get_siteInfo)) {
                 </div>
                 <div class="form-group">
                     <label>County</label>
-                    <input class="form-control" id="county" name="county" value="<?php echo $siteInfo->county_name; ?>" readonly="">
+                    <input class="form-control" id="e_county" name="county" value="<?php echo $siteInfo->county_name; ?>" readonly="">
                 </div>
                 <div class="form-group">
                     <label>Subcounty</label>
-                    <input class="form-control" id="subcounty" name="subcounty" value="<?php echo $siteInfo->subcounty_name; ?>" readonly="">
+                    <input class="form-control" id="e_subcounty" name="subcounty" value="<?php echo $siteInfo->subcounty_name; ?>" readonly="">
                 </div>
                 <div class="form-group">
                     <label>Category</label>
@@ -54,10 +54,10 @@ if (!empty($get_siteInfo)) {
                 </div>
                 <div class="form-group">
                     <label>Partner</label>
-                    <input name="partner_id" id="partner" class="form-control" value="<?php echo $siteInfo->partner_name; ?>" readonly="">
+                    <input name="partner_id" id="e_partner" class="form-control" value="<?php echo $siteInfo->partner_name; ?>" readonly="">
 <!--                    <select>
                     <?php foreach ($get_partner as $partner) { ?>
-                                <option value="<?php echo $partner->id ?>"
+                                    <option value="<?php echo $partner->id ?>"
                         <?php
                         if ($partner->name == $siteInfo->partner_name) {
                             echo "selected=selected";

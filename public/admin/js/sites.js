@@ -20,7 +20,7 @@ $(function () {
         $("#subcounty option").remove();
         $("#subcounty").append($("<option value=''>Select Subcounty</option>"));
         $.each(data, function (i, v) {
-            $("#subcounty").append($("<option value='" + v.id + "' countyid='" + v.county_id + "'>" + v.name + "</option>")).trigger('change');
+            $("#subcounty").append($("<option value='" + v.id + "' countyid='" + v.county_id + "'>" + v.name + "</option>"));
         });
     });
 
@@ -53,7 +53,7 @@ $(function () {
 
     //Add mflcode when facility is selected
     $('#facility').on('change', function () {
-        $('#mflcode').val($(this).find(':selected').attr('mflcode'));
+        $('#mflcode').val($(this).find(':selected').attr('mflcode')).trigger('change');
         $('#subcounty').val($(this).find(':selected').attr('subcountyid')).trigger('change');
         $("#county").val($('#subcounty').find(':selected').attr('countyid')).trigger('change');
         $("#partner").val($(this).find(':selected').attr('partnerid')).trigger('change');

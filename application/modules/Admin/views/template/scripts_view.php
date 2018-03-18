@@ -19,5 +19,3 @@
 <script type="text/javascript" src="<?php echo base_url() . 'public/admin/lib/chosen_v1.8.3/chosen.jquery.min.js'; ?>"></script>
 <!-- Custom Theme JavaScript -->
 <script src="<?php echo base_url() . 'public/admin/lib/sbadmin2/dist/js/sb-admin-2.js'; ?>"></script>
-<!--select2 js--->
-<script src="<?php echo base_url() . 'public/admin/select2/js/select2.min.js'; ?>"></script>
