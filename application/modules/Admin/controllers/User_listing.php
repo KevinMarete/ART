@@ -64,6 +64,7 @@ class User_listing extends BaseController {
             'email' => $this->input->post('user_email'),
             'mobile' => $this->input->post('user_mobile'),
             'roleId' => $this->input->post('roleId'),
+            'updatedBy' => $this->session->userdata('email'),
             'createdDtm' => date('Y-m-d H:i:s'),
             'updatedDtm' => date('Y-m-d H:i:s')
         );
