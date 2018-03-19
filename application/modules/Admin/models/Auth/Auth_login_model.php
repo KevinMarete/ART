@@ -5,12 +5,13 @@ if (!defined('BASEPATH'))
 
 class Auth_login_model extends CI_Model {
 
+    //function login user details
     public function login_user($email, $pass) {
-
-        $this->db->select('*');
+        $this->db->select('auth_tbl_users.*,auth_tbl_roles.*');
         $this->db->from('auth_tbl_users');
-        $this->db->where('email', $email);
-        $this->db->where('password', $pass);
+        $this->db->join('auth_tbl_roles', 'auth_tbl_roles.roleId=auth_tbl_users.roleId');
+        $this->db->where('auth_tbl_users.email', $email);
+        $this->db->where('auth_tbl_users.password', $pass);
 
         if ($query = $this->db->get()) {
             return $query->row_array();

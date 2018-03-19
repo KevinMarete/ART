@@ -35,6 +35,7 @@ class Auth_login extends CI_Controller {
                     'mobile' => $data['mobile'],
                     'first_name' => $data['first_name'],
                     'roleId' => $data['roleId'],
+                    'role' => $data['role'],
                     'isLoggedIn' => TRUE
                 );
                 $this->session->set_userdata($sessionArray);

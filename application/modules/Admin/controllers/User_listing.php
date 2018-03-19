@@ -31,8 +31,10 @@ class User_listing extends BaseController {
             $row[] = $user_listing->role;
             $row[] = $user_listing->email;
             $row[] = $user_listing->mobile;
+            $row[] = $user_listing->updatedBy;
             $row[] = $user_listing->createdDtm;
             $row[] = $user_listing->updatedDtm;
+
             //add html for action
             $row[] = '<a class="btn btn-sm btn-primary glyphicon glyphicon-pencil" href="javascript:void(0)" title="Edit" onclick="edit_user_listing(' . "'" . $user_listing->id . "'" . ')"></a>
 				  <a class="btn btn-sm btn-danger glyphicon glyphicon-trash" href="javascript:void(0)" title="Delete" onclick="delete_user_listing(' . "'" . $user_listing->id . "'" . ')"></a>';
@@ -77,7 +79,8 @@ class User_listing extends BaseController {
             'email' => $this->input->post('user_email'),
             'mobile' => $this->input->post('user_mobile'),
             'roleId' => $this->input->post('roleId'),
-            'updatedDtm' => date('Y-m-d H:i:s')
+            'updatedDtm' => date('Y-m-d H:i:s'),
+            'updatedBy' => $this->session->userdata('email')
         );
         $this->user_listing->update(array('id' => $this->input->post('id')), $data);
         echo json_encode(array("status" => TRUE));
@@ -117,7 +120,7 @@ class User_listing extends BaseController {
         }
         if ($this->input->post('roleId') == '') {
             $data['inputerror'][] = 'roleId';
-            $data['error_string'][] = 'Please assignee role';
+            $data['error_string'][] = 'Please assign role';
             $data['status'] = FALSE;
         }
 

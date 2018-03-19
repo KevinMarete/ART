@@ -16,7 +16,11 @@
                 <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
             </a>
             <ul class="dropdown-menu dropdown-user">
-                <li><a href="#"><i class="fa fa-user fa-fw"></i> 
+                <li>
+                    <a href="#">
+                        <?= $this->session->userdata('role'); ?>
+                        <br>
+                        <i class="fa fa-user fa-fw"></i> 
                         <?= $this->session->userdata('first_name'); ?>
                         <?= $this->session->userdata('last_name'); ?>
                     </a>                   

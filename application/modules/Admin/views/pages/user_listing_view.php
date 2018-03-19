@@ -24,8 +24,9 @@
                         <th>User Role</th>
                         <th>Email</th>
                         <th>Mobile Number</th>
+                        <th>Updated By</th>
                         <th>Date Created</th>
-                        <th>Date Updated</th>
+                        <th>Date Updated</th>                     
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -39,8 +40,9 @@
                         <th>User Role</th>
                         <th>Email</th>
                         <th>Mobile Number</th>
+                        <th>Updated By</th>
                         <th>Date Created</th>
-                        <th>Date Updated</th>
+                        <th>Date Updated</th>                        
                         <th>Action</th>
                     </tr>
                 </tfoot>
