@@ -31,3 +31,6 @@ a {
 #wrapper{
     background-color: #222d32
 }
+.input-group-addon {
+    background-color: #d9edf7;
+}

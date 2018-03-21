@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Subcounty_model extends CI_Model {
 
     var $table = 'tbl_subcounty';
-    var $column_order = array('tbl_subcounty.name');
+    var $column_order = array('tbl_subcounty.name','tbl_county.name');
     var $column_search = array('tbl_subcounty.name','tbl_county.name');
     var $order = array('tbl_subcounty.id' => 'desc');
 

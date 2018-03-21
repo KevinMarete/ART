@@ -53,10 +53,9 @@ class Auth_login extends CI_Controller {
         }
     }
 
-    /*
+    /**
      * function load dashboard_view
      */
-
     public function home() {
         $data['content_view'] = 'pages/dashboard_view';
         $data['page_title'] = 'ART Dashboard | Admin';
@@ -76,10 +75,9 @@ class Auth_login extends CI_Controller {
         }
     }
 
-    /*
+    /**
      * function logout and load login_view
      */
-
     public function user_logout() {
         $this->session->sess_destroy();
         $this->load->view("Admin/pages/auth/login_view");

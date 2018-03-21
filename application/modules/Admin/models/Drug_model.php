@@ -5,8 +5,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Drug_model extends CI_Model {
 
     var $table = 'tbl_drug';
-    var $column_order = array('strength','packsize');
-    var $column_search = array('strength','packsize');
+    var $column_order = array('tbl_drug.strength','tbl_drug.packsize','tbl_generic.name','tbl_formulation.name');
+    var $column_search = array('tbl_drug.strength','tbl_drug.packsize','tbl_generic.name','tbl_formulation.name');
     var $order = array('id' => 'desc');
 
     private function _get_datatables_query() {

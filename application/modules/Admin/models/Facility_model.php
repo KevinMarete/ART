@@ -5,8 +5,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Facility_model extends CI_Model {
 
     var $table = 'tbl_facility';
-    var $column_order = array('tbl_facility.name', 'tbl_facility.mflcode');
-    var $column_search = array('tbl_facility.name', 'tbl_facility.mflcode');
+    var $column_order = array('tbl_facility.name', 'tbl_facility.mflcode', 'tbl_facility.category', 'tbl_facility.dhiscode', 'tbl_facility.longitude',
+        'tbl_facility.latitude', 'tbl_subcounty.name', 'tbl_partner.name');
+    var $column_search = array('tbl_facility.name', 'tbl_facility.mflcode', 'tbl_facility.category', 'tbl_facility.dhiscode', 'tbl_facility.longitude',
+        'tbl_facility.latitude', 'tbl_subcounty.name', 'tbl_partner.name');
     var $order = array('tbl_facility.id' => 'desc');
 
     private function _get_datatables_query() {
