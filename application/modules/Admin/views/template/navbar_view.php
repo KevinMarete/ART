@@ -67,6 +67,9 @@
                                 <a href="<?php echo base_url('Admin/Settings/County'); ?>">County</a>
                             </li>
                             <li>
+                                <a href="<?php echo base_url('Admin/Settings/Subcounty'); ?>">SubCounty</a>
+                            </li>
+                            <li>
                                 <a href="<?php echo base_url('Admin/Settings/Drug'); ?>">Drug</a>
                             </li>
                             <li>
@@ -95,9 +98,6 @@
                             </li>
                             <li>
                                 <a href="<?php echo base_url('Admin/Settings/Service'); ?>">Service</a>
-                            </li>
-                            <li>
-                                <a href="<?php echo base_url('Admin/Settings/Subcounty'); ?>">SubCounty</a>
                             </li>
                             <li>
                                 <a href="<?php echo base_url('Admin/Settings/User'); ?>">User</a>

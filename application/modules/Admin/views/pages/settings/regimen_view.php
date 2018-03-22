@@ -79,7 +79,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Regimen Description</label>
                             <div class="col-md-9">
-                                <input name="description" placeholder="Regimen Description" class="form-control" type="text">
+                                <textarea name="description" placeholder="Regimen Description" class="form-control" type="text"></textarea>
                                 <span class="help-block"></span>
                             </div>
                         </div>
