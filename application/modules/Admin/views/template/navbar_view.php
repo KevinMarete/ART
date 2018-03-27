@@ -6,7 +6,10 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="<?php echo base_url() . 'Admin/home' ?>">ART DASHBOARD v1.0</a>
+        <a class="navbar-brand" href="<?php echo base_url() . 'Admin/home' ?>">
+            <i class="fa fa-dashboard fa-fw"></i>
+            ART DASHBOARD v1.0
+        </a>
     </div>
     <!-- /.navbar-header -->
 
@@ -39,10 +42,7 @@
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
                 <li>
-                    <a href="<?php echo base_url() . 'Admin/home' ?>"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
-                </li>
-                <li>
-                    <a href="<?php echo base_url() . 'Admin/sites'; ?>"><i class="fa fa-edit fa-fw"></i> Sites</a>
+                    <a href="<?php echo base_url() . 'Admin/sites'; ?>"><i class="fa fa-list-ul fa-fw"></i> Sites</a>
                 </li>
                 <li>
                     <a href="<?php echo base_url('Admin/User_listing'); ?>"><i class="fa fa-user fa-fw"></i> User Listing</a>

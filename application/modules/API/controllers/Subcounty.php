@@ -29,12 +29,14 @@ class Subcounty extends \API\Libraries\REST_Controller {
         $conditions = array(
             'id' => $id,
             'county_id' => $county
+//            'v.county.id' => $county
+                
         );
         $conditions = array_filter($conditions);
 
         //Subcounties from a data store e.g. database
-//        $subcounties = $this->subcounty_model->read($conditions);
-        $subcounties = $this->subcounty_model->read();
+        $subcounties = $this->subcounty_model->read($conditions);
+//        $subcounties = $this->subcounty_model->read();
         //If the id parameter doesn't exist return all the subcounties
         if ($id === NULL) {
             //Check if the subcounties data store contains subcounties (in case the database result returns NULL)
