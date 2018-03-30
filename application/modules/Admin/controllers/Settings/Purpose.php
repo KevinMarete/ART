@@ -13,7 +13,7 @@ class Purpose extends BaseController {
 
     public function index() {
         $data['content_view'] = 'pages/settings/purpose_view';
-        $data['page_title'] = 'ART Dashboard | Settings';
+        $data['page_title'] = 'ART | Settings | Purpose';
         $this->load->view('template/template_view', $data);
     }
 

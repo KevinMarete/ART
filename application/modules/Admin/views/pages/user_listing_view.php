@@ -1,3 +1,5 @@
+<script src="http://code.highcharts.com/highcharts.js"></script>
+
 <div id="page-wrapper">
     <div class="row">
         <div class="col-md-5">
@@ -48,7 +50,8 @@
                 </tfoot>
             </table> 
         </div>
-    </div>       
+    </div>
+    <div id="container"></div>
 
 </div>
 

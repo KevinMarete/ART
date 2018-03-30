@@ -12,7 +12,7 @@ class Category extends BaseController {
 
     public function index() {
         $data['content_view'] = 'pages/settings/category_view';
-        $data['page_title'] = 'ART Dashboard | Settings';
+        $data['page_title'] = 'ART | Settings | Category';
         $this->load->view('template/template_view', $data);
     }
 

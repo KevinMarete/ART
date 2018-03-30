@@ -134,6 +134,7 @@ $(document).ready(function () {
 
 });
 
+//function deleteSite
 function deleteSite(id)
 {
     if (confirm('Are you sure you want to delete this site?'))

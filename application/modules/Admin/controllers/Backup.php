@@ -14,7 +14,7 @@ class Backup extends BaseController {
 
     public function index() {
         $data['content_view'] = 'pages/backup_view';
-        $data['page_title'] = 'ART Dashboard | BackUp';
+        $data['page_title'] = 'ART | BackUp';
         $data['get_facility'] = $this->Facility_model->read();
         $this->load->view('template/template_view', $data);
     }

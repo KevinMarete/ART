@@ -15,7 +15,7 @@ class Drug extends BaseController {
 
     public function index() {
         $data['content_view'] = 'pages/settings/drug_view';
-        $data['page_title'] = 'ART Dashboard | Settings';
+        $data['page_title'] = 'ART | Settings | Drug';
         $data['get_generic'] = $this->Generic_model->read();
         $data['get_formulation'] = $this->Formulation_model->read();
         $this->load->view('template/template_view', $data);

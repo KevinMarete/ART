@@ -16,7 +16,7 @@ class Admin extends BaseController {
     public function home() {
         $this->isLoggedIn();
         $data['content_view'] = 'pages/dashboard_view';
-        $data['page_title'] = 'ART Dashboard | Admin';
+        $data['page_title'] = 'ART | Admin';
         $this->load->view('template/template_view', $data);
     }
 

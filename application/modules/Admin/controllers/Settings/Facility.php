@@ -15,7 +15,7 @@ class Facility extends BaseController {
 
     public function index() {
         $data['content_view'] = 'pages/settings/facility_view';
-        $data['page_title'] = 'ART Dashboard | Settings';
+        $data['page_title'] = 'ART | Settings | Facility';
         $data['get_subcounty'] = $this->Subcounty_model->read();
         $data['get_partner'] = $this->Partner_model->read();
         $this->load->view('template/template_view', $data);

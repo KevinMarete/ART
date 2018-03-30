@@ -12,7 +12,7 @@ class Change_reason extends BaseController {
 
     public function index() {
         $data['content_view'] = 'pages/settings/change_reason_view';
-        $data['page_title'] = 'ART Dashboard | Settings';
+        $data['page_title'] = 'ART | Settings | Change Reason';
         $this->load->view('template/template_view', $data);
     }
 

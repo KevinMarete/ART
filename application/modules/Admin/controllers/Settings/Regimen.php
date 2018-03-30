@@ -16,7 +16,7 @@ class Regimen extends BaseController {
 
     public function index() {
         $data['content_view'] = 'pages/settings/regimen_view';
-        $data['page_title'] = 'ART Dashboard | Settings';
+        $data['page_title'] = 'ART | Settings | Regimen';
         $data['get_category'] = $this->Category_model->read();
         $data['get_service'] = $this->Service_model->read();
         $data['get_line'] = $this->Line_model->read();

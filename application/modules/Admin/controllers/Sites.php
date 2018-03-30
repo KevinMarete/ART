@@ -15,7 +15,7 @@ class Sites extends BaseController {
 
     public function index() {
         $data['content_view'] = 'pages/sites_view';
-        $data['page_title'] = 'ART Dashboard | Sites';
+        $data['page_title'] = 'ART | Sites';
         $this->load->view('template/template_view', $data);
     }
 

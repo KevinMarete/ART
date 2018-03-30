@@ -14,7 +14,7 @@ class User_listing extends BaseController {
 
     public function index() {
         $data['content_view'] = 'pages/user_listing_view';
-        $data['page_title'] = 'ART Dashboard | User Listing';
+        $data['page_title'] = 'ART | User Listing';
         $data['get_roles'] = $this->Role_model->read();
         $this->load->view('template/template_view', $data);
     }
