@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="NASCOP">
         <meta name="author" content="NASCOP">
-        <title>ART Dashboard | Login</title>
+        <title>ART | Login</title>
         <!-- Bootstrap Core CSS -->
         <link href="<?php echo base_url() . 'public/admin/lib/sbadmin2/vendor/bootstrap/css/bootstrap.min.css'; ?>" rel="stylesheet">
         <!-- MetisMenu CSS -->
