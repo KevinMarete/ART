@@ -79,7 +79,7 @@ class Sites extends BaseController {
     //function editSite
     public function editSite($id = Null) {
         $data['content_view'] = 'pages/site_update';
-        $data['page_title'] = 'ART Dashboard | Sites';
+        $data['page_title'] = 'ART | Sites | Update';
         $data['get_siteInfo'] = $this->Install_model->get_siteInfo($id);
         $data['assigned_username'] = $this->User_model->get_username();
         $data['get_partner'] = $this->Partner_model->read();
