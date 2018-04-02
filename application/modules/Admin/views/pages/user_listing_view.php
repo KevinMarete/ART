@@ -1,5 +1,3 @@
-<script src="http://code.highcharts.com/highcharts.js"></script>
-
 <div id="page-wrapper">
     <div class="row">
         <div class="col-md-5">
@@ -51,8 +49,6 @@
             </table> 
         </div>
     </div>
-    <div id="container"></div>
-
 </div>
 
 <script src="<?php echo base_url() . 'public/admin/js/user_listing.js'; ?>"></script>
