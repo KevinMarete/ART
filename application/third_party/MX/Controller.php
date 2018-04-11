@@ -52,6 +52,9 @@ class MX_Controller
 		
 		/* autoload module items */
 		$this->load->_autoloader($this->autoload);
+
+		/*Add default timezone*/
+		date_default_timezone_set("Africa/Nairobi");
 	}
 	
 	public function __get($class) 

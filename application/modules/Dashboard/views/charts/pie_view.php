@@ -14,7 +14,7 @@
                 plotShadow: false,
                 type: 'pie'
             },
-            colors: ['red', 'green'],
+            colors: ['green', 'red'],
             title: {
                 text:  '<?php echo $chart_title; ?>'
             },
@@ -23,6 +23,7 @@
             },
             legend: {
                 enabled: true,
+                reversed: true,
                 width:555,
                 itemWidth:500,
                 itemStyle: {
