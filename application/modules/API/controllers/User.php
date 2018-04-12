@@ -167,5 +167,5 @@ class User extends \API\Libraries\REST_Controller  {
             ], \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // CREATED (201) being the HTTP response code
         }
     }
-
+    
 }

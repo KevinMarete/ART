@@ -55,4 +55,19 @@ class User_model extends CI_Model {
 		return $data;
 	}
 
+	public function authenticate_user($data)
+	{	
+		$query = $this->db->get_where('tbl_user', $data);
+		$data = $query->row_array();
+		if(is_array($data))
+		{
+			$data['status'] = TRUE;
+		}
+		else
+		{
+			$data['status'] = FALSE;
+		}
+		return $data;
+	}
+
 }
