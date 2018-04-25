@@ -12,10 +12,11 @@ class User extends MX_Controller {
 	{	
 		$response = $this->User_model->check_user($this->input->post());
 		if($response['status']){
+			$this->session->set_userdata($response['data']);
 			//Go to dashboard
 			$message = '<div class="alert alert-success alert-dismissible" role="alert">
 						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<strong>Success!</strong> '.$response['message'].'</div>';
+						'.$response['message'].'</div>';
 			$this->session->set_flashdata('dashboard_msg', $message);
 			redirect('manager/dashboard');
 		}else{
@@ -100,6 +101,46 @@ class User extends MX_Controller {
 			$data['status'] = FALSE;
 		}
 		return $data;
+	}
+
+	public function update_profile(){
+		$response = $this->User_model->update_user($this->input->post(), $this->session->userdata('id'));
+		if($response['status']){
+			$this->session->set_userdata($response['data']);
+			//Go to profile page with success message
+			$message = '<div class="alert alert-success alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<strong>Success!</strong> '.$response['message'].'</div>';
+		}else{
+			//Go to profile page with error message
+			$message = '<div class="alert alert-danger alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<strong>Error!</strong> '.$response['message'].'</div>';
+		}
+		$this->session->set_flashdata('user_msg', $message);
+		redirect('manager/profile');
+	}
+
+	public function update_password(){
+		$response = $this->User_model->change_password($this->input->post(), $this->session->userdata('id'));
+		if($response['status']){
+			//Go to profile page with success message
+			$message = '<div class="alert alert-success alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<strong>Success!</strong> '.$response['message'].'</div>';
+		}else{
+			//Go to profile page with error message
+			$message = '<div class="alert alert-danger alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<strong>Error!</strong> '.$response['message'].'</div>';
+		}
+		$this->session->set_flashdata('user_msg', $message);
+		redirect('manager/profile');
+	}
+
+	public function logout(){
+		$this->session->sess_destroy();
+		redirect('manager/login');
 	}
 	
 }

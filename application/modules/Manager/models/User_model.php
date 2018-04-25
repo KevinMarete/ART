@@ -11,6 +11,7 @@ class User_model extends CI_Model {
 			$user_data = $this->db->get_where($this->table, array('email_address' => $data['email_address'], 'password' =>md5($data['password'])))->row_array();
 			if(!empty($user_data)){
 				$response['message'] = 'Welcome, <b>'.$user_data['firstname'].'</b> to the Commodity Manager!';
+				unset($user_data['password']);
 				$response['data'] = $user_data;
 				$response['status'] = TRUE;
 			}else{
@@ -74,6 +75,53 @@ class User_model extends CI_Model {
 				}
 			}else{
 				$response['message'] = 'The user account linked to <b>'.$data['email_address'].'</b> does not exist!';
+				$response['status'] = FALSE;
+			}
+		}catch(Execption $e){
+			$response['status'] = FALSE;
+			$response['message'] = $e->getMessage();
+		}
+		return $response;
+	}
+
+	public function update_user($data, $id){
+		$response = array();
+		try{
+			$this->db->where('id', $id);
+			$this->db->update($this->table, $data);
+			$count = $this->db->affected_rows();
+			if($count > 0){
+				$response['message'] = 'User Profile for <b>'.$data['firstname'].' '.$data['lasttname'].'</b> was updated!';
+				$response['data'] = $data;
+				$response['status'] = TRUE;
+			}else{
+				$response['message'] = 'User Profile for <b>'.$data['firstname'].' '.$data['lasttname'].'</b> could not be updated!';
+				$response['status'] = FALSE;
+			}
+		}catch(Execption $e){
+			$response['status'] = FALSE;
+			$response['message'] = $e->getMessage();
+		}
+		return $response;
+	}
+
+	public function change_password($data, $id){
+		$response = array();
+		try{
+			$user_data = $this->db->get_where($this->table, array('id' => $id, 'password' => md5($data['oldpassword'])))->row_array();
+			if(!empty($user_data)){
+				$this->db->where('id', $id);
+				$this->db->update($this->table, array('password' => md5($data['password'])));
+				$count = $this->db->affected_rows();
+				if($count > 0){
+					$response['message'] = 'Password was changed!';
+					$response['status'] = TRUE;
+				}else{
+					$response['message'] = 'Password was not changed!';
+					$response['status'] = FALSE;
+				}
+			}else{
+				$response['message'] = 'Old Password does not match!';
 				$response['status'] = FALSE;
 			}
 		}catch(Execption $e){

@@ -74,7 +74,11 @@
                                 <label for="inputrole" class="col-sm-2 control-label">Role</label>
                                 <div class="col-sm-10">
                                     <select class="form-control" id="inputrole" name="role_id" required> 
-                                        <option value="1">NASCOP</option>
+                                        <option value=''>Select Role</option>
+                                        <?php foreach ($roles as $role) {
+                                            echo "<option value='".$role["id"]."'>".$role["name"]."</option>";
+                                        }?>
+                                        
                                     </select>
                                 </div>
                             </div>
