@@ -44,12 +44,13 @@
                     <div class="panel-heading text-center">
                         <img src="<?php echo base_url().'public/manager/img/nascop_logo.png';?>" class="img-responsive center-block" alt="nascop">
                         <h3 class="panel-title"><b>Commodity Manager</b></h3>
+                        <?php echo $this->session->flashdata('user_msg'); ?>
                     </div>
                     <div class="panel-body">
-                        <form role="form" action="<?php echo base_url().'manager/reset_account';?>" method="POST">
+                        <form role="form" action="<?php echo base_url().'user/reset_account';?>" method="POST">
                             <fieldset>
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus required>
+                                    <input class="form-control" placeholder="E-mail" name="email_address" type="email" autofocus required>
                                 </div>
                                 <button type="submit" class="btn btn-lg btn-danger btn-block"> <i class="fa fa-refresh"></i> Reset Account</button>
                             </fieldset>

@@ -44,9 +44,10 @@
                     <div class="panel-heading text-center">
                         <img src="<?php echo base_url().'public/manager/img/nascop_logo.png';?>" class="img-responsive center-block" alt="nascop">
                         <h3 class="panel-title"><b>Commodity Manager</b></h3>
+                        <?php echo $this->session->flashdata('user_msg'); ?>
                     </div>
                     <div class="panel-body">
-                        <form class="form-horizontal" action="<?php echo base_url().'manager/create_account';?>" method="POST">
+                        <form class="form-horizontal" action="<?php echo base_url().'user/create_account';?>" method="POST">
                             <div class="form-group">
                                 <label for="inputfirstname" class="col-sm-2 control-label">Firstname</label>
                                 <div class="col-sm-4">
@@ -118,6 +119,21 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="<?php echo base_url().'public/manager/lib/sbadmin2/dist/js/sb-admin-2.js';?>"></script>
+
+    <script type="text/javascript">
+        $(function(){
+            $("#inputpassword").on("change", validatePassword)
+            $("#inputcpassword").on("change", validatePassword)
+
+            function validatePassword(){
+                var password = $("#inputpassword").val()
+                var confirm_password = $("#inputcpassword").val()
+                if(password != confirm_password && confirm_password !=='') {
+                    alert("Passwords Don't Match");
+                }
+            }
+        });
+    </script>
 
 </body>
 
