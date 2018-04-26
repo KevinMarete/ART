@@ -13,6 +13,16 @@ class User_model extends CI_Model {
 				$response['message'] = 'Welcome, <b>'.$user_data['firstname'].'</b> to the Commodity Manager!';
 				unset($user_data['password']);
 				$response['data'] = $user_data;
+				//Get menu data
+				$this->db->select('m.name module,m.icon, sm.name submodule');
+				$this->db->from('tbl_role_submodule rsm');
+				$this->db->join('tbl_submodule sm', 'sm.id = rsm.role_id', 'inner');
+				$this->db->join('tbl_module m', 'm.id = sm.module_id', 'inner');
+				$this->db->where(array('rsm.role_id' => $user_data['role_id']));
+				foreach ($this->db->get()->result_array() as $value) {
+					$response['data']['modules'][$value['module']]['icon'] = $value['icon'];
+					$response['data']['modules'][$value['module']]['submodules'][] = $value['submodule'];
+				}
 				$response['status'] = TRUE;
 			}else{
 				$response['message'] = 'Please enter valid user account credentials!';

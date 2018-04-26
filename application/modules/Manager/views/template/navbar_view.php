@@ -6,7 +6,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="<?php echo base_url() . 'manager/dashboard' ?>">
+        <a class="navbar-brand" href="<?php echo base_url() . 'manager/dashboard'; ?>">
             <i class="fa fa-dashboard fa-fw"></i>
             Commodity Manager
         </a>
@@ -39,15 +39,27 @@
     <div class="navbar-default sidebar" role="navigation">
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
-                <li>
-                    <a href="<?php echo base_url() . 'Admin/sites'; ?>"><i class="fa fa-list-ul fa-fw"></i> Sites</a>
+                <li class="sidebar-search">
+                    <div class="input-group custom-search-form">
+                        <input type="text" class="form-control" placeholder="Search...">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                    </div>
+                    <!-- /input-group -->
                 </li>
                 <li>
-                    <a href="<?php echo base_url('Admin/User_listing'); ?>"><i class="fa fa-user fa-fw"></i> User Listing</a>
+                    <a href="<?php echo base_url() . 'manager/dashboard'; ?>"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                 </li>
-                <li>
-                    <a href = "#"><i class = "fa fa-bar-chart-o fa-fw"></i> Reports</a>
-                </li>
+                <?php foreach ($this->session->userdata('modules') as $module => $value) {
+                    echo "<li><a href='#'><i class='".$value['icon']."'></i> ".ucwords($module)."<span class='fa arrow'></span></a><ul class='nav nav-second-level'>";
+                    foreach ($value['submodules'] as $submodule) {
+                        echo "<li><a href='".base_url() . "manager/".$module."/".$submodule."'>".ucwords($submodule)."</a></li>";
+                    }
+                    echo "</ul> </li>";
+                }?>
             </ul>
         </div>
         <!--/.sidebar-collapse -->
