@@ -59,13 +59,18 @@ $route['admin'] = 'Admin';
 $route['manager/login'] = 'Manager/load_page/user/login/Login';
 $route['manager/forgot_pass'] = 'Manager/load_page/user/forgot/Forgot Password';
 $route['manager/register_account'] = 'Manager/load_page/user/register/New Account';
-$route['manager/dashboard'] = 'Manager/load_template/dashboard/dashboard/Dashboard';
+
 $route['user/create_account'] = 'Manager/user/create_account';
 $route['user/authenticate'] = 'Manager/user/authenticate';
 $route['user/reset_account'] = 'Manager/user/reset_account';
 $route['manager/logout'] = 'Manager/user/logout';
-$route['manager/profile'] = 'Manager/load_template/user/profile/Profile';
+
+$route['manager/dashboard'] = 'Manager/load_template/dashboard/dashboard/Dashboard/0';
+$route['manager/profile'] = 'Manager/load_template/user/profile/Profile/0';
+$route['manager/(:any)/(:any)'] = 'Manager/load_template/$1/$2/$2';
+
 $route['manager/update_profile'] = 'Manager/user/update_profile';
 $route['manager/update_password'] = 'Manager/user/update_password';
+
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

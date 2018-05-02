@@ -17,11 +17,16 @@ class Manager extends MX_Controller {
 		$this->load->view('pages/'.$module.'/'.$page.'_view', $data);
 	}
 
-	public function load_template($module = 'dashboard', $page = 'dashboard', $title = 'Dashboard')
+	public function load_template($module = 'dashboard', $page = 'dashboard', $title = 'Dashboard', $is_table = TRUE)
 	{	
 		if($this->session->userdata('id')){
 			$data['content_view'] = 'pages/'.$module.'/'.$page.'_view';
-        	$data['page_title'] = 'ART | '.$title;
+			if($is_table){
+				$data['page_name'] = $page;
+				$data['columns'] = $this->db->list_fields('tbl_'.$page);
+				$data['content_view'] = 'template/table_view';
+			}
+        	$data['page_title'] = 'ART | '.ucwords($title);
         	$this->load->view('template/template_view', $data);
 		}else{
 			redirect("manager/login");
