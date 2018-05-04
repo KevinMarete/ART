@@ -30,6 +30,8 @@
 		<?php $this->load->view('tabs/regimen_view'); ?>
 		<!--adt_sites-tab-->
 		<?php $this->load->view('tabs/adt_sites_view'); ?>
+		<!--adt_reports-tab-->
+		<?php $this->load->view('tabs/adt_reports_view'); ?>
 	</div>
 	<!--footer-->
 	<hr>

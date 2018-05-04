@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Art_sites_model extends CI_Model {
+class Adt_sites_model extends CI_Model {
 
     public function get_adt_sites_versions($filters){
         $columns = array();

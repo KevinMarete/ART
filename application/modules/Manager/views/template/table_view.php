@@ -1,7 +1,11 @@
  <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header"><?php echo ucwords($page_name); ?> Listing</h1>
+            <ol class="breadcrumb page-header">
+                <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
+                <li>Admin</li>
+                <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i> <?php echo ucwords($page_name); ?></li>
+            </ol>
         </div>
         <!-- /.col-lg-12 -->
     </div>

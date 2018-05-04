@@ -14,7 +14,8 @@ var mainFilterURLs = {
     'facility': [{'link': facilityURL, 'type': 'facility'}],
     'partner': [{'link': partnerURL, 'type': 'partner'}],
     'regimen': [{'link': regimenListURL, 'type': 'regimen'}],
-    'adt_sites': [{'link': countyURL, 'type': 'county'}]
+    'adt_sites': [{'link': countyURL, 'type': 'county'}],
+    'adt_reports': [{'link': countyURL, 'type': 'county'}]
 }
 var tabFiltersURLs = {
     'summary': [{'link': drugListURL, 'type': 'drug', 'filters': ['#national_mos_chart_filter']}],
@@ -28,6 +29,11 @@ var tabFiltersURLs = {
     'partner': [],
     'regimen': [],
     'adt_sites': [],
+    'adt_reports': [
+        {'link': drugListURL, 'type': 'drug', 'filters': ['#adt_reports_commodity_consumption_chart_filter', '#commodity_consumption_regimen_visit_chart_filter','#patients_commodity_dosing_chart_filter']},
+        {'link': regimenListURL, 'type': 'start_regimen', 'filters': ['#patients_started_art_chart_filter']},
+        {'link': regimenListURL, 'type': 'current_regimen', 'filters': ['#patients_active_regimen_chart_filter', '#commodity_consumption_drug_visit_chart_filter']}
+    ]
 }
 var charts = {
     'summary': ['patient_scaleup_chart', 'patient_services_chart', 'national_mos_chart'],
@@ -37,7 +43,8 @@ var charts = {
     'facility': ['facility_patient_distribution_chart', 'facility_patient_distribution_table'],
     'partner': ['partner_patient_distribution_chart', 'partner_patient_distribution_table'],
     'regimen': ['regimen_patient_chart', 'regimen_nrti_drugs_chart', 'regimen_nnrti_drugs_chart'],
-    'adt_sites': ['adt_sites_version_chart', 'adt_sites_internet_chart', 'adt_sites_backup_chart', 'adt_sites_distribution_chart', 'adt_sites_distribution_table']
+    'adt_sites': ['adt_sites_version_chart', 'adt_sites_internet_chart', 'adt_sites_backup_chart', 'adt_sites_distribution_chart', 'adt_sites_distribution_table'],
+    'adt_reports': ['adt_reports_commodity_consumption_chart', 'patients_started_art_chart', 'patients_active_regimen_chart', 'commodity_consumption_regimen_visit_chart', 'commodity_consumption_drug_visit_chart', 'patients_commodity_dosing_chart']
 }
 var filters = {}
 var tabName = 'summary'

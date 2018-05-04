@@ -37,6 +37,7 @@
 	          		</a>
 	          		<ul class="dropdown-menu">
 						<li><a href="#adt_sites" aria-controls="adt_sites" role="tab" data-toggle="tab">Sites</a></li>
+						<li><a href="#adt_reports" aria-controls="adt_reports" role="tab" data-toggle="tab">Reports</a></li>
 					</ul>
 				</li>
 	          	<li>
