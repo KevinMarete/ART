@@ -30,9 +30,9 @@ var tabFiltersURLs = {
     'regimen': [],
     'adt_sites': [],
     'adt_reports': [
-        {'link': drugListURL, 'type': 'drug', 'filters': ['#adt_reports_commodity_consumption_chart_filter', '#commodity_consumption_regimen_visit_chart_filter','#patients_commodity_dosing_chart_filter']},
-        {'link': regimenListURL, 'type': 'start_regimen', 'filters': ['#patients_started_art_chart_filter']},
-        {'link': regimenListURL, 'type': 'current_regimen', 'filters': ['#patients_active_regimen_chart_filter', '#commodity_consumption_drug_visit_chart_filter']}
+        {'link': drugListURL, 'type': 'drug', 'filters': ['#adt_reports_commodity_consumption_regimen_chart_filter', '#adt_reports_commodity_consumption_dose_chart_filter', '#adt_reports_paediatric_weight_age_chart_filter', '#adt_reports_commodity_consumption_chart_filter']},
+        {'link': regimenListURL, 'type': 'start_regimen', 'filters': ['#adt_reports_patients_started_art_chart_filter']},
+        {'link': regimenListURL, 'type': 'current_regimen', 'filters': ['#adt_reports_active_patients_regimen_chart_filter', '#adt_reports_commodity_consumption_drug_chart_filter']}
     ]
 }
 var charts = {
@@ -44,7 +44,7 @@ var charts = {
     'partner': ['partner_patient_distribution_chart', 'partner_patient_distribution_table'],
     'regimen': ['regimen_patient_chart', 'regimen_nrti_drugs_chart', 'regimen_nnrti_drugs_chart'],
     'adt_sites': ['adt_sites_version_chart', 'adt_sites_internet_chart', 'adt_sites_backup_chart', 'adt_sites_distribution_chart', 'adt_sites_distribution_table'],
-    'adt_reports': ['adt_reports_commodity_consumption_chart', 'patients_started_art_chart', 'patients_active_regimen_chart', 'commodity_consumption_regimen_visit_chart', 'commodity_consumption_drug_visit_chart', 'patients_commodity_dosing_chart']
+    'adt_reports': ['adt_reports_patients_started_art_chart', 'adt_reports_active_patients_regimen_chart', 'adt_reports_commodity_consumption_regimen_chart', 'adt_reports_commodity_consumption_drug_chart', 'adt_reports_commodity_consumption_dose_chart', 'adt_reports_commodity_consumption_chart', 'adt_reports_paediatric_weight_age_chart']
 }
 var filters = {}
 var tabName = 'summary'

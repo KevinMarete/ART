@@ -101,18 +101,20 @@ class Dashboard extends MX_Controller {
 			$main_data = $this->adt_sites_model->get_adt_sites_distribution($filters);
 		}else if($chartname == 'adt_sites_distribution_table'){
 			$main_data = $this->adt_sites_model->get_adt_sites_distribution_numbers($filters);
-		}else if ($chartname == 'patients_started_art_chart') {
-            $main_data = $this->adt_reports_model->get_adt_reports_patients_started_art_chart($filters);
-        } else if ($chartname == 'patients_active_regimen_chart') {
-            $main_data = $this->adt_reports_model->get_adt_reports_patients_active_regimen_chart($filters);
-        } else if ($chartname == 'commodity_consumption_regimen_visit_chart') {
-            $main_data = $this->adt_reports_model->get_adt_reports_commodity_consumption_regimen_visit_chart($filters);
-        } else if ($chartname == 'commodity_consumption_drug_visit_chart') {
-            $main_data = $this->adt_reports_model->get_adt_reports_commodity_consumption_drug_visit_chart($filters);
-        } else if ($chartname == 'patients_commodity_dosing_chart') {
-            $main_data = $this->adt_reports_model->get_adt_reports_patients_commodity_dosing_chart($filters);
-        } else if ($chartname == 'adt_reports_commodity_consumption_chart') {
-            $main_data = $this->adt_reports_model->get_adt_reports_commodity_consumption_chart($filters);
+		}else if ($chartname == 'adt_reports_patients_started_art_chart') {
+            $main_data = $this->adt_reports_model->get_adt_reports_patients_started_art($filters);
+        } else if ($chartname == 'adt_reports_active_patients_regimen_chart') {
+            $main_data = $this->adt_reports_model->get_adt_reports_patients_active_regimen($filters);
+        } else if ($chartname == 'adt_reports_commodity_consumption_regimen_chart') {
+            $main_data = $this->adt_reports_model->get_adt_reports_commodity_consumption_regimen($filters);
+        } else if ($chartname == 'adt_reports_commodity_consumption_drug_chart') {
+            $main_data = $this->adt_reports_model->get_adt_reports_commodity_consumption_drug($filters);
+        } else if ($chartname == 'adt_reports_commodity_consumption_dose_chart') {
+            $main_data = $this->adt_reports_model->get_adt_reports_commodity_consumption_dose($filters);
+        } else if($chartname == 'adt_reports_paediatric_weight_age_chart'){
+			$main_data = $this->adt_reports_model->get_paediatric_patients_by_weight_age($filters);
+		} else if ($chartname == 'adt_reports_commodity_consumption_chart') {
+            $main_data = $this->adt_reports_model->get_adt_reports_commodity_consumption($filters);
         }
 		return $main_data;
 	}

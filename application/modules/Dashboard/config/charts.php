@@ -281,13 +281,13 @@ $config['adt_sites_distribution_table_filters'] = array('county');
 $config['adt_sites_distribution_table_filters_default'] = array();
 
 //adt_reports_patients_started_on_art
-$config['patients_started_art_chart_chartview'] = 'charts/stacked_bar_view_without_plotlines';
-$config['patients_started_art_chart_title'] = 'Listing of Patient(s) Started on ART';
-$config['patients_started_art_chart_yaxis_title'] = 'No. of Patients';
-$config['patients_started_art_chart_source'] = 'Source: www.commodities.nascop.org';
-$config['patients_started_art_chart_has_drilldown'] = FALSE;
-$config['patients_started_art_chart_filters'] = array('data_year', 'data_month', 'start_regimen');
-$config['patients_started_art_chart_filters_default'] = array(
+$config['adt_reports_patients_started_art_chart_chartview'] = 'charts/stacked_bar_view_without_plotlines';
+$config['adt_reports_patients_started_art_chart_title'] = 'PATIENT(S) STARTED ON ART';
+$config['adt_reports_patients_started_art_chart_yaxis_title'] = 'No. of Patients';
+$config['adt_reports_patients_started_art_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['adt_reports_patients_started_art_chart_has_drilldown'] = FALSE;
+$config['adt_reports_patients_started_art_chart_filters'] = array('data_year', 'data_month', 'start_regimen');
+$config['adt_reports_patients_started_art_chart_filters_default'] = array(
     'data_year' => $config['data_year'],
     'data_month' => $config['data_month'],
     'start_regimen' => array(
@@ -300,14 +300,14 @@ $config['patients_started_art_chart_filters_default'] = array(
     )
 );
 
-//adt_reports_patients_active by regimen
-$config['patients_active_regimen_chart_chartview'] = 'charts/stacked_bar_view_without_plotlines';
-$config['patients_active_regimen_chart_title'] = 'Listing of Active Patients(s) By Regimen';
-$config['patients_active_regimen_chart_yaxis_title'] = 'No. of Patients';
-$config['patients_active_regimen_chart_source'] = 'Source: www.commodities.nascop.org';
-$config['patients_active_regimen_chart_has_drilldown'] = FALSE;
-$config['patients_active_regimen_chart_filters'] = array('data_year', 'data_month', 'current_regimen');
-$config['patients_active_regimen_chart_filters_default'] = array(
+//adt_reports_active_patients_regimen_chart
+$config['adt_reports_active_patients_regimen_chart_chartview'] = 'charts/stacked_bar_view_without_plotlines';
+$config['adt_reports_active_patients_regimen_chart_title'] = 'ACTIVE PATIENT(S) BY REGIMEN';
+$config['adt_reports_active_patients_regimen_chart_yaxis_title'] = 'No. of Patients';
+$config['adt_reports_active_patients_regimen_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['adt_reports_active_patients_regimen_chart_has_drilldown'] = FALSE;
+$config['adt_reports_active_patients_regimen_chart_filters'] = array('data_year', 'data_month', 'current_regimen');
+$config['adt_reports_active_patients_regimen_chart_filters_default'] = array(
     'data_year' => $config['data_year'],
     'data_month' => $config['data_month'],
     'current_regimen' => array(
@@ -320,50 +320,73 @@ $config['patients_active_regimen_chart_filters_default'] = array(
     )
 );
 
-//adt_reports_commodity_consumption_based_on_drug(visit)_chart
-$config['commodity_consumption_regimen_visit_chart_chartview'] = 'charts/line_view';
-$config['commodity_consumption_regimen_visit_chart_title'] = 'Commodity Consumption Based On Current Regimen (Visit)';
-$config['commodity_consumption_regimen_visit_chart_yaxis_title'] = 'No. of Patients';
-$config['commodity_consumption_regimen_visit_chart_source'] = 'Source: www.commodities.nascop.org';
-$config['commodity_consumption_regimen_visit_chart_has_drilldown'] = FALSE;
-$config['commodity_consumption_regimen_visit_chart_filters'] = array('drug', 'data_date');
-$config['commodity_consumption_regimen_visit_chart_filters_default'] = array(
+//adt_reports_commodity_consumption_regimen_chart
+$config['adt_reports_commodity_consumption_regimen_chart_chartview'] = 'charts/line_view';
+$config['adt_reports_commodity_consumption_regimen_chart_title'] = 'COMMODITY CONSUMPTION BY REGIMEN';
+$config['adt_reports_commodity_consumption_regimen_chart_yaxis_title'] = 'No. of Patients';
+$config['adt_reports_commodity_consumption_regimen_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['adt_reports_commodity_consumption_regimen_chart_has_drilldown'] = FALSE;
+$config['adt_reports_commodity_consumption_regimen_chart_filters'] = array('data_date', 'drug');
+$config['adt_reports_commodity_consumption_regimen_chart_filters_default'] = array(
+    'data_date' => $config['data_date'],
+    'drug' => array(
+        'Efavirenz (EFV) 600mg Tabs'
+    )
+);
+
+//adt_reports_commodity_consumption_drug_chart
+$config['adt_reports_commodity_consumption_drug_chart_chartview'] = 'charts/line_view';
+$config['adt_reports_commodity_consumption_drug_chart_title'] = 'COMMODITY CONSUMPTION BY DRUG';
+$config['adt_reports_commodity_consumption_drug_chart_yaxis_title'] = 'No. of Patients';
+$config['adt_reports_commodity_consumption_drug_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['adt_reports_commodity_consumption_drug_chart_has_drilldown'] = FALSE;
+$config['adt_reports_commodity_consumption_drug_chart_filters'] = array( 'data_date', 'current_regimen');
+$config['adt_reports_commodity_consumption_drug_chart_filters_default'] = array(
+    'data_date' => $config['data_date'],
+    'current_regimen' => array(
+        'AF2B | TDF + 3TC + EFV'
+    )
+);
+
+//adt_reports_commodity_consumption_dose_chart
+$config['adt_reports_commodity_consumption_dose_chart_chartview'] = 'charts/combined_column_line_view';
+$config['adt_reports_commodity_consumption_dose_chart_title'] = 'COMMODITY CONSUMPTION BY DOSE';
+$config['adt_reports_commodity_consumption_dose_chart_yaxis_title'] = 'No. of Patients';
+$config['adt_reports_commodity_consumption_dose_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['adt_reports_commodity_consumption_dose_chart_has_drilldown'] = FALSE;
+$config['adt_reports_commodity_consumption_dose_chart_filters'] = array('data_date', 'drug');
+$config['adt_reports_commodity_consumption_dose_chart_filters_default'] = array(
     'data_date' => $config['data_date'],
     'drug' => array(
         'Nevirapine (NVP) 200mg Tabs'
     )
 );
 
-//adt_reports_commodity_consumption_based_on_current_regimen(visit)_chart
-$config['commodity_consumption_drug_visit_chart_chartview'] = 'charts/line_view';
-$config['commodity_consumption_drug_visit_chart_title'] = 'Commodity Consumption Based On Drug (Visit)';
-$config['commodity_consumption_drug_visit_chart_yaxis_title'] = 'No. of Patients';
-$config['commodity_consumption_drug_visit_chart_source'] = 'Source: www.commodities.nascop.org';
-$config['commodity_consumption_drug_visit_chart_has_drilldown'] = FALSE;
-$config['commodity_consumption_drug_visit_chart_filters'] = array('current_regimen', 'data_date');
-$config['commodity_consumption_drug_visit_chart_filters_default'] = array(
-    'data_date' => $config['data_date'],
-    'current_regimen' => array(
-        'AF1B | AZT + 3TC + EFV'
-    )
-);
-//adt_reports_commodity_dosing_chart
-$config['patients_commodity_dosing_chart_chartview'] = 'charts/combined_column_line_with_many_colors_view';
-$config['patients_commodity_dosing_chart_title'] = 'Patient(s) Commodity And Dosing';
-$config['patients_commodity_dosing_chart_yaxis_title'] = 'No. of Patients';
-$config['patients_commodity_dosing_chart_source'] = 'Source: www.commodities.nascop.org';
-$config['patients_commodity_dosing_chart_has_drilldown'] = FALSE;
-$config['patients_commodity_dosing_chart_filters'] = array('data_date', 'drug');
-$config['patients_commodity_dosing_chart_filters_default'] = array(
-    'data_date' => $config['data_date'],
+//adt_reports_paediatric_weight_age_chart
+$config['adt_reports_paediatric_weight_age_chart_chartview'] = 'charts/scatter_plot_view';
+$config['adt_reports_paediatric_weight_age_chart_title'] = 'PAEDIATRIC PATIENTS BY WEIGHT AND AGE';
+$config['adt_reports_paediatric_weight_age_chart_yaxis_title'] = 'Age';
+$config['adt_reports_paediatric_weight_age_chart_xaxis_title'] = 'Weight (KG)';
+$config['adt_reports_paediatric_weight_age_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['adt_reports_paediatric_weight_age_chart_has_drilldown'] = FALSE;
+$config['adt_reports_paediatric_weight_age_chart_filters'] = array('data_year', 'data_month', 'drug');
+$config['adt_reports_paediatric_weight_age_chart_filters_default'] = array(
+    'data_year' => $config['data_year'],
+    'data_month' => $config['data_month'],
     'drug' => array(
-        'Nevirapine (NVP) 200mg Tabs'
+        'Abacavir/Lamivudine (ABC/3TC) 60/30mg FDC Tabs',
+        'Zidovudine/Lamivudine (AZT/3TC) 60/30mg FDC Tabs',
+        'Zidovudine/Lamivudine/Nevirapine (AZT/3TC/NVP) 60/30/50mg FDC Tabs',
+        'Efavirenz (EFV) 200mg Tabs',
+        'Nevirapine (NVP) 200mg Tabs',
+        'Lopinavir/Ritonavir (LPV/r) 80/20mg/ml Liquid',
+        'Lopinavir/Ritonavir (LPV/r) 200/50mg Tabs'
     )
 );
 
 //adt_reports_commodity_consumption_chart
 $config['adt_reports_commodity_consumption_chart_chartview'] = 'charts/line_view';
-$config['adt_reports_commodity_consumption_chart_title'] = 'Commodity Consumption Over Time';
+$config['adt_reports_commodity_consumption_chart_title'] = 'COMMODITY CONSUMPTION TREND';
 $config['adt_reports_commodity_consumption_chart_yaxis_title'] = 'No. of Packs';
 $config['adt_reports_commodity_consumption_chart_source'] = 'Source: www.commodities.nascop.org';
 $config['adt_reports_commodity_consumption_chart_has_drilldown'] = FALSE;
@@ -372,6 +395,6 @@ $config['adt_reports_commodity_consumption_chart_filters_default'] = array(
     'data_date' => $config['data_date'],
     'drug' => array(
         'Efavirenz (EFV) 600mg Tabs',
-        'Nevirapine (NVP) 200mg Tabs'
+        'Dolutegravir (DTG) 50mg Tabs'
     )
 );

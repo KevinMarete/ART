@@ -63,11 +63,11 @@
 		            </div>
 		            <div class="modal-body">
 						<div class="row">
-							<div class="col-md-9">
+							<div class="col-sm-9">
 								<select id="national_mos_chart_filter" multiple="multiple" data-filter_type="drug"></select>
 							</div>
-							<div class="col-md-3">
-								<button id="national_mos_chart_filter_clear_btn" class="btn btn-danger btn-sm clear_btn"><span class="glyphicon glyphicon-refresh"></span> Clear</button>
+							<div class="col-sm-3">
+								<button id="national_mos_chart_filter_clear_btn" class="btn btn-danger btn-sm clear_btn"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
 								<button id="national_mos_chart_filter_btn" class="btn btn-warning btn-sm filter_btn"><span class="glyphicon glyphicon-filter"></span> Filter</button>
 							</div>
 						</div>

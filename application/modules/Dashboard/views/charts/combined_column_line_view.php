@@ -8,7 +8,7 @@
         var chartDIV = '<?php echo $chart_name."_container"; ?>';
 
         Highcharts.setOptions({
-            colors: ['#5cb85c', '#f0ad4e', '#5bc0de']
+            colors: ['#5cb85c', '#f0ad4e', '#5bc0de','#808080','#ac5353','#0080ff','#ff4000']
         });
 
         Highcharts.chart(chartDIV, {

@@ -8,7 +8,7 @@
         var chartDIV = '<?php echo $chart_name."_container"; ?>';
 
         Highcharts.setOptions({
-            colors: ['#5cb85c', '#f0ad4e', '#5bc0de','#808080','#ac5353','#0080ff','#ff4000']
+            colors: ['#5cb85c', '#f0ad4e', '#5bc0de']
         });
 
         Highcharts.chart(chartDIV, {
@@ -18,7 +18,8 @@
             },
 
             chart: {
-                type: 'column'
+                type: 'scatter',
+                zoomType: 'xy'
             },
             
             title: {
@@ -29,32 +30,46 @@
             },
 
             xAxis: {
-                categories: <?php echo $chart_categories; ?>,
-                crosshair: true
-            },
-
-            yAxis: {
-                allowDecimals: false,
+                crosshair: true,
+                startOnTick: true,
+                endOnTick: true,
+                showLastLabel: true,
                 min: 0,
                 title: {
-                    text: '<?php echo $chart_yaxis_title; ?>',
+                    text: '<?php echo $chart_xaxis_title; ?>'
                 }
             },
 
-            tooltip: {
-                headerFormat: '<b>{point.x}</b><br/>',
-                pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
-                footerFormat: 'Total: <b>{point.total:,.0f}</b>',
-                shared: true
+            yAxis: 
+            {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: '<?php echo $chart_yaxis_title; ?>'
+                }
             },
-
             plotOptions: {
-                column: {
-                    stacking: 'normal',
-                    dataLabels: {
+                scatter: {
+                marker: {
+                    radius: 5,
+                    states: {
+                    hover: {
                         enabled: true,
-                        color: 'black'
+                        lineColor: 'rgb(100,100,100)'
                     }
+                    }
+                },
+                states: {
+                    hover: {
+                    marker: {
+                        enabled: false
+                    }
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<b>{series.name}</b><br>',
+                    pointFormat: '{point.y} yrs, {point.x} kg'
+                }
                 }
             },
 
