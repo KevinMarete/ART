@@ -38,8 +38,15 @@
 
 <script type="text/javascript">
 	$(function() {
-	    /*DataTable*/
-	    $('.distribution_table').DataTable({
+
+		//Add search input
+		$('.distribution_table thead th').each(function(){
+        	var title = $('.distribution_table thead th').eq($(this).index()).text();
+        	$(this).html('<input type="text" placeholder="Search '+title.toLowerCase()+'"" />');
+    	});
+
+	    //DataTable
+	    var table = $('.distribution_table').DataTable({
 	    	"bDestroy": true,
 			"pagingType": "full_numbers",
 			"ordering": false,
@@ -69,5 +76,13 @@
 	            }
 	        ]
 		});
+
+		//Apply the search
+    	table.columns().eq(0).each(function(colIdx){
+	        $('input', table.column(colIdx).header()).on('keyup change', function(){
+	            table.column(colIdx).search(this.value).draw();
+	        });
+    	}); 
+
 	});
 </script>
