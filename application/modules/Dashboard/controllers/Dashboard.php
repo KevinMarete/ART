@@ -118,5 +118,25 @@ class Dashboard extends MX_Controller {
         }
 		return $main_data;
 	}
+
+	public function get_adt_data($table, $start_date, $end_date){
+		//Setup the elements
+		$elements = array(
+			'dsh_patient_adt' =>  array(
+				'rows' =>  array('current_regimen'),
+				'columns' => array('gender'),
+				'query' => "SELECT gender, ROUND(DATEDIFF(CURDATE(), birth_date)/365) age, start_weight, current_weight, enrollment_date, start_regimen_date, status_change_date, start_regimen, current_regimen, service, status, last_viral_test_result viral_load FROM dsh_patient_adt WHERE enrollment_date >= ? AND enrollment_date <= ? "
+			),
+			'dsh_visit_adt' =>  array(
+				'rows' =>  array('drug'),
+				'columns' => array('current_weight'),
+				'query' => "SELECT gender, ROUND(DATEDIFF(dispensing_date, birth_date)/365) age, pv.current_weight, purpose, last_regimen, pv.current_regimen, regimen_change_reason, dispensing_date, appointment_date, appointment_adherence, non_adherence_reason, drug, dose, duration, pill_count_adherence, self_reporting_adherence  FROM dsh_visit_adt pv  INNER JOIN dsh_patient_adt p ON p.id = pv.patient_adt_id WHERE dispensing_date >= ? AND dispensing_date <= ? "
+			)			
+		); 
+		//Get elements based on selected options
+		$response['data'] = $this->db->query($elements[$table]['query'], array($start_date, $end_date))->result_array();
+		$response['defs'] = array('rows' => $elements[$table]['rows'], 'cols' => $elements[$table]['columns']);
+		echo json_encode($response);
+	}		
     
 }

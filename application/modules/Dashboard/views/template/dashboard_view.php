@@ -32,6 +32,8 @@
 		<?php $this->load->view('tabs/adt_sites_view'); ?>
 		<!--adt_reports-tab-->
 		<?php $this->load->view('tabs/adt_reports_view'); ?>
+		<!--adt_data_warehouse-tab-->
+		<?php $this->load->view('tabs/adt_data_warehouse_view'); ?>
 	</div>
 	<!--footer-->
 	<hr>

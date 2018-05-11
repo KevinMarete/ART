@@ -24,5 +24,20 @@
 <script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/datatables/js/buttons.html5.min.js';?>"></script>
 <script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/datatables/js/buttons.print.min.js';?>"></script>
 <script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/datatables/js/dataTables.bootstrap.min.js';?>"></script>
+<!--moment-->
+<script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/moment/js/moment.min.js';?>"></script>
+<!--daterangepicker-->
+<script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/daterangepicker/js/daterangepicker.js'?>"></script>
+<!--bootbox-->
+<script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/bootbox/js/bootbox.min.js';?>"></script>
+<!-- external libs from cdnjs -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.js"></script>
+<!-- pivotTable-->
+<script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/pivotTable/js/pivot.js';?>"></script>
+<script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/pivotTable/js/export_renderers.js';?>"></script>
+<script type="text/javascript" src="<?php echo base_url().'public/dashboard/lib/pivotTable/js/d3_renderers.js';?>"></script>
 <!--dashboard-->
 <script type="text/javascript" src="<?php echo base_url().'public/dashboard/js/dashboard.js';?>"></script>
