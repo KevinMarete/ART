@@ -78,7 +78,6 @@
                                         <?php foreach ($roles as $role) {
                                             echo "<option value='".$role["id"]."'>".$role["name"]."</option>";
                                         }?>
-                                        
                                     </select>
                                 </div>
                             </div>

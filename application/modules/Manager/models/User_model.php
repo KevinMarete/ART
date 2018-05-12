@@ -14,14 +14,18 @@ class User_model extends CI_Model {
 				unset($user_data['password']);
 				$response['data'] = $user_data;
 				//Get menu data
-				$this->db->select('m.name module,m.icon, sm.name submodule');
+				$this->db->select('m.name module,m.icon, sm.name submodule, r.name role, IF(us.scope_id IS NULL, " ", us.scope_id) scope', FALSE);
 				$this->db->from('tbl_role_submodule rsm');
-				$this->db->join('tbl_submodule sm', 'sm.id = rsm.role_id', 'inner');
+				$this->db->join('tbl_submodule sm', 'sm.id = rsm.submodule_id', 'inner');
 				$this->db->join('tbl_module m', 'm.id = sm.module_id', 'inner');
+				$this->db->join('tbl_role r', 'r.id = rsm.role_id', 'inner');
+				$this->db->join('tbl_user_scope us', 'us.role_id = rsm.role_id AND us.user_id = '.$user_data['id'], 'left');
 				$this->db->where(array('rsm.role_id' => $user_data['role_id']));
 				foreach ($this->db->get()->result_array() as $value) {
 					$response['data']['modules'][$value['module']]['icon'] = $value['icon'];
 					$response['data']['modules'][$value['module']]['submodules'][] = $value['submodule'];
+					$response['data']['role'] = $value['role'];
+					$response['data']['scope'] = $value['scope'];
 				}
 				$response['status'] = TRUE;
 			}else{

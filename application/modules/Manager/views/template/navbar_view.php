@@ -55,8 +55,9 @@
                 </li>
                 <?php foreach ($this->session->userdata('modules') as $module => $value) {
                     echo "<li><a href='#'><i class='".$value['icon']."'></i> ".ucwords($module)."<span class='fa arrow'></span></a><ul class='nav nav-second-level'>";
-                    foreach ($value['submodules'] as $submodule) {
-                        echo "<li><a href='".base_url() . "manager/".$module."/".$submodule."'>".ucwords($submodule)."</a></li>";
+                    foreach ($value['submodules'] as $orig_submodule) {
+                        $submodule = str_replace(' ', '_', $orig_submodule);
+                        echo "<li><a href='".base_url() . "manager/".$module."/".$submodule."'>".ucwords($orig_submodule)."</a></li>";
                     }
                     echo "</ul> </li>";
                 }?>

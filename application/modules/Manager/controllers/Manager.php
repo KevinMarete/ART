@@ -26,6 +26,23 @@ class Manager extends MX_Controller {
 				$data['columns'] = $this->db->list_fields('tbl_'.$page);
 				$data['content_view'] = 'template/table_view';
 			}
+			if($page == 'assign'){
+				$data['scopes'] = $this->db->order_by('name', 'ASC')->get('tbl_'.$this->session->userdata('role'))->result_array();
+			}else if($module == 'orders'){
+				$data['page_name'] = $page;
+				$columns = array(
+					'reports' => array(
+						'subcounty' => array('#CDRR-ID', '#MAPS-ID', 'Period Beginning', 'Status', 'Facility Name', 'Options'),
+						'county' => array('Subcounty', 'Reported Count', 'Options')
+					),
+					'reporting_rates' => array(
+						'subcounty' => array('MFL Code', 'Facility Name', 'Order Reports', 'Options'),
+						'county' => array('Subcounty', 'Reported Count', 'Options')
+					)
+				);
+
+				$data['columns'] = $columns[$page][$this->session->userdata('role')];
+			}
         	$data['page_title'] = 'ART | '.ucwords($title);
         	$this->load->view('template/template_view', $data);
 		}else{

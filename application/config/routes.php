@@ -69,8 +69,15 @@ $route['manager/dashboard'] = 'Manager/load_template/dashboard/dashboard/Dashboa
 $route['manager/profile'] = 'Manager/load_template/user/profile/Profile/0';
 $route['manager/(:any)/(:any)'] = 'Manager/load_template/$1/$2/$2';
 
+$route['manager/orders/reports'] = 'Manager/load_template/orders/reports/Reports/0';
+$route['manager/orders/view/(:any)/(:any)'] = 'Manager/Orders/view_orders/$1/$2';
+$route['manager/orders/assign'] = 'Manager/load_template/orders/assign/Assign/0';
+$route['manager/orders/allocation'] = 'Manager/load_template/orders/allocation/Allocation/0';
+$route['manager/orders/reporting_rates'] = 'Manager/load_template/orders/reporting_rates/Reporting Rates/0';
+
 $route['manager/update_profile'] = 'Manager/user/update_profile';
 $route['manager/update_password'] = 'Manager/user/update_password';
+$route['manager/assign_scope'] = 'Manager/orders/assign_scope';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
