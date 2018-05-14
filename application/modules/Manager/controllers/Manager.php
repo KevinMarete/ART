@@ -29,6 +29,7 @@ class Manager extends MX_Controller {
 			if($page == 'assign'){
 				$data['scopes'] = $this->db->order_by('name', 'ASC')->get('tbl_'.$this->session->userdata('role'))->result_array();
 			}else if($module == 'orders'){
+				$this->load->model('Orders_model');
 				$data['page_name'] = $page;
 				$columns = array(
 					'reports' => array(
@@ -38,10 +39,19 @@ class Manager extends MX_Controller {
 					'reporting_rates' => array(
 						'subcounty' => array('MFL Code', 'Facility Name', 'Order Reports', 'Options'),
 						'county' => array('Subcounty', 'Reported Count', 'Options')
+					),
+					'cdrr_maps' => array(
+						'subcounty' => array(
+							'drugs' => $this->Orders_model->get_drugs(),
+							'regimens' => $this->Orders_model->get_drugs(),
+							'cdrrs' => $this->Orders_model->get_cdrr_data($this->uri->segment('4')),
+							'maps' => $this->Orders_model->get_maps_data($this->uri->segment('5'))
+						)
 					)
 				);
-
 				$data['columns'] = $columns[$page][$this->session->userdata('role')];
+				echo '<pre>';
+				print_r($data['columns']);die();
 			}
         	$data['page_title'] = 'ART | '.ucwords($title);
         	$this->load->view('template/template_view', $data);

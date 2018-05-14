@@ -96,6 +96,15 @@ class Orders_model extends CI_Model {
 		return $response;
 	}
 
+
+	public function get_drugs(){
+		return $this->db->get('vw_drug_list')->result_array();
+	}
+
+	public function get_regimens(){
+		return $this->db->get('vw_regimen_list')->result_array();
+	}
+
 	public function get_cdrr_data($cdrr_id){
 		$response = array();
 		try{
@@ -106,7 +115,7 @@ class Orders_model extends CI_Model {
 				INNER JOIN tbl_cdrr_log cl ON cl.cdrr_id = c.id
 				INNER JOIN tbl_facility f ON f.id = c.facility_id
 				INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
-				INNER JOIN tbl_county co ON c0.id = sc.county_id
+				INNER JOIN tbl_county co ON co.id = sc.county_id
 				WHERE c.id = ?";
 			$table_data = $this->db->query($sql, array($cdrr_id))->result_array();
 			if(!empty($table_data)){
@@ -136,7 +145,7 @@ class Orders_model extends CI_Model {
 				INNER JOIN tbl_maps_log ml ON ml.maps_id = m.id
 				INNER JOIN tbl_facility f ON f.id = m.facility_id
 				INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
-				INNER JOIN tbl_county co ON c0.id = sc.county_id
+				INNER JOIN tbl_county co ON co.id = sc.county_id
 				WHERE m.id = ?";
 			$table_data = $this->db->query($sql, array($maps_id))->result_array();
 			if(!empty($table_data)){

@@ -43,46 +43,5 @@ class Orders extends MX_Controller {
 			echo json_encode(array('data' => $response['data']));
 		}
 	}
-
-	public function view_orders($cdrr_id, $maps_id){
-		//Get order data
-		$cdrr_data = $this->Orders_model->get_cdrr_data($cdrr_id);
-		$maps_data = $this->Orders_model->get_maps_data($maps_id);
-
-
-		$columns =array(
-			'D-CDRR' => array(
-				'Drug Name', 
-				'Unit Pack Size', 
-				'Beginning Balance', 
-				'Quantity Received in this period', 
-				'Total Qty ISSUED to ARV dispensing sites(Satellite sites plus Central site dispensing point(s) where relevant)',
-				'End of Month Physical Count',
-				'Reported Aggregated Quantity CONSUMED in the reporting period(Satellite sites plus Central site dispensing point where relevant)',
-				'Reported Aggregated Physical Stock on Hand at end of reporting period (Satellite sites plus Central site dispensing point where relevant)',
-				'Quantity required for RESUPPLY',
-				'Calculated Quantity',
-				'Rationalized Quantity'
-			),
-			'F-CDRR' => array(
-				'Drug Name', 
-				'Unit Pack Size', 
-				'Beginning Balance', 
-				'Quantity Received in this period', 
-				'Total Quantity Dispensed this period',
-				'End of Month Physical Count',
-				'Quantity required for RESUPPLY',
-				'Calculated Quantity',
-				'Rationalized Quantity'
-			),
-			'D-MAPS' => array('Regimen' , 'Patients'),
-			'F-MAPS' => array('Regimen' , 'Patients')
-
-
-
-
-
-		);
-	}
-	
+		
 }
