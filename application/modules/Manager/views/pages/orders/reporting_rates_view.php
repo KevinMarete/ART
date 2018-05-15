@@ -1,4 +1,4 @@
- <div id="page-wrapper">
+<div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
             <ol class="breadcrumb page-header">
@@ -8,6 +8,13 @@
             </ol>
         </div>
         <!-- /.col-lg-12 -->
+    </div>
+    <div class="row"> <!--row-->
+        <div class="col-lg-12">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
     </div>
     <!-- /.row -->
     <div class="row">
@@ -20,7 +27,11 @@
                     <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-listing">
                         <thead>
                             <tr>
-                                <?php foreach ($columns as $column){ echo"<th>".ucwords($column)."</th>"; } ?>
+                                <?php
+                                foreach ($columns as $column) {
+                                    echo"<th>" . ucwords($column) . "</th>";
+                                }
+                                ?>
                             </tr>
                         </thead>
                         <tbody>
@@ -38,35 +49,36 @@
 <!-- /#page-wrapper -->
 
 <script>
-    $(document).ready(function() {
-        $('#dataTables-listing').DataTable({
+    $(document).ready(function () {
+        var table = $('#dataTables-listing').DataTable({
             responsive: true,
-            order: [[ 1, "asc" ]],
+            order: [[1, "asc"]],
             pagingType: "full_numbers",
-            ajax: "<?php echo base_url().'Manager/Orders/get_reporting_rates';?>",
+            ajax: "<?php echo base_url() . 'Manager/Orders/get_reporting_rates'; ?>",
             initComplete: function () {
-                this.api().columns([1, 2]).every( function () {
+                this.api().columns([1, 2]).every(function () {
                     var column = this;
                     var select = $('<br/><select><option value="">Show all</option></select>')
-                        .appendTo( $(column.header()) )
-                        .on('change', function () {
-                            var val = $.fn.dataTable.util.escapeRegex(
-                                $(this).val()
-                            );
-                            column
-                                .search( val ? '^'+val+'$' : '', true, false )
-                                .draw();
-                        });
-                    column.data().unique().sort().each( function ( d, j ) {
+                            .appendTo($(column.header()))
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                        );
+                                column
+                                        .search(val ? '^' + val + '$' : '', true, false)
+                                        .draw();
+                            });
+                    column.data().unique().sort().each(function (d, j) {
                         var val = $('<div/>').html(d).text();
-                        select.append( '<option value="' + val + '">' + val + '</option>' );
+                        select.append('<option value="' + val + '">' + val + '</option>');
                     });
                 });
                 //Show reporting rate
                 var filteredData = this.api().column(3).data().filter( function ( value, index ) {
-                    return value == 'Report' ? true : false;
+                    return value == 'Repo' ? true : false;
                 });
-                //alert(filteredData.length)
+//                alert(filteredData.length)
+;
             }
         });
     });

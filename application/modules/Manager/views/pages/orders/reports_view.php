@@ -1,4 +1,4 @@
- <div id="page-wrapper">
+<div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
             <ol class="breadcrumb page-header">
@@ -20,7 +20,11 @@
                     <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-listing">
                         <thead>
                             <tr>
-                                <?php foreach ($columns as $column){ echo"<th>".ucwords($column)."</th>"; } ?>
+                                <?php
+                                foreach ($columns as $column) {
+                                    echo"<th>" . ucwords($column) . "</th>";
+                                }
+                                ?>
                             </tr>
                         </thead>
                         <tbody>
@@ -38,28 +42,28 @@
 <!-- /#page-wrapper -->
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#dataTables-listing').DataTable({
             responsive: true,
-            order: [[ 2, "desc" ]],
+            order: [[2, "desc"]],
             pagingType: "full_numbers",
-            ajax: "<?php echo base_url().'Manager/Orders/get_orders';?>",
+            ajax: "<?php echo base_url() . 'Manager/Orders/get_orders'; ?>",
             initComplete: function () {
-                this.api().columns([2, 3, 4]).every( function () {
+                this.api().columns([2, 3, 4]).every(function () {
                     var column = this;
                     var select = $('<br/><select><option value="">Show all</option></select>')
-                        .appendTo( $(column.header()) )
-                        .on('change', function () {
-                            var val = $.fn.dataTable.util.escapeRegex(
-                                $(this).val()
-                            );
-                            column
-                                .search( val ? '^'+val+'$' : '', true, false )
-                                .draw();
-                        });
-                    column.data().unique().sort().each( function ( d, j ) {
+                            .appendTo($(column.header()))
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                        );
+                                column
+                                        .search(val ? '^' + val + '$' : '', true, false)
+                                        .draw();
+                            });
+                    column.data().unique().sort().each(function (d, j) {
                         var val = $('<div/>').html(d).text();
-                        select.append( '<option value="' + val + '">' + val + '</option>' );
+                        select.append('<option value="' + val + '">' + val + '</option>');
                     });
                 });
             }

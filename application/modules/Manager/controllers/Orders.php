@@ -43,5 +43,13 @@ class Orders extends MX_Controller {
 			echo json_encode(array('data' => $response['data']));
 		}
 	}
+        
+        public function get_allocation()
+        {
+        $response = $this->Orders_model->get_allocation_data($this->session->userdata('scope'));
+		if($response['status']){
+			echo json_encode(array('data' => $response['data']));
+		}
+        }
 		
 }
