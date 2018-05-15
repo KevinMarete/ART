@@ -146,11 +146,10 @@ class Orders_model extends CI_Model {
 
 		$response = array();
 		try{
-			$sql = "SELECT *
+			$sql = "SELECT *,r.name as regimen_name, f.name as facility_name, sc.name as subcounty, co.name as county
 				FROM tbl_maps m 
 				INNER JOIN tbl_maps_item mi ON mi.maps_id = m.id
 				INNER JOIN vw_regimen_list r ON r.id = mi.regimen_id
-				INNER JOIN tbl_maps_log ml ON ml.maps_id = m.id
 				INNER JOIN tbl_facility f ON f.id = m.facility_id
 				INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
 				INNER JOIN tbl_county co ON co.id = sc.county_id

@@ -14,6 +14,7 @@
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
+                    CDRR
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
@@ -100,6 +101,74 @@
                                             <td><?= $cdrr[26];?></td>
                                             <td><?= $cdrr[26]* 4 ; // calculated ?></td>
                                             <td><?= ($cdrr[19]) ; // rationalized ?></td>
+                                        </tr>
+                                    <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div> <!--end of cdrr-->
+                            <div class="col-md-5">
+
+                            </div><!--end of maps-->
+                        </div>
+                    </div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+
+                        <div class="panel panel-default">
+                <div class="panel-heading">
+                    D-MAP
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table cellpadding="4" border="1" width="100%">
+                                    <tbody>
+                                        <tr>
+                                            <td><b>Facility Name: </b><span class="facility_name"> <?= $columns['maps']['data'][0][49]; ?></span></td>
+                                            <td><b>Facility code: </b><span class="mflcode"><?= $columns['maps']['data'][0][41]; ?></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>County: </b><span class="county"><?= $columns['maps']['data'][0][51]; ?></span></td>
+                                            <td><b>Subcounty: </b><span class="subcounty"><?= $columns['maps']['data'][0][50]; ?></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Type of Service provided at the Facility: </b><span class="services"><?= $columns['maps']['data'][0][9]; ?></span></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <b>Period of Reporting: </b>
+                                                <b>Beginning:</b> <span class="period_begin"><?= $columns['maps']['data'][0][5]; ?></span>
+                                                <b>Ending:</b> <span class="period_end"><?= $columns['maps']['data'][0][6]; ?></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-7">
+                                <table width="100%" class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <th>
+                                            <th >Category</th>
+                                            <th >Regimen Code</th>
+                                            <th >ARV Treatment Regimen</th>
+                                            <th >No of Cumulative Active Patients/Clients on this regimen at the End of the Reporting period</th>
+                                        </th>
+                                    </thead>
+                                    <tbody>
+                                        <?php 
+                                        foreach ($columns['maps']['data'] as $cdrr ) {?>
+                                        <tr>
+                                            <td><?= $cdrr[40];?></td>
+                                            <td><?= $cdrr[4];?></td>
+                                            <td><?= $cdrr[48];?></td>
+                                            <td><?= $cdrr[22]; // total adult  23 = total child?></td>
                                         </tr>
                                     <?php } ?>
                                     </tbody>
