@@ -110,7 +110,7 @@ class Orders_model extends CI_Model {
 
 	public function get_cdrr_data($cdrr_id,$scope = null,$role = null){
 		$county_cond = "";
-		$role_cond = ($role == 'subcounty') ? " AND sc.county_id = $scope" : " AND f.subcounty_id = $scope";
+		$role_cond = ($role == 'subcounty') ? " AND sc.id = $scope" : " AND f.subcounty_id = $scope";
 
 		$response = array();
 		try{
@@ -122,7 +122,6 @@ class Orders_model extends CI_Model {
 			INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
 			INNER JOIN tbl_county co ON co.id = sc.county_id
 			WHERE c.id = ?  ".$role_cond;
-
 			$table_data = $this->db->query($sql, array($cdrr_id))->result_array();
 			if(!empty($table_data)){
 				foreach ($table_data as $result) {
@@ -143,7 +142,7 @@ class Orders_model extends CI_Model {
 
 	public function get_maps_data($maps_id,$scope = null,$role = null){
 		$county_cond = "";
-		$role_cond = ($role == 'subcounty') ? " AND sc.county_id = $scope" : " AND f.subcounty_id = $scope";
+		$role_cond = ($role == 'subcounty') ? " AND sc.id = $scope" : " AND f.subcounty_id = $scope";
 
 		$response = array();
 		try{

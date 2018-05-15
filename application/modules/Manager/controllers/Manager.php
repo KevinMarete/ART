@@ -55,7 +55,7 @@ class Manager extends MX_Controller {
 				$data['columns'] = $columns[$page][$this->session->userdata('role')];
 
 // load cdrr
-				// echo "<pre>";				var_dump($data['columns']['maps']); die;
+				// echo "<pre>"; var_dump($data['columns']['cdrrs']); die;
 				// var_dump($id1);// get cdrr
 				// var_dump($id2);// get map
 				// die;
