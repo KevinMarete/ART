@@ -51,13 +51,13 @@
                     <!-- /input-group -->
                 </li>
                 <li>
-                    <a href="<?php echo base_url() . 'manager/dashboard'; ?>"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                    <a class="dashboard" href="<?php echo base_url() . 'manager/dashboard'; ?>"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                 </li>
                 <?php foreach ($this->session->userdata('modules') as $module => $value) {
                     echo "<li><a href='#'><i class='".$value['icon']."'></i> ".ucwords($module)."<span class='fa arrow'></span></a><ul class='nav nav-second-level'>";
                     foreach ($value['submodules'] as $orig_submodule) {
                         $submodule = str_replace(' ', '_', $orig_submodule);
-                        echo "<li><a href='".base_url() . "manager/".$module."/".$submodule."'>".ucwords($orig_submodule)."</a></li>";
+                        echo "<li><a class='".str_replace(' ', '_', $orig_submodule)."' href='".base_url() . "manager/".$module."/".$submodule."'>".ucwords($orig_submodule)."</a></li>";
                     }
                     echo "</ul> </li>";
                 }?>

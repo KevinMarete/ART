@@ -105,17 +105,28 @@ class Orders_model extends CI_Model {
         return $this->db->get('vw_regimen_list')->result_array();
     }
 
+<<<<<<< HEAD
     public function get_cdrr_data($cdrr_id) {
         $response = array();
         try {
             $sql = "SELECT *
+=======
+	public function get_cdrr_data($cdrr_id,$county = null,$subcounty = null){
+		$county_cond = "";
+		$county_cond = (isset($county)) ? $county_cond." AND sc.county_id = $county" : $county_cond."" ;
+		$county_cond = (isset($subcounty)) ? $county_cond." AND f.subcounty_id = $subcounty" : $county_cond."" ;
+
+		$response = array();
+		try{
+			$sql = "SELECT *,d.name as drug_name,f.name as facility_name,co.name as county, sc.name as subcounty
+>>>>>>> edb64a915cb2fe1842320682a7e4e614e82d6ba5
 				FROM tbl_cdrr c 
 				INNER JOIN tbl_cdrr_item ci ON ci.cdrr_id = c.id
 				INNER JOIN vw_drug_list d ON d.id = ci.drug_id
-				INNER JOIN tbl_cdrr_log cl ON cl.cdrr_id = c.id
 				INNER JOIN tbl_facility f ON f.id = c.facility_id
 				INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
 				INNER JOIN tbl_county co ON co.id = sc.county_id
+<<<<<<< HEAD
 				WHERE c.id = ?";
             $table_data = $this->db->query($sql, array($cdrr_id))->result_array();
             if (!empty($table_data)) {
@@ -139,13 +150,43 @@ class Orders_model extends CI_Model {
         $response = array();
         try {
             $sql = "SELECT *
+=======
+				WHERE c.id = ?  ".$county_cond;
+
+			$table_data = $this->db->query($sql, array($cdrr_id))->result_array();
+			if(!empty($table_data)){
+				foreach ($table_data as $result) {
+					$response['data'][] = array_values($result);
+				}
+				$response['message'] = 'Table data was found!';
+				$response['status'] = TRUE;
+			}else{
+				$response['message'] = 'Table is empty!';
+				$response['status'] = FALSE;
+			}
+		}catch(Execption $e){
+			$response['status'] = FALSE;
+			$response['message'] = $e->getMessage();
+		}
+		return $response;
+	}
+
+	public function get_maps_data($maps_id,$county = null,$subcounty = null){
+		$county_cond = "";
+		$county_cond = (isset($county)) ? $county_cond." AND sc.county_id = $county" : $county_cond."" ;
+		$county_cond = (isset($subcounty)) ? $county_cond." AND f.subcounty_id = $subcounty" : $county_cond."" ;
+
+		$response = array();
+		try{
+			$sql = "SELECT *,r.name as regimen_name, f.name as facility_name, sc.name as subcounty, co.name as county
+>>>>>>> edb64a915cb2fe1842320682a7e4e614e82d6ba5
 				FROM tbl_maps m 
 				INNER JOIN tbl_maps_item mi ON mi.maps_id = m.id
 				INNER JOIN vw_regimen_list r ON r.id = mi.regimen_id
-				INNER JOIN tbl_maps_log ml ON ml.maps_id = m.id
 				INNER JOIN tbl_facility f ON f.id = m.facility_id
 				INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
 				INNER JOIN tbl_county co ON co.id = sc.county_id
+<<<<<<< HEAD
 				WHERE m.id = ?";
             $table_data = $this->db->query($sql, array($maps_id))->result_array();
             if (!empty($table_data)) {
@@ -200,5 +241,25 @@ class Orders_model extends CI_Model {
         }
         return $response;
     }
+=======
+				WHERE m.id = ? ".$county_cond;
+			$table_data = $this->db->query($sql, array($maps_id))->result_array();
+			if(!empty($table_data)){
+				foreach ($table_data as $result) {
+					$response['data'][] = array_values($result);
+				}
+				$response['message'] = 'Table data was found!';
+				$response['status'] = TRUE;
+			}else{
+				$response['message'] = 'Table is empty!';
+				$response['status'] = FALSE;
+			}
+		}catch(Execption $e){
+			$response['status'] = FALSE;
+			$response['message'] = $e->getMessage();
+		}
+		return $response;
+	}
+>>>>>>> edb64a915cb2fe1842320682a7e4e614e82d6ba5
 
 }
