@@ -31,7 +31,7 @@ class Orders extends MX_Controller {
 
 	public function get_orders()
 	{	
-		$response = $this->Orders_model->get_order_data($this->session->userdata('scope'));
+		$response = $this->Orders_model->get_order_data($this->session->userdata('scope'),$this->session->userdata('role'));
 		if($response['status']){
 			echo json_encode(array('data' => $response['data']));
 		}

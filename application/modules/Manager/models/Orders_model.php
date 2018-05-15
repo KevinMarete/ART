@@ -23,25 +23,28 @@ class Orders_model extends CI_Model {
 		return $response;
 	}
 
-    public function get_order_data($scope){
+	public function get_order_data($scope,$role){
 		$response = array();
+		$role_cond = ($role == 'subcounty') ? 'AND f.subcounty_id =' : 'AND co.id =' ;
 		try{
 			$sql = "SELECT 
-						IF(c.code = 'D-CDRR', CONCAT('D-CDRR#', c.id), CONCAT('F-CDRR#', c.id)) cdrr_id,
-						IF(m.code = 'D-MAPS', CONCAT('D-MAPS#', m.id), CONCAT('F-MAPS#', m.id)) maps_id,
-						c.period_begin,
-						c.status,
-						f.name facility_name,
-						CONCAT('<a href=view/', c.id,'/', m.id, '>View Order</a>') option
-					FROM tbl_facility f
-					INNER JOIN tbl_cdrr c ON c.facility_id = f.id
-					INNER JOIN tbl_maps m ON m.facility_id = f.id
-					WHERE c.facility_id = m.facility_id
-					AND c.period_begin = m.period_begin
-					AND c.period_end = m.period_end
-					AND f.subcounty_id = ?
-					GROUP BY c.id 
-					ORDER BY c.period_begin DESC";
+			IF(c.code = 'D-CDRR', CONCAT('D-CDRR#', c.id), CONCAT('F-CDRR#', c.id)) cdrr_id,
+			IF(m.code = 'D-MAPS', CONCAT('D-MAPS#', m.id), CONCAT('F-MAPS#', m.id)) maps_id,
+			c.period_begin,
+			c.status,
+			f.name facility_name,
+			CONCAT('<a href=view/', c.id,'/', m.id, '>View Order</a>') option
+			FROM tbl_facility f
+			INNER JOIN tbl_cdrr c ON c.facility_id = f.id
+			INNER JOIN tbl_maps m ON m.facility_id = f.id
+			INNER JOIN tbl_subcounty sc on sc.id = f.subcounty_id
+			INNER JOIN tbl_county co on co.id = sc.county_id
+			WHERE c.facility_id = m.facility_id
+			AND c.period_begin = m.period_begin
+			AND c.period_end = m.period_end
+			$role_cond ?
+			GROUP BY c.id 
+			ORDER BY c.period_begin DESC";
 			$table_data = $this->db->query($sql, array($scope))->result_array();
 			if(!empty($table_data)){
 				foreach ($table_data as $result) {
@@ -65,16 +68,16 @@ class Orders_model extends CI_Model {
 		try{
 			$month_name = date('F Y', strtotime($period_begin));
 			$sql = "SELECT 
-						f.mflcode,
-						f.name facility_name,
-						IF(c.period_begin IS NOT NULL, ?, ?) reporting_status,
-						IF(c.period_begin IS NOT NULL, '<a href=reports>View</a>', CONCAT('<a href=get_report/', f.mflcode,'>Report</a>')) option
-					FROM tbl_facility f  
-					LEFT JOIN tbl_cdrr c ON c.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
-					LEFT JOIN tbl_maps m ON m.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
-					WHERE f.subcounty_id = ?
-					GROUP BY f.mflcode
-					ORDER BY f.name ASC";
+			f.mflcode,
+			f.name facility_name,
+			IF(c.period_begin IS NOT NULL, ?, ?) reporting_status,
+			IF(c.period_begin IS NOT NULL, '<a href=reports>View</a>', CONCAT('<a href=get_report/', f.mflcode,'>Report</a>')) option
+			FROM tbl_facility f  
+			LEFT JOIN tbl_cdrr c ON c.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
+			LEFT JOIN tbl_maps m ON m.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
+			WHERE f.subcounty_id = ?
+			GROUP BY f.mflcode
+			ORDER BY f.name ASC";
 			$table_data = $this->db->query($sql, array(
 				'<span class="label label-success">Submitted for '.$month_name.'</span>',
 				'<span class="label label-danger">Pending for '.$month_name.'</span>', 
@@ -105,21 +108,20 @@ class Orders_model extends CI_Model {
 		return $this->db->get('vw_regimen_list')->result_array();
 	}
 
-	public function get_cdrr_data($cdrr_id,$county = null,$subcounty = null){
+	public function get_cdrr_data($cdrr_id,$scope = null,$role = null){
 		$county_cond = "";
-		$county_cond = (isset($county)) ? $county_cond." AND sc.county_id = $county" : $county_cond."" ;
-		$county_cond = (isset($subcounty)) ? $county_cond." AND f.subcounty_id = $subcounty" : $county_cond."" ;
+		$role_cond = ($role == 'subcounty') ? " AND sc.county_id = $scope" : " AND f.subcounty_id = $scope";
 
 		$response = array();
 		try{
 			$sql = "SELECT *,d.name as drug_name,f.name as facility_name,co.name as county, sc.name as subcounty
-				FROM tbl_cdrr c 
-				INNER JOIN tbl_cdrr_item ci ON ci.cdrr_id = c.id
-				INNER JOIN vw_drug_list d ON d.id = ci.drug_id
-				INNER JOIN tbl_facility f ON f.id = c.facility_id
-				INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
-				INNER JOIN tbl_county co ON co.id = sc.county_id
-				WHERE c.id = ?  ".$county_cond;
+			FROM tbl_cdrr c 
+			INNER JOIN tbl_cdrr_item ci ON ci.cdrr_id = c.id
+			INNER JOIN vw_drug_list d ON d.id = ci.drug_id
+			INNER JOIN tbl_facility f ON f.id = c.facility_id
+			INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
+			INNER JOIN tbl_county co ON co.id = sc.county_id
+			WHERE c.id = ?  ".$role_cond;
 
 			$table_data = $this->db->query($sql, array($cdrr_id))->result_array();
 			if(!empty($table_data)){
@@ -139,21 +141,20 @@ class Orders_model extends CI_Model {
 		return $response;
 	}
 
-	public function get_maps_data($maps_id,$county = null,$subcounty = null){
+	public function get_maps_data($maps_id,$scope = null,$role = null){
 		$county_cond = "";
-		$county_cond = (isset($county)) ? $county_cond." AND sc.county_id = $county" : $county_cond."" ;
-		$county_cond = (isset($subcounty)) ? $county_cond." AND f.subcounty_id = $subcounty" : $county_cond."" ;
+		$role_cond = ($role == 'subcounty') ? " AND sc.county_id = $scope" : " AND f.subcounty_id = $scope";
 
 		$response = array();
 		try{
 			$sql = "SELECT *,r.name as regimen_name, f.name as facility_name, sc.name as subcounty, co.name as county
-				FROM tbl_maps m 
-				INNER JOIN tbl_maps_item mi ON mi.maps_id = m.id
-				INNER JOIN vw_regimen_list r ON r.id = mi.regimen_id
-				INNER JOIN tbl_facility f ON f.id = m.facility_id
-				INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
-				INNER JOIN tbl_county co ON co.id = sc.county_id
-				WHERE m.id = ? ".$county_cond;
+			FROM tbl_maps m 
+			INNER JOIN tbl_maps_item mi ON mi.maps_id = m.id
+			INNER JOIN vw_regimen_list r ON r.id = mi.regimen_id
+			INNER JOIN tbl_facility f ON f.id = m.facility_id
+			INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
+			INNER JOIN tbl_county co ON co.id = sc.county_id
+			WHERE m.id = ? ".$county_cond;
 			$table_data = $this->db->query($sql, array($maps_id))->result_array();
 			if(!empty($table_data)){
 				foreach ($table_data as $result) {

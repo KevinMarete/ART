@@ -47,8 +47,8 @@ class Manager extends MX_Controller {
 						'subcounty' => array(
 							'drugs' => $this->Orders_model->get_drugs(),
 							'regimens' => $this->Orders_model->get_drugs(),
-							'cdrrs' => $this->Orders_model->get_cdrr_data($this->uri->segment('4'), NULL,$this->session->userdata('sub_county')), // get cdrr list
-							'maps' => $this->Orders_model->get_maps_data($this->uri->segment('5') ,  NULL,$this->session->userdata('sub_county')) // get maps list
+							'cdrrs' => $this->Orders_model->get_cdrr_data($this->uri->segment('4'),$this->session->userdata('scope'),$this->session->userdata('role')), // get cdrr list
+							'maps' => $this->Orders_model->get_maps_data($this->uri->segment('5') , $this->session->userdata('scope'),$this->session->userdata('role')) // get maps list
 						)
 					)
 				);
