@@ -13,6 +13,7 @@ class User_model extends CI_Model {
 				$response['message'] = 'Welcome, <b>'.$user_data['firstname'].'</b> to the Commodity Manager!';
 				unset($user_data['password']);
 				$response['data'] = $user_data;
+				$response['data']['scope_name'] = 'National';
 				//Get menu data
 				$this->db->select('m.name module,m.icon, sm.name submodule, r.name role, IF(us.scope_id IS NULL, " ", us.scope_id) scope', FALSE);
 				$this->db->from('tbl_role_submodule rsm');
@@ -26,6 +27,12 @@ class User_model extends CI_Model {
 					$response['data']['modules'][$value['module']]['submodules'][] = $value['submodule'];
 					$response['data']['role'] = $value['role'];
 					$response['data']['scope'] = $value['scope'];
+
+				}
+				//Set scopename
+				if(in_array($response['data']['role'], array('subcounty', 'county'))){
+					$this->db->select('name');
+					$response['data']['scope_name'] = $this->db->get_where('tbl_'.$response['data']['role'], array('id' => $response['data']['scope']))->row_array()['name'];
 				}
 				$response['status'] = TRUE;
 			}else{

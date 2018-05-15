@@ -31,25 +31,23 @@ class Orders extends MX_Controller {
 
 	public function get_orders()
 	{	
-		$response = $this->Orders_model->get_order_data($this->session->userdata('scope'));
-		if($response['status']){
-			echo json_encode(array('data' => $response['data']));
-		}
+		$response = $this->Orders_model->get_order_data($this->session->userdata('scope'), $this->session->userdata('role'));
+		echo json_encode(array('data' => $response['data']));
 	}
 
 	public function get_reporting_rates(){
-		$response = $this->Orders_model->get_reporting_data($this->session->userdata('scope'), date('Y-m-01'), date('Y-m-t'));
-		if($response['status']){
-			echo json_encode(array('data' => $response['data']));
-		}
+		$response = $this->Orders_model->get_reporting_data($this->session->userdata('scope'), $this->session->userdata('role'), date('Y-m-d', strtotime('first day of last month')), date('Y-m-d', strtotime('last day of last month')));
+		echo json_encode(array('data' => $response['data']));
 	}
         
-        public function get_allocation()
-        {
-        $response = $this->Orders_model->get_allocation_data($this->session->userdata('scope'));
-		if($response['status']){
-			echo json_encode(array('data' => $response['data']));
-		}
-        }
+    public function get_allocation(){
+		$response = $this->Orders_model->get_allocation_data($this->session->userdata('scope'), $this->session->userdata('role'), date('Y-m-d', strtotime('first day of last month')), date('Y-m-d', strtotime('last day of last month')));
+		echo json_encode(array('data' => $response['data']));
+	}
+
+	public function get_county_allocation($period_begin){
+		$response = $this->Orders_model->get_county_allocation_data($this->session->userdata('scope'), $this->session->userdata('role'), $period_begin, date('Y-m-t', strtotime($period_begin)));
+		echo json_encode(array('data' => $response['data']));
+	}
 		
 }

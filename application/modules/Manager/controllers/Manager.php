@@ -25,18 +25,19 @@ class Manager extends MX_Controller {
                 $data['content_view'] = 'template/table_view';
             }
             if ($page == 'assign') {
-                $data['scopes'] = $this->db->order_by('name', 'ASC')->get('tbl_' . $this->session->userdata('role'))->result_array();
+                //$data['scopes'] = $this->db->order_by('name', 'ASC')->get('tbl_' . $this->session->userdata('role'))->result_array();
+                $data['scopes'] = array();
             } else if ($module == 'orders') {
                 $this->load->model('Orders_model');
                 $data['page_name'] = $page;
                 $columns = array(
                     'reports' => array(
-                        'subcounty' => array('#CDRR-ID', '#MAPS-ID', 'Period Beginning', 'Status', 'Facility Name', 'Options'),
-                        'county' => array('Subcounty', 'Reported Count', 'Options')
+                        'subcounty' => array('#CDRR-ID', '#MAPS-ID', 'Period Beginning', 'Status', 'Facility Name', 'Actions'),
+                        'county' => array('#CDRR-ID', '#MAPS-ID', 'Period Beginning', 'Status', 'Subcounty', 'Facility Name', 'Actions')
                     ),
                     'reporting_rates' => array(
-                        'subcounty' => array('MFL Code', 'Facility Name', 'Order Reports', 'Options'),
-                        'county' => array('Subcounty', 'Reported Count', 'Options')
+                        'subcounty' => array('MFL Code', 'Facility Name', 'Status', 'Period', 'Actions'),
+                        'county' => array('Subcounty', 'Submitted', 'Progress')
                     ),
                     'cdrr_maps' => array(
                         'subcounty' => array(
@@ -47,13 +48,15 @@ class Manager extends MX_Controller {
                         )
                     ),
                     'allocation' => array(
-                        'subcounty' => array('MFL Code','Facility Name', 'Period Beginning', 'Status', 'Options'),
-                        'county' => array('Subcounty', 'Reported Count', 'Options')
+                        'subcounty' => array('MFL Code','Facility Name', 'Period', 'Status', 'Actions'),
+                        'county' => array('Period', 'Allocated', 'Status', 'Actions')
                     ),
+                    'edit_allocation' => array(
+                        'subcounty' => array(),
+                        'county' => array('Subcounty', 'Status', 'Approval', 'Actions')
+                    )
                 );
                 $data['columns'] = $columns[$page][$this->session->userdata('role')];
-//				echo '<pre>';
-//				print_r($data['columns']);die();
             }
             $data['page_title'] = 'ART | ' . ucwords($title);
             $this->load->view('template/template_view', $data);
