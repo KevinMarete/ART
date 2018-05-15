@@ -105,18 +105,22 @@ class Orders_model extends CI_Model {
 		return $this->db->get('vw_regimen_list')->result_array();
 	}
 
-	public function get_cdrr_data($cdrr_id){
+	public function get_cdrr_data($cdrr_id,$county = null,$subcounty = null){
+		$county_cond = "";
+		$county_cond = (isset($county)) ? $county_cond." AND sc.county_id = $county" : $county_cond."" ;
+		$county_cond = (isset($subcounty)) ? $county_cond." AND f.subcounty_id = $subcounty" : $county_cond."" ;
+
 		$response = array();
 		try{
-			$sql = "SELECT *
+			$sql = "SELECT *,d.name as drug_name,f.name as facility_name,co.name as county, sc.name as subcounty
 				FROM tbl_cdrr c 
 				INNER JOIN tbl_cdrr_item ci ON ci.cdrr_id = c.id
 				INNER JOIN vw_drug_list d ON d.id = ci.drug_id
-				INNER JOIN tbl_cdrr_log cl ON cl.cdrr_id = c.id
 				INNER JOIN tbl_facility f ON f.id = c.facility_id
 				INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
 				INNER JOIN tbl_county co ON co.id = sc.county_id
-				WHERE c.id = ?";
+				WHERE c.id = ?  ".$county_cond;
+
 			$table_data = $this->db->query($sql, array($cdrr_id))->result_array();
 			if(!empty($table_data)){
 				foreach ($table_data as $result) {
@@ -135,7 +139,11 @@ class Orders_model extends CI_Model {
 		return $response;
 	}
 
-	public function get_maps_data($maps_id){
+	public function get_maps_data($maps_id,$county = null,$subcounty = null){
+		$county_cond = "";
+		$county_cond = (isset($county)) ? $county_cond." AND sc.county_id = $county" : $county_cond."" ;
+		$county_cond = (isset($subcounty)) ? $county_cond." AND f.subcounty_id = $subcounty" : $county_cond."" ;
+
 		$response = array();
 		try{
 			$sql = "SELECT *
@@ -146,7 +154,7 @@ class Orders_model extends CI_Model {
 				INNER JOIN tbl_facility f ON f.id = m.facility_id
 				INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
 				INNER JOIN tbl_county co ON co.id = sc.county_id
-				WHERE m.id = ?";
+				WHERE m.id = ? ".$county_cond;
 			$table_data = $this->db->query($sql, array($maps_id))->result_array();
 			if(!empty($table_data)){
 				foreach ($table_data as $result) {

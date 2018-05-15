@@ -23,22 +23,22 @@
                                 <table cellpadding="4" border="1" width="100%">
                                     <tbody>
                                         <tr>
-                                            <td><b>Facility Name: </b><span class="facility_name"></span></td>
-                                            <td><b>Facility code: </b><span class="mflcode"></span></td>
+                                            <td><b>Facility Name: </b><span class="facility_name"> <?= $columns['cdrrs']['data'][0][43]; ?></span></td>
+                                            <td><b>Facility code: </b><span class="mflcode"><?= $columns['cdrrs']['data'][0][34]; ?></span></td>
                                         </tr>
                                         <tr>
-                                            <td><b>County: </b><span class="county"></span></td>
-                                            <td><b>Subcounty: </b><span class="subcounty"></span></td>
+                                            <td><b>County: </b><span class="county"><?= $columns['cdrrs']['data'][0][44]; ?></span></td>
+                                            <td><b>Subcounty: </b><span class="subcounty"><?= $columns['cdrrs']['data'][0][45]; ?></span></td>
                                         </tr>
                                         <tr>
-                                            <td><b>Type of Service provided at the Facility: </b><span class="services"></span></td>
-                                            <td><b>Non-ARV: </b><input type="checkbox" class="non_arv" readonly="readonly"></td>
+                                            <td><b>Type of Service provided at the Facility: </b><span class="services"><?= $columns['cdrrs']['data'][0][10]; ?></span></td>
+                                            <td><b>Non-ARV: </b> <?= $columns['cdrrs']['data'][0][12]; ?><input type="checkbox" class="non_arv" readonly="readonly"></td>
                                         </tr>
                                         <tr>
                                             <td colspan="2">
                                                 <b>Period of Reporting: </b>
-                                                <b>Beginning:</b> <span class="period_begin"></span>
-                                                <b>Ending:</b> <span class="period_end"></span>
+                                                <b>Beginning:</b> <span class="period_begin"><?= $columns['cdrrs']['data'][0][5]; ?></span>
+                                                <b>Ending:</b> <span class="period_end"><?= $columns['cdrrs']['data'][0][6]; ?></span>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -86,6 +86,22 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php 
+                                        foreach ($columns['cdrrs']['data'] as $cdrr ) {?>
+                                        <tr>
+                                            <td><?= $cdrr[42];?></td>
+                                            <td><?= $cdrr[39];?></td>
+                                            <td><?= $cdrr[16];?></td>
+                                            <td><?= $cdrr[17];?></td>
+                                            <td><?= $cdrr[18];?></td>
+                                            <td><?= $cdrr[22];?></td>
+                                            <td><?= $cdrr[19]; //dispensed?></td>
+                                            <td><?= $cdrr[27];?></td>
+                                            <td><?= $cdrr[26];?></td>
+                                            <td><?= $cdrr[26]* 4 ; // calculated ?></td>
+                                            <td><?= ($cdrr[19]) ; // rationalized ?></td>
+                                        </tr>
+                                    <?php } ?>
                                     </tbody>
                                 </table>
                             </div> <!--end of cdrr-->
