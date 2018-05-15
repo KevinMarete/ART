@@ -50,7 +50,7 @@
 
 <script>
     $(document).ready(function () {
-        var table = $('#dataTables-listing').DataTable({
+        $('#dataTables-listing').DataTable({
             responsive: true,
             order: [[1, "asc"]],
             pagingType: "full_numbers",
@@ -74,12 +74,27 @@
                     });
                 });
                 //Show reporting rate
-                var filteredData = this.api().column(3).data().filter( function ( value, index ) {
-                    return value == 'Repo' ? true : false;
+                var filteredData = this.api().column(3).data().filter(function (value, index) {
+                    return value == 'Report' ? true : false;
                 });
 //                alert(filteredData.length)
-;
+
             }
         });
+//         var pending = $("#dataTables-listing td:nth-child(3):contains('Pending')").length;
+////                alert("Unknown rows :" + pending);
+//                var submitted = $("#dataTables-listing td:nth-child(3):contains('Submitted')").length;
+////                alert("Unknown rows :" + submitted);
+//                var percentage;
+//                percentage=(submitted/pending)*100;
+////                console.log(percentage);
     });
+    $(document).ready(function () {
+        var table = $('#dataTables-listing').DataTable();
+        var dataCount = table.rows(':contains("Unknown")').data().length;
+        console.log(dataCount);
+
+        $('#output').text('Number of rows that contain Unknown: ' + dataCount)
+        console.log(dataCount);
+    })
 </script>
