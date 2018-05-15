@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Manager extends MX_Controller {
@@ -60,12 +61,10 @@ class Manager extends MX_Controller {
 				// var_dump($id2);// get map
 				// die;
 			}
-        	$data['page_title'] = 'ART | '.ucwords($title);
-        	$this->load->view('template/template_view', $data);
+			$data['page_title'] = 'ART | '.ucwords($title);
+			$this->load->view('template/template_view', $data);
 		}else{
 			redirect("manager/login");
 		}	
-
 	}
-	
 }

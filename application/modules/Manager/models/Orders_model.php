@@ -171,5 +171,39 @@ class Orders_model extends CI_Model {
 		}
 		return $response;
 	}
-
+	public function get_allocation_data($scope) {
+		$response = array();
+		try {
+			$sql = "SELECT                      
+			f.mflcode,
+			f.name,
+			c.period_begin,
+			c.status,
+			IF(c.status = 'received', CONCAT('<a href=allocate/', c.id,'/', m.id, '> Allocate</a>'), CONCAT('<a href=allocate/', c.id,'/', m.id, '>View Order</a>'))  option
+			FROM tbl_facility f
+			INNER JOIN tbl_cdrr c ON c.facility_id = f.id
+			INNER JOIN tbl_maps m ON m.facility_id = f.id
+			WHERE c.facility_id = m.facility_id
+			AND c.period_begin = m.period_begin
+			AND c.period_end = m.period_end
+			AND f.subcounty_id = ?
+			GROUP BY c.id 
+			ORDER BY c.period_begin DESC";
+			$table_data = $this->db->query($sql, array($scope))->result_array();
+			if (!empty($table_data)) {
+				foreach ($table_data as $result) {
+					$response['data'][] = array_values($result);
+				}
+				$response['message'] = 'Table data was found!';
+				$response['status'] = TRUE;
+			} else {
+				$response['message'] = 'Table is empty!';
+				$response['status'] = FALSE;
+			}
+		} catch (Execption $e) {
+			$response['status'] = FALSE;
+			$response['message'] = $e->getMessage();
+		}
+		return $response;
+	}
 }
