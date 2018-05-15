@@ -13,3 +13,9 @@
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables/js/dataTables.select.min.js'; ?>"></script>
 <!-- Custom Theme JavaScript -->
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/dist/js/sb-admin-2.js'; ?>"></script>
+<script type="text/javascript">
+$(function(){
+	$('.<?=  $page_name;?>').addClass("active-page");
+
+});
+</script>

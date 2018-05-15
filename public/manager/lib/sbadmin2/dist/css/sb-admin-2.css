@@ -432,3 +432,6 @@ table.dataTable thead .sorting:after {
     border-left-width: 0;
   }
 }
+.active-page {
+    border-left: solid 3px #FF9900;
+}
