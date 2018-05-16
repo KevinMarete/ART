@@ -18,6 +18,8 @@
 <link href=".<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables-responsive/dataTables.responsive.css'; ?>" rel="stylesheet">
 <!-- Sb-Admin CSS -->
 <link href="<?php echo base_url() . 'public/manager/lib/sbadmin2/dist/css/sb-admin-2.css'; ?>" rel="stylesheet">
+<!-- Manager -->
+<link href="<?php echo base_url() . 'public/manager/css/manager.css'; ?>" rel="stylesheet">
 <!--favicon-->
 <link rel="shortcut icon" type="text/css" href="<?php echo base_url() . 'public/dashboard/img/favicon.ico'; ?>">
 <!-- jQuery js-->

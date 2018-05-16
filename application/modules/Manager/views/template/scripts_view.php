@@ -11,6 +11,8 @@
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables-responsive/dataTables.responsive.js'; ?>"></script>
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables/js/dataTables.buttons.min.js'; ?>"></script>
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables/js/dataTables.select.min.js'; ?>"></script>
+<script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables-plugins/average().js'; ?>"></script>
+<script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables-plugins/sum().js'; ?>"></script>
 <!-- Custom Theme JavaScript -->
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/dist/js/sb-admin-2.js'; ?>"></script>
 <script type="text/javascript">

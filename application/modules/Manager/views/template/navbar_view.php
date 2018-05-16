@@ -8,7 +8,7 @@
         </button>
         <a class="navbar-brand" href="<?php echo base_url() . 'manager/dashboard'; ?>">
             <i class="fa fa-dashboard fa-fw"></i>
-            Commodity Manager
+            Commodity Manager: <b><?php echo ucwords($this->session->userdata('scope_name')).' '.ucwords($this->session->userdata('role')); ?></b>
         </a>
     </div>
     <!-- /.navbar-header -->
