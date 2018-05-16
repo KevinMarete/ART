@@ -225,62 +225,70 @@ class Orders_model extends CI_Model {
         return $this->db->get('vw_regimen_list')->result_array();
     }
 
-    public function get_cdrr_data($cdrr_id) {
+   
+
+  public function get_cdrr_data($cdrr_id,$scope = null,$role = null){
+        
+        $role_cond = ($role == 'subcounty') ? " AND sc.id = $scope" : " AND subcounty_id = $scope";
+
         $response = array();
-        try {
-            $sql = "SELECT *
-				FROM tbl_cdrr c 
-				INNER JOIN tbl_cdrr_item ci ON ci.cdrr_id = c.id
-				INNER JOIN vw_drug_list d ON d.id = ci.drug_id
-				INNER JOIN tbl_facility f ON f.id = c.facility_id
-				INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
-				INNER JOIN tbl_county co ON co.id = sc.county_id
-				WHERE c.id = ?";
-            $table_data = $this->db->query($sql, array($cdrr_id))->result_array();
-            if (!empty($table_data)) {
+        try{
+            $sql = "SELECT *,d.name as drug_name,f.name as facility_name,co.name as county, sc.name as subcounty
+            FROM tbl_cdrr c 
+            INNER JOIN tbl_cdrr_item ci ON ci.cdrr_id = c.id
+            INNER JOIN vw_drug_list d ON d.id = ci.drug_id
+            INNER JOIN tbl_facility f ON f.id = c.facility_id
+            INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
+            INNER JOIN tbl_county co ON co.id = sc.county_id
+            WHERE c.id = ?  ".$role_cond;
+
+                  $table_data = $this->db->query($sql, array($cdrr_id))->result_array();
+            if(!empty($table_data)){
                 foreach ($table_data as $result) {
                     $response['data'][] = array_values($result);
                 }
                 $response['message'] = 'Table data was found!';
                 $response['status'] = TRUE;
-            } else {
+            }else{
                 $response['message'] = 'Table is empty!';
                 $response['status'] = FALSE;
             }
-        } catch (Execption $e) {
+        }catch(Execption $e){
             $response['status'] = FALSE;
             $response['message'] = $e->getMessage();
         }
         return $response;
     }
 
-    public function get_maps_data($maps_id) {
+    public function get_maps_data($maps_id,$scope = null,$role = null){
+        $role_cond = ($role == 'subcounty') ? " AND f.subcounty_id = $scope" : " AND sc.county_id = $scope";
+
         $response = array();
-        try {
-            $sql = "SELECT *
-				FROM tbl_maps m 
-				INNER JOIN tbl_maps_item mi ON mi.maps_id = m.id
-				INNER JOIN vw_regimen_list r ON r.id = mi.regimen_id
-				INNER JOIN tbl_facility f ON f.id = m.facility_id
-				INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
-				INNER JOIN tbl_county co ON co.id = sc.county_id
-				WHERE m.id = ?";
+        try{
+            $sql = "SELECT *,r.name as regimen_name, f.name as facility_name, sc.name as subcounty, co.name as county
+            FROM tbl_maps m 
+            INNER JOIN tbl_maps_item mi ON mi.maps_id = m.id
+            INNER JOIN vw_regimen_list r ON r.id = mi.regimen_id
+            INNER JOIN tbl_facility f ON f.id = m.facility_id
+            INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
+            INNER JOIN tbl_county co ON co.id = sc.county_id
+            WHERE m.id = ? ".$role_cond;
+
             $table_data = $this->db->query($sql, array($maps_id))->result_array();
-            if (!empty($table_data)) {
+            if(!empty($table_data)){
                 foreach ($table_data as $result) {
                     $response['data'][] = array_values($result);
                 }
                 $response['message'] = 'Table data was found!';
                 $response['status'] = TRUE;
-            } else {
+            }else{
                 $response['message'] = 'Table is empty!';
                 $response['status'] = FALSE;
             }
-        } catch (Execption $e) {
+        }catch(Execption $e){
             $response['status'] = FALSE;
             $response['message'] = $e->getMessage();
         }
         return $response;
-    }
-
+    }	
 }
