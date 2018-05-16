@@ -67,7 +67,7 @@ class Orders_model extends CI_Model {
 	public function get_drugs(){
 		return $this->db->get('vw_drug_list')->result_array();
 	}
-	
+
 
 	public function get_reporting_data($scope, $role, $period_begin, $period_end) {
 		$response = array('data' => array());
@@ -282,4 +282,4 @@ class Orders_model extends CI_Model {
 	}
 
 }
-}
+

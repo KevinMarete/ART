@@ -1,14 +1,12 @@
- <div id="page-wrapper">
-    <div class="row">
+ <div id="container">
         <div class="col-lg-12">
-            <ol class="breadcrumb page-header">
+            <ol class="breadcrumb">
                 <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
                 <li>Orders</li>
                 <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i> View Orders</li>
             </ol>
         </div>
         <!-- /.col-lg-12 -->
-    </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
@@ -20,8 +18,23 @@
                 <div class="panel-body">
                     <div class="container-fluid">
                         <div class="row">
+                            <div class="col-md-4 ">
+                                <button type="submit" class="btn btn-success">Approve CDRR</button>
+                                <button type="submit" class="btn btn-warning">Reject CDRR</button>
+                            </div>
+                            <div class="col-md-8 ">
+                                <span class="label label-info">* 1</span> - <small> Total Qty ISSUED to ARV dispensing sites (Satellite sites plus Central site dispensing point(s) where relevant)</small><br />
+                                <span class="label label-info">* 2</span> - <small> Reported Aggregated Quantity CONSUMED in the reporting period (Satellite sites plus Central site dispensing point where relevant)</small> <br />
+                                <span class="label label-info">* 3</span> - <small> Reported Aggregated Physical Stock on Hand at end of reporting period (Satellite sites plus Central site dispensing point where relevant)
+                                </small>
+                                <br />
+                                <br />
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-12">
-                                <table cellpadding="4" border="1" width="100%">
+
+                                <table cellpadding="4"  width="100%" class="table">
                                     <tbody>
                                         <tr>
                                             <td><b>Facility Name: </b><span class="facility_name"> <?= $columns['cdrrs']['data'][0][43]; ?></span></td>
@@ -43,27 +56,30 @@
                                             </td>
                                         </tr>
                                     </tbody>
-                                </table>
+                                </table>                             
+
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-7">
+                            <div class="col-md-12">
                                 <table width="100%" class="table table-striped table-bordered table-hover">
                                     <thead>
                                         <tr>
                                             <th rowspan="3">Drug Name</th>
-                                            <th rowspan="3">Unit Pack Size</th>
+                                            <th rowspan="3">Pack Size</th>
                                             <th>Beginning Balance</th>
-                                            <th>Quantity <br>Received in this period</th>
-                                            <th>Total Qty ISSUED <br>to ARV dispensing sites <br>(Satellite sites plus Central site <br>dispensing point(s) where relevant)</th>
+                                            <th>Quantity Received</th>
+                                            <th>Qty ISSUED  <span class="label label-info">* 1</span></th>
                                             <th>End of Month Physical Count</th>
-                                            <th>Reported Aggregated <br>Quantity CONSUMED <br>in the reporting period<br> (Satellite sites plus <br>Central site dispensing point where relevant)</th>
-                                            <th>Reported Aggregated <br>Physical Stock on Hand <br>at end of reporting period <br>(Satellite sites plus <br>Central site dispensing point where relevant)</th>
-                                            <th >Quantity required for RESUPPLY</th>
-                                            <th >Calculated Quantity</th>
-                                            <th >Rationalized Quantity</th>
+                                            <th>Qty Consumed <span class="label label-info">* 2</span></th>
+                                            <th>Physical SAH<span class="label label-info">* 2</span></th>
+                                            <th >Qty for RESUPPLY</th>
+                                            <th >Calculated Qty</th>
+                                            <th >Rationalized Qty</th>
+                                            <th >Allocated</th>
+                                            <th >Label</th>
                                         </tr>
                                         <tr>
+                                            <th>In Packs</th>
+                                            <th>In Packs</th>
                                             <th>In Packs</th>
                                             <th>In Packs</th>
                                             <th>In Packs</th>
@@ -84,6 +100,8 @@
                                             <th>J</th>
                                             <th>K</th>
                                             <th>L</th>
+                                            <th>M</th>
+                                            <th>N</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -101,10 +119,16 @@
                                             <td><?= $cdrr[26];?></td>
                                             <td><?= $cdrr[26]* 4 ; // calculated ?></td>
                                             <td><?= ($cdrr[19]) ; // rationalized ?></td>
+                                            <td><input type="text" class="form-control" name="Allocated" value="<?= ($cdrr[19]) * 4 ; // rationalized ?>"></td>
+                                            <td>label</td>
                                         </tr>
                                     <?php } ?>
                                     </tbody>
                                 </table>
+
+                                                                <button type="submit" class="btn btn-success">Save Allocation</button>
+                                <button type="submit" class="btn btn-success">Complete Allocation</button>
+
                             </div> <!--end of cdrr-->
                             <div class="col-md-5">
 
@@ -123,9 +147,12 @@
                 <!-- /.panel-heading -->
                 <div class="panel-body">
                     <div class="container-fluid">
+                                <span class="label label-info">* 1</span> - <small> No of Cumulative Active Patients/Clients on this regimen at the End of the Reporting period</small>
+                                <br />
+                                <br />
                         <div class="row">
                             <div class="col-md-12">
-                                <table cellpadding="4" border="1" width="100%">
+                                <table cellpadding="4" width="100%" class="table">
                                     <tbody>
                                         <tr>
                                             <td><b>Facility Name: </b><span class="facility_name"> <?= $columns['maps']['data'][0][49]; ?></span></td>
@@ -151,15 +178,14 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-7">
+                            <div class="col-md-12">
+
                                 <table width="100%" class="table table-striped table-bordered table-hover">
                                     <thead>
-                                        <th>
                                             <th >Category</th>
                                             <th >Regimen Code</th>
                                             <th >ARV Treatment Regimen</th>
-                                            <th >No of Cumulative Active Patients/Clients on this regimen at the End of the Reporting period</th>
-                                        </th>
+                                            <th >Active Patients on this regimen <span class="label label-info">* 1</span></th>
                                     </thead>
                                     <tbody>
                                         <?php 
@@ -189,3 +215,20 @@
     <!-- /.row -->
 </div>
 <!-- /#page-wrapper -->
+
+<script type="text/javascript">
+    $(function(){
+        $('#side-menu').remove();
+        // alert('page-wrapper!');
+
+    });
+</script>
+<style type="text/css">
+    .breadcrumb{
+            padding: 8px 15px 5px 8px;
+             margin-bottom: 0px; 
+    }
+    .panel-default{
+        margin: 12px;
+    }
+</style>
