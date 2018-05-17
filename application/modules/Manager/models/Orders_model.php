@@ -150,7 +150,7 @@ class Orders_model extends CI_Model {
                 UCASE(f.name) facility_name,
                 IF(c.period_begin IS NOT NULL, ?, ?) reporting_status,
                 ? period,
-                IF(c.period_begin IS NOT NULL, '<a href=reports>View</a>', CONCAT('<a href=get_report/', f.mflcode,'>Report</a>')) option
+                IF(c.period_begin IS NOT NULL, CONCAT('<a href=view/',c.id,'/',m.id,'>View</a>'), CONCAT('<a href=get_report/', f.mflcode,'>Report</a>')) option
                 FROM tbl_facility f  
                 LEFT JOIN tbl_cdrr c ON c.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
                 LEFT JOIN tbl_maps m ON m.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
@@ -278,9 +278,9 @@ class Orders_model extends CI_Model {
         $regimens = $this->db->get('vw_regimen_list')->result_array();
         foreach ($regimens as $regimen) {
             $response[$regimen['category']][] = array(
-                    'id' => $regimen['id'],
-                    'code' => $regimen['code'],
-                    'name' => $regimen['name']
+                'id' => $regimen['id'],
+                'code' => $regimen['code'],
+                'name' => $regimen['name']
             );
         }
         return $response;
@@ -289,7 +289,7 @@ class Orders_model extends CI_Model {
     
 
     public function get_cdrr_data($cdrr_id,$scope = null,$role = null){
-        
+
         $role_cond = ($role == 'subcounty') ? " AND sc.id = $scope" : " AND county_id = $scope";
 
         $response = array();
@@ -306,7 +306,49 @@ class Orders_model extends CI_Model {
             $table_data = $this->db->query($sql, array($cdrr_id))->result_array();
             if(!empty($table_data)){
                 foreach ($table_data as $result) {
-                    $response['data'][] = array_values($result);
+                    $response['data'][] = array('status' => $result['status'], 
+                        'created' => $result['created'], 
+                        'updated' => $result['updated'], 
+                        'code' => $result['code'], 
+                        'period_begin' => $result['period_begin'], 
+                        'period_end' => $result['period_end'], 
+                        'comments' => $result['comments'], 
+                        'reports_expected' => $result['reports_expected'], 
+                        'reports_actual' => $result['reports_actual'], 
+                        'services' => $result['services'], 
+                        'sponsors' => $result['sponsors'], 
+                        'non_arv' => $result['non_arv'], 
+                        'delivery_note' => $result['delivery_note'], 
+                        'order_id' => $result['order_id'], 
+                        'facility_id' => $result['facility_id'],
+                        'facility_name' => $result['facility_name'], 
+                        'mflcode' => $result['mflcode'], 
+                        'county' => $result['county'], 
+                        'subcounty' => $result['subcounty']
+                    );
+
+                    $response['data']['cdrr_item'] = array($result['drug_name']=>array(
+                        'balance' => $result['balance'], 
+                        'received' => $result['received'], 
+                        'dispensed_units' => $result['dispensed_units'], 
+                        'dispensed_packs' => $result['dispensed_packs'], 
+                        'losses' => $result['losses'], 
+                        'adjustments' => $result['adjustments'], 
+                        'count' => $result['count'], 
+                        'expiry_quant' => $result['expiry_quant'], 
+                        'expiry_date' => $result['expiry_date'], 
+                        'out_of_stock' => $result['out_of_stock'], 
+                        'resupply' => $result['resupply'], 
+                        'aggr_consumed' => $result['aggr_consumed'], 
+                        'aggr_on_hand' => $result['aggr_on_hand'], 
+                        'publish' => $result['publish'], 
+                        'cdrr_id' => $result['cdrr_id'], 
+                        'drug_id' => $result['drug_id'], 
+                        'qty_allocated' => $result['qty_allocated'], 
+                        'feedback' => $result['feedback'], 
+                        'decision' => $result['decision']
+                    ));
+
                 }
                 $response['message'] = 'Table data was found!';
                 $response['status'] = TRUE;

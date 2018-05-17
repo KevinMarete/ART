@@ -46,35 +46,35 @@
                             <table cellpadding="4"  width="100%" class="table">
                                 <tbody>
                                     <tr>
-                                        <td><b>Facility Name: </b><span class="facility_name"> <?= $columns['cdrrs']['data'][0][46]; ?></span></td>
-                                        <td><b>Facility code: </b><span class="mflcode"><?= $columns['cdrrs']['data'][0][37]; ?></span></td>
+                                        <td><b>Facility Name: </b><span class="facility_name"> <?= $columns['cdrrs']['data'][0]['facility_name']; ?></span></td>
+                                        <td><b>Facility code: </b><span class="mflcode"><?= $columns['cdrrs']['data'][0]['mflcode']; ?></span></td>
                                     </tr>
                                     <tr>
-                                        <td><b>County: </b><span class="county"><?= $columns['cdrrs']['data'][0][47]; ?></span></td>
-                                        <td><b>Subcounty: </b><span class="subcounty"><?= $columns['cdrrs']['data'][0][48]; ?></span></td>
+                                        <td><b>County: </b><span class="county"><?= $columns['cdrrs']['data'][0]['county']; ?></span></td>
+                                        <td><b>Subcounty: </b><span class="subcounty"><?= $columns['cdrrs']['data'][0]['subcounty']; ?></span></td>
                                     </tr>
                                     <tr>
-                                        <td><b>Type of Service provided at the Facility: </b><span class="services"><?= $columns['cdrrs']['data'][0][10]; ?></span></td>
-                                        <td><b>Non-ARV: </b> <?= $columns['cdrrs']['data'][0][12]; ?><input type="checkbox" class="non_arv" readonly="readonly"></td>
+                                        <td><b>Type of Service provided at the Facility: </b><span class="services"><?= $columns['cdrrs']['data'][0]['services']; ?></span></td>
+                                        <td><b>Non-ARV: </b> <?= $columns['cdrrs']['data'][0]['non_arv']; ?><input type="checkbox" class="non_arv" readonly="readonly"></td>
                                     </tr>
                                     <tr>
                                         <td colspan="2">
                                             <b>Period of Reporting: </b>
-                                            <b>Beginning:</b> <span class="period_begin"><?= $columns['cdrrs']['data'][0][5]; ?></span>
-                                            <b>Ending:</b> <span class="period_end"><?= $columns['cdrrs']['data'][0][6]; ?></span>
+                                            <b>Beginning:</b> <span class="period_begin"><?= $columns['cdrrs']['data'][0]['period_begin']; ?></span>
+                                            <b>Ending:</b> <span class="period_end"><?= $columns['cdrrs']['data'][0]['period_end']; ?></span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="2">
-                                            <b>order status: </b> <span class="period_begin"><?= $columns['cdrrs']['data'][0][1]; ?></span>
+                                            <b>order status: </b> <span class="period_begin"><?= $columns['cdrrs']['data'][0]['status']; ?></span>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>                             
 
                         </div>
-                        <div class="col-md-6">
-                            <table class=" table-striped table-bordered table-hover" style="max-width: 894px;padding: 7px;">
+                        <div class="col-md-8">
+                            <table class=" table-striped table-bordered table-hover">
                                 <thead>
                                     <tr>
                                         <th rowspan="3">Drug Name</th>
@@ -85,20 +85,11 @@
                                         <th>End Month Count <span class="label label-info">* 2</span></th>
                                         <th>Qty Consumed <span class="label label-info">* 3</span></th>
                                         <th>Physical SAH<span class="label label-info">* 4</span></th>
-                                        <?php if($columns['cdrrs']['data'][0][4] == 'D-CDRR'){ ?> 
+                                        <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
                                             <th >Aggregate Consumed</th>
                                             <th >Aggregate SAH</th>
                                         <?php }?>
-
-
                                         <th >Qty for RESUPPLY</th>
-
-                                        <!-- <th >AMC</th> -->
-                                        <!-- <th >Months of Stock</th> -->
-                                        <!-- <th >Recommended for allocation</th> -->
-                                        <!-- <th >Allocated</th> -->
-                                        <!-- <th rowspan="3">comments</th> -->
-                                        <!-- <th rowspan="3">decision</th> -->
                                     </tr>
                                     <tr>
                                         <th><small>(packs)</small></th>
@@ -108,14 +99,10 @@
                                         <th><small>(packs)</small></th>
                                         <th><small>(packs)</small></th>
                                         <th><small>(packs)</small></th>
-                                        <?php if($columns['cdrrs']['data'][0][4] == 'D-CDRR'){ ?> 
+                                        <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
                                             <th><small>(packs)</small></th>
                                             <th><small>(packs)</small></th>
-                                        <?php }?>                                        
-                                        <!-- <th><small>(packs)</small></th> -->
-                                        <!-- <th><small>(packs)</small></th> -->
-                                        <!-- <th><small>(packs)</small></th> -->
-                                        <!-- <th><small>(packs)</small></th> -->
+                                        <?php }?>
                                     </tr>
                                     <tr>
                                         <th>A</th>
@@ -123,52 +110,56 @@
                                         <th>C</th>
                                         <th>D</th>
                                         <th>E</th>
-                                        <?php if($columns['cdrrs']['data'][0][4] == 'D-CDRR'){ ?> 
-
+                                        <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
                                             <th>F</th>
                                             <th>G</th>
                                         <?php }?>
-
                                         <th>H</th>
                                         <th>J</th>
-                                        <!-- <th>K</th> -->
-                                        <!-- <th>L</th> -->
-                                        <!-- <th>M</th> -->
-                                        <!-- <th>M</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <form name="orderForm" id="orderForm">
-                                        <?php foreach ($columns['cdrrs']['data'] as $cdrr ) {?>
+                                        <?php foreach ($columns['drugs'] as $key => $drug) {  ?>
                                             <tr>
-                                                <td><?= $cdrr[45]; // drugname ?></td>
-                                                <td><?= $cdrr[36]; // Pack size ?></td>
-                                                <td><?= $cdrr[16]; // beginning balance ?></td>
-                                                <td><?= $cdrr[17]; // qty received?></td>
-                                                <td><?= $cdrr[18];// Qty Issued ?></td>
-                                                <?php if($columns['cdrrs']['data'][0][4] == 'D-CDRR'){ ?> 
-                                                    <td><?= $cdrr[27];?></td>
-                                                    <td><?= $cdrr[28];?></td>
+                                                <td><?= $drug['name'];?></td>
+                                                <td><?= $drug['pack_size'];?></td>
+                                                <?php 
+                                                $drugname = $drug['name'];
+                                                 if (in_array($drugname, array_keys($columns['cdrrs']['data']['cdrr_item']))){?>
+                                                <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['balance']; // beginning balance ?></td>
+                                                <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['received']; // qty received?></td>
+                                                <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['dispensed_units'];// Qty Issued ?></td>
+                                                <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_consumed'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_on_hand'];?></td>
                                                 <?php }?>
-                                                
-                                                <td><?= $cdrr[22];?></td>
-                                                <td><?= $cdrr[19]; //dispensed?></td>
-                                                <td><?= $cdrr[27];?></td>
-                                                <td><?= $cdrr[26];?></td>
-                                                <!-- <td><?= '0' // amc  ?></td> -->
-                                                <!-- <td><?= ($cdrr[19]) ; // rationalized ?></td> -->
-                                                <!-- <td><?= $cdrr[26]* 4 ; // Auto Calculated - recommended ?></td> -->
-                                                <!-- <td><input type="text" class="form-control" name="qty_allocated-<?= $cdrr[49];?>" value="<?= ($cdrr[32]) * 4 ; // rationalized ?>"></td> -->
-                                                <!-- <td><input type="text" class="form-control" name="feedback-<?= $cdrr[49];?>" value="<?= ($cdrr[33]) ; // rationalized ?>"></td> -->
-                                                <!-- <td><?= ($cdrr[34]) ; // rationalized ?></td> -->
+                                                <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['count'];?></td>
+                                                <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['received']; //dispensed?></td>
+                                                <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['received'];?></td>
+                                                <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['resupply'];?></td>
+
+                                                <?php } else { ?>
+                                                    <td>0</td>
+                                                    <td>0</td>
+                                                    <td>0</td>
+                                                <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
+                                                    <td>0</td>
+                                                    <td>0</td>
+                                                <?php }?>
+                                                    <td>0</td>
+                                                    <td>0</td>
+                                                    <td>0</td>
+                                                    <td>0</td>
+                                            <?php } ?>
                                             </tr>
                                         <?php } ?>
                                     </form>
                                 </tbody>
                             </table>
                         </div> <!--end of cdrr-->
-                        <div class="col-md-5 pull-right">
-                            <table class="table table-striped table-bordered table-hover pull-right" style="max-width: 360px;padding: 7px;">
+                        <div class="col-md-4">
+                            <table class="table table-striped table-bordered table-hover">
                                 <thead>
                                     <th >Regimen Code</th>
                                     <th >ARV Treatment Regimen</th>
@@ -215,19 +206,19 @@
 
 
         $('#approveOrder').click(function(e){
-            $.get( "/ART/manager/orders/actionOrder/<?= $columns['cdrrs']['data'][0][30]; ?>/approved", function( data ) {
+            $.get( "/ART/manager/orders/actionOrder/<?= $cdrr_id; ?>/approved", function( data ) {
               alert(data);
               window.location.href = "";
           });
         })
         $('#rejectOrder').click(function(e){
-            $.get( "/ART/manager/orders/actionOrder/<?= $columns['cdrrs']['data'][0][30]; ?>/rejected", function( data ) {
+            $.get( "/ART/manager/orders/actionOrder/<?= $cdrr_id; ?>/rejected", function( data ) {
               alert(data);
               window.location.href = "";
           });
         })
         $('#complete_allocation').click(function(e){
-            $.get( "/ART/manager/orders/actionOrder/<?= $columns['cdrrs']['data'][0][30]; ?>/allocated", function( data ) {
+            $.get( "/ART/manager/orders/actionOrder/<?= $cdrr_id; ?>/allocated", function( data ) {
               alert(data);
               window.location.href = "";
           });
@@ -236,8 +227,7 @@
         $('#save_allocation').click(function(e){
             // $('form')..serializeArray();
             var form = $('#orderForm');
-            var url ="/ART/manager/orders/updateOrder/<?= $columns['cdrrs']['data'][0][30]; ?>";
-
+            var url ="/ART/manager/orders/updateOrder/<?= $cdrr_id; ?>";
 
             $.ajax( {
               type: "POST",
@@ -246,7 +236,7 @@
               success: function( response ) {
                 alert('Allocation Saved')
 
-                $.get( "/ART/manager/orders/actionOrder/<?= $columns['cdrrs']['data'][0][30]; ?>/pending", function( data ) {
+                $.get( "/ART/manager/orders/actionOrder/<?= $cdrr_id; ?>/pending", function( data ) {
               // alert(data);
               // window.location.href = "";
           });
