@@ -34,7 +34,6 @@ class Orders extends MX_Controller {
 		foreach ($_POST as $key => $value) {
 			$vals = array(explode('-', $key)[0] => $value, 'id'=>explode('-', $key)[1]+0 );
 			array_push($updateArray, $vals);
-			
 		}
 		$response = $this->Orders_model->updateOrder($orderid,$updateArray,$this->session->userdata('id'));
 		echo $response['message'];
@@ -56,7 +55,7 @@ class Orders extends MX_Controller {
 		$response = $this->Orders_model->get_reporting_data($this->session->userdata('scope'), $this->session->userdata('role'), date('Y-m-d', strtotime('first day of last month')), date('Y-m-d', strtotime('last day of last month')));
 		echo json_encode(array('data' => $response['data']));
 	}
-	
+
 	public function get_allocation(){
 		$response = $this->Orders_model->get_allocation_data($this->session->userdata('scope'), $this->session->userdata('role'), date('Y-m-d', strtotime('first day of last month')), date('Y-m-d', strtotime('last day of last month')));
 		echo json_encode(array('data' => $response['data']));
@@ -66,5 +65,5 @@ class Orders extends MX_Controller {
 		$response = $this->Orders_model->get_county_allocation_data($this->session->userdata('scope'), $this->session->userdata('role'), $period_begin, date('Y-m-t', strtotime($period_begin)));
 		echo json_encode(array('data' => $response['data']));
 	}
-	
+
 }

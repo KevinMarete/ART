@@ -2,8 +2,8 @@
     <div class="col-lg-12">
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
-            <li><a href="<?php echo base_url('manager/orders/reports'); ?>">Orders</a></li>
-            <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i> View Orders</li>
+            <li><a href="<?php echo base_url('manager/orders/allocation'); ?>">Allocation</a></li>
+            <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i>View Allocation </li>
         </ol>
     </div>
     <!-- /.col-lg-12 -->
@@ -15,10 +15,16 @@
                     CDRR
                 </div>
                 <!-- /.panel-heading -->
+
              <div class="panel-body">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-4 ">
+                            <?php if ($role=='county'){?>
+
+                                <button type="submit" class="btn btn-success" id="approveOrder">Approve Order</button>
+                                <button type="submit" class="btn btn-warning" id="rejectOrder">Reject Order</button>
+                            <?php }?>
                         </div>
                         <div class="col-md-8 ">
                             <span class="label label-info">* 1</span> - <small> Total Qty ISSUED to ARV dispensing sites (Satellite sites plus Central site dispensing point(s) where relevant)</small><br />
@@ -69,30 +75,37 @@
                                     <tr>
                                         <th rowspan="3">Drug Name</th>
                                         <th rowspan="3">Pack Size</th>
-                                        <th>Beginning Balance</th>
-                                        <th>Quantity Received</th>
-                                        <th>Qty ISSUED  <span class="label label-info">* 1</span></th>
                                         <th>End Month Count <span class="label label-info">* 2</span></th>
                                         <th>Qty Consumed <span class="label label-info">* 3</span></th>
                                         <th>Physical SAH<span class="label label-info">* 4</span></th>
                                         <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
-                                            <th >Aggregate Consumed</th>
-                                            <th >Aggregate SAH</th>
+                                            <th >Aggr Consumed</th>
+                                            <th >Aggr SAH</th>
                                         <?php }?>
                                         <th >Qty for RESUPPLY</th>
+
+                                        <th >AMC</th>
+                                        <th >Months of Stock</th>
+                                        <th ><small>Auto Allocation</small></th>
+                                        <th ><small>Allocated</small></th>
+                                        <th rowspan="3">comments</th>
+                                        <th rowspan="3">decision</th>
+
                                     </tr>
                                     <tr>
                                         <th><small>(packs)</small></th>
                                         <th><small>(packs)</small></th>
                                         <th><small>(packs)</small></th>
                                         <th><small>(packs)</small></th>
-                                        <th><small>(packs)</small></th>
-                                        <th><small>(packs)</small></th>
-                                        <th><small>(packs)</small></th>
                                         <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
                                             <th><small>(packs)</small></th>
                                             <th><small>(packs)</small></th>
                                         <?php }?>
+
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
                                     </tr>
                                     <tr>
                                         <th>A</th>
@@ -106,29 +119,37 @@
                                         <?php }?>
                                         <th>H</th>
                                         <th>J</th>
+
+
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <form name="orderForm" id="orderForm">
                                         <?php foreach ($columns['drugs'] as $key => $drug) {  ?>
-                                                <?php  $drugname = $drug['name']; if (in_array($drugname, array_keys($columns['cdrrs']['data']['cdrr_item']))){?>
+                                    <?php  $drugname = $drug['name']; if (in_array($drugname, array_keys($columns['cdrrs']['data']['cdrr_item']))){?>
                                             <tr>
                                                 <td><?= $drug['name'];?></td>
                                                 <td><?= $drug['pack_size'];?></td>
-
-
-                                                <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['balance']; // beginning balance ?></td>
-                                                <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['received']; // qty received?></td>
-                                                <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['dispensed_units'];// Qty Issued ?></td>
                                                 <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_consumed'];?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_on_hand'];?></td>
+                                                <?php } ?>
                                                 <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['count'];?></td>
                                                 <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['received']; //dispensed?></td>
                                                 <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['received'];?></td>
                                                 <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['resupply'];?></td>
+                                                <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['resupply'];?></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td><input type="text" class="form-control" name="qty_allocated-<?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['cdrr_item_id'];?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugname]['resupply']) * 4 ; // rationalized ?>"></td>
+                                                <td><input type="text" class="form-control" name="feedback-<?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['cdrr_item_id'];?>" value=""></td>
+                                                <td>RESUPPLY</td>
 
-                                                <?php } } ?>
+                                                <?php  } ?>
                                             </tr>
                                         <?php } ?>
                                     </form>
@@ -144,17 +165,22 @@
                                 <?php  foreach ($columns['cdrrs']['data']['cdrr_logs'] as $key => $log) {?>
                                 <tr>
                                     <td><?= $log['description'];?>  </td>
-                                    <td> <?= $log['firstname'].'('.$log['role'].')';?> </td>
+                                    <td> <?= $log['firstname'].' ('.$log['role'].')';?> </td>
                                     <td> <?= $log['created'];?></td>
                                 </tr>
                                 <?php } ?>
                             </table>
+                            <?php if ($role=='subcounty' && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved'))){?>
+                                <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
+                                <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
+                            <?php }?>
+
                         </div> <!--end of cdrr-->
-                        <div class="col-md-4 pull-right" style="max-width: 30%;">
+                        <div class="col-md-4 pull-right" style="max-width: 30%; ">
                             <table class="table table-striped table-bordered table-hover">
                                 <thead>
                                     <th >Regimen Code</th>
-                                    <th >ARV Treatment Regimen</th>
+                                    <th >ARV Treatment <br />Regimen</th>
                                     <th >Active Patients on this regimen <span class="label label-info">* 1</span></th>
                                 </thead>
                                 <tbody>
@@ -233,6 +259,10 @@
             }
         });
         })
+
+    <?php if ($columns['cdrrs']['data'][0]['status'] == 'allocated' || $columns['cdrrs']['data'][0]['status'] == 'approved') {?>
+        $('input').attr('disabled',true);
+    <?php } ?>
 
 
     });

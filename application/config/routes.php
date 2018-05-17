@@ -70,8 +70,10 @@ $route['manager/profile'] = 'Manager/load_template/user/profile/Profile/0';
 $route['manager/(:any)/(:any)'] = 'Manager/load_template/$1/$2/$2';
 
 $route['manager/orders/reports'] = 'Manager/load_template/orders/reports/Reports/0';
-$route['manager/orders/view/(:any)/(:any)'] = 'Manager/load_template/orders/cdrr_maps/View Orders/0/$1/$2';
+$route['manager/orders/view/(:any)/(:any)'] = 'Manager/load_template/orders/cdrr_maps/View Order/0/$1/$2';
 $route['manager/orders/allocation'] = 'Manager/load_template/orders/allocation/Allocation/0';
+$route['manager/orders/allocate/(:any)/(:any)']      = 'Manager/load_template/orders/allocate/Allocation/0';
+$route['manager/orders/view_allocation/(:any)/(:any)'] = 'Manager/load_template/orders/allocate/Allocation/0';
 $route['manager/orders/reporting_rates'] = 'Manager/load_template/orders/reporting_rates/Reporting Rates/0';
 $route['manager/orders/edit_allocation/(:any)'] = 'Manager/load_template/orders/edit_allocation/Edit Allocation/0/$1';
 

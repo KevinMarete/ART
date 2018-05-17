@@ -58,6 +58,20 @@ class Manager extends MX_Controller {
 						'subcounty' => array('MFL Code','Facility Name', 'Period', 'Status', 'Actions'),
 						'county' => array('Period', 'Allocated', 'Status', 'Actions')
 					),
+					'allocate' => array(
+						'subcounty' => array(
+							'drugs' => $this->Orders_model->get_drugs(),
+							'regimens' => $this->Orders_model->get_regimens(),
+							'cdrrs' => $this->Orders_model->get_cdrr_data($this->uri->segment('4'),$this->session->userdata('scope'),$this->session->userdata('role')),
+							'maps' => $this->Orders_model->get_maps_data($this->uri->segment('5'),$this->session->userdata('scope'),$this->session->userdata('role'))
+						),
+						'county' => array(
+							'drugs' => $this->Orders_model->get_drugs(),
+							'regimens' => $this->Orders_model->get_regimens(),
+							'cdrrs' => $this->Orders_model->get_cdrr_data($this->uri->segment('4'),$this->session->userdata('scope'),$this->session->userdata('role')),
+							'maps' => $this->Orders_model->get_maps_data($this->uri->segment('5'),$this->session->userdata('scope'),$this->session->userdata('role'))
+						)
+					),
 					'edit_allocation' => array(
 						'subcounty' => array(),
 						'county' => array('Subcounty', 'Status', 'Approval', 'Actions')
@@ -66,6 +80,7 @@ class Manager extends MX_Controller {
 				$data['columns'] = $columns[$page][$this->session->userdata('role')];
 				$data['role'] = $this->session->userdata('role');
 				$data['cdrr_id'] = $this->uri->segment('4');
+				// echo "<pre>"; var_dump($data['columns']);die;
 			}
 			$data['page_title'] = 'ART | ' . ucwords($title);
 			$this->load->view('template/template_view', $data);

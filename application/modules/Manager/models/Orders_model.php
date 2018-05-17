@@ -32,7 +32,8 @@ class Orders_model extends CI_Model {
                 $array = array(
                     'description' => $action,
                     'user_id' => $user,
-                    'cdrr_id' => $orderid
+                    'cdrr_id' => $orderid,
+                    'created' => date('Y-m-d H:i:s')
                 );
                 $this->db->set($array);
                 $this->db->insert('tbl_cdrr_log');
@@ -58,7 +59,8 @@ class Orders_model extends CI_Model {
                 $array = array(
                     'description' => 'updated',
                     'user_id' => $user,
-                    'cdrr_id' => $orderid
+                    'cdrr_id' => $orderid,
+                    'created' => date('Y-m-d H:i:s')
                 );
                 $this->db->set($array);
                 $this->db->insert('tbl_cdrr_log');
@@ -150,7 +152,7 @@ class Orders_model extends CI_Model {
                 UCASE(f.name) facility_name,
                 IF(c.period_begin IS NOT NULL, ?, ?) reporting_status,
                 ? period,
-                IF(c.period_begin IS NOT NULL, CONCAT('<a href=view/',c.id,'/',m.id,'>View</a>'), CONCAT('<a href=get_report/', f.mflcode,'>Report</a>')) option
+                IF(c.period_begin IS NOT NULL, CONCAT('<a href=view/',c.id,'/',m.id,'>View</a>'), 'Not Reported ' ) option
                 FROM tbl_facility f  
                 LEFT JOIN tbl_cdrr c ON c.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
                 LEFT JOIN tbl_maps m ON m.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
@@ -206,7 +208,7 @@ class Orders_model extends CI_Model {
                 UCASE(f.name) facility_name,
                 IF(c.period_begin IS NULL, DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%M-%Y') ,DATE_FORMAT(c.period_begin, '%M-%Y')) period,
                 IF(c.status IS NULL, 'Not Reported', c.status) reporting_status,
-                IF(c.status = 'pending', CONCAT('<a href=allocate/', c.id,'/', m.id, '> Allocate</a>'), CONCAT('<a href=view_allocate/', c.id,'/', m.id, '>View Allocation</a>'))  option
+                IF(c.status = 'pending', CONCAT('<a href=allocate/', c.id,'/', m.id, '> Allocate</a>'), CONCAT('<a href=view_allocation/', c.id,'/', m.id, '>View Allocation</a>'))  option
                 FROM tbl_facility f
                 LEFT JOIN tbl_cdrr c ON c.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
                 LEFT JOIN tbl_maps m ON m.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
@@ -304,6 +306,14 @@ class Orders_model extends CI_Model {
             WHERE c.id = ?  ".$role_cond;
 
             $table_data = $this->db->query($sql, array($cdrr_id))->result_array();
+
+            $logs_sql = "SELECT cl.description,cl.created,u.firstname,u.lastname,r.name as role
+            FROM tbl_cdrr_log cl
+            inner join tbl_user u  on cl.user_id = u.id
+            inner join tbl_role r on u.role_id = r.id
+            where cdrr_id =? order by cl.id asc";
+            $logs_table_data = $this->db->query($logs_sql, array($cdrr_id))->result_array();
+
             if(!empty($table_data)){
                 foreach ($table_data as $result) {
                     $response['data'][] = array('status' => $result['status'], 
@@ -327,7 +337,8 @@ class Orders_model extends CI_Model {
                         'subcounty' => $result['subcounty']
                     );
 
-                    $response['data']['cdrr_item'] = array($result['drug_name']=>array(
+                    $response['data']['cdrr_item'][$result['drug_name']] = array(
+                        'cdrr_item_id' => $result['cdrr_item_id'],
                         'balance' => $result['balance'], 
                         'received' => $result['received'], 
                         'dispensed_units' => $result['dispensed_units'], 
@@ -347,7 +358,9 @@ class Orders_model extends CI_Model {
                         'qty_allocated' => $result['qty_allocated'], 
                         'feedback' => $result['feedback'], 
                         'decision' => $result['decision']
-                    ));
+                    );
+
+                    $response['data']['cdrr_logs'] = $logs_table_data;
 
                 }
                 $response['message'] = 'Table data was found!';
@@ -362,6 +375,8 @@ class Orders_model extends CI_Model {
         }
         return $response;
     }
+
+
 
     public function get_maps_data($maps_id,$scope = null,$role = null){
         $role_cond = ($role == 'subcounty') ? " AND f.subcounty_id = $scope" : " AND sc.county_id = $scope";
