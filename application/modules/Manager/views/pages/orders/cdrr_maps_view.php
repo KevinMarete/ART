@@ -25,9 +25,9 @@
                     <div class="row">
                         <div class="col-md-4 ">
                             <?php if ($role=='county'){?>
-                            
-                            <button type="submit" class="btn btn-success" id="approveOrder">Approve Order</button>
-                            <button type="submit" class="btn btn-warning" id="rejectOrder">Reject Order</button>
+
+                                <button type="submit" class="btn btn-success" id="approveOrder">Approve Order</button>
+                                <button type="submit" class="btn btn-warning" id="rejectOrder">Reject Order</button>
                             <?php }?>
                         </div>
                         <div class="col-md-8 ">
@@ -79,39 +79,54 @@
                                     <tr>
                                         <th rowspan="3">Drug Name</th>
                                         <th rowspan="3">Pack Size</th>
-                                        <th>Beginning Balance</th>
-                                        <th>Quantity Received</th>
-                                        <th>Qty ISSUED  <span class="label label-info">* 1</span></th>
+                                        <!-- <th>Beginning Balance</th> -->
+                                        <!-- <th>Quantity Received</th> -->
+                                        <!-- <th>Qty ISSUED  <span class="label label-info">* 1</span></th> -->
                                         <th>End Month Count <span class="label label-info">* 2</span></th>
                                         <th>Qty Consumed <span class="label label-info">* 3</span></th>
                                         <th>Physical SAH<span class="label label-info">* 4</span></th>
+                                        <?php if($columns['cdrrs']['data'][0][4] == 'D-CDRR'){ ?> 
+                                            <th >Aggregate Consumed</th>
+                                            <th >Aggregate SAH</th>
+                                        <?php }?>
+
+
                                         <th >Qty for RESUPPLY</th>
-                                        <th >Recommended Qty(auto calculated)</th>
+
                                         <th >AMC</th>
                                         <th >Months of Stock</th>
+                                        <th >Recommended for allocation</th>
                                         <th >Allocated</th>
                                         <th rowspan="3">comments</th>
                                         <th rowspan="3">decision</th>
                                     </tr>
                                     <tr>
-                                        <th>In Packs</th>
-                                        <th>In Packs</th>
-                                        <th>In Packs</th>
-                                        <th>In Packs</th>
-                                        <th>In Packs</th>
-                                        <th>In Packs</th>
-                                        <th>In Packs</th>
-                                        <th>In Packs</th>
-                                        <th>In Packs</th>
-                                        <th>In Packs</th>
-                                        <th>In Packs</th>
+                                        <th><small>(packs)</small></th>
+                                        <th><small>(packs)</small></th>
+                                        <!-- <th><small>(packs)</small></th> -->
+                                        <!-- <th><small>(packs)</small></th> -->
+                                        <!-- <th><small>(packs)</small></th> -->
+                                        <th><small>(packs)</small></th>
+                                        <th><small>(packs)</small></th>
+                                        <?php if($columns['cdrrs']['data'][0][4] == 'D-CDRR'){ ?> 
+                                            <th><small>(packs)</small></th>
+                                            <th><small>(packs)</small></th>
+                                        <?php }?>                                        
+                                        <th><small>(packs)</small></th>
+                                        <th><small>(packs)</small></th>
+                                        <th><small>(packs)</small></th>
+                                        <th><small>(packs)</small></th>
                                     </tr>
                                     <tr>
                                         <th>A</th>
                                         <th>B</th>
-                                        <th>C</th>
-                                        <th>F</th>
-                                        <th>G</th>
+                                        <!-- <th>C</th> -->
+                                        <?php if($columns['cdrrs']['data'][0][4] == 'D-CDRR'){ ?> 
+
+                                            <th>F</th>
+                                            <th>G</th>
+                                        <?php }?>
+
                                         <th>H</th>
                                         <th>J</th>
                                         <th>K</th>
@@ -124,18 +139,23 @@
                                     <form name="orderForm" id="orderForm">
                                         <?php foreach ($columns['cdrrs']['data'] as $cdrr ) {?>
                                             <tr>
-                                                <td><?= $cdrr[42];?></td>
-                                                <td><?= $cdrr[39];?></td>
-                                                <td><?= $cdrr[16];?></td>
-                                                <td><?= $cdrr[17];?></td>
-                                                <td><?= $cdrr[18];?></td>
+                                                <td><?= $cdrr[45]; // drugname ?></td>
+                                                <td><?= $cdrr[36];?></td>
+                                                <!-- <td><?= $cdrr[16]; // beginning balance ?></td> -->
+                                                <!-- <td><?= $cdrr[17]; // qty received?></td> -->
+                                                <!-- <td><?= $cdrr[18];// Qty Issued ?></td> -->
+                                                <?php if($columns['cdrrs']['data'][0][4] == 'D-CDRR'){ ?> 
+                                                <td><?= $cdrr[27];?></td>
+                                                <td><?= $cdrr[28];?></td>
+                                                <?php }?>
+                                                
                                                 <td><?= $cdrr[22];?></td>
                                                 <td><?= $cdrr[19]; //dispensed?></td>
                                                 <td><?= $cdrr[27];?></td>
                                                 <td><?= $cdrr[26];?></td>
-                                                <td><?= $cdrr[26]* 4 ; // calculated ?></td>
                                                 <td><?= '0' // amc  ?></td>
                                                 <td><?= ($cdrr[19]) ; // rationalized ?></td>
+                                                <td><?= $cdrr[26]* 4 ; // Auto Calculated - recommended ?></td>
                                                 <td><input type="text" class="form-control" name="qty_allocated-<?= $cdrr[49];?>" value="<?= ($cdrr[32]) * 4 ; // rationalized ?>"></td>
                                                 <td><input type="text" class="form-control" name="feedback-<?= $cdrr[49];?>" value="<?= ($cdrr[33]) ; // rationalized ?>"></td>
                                                 <td><?= ($cdrr[34]) ; // rationalized ?></td>
@@ -144,7 +164,7 @@
                                     </form>
                                 </tbody>
                             </table>
-                            <?php if ($role=='subcounty'){?>
+                            <?php if ($role=='subcounty' &&  $columns['cdrrs']['data'][0][1] !== 'allocated'){?>
                                 <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
                                 <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
                             <?php }?>
@@ -263,8 +283,8 @@
 
         $('#save_allocation').click(function(e){
             // $('form')..serializeArray();
-        var form = $('#orderForm');
-        var url ="/ART/manager/orders/updateOrder/<?= $columns['cdrrs']['data'][0][30]; ?>";
+            var form = $('#orderForm');
+            var url ="/ART/manager/orders/updateOrder/<?= $columns['cdrrs']['data'][0][30]; ?>";
 
 
             $.ajax( {
@@ -272,8 +292,9 @@
               url: url,
               data: form.serialize(),
               success: function( response ) {
+                alert('Allocation Saved')
 
-            $.get( "/ART/manager/orders/actionOrder/<?= $columns['cdrrs']['data'][0][30]; ?>/pending", function( data ) {
+                $.get( "/ART/manager/orders/actionOrder/<?= $columns['cdrrs']['data'][0][30]; ?>/pending", function( data ) {
               // alert(data);
               // window.location.href = "";
           });
@@ -281,9 +302,6 @@
 
             }
         });
-
-
-
         })
 
 
