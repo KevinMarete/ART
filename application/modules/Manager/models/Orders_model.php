@@ -274,7 +274,16 @@ class Orders_model extends CI_Model {
     }
 
     public function get_regimens() {
-        return $this->db->get('vw_regimen_list')->result_array();
+        $response = array();
+        $regimens = $this->db->get('vw_regimen_list')->result_array();
+        foreach ($regimens as $regimen) {
+            $response[$regimen['category']][] = array(
+                    'id' => $regimen['id'],
+                    'code' => $regimen['code'],
+                    'name' => $regimen['name']
+            );
+        }
+        return $response;
     }
 
     
@@ -317,7 +326,7 @@ class Orders_model extends CI_Model {
 
         $response = array();
         try{
-            $sql = "SELECT *,r.name as regimen_name, f.name as facility_name, sc.name as subcounty, co.name as county
+            $sql = "SELECT mi.total, mi.regimen_id
             FROM tbl_maps m 
             INNER JOIN tbl_maps_item mi ON mi.maps_id = m.id
             INNER JOIN vw_regimen_list r ON r.id = mi.regimen_id
@@ -329,7 +338,7 @@ class Orders_model extends CI_Model {
             $table_data = $this->db->query($sql, array($maps_id))->result_array();
             if(!empty($table_data)){
                 foreach ($table_data as $result) {
-                    $response['data'][] = array_values($result);
+                    $response['data'][$result['regimen_id']] = $result['total'];
                 }
                 $response['message'] = 'Table data was found!';
                 $response['status'] = TRUE;
