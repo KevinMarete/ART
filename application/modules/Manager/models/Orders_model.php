@@ -23,6 +23,58 @@ class Orders_model extends CI_Model {
         }
         return $response;
     }
+    public function actionOrder($orderid,$action,$user) {
+        $response = array();
+        try {
+            $this->db->set('status', $action);
+            $this->db->where('id', $orderid);
+            if ($this->db->update('tbl_cdrr')){
+                $array = array(
+                    'description' => $action,
+                    'user_id' => $user,
+                    'cdrr_id' => $orderid
+                    );
+                $this->db->set($array);
+                $this->db->insert('tbl_cdrr_log');
+
+                $response['message'] = 'Order status was updated!';
+                $response['status'] = TRUE;
+            } else {
+                $response['message'] = 'Order status was not updated!';
+                $response['status'] = FALSE;
+            }
+        } catch (Execption $e) {
+            $response['status'] = FALSE;
+            $response['message'] = $e->getMessage();
+        }
+        return $response;
+    }
+
+    public function updateOrder($orderid,$order,$user) {
+        $response = array();
+        try {   
+            if ($this->db->update_batch('tbl_cdrr_item', $order, 'id') == 0) {
+
+                $array = array(
+                    'description' => 'updated',
+                    'user_id' => $user,
+                    'cdrr_id' => $orderid
+                    );
+                $this->db->set($array);
+                $this->db->insert('tbl_cdrr_log');
+
+                $response['message'] = 'Order was updated!';
+                $response['status'] = TRUE;
+            } else {
+                $response['message'] = 'Order was not updated!';
+                $response['status'] = FALSE;
+            }
+        } catch (Execption $e) {
+            $response['status'] = FALSE;
+            $response['message'] = $e->getMessage();
+        }
+        return $response;
+    }
 
     public function get_order_data($scope, $role) {
         $response = array('data'=> array());
@@ -233,7 +285,7 @@ class Orders_model extends CI_Model {
 
         $response = array();
         try{
-            $sql = "SELECT *,d.name as drug_name,f.name as facility_name,co.name as county, sc.name as subcounty
+            $sql = "SELECT *,d.name as drug_name,f.name as facility_name,co.name as county, sc.name as subcounty,ci.id as cdrr_item_id
             FROM tbl_cdrr c 
             INNER JOIN tbl_cdrr_item ci ON ci.cdrr_id = c.id
             INNER JOIN vw_drug_list d ON d.id = ci.drug_id

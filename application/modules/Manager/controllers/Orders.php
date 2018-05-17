@@ -28,6 +28,32 @@ class Orders extends MX_Controller {
 		$this->session->set_flashdata('orders_msg', $message);
 		redirect('manager/orders/assign');
     }
+	public function updateOrder($orderid)
+	{	
+		$updateArray = array();
+		foreach ($_POST as $key => $value) {
+		$vals = array(explode('-', $key)[0] => $value, 'id'=>explode('-', $key)[1]+0 );
+		array_push($updateArray, $vals);
+
+		// var_dump($vals);
+		// die;
+		 // $this->Orders_model->updateOrder($orderid,$vals,$this->session->userdata('id'));
+		 
+		
+		}
+		$response = $this->Orders_model->updateOrder($orderid,$updateArray,$this->session->userdata('id'));
+var_dump($response);
+
+		// var_dump($this->session->all_userdata());
+		// $response = $this->Orders_model->get_order_data($this->session->userdata('scope'),$this->session->userdata('role'));
+		// 	echo json_encode(array('data' => $response['data']));
+	}
+	public function actionOrder($orderid,$action)
+	{	
+
+		$response = $this->Orders_model->actionOrder($orderid,$action,$this->session->userdata('id'));
+			echo $response['message'];
+	}
 
 	public function get_orders()
 	{	

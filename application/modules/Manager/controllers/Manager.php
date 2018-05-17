@@ -64,6 +64,8 @@ class Manager extends MX_Controller {
 					)
 				);
 				$data['columns'] = $columns[$page][$this->session->userdata('role')];
+				$data['role'] = $this->session->userdata('role');
+				// echo "<pre>"; var_dump($data['columns']);die;
 			}
 			$data['page_title'] = 'ART | ' . ucwords($title);
 			$this->load->view('template/template_view', $data);
