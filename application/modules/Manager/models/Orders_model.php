@@ -107,7 +107,7 @@ class Orders_model extends CI_Model {
             c.status,
             $column
             UCASE(f.name) facility_name,
-            CONCAT('<a href=view/', c.id,'/', m.id, '>View Order</a>') option
+            CONCAT('<a href=view/', c.id,'/', m.id, '>View Order</a>') options
             FROM tbl_facility f
             $join
             INNER JOIN tbl_cdrr c ON c.facility_id = f.id
@@ -156,7 +156,7 @@ class Orders_model extends CI_Model {
                 ORDER BY sc.name ASC";
                 $table_data = $this->db->query($sql, array($period_begin, $period_end, $period_begin, $period_end, $scope))->result_array();
             }else{
-                $allocation_cond = ($allocation) ? "IF(c.period_begin IS NOT NULL, CONCAT('<a href=../../../view_allocation/',c.id,'/',m.id,'>View</a>'), 'Not Reported ' ) option" : "IF(c.period_begin IS NOT NULL, CONCAT('<a href=view/',c.id,'/',m.id,'>View</a>'), 'Not Reported ' ) option" ;
+                $allocation_cond = ($allocation) ? "IF(c.period_begin IS NOT NULL, CONCAT('<a href=../../../view_allocation/',c.id,'/',m.id,'>View</a>'), 'Not Reported ' ) options" : "IF(c.period_begin IS NOT NULL, CONCAT('<a href=view/',c.id,'/',m.id,'>View</a>'), 'Not Reported ' ) options" ;
 
                 $sql = "SELECT 
                 f.mflcode,
@@ -203,7 +203,7 @@ class Orders_model extends CI_Model {
                 DATE_FORMAT(c.period_begin, '%M-%Y') period,
                 CONCAT_WS('/', SUM(IF(c.status = 'approved', 1, 0)) , sb.total) approved,
                 IF(SUM(IF(c.status = 'approved', 1, 0)) != sb.total, 'Incomplete', 'Complete') status,
-                CONCAT('<a href=edit_allocation/', c.period_begin, '>View/Edit</a>')  option
+                CONCAT('<a href=edit_allocation/', c.period_begin, '>View/Edit</a>')  options
                 FROM tbl_cdrr c 
                 INNER JOIN tbl_maps m ON c.facility_id = m.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status IN('allocated', 'approved')
                 INNER JOIN tbl_facility f ON c.facility_id = f.id  
@@ -220,7 +220,7 @@ class Orders_model extends CI_Model {
                 UCASE(f.name) facility_name,
                 IF(c.period_begin IS NULL, DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%M-%Y') ,DATE_FORMAT(c.period_begin, '%M-%Y')) period,
                 IF(c.status IS NULL, 'Not Reported', c.status) reporting_status,
-                IF(c.status = 'pending', CONCAT('<a href=allocate/', c.id,'/', m.id, '> Allocate</a>'), CONCAT('<a href=view_allocation/', c.id,'/', m.id, '>View Allocation</a>'))  option
+                IF(c.status = 'pending', CONCAT('<a href=allocate/', c.id,'/', m.id, '> Allocate</a>'), CONCAT('<a href=view_allocation/', c.id,'/', m.id, '>View Allocation</a>'))  options
                 FROM tbl_facility f
                 LEFT JOIN tbl_cdrr c ON c.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
                 LEFT JOIN tbl_maps m ON m.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
@@ -257,7 +257,7 @@ class Orders_model extends CI_Model {
             CONCAT_WS('/', SUM(IF(c.period_begin IS NOT NULL, 1, 0)), (SUM(IF(c.period_begin IS NOT NULL, 1, 0)) + SUM(IF(c.period_begin IS NULL, 1, 0)))) submitted,
             IF(SUM(IF(c.period_begin IS NOT NULL, 1, 0)) = (SUM(IF(c.period_begin IS NOT NULL, 1, 0)) + SUM(IF(c.period_begin IS NULL, 1, 0))), 'Allocated', 'Unallocated') allocation,
             'N/A' approval_status,
-            IF(SUM(IF(c.period_begin IS NOT NULL, 1, 0)) = (SUM(IF(c.period_begin IS NOT NULL, 1, 0)) + SUM(IF(c.period_begin IS NULL, 1, 0))), CONCAT('<a href=view_allocate/', sc.id,'/', c.period_begin, '>View/Verify Allocation</a>'), CONCAT('<a href=','../allocation/subcounty/',sc.id,'/$currmonth','> Pending Allocation</a>')) option
+            IF(SUM(IF(c.period_begin IS NOT NULL, 1, 0)) = (SUM(IF(c.period_begin IS NOT NULL, 1, 0)) + SUM(IF(c.period_begin IS NULL, 1, 0))), CONCAT('<a href=view_allocate/', sc.id,'/', c.period_begin, '>View/Verify Allocation</a>'), CONCAT('<a href=','../allocation/subcounty/',sc.id,'/$currmonth','> Pending Allocation</a>')) options
             FROM tbl_facility f
             INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
             LEFT JOIN tbl_cdrr c ON c.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
