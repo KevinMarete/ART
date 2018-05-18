@@ -136,7 +136,7 @@ class Orders_model extends CI_Model {
         return $response;
     }
 
-    public function get_reporting_data($scope, $role, $period_begin, $period_end) {
+    public function get_reporting_data($scope, $role, $period_begin, $period_end,$allocation = false) {
         $response = array('data' => array());
         try {
             $month_name = date('F Y', strtotime($period_begin));
@@ -156,12 +156,14 @@ class Orders_model extends CI_Model {
                 ORDER BY sc.name ASC";
                 $table_data = $this->db->query($sql, array($period_begin, $period_end, $period_begin, $period_end, $scope))->result_array();
             }else{
+                $allocation_cond = ($allocation) ? "IF(c.period_begin IS NOT NULL, CONCAT('<a href=../../../view_allocation/',c.id,'/',m.id,'>View</a>'), 'Not Reported ' ) option" : "IF(c.period_begin IS NOT NULL, CONCAT('<a href=view/',c.id,'/',m.id,'>View</a>'), 'Not Reported ' ) option" ;
+
                 $sql = "SELECT 
                 f.mflcode,
                 UCASE(f.name) facility_name,
                 IF(c.period_begin IS NOT NULL, ?, ?) reporting_status,
                 ? period,
-                IF(c.period_begin IS NOT NULL, CONCAT('<a href=view/',c.id,'/',m.id,'>View</a>'), 'Not Reported ' ) option
+                $allocation_cond
                 FROM tbl_facility f  
                 LEFT JOIN tbl_cdrr c ON c.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
                 LEFT JOIN tbl_maps m ON m.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
@@ -169,6 +171,7 @@ class Orders_model extends CI_Model {
                 AND f.category != 'satellite'
                 GROUP BY f.mflcode
                 ORDER BY f.name ASC";
+                // var_dump($sql);die;
                 $table_data = $this->db->query($sql, array(
                     '<span class="label label-success">Submitted</span>',
                     '<span class="label label-danger">Pending</span>',
@@ -248,11 +251,12 @@ class Orders_model extends CI_Model {
     public function get_county_allocation_data($scope, $role, $period_begin, $period_end){
         $response = array('data' => array());
         try {
+            $currmonth = date('Ym');
             $sql = "SELECT                      
             UCASE(sc.name) subcounty,
             IF(SUM(IF(c.period_begin IS NOT NULL, 1, 0)) = (SUM(IF(c.period_begin IS NOT NULL, 1, 0)) + SUM(IF(c.period_begin IS NULL, 1, 0))), 'Allocated', 'Unallocated') allocation,
             'N/A' approval_status,
-            IF(SUM(IF(c.period_begin IS NOT NULL, 1, 0)) = (SUM(IF(c.period_begin IS NOT NULL, 1, 0)) + SUM(IF(c.period_begin IS NULL, 1, 0))), CONCAT('<a href=view_allocate/', sc.id,'/', c.period_begin, '>View/Verify Allocation</a>'), '<a> Pending Allocation</a>') option
+            IF(SUM(IF(c.period_begin IS NOT NULL, 1, 0)) = (SUM(IF(c.period_begin IS NOT NULL, 1, 0)) + SUM(IF(c.period_begin IS NULL, 1, 0))), CONCAT('<a href=view_allocate/', sc.id,'/', c.period_begin, '>View/Verify Allocation</a>'), CONCAT('<a href=','../allocation/subcounty/',sc.id,'/$currmonth','> Pending Allocation</a>')) option
             FROM tbl_facility f
             INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
             LEFT JOIN tbl_cdrr c ON c.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?

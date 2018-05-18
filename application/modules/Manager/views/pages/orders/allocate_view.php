@@ -20,10 +20,9 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-4 ">
-                            <?php if ($role=='county'){?>
-
+                            <?php if ($role=='county' && $columns['cdrrs']['data'][0]['status'] !== 'approved'){?>
                                 <button type="submit" class="btn btn-success" id="approveOrder">Approve Order</button>
-                                <button type="submit" class="btn btn-warning" id="rejectOrder">Reject Order</button>
+                                <button type="submit" class="btn btn-danger" id="rejectOrder">Reject Order</button>
                             <?php }?>
                         </div>
                         <div class="col-md-8 ">
@@ -62,7 +61,7 @@
                                     </tr>
                                     <tr>
                                         <td colspan="2">
-                                            <b>order status: </b> <span class="period_begin"><?= $columns['cdrrs']['data'][0]['status']; ?></span>
+                                            <b>order status: </b> <span class="label label-info"><?= $columns['cdrrs']['data'][0]['status']; ?></span>
                                         </td>
                                     </tr>
                                 </tbody>

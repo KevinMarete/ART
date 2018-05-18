@@ -86,7 +86,7 @@
                 responsive: true,
                 order: [[1, "asc"]],
                 pagingType: "full_numbers",
-                ajax: "<?php echo base_url() . 'Manager/Orders/get_reporting_rates'; ?>",
+                ajax: "<?php echo base_url() . 'Manager/Orders/get_reporting_rates';?>",
                 initComplete: function () {
                     this.api().columns([1, 2]).every(function () {
                         var column = this;

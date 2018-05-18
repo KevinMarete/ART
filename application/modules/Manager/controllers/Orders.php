@@ -51,8 +51,11 @@ class Orders extends MX_Controller {
 		echo json_encode(array('data' => $response['data']));
 	}
 
-	public function get_reporting_rates(){
-		$response = $this->Orders_model->get_reporting_data($this->session->userdata('scope'), $this->session->userdata('role'), date('Y-m-d', strtotime('first day of last month')), date('Y-m-d', strtotime('last day of last month')));
+	public function get_reporting_rates($role = null,$scope = null,$allocation = null){
+		$role = (isset($role)) ? $role :  $this->session->userdata('role') ;
+		$scope = (isset($scope)) ? $scope :  $this->session->userdata('scope') ;
+		$allocation = (isset($allocation)) ? TRUE :  FALSE ;
+		$response = $this->Orders_model->get_reporting_data($scope,$role, date('Y-m-d', strtotime('first day of last month')), date('Y-m-d', strtotime('last day of last month')),$allocation);
 		echo json_encode(array('data' => $response['data']));
 	}
 

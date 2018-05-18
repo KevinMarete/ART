@@ -115,20 +115,19 @@
                                             <tr>
                                                 <td><?= $drug['name'];?></td>
                                                 <td><?= $drug['pack_size'];?></td>
-
-
                                                 <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['balance']; // beginning balance ?></td>
                                                 <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['received']; // qty received?></td>
                                                 <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['dispensed_units'];// Qty Issued ?></td>
                                                 <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_consumed'];?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_on_hand'];?></td>
+                                                <?php }  ?>
                                                 <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['count'];?></td>
                                                 <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['received']; //dispensed?></td>
                                                 <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['received'];?></td>
                                                 <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['resupply'];?></td>
 
-                                                <?php } } ?>
+                                                <?php }  ?>
                                             </tr>
                                         <?php } ?>
                                     </form>

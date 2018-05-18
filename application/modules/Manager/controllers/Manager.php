@@ -40,6 +40,10 @@ class Manager extends MX_Controller {
 						'subcounty' => array('MFL Code', 'Facility Name', 'Status', 'Period', 'Actions'),
 						'county' => array('Subcounty', 'Submitted', 'Progress')
 					),
+					'subcounty_reports' => array(
+						'subcounty' => array('MFL Code', 'Facility Name', 'Status', 'Period', 'Actions'),
+						'county' => array('MFL Code', 'Facility Name', 'Status', 'Period', 'Actions')
+					),
 					'cdrr_maps' => array(
 						'subcounty' => array(
 							'drugs' => $this->Orders_model->get_drugs(),
@@ -81,6 +85,12 @@ class Manager extends MX_Controller {
 				$data['role'] = $this->session->userdata('role');
 				$data['cdrr_id'] = $this->uri->segment('4');
 				$data['map_id'] = $this->uri->segment('5');
+
+				$data['seg_4'] = $this->uri->segment('4');
+				$data['seg_5'] = $this->uri->segment('5');
+				$data['seg_6'] = $this->uri->segment('6');
+
+
 				// echo "<pre>"; var_dump($data['columns']);die;
 			}
 			$data['page_title'] = 'ART | ' . ucwords($title);
