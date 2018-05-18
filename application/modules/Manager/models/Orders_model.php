@@ -23,13 +23,14 @@ class Orders_model extends CI_Model {
         }
         return $response;
     }
-    public function actionOrder($orderid,$action,$user) {
+    public function actionOrder($orderid,$mapid,$action,$user) {
         $response = array();
         try {
             $this->db->set('status', $action);
             $this->db->where('id', $orderid);
+
             if ($this->db->update('tbl_cdrr')){
-                $array = array(
+                    $array = array(
                     'description' => $action,
                     'user_id' => $user,
                     'cdrr_id' => $orderid,
@@ -37,6 +38,23 @@ class Orders_model extends CI_Model {
                 );
                 $this->db->set($array);
                 $this->db->insert('tbl_cdrr_log');
+
+
+                // update maps
+                $this->db->set('status', $action);
+                $this->db->where('id', $mapid);
+                if ($this->db->update('tbl_maps')){
+
+                $maps_log = array(
+                    'description' => $action,
+                    'user_id' => $user,
+                    'maps_id' => $mapid,
+                    'created' => date('Y-m-d H:i:s')
+                );
+                $this->db->insert('tbl_maps_log',$maps_log);
+                }               
+                // update maps  -/>
+
 
                 $response['message'] = 'Order status was updated!';
                 $response['status'] = TRUE;
@@ -51,19 +69,10 @@ class Orders_model extends CI_Model {
         return $response;
     }
 
-    public function updateOrder($orderid,$order,$user) {
+    public function updateOrder($orderid,$mapid,$order,$user) {
         $response = array();
         try {   
             if ($this->db->update_batch('tbl_cdrr_item', $order, 'id') == 0) {
-
-                $array = array(
-                    'description' => 'updated',
-                    'user_id' => $user,
-                    'cdrr_id' => $orderid,
-                    'created' => date('Y-m-d H:i:s')
-                );
-                $this->db->set($array);
-                $this->db->insert('tbl_cdrr_log');
 
                 $response['message'] = 'Order was updated!';
                 $response['status'] = TRUE;

@@ -220,19 +220,19 @@
 
 
         $('#approveOrder').click(function(e){
-            $.get( "/ART/manager/orders/actionOrder/<?= $cdrr_id; ?>/approved", function( data ) {
+            $.get( "/ART/manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/approved", function( data ) {
               alert(data);
               window.location.href = "";
           });
         })
         $('#rejectOrder').click(function(e){
-            $.get( "/ART/manager/orders/actionOrder/<?= $cdrr_id; ?>/rejected", function( data ) {
+            $.get( "/ART/manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/rejected", function( data ) {
               alert(data);
               window.location.href = "";
           });
         })
         $('#complete_allocation').click(function(e){
-            $.get( "/ART/manager/orders/actionOrder/<?= $cdrr_id; ?>/allocated", function( data ) {
+            $.get( "/ART/manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/allocated", function( data ) {
               alert(data);
               window.location.href = "";
           });
@@ -241,7 +241,7 @@
         $('#save_allocation').click(function(e){
             // $('form')..serializeArray();
             var form = $('#orderForm');
-            var url ="/ART/manager/orders/updateOrder/<?= $cdrr_id; ?>";
+            var url ="/ART/manager/orders/updateOrder/<?= $cdrr_id.'/'.$map_id; ?>";
 
             $.ajax( {
               type: "POST",
@@ -249,11 +249,10 @@
               data: form.serialize(),
               success: function( response ) {
                 alert('Allocation Saved')
-
-                $.get( "/ART/manager/orders/actionOrder/<?= $cdrr_id; ?>/pending", function( data ) {
-              // alert(data);
-              // window.location.href = "";
-          });
+                $.get( "/ART/manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/pending", function( data ) {
+                    //some code
+                });
+              window.location.href = "";
 
 
             }

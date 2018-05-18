@@ -80,6 +80,7 @@ class Manager extends MX_Controller {
 				$data['columns'] = $columns[$page][$this->session->userdata('role')];
 				$data['role'] = $this->session->userdata('role');
 				$data['cdrr_id'] = $this->uri->segment('4');
+				$data['map_id'] = $this->uri->segment('5');
 				// echo "<pre>"; var_dump($data['columns']);die;
 			}
 			$data['page_title'] = 'ART | ' . ucwords($title);

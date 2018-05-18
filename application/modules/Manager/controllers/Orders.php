@@ -28,20 +28,20 @@ class Orders extends MX_Controller {
 		$this->session->set_flashdata('orders_msg', $message);
 		redirect('manager/orders/assign');
 	}
-	public function updateOrder($orderid)
+	public function updateOrder($orderid,$mapid)
 	{	
 		$updateArray = array();
 		foreach ($_POST as $key => $value) {
 			$vals = array(explode('-', $key)[0] => $value, 'id'=>explode('-', $key)[1]+0 );
 			array_push($updateArray, $vals);
 		}
-		$response = $this->Orders_model->updateOrder($orderid,$updateArray,$this->session->userdata('id'));
+		$response = $this->Orders_model->updateOrder($orderid,$mapid,$updateArray,$this->session->userdata('id'));
 		echo $response['message'];
 	}
-	public function actionOrder($orderid,$action)
+	public function actionOrder($orderid,$mapid,$action)
 	{	
 
-		$response = $this->Orders_model->actionOrder($orderid,$action,$this->session->userdata('id'));
+		$response = $this->Orders_model->actionOrder($orderid,$mapid,$action,$this->session->userdata('id'));
 		echo $response['message'];
 	}
 
