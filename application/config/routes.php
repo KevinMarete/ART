@@ -56,6 +56,7 @@ $route['upload'] = 'FtpService/upload';
 $route['files/(:any)'] = 'FtpService/get_files/$1';
 $route['analysis'] = 'FtpService/analysis';
 $route['admin'] = 'Admin';
+$route['manager'] = 'Manager';
 $route['manager/login'] = 'Manager/load_page/user/login/Login';
 $route['manager/forgot_pass'] = 'Manager/load_page/user/forgot/Forgot Password';
 $route['manager/register_account'] = 'Manager/load_page/user/register/New Account';
