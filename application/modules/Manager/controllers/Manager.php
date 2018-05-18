@@ -60,7 +60,7 @@ class Manager extends MX_Controller {
 					),
 					'allocation' => array(
 						'subcounty' => array('MFL Code','Facility Name', 'Period', 'Status', 'Actions'),
-						'county' => array('Period', 'Allocated', 'Status', 'Actions')
+						'county' => array('Period', 'Approved', 'Status', 'Actions')
 					),
 					'allocate' => array(
 						'subcounty' => array(
@@ -78,7 +78,7 @@ class Manager extends MX_Controller {
 					),
 					'edit_allocation' => array(
 						'subcounty' => array(),
-						'county' => array('Subcounty', 'Status', 'Approval', 'Actions')
+						'county' => array('Subcounty', 'Report Count', 'Status', 'Approval', 'Actions')
 					)
 				);
 				$data['columns'] = $columns[$page][$this->session->userdata('role')];

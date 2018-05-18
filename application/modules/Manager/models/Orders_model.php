@@ -201,14 +201,14 @@ class Orders_model extends CI_Model {
             if($role == 'county'){
                 $sql = "SELECT 
                 DATE_FORMAT(c.period_begin, '%M-%Y') period,
-                CONCAT_WS('/', COUNT(DISTINCT sc.name),sb.total ) allocated,
-                IF(COUNT(DISTINCT sc.name) != sb.total, 'Incomplete', 'Complete') status,
+                CONCAT_WS('/', SUM(IF(c.status = 'approved', 1, 0)) , sb.total) approved,
+                IF(SUM(IF(c.status = 'approved', 1, 0)) != sb.total, 'Incomplete', 'Complete') status,
                 CONCAT('<a href=edit_allocation/', c.period_begin, '>View/Edit</a>')  option
                 FROM tbl_cdrr c 
-                INNER JOIN tbl_maps m ON c.facility_id = m.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status = 'allocated'
+                INNER JOIN tbl_maps m ON c.facility_id = m.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status IN('allocated', 'approved')
                 INNER JOIN tbl_facility f ON c.facility_id = f.id  
                 INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id,
-                (SELECT COUNT(DISTINCT sb.name) total FROM tbl_facility fc INNER JOIN tbl_subcounty sb ON fc.subcounty_id = sb.id WHERE sb.county_id = ? AND fc.category != 'satellite') sb
+                (SELECT COUNT(DISTINCT fc.name) total FROM tbl_facility fc INNER JOIN tbl_subcounty sb ON fc.subcounty_id = sb.id WHERE sb.county_id = ? AND fc.category != 'satellite') sb
                 WHERE sc.county_id = ?
                 AND f.category != 'satellite'
                 GROUP BY period
@@ -254,6 +254,7 @@ class Orders_model extends CI_Model {
             $currmonth = date('Ym');
             $sql = "SELECT                      
             UCASE(sc.name) subcounty,
+            CONCAT_WS('/', SUM(IF(c.period_begin IS NOT NULL, 1, 0)), (SUM(IF(c.period_begin IS NOT NULL, 1, 0)) + SUM(IF(c.period_begin IS NULL, 1, 0)))) submitted,
             IF(SUM(IF(c.period_begin IS NOT NULL, 1, 0)) = (SUM(IF(c.period_begin IS NOT NULL, 1, 0)) + SUM(IF(c.period_begin IS NULL, 1, 0))), 'Allocated', 'Unallocated') allocation,
             'N/A' approval_status,
             IF(SUM(IF(c.period_begin IS NOT NULL, 1, 0)) = (SUM(IF(c.period_begin IS NOT NULL, 1, 0)) + SUM(IF(c.period_begin IS NULL, 1, 0))), CONCAT('<a href=view_allocate/', sc.id,'/', c.period_begin, '>View/Verify Allocation</a>'), CONCAT('<a href=','../allocation/subcounty/',sc.id,'/$currmonth','> Pending Allocation</a>')) option
@@ -300,8 +301,6 @@ class Orders_model extends CI_Model {
         }
         return $response;
     }
-
-    
 
     public function get_cdrr_data($cdrr_id,$scope = null,$role = null){
 
@@ -388,8 +387,6 @@ class Orders_model extends CI_Model {
         }
         return $response;
     }
-
-
 
     public function get_maps_data($maps_id,$scope = null,$role = null){
         $role_cond = ($role == 'subcounty') ? " AND f.subcounty_id = $scope" : " AND sc.county_id = $scope";

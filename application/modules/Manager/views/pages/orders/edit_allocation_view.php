@@ -39,7 +39,7 @@
     $(document).ready(function () {
         $('#dataTables-listing').DataTable({
             responsive: true,
-            order: [[1, "asc"]],
+            order: [[1, "desc"]],
             pagingType: "full_numbers",
             ajax: "<?php echo base_url() . 'Manager/Orders/get_county_allocation/'. $this->uri->segment('4');; ?>",
             initComplete: function () {
