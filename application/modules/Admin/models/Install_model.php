@@ -82,8 +82,8 @@ class Install_model extends CI_Model {
         $this->db->select('tbl_install.id as install_id,tbl_install.version,tbl_install.setup_date,tbl_install.upgrade_date,tbl_install.comments,'
                 . 'tbl_install.contact_name,tbl_install.contact_phone,tbl_install.emrs_used,tbl_install.active_patients,tbl_install.is_internet,'
                 . 'tbl_install.is_usage,tbl_install.user_id,tbl_facility.name,tbl_facility.mflcode,tbl_facility.category,tbl_facility.subcounty_id,'
-                . 'tbl_subcounty.id,tbl_subcounty.name as subcounty_name,tbl_user.name as user_name,tbl_county.name as county_name,'
-                . 'tbl_partner.name as partner_name');
+                . 'tbl_subcounty.id,tbl_subcounty.name as subcounty_name, CONCAT_WS(" ", tbl_user.firstname, tbl_user.lastname) as user_name,tbl_county.name as county_name,'
+                . 'tbl_partner.name as partner_name', FALSE);
         $this->db->from('tbl_install');
         $this->db->join('tbl_facility', 'tbl_install.facility_id=tbl_facility.id');
         $this->db->join('tbl_subcounty', 'tbl_facility.subcounty_id=tbl_subcounty.id');

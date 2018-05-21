@@ -47,7 +47,7 @@ $(function () {
         $("#user option").remove();
         $("#user").append($("<option value=''>Select Assignee</option>"));
         $.each(data, function (i, v) {
-            $("#user").append($("<option value='" + v.id + "'>" + v.name + "</option>"));
+            $("#user").append($("<option value='" + v.id + "'>" + v.firstname +' '+ v.lastname + "</option>"));
         });
     });
 

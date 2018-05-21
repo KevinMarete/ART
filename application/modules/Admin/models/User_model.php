@@ -81,7 +81,7 @@ class User_model extends CI_Model {
 
     //function get user_names
     public function get_username() {
-        $this->db->select('id, name');
+        $this->db->select('id, CONCAT_WS(" ", firstname, lastname) name', FALSE);
         $this->db->from('tbl_user');
         $query = $this->db->get();
         return $query->result();
