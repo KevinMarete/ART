@@ -49,12 +49,17 @@ class User_model extends CI_Model {
 	public function create_user($data){
 		$response = array();
 		try{
+			$scope_id = $data['scope_id'];
 			$data['password'] = md5($data['password']);
 			unset($data['cpassword']);
+			unset($data['scope_id']);
 			$this->db->insert($this->table, $data);
 			$count = $this->db->affected_rows();
 			if($count > 0){
 				$data['id'] = $this->db->insert_id();
+				//Assign scope of user role
+				$this->db->replace('tbl_user_scope', array('scope_id' => $scope_id, 'role_id' => $data['role_id'], 'user_id' => $data['id']));
+				//Set response message
 				$response['message'] = 'User account for <b>'.$data['firstname'].' '.$data['lasttname'].'</b> was created!';
 				$response['data'] = $data;
 				$response['status'] = TRUE;

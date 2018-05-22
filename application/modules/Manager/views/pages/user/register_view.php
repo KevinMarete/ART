@@ -81,6 +81,7 @@
                                     </select>
                                 </div>
                             </div>
+                            <span id="scope_section"></span>
                             <hr/>
                             <div class="form-group">
                                 <label for="inputpassword" class="col-sm-2 control-label">Password</label>
@@ -135,6 +136,20 @@
                     alert("Passwords Don't Match");
                 }
             }
+
+            //Add scopes after role is choosen
+            $('#inputrole').on('change', function(){
+                var role = $('#inputrole :selected').text()
+                $('#scope_section').empty();
+                $.getJSON('User/get_role_scope/'+role, function(data){
+                    if(data.length > 0){
+                        $('#scope_section').html('<div class="form-group"><label for="inputscope" class="col-sm-2 control-label">Scope</label><div class="col-sm-10"><select class="form-control" id="inputscope" name="scope_id" required><option value=" ">Select Scope</option></select></div></div>');
+                        $.each(data, function(i, v){
+                            $('#inputscope').append($("<option value='" + v.id + "'>" + v.name + "</option>"));
+                        });
+                    }
+                });
+            });
         });
     </script>
 
