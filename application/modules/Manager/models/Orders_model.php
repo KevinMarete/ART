@@ -4,25 +4,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Orders_model extends CI_Model {
 
-    public function update_user_scope($data) {
-        $response = array();
-        try {
-            $this->db->replace('tbl_user_scope', $data);
-            $count = $this->db->affected_rows();
-            if ($count > 0) {
-                $response['message'] = 'User account scope was updated!';
-                $response['data'] = $data;
-                $response['status'] = TRUE;
-            } else {
-                $response['message'] = 'User account scope was not updated!';
-                $response['status'] = FALSE;
-            }
-        } catch (Execption $e) {
-            $response['status'] = FALSE;
-            $response['message'] = $e->getMessage();
-        }
-        return $response;
-    }
     public function actionOrder($orderid,$mapid,$action,$user) {
         $response = array();
         try {

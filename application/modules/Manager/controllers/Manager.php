@@ -25,10 +25,8 @@ class Manager extends MX_Controller {
 				$data['columns'] = $this->db->list_fields('tbl_' . $page);
 				$data['content_view'] = 'template/table_view';
 			}
-			if ($page == 'assign') {
-            //$data['scopes'] = $this->db->order_by('name', 'ASC')->get('tbl_' . $this->session->userdata('role'))->result_array();
-				$data['scopes'] = array();
-			} else if ($module == 'orders') {
+
+			if ($module == 'orders') {
 				$this->load->model('Orders_model');
 				$data['page_name'] = $page;
 				$columns = array(
@@ -85,13 +83,9 @@ class Manager extends MX_Controller {
 				$data['role'] = $this->session->userdata('role');
 				$data['cdrr_id'] = $this->uri->segment('4');
 				$data['map_id'] = $this->uri->segment('5');
-
 				$data['seg_4'] = $this->uri->segment('4');
 				$data['seg_5'] = $this->uri->segment('5');
 				$data['seg_6'] = $this->uri->segment('6');
-
-
-				// echo "<pre>"; var_dump($data['columns']);die;
 			}
 			$data['page_title'] = 'ART | ' . ucwords($title);
 			$this->load->view('template/template_view', $data);

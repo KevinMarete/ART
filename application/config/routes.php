@@ -81,8 +81,6 @@ $route['manager/orders/edit_allocation/(:any)'] = 'Manager/load_template/orders/
 
 $route['manager/update_profile'] = 'Manager/user/update_profile';
 $route['manager/update_password'] = 'Manager/user/update_password';
-$route['manager/admin/assign'] = 'Manager/load_template/admin/assign/Assign/0';
-$route['manager/assign_scope'] = 'Manager/orders/assign_scope';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

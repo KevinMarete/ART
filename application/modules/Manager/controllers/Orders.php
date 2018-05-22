@@ -7,27 +7,7 @@ class Orders extends MX_Controller {
 		parent::__construct();
 		$this->load->model('Orders_model');
 	}
-
-	public function assign_scope(){
-		$post_data['scope_id'] = $this->input->post('scope');
-		$post_data['role_id'] = $this->session->userdata('role_id');
-		$post_data['user_id'] = $this->session->userdata('id');
-
-		$response = $this->Orders_model->update_user_scope($post_data);
-		if($response['status']){
-			$this->session->set_userdata('scope', $post_data['scope_id']);
-			$message = '<div class="alert alert-success alert-dismissible" role="alert">
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			'.$response['message'].'</div>';
-			
-		}else{
-			$message = '<div class="alert alert-danger alert-dismissible" role="alert">
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<strong>Error!</strong> '.$response['message'].'</div>';
-		}
-		$this->session->set_flashdata('orders_msg', $message);
-		redirect('manager/orders/assign');
-	}
+	
 	public function updateOrder($orderid,$mapid)
 	{	
 		$updateArray = array();
@@ -40,7 +20,6 @@ class Orders extends MX_Controller {
 	}
 	public function actionOrder($orderid,$mapid,$action)
 	{	
-
 		$response = $this->Orders_model->actionOrder($orderid,$mapid,$action,$this->session->userdata('id'));
 		echo $response['message'];
 	}
