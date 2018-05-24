@@ -72,13 +72,13 @@
                                 <table class=" table-striped table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                         <th rowspan="3">Drug Name</th>
-                                         <th rowspan="3">Pack Size</th>
-                                         <th>Beginning Balance</th>
-                                         <th>Quantity Received</th>
-                                         <th>Qty ISSUED  <span class="label label-info">* 1</span></th>
-                                         <th>End fo Month SAH <span class="label label-info">* 2</span></th>
-                                         <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
+                                           <th rowspan="3">Drug Name</th>
+                                           <th rowspan="3">Pack Size</th>
+                                           <th>Beginning Balance</th>
+                                           <th>Quantity Received</th>
+                                           <th>Qty ISSUED  <span class="label label-info">* 1</span></th>
+                                           <th>End fo Month SAH <span class="label label-info">* 2</span></th>
+                                           <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
                                             <th >Aggregate Consumed</th>
                                             <th >Aggregate SAH</th>
                                         <?php }?>
@@ -146,14 +146,14 @@
                                                 <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['resupply'];?></td>
                                                 <td><?= $drugamc;?></td>
                                                 <td id="mos"><?= 
-                                                ($count>0 && $drugamc>0) ? number_format($count/$drugamc) : 0 ;
+                                                $mos =   ($count>0 && $drugamc>0) ? number_format($count/$drugamc) : 0 ;
                                                 ?></td>
                                                 <td id="auto">
                                                     <?= $drugamc * 4;?>
                                                 </td>
                                                 <td><input type="text" class="form-control" name="qty_allocated-<?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['cdrr_item_id'];?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugname]['resupply']) * 4 ; // rationalized ?>"></td>
                                                 <td><input type="text" class="form-control" name="feedback-<?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['cdrr_item_id'];?>" value=""></td>
-                                                <td>RESUPPLY</td>
+                                                <td><?= ($mos < 4) ? 'RESUPPLY' : 'MONITOR' ; ?></td>
 
 
                                             <?php  } ?>
