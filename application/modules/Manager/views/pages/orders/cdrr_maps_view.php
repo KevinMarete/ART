@@ -22,10 +22,7 @@
                         </div>
                         <div class="col-md-8 ">
                             <span class="label label-info">* 1</span> - <small> Total Qty ISSUED to ARV dispensing sites (Satellite sites plus Central site dispensing point(s) where relevant)</small><br />
-                            <span class="label label-info">* 2</span> - <small> End of Month Physical Count</small><br />
-                            <span class="label label-info">* 3</span> - <small> Reported Aggregated Quantity CONSUMED in the reporting period (Satellite sites plus Central site dispensing point where relevant)</small> <br />
-                            <span class="label label-info">* 4</span> - <small> Reported Aggregated Physical Stock on Hand at end of reporting period (Satellite sites plus Central site dispensing point where relevant)
-                            </small>
+                            <span class="label label-info">* 2</span> - <small> End of Month Physical </small>
                             <br />
                             <br />
                         </div>
@@ -72,9 +69,7 @@
                                         <th>Beginning Balance</th>
                                         <th>Quantity Received</th>
                                         <th>Qty ISSUED  <span class="label label-info">* 1</span></th>
-                                        <th>End Month Count <span class="label label-info">* 2</span></th>
-                                        <th>Qty Consumed <span class="label label-info">* 3</span></th>
-                                        <th>Physical SAH<span class="label label-info">* 4</span></th>
+                                        <th>End fo Month SAH <span class="label label-info">* 2</span></th>
                                         <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
                                             <th >Aggregate Consumed</th>
                                             <th >Aggregate SAH</th>
@@ -86,25 +81,21 @@
                                         <th><small>(packs)</small></th>
                                         <th><small>(packs)</small></th>
                                         <th><small>(packs)</small></th>
-                                        <th><small>(packs)</small></th>
-                                        <th><small>(packs)</small></th>
-                                        <th><small>(packs)</small></th>
                                         <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
                                             <th><small>(packs)</small></th>
                                             <th><small>(packs)</small></th>
                                         <?php }?>
+                                        <th><small>(packs)</small></th>
                                     </tr>
                                     <tr>
                                         <th>A</th>
                                         <th>B</th>
                                         <th>C</th>
                                         <th>D</th>
-                                        <th>E</th>
                                         <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
                                             <th>F</th>
                                             <th>G</th>
                                         <?php }?>
-                                        <th>H</th>
                                         <th>J</th>
                                     </tr>
                                 </thead>
@@ -116,15 +107,13 @@
                                                 <td><?= $drug['name'];?></td>
                                                 <td><?= $drug['pack_size'];?></td>
                                                 <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['balance']; // beginning balance ?></td>
-                                                <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['received']; // qty received?></td>
+                                                <td><?= (isset($columns['cdrrs']['data']['cdrr_item'][$drugname]['received'])) ? $columns['cdrrs']['data']['cdrr_item'][$drugname]['received'] : 0 ;; // qty received?></td>
                                                 <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['dispensed_units'];// Qty Issued ?></td>
+                                                <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['count'];?></td>
                                                 <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_consumed'];?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_on_hand'];?></td>
                                                 <?php }  ?>
-                                                <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['count'];?></td>
-                                                <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['received']; //dispensed?></td>
-                                                <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['received'];?></td>
                                                 <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['resupply'];?></td>
 
                                                 <?php }  ?>

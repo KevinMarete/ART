@@ -327,7 +327,7 @@ class Orders_model extends CI_Model {
                         'facility_name' => $result['facility_name'], 
                         'mflcode' => $result['mflcode'], 
                         'county' => $result['county'], 
-                        'subcounty' => $result['subcounty']
+                        'subcounty' => $result['subcounty'],
                     );
 
                     $response['data']['cdrr_item'][$result['drug_name']] = array(
@@ -346,6 +346,7 @@ class Orders_model extends CI_Model {
                         'aggr_consumed' => $result['aggr_consumed'], 
                         'aggr_on_hand' => $result['aggr_on_hand'], 
                         'publish' => $result['publish'], 
+                        'drugamc' => $this->getDrugAMC( $result['mflcode'],$result['drug_id']),
                         'cdrr_id' => $result['cdrr_id'], 
                         'drug_id' => $result['drug_id'], 
                         'qty_allocated' => $result['qty_allocated'], 
@@ -367,6 +368,21 @@ class Orders_model extends CI_Model {
             $response['message'] = $e->getMessage();
         }
         return $response;
+    }
+
+    public function getDrugAMC($mflcode,$drug){
+        $sql = "SELECT sum(aggr_consumed)/count(aggr_consumed) as AMC
+        FROM tbl_cdrr_item ci 
+        left join tbl_cdrr c on c.id = ci.cdrr_id
+        left join tbl_facility f on f.id = c.facility_id
+        WHERE 
+        period_begin >= '2018-03-01'
+        and mflcode = $mflcode
+        and  drug_id = $drug ";
+
+        $amc_data = $this->db->query($sql)->result_array()[0]['AMC']+0;
+        
+        return $amc_data; 
     }
 
     public function get_maps_data($maps_id,$scope = null,$role = null){
