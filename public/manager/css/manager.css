@@ -6,3 +6,27 @@
 	color: #000000 !important;
 	font-weight: bold;
 }
+.navbar-default {
+    background-color: #3d4a57;
+    border-color: #333;
+}
+.dropdown-menu li a {
+    word-wrap: break-word;
+    white-space: normal;
+}
+.nav > li > a:focus, .nav > li > a:hover {
+    text-decoration: none;
+    background-color: black;
+}
+a {
+    color: #bbb;
+    background-color:none;
+    text-decoration: none;
+}
+.navbar-default .navbar-brand {
+    color: #fff;
+}
+.sidebar ul li a.active {
+    background-color: black;
+    text-decoration: none;
+}
