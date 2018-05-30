@@ -4,11 +4,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Status extends MX_Controller {
 
-    public function __construct() {
-        parent::__construct();
-        $this->load->model('settings/Status_model', 'status');
-    }
-
     public function index() {
         $data['content_view'] = 'pages/admin/status_view';
         $data['page_title'] = 'ART | Status';
@@ -17,7 +12,7 @@ class Status extends MX_Controller {
     }
 
     public function ajax_list() {
-        $list = $this->status->get_datatables();
+        $list = $this->Status_model->get_datatables();
         $data = array();
         $no = '';
         foreach ($list as $status) {
@@ -32,8 +27,8 @@ class Status extends MX_Controller {
         }
 
         $output = array(
-            "recordsTotal" => $this->status->count_all(),
-            "recordsFiltered" => $this->status->count_filtered(),
+            "recordsTotal" => $this->Status_model->count_all(),
+            "recordsFiltered" => $this->Status_model->count_filtered(),
             "data" => $data,
         );
         //output to json format
@@ -41,7 +36,7 @@ class Status extends MX_Controller {
     }
 
     public function ajax_edit($id) {
-        $data = $this->status->get_by_id($id);
+        $data = $this->Status_model->get_by_id($id);
         echo json_encode($data);
     }
 
@@ -50,7 +45,7 @@ class Status extends MX_Controller {
         $data = array(
             'name' => $this->input->post('name')
         );
-        $insert = $this->status->save($data);
+        $insert = $this->Status_model->save($data);
         echo json_encode(array("status" => TRUE));
     }
 
@@ -59,12 +54,12 @@ class Status extends MX_Controller {
         $data = array(
             'name' => $this->input->post('name')
         );
-        $this->status->update(array('id' => $this->input->post('id')), $data);
+        $this->Status_model->update(array('id' => $this->input->post('id')), $data);
         echo json_encode(array("status" => TRUE));
     }
 
     public function ajax_delete($id) {
-        $this->status->delete_by_id($id);
+        $this->Status_model->delete_by_id($id);
         echo json_encode(array("status" => TRUE));
     }
 

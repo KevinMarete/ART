@@ -4,11 +4,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Generic extends MX_Controller {
 
-    public function __construct() {
-        parent::__construct();
-        $this->load->model('settings/Generic_model', 'generic');
-    }
-
     public function index() {
         $data['content_view'] = 'pages/admin/generic_view';
         $data['page_title'] = 'ART | Generic';
@@ -17,7 +12,7 @@ class Generic extends MX_Controller {
     }
 
     public function ajax_list() {
-        $list = $this->generic->get_datatables();
+        $list = $this->Generic_model->get_datatables();
         $data = array();
         $no = '';
         foreach ($list as $generic) {
@@ -33,8 +28,8 @@ class Generic extends MX_Controller {
         }
 
         $output = array(
-            "recordsTotal" => $this->generic->count_all(),
-            "recordsFiltered" => $this->generic->count_filtered(),
+            "recordsTotal" => $this->Generic_model->count_all(),
+            "recordsFiltered" => $this->Generic_model->count_filtered(),
             "data" => $data,
         );
         //output to json format
@@ -42,7 +37,7 @@ class Generic extends MX_Controller {
     }
 
     public function ajax_edit($id) {
-        $data = $this->generic->get_by_id($id);
+        $data = $this->Generic_model->get_by_id($id);
         echo json_encode($data);
     }
 
@@ -52,7 +47,7 @@ class Generic extends MX_Controller {
             'name' => $this->input->post('name'),
             'abbreviation' => $this->input->post('abbreviation')
         );
-        $insert = $this->generic->save($data);
+        $insert = $this->Generic_model->save($data);
         echo json_encode(array("status" => TRUE));
     }
 
@@ -62,12 +57,12 @@ class Generic extends MX_Controller {
             'name' => $this->input->post('name'),
             'abbreviation' => $this->input->post('abbreviation')
         );
-        $this->generic->update(array('id' => $this->input->post('id')), $data);
+        $this->Generic_model->update(array('id' => $this->input->post('id')), $data);
         echo json_encode(array("status" => TRUE));
     }
 
     public function ajax_delete($id) {
-        $this->generic->delete_by_id($id);
+        $this->Generic_model->delete_by_id($id);
         echo json_encode(array("status" => TRUE));
     }
 

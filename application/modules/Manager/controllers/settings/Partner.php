@@ -3,12 +3,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Partner extends MX_Controller {
-
-    public function __construct() {
-        parent::__construct();
-        $this->load->model('settings/Partner_model', 'partner');
-    }
-
     public function index() {
         $data['content_view'] = 'pages/admin/partner_view';
         $data['page_title'] = 'ART | Partner';
@@ -17,7 +11,7 @@ class Partner extends MX_Controller {
     }
 
     public function ajax_list() {
-        $list = $this->partner->get_datatables();
+        $list = $this->Partner_model->get_datatables();
         $data = array();
         $no = '';
         foreach ($list as $partner) {
@@ -32,8 +26,8 @@ class Partner extends MX_Controller {
         }
 
         $output = array(
-            "recordsTotal" => $this->partner->count_all(),
-            "recordsFiltered" => $this->partner->count_filtered(),
+            "recordsTotal" => $this->Partner_model->count_all(),
+            "recordsFiltered" => $this->Partner_model->count_filtered(),
             "data" => $data,
         );
         //output to json format
@@ -41,7 +35,7 @@ class Partner extends MX_Controller {
     }
 
     public function ajax_edit($id) {
-        $data = $this->partner->get_by_id($id);
+        $data = $this->Partner_model->get_by_id($id);
         echo json_encode($data);
     }
 
@@ -50,7 +44,7 @@ class Partner extends MX_Controller {
         $data = array(
             'name' => $this->input->post('name'),
         );
-        $insert = $this->partner->save($data);
+        $insert = $this->Partner_model->save($data);
         echo json_encode(array("status" => TRUE));
     }
 
@@ -59,12 +53,12 @@ class Partner extends MX_Controller {
         $data = array(
             'name' => $this->input->post('name')
         );
-        $this->partner->update(array('id' => $this->input->post('id')), $data);
+        $this->Partner_model->update(array('id' => $this->input->post('id')), $data);
         echo json_encode(array("status" => TRUE));
     }
 
     public function ajax_delete($id) {
-        $this->partner->delete_by_id($id);
+        $this->Partner_model->delete_by_id($id);
         echo json_encode(array("status" => TRUE));
     }
 

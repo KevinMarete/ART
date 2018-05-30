@@ -3,13 +3,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Drug extends MX_Controller {
 
-    public function __construct() {
-        parent::__construct();
-        $this->load->model('settings/Drug_model', 'drug');
-        $this->load->model('settings/Generic_model');
-        $this->load->model('settings/Formulation_model');
-    }
-
     public function index() {
         $data['content_view'] = 'pages/admin/drug_view';
         $data['page_title'] = 'ART | Drug';
@@ -20,7 +13,7 @@ class Drug extends MX_Controller {
     }
 
     public function ajax_list() {
-        $list = $this->drug->get_datatables();
+        $list = $this->Drug_model->get_datatables();
         $data = array();
         $no = '';
         foreach ($list as $drug) {
@@ -38,8 +31,8 @@ class Drug extends MX_Controller {
         }
 
         $output = array(
-            "recordsTotal" => $this->drug->count_all(),
-            "recordsFiltered" => $this->drug->count_filtered(),
+            "recordsTotal" => $this->Drug_model->count_all(),
+            "recordsFiltered" => $this->Drug_model->count_filtered(),
             "data" => $data,
         );
         //output to json format
@@ -47,7 +40,7 @@ class Drug extends MX_Controller {
     }
 
     public function ajax_edit($id) {
-        $data = $this->drug->get_by_id($id);
+        $data = $this->Drug_model->get_by_id($id);
         echo json_encode($data);
     }
 
@@ -59,7 +52,7 @@ class Drug extends MX_Controller {
             'generic_id' => $this->input->post('generic_id'),
             'formulation_id' => $this->input->post('formulation_id')
         );
-        $insert = $this->drug->save($data);
+        $insert = $this->Drug_model->save($data);
         echo json_encode(array("status" => TRUE));
     }
 
@@ -71,12 +64,12 @@ class Drug extends MX_Controller {
             'generic_id' => $this->input->post('generic_id'),
             'formulation_id' => $this->input->post('formulation_id')
         );
-        $this->drug->update(array('id' => $this->input->post('id')), $data);
+        $this->Drug_model->update(array('id' => $this->input->post('id')), $data);
         echo json_encode(array("status" => TRUE));
     }
 
     public function ajax_delete($id) {
-        $this->drug->delete_by_id($id);
+        $this->Drug_model->delete_by_id($id);
         echo json_encode(array("status" => TRUE));
     }
 

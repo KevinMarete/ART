@@ -4,14 +4,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Regimen extends MX_Controller {
 
-    public function __construct() {
-        parent::__construct();
-        $this->load->model('settings/Regimen_model', 'regimen');
-        $this->load->model('settings/Category_model');
-        $this->load->model('settings/Service_model');
-        $this->load->model('settings/Line_model');
-    }
-
     public function index() {
         $data['content_view'] = 'pages/admin/regimen_view';
         $data['page_title'] = 'ART | Regimen';
@@ -23,7 +15,7 @@ class Regimen extends MX_Controller {
     }
 
     public function ajax_list() {
-        $list = $this->regimen->get_datatables();
+        $list = $this->Regimen_model->get_datatables();
         $data = array();
         $no = '';
         foreach ($list as $regimen) {
@@ -44,8 +36,8 @@ class Regimen extends MX_Controller {
         }
 
         $output = array(
-            "recordsTotal" => $this->regimen->count_all(),
-            "recordsFiltered" => $this->regimen->count_filtered(),
+            "recordsTotal" => $this->Regimen_model->count_all(),
+            "recordsFiltered" => $this->Regimen_model->count_filtered(),
             "data" => $data,
         );
         //output to json format
@@ -53,7 +45,7 @@ class Regimen extends MX_Controller {
     }
 
     public function ajax_edit($id) {
-        $data = $this->regimen->get_by_id($id);
+        $data = $this->Regimen_model->get_by_id($id);
         echo json_encode($data);
     }
 
@@ -67,7 +59,7 @@ class Regimen extends MX_Controller {
             'service_id' => $this->input->post('service_id'),
             'line_id' => $this->input->post('line_id')
         );
-        $insert = $this->regimen->save($data);
+        $insert = $this->Regimen_model->save($data);
         echo json_encode(array("status" => TRUE));
     }
 
@@ -81,12 +73,12 @@ class Regimen extends MX_Controller {
             'service_id' => $this->input->post('service_id'),
             'line_id' => $this->input->post('line_id')
         );
-        $this->regimen->update(array('id' => $this->input->post('id')), $data);
+        $this->Regimen_model->update(array('id' => $this->input->post('id')), $data);
         echo json_encode(array("status" => TRUE));
     }
 
     public function ajax_delete($id) {
-        $this->regimen->delete_by_id($id);
+        $this->Regimen_model->delete_by_id($id);
         echo json_encode(array("status" => TRUE));
     }
 

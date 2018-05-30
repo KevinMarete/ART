@@ -4,20 +4,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class County extends MX_Controller {
 
-    public function __construct() {
-        parent::__construct();
-        $this->load->model('settings/County_model', 'county');
-    }
-
     public function index() {
         $data['content_view'] = 'pages/admin/county_view';
         $data['page_title'] = 'ART | County';
-        $data['page_name']='county';
+        $data['page_name'] = 'county';
         $this->load->view('template/template_view', $data);
     }
 
     public function ajax_list() {
-        $list = $this->county->get_datatables();
+        $list = $this->County_model->get_datatables();
         $data = array();
         $no = '';
         foreach ($list as $county) {
@@ -32,8 +27,8 @@ class County extends MX_Controller {
         }
 
         $output = array(
-            "recordsTotal" => $this->county->count_all(),
-            "recordsFiltered" => $this->county->count_filtered(),
+            "recordsTotal" => $this->County_model->count_all(),
+            "recordsFiltered" => $this->County_model->count_filtered(),
             "data" => $data,
         );
         //output to json format
@@ -41,7 +36,7 @@ class County extends MX_Controller {
     }
 
     public function ajax_edit($id) {
-        $data = $this->county->get_by_id($id);
+        $data = $this->County_model->get_by_id($id);
         echo json_encode($data);
     }
 
@@ -50,7 +45,7 @@ class County extends MX_Controller {
         $data = array(
             'name' => $this->input->post('name')
         );
-        $insert = $this->county->save($data);
+        $insert = $this->County_model->save($data);
         echo json_encode(array("status" => TRUE));
     }
 
@@ -59,12 +54,12 @@ class County extends MX_Controller {
         $data = array(
             'name' => $this->input->post('name')
         );
-        $this->county->update(array('id' => $this->input->post('id')), $data);
+        $this->County_model->update(array('id' => $this->input->post('id')), $data);
         echo json_encode(array("status" => TRUE));
     }
 
     public function ajax_delete($id) {
-        $this->county->delete_by_id($id);
+        $this->County_model->delete_by_id($id);
         echo json_encode(array("status" => TRUE));
     }
 

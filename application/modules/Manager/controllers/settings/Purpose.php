@@ -4,11 +4,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Purpose extends MX_Controller {
 
-    public function __construct() {
-        parent::__construct();
-        $this->load->model('settings/Purpose_model', 'purpose');
-    }
-
     public function index() {
         $data['content_view'] = 'pages/admin/purpose_view';
         $data['page_title'] = 'ART | Purpose';
@@ -17,7 +12,7 @@ class Purpose extends MX_Controller {
     }
 
     public function ajax_list() {
-        $list = $this->purpose->get_datatables();
+        $list = $this->Purpose_model->get_datatables();
         $data = array();
         $no = '';
         foreach ($list as $purpose) {
@@ -32,8 +27,8 @@ class Purpose extends MX_Controller {
         }
 
         $output = array(
-            "recordsTotal" => $this->purpose->count_all(),
-            "recordsFiltered" => $this->purpose->count_filtered(),
+            "recordsTotal" => $this->Purpose_model->count_all(),
+            "recordsFiltered" => $this->Purpose_model->count_filtered(),
             "data" => $data,
         );
         //output to json format
@@ -41,7 +36,7 @@ class Purpose extends MX_Controller {
     }
 
     public function ajax_edit($id) {
-        $data = $this->purpose->get_by_id($id);
+        $data = $this->Purpose_model->get_by_id($id);
         echo json_encode($data);
     }
 
@@ -50,7 +45,7 @@ class Purpose extends MX_Controller {
         $data = array(
             'name' => $this->input->post('name')
         );
-        $insert = $this->purpose->save($data);
+        $insert = $this->Purpose_model->save($data);
         echo json_encode(array("status" => TRUE));
     }
 
@@ -59,12 +54,12 @@ class Purpose extends MX_Controller {
         $data = array(
             'name' => $this->input->post('name')
         );
-        $this->purpose->update(array('id' => $this->input->post('id')), $data);
+        $this->Purpose_model->update(array('id' => $this->input->post('id')), $data);
         echo json_encode(array("status" => TRUE));
     }
 
     public function ajax_delete($id) {
-        $this->purpose->delete_by_id($id);
+        $this->Purpose_model->delete_by_id($id);
         echo json_encode(array("status" => TRUE));
     }
 

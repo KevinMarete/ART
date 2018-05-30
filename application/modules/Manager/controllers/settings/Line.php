@@ -3,11 +3,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Line extends MX_Controller {
 
-    public function __construct() {
-        parent::__construct();
-        $this->load->model('settings/Line_model', 'line');
-    }
-
     public function index() {
         $data['content_view'] = 'pages/admin/line_view';
         $data['page_title'] = 'ART | Line';
@@ -16,7 +11,7 @@ class Line extends MX_Controller {
     }
 
     public function ajax_list() {
-        $list = $this->line->get_datatables();
+        $list = $this->Line_model->get_datatables();
         $data = array();
         $no = '';
         foreach ($list as $line) {
@@ -31,8 +26,8 @@ class Line extends MX_Controller {
         }
 
         $output = array(
-            "recordsTotal" => $this->line->count_all(),
-            "recordsFiltered" => $this->line->count_filtered(),
+            "recordsTotal" => $this->Line_model->count_all(),
+            "recordsFiltered" => $this->Line_model->count_filtered(),
             "data" => $data,
         );
         //output to json format
@@ -40,7 +35,7 @@ class Line extends MX_Controller {
     }
 
     public function ajax_edit($id) {
-        $data = $this->line->get_by_id($id);
+        $data = $this->Line_model->get_by_id($id);
         echo json_encode($data);
     }
 
@@ -49,7 +44,7 @@ class Line extends MX_Controller {
         $data = array(
             'name' => $this->input->post('name'),
         );
-        $insert = $this->line->save($data);
+        $insert = $this->Line_model->save($data);
         echo json_encode(array("status" => TRUE));
     }
 
@@ -58,12 +53,12 @@ class Line extends MX_Controller {
         $data = array(
             'name' => $this->input->post('name')
         );
-        $this->line->update(array('id' => $this->input->post('id')), $data);
+        $this->Line_model->update(array('id' => $this->input->post('id')), $data);
         echo json_encode(array("status" => TRUE));
     }
 
     public function ajax_delete($id) {
-        $this->line->delete_by_id($id);
+        $this->Line_model->delete_by_id($id);
         echo json_encode(array("status" => TRUE));
     }
 

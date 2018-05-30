@@ -3,14 +3,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Facility extends MX_Controller {
-
-    public function __construct() {
-        parent::__construct();
-        $this->load->model('settings/Facility_model', 'facility_listing');
-        $this->load->model('settings/Subcounty_model');
-        $this->load->model('settings/Partner_model');
-    }
-
     public function index() {
         $data['content_view'] = 'pages/admin/facility_view';
         $data['page_title'] = 'ART | Facility';
@@ -21,7 +13,7 @@ class Facility extends MX_Controller {
     }
 
     public function ajax_list() {
-        $list = $this->facility_listing->get_datatables();
+        $list = $this->Facility_model->get_datatables();
         $data = array();
         $no = '';
         foreach ($list as $facility_list) {
@@ -43,8 +35,8 @@ class Facility extends MX_Controller {
         }
 
         $output = array(
-            "recordsTotal" => $this->facility_listing->count_all(),
-            "recordsFiltered" => $this->facility_listing->count_filtered(),
+            "recordsTotal" => $this->Facility_model->count_all(),
+            "recordsFiltered" => $this->Facility_model->count_filtered(),
             "data" => $data,
         );
         //output to json format
@@ -52,7 +44,7 @@ class Facility extends MX_Controller {
     }
 
     public function ajax_edit($id) {
-        $data = $this->facility_listing->get_by_id($id);
+        $data = $this->Facility_model->get_by_id($id);
         echo json_encode($data);
     }
 
@@ -69,7 +61,7 @@ class Facility extends MX_Controller {
             'partner_id' => $this->input->post('partner_id')
         );
 
-        $insert = $this->facility_listing->save($data);
+        $insert = $this->Facility_model->save($data);
         echo json_encode(array("status" => TRUE));
     }
 
@@ -85,12 +77,12 @@ class Facility extends MX_Controller {
             'subcounty_id' => $this->input->post('subcounty_id'),
             'partner_id' => $this->input->post('partner_id')
         );
-        $this->facility_listing->update(array('id' => $this->input->post('id')), $data);
+        $this->Facility_model->update(array('id' => $this->input->post('id')), $data);
         echo json_encode(array("status" => TRUE));
     }
 
     public function ajax_delete($id) {
-        $this->facility_listing->delete_by_id($id);
+        $this->Facility_model->delete_by_id($id);
         echo json_encode(array("status" => TRUE));
     }
 

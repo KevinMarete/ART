@@ -3,11 +3,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Change_reason extends MX_Controller {
 
-    public function __construct() {
-        parent::__construct();
-        $this->load->model('settings/Change_reason_model', 'change_reason');
-    }
-
     public function index() {
         $data['content_view'] = 'pages/admin/change_reason_view';
         $data['page_title'] = 'ART | Change Reason';
@@ -16,7 +11,7 @@ class Change_reason extends MX_Controller {
     }
 
     public function ajax_list() {
-        $list = $this->change_reason->get_datatables();
+        $list = $this->Change_reason_model->get_datatables();
         $data = array();
         $no = '';
         foreach ($list as $change_reason) {
@@ -31,8 +26,8 @@ class Change_reason extends MX_Controller {
         }
 
         $output = array(
-            "recordsTotal" => $this->change_reason->count_all(),
-            "recordsFiltered" => $this->change_reason->count_filtered(),
+            "recordsTotal" => $this->Change_reason_model->count_all(),
+            "recordsFiltered" => $this->Change_reason_model->count_filtered(),
             "data" => $data,
         );
         //output to json format
@@ -40,7 +35,7 @@ class Change_reason extends MX_Controller {
     }
 
     public function ajax_edit($id) {
-        $data = $this->change_reason->get_by_id($id);
+        $data = $this->Change_reason_model->get_by_id($id);
         echo json_encode($data);
     }
 
@@ -49,7 +44,7 @@ class Change_reason extends MX_Controller {
         $data = array(
             'name' => $this->input->post('name')
         );
-        $insert = $this->change_reason->save($data);
+        $insert = $this->Change_reason_model->save($data);
         echo json_encode(array("status" => TRUE));
     }
 
@@ -58,12 +53,12 @@ class Change_reason extends MX_Controller {
         $data = array(
             'name' => $this->input->post('name')
         );
-        $this->change_reason->update(array('id' => $this->input->post('id')), $data);
+        $this->Change_reason_model->update(array('id' => $this->input->post('id')), $data);
         echo json_encode(array("status" => TRUE));
     }
 
     public function ajax_delete($id) {
-        $this->change_reason->delete_by_id($id);
+        $this->Change_reason_model->delete_by_id($id);
         echo json_encode(array("status" => TRUE));
     }
 

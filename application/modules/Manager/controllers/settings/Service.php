@@ -4,11 +4,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Service extends MX_Controller {
 
-    public function __construct() {
-        parent::__construct();
-        $this->load->model('settings/Service_model', 'service');
-    }
-
     public function index() {
         $data['content_view'] = 'pages/admin/service_view';
         $data['page_title'] = 'ART | Service';
@@ -17,7 +12,7 @@ class Service extends MX_Controller {
     }
 
     public function ajax_list() {
-        $list = $this->service->get_datatables();
+        $list = $this->Service_model->get_datatables();
         $data = array();
         $no = '';
         foreach ($list as $service) {
@@ -32,8 +27,8 @@ class Service extends MX_Controller {
         }
 
         $output = array(
-            "recordsTotal" => $this->service->count_all(),
-            "recordsFiltered" => $this->service->count_filtered(),
+            "recordsTotal" => $this->Service_model->count_all(),
+            "recordsFiltered" => $this->Service_model->count_filtered(),
             "data" => $data,
         );
         //output to json format
@@ -41,7 +36,7 @@ class Service extends MX_Controller {
     }
 
     public function ajax_edit($id) {
-        $data = $this->service->get_by_id($id);
+        $data = $this->Service_model->get_by_id($id);
         echo json_encode($data);
     }
 
@@ -50,7 +45,7 @@ class Service extends MX_Controller {
         $data = array(
             'name' => $this->input->post('name'),
         );
-        $insert = $this->service->save($data);
+        $insert = $this->Service_model->save($data);
         echo json_encode(array("status" => TRUE));
     }
 
@@ -59,12 +54,12 @@ class Service extends MX_Controller {
         $data = array(
             'name' => $this->input->post('name')
         );
-        $this->service->update(array('id' => $this->input->post('id')), $data);
+        $this->Service_model->update(array('id' => $this->input->post('id')), $data);
         echo json_encode(array("status" => TRUE));
     }
 
     public function ajax_delete($id) {
-        $this->service->delete_by_id($id);
+        $this->Service_model->delete_by_id($id);
         echo json_encode(array("status" => TRUE));
     }
 
