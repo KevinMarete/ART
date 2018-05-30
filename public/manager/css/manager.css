@@ -1,10 +1,10 @@
 .progress {
-	margin-bottom: 0px !important;
+    margin-bottom: 0px !important;
 }
 
 .progress-bar {
-	color: #000000 !important;
-	font-weight: bold;
+    color: #000000 !important;
+    font-weight: bold;
 }
 .navbar-default {
     background-color: #3d4a57;
@@ -29,4 +29,7 @@ a {
 .sidebar ul li a.active {
     background-color: black;
     text-decoration: none;
+}
+.sidebar{
+    margin-top: 55px;
 }
