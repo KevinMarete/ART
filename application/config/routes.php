@@ -85,6 +85,7 @@ $route['manager/update_password'] = 'Manager/user/update_password';
 //settings
 $route['manager/county']='Manager/settings/County';
 $route['manager/subcounty']='Manager/settings/Subcounty';
+$route['manager/generic']='Manager/settings/Generic';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

@@ -69,6 +69,7 @@
                     <ul class="nav nav-second-level">
                         <li><a href="<?php echo base_url('manager/county');?>">County</a></li>
                         <li><a href="<?php echo base_url('manager/subcounty');?>">Sub County</a></li>
+                        <li><a href="<?php echo base_url('manager/generic');?>">Generic</a></li>
                     </ul>
                 </li>
             </ul>
