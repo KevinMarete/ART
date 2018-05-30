@@ -82,5 +82,9 @@ $route['manager/orders/edit_allocation/(:any)'] = 'Manager/load_template/orders/
 $route['manager/update_profile'] = 'Manager/user/update_profile';
 $route['manager/update_password'] = 'Manager/user/update_password';
 
+//settings
+$route['manager/county']='Manager/settings/County';
+$route['manager/subcounty']='Manager/settings/Subcounty';
+
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

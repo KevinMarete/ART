@@ -7,12 +7,6 @@ class Admin extends MX_Controller {
         $this->load->model('Admin_model');
     }
 
-    public function index() {
-        $data['content_view'] = 'pages/admin/county_view';
-        $data['page_title'] = 'ART | County';
-        $this->load->view('template/template_view', $data);
-    }
-
     public function get_data($table) {
         $response = $this->Admin_model->get_table_data($table);
         if ($response['status']) {

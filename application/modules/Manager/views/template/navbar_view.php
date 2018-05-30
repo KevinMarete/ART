@@ -67,8 +67,8 @@
                 <li>
                     <a href="#"><i class="fa fa-list"></i><span class="fa arrow"></span> Settings</a>
                     <ul class="nav nav-second-level">
-                        <li><a href="<?php echo base_url('Manager/County');?>">County</a></li>
-                        <li><a href="#">Sub County</a></li>
+                        <li><a href="<?php echo base_url('manager/county');?>">County</a></li>
+                        <li><a href="<?php echo base_url('manager/subcounty');?>">Sub County</a></li>
                     </ul>
                 </li>
             </ul>

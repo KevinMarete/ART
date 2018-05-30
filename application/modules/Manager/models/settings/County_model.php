@@ -15,9 +15,9 @@ class County_model extends CI_Model {
         $i = 0;
 
         foreach ($this->column_search as $item) { // loop column 
-            if ($_POST['search']['value']) { // if datatable send POST for search
+            if ($_POST['search']['value']) {
                 if ($i === 0) { // first loop
-                    $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
+                    $this->db->group_start();
                     $this->db->like($item, $_POST['search']['value']);
                 } else {
                     $this->db->or_like($item, $_POST['search']['value']);

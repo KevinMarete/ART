@@ -6,12 +6,13 @@ class County extends MX_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('County_model', 'county');
+        $this->load->model('settings/County_model', 'county');
     }
 
     public function index() {
         $data['content_view'] = 'pages/admin/county_view';
         $data['page_title'] = 'ART | County';
+        $data['page_name']='county';
         $this->load->view('template/template_view', $data);
     }
 
@@ -45,7 +46,7 @@ class County extends MX_Controller {
     }
 
     public function ajax_add() {
-        $this->_validate();
+        $this->validate();
         $data = array(
             'name' => $this->input->post('name')
         );
@@ -54,7 +55,7 @@ class County extends MX_Controller {
     }
 
     public function ajax_update() {
-        $this->_validate();
+        $this->validate();
         $data = array(
             'name' => $this->input->post('name')
         );
@@ -67,7 +68,7 @@ class County extends MX_Controller {
         echo json_encode(array("status" => TRUE));
     }
 
-    private function _validate() {
+    private function validate() {
         $data = array();
         $data['error_string'] = array();
         $data['inputerror'] = array();

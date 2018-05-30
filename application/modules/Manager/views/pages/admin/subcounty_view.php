@@ -1,19 +1,19 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-md-5">
-            <h3>Counties</h3>
+            <h3>SubCounties</h3>
         </div>
         <div class="col-md-7">
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
                 <li>Admin</li>
-                <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i> <?php echo $page_name; ?></li>
+                <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i><?php echo $page_name; ?></li>
             </ol>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <button class="btn btn-default" onclick="add_county()"><i class="fa fa-plus-square"></i> Add County</button>
+            <button class="btn btn-default" onclick="add_subcounty()"><i class="fa fa-plus-square-o"></i> Add Subcounty</button>
             <button class="btn btn-default" onclick="reload_table()"><i class="fa fa-refresh"></i> Refresh</button>
             <br/>
             <br/>
@@ -21,18 +21,25 @@
     </div>
     <div class="panel panel-default">
         <div class="panel-body">
-
-            <table id="table" class="table table-striped table-bordered table-responsive table-condensed" width="100%">
+            <table id="table" class="table table-striped table-bordered table-responsive table-condensed" cellspacing="0" width="100%">
                 <thead>
                     <tr>
-                        <th class="col-md-11">County Name</th>
-                        <th class="col-md-1">Action</th>
+                        <th class="col-lg-5 col-md-5 col-xs-4">SubCounty Name</th>
+                        <th class="col-lg-5 col-md-5 col-xs-4">County Name</th>
+                        <th class="col-lg-1 col-md-2 col-xs-4">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-
                 </tbody>
-            </table>  
+
+                <tfoot>
+                    <tr>
+                        <th class="col-lg-5 col-md-5 col-xs-4">SubCounty Name</th>
+                        <th class="col-lg-5 col-md-5 col-xs-4">County Name</th>
+                        <th class="col-lg-1 col-md-2 col-xs-4">Action</th>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
     </div>
 </div>
@@ -50,65 +57,67 @@
             },
             "serverSide": true,
             "order": [],
-
-            //load data for the table's content from an Ajax source
             "ajax": {
-                "url": "<?php echo base_url('Manager/settings/County/ajax_list'); ?>",
+                "url": "<?php echo base_url('Manager/settings/Subcounty/ajax_list'); ?>",
                 "type": "POST"
             },
-
             //last column
             "columnDefs": [
                 {
                     "targets": [-1],
                     "orderable": false,
                 },
-            ]
-
+            ],
         });
-
-        //set input/textarea/select event when change value, remove class error and remove text help block 
         $("input").change(function () {
             $(this).parent().parent().removeClass('has-error');
             $(this).next().empty();
         });
-
     });
 
-    function add_county()
+    function add_subcounty()
     {
         save_method = 'add';
-        $('#form')[0].reset(); // reset form on modals
+        $('#form')[0].reset();
         $('.form-group').removeClass('has-error');
         $('.help-block').empty();
         $('#modal_form').modal('show');
-        $('.modal-title').text('Add County');
+        $('.modal-title').text('Add SubCounty');
+
+        //select2 for County
+        $("#county").select2({
+            placeholder: "---Select County---",
+            allowClear: true,
+            dropdownParent: $("#modal_form")
+        });
     }
 
-    function edit_county(id)
+    function edit_subcounty(id)
     {
         save_method = 'update';
-        //reset form on modals
         $('#form')[0].reset();
-        //clear error class
         $('.form-group').removeClass('has-error');
-        //clear error string
         $('.help-block').empty();
+
+        //select2 for County
+        $("#county").select2({
+            allowClear: true,
+            dropdownParent: $("#modal_form")
+        });
 
         //Ajax Load data from ajax
         $.ajax({
-            url: "<?php echo base_url('Manager/settings/County/ajax_edit'); ?>/" + id,
+            url: "<?php echo base_url('Manager/settings/Subcounty/ajax_edit'); ?>/" + id,
             type: "GET",
             dataType: "JSON",
             success: function (data)
             {
-
                 $('[name="id"]').val(data.id);
                 $('[name="name"]').val(data.name);
-                //show modal when complete loaded
+                $('[name="county_id"]').val(data.county_id).trigger('change');
+
                 $('#modal_form').modal('show');
-                // modal title
-                $('.modal-title').text('Edit County');
+                $('.modal-title').text('Edit SubCounty');
 
             },
             error: function ()
@@ -120,7 +129,6 @@
 
     function reload_table()
     {
-        //reload datatable ajax
         table.ajax.reload(null, false);
     }
 
@@ -131,12 +139,12 @@
         var url;
 
         if (save_method == 'add') {
-            url = "<?php echo base_url('Manager/settings/County/ajax_add'); ?>";
+            url = "<?php echo base_url('Manager/settings/Subcounty/ajax_add'); ?>";
         } else {
-            url = "<?php echo base_url('Manager/settings/County/ajax_update'); ?>";
+            url = "<?php echo base_url('Manager/settings/Subcounty/ajax_update'); ?>";
         }
 
-        //ajax adding data to database
+        // ajax adding data to database
         $.ajax({
             url: url,
             type: "POST",
@@ -144,8 +152,8 @@
             dataType: "JSON",
             success: function (data)
             {
-                //if success close modal and reload ajax table
-                if (data.status)
+
+                if (data.status) //if success close modal and reload ajax table
                 {
                     $('#modal_form').modal('hide');
                     reload_table();
@@ -153,9 +161,7 @@
                 {
                     for (var i = 0; i < data.inputerror.length; i++)
                     {
-                        //select parent twice to select div form-group class and add has-error class
                         $('[name="' + data.inputerror[i] + '"]').parent().parent().addClass('has-error');
-                        //select span help-block class set text error string
                         $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
                     }
                 }
@@ -168,20 +174,19 @@
             {
                 alert('Error adding / update data');
                 $('#btnSave').text('save');
-                //set button enable
-                $('#btnSave').attr('disabled', false);
+                $('#btnSave').attr('disabled', false); //set button enable 
 
             }
         });
     }
 
-    function delete_county(id)
+    function delete_subcounty(id)
     {
-        if (confirm('Are you sure you want to delete this County?'))
+        if (confirm('Are you sure you want to delete this data?'))
         {
-            //ajax delete data to database
+            // ajax delete data to database
             $.ajax({
-                url: "<?php echo base_url('Manager/settings/County/ajax_delete'); ?>/" + id,
+                url: "<?php echo base_url('Manager/settings/Subcounty/ajax_delete'); ?>/" + id,
                 type: "POST",
                 dataType: "JSON",
                 success: function (data)
@@ -199,8 +204,7 @@
         }
     }
 </script>
-
-<!-- Add or Edit County modal -->
+<!-- Add or Edit modal -->
 <div class="modal fade" id="modal_form" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -213,9 +217,22 @@
                     <input type="hidden" value="" name="id"/> 
                     <div class="form-body">
                         <div class="form-group">
+                            <label class="control-label col-md-3">Subcounty Name</label>
+                            <div class="col-md-9">
+                                <input name="name" id="name" placeholder="SubCounty Name" class="form-control" type="text">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label class="control-label col-md-3">County Name</label>
                             <div class="col-md-9">
-                                <input name="name" placeholder="County Name" class="form-control" type="text">
+                                <select name="county_id" id="county" class="form-control" style="width: 100%">
+                                    <option value="">---Select County----</option>
+                                    <?php foreach ($get_county as $row) { ?>
+                                        <option value="<?= $row->id ?>"><?= $row->name ?></option>
+                                    <?php } ?>
+                                </select>
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -229,3 +246,4 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<!-- End Bootstrap modal -->
