@@ -1,55 +1,53 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-md-5">
-            <h3>Facilities Listing</h3>
+            <h3>Regimen</h3>
         </div>
         <div class="col-md-7">
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
                 <li>Admin</li>
-                <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i><?php echo $page_name;?></li>
+                <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i><?php echo $page_name; ?></li>
             </ol>
-            <!-- /.col-lg-12 -->
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <button class="btn btn-default" onclick="add_facility()"><i class="fa fa-plus-square-o"></i> Add Facility</button>
+            <button class="btn btn-default" onclick="add_regimen()"><i class="fa fa-plus-square-o"></i> Add Regimen</button>
             <button class="btn btn-default" onclick="reload_table()"><i class="fa fa-refresh"></i> Refresh</button>
-            <br>
-            <br>
+            <br/>
+            <br/>
         </div>
     </div>
     <div class="panel panel-default">
-        <div class="panel-body">
-
+        <div class="panel-body">          
             <table id="table" class="table table-striped table-bordered table-responsive table-condensed" width="100%">
                 <thead>
                     <tr>
-                        <th>Facility Name</th>
-                        <th>MflCode</th>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Description</th>
                         <th>Category</th>
-                        <th>DhisCode</th>
-                        <th>Longitude</th>
-                        <th>Latitude</th>
-                        <th>SubCounty Name</th>
-                        <th>Partner Name</th>
+                        <th>Service</th>
+                        <th>Line</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
+
                 </tbody>
-            </table>
+            </table> 
         </div>
-    </div>
+    </div> 
+
 </div>
 
 <script>
-
     var save_method;
     var table;
 
     $(document).ready(function () {
+
         //datatables
         table = $('#table').DataTable({
 
@@ -60,7 +58,7 @@
             "serverSide": true,
             "order": [],
             "ajax": {
-                "url": "<?php echo base_url('Manager/settings/Facility/ajax_list'); ?>",
+                "url": "<?php echo base_url('Manager/settings/Regimen/ajax_list'); ?>",
                 "type": "POST"
             },
             "columnDefs": [
@@ -78,16 +76,14 @@
 
     });
 
-
-
-    function add_facility()
+    function add_regimen()
     {
         save_method = 'add';
         $('#form')[0].reset();
         $('.form-group').removeClass('has-error');
         $('.help-block').empty();
         $('#modal_form').modal('show');
-        $('.modal-title').text('Add Facility');
+        $('.modal-title').text('Add Regimen');
 
         //select2 for Category
         $("#category_id").select2({
@@ -96,63 +92,64 @@
             dropdownParent: $("#modal_form")
         });
 
-        //select2 for Subcounty
-        $("#subcounty").select2({
-            placeholder: "---Select SubCounty---",
+        //select2 for Service
+        $("#service_id").select2({
+            placeholder: "---Select Service---",
             allowClear: true,
             dropdownParent: $("#modal_form")
         });
-        //select2 for Partner
-        $("#partner").select2({
-            placeholder: "---Select Partner---",
+
+        //select2 for Line
+        $("#line_id").select2({
+            placeholder: "---Select Line---",
             allowClear: true,
             dropdownParent: $("#modal_form")
         });
     }
 
-    function edit_facility_listing(id)
+    function edit_regimen(id)
     {
         save_method = 'update';
         $('#form')[0].reset();
         $('.form-group').removeClass('has-error');
         $('.help-block').empty();
+
         //select2 for Category
         $("#category_id").select2({
             allowClear: true,
             dropdownParent: $("#modal_form")
         });
 
-        //select2 for Subcounty
-        $("#subcounty").select2({
+        //select2 for Service
+        $("#service_id").select2({
             allowClear: true,
             dropdownParent: $("#modal_form")
         });
-        //select2 for Partner
-        $("#partner").select2({
+
+        //select2 for Line
+        $("#line_id").select2({
             allowClear: true,
             dropdownParent: $("#modal_form")
         });
 
         //Ajax Load data from ajax
         $.ajax({
-            url: "<?php echo base_url('Manager/settings/Facility/ajax_edit'); ?>/" + id,
+            url: "<?php echo base_url('Manager/settings/Regimen/ajax_edit'); ?>/" + id,
             type: "GET",
             dataType: "JSON",
             success: function (data)
             {
 
                 $('[name="id"]').val(data.id);
+                $('[name="code"]').val(data.code);
                 $('[name="name"]').val(data.name);
-                $('[name="mflcode"]').val(data.mflcode);
-                $('[name="category"]').val(data.category).trigger('change');
-                $('[name="dhiscode"]').val(data.dhiscode);
-                $('[name="longitude"]').val(data.longitude);
-                $('[name="latitude"]').val(data.latitude);
-                $('[name="subcounty_id"]').val(data.subcounty_id).trigger('change');
-                $('[name="partner_id"]').val(data.partner_id).trigger('change');
+                $('[name="description"]').val(data.description);
+                $('[name="category_id"]').val(data.category_id).trigger('change');
+                $('[name="service_id"]').val(data.service_id).trigger('change');
+                $('[name="line_id"]').val(data.line_id).trigger('change');
 
                 $('#modal_form').modal('show');
-                $('.modal-title').text('Edit Facility');
+                $('.modal-title').text('Edit Regimen');
 
             },
             error: function ()
@@ -174,10 +171,12 @@
         var url;
 
         if (save_method == 'add') {
-            url = "<?php echo base_url('Manager/settings/Facility/ajax_add'); ?>";
+            url = "<?php echo base_url('Manager/settings/Regimen/ajax_add'); ?>";
         } else {
-            url = "<?php echo base_url('Manager/settings/Facility/ajax_update'); ?>";
+            url = "<?php echo base_url('Manager/settings/Regimen/ajax_update'); ?>";
         }
+
+        // ajax adding data to database
         $.ajax({
             url: url,
             type: "POST",
@@ -213,12 +212,12 @@
         });
     }
 
-    function delete_facility_listing(id)
+    function delete_regimen(id)
     {
-        if (confirm('Are you sure you want to delete this facility?'))
+        if (confirm('Are you sure you want to delete this Regimen?'))
         {
             $.ajax({
-                url: "<?php echo base_url('Manager/settings/Facility/ajax_delete'); ?>/" + id,
+                url: "<?php echo base_url('Manager/settings/Regimen/ajax_delete'); ?>/" + id,
                 type: "POST",
                 dataType: "JSON",
                 success: function (data)
@@ -236,7 +235,7 @@
     }
 </script>
 
-<!-- Add or Edit modal -->
+<!-- Add or Edit County modal -->
 <div class="modal fade" id="modal_form" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -249,59 +248,32 @@
                     <input type="hidden" value="" name="id"/> 
                     <div class="form-body">
                         <div class="form-group">
-                            <label class="control-label col-md-3">Facility Name</label>
+                            <label class="control-label col-md-3">Regimen Code</label>
                             <div class="col-md-9">
-                                <input id="name" name="name" placeholder="Facility Name" class="form-control" type="text">
+                                <input name="code" placeholder="Regimen Code" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">MflCode</label>
+                            <label class="control-label col-md-3">Regimen Name</label>
                             <div class="col-md-9">
-                                <input id="mflcode" name="mflcode" placeholder="MflCode" class="form-control"></textarea>
+                                <input name="name" placeholder="Regimen Name" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Category</label>
+                            <label class="control-label col-md-3">Regimen Description</label>
                             <div class="col-md-9">
-                                <select name="category" id="category_id" class="form-control" style="width: 100%">
-                                    <option value="">---Select Category---</option>
-                                    <option value="central">Central</option>
-                                    <option value="satellite">Satellite</option>
-                                    <option value="standalone">Standalone</option>
-                                </select>
-                                <span class="help-block"></span>
-                            </div>
-
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">DhisCode</label>
-                            <div class="col-md-9">
-                                <input id="dhiscode" name="dhiscode" placeholder="DhisCode" class="form-control"></textarea>
+                                <textarea name="description" placeholder="Regimen Description" class="form-control" type="text"></textarea>
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Longitude</label>
+                            <label class="control-label col-md-3">Category Name</label>
                             <div class="col-md-9">
-                                <input id="longitude" name="longitude" placeholder="Longitude" class="form-control"></textarea>
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">Latitude</label>
-                            <div class="col-md-9">
-                                <input id="latitude" name="latitude" placeholder="Latitude" class="form-control"></textarea>
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">Sub County</label>
-                            <div class="col-md-9">
-                                <select name="subcounty_id" id="subcounty" class="form-control" style="width: 100%">
-                                    <option value="">----Select SubCounty---</option>
-                                    <?php foreach ($get_subcounty as $row) { ?>                                        
+                                <select name="category_id" id="category_id" class="form-control" style="width: 100%">
+                                    <option value="">---Select Category----</option>
+                                    <?php foreach ($get_category as $row) { ?>
                                         <option value="<?= $row->id ?>"><?= $row->name ?></option>
                                     <?php } ?>
                                 </select>
@@ -309,25 +281,35 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Partner Name</label>
+                            <label class="control-label col-md-3">Service Name</label>
                             <div class="col-md-9">
-                                <select name="partner_id" id="partner" class="form-control" style="width: 100%">
-                                    <option value="">----Select Partner----</option>
-                                    <?php foreach ($get_partner as $row) { ?>
+                                <select name="service_id" id="service_id" class="form-control" style="width: 100%">
+                                    <option value="">---Select Service----</option>
+                                    <?php foreach ($get_service as $row) { ?>
                                         <option value="<?= $row->id ?>"><?= $row->name ?></option>
                                     <?php } ?>
                                 </select>
                                 <span class="help-block"></span>
                             </div>
                         </div>
-                    </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Line Name</label>
+                            <div class="col-md-9">
+                                <select name="line_id" id="line_id" class="form-control" style="width: 100%">
+                                    <option value="">---Select Line----</option>
+                                    <?php foreach ($get_line as $row) { ?>
+                                        <option value="<?= $row->id ?>"><?= $row->name ?></option>
+                                    <?php } ?>
+                                </select>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" id="btnSave" onclick="save()">Save</button>
-                <button type="button" data-dismiss="modal">Cancel</button>
+                <button type="button" id="btnSave" onclick="save()" class="btn btn-default">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<!-- End Bootstrap modal -->

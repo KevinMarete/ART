@@ -1,48 +1,51 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-md-5">
-            <h3>Generic</h3>
+            <h3>Purpose</h3>
         </div>
         <div class="col-md-7">
             <ol class="breadcrumb">
-                <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
                 <li>Admin</li>
-                <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i> <?php echo $page_name; ?></li>
+                <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i><?php echo $page_name; ?></li>
             </ol>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <button class="btn btn-default" onclick="add_generic()"><i class="fa fa-plus-square-o"></i> Add Generic</button>
+            <button class="btn btn-default" onclick="add_purpose()"><i class="fa fa-plus-square-o"></i> Add Purpose</button>
             <button class="btn btn-default" onclick="reload_table()"><i class="fa fa-refresh"></i> Refresh</button>
             <br/>
             <br/>
         </div>
     </div>
     <div class="panel panel-default">
-        <div class="panel-body">          
+        <div class="panel-body">
             <table id="table" class="table table-striped table-bordered table-responsive table-condensed" width="100%">
                 <thead>
                     <tr>
-                        <th class="col-lg-5 col-md-5 col-xs-4">Generic Name</th>
-                        <th class="col-lg-5 col-md-5 col-xs-4">Abbreviation</th>
-                        <th class="col-lg-1 col-md-2 col-xs-4">Action</th>
+                        <th class="col-md-8">Purpose Name</th>
+                        <th class="col-md-1">Action</th>
                     </tr>
                 </thead>
                 <tbody>
 
                 </tbody>
-            </table>
+            </table>  
         </div>
     </div> 
+
 </div>
 
 <script>
     var save_method;
     var table;
+
     $(document).ready(function () {
+
         //datatables
         table = $('#table').DataTable({
+
             "processing": true,
             "language": {
                 processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
@@ -50,17 +53,16 @@
             "serverSide": true,
             "order": [],
             "ajax": {
-                "url": "<?php echo base_url('Manager/settings/Generic/ajax_list'); ?>",
+                "url": "<?php echo base_url('Manager/settings/Purpose/ajax_list'); ?>",
                 "type": "POST"
             },
-
-            //last column
             "columnDefs": [
                 {
                     "targets": [-1],
                     "orderable": false,
                 },
             ],
+
         });
         $("input").change(function () {
             $(this).parent().parent().removeClass('has-error');
@@ -69,26 +71,24 @@
 
     });
 
-    function add_generic()
+    function add_purpose()
     {
         save_method = 'add';
-        $('#form')[0].reset(); // reset form on modals
+        $('#form')[0].reset();
         $('.form-group').removeClass('has-error');
         $('.help-block').empty();
         $('#modal_form').modal('show');
-        $('.modal-title').text('Add Generic');
+        $('.modal-title').text('Add Purpose');
     }
 
-    function edit_generic(id)
+    function edit_purpose(id)
     {
         save_method = 'update';
         $('#form')[0].reset();
         $('.form-group').removeClass('has-error');
         $('.help-block').empty();
-
-        //Ajax Load data from ajax
         $.ajax({
-            url: "<?php echo base_url('Manager/settings/Generic/ajax_edit'); ?>/" + id,
+            url: "<?php echo base_url('Manager/settings/Purpose/ajax_edit'); ?>/" + id,
             type: "GET",
             dataType: "JSON",
             success: function (data)
@@ -96,10 +96,9 @@
 
                 $('[name="id"]').val(data.id);
                 $('[name="name"]').val(data.name);
-                $('[name="abbreviation"]').val(data.abbreviation);
 
                 $('#modal_form').modal('show');
-                $('.modal-title').text('Edit Generic');
+                $('.modal-title').text('Edit Purpose');
 
             },
             error: function ()
@@ -121,12 +120,10 @@
         var url;
 
         if (save_method == 'add') {
-            url = "<?php echo base_url('Manager/settings/Generic/ajax_add'); ?>";
+            url = "<?php echo base_url('Manager/settings/Purpose/ajax_add'); ?>";
         } else {
-            url = "<?php echo base_url('Manager/settings/Generic/ajax_update'); ?>";
+            url = "<?php echo base_url('Manager/settings/Purpose/ajax_update'); ?>";
         }
-
-        // ajax adding data to database
         $.ajax({
             url: url,
             type: "POST",
@@ -143,7 +140,7 @@
                 {
                     for (var i = 0; i < data.inputerror.length; i++)
                     {
-                        $('[name="' + data.inputerror[i] + '"]').parent().parent().addClass('has-error');
+                        $('[name="' + data.inputerror[i] + '"]').parent().parent().addClass('has-error')
                         $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
                     }
                 }
@@ -162,18 +159,16 @@
         });
     }
 
-    function delete_generic(id)
+    function delete_purpose(id)
     {
-        if (confirm('Are you sure you want to delete this Generic?'))
+        if (confirm('Are you sure you want to delete this Purpose?'))
         {
-            // ajax delete data to database
             $.ajax({
-                url: "<?php echo base_url('Manager/settings/Generic/ajax_delete'); ?>/" + id,
+                url: "<?php echo base_url('Manager/settings/Purpose/ajax_delete'); ?>/" + id,
                 type: "POST",
                 dataType: "JSON",
                 success: function (data)
                 {
-                    //if success reload ajax table
                     $('#modal_form').modal('hide');
                     reload_table();
                 },
@@ -182,11 +177,12 @@
                     alert('Error deleting data');
                 }
             });
+
         }
     }
 </script>
 
-<!-- Add or Edit County modal -->
+<!-- Add or Edit Purpose modal -->
 <div class="modal fade" id="modal_form" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -199,16 +195,9 @@
                     <input type="hidden" value="" name="id"/> 
                     <div class="form-body">
                         <div class="form-group">
-                            <label class="control-label col-md-3">Generic Name</label>
+                            <label class="control-label col-md-3">Purpose Name</label>
                             <div class="col-md-9">
-                                <input name="name" placeholder="Generic Name" class="form-control" type="text">
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">Abbreviation</label>
-                            <div class="col-md-9">
-                                <input name="abbreviation" placeholder="Abbreviation Name" class="form-control" type="text">
+                                <input name="name" placeholder="Purpose Name" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -222,4 +211,3 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-

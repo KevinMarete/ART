@@ -31,14 +31,6 @@
                 </thead>
                 <tbody>
                 </tbody>
-
-                <tfoot>
-                    <tr>
-                        <th class="col-lg-5 col-md-5 col-xs-4">SubCounty Name</th>
-                        <th class="col-lg-5 col-md-5 col-xs-4">County Name</th>
-                        <th class="col-lg-1 col-md-2 col-xs-4">Action</th>
-                    </tr>
-                </tfoot>
             </table>
         </div>
     </div>

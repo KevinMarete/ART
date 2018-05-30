@@ -1,7 +1,7 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-md-5">
-            <h3>Generic</h3>
+            <h3>Category</h3>
         </div>
         <div class="col-md-7">
             <ol class="breadcrumb">
@@ -13,33 +13,39 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <button class="btn btn-default" onclick="add_generic()"><i class="fa fa-plus-square-o"></i> Add Generic</button>
+            <button class="btn btn-default" onclick="add_category()"><i class="fa fa-plus-square-o"></i> Add Category</button>
             <button class="btn btn-default" onclick="reload_table()"><i class="fa fa-refresh"></i> Refresh</button>
             <br/>
             <br/>
         </div>
     </div>
     <div class="panel panel-default">
-        <div class="panel-body">          
+        <div class="panel-body">         
             <table id="table" class="table table-striped table-bordered table-responsive table-condensed" width="100%">
                 <thead>
                     <tr>
-                        <th class="col-lg-5 col-md-5 col-xs-4">Generic Name</th>
-                        <th class="col-lg-5 col-md-5 col-xs-4">Abbreviation</th>
-                        <th class="col-lg-1 col-md-2 col-xs-4">Action</th>
+                        <th class="col-md-8">Category Name</th>
+                        <th class="col-md-1">Action</th>
                     </tr>
                 </thead>
                 <tbody>
 
                 </tbody>
-            </table>
+                <tfoot>
+                    <tr>
+                        <th class="col-md-8">Category Name</th>
+                        <th class="col-md-1">Action</th>
+                    </tr>
+                </tfoot>
+            </table> 
         </div>
-    </div> 
+    </div>
 </div>
 
 <script>
     var save_method;
     var table;
+
     $(document).ready(function () {
         //datatables
         table = $('#table').DataTable({
@@ -50,17 +56,16 @@
             "serverSide": true,
             "order": [],
             "ajax": {
-                "url": "<?php echo base_url('Manager/settings/Generic/ajax_list'); ?>",
+                "url": "<?php echo base_url('Manager/settings/Category/ajax_list'); ?>",
                 "type": "POST"
             },
-
-            //last column
             "columnDefs": [
                 {
-                    "targets": [-1],
+                    "targets": [-1], //last column
                     "orderable": false,
                 },
             ],
+
         });
         $("input").change(function () {
             $(this).parent().parent().removeClass('has-error');
@@ -69,37 +74,35 @@
 
     });
 
-    function add_generic()
+    function add_category()
     {
         save_method = 'add';
         $('#form')[0].reset(); // reset form on modals
         $('.form-group').removeClass('has-error');
         $('.help-block').empty();
         $('#modal_form').modal('show');
-        $('.modal-title').text('Add Generic');
+        $('.modal-title').text('Add Category');
     }
 
-    function edit_generic(id)
+    function edit_category(id)
     {
         save_method = 'update';
-        $('#form')[0].reset();
+        $('#form')[0].reset(); // reset form on modals
         $('.form-group').removeClass('has-error');
-        $('.help-block').empty();
+        $('.help-block').empty(); // clear error string
 
         //Ajax Load data from ajax
         $.ajax({
-            url: "<?php echo base_url('Manager/settings/Generic/ajax_edit'); ?>/" + id,
+            url: "<?php echo base_url('Manager/settings/Category/ajax_edit'); ?>/" + id,
             type: "GET",
             dataType: "JSON",
             success: function (data)
             {
-
                 $('[name="id"]').val(data.id);
                 $('[name="name"]').val(data.name);
-                $('[name="abbreviation"]').val(data.abbreviation);
 
                 $('#modal_form').modal('show');
-                $('.modal-title').text('Edit Generic');
+                $('.modal-title').text('Edit Category');
 
             },
             error: function ()
@@ -111,7 +114,7 @@
 
     function reload_table()
     {
-        table.ajax.reload(null, false);
+        table.ajax.reload(null, false); //reload datatable ajax 
     }
 
     function save()
@@ -121,11 +124,10 @@
         var url;
 
         if (save_method == 'add') {
-            url = "<?php echo base_url('Manager/settings/Generic/ajax_add'); ?>";
+            url = "<?php echo base_url('Manager/settings/Category/ajax_add'); ?>";
         } else {
-            url = "<?php echo base_url('Manager/settings/Generic/ajax_update'); ?>";
+            url = "<?php echo base_url('Manager/settings/Category/ajax_update'); ?>";
         }
-
         // ajax adding data to database
         $.ajax({
             url: url,
@@ -134,7 +136,6 @@
             dataType: "JSON",
             success: function (data)
             {
-
                 if (data.status)
                 {
                     $('#modal_form').modal('hide');
@@ -162,13 +163,13 @@
         });
     }
 
-    function delete_generic(id)
+    function delete_category(id)
     {
-        if (confirm('Are you sure you want to delete this Generic?'))
+        if (confirm('Are you sure you want to delete this Category?'))
         {
             // ajax delete data to database
             $.ajax({
-                url: "<?php echo base_url('Manager/settings/Generic/ajax_delete'); ?>/" + id,
+                url: "<?php echo base_url('Manager/settings/Category/ajax_delete'); ?>/" + id,
                 type: "POST",
                 dataType: "JSON",
                 success: function (data)
@@ -182,6 +183,7 @@
                     alert('Error deleting data');
                 }
             });
+
         }
     }
 </script>
@@ -199,16 +201,9 @@
                     <input type="hidden" value="" name="id"/> 
                     <div class="form-body">
                         <div class="form-group">
-                            <label class="control-label col-md-3">Generic Name</label>
+                            <label class="control-label col-md-3">Category Name</label>
                             <div class="col-md-9">
-                                <input name="name" placeholder="Generic Name" class="form-control" type="text">
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">Abbreviation</label>
-                            <div class="col-md-9">
-                                <input name="abbreviation" placeholder="Abbreviation Name" class="form-control" type="text">
+                                <input name="name" placeholder="Category Name" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -222,4 +217,3 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
