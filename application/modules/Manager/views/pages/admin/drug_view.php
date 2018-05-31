@@ -117,7 +117,7 @@
 
         //Ajax Load data from ajax
         $.ajax({
-            url: "<?php echo base_url('Managers/settings/Drug/ajax_edit'); ?>/" + id,
+            url: "<?php echo base_url('Manager/settings/Drug/ajax_edit'); ?>/" + id,
             type: "GET",
             dataType: "JSON",
             success: function (data)

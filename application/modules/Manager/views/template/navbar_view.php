@@ -66,7 +66,7 @@
                 <!--settings-->
                 <li>
                     <a href="#"><i class="fa fa-list"></i><span class="fa arrow"></span> Settings</a>
-                    <ul class="nav nav-second-level">
+                    <ul class="nav nav-second-level" id="settings_nav_links">
                         <li><a href="<?php echo base_url('manager/county'); ?>">County</a></li>
                         <li><a href="<?php echo base_url('manager/subcounty'); ?>">Sub County</a></li>
                         <li><a href="<?php echo base_url('manager/generic'); ?>">Generic</a></li>
@@ -83,9 +83,24 @@
                         <li><a href="<?php echo base_url('manager/facility'); ?>">Facility</a></li>
                     </ul>
                 </li>
+                <!--backups-->
+                <li>
+                    <a href="<?php echo base_url('#mftp'); ?>" ><i class="fa fa-cloud-upload"></i> Back_UPs</a>
+                </li>
             </ul>
         </div>
         <!--/.sidebar-collapse -->
     </div>
     <!--/.navbar-static-side -->
 </nav>
+<script>
+//sort settings_nav links alphabetically
+    var mylist = $('#settings_nav_links');
+    var listitems = mylist.children('li').get();
+
+    listitems.sort(function (a, b) {
+        return $(a).text().toUpperCase().localeCompare($(b).text().toUpperCase());
+    })
+
+    mylist.empty().append(listitems)
+</script>
