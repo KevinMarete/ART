@@ -13,6 +13,7 @@
             <button class="btn btn-default" onclick="add_service()"><i class="fa fa-plus-square-o"></i> Add Service</button>
             <button class="btn btn-default" onclick="reload_table()"><i class="fa fa-refresh"></i> Refresh</button>
             <br/>
+            <br/>
         </div>
     </div>
     <div class="panel panel-default">

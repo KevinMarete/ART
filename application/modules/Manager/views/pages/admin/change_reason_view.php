@@ -16,7 +16,7 @@
             <br/>
         </div>
     </div>
-    <div class="panel panel-primary">
+    <div class="panel panel-default">
         <div class="panel-body">
             <table id="table" class="table table-striped table-bordered table-responsive table-condensed" width="100%">
                 <thead>
