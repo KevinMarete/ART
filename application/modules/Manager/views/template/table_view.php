@@ -96,6 +96,8 @@
 
                 $('[name="id"]').val(data.id);
                 $('[name="name"]').val(data.name);
+                $('[name="value"]').val(data.value);
+                $('[name="frequency"]').val(data.frequency);
                // $('[name="_table_"]').val(data.<?php // echo $page_name;?>)
                 
                 $('#modal_form').modal('show');

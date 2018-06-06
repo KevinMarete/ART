@@ -28,7 +28,7 @@ class Admin extends MX_Controller {
     }
 
     public function ajax_update() {
-        $this->Admin_model->update($_POST);
+        $this->Admin_model->update(array('id' => $this->input->post('id')),$_POST);
         echo json_encode(array("status" => TRUE));
     }
 

@@ -39,14 +39,14 @@ class Admin_model extends CI_Model {
     }
 
     public function get_by_id($id) {
-        $db_tables = [
-            'county'=>'tbl_county',
-            'facility'=>'tbl_facility'
-        ];
-        
-        $table = $db_tables[$page_name];
-        
-        $this->db->from($table);
+//        $db_tables = [
+//            'county'=>'tbl_county',
+//            'facility'=>'tbl_facility'
+//        ];
+//        
+//        $table = $db_tables[$page_name];
+//        
+        $this->db->from('tbl_county');
         $this->db->where('id', $id);
         $query = $this->db->get();
 
