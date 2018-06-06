@@ -1,4 +1,4 @@
-<!-- Add or Edit County modal -->
+<!-- Add or Edit modal -->
 <div class="modal fade" id="modal_form" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -11,14 +11,28 @@
                     <input type="hidden" value="" name="id"/> 
                     <div class="form-body">
                         <div class="form-group">
-                            <label class="control-label col-md-3">County Name</label>
+                            <label class="control-label col-md-3">Name</label>
                             <div class="col-md-9">
                                 <input name="name" placeholder="Name" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Value</label>
+                            <div class="col-md-9">
+                                <input name="value" placeholder="Value" class="form-control" type="text">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Frequency</label>
+                            <div class="col-md-9">
+                                <input name="frequency" placeholder="Frequency" class="form-control" type="text">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
                     </div>
-                    <input name="_table_" type="hidden" value="tbl_county">
+                    <input name="_table_" type="hidden" value="tbl_dose">
                 </form>
             </div>
             <div class="modal-footer">

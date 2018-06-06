@@ -7,6 +7,7 @@
     font-weight: bold;
 }
 .navbar-default {
+    color: #fff;
     background-color: #3d4a57;
     border-color: #333;
 }
@@ -14,10 +15,10 @@
     word-wrap: break-word;
     white-space: normal;
 }
-.nav > li > a:focus, .nav > li > a:hover {
+.nav > li > a:focus, .nav > li > a:hover{
     color: #fff;
     text-decoration: none;
-    background-color: black;
+    background-color:#333;
 }
 a {
     color: #ccc;
@@ -29,6 +30,7 @@ a {
 }
 .sidebar ul li a.active {
     background-color: black;
+    color: #fff;
     text-decoration: none;
 }
 .sidebar{
@@ -36,4 +38,9 @@ a {
 }
 .breadcrumb{
     margin-top: 20px;
+}
+/*datatables background color of selected tbody row*/
+table.dataTable tbody tr.selected {
+    color: #fff;
+    background-color: #3d4a57;
 }

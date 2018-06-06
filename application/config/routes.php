@@ -84,20 +84,20 @@ $route['manager/update_profile'] = 'Manager/user/update_profile';
 $route['manager/update_password'] = 'Manager/user/update_password';
 
 //settings
-$route['manager/county'] = 'Manager/settings/County';
-$route['manager/subcounty'] = 'Manager/settings/Subcounty';
-$route['manager/generic'] = 'Manager/settings/Generic';
-$route['manager/category'] = 'Manager/settings/Category';
-$route['manager/change_reason'] = 'Manager/settings/Change_reason';
-$route['manager/drug'] = 'Manager/settings/Drug';
-$route['manager/formulation'] = 'Manager/settings/Formulation';
-$route['manager/line'] = 'Manager/settings/Line';
-$route['manager/regimen'] = 'Manager/settings/Regimen';
-$route['manager/service'] = 'Manager/settings/Service';
-$route['manager/partner'] = 'Manager/settings/Partner';
-$route['manager/status'] = 'Manager/settings/Status';
-$route['manager/purpose'] = 'Manager/settings/Purpose';
-$route['manager/facility'] = 'Manager/settings/Facility';
+//$route['manager/county'] = 'Manager/settings/County';
+//$route['manager/subcounty'] = 'Manager/settings/Subcounty';
+//$route['manager/generic'] = 'Manager/settings/Generic';
+//$route['manager/category'] = 'Manager/settings/Category';
+//$route['manager/change_reason'] = 'Manager/settings/Change_reason';
+//$route['manager/drug'] = 'Manager/settings/Drug';
+//$route['manager/formulation'] = 'Manager/settings/Formulation';
+//$route['manager/line'] = 'Manager/settings/Line';
+//$route['manager/regimen'] = 'Manager/settings/Regimen';
+//$route['manager/service'] = 'Manager/settings/Service';
+//$route['manager/partner'] = 'Manager/settings/Partner';
+//$route['manager/status'] = 'Manager/settings/Status';
+//$route['manager/purpose'] = 'Manager/settings/Purpose';
+//$route['manager/facility'] = 'Manager/settings/Facility';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

@@ -195,7 +195,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Status Name</label>
                             <div class="col-md-9">
-                                <input name="name" placeholder="Status Name" class="form-control" type="text">
+                                <input name="name" placeholder="Name" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
