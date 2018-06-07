@@ -87,7 +87,7 @@
 <script type="text/javascript">
     $(function () {
         var countyURL = '../../API/subcounty';
-        var countyURL = '../../API/partner';
+        var parnerURL = '../../API/partner';
         $("#subcounty").empty()
         $.getJSON(countyURL, function (subcounties) {
             $("#subcounty").append($("<option value=''>Select SubCounty</option>"));
@@ -96,7 +96,7 @@
             });
         });
         $("#partner").empty()
-        $.getJSON(countyURL, function (partners) {
+        $.getJSON(parnerURL, function (partners) {
             $("#partner").append($("<option value=''>Select Partner</option>"));
             $.each(partners, function (index, partner) {
                 $("#partner").append($("<option value='" + partner.id + "'>" + partner.name.toUpperCase() + "</option>"));

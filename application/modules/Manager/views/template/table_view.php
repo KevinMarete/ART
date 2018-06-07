@@ -119,12 +119,6 @@
         $('#form')[0].reset();
         $('.form-group').removeClass('has-error');
         $('.help-block').empty();
-        //select2
-        $(".select2").select2({
-            width: '100%',
-            allowClear: true,
-            dropdownParent: $("#modal_form")
-        });
 
         $.ajax({
             url: "<?php echo base_url('Manager/Admin/ajax_edit/tbl_' . $page_name); ?>/" + this.selected_id,
@@ -163,6 +157,13 @@
                 $('[name="partner_id"]').val(data.partner_id);
 
                 $('#modal_form').modal('show');
+                
+                //select2
+                $(".select2").select2({
+                    width: '100%',
+                    allowClear: true,
+                    dropdownParent: $("#modal_form")
+                });
                 $('.modal-title').text('Edit <?php echo ucwords($page_name); ?>');
 
             },

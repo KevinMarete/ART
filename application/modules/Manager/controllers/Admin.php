@@ -19,7 +19,7 @@ class Admin extends MX_Controller {
 
     //function add data to db_table
     public function add_data() {
-        $this->_validate();
+        //$this->_validate();
         $insert = $this->Admin_model->save($_POST);
         echo json_encode(array("status" => TRUE));
     }
@@ -32,7 +32,7 @@ class Admin extends MX_Controller {
 
     //function update data from db_table
     public function ajax_update() {
-        $this->_validate();
+        //$this->_validate();
         $this->Admin_model->update(array('id' => $this->input->post('id')), $_POST);
         echo json_encode(array("status" => TRUE));
     }
