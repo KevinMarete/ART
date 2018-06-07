@@ -40,7 +40,7 @@ class Admin_model extends CI_Model {
     }
 
     //function get_by_id
-    public function get_by_id($table,$id) {
+    public function get_by_id($table, $id) {
         $this->db->from($table);
         $this->db->where('id', $id);
         $query = $this->db->get();
@@ -48,7 +48,7 @@ class Admin_model extends CI_Model {
         return $query->row();
     }
 
-    //function update table
+    //function update db_table
     public function update($where, $data) {
         $post_data = array();
         $table = '';
@@ -60,6 +60,12 @@ class Admin_model extends CI_Model {
         }
         $this->db->update($table, $post_data, $where);
         return $this->db->affected_rows();
+    }
+
+    //function delete from db_table
+    public function delete_by_id($table, $id) {
+        $this->db->where('id', $id);
+        $this->db->delete($table);
     }
 
 }

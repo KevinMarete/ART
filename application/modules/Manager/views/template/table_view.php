@@ -18,7 +18,7 @@
                     <div class="btn-group" role="group" aria-label="...">
                         <button type="button" class="btn btn-default" onclick="add_<?php echo $page_name; ?>()"> <i class="fa fa-plus-square"></i> Add</button>
                         <button type="button" class="btn btn-default" onclick="edit_<?php echo $page_name; ?>()"> <i class="fa fa-edit"></i> Edit</button>
-                        <button type="button" class="btn btn-default"> <i class="fa fa-trash"></i> Remove</button>
+                        <button type="button" class="btn btn-default" onclick="delete_<?php echo $page_name; ?>()"> <i class="fa fa-trash"></i> Remove</button>
                         <i class="label label-default">click on table row for Edit/Remove</i>
                     </div>
                 </div>
@@ -66,10 +66,10 @@
 
     });
     $('#dataTables-listing tbody').on('click', 'tr', function () {
-    //console.log( table.row( this ).data() );
+        //console.log( table.row( this ).data() );
         selected_id = (table.row(this).data())[0];
     });
-    
+
     //function add data to db_table
     function add_<?php echo $page_name; ?>()
     {
@@ -171,14 +171,14 @@
             }
         });
     }
-    
+
     //function remove data from db_table
-    function delete_<?php echo $page_name; ?>(id)
+    function delete_<?php echo $page_name; ?>()
     {
         if (confirm('Are you sure you want to delete this <?php echo $page_name; ?>?'))
         {
             $.ajax({
-                url: "<?php echo base_url('Manager/Admin/ajax_delete'); ?>/" + id,
+                url: "<?php echo base_url('Manager/Admin/ajax_delete/tbl_'.$page_name); ?>/" + this.selected_id,
                 type: "POST",
                 dataType: "JSON",
                 success: function (data)

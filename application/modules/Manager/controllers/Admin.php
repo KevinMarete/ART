@@ -9,6 +9,7 @@ class Admin extends MX_Controller {
         $this->load->model('Admin_model');
     }
 
+    //function fetch data from db_table
     public function get_data($table) {
         $response = $this->Admin_model->get_table_data($table);
         if ($response['status']) {
@@ -16,23 +17,30 @@ class Admin extends MX_Controller {
         }
     }
 
-    //add data to database
+    //function add data to db_table
     public function add_data() {
-        $this->_validate();
         $insert = $this->Admin_model->save($_POST);
         echo json_encode(array("status" => TRUE));
     }
 
-    public function ajax_edit($id,$table) {
-        $data = $this->Admin_model->get_by_id($id,$table);
+    //function edit data from db_table
+    public function ajax_edit($id, $table) {
+        $data = $this->Admin_model->get_by_id($id, $table);
         echo json_encode($data);
     }
 
+    //function update data from db_table
     public function ajax_update() {
-        $this->Admin_model->update(array('id' => $this->input->post('id')),$_POST);
+        $this->Admin_model->update(array('id' => $this->input->post('id')), $_POST);
         echo json_encode(array("status" => TRUE));
     }
-    
+    //function delete from db_table
+    public function ajax_delete($id,$table) {
+        $this->Admin_model->delete_by_id($id,$table);
+        echo json_encode(array("status" => TRUE));
+    }
+
+    //function form validations
     private function _validate() {
         $data = array();
         $data['error_string'] = array();
@@ -65,7 +73,7 @@ class Admin extends MX_Controller {
             $data['error_string'][] = 'Formulation is required';
             $data['status'] = FALSE;
         }
-         if ($this->input->post('county_id') == '') {
+        if ($this->input->post('county_id') == '') {
             $data['inputerror'][] = 'county_id';
             $data['error_string'][] = 'County Name is required';
             $data['status'] = FALSE;
