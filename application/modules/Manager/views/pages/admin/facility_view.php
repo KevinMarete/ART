@@ -27,7 +27,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Category</label>
                             <div class="col-md-9">
-                                <select name="category" id="category_id" class="form-control" style="width: 100%">
+                                <select name="category" id="category_id" class="form-control select2" style="width: 100%">
                                     <option value="">Select Category</option>
                                     <option value="central">Central</option>
                                     <option value="satellite">Satellite</option>
@@ -61,14 +61,14 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Sub County</label>
                             <div class="col-md-9">
-                                <select name="subcounty_id" id="subcounty" class="form-control"> </select>
+                                <select name="subcounty_id" id="subcounty" class="form-control select2"> </select>
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Partner</label>
                             <div class="col-md-9">
-                                <select name="partner_id" id="partner" class="form-control"> </select>
+                                <select name="partner_id" id="partner" class="form-control select2"> </select>
                                 <span class="help-block"></span>
                             </div>
                         </div>

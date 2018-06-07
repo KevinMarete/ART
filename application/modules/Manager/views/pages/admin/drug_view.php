@@ -27,23 +27,14 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Generic</label>
                             <div class="col-md-9">
-                                <select name="generic_id" id="generic_id" class="form-control" style="width: 100%">
-                                    <option value="">---Select Generic----</option>
-                                    <?php foreach ($get_generic as $row) { ?>
-                                        <option value="<?= $row->id ?>"><?= $row->name ?></option>
-                                    <?php } ?>
-                                </select>
+                                <select name="generic_id" id="generic_id" class="form-control select2"></select>
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Formulation</label>
                             <div class="col-md-9">
-                                <select name="formulation_id" id="formulation_id" class="form-control" style="width: 100%">
-                                    <option value="">---Select Formulation----</option>
-                                    <?php foreach ($get_formulation as $row) { ?>
-                                        <option value="<?= $row->id ?>"><?= $row->name ?></option>
-                                    <?php } ?>
+                                <select name="formulation_id" id="formulation_id" class="form-control select2">
                                 </select>
                                 <span class="help-block"></span>
                             </div>
@@ -58,4 +49,25 @@
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+</div><!-- /End modal -->
+
+<script type="text/javascript">
+    $(function () {
+        var genericURL = '../../API/generic';
+        var formulationURL = '../../API/formulation';
+        $("#generic_id").empty()
+        $.getJSON(genericURL, function (generics) {
+            $("#generic_id").append($("<option value=''>Select Generic</option>"));
+            $.each(generics, function (index, generic) {
+                $("#generic_id").append($("<option value='" + generic.id + "'>" + generic.name.toUpperCase() + "</option>"));
+            });
+        });
+        $("#formulation_id").empty()
+        $.getJSON(formulationURL, function (formulations) {
+            $("#formulation_id").append($("<option value=''>Select Formulation</option>"));
+            $.each(formulations, function (index, formulation) {
+                $("#formulation_id").append($("<option value='" + formulation.id + "'>" + formulation.name.toUpperCase() + "</option>"));
+            });
+        });
+    });
+</script>

@@ -21,7 +21,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">County</label>
                             <div class="col-md-9">
-                                <select name="county_id" id="county" class="form-control"></select>
+                                <select name="county_id" id="county" class="form-control select2"></select>
                                 <span class="help-block"></span>
                             </div>
                         </div>

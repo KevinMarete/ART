@@ -19,7 +19,7 @@
 <!-- Sb-Admin CSS -->
 <link href="<?php echo base_url() . 'public/manager/lib/sbadmin2/dist/css/sb-admin-2.css'; ?>" rel="stylesheet">
 <!--select2 css-->
-<link href="<?php echo base_url() . 'public/manager/select2-4.0.6/dist/css/select2.min.css'; ?>" rel="stylesheet" />
+<link href="<?php echo base_url() . 'public/manager/select2/css/select2.min.css'; ?>" rel="stylesheet" />
 <!-- Manager -->
 <link href="<?php echo base_url() . 'public/manager/css/manager.css'; ?>" rel="stylesheet">
 <!--favicon-->

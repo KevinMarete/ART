@@ -34,21 +34,21 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Category</label>
                             <div class="col-md-9">
-                                <select name="category_id" id="category" class="form-control"></select>
+                                <select name="category_id" id="category" class="form-control select2"></select>
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Service</label>
                             <div class="col-md-9">
-                                <select name="service_id" id="service" class="form-control"></select>
+                                <select name="service_id" id="service" class="form-control select2"></select>
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Line</label>
                             <div class="col-md-9">
-                                <select name="line_id" id="line" class="form-control"></select>
+                                <select name="line_id" id="line" class="form-control select2"></select>
                                 <span class="help-block"></span>
                             </div>
                         </div>

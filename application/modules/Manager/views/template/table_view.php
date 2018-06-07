@@ -104,6 +104,12 @@
         $('.help-block').empty();
         $('#modal_form').modal('show');
         $('.modal-title').text('Add <?php echo ucwords(str_replace('_', ' ', $page_name)); ?>');
+        //select2
+        $(".select2").select2({
+            width: '100%',
+            allowClear: true,
+            dropdownParent: $("#modal_form")
+        });
     }
 
     //function edit db_table data
@@ -113,6 +119,12 @@
         $('#form')[0].reset();
         $('.form-group').removeClass('has-error');
         $('.help-block').empty();
+        //select2
+        $(".select2").select2({
+            width: '100%',
+            allowClear: true,
+            dropdownParent: $("#modal_form")
+        });
 
         $.ajax({
             url: "<?php echo base_url('Manager/Admin/ajax_edit/tbl_' . $page_name); ?>/" + this.selected_id,
@@ -148,7 +160,6 @@
                 $('[name="longitude"]').val(data.longitude);
                 $('[name="latitude"]').val(data.latitude);
                 $('[name="subcounty_id"]').val(data.subcounty_id);
-                //$('[name="subcounty_id"]').val(data.subcounty_id);
                 $('[name="partner_id"]').val(data.partner_id);
 
                 $('#modal_form').modal('show');
