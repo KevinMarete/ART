@@ -166,7 +166,7 @@
         if (confirm('Are you sure you want to delete this <?php echo $page_name;?>?'))
         {
             $.ajax({
-                url: "<?php echo base_url('Manager/settings/Status/ajax_delete'); ?>/" + id,
+                url: "<?php echo base_url('Manager/Admin/ajax_delete'); ?>/" + id,
                 type: "POST",
                 dataType: "JSON",
                 success: function (data)
