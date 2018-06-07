@@ -11,7 +11,7 @@
                     <input type="hidden" value="" name="id"/> 
                     <div class="form-body">
                         <div class="form-group">
-                            <label class="control-label col-md-3">Subcounty Name</label>
+                            <label class="control-label col-md-3">Sub county</label>
                             <div class="col-md-9">
                                 <input name="name" id="name" placeholder="Name" class="form-control" type="text">
                                 <span class="help-block"></span>
@@ -19,7 +19,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-md-3">County Name</label>
+                            <label class="control-label col-md-3">County</label>
                             <div class="col-md-9">
                                 <select name="county_id" id="county" class="form-control"></select>
                                 <span class="help-block"></span>

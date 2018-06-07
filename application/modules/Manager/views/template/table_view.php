@@ -19,7 +19,9 @@
                         <button type="button" class="btn btn-default" onclick="add_<?php echo $page_name; ?>()"> <i class="fa fa-plus-square"></i> Add</button>
                         <button type="button" class="btn btn-default" onclick="edit_<?php echo $page_name; ?>()"> <i class="fa fa-edit"></i> Edit</button>
                         <button type="button" class="btn btn-default" onclick="delete_<?php echo $page_name; ?>()"> <i class="fa fa-trash"></i> Remove</button>
-                        <i class="label label-default">click on table row for Edit/Remove</i>
+                        <br/>
+                        <br/>
+                        <i class="label label-warning">Click on table row for Edit/Remove</i>
                     </div>
                 </div>
                 <!-- /.panel-heading -->
@@ -133,6 +135,21 @@
                 $('[name="formulation_id"]').val(data.formulation_id);
                 //generic
                 $('[name="abbreviation"]').val(data.abbreviation);
+                //regimen
+                $('[name="code"]').val(data.code);
+                $('[name="description"]').val(data.description);
+                $('[name="category_id"]').val(data.category_id);
+                $('[name="service_id"]').val(data.service_id);
+                $('[name="line_id"]').val(data.line_id);
+                //facility
+                $('[name="mflcode"]').val(data.mflcode);
+                $('[name="category"]').val(data.category);
+                $('[name="dhiscode"]').val(data.dhiscode);
+                $('[name="longitude"]').val(data.longitude);
+                $('[name="latitude"]').val(data.latitude);
+                $('[name="subcounty_id"]').val(data.subcounty_id);
+                //$('[name="subcounty_id"]').val(data.subcounty_id);
+                $('[name="partner_id"]').val(data.partner_id);
 
                 $('#modal_form').modal('show');
                 $('.modal-title').text('Edit <?php echo ucwords($page_name); ?>');
