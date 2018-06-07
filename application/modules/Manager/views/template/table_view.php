@@ -29,6 +29,9 @@
                             <tr>
                                 <?php
                                 foreach ($columns as $column) {
+                                    if($column == 'county_id'){
+                                        $column = 'County';
+                                    }
                                     echo"<th>" . ucwords($column) . "</th>";
                                 }
                                 ?>
@@ -66,7 +69,6 @@
 
     });
     $('#dataTables-listing tbody').on('click', 'tr', function () {
-        //console.log( table.row( this ).data() );
         selected_id = (table.row(this).data())[0];
     });
 
@@ -95,9 +97,11 @@
             dataType: "JSON",
             success: function (data)
             {
-
+                //commmon to all
                 $('[name="id"]').val(data.id);
                 $('[name="name"]').val(data.name);
+                //county
+                $('[name="county_id"]').val(data.county_id);
                 //dose
                 $('[name="value"]').val(data.value);
                 $('[name="frequency"]').val(data.frequency);

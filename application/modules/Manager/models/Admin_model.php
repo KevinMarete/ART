@@ -7,7 +7,14 @@ class Admin_model extends CI_Model {
     public function get_table_data($table) {
         $response = array();
         try {
-            $table_data = $this->db->get($table)->result_array();
+            if($table == 'tbl_subcounty'){
+                $this->db->select('sc.id, sc.name, c.name county');
+                $this->db->from('tbl_subcounty sc');
+                $this->db->join('tbl_county c', 'c.id = sc.county_id', 'inner');
+                $table_data = $this->db->get()->result_array();
+            }else{
+                $table_data = $this->db->get($table)->result_array();
+            }
             if (!empty($table_data)) {
                 foreach ($table_data as $result) {
                     $response['data'][] = array_values($result);

@@ -21,12 +21,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">County Name</label>
                             <div class="col-md-9">
-                                <select name="county_id" id="county" class="form-control" style="width: 100%">
-                                    <option value="">---Select County----</option>
-                                    <?php foreach ($get_county as $row) { ?>
-                                        <option value="<?= $row->id ?>"><?= $row->name ?></option>
-                                    <?php } ?>
-                                </select>
+                                <select name="county_id" id="county" class="form-control"></select>
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -42,3 +37,16 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <!-- End Bootstrap modal -->
+
+<script type="text/javascript">
+    $(function(){
+        var countyURL = '../../API/county';
+        $("#county").empty()
+        $.getJSON(countyURL, function(counties){
+            $("#county").append($("<option value=''>Select County</option>"));
+            $.each(counties, function(index, county) {
+                $("#county").append($("<option value='" + county.id + "'>" + county.name.toUpperCase() + "</option>"));
+            });
+        }); 
+    });
+</script>
