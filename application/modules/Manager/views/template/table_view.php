@@ -29,8 +29,29 @@
                             <tr>
                                 <?php
                                 foreach ($columns as $column) {
-                                    if($column == 'county_id'){
+                                    if ($column == 'county_id') {
                                         $column = 'County';
+                                    }
+                                    if ($column == 'generic_id') {
+                                        $column = 'Generic';
+                                    }
+                                    if ($column == 'formulation_id') {
+                                        $column = 'Formulation';
+                                    }
+                                    if ($column == 'subcounty_id') {
+                                        $column = 'Subcounty';
+                                    }
+                                    if ($column == 'partner_id') {
+                                        $column = 'Partner';
+                                    }
+                                    if ($column == 'category_id') {
+                                        $column = 'Category';
+                                    }
+                                    if ($column == 'service_id') {
+                                        $column = 'Service';
+                                    }
+                                    if ($column == 'line_id') {
+                                        $column = 'Line';
                                     }
                                     echo"<th>" . ucwords($column) . "</th>";
                                 }
@@ -182,7 +203,7 @@
         if (confirm('Are you sure you want to delete this <?php echo $page_name; ?>?'))
         {
             $.ajax({
-                url: "<?php echo base_url('Manager/Admin/ajax_delete/tbl_'.$page_name); ?>/" + this.selected_id,
+                url: "<?php echo base_url('Manager/Admin/ajax_delete/tbl_' . $page_name); ?>/" + this.selected_id,
                 type: "POST",
                 dataType: "JSON",
                 success: function (data)
