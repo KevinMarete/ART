@@ -18,7 +18,7 @@
 .nav > li > a:focus, .nav > li > a:hover{
     color: #fff;
     text-decoration: none;
-    background-color:#333;
+    background-color:#3d4a57;
 }
 a {
     color: #ccc;
@@ -28,13 +28,16 @@ a {
 .navbar-default .navbar-brand {
     color: #fff;
 }
-.sidebar ul li a.active {
-    background-color: black;
-    color: #fff;
-    text-decoration: none;
-}
 .sidebar{
     margin-top: 55px;
+}
+.sidebar ul li a {
+    background-color: #fff;
+    color: #000;
+    text-decoration: none;
+}
+.sidebar ul li a.active{
+    color: #000;
 }
 .breadcrumb{
     margin-top: 20px;
