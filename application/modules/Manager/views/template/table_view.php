@@ -59,16 +59,15 @@
             ajax: "<?php echo base_url() . 'Manager/Admin/get_data/tbl_' . $page_name . '/'; ?>",
             select: {
             style: 'single',
-        }
-        
+        }   
         
         });
         
     });
     $('#dataTables-listing tbody').on( 'click', 'tr', function () {
-    console.log( table.row( this ).data() );
+//    console.log( table.row( this ).data() );
     selected_id = (table.row( this ).data())[0];
-    console.log(selected_id);
+//    console.log(selected_id);
 } );
     function add_<?php echo $page_name; ?>()
     {
@@ -88,7 +87,7 @@
         $('.help-block').empty();
         
         $.ajax({
-            url: "<?php echo base_url('Manager/Admin/ajax_edit'); ?>/" + this.selected_id,
+            url: "<?php echo base_url('Manager/Admin/ajax_edit/tbl_'.$page_name); ?>/" + this.selected_id,
             type: "GET",
             dataType: "JSON",
             success: function (data)

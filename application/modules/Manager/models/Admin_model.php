@@ -25,6 +25,7 @@ class Admin_model extends CI_Model {
         return $response;
     }
 
+    //function save data to database
     public function save($data) {
         $post_data = array();
         $table = '';
@@ -38,21 +39,16 @@ class Admin_model extends CI_Model {
         return $this->db->insert_id();
     }
 
-    public function get_by_id($id) {
-//        $db_tables = [
-//            'county'=>'tbl_county',
-//            'facility'=>'tbl_facility'
-//        ];
-//        
-//        $table = $db_tables[$page_name];
-//        
-        $this->db->from('tbl_county');
+    //function get_by_id
+    public function get_by_id($table,$id) {
+        $this->db->from($table);
         $this->db->where('id', $id);
         $query = $this->db->get();
 
         return $query->row();
     }
 
+    //function update table
     public function update($where, $data) {
         $post_data = array();
         $table = '';

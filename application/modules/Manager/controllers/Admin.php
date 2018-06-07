@@ -22,8 +22,8 @@ class Admin extends MX_Controller {
         echo json_encode(array("status" => TRUE));
     }
 
-    public function ajax_edit($id) {
-        $data = $this->Admin_model->get_by_id($id);
+    public function ajax_edit($id,$table) {
+        $data = $this->Admin_model->get_by_id($id,$table);
         echo json_encode($data);
     }
 
