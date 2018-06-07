@@ -18,6 +18,7 @@ class Admin extends MX_Controller {
 
     //add data to database
     public function add_data() {
+        $this->_validate();
         $insert = $this->Admin_model->save($_POST);
         echo json_encode(array("status" => TRUE));
     }
@@ -30,6 +31,50 @@ class Admin extends MX_Controller {
     public function ajax_update() {
         $this->Admin_model->update(array('id' => $this->input->post('id')),$_POST);
         echo json_encode(array("status" => TRUE));
+    }
+    
+    private function _validate() {
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = TRUE;
+
+        if ($this->input->post('name') == '') {
+            $data['inputerror'][] = 'name';
+            $data['error_string'][] = 'Name is required';
+            $data['status'] = FALSE;
+        }
+        if ($this->input->post('strength') == '') {
+            $data['inputerror'][] = 'strength';
+            $data['error_string'][] = 'Drug Strength is required';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('packsize') == '') {
+            $data['inputerror'][] = 'packsize';
+            $data['error_string'][] = 'Drug Pack Size is required';
+            $data['status'] = FALSE;
+        }
+        if ($this->input->post('generic_id') == '') {
+            $data['inputerror'][] = 'generic_id';
+            $data['error_string'][] = 'Generic Name is required';
+            $data['status'] = FALSE;
+        }
+        if ($this->input->post('formulation_id') == '') {
+            $data['inputerror'][] = 'formulation_id';
+            $data['error_string'][] = 'Formulation is required';
+            $data['status'] = FALSE;
+        }
+         if ($this->input->post('county_id') == '') {
+            $data['inputerror'][] = 'county_id';
+            $data['error_string'][] = 'County Name is required';
+            $data['status'] = FALSE;
+        }
+
+        if ($data['status'] === FALSE) {
+            echo json_encode($data);
+            exit();
+        }
     }
 
 }

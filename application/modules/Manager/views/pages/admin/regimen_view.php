@@ -13,21 +13,21 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Regimen Code</label>
                             <div class="col-md-9">
-                                <input name="code" placeholder="Regimen Code" class="form-control" type="text">
+                                <input name="code" placeholder="Code" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Regimen Name</label>
                             <div class="col-md-9">
-                                <input name="name" placeholder="Regimen Name" class="form-control" type="text">
+                                <input name="name" placeholder="Name" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Regimen Description</label>
                             <div class="col-md-9">
-                                <textarea name="description" placeholder="Regimen Description" class="form-control" type="text"></textarea>
+                                <textarea name="description" placeholder="Description" class="form-control" type="text"></textarea>
                                 <span class="help-block"></span>
                             </div>
                         </div>
