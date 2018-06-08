@@ -96,8 +96,7 @@
     });
 
     //function add data to db_table
-    function add_<?php echo $page_name; ?>()
-    {
+    function add_<?php echo $page_name; ?>() {
         save_method = 'add';
         $('#form')[0].reset();
         $('.form-group').removeClass('has-error');
@@ -113,29 +112,22 @@
     }
 
     //function edit db_table data
-    function edit_<?php echo $page_name; ?>()
-    {
+    function edit_<?php echo $page_name; ?>() {
         save_method = 'update';
         $('#form')[0].reset();
         $('.form-group').removeClass('has-error');
         $('.help-block').empty();
-        //select2
-        $(".select2").select2({
-            width: '100%',
-            allowClear: true,
-            dropdownParent: $("#modal_form")
-        });
 
         $.ajax({
-            url: "<?php echo base_url('Manager/Admin/ajax_edit/tbl_' . $page_name); ?>/" + this.selected_id,
+            url: "<?php echo base_url('Manager/Admin/edit_data/tbl_' . $page_name); ?>/" + this.selected_id,
             type: "GET",
             dataType: "JSON",
             success: function (data)
             {
-                //commmon to all
+                //commmon to most tables
                 $('[name="id"]').val(data.id);
                 $('[name="name"]').val(data.name);
-                //county
+                //subcounty
                 $('[name="county_id"]').val(data.county_id);
                 //dose
                 $('[name="value"]').val(data.value);
@@ -163,24 +155,29 @@
                 $('[name="partner_id"]').val(data.partner_id);
 
                 $('#modal_form').modal('show');
+
+                //select2
+                $(".select2").select2({
+                    width: '100%',
+                    allowClear: true,
+                    dropdownParent: $("#modal_form")
+                });
                 $('.modal-title').text('Edit <?php echo ucwords($page_name); ?>');
 
             },
             error: function ()
             {
-                alert('Error getting data');
+                swal('Error', 'Error getting <?php echo $page_name;?>', 'error');
             }
         });
     }
 
     //function refresh table
-    function reload_table()
-    {
+    function reload_table() {
         table.ajax.reload(null, false);
     }
 
-    function save()
-    {
+    function save() {
         $('#btnSave').text('saving...');
         $('#btnSave').attr('disabled', true);
         var url;
@@ -188,7 +185,7 @@
         if (save_method == 'add') {
             url = "<?php echo base_url('Manager/Admin/add_data'); ?>";
         } else {
-            url = "<?php echo base_url('Manager/Admin/ajax_update'); ?>";
+            url = "<?php echo base_url('Manager/Admin/update_data'); ?>";
         }
         $.ajax({
             url: url,
@@ -201,6 +198,7 @@
                 if (data.status)
                 {
                     $('#modal_form').modal('hide');
+                     swal('<?php echo ucwords($page_name); ?>', 'Add/updation success!', 'success');
                     reload_table();
                 } else
                 {
@@ -217,7 +215,7 @@
             },
             error: function ()
             {
-                alert('Error adding / updating data');
+                swal('Error', 'Error adding / updating <?php echo $page_name; ?>', 'error');
                 $('#btnSave').text('save');
                 $('#btnSave').attr('disabled', false);
 
@@ -226,22 +224,23 @@
     }
 
     //function remove data from db_table
-    function delete_<?php echo $page_name; ?>()
-    {
+    function delete_<?php echo $page_name; ?>() {
         if (confirm('Are you sure you want to delete this <?php echo $page_name; ?>?'))
         {
+
             $.ajax({
-                url: "<?php echo base_url('Manager/Admin/ajax_delete/tbl_' . $page_name); ?>/" + this.selected_id,
+                url: "<?php echo base_url('Manager/Admin/delete_data/tbl_' . $page_name); ?>/" + this.selected_id,
                 type: "POST",
                 dataType: "JSON",
-                success: function (data)
+                success: function ()
                 {
+                    swal('<?php echo ucwords($page_name); ?>', 'deletion success!', 'success');
                     $('#modal_form').modal('hide');
                     reload_table();
                 },
                 error: function ()
                 {
-                    alert('Error deleting data');
+                    swal('Error', 'Error deleting <?php echo $page_name; ?>!', 'error');
                 }
             });
 

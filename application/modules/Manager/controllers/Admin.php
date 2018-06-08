@@ -25,20 +25,21 @@ class Admin extends MX_Controller {
     }
 
     //function edit data from db_table
-    public function ajax_edit($id, $table) {
+    public function edit_data($id, $table) {
         $data = $this->Admin_model->get_by_id($id, $table);
         echo json_encode($data);
     }
 
     //function update data from db_table
-    public function ajax_update() {
+    public function update_data() {
         $this->_validate();
         $this->Admin_model->update(array('id' => $this->input->post('id')), $_POST);
         echo json_encode(array("status" => TRUE));
     }
+
     //function delete from db_table
-    public function ajax_delete($id,$table) {
-        $this->Admin_model->delete_by_id($id,$table);
+    public function delete_data($id, $table) {
+        $this->Admin_model->delete_by_id($id, $table);
         echo json_encode(array("status" => TRUE));
     }
 
@@ -49,37 +50,58 @@ class Admin extends MX_Controller {
         $data['inputerror'] = array();
         $data['status'] = TRUE;
 
-        if ($this->input->post('name') == '') {
+        if ($this->input->post('name') == '' && $this->input->post('value') == '' && $this->input->post('frequency') == '' && $this->input->post('strength') == '' && $this->input->post('packsize') == '' && $this->input->post('generic_id') == '' && $this->input->post('formulation_id') == '' && $this->input->post('mflcode') == '' && $this->input->post('category') == '' && $this->input->post('dhiscode') == '' && $this->input->post('dhiscode') == '' && $this->input->post('longitude') == '' && $this->input->post('latitude') == '' && $this->input->post('subcounty_id') == '' && $this->input->post('partner_id') == '' && $this->input->post('abbreviation') == '' && $this->input->post('code') == '' && $this->input->post('description') == '' && $this->input->post('category_id') == '' && $this->input->post('service_id') == '' && $this->input->post('line_id') == '' && $this->input->post('county_id') == '') {
+            //common to many forms
             $data['inputerror'][] = 'name';
             $data['error_string'][] = 'Name is required';
+            //dose
+            $data['inputerror'][] = 'value';
+            $data['error_string'][] = 'Value is required';
+            $data['inputerror'][] = 'frequency';
+            $data['error_string'][] = 'Frequency is required';
+            //drug
+            $data['inputerror'][] = 'strength';
+            $data['error_string'][] = 'Strength is required';
+            $data['inputerror'][] = 'packsize';
+            $data['error_string'][] = 'Packsize is required';
+            $data['inputerror'][] = 'generic_id';
+            $data['error_string'][] = 'Generic is required';
+            $data['inputerror'][] = 'formulation_id';
+            $data['error_string'][] = 'Formulation is required';
+            //facility
+            $data['inputerror'][] = 'mflcode';
+            $data['error_string'][] = 'MFLcode is required';
+            $data['inputerror'][] = 'category';
+            $data['error_string'][] = 'Category is required';
+            $data['inputerror'][] = 'dhiscode';
+            $data['error_string'][] = 'DhisCode is required';
+            $data['inputerror'][] = 'longitude';
+            $data['error_string'][] = 'Longitude is required';
+            $data['inputerror'][] = 'latitude';
+            $data['error_string'][] = 'Latitude is required';
+            $data['inputerror'][] = 'subcounty_id';
+            $data['error_string'][] = 'Subcounty Name is required';
+            $data['inputerror'][] = 'partner_id';
+            $data['error_string'][] = 'Partner Name is required';
+            //generic
+            $data['inputerror'][] = 'abbreviation';
+            $data['error_string'][] = 'Abbreviation is required';
+            //regimen
+            $data['inputerror'][] = 'code';
+            $data['error_string'][] = 'Code is required';
+            $data['inputerror'][] = 'description';
+            $data['error_string'][] = 'Description is required';
+            $data['inputerror'][] = 'category_id';
+            $data['error_string'][] = 'Category is required';
+            $data['inputerror'][] = 'service_id';
+            $data['error_string'][] = 'Service Name is required';
+            $data['inputerror'][] = 'line_id';
+            $data['error_string'][] = 'Line Name is required';
+            //subcounty
+            $data['inputerror'][] = 'county_id';
+            $data['error_string'][] = 'County Name is required';
             $data['status'] = FALSE;
         }
-//        if ($this->input->post('strength') == '') {
-//            $data['inputerror'][] = 'strength';
-//            $data['error_string'][] = 'Drug Strength is required';
-//            $data['status'] = FALSE;
-//        }
-//
-//        if ($this->input->post('packsize') == '') {
-//            $data['inputerror'][] = 'packsize';
-//            $data['error_string'][] = 'Drug Pack Size is required';
-//            $data['status'] = FALSE;
-//        }
-//        if ($this->input->post('generic_id') == '') {
-//            $data['inputerror'][] = 'generic_id';
-//            $data['error_string'][] = 'Generic Name is required';
-//            $data['status'] = FALSE;
-//        }
-//        if ($this->input->post('formulation_id') == '') {
-//            $data['inputerror'][] = 'formulation_id';
-//            $data['error_string'][] = 'Formulation is required';
-//            $data['status'] = FALSE;
-//        }
-//        if ($this->input->post('county_id') == '') {
-//            $data['inputerror'][] = 'county_id';
-//            $data['error_string'][] = 'County Name is required';
-//            $data['status'] = FALSE;
-//        }
 
         if ($data['status'] === FALSE) {
             echo json_encode($data);

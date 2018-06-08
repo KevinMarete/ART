@@ -11,7 +11,7 @@
                     <input type="hidden" value="" name="id"/> 
                     <div class="form-body">
                         <div class="form-group">
-                            <label class="control-label col-md-3">Facility Name</label>
+                            <label class="control-label col-md-3">Facility</label>
                             <div class="col-md-9">
                                 <input id="name" name="name" placeholder="Name" class="form-control" type="text">
                                 <span class="help-block"></span>
@@ -77,8 +77,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" id="btnSave" onclick="save()">Save</button>
-                <button type="button" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-default" id="btnSave" onclick="save()">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -87,7 +87,7 @@
 <script type="text/javascript">
     $(function () {
         var countyURL = '../../API/subcounty';
-        var countyURL = '../../API/partner';
+        var parnerURL = '../../API/partner';
         $("#subcounty").empty()
         $.getJSON(countyURL, function (subcounties) {
             $("#subcounty").append($("<option value=''>Select SubCounty</option>"));
@@ -96,7 +96,7 @@
             });
         });
         $("#partner").empty()
-        $.getJSON(countyURL, function (partners) {
+        $.getJSON(parnerURL, function (partners) {
             $("#partner").append($("<option value=''>Select Partner</option>"));
             $.each(partners, function (index, partner) {
                 $("#partner").append($("<option value='" + partner.id + "'>" + partner.name.toUpperCase() + "</option>"));
