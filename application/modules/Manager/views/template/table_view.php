@@ -96,7 +96,7 @@
     });
 
     //function add data to db_table
-    function add_<?php echo $page_name; ?>(){
+    function add_<?php echo $page_name; ?>() {
         save_method = 'add';
         $('#form')[0].reset();
         $('.form-group').removeClass('has-error');
@@ -112,7 +112,7 @@
     }
 
     //function edit db_table data
-    function edit_<?php echo $page_name; ?>(){
+    function edit_<?php echo $page_name; ?>() {
         save_method = 'update';
         $('#form')[0].reset();
         $('.form-group').removeClass('has-error');
@@ -167,27 +167,25 @@
             },
             error: function ()
             {
-                swal('Error', 'Error getting data', 'error');
+                swal('Error', 'Error getting <?php echo $page_name;?>', 'error');
             }
         });
     }
 
     //function refresh table
-    function reload_table(){
+    function reload_table() {
         table.ajax.reload(null, false);
     }
 
-    function save(){
+    function save() {
         $('#btnSave').text('saving...');
         $('#btnSave').attr('disabled', true);
         var url;
 
         if (save_method == 'add') {
             url = "<?php echo base_url('Manager/Admin/add_data'); ?>";
-            swal('<?php echo ucwords($page_name); ?>', 'Add success!', 'success');
         } else {
             url = "<?php echo base_url('Manager/Admin/update_data'); ?>";
-            swal('<?php echo ucwords($page_name); ?>', 'updation success!', 'success');
         }
         $.ajax({
             url: url,
@@ -200,6 +198,7 @@
                 if (data.status)
                 {
                     $('#modal_form').modal('hide');
+                     swal('<?php echo ucwords($page_name); ?>', 'Add/updation success!', 'success');
                     reload_table();
                 } else
                 {
@@ -225,7 +224,7 @@
     }
 
     //function remove data from db_table
-    function delete_<?php echo $page_name; ?>(){
+    function delete_<?php echo $page_name; ?>() {
         if (confirm('Are you sure you want to delete this <?php echo $page_name; ?>?'))
         {
 
