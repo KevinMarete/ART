@@ -15,6 +15,8 @@
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables-plugins/sum().js'; ?>"></script>
 <!--select2 js-->
 <script src="<?php echo base_url() . 'public/manager/select2/js/select2.js'; ?>"></script>
+<!--bootstrap-sweetalert--->
+<script src="<?php echo base_url() . 'public/manager/bootstrap-sweetalert/js/sweetalert.min.js'; ?>"></script>
 <!-- Custom Theme JavaScript -->
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/dist/js/sb-admin-2.js'; ?>"></script>
 <script type="text/javascript">

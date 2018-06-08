@@ -77,8 +77,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" id="btnSave" onclick="save()">Save</button>
-                <button type="button" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-default" id="btnSave" onclick="save()">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

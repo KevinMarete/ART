@@ -24,5 +24,9 @@
 <link href="<?php echo base_url() . 'public/manager/css/manager.css'; ?>" rel="stylesheet">
 <!--favicon-->
 <link rel="shortcut icon" type="text/css" href="<?php echo base_url() . 'public/dashboard/img/favicon.ico'; ?>">
+<!--select2.min.css-->
+<link href="<?php echo base_url() . 'public/manager/select2/css/select2.min.css'; ?>" rel="stylesheet" />
+<!--bootstrap-sweetalert-->
+<link href="<?php echo base_url() . 'public/manager/bootstrap-sweetalert/css/sweetalert.min.css'; ?>" rel="stylesheet" />    
 <!-- jQuery js-->
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables/js/jquery-1.12.4.js'; ?>"></script>

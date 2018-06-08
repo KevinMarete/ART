@@ -25,19 +25,19 @@ class Admin extends MX_Controller {
     }
 
     //function edit data from db_table
-    public function ajax_edit($id, $table) {
+    public function edit_data($id, $table) {
         $data = $this->Admin_model->get_by_id($id, $table);
         echo json_encode($data);
     }
 
     //function update data from db_table
-    public function ajax_update() {
+    public function update_data() {
         //$this->_validate();
         $this->Admin_model->update(array('id' => $this->input->post('id')), $_POST);
         echo json_encode(array("status" => TRUE));
     }
     //function delete from db_table
-    public function ajax_delete($id,$table) {
+    public function delete_data($id,$table) {
         $this->Admin_model->delete_by_id($id,$table);
         echo json_encode(array("status" => TRUE));
     }
