@@ -27,7 +27,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Description</label>
                             <div class="col-md-9">
-                                <textarea name="description" placeholder="Description" class="form-control" type="text"></textarea>
+                                <textarea name="description" placeholder="Description" class="form-control" type="text" rows="5"></textarea>
                                 <span class="help-block"></span>
                             </div>
                         </div>
