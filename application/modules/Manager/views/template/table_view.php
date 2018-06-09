@@ -162,12 +162,12 @@
                     allowClear: true,
                     dropdownParent: $("#modal_form")
                 });
-                $('.modal-title').text('Edit <?php echo ucwords($page_name); ?>');
+                $('.modal-title').text('Edit <?php echo ucwords(str_replace('_', ' ', $page_name)); ?>');
 
             },
             error: function ()
             {
-                swal('Error', 'Error getting <?php echo $page_name;?>', 'error');
+                swal('Error', 'Error getting <?php echo str_replace('_', ' ', $page_name); ?>', 'error');
             }
         });
     }
@@ -198,7 +198,7 @@
                 if (data.status)
                 {
                     $('#modal_form').modal('hide');
-                     swal('<?php echo ucwords($page_name); ?>', 'Add/updation success!', 'success');
+                    swal('<?php echo ucwords(str_replace('_', ' ', $page_name)); ?>', 'Add/updation success!', 'success');
                     reload_table();
                 } else
                 {
@@ -215,7 +215,7 @@
             },
             error: function ()
             {
-                swal('Error', 'Error adding / updating <?php echo $page_name; ?>', 'error');
+                swal('Error', 'Error adding / updating <?php echo str_replace('_', ' ', $page_name); ?>', 'error');
                 $('#btnSave').text('save');
                 $('#btnSave').attr('disabled', false);
 
@@ -225,7 +225,7 @@
 
     //function remove data from db_table
     function delete_<?php echo $page_name; ?>() {
-        if (confirm('Are you sure you want to delete this <?php echo $page_name; ?>?'))
+        if (confirm('Are you sure you want to delete this <?php echo str_replace('_', ' ', $page_name); ?>?'))
         {
 
             $.ajax({
@@ -234,13 +234,13 @@
                 dataType: "JSON",
                 success: function ()
                 {
-                    swal('<?php echo ucwords($page_name); ?>', 'deletion success!', 'success');
+                    swal('<?php echo ucwords(str_replace('_', ' ', $page_name)); ?>', 'deletion success!', 'success');
                     $('#modal_form').modal('hide');
                     reload_table();
                 },
                 error: function ()
                 {
-                    swal('Error', 'Error deleting <?php echo $page_name; ?>!', 'error');
+                    swal('Error', 'Error deleting <?php echo str_replace('_', ' ', $page_name); ?>!', 'error');
                 }
             });
 
