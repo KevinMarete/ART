@@ -50,7 +50,7 @@ class Admin extends MX_Controller {
         $data['inputerror'] = array();
         $data['status'] = TRUE;
 
-        if ($this->input->post('name') == '' && ($this->input->post('name') == '' || $this->input->post('value') == '' || $this->input->post('frequency') == '') && ($this->input->post('strength') == '' || $this->input->post('packsize') == '' || $this->input->post('generic_id') == '' || $this->input->post('formulation_id') == '') && ($this->input->post('name') == '' || $this->input->post('mflcode') == '' || $this->input->post('category') == '' || $this->input->post('dhiscode') == '' || $this->input->post('longitude') == '' || $this->input->post('latitude') == '' || $this->input->post('subcounty_id') == '' || $this->input->post('partner_id') == '') && ($this->input->post('name') == '' || $this->input->post('abbreviation') == '') && ($this->input->post('name') == '' || $this->input->post('code') == '' || $this->input->post('description') == '' || $this->input->post('category_id') == '' || $this->input->post('service_id') == '' || $this->input->post('line_id') == '') && ($this->input->post('name') == '' || $this->input->post('county_id') == '')) {
+        if ($this->input->post('name') == '' && ($this->input->post('name') == '' || $this->input->post('value') == '' || $this->input->post('frequency') == '') && ($this->input->post('strength') == '' || $this->input->post('packsize') == '' || $this->input->post('generic_id') == '' || $this->input->post('formulation_id') == '') && ($this->input->post('name') == '' || $this->input->post('mflcode') == '' || $this->input->post('category') == '' || $this->input->post('dhiscode') == '' || $this->input->post('longitude') == '' || $this->input->post('latitude') == '' || $this->input->post('subcounty_id') == '' || $this->input->post('partner_id') == '') && ($this->input->post('name') == '' || $this->input->post('abbreviation') == '') && ($this->input->post('facility_id') == '' || $this->input->post('version') == '' || $this->input->post('setup_date') == '' || $this->input->post('upgrade_date') == '' || $this->input->post('comments') == '' || $this->input->post('contact_name') == '' || $this->input->post('contact_phone') == '' || $this->input->post('active_patients') == '' || $this->input->post('user_id') == '') && ($this->input->post('name') == '' || $this->input->post('code') == '' || $this->input->post('description') == '' || $this->input->post('category_id') == '' || $this->input->post('service_id') == '' || $this->input->post('line_id') == '') && ($this->input->post('name') == '' || $this->input->post('county_id') == '')) {
             //common to many forms
             $data['inputerror'][] = 'name';
             $data['error_string'][] = 'Name is required';
@@ -86,6 +86,30 @@ class Admin extends MX_Controller {
             //generic
             $data['inputerror'][] = 'abbreviation';
             $data['error_string'][] = 'Abbreviation is required';
+            //install
+            $data['inputerror'][] = 'facility_id';
+            $data['error_string'][] = 'Facility is required';
+            $data['inputerror'][] = 'version';
+            $data['error_string'][] = 'ADT Version is required';
+            $data['inputerror'][] = 'setup_date';
+            $data['error_string'][] = 'Set Up Date is required';
+            $data['inputerror'][] = 'upgrade_date';
+            $data['error_string'][] = 'UpGrade Date is required';
+            $data['inputerror'][] = 'comments';
+            $data['error_string'][] = 'Comment is required';
+            $data['inputerror'][] = 'contact_name';
+            $data['error_string'][] = 'Contact Name is required';
+            $data['inputerror'][] = 'contact_phone';
+            $data['error_string'][] = 'Contact Phone is required';
+            //$data['inputerror'][] = 'emrs_used';
+            //$data['error_string'][] = 'Emrs is required';
+            $data['inputerror'][] = 'active_patients';
+            $data['error_string'][] = 'Active Patients is required';
+            $data['inputerror'][] = 'facility_id';
+            $data['error_string'][] = 'Facility Name is required';
+            $data['inputerror'][] = 'user_id';
+            $data['error_string'][] = 'Assignee Name is required';
+
             //regimen
             $data['inputerror'][] = 'code';
             $data['error_string'][] = 'Code is required';

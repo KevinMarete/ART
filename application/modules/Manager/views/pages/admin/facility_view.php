@@ -86,10 +86,10 @@
 <!-- End Bootstrap modal -->
 <script type="text/javascript">
     $(function () {
-        var countyURL = '../../API/subcounty';
+        var subcountyURL = '../../API/subcounty';
         var parnerURL = '../../API/partner';
         $("#subcounty").empty()
-        $.getJSON(countyURL, function (subcounties) {
+        $.getJSON(subcountyURL, function (subcounties) {
             $("#subcounty").append($("<option value=''>Select SubCounty</option>"));
             $.each(subcounties, function (index, subcounty) {
                 $("#subcounty").append($("<option value='" + subcounty.id + "'>" + subcounty.name.toUpperCase() + "</option>"));

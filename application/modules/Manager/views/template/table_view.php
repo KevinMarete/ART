@@ -15,7 +15,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <!--Add button controls-->
-                    <div class="btn-group" role="group" aria-label="...">
+                    <div class="btn-group" role="group" id="action_btn" aria-label="...">
                         <button type="button" class="btn btn-default" onclick="add_<?php echo $page_name; ?>()"> <i class="fa fa-plus-square"></i> Add</button>
                         <button type="button" class="btn btn-default" onclick="edit_<?php echo $page_name; ?>()"> <i class="fa fa-edit"></i> Edit</button>
                         <button type="button" class="btn btn-default" onclick="delete_<?php echo $page_name; ?>()"> <i class="fa fa-trash"></i> Remove</button>
@@ -55,7 +55,25 @@
                                     if ($column == 'line_id') {
                                         $column = 'Line';
                                     }
-                                    echo"<th>" . ucwords($column) . "</th>";
+                                    if ($column == 'facility_id') {
+                                        $column = 'facility name';
+                                    }
+                                    if ($column == 'user_id') {
+                                        $column = 'Assignee';
+                                    }
+                                    if ($column == 'foldername') {
+                                        $column = 'folder name';
+                                    }
+                                    if ($column == 'firstname') {
+                                        $column = 'first name';
+                                    }
+                                    if ($column == 'lastname') {
+                                        $column = 'last name';
+                                    }
+                                    if ($column == 'role_id') {
+                                        $column = 'role';
+                                    }
+                                    echo"<th>" . ucwords(str_replace('_', ' ', $column)) . "</th>";
                                 }
                                 ?>
                             </tr>
@@ -80,6 +98,14 @@
     var save_method;
     var table;
     var selected_id = 0;
+
+    //hide action_btn for backup
+<?php if ($page_name == 'backup') { ?>
+        $('#action_btn').hide();
+    <?php
+}
+?>
+
     $(document).ready(function () {
         table = $('#dataTables-listing').DataTable({
             responsive: true,
@@ -139,6 +165,22 @@
                 $('[name="formulation_id"]').val(data.formulation_id);
                 //generic
                 $('[name="abbreviation"]').val(data.abbreviation);
+                //install
+                $('[name="facility_id"]').val(data.facility_id);
+                $('[name="contact_name"]').val(data.contact_name);
+                $('[name="contact_phone"]').val(data.contact_phone);
+                $('[name="version"]').val(data.version);
+                $('[name="setup_date"]').val(data.setup_date);
+                $('[name="upgrade_date"]').val(data.upgrade_date);
+                $('[name="comments"]').val(data.comments);
+                // $('[name="is_usage"]').val(data.is_usage);
+                //$("input[name=is_usage][value=1]").prop('checked', true);
+                //$("input[name=is_usage][value=0]").prop('checked', true);
+                //$('[name="is_internet"]').val(data.is_internet);
+                //$("input[name=is_internet][value=1]").prop('checked', true);
+                //$("input[name=is_internet][value=0]").prop('checked', true);
+                $('[name="active_patients"]').val(data.active_patients);
+                $('[name="user_id"]').val(data.user_id);
                 //regimen
                 $('[name="code"]').val(data.code);
                 $('[name="description"]').val(data.description);
@@ -153,6 +195,12 @@
                 $('[name="latitude"]').val(data.latitude);
                 $('[name="subcounty_id"]').val(data.subcounty_id);
                 $('[name="partner_id"]').val(data.partner_id);
+                //user
+                $('[name="firstname"]').val(data.firstname);
+                $('[name="lastname"]').val(data.lastname);
+                $('[name="email_address"]').val(data.email_address);
+                $('[name="phone_number"]').val(data.phone_number);
+                $('[name="role_id"]').val(data.role_id);
 
                 $('#modal_form').modal('show');
 

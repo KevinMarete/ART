@@ -65,7 +65,7 @@
                 ?>
                 <!--backups-->
                 <li>
-                    <a href="<?php echo base_url('#mftp'); ?>" ><i class="fa fa-cloud-upload"></i> Back_UPs</a>
+                    <a href="#" ><i class="fa fa-cloud-upload"></i> Mftp</a>
                 </li>
             </ul>
         </div>
