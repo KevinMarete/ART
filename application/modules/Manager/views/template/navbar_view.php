@@ -7,12 +7,16 @@
             <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="<?php echo base_url() . 'manager/dashboard'; ?>">
-            <i class="fa fa-dashboard fa-fw"></i>
-            Commodity Manager: <b><?php echo ucwords($this->session->userdata('scope_name')) . ' ' . ucwords($this->session->userdata('role')); ?></b>
-        </a>
+            <i class="fa fa-dashboard fa-fw"></i> Commodity Manager
+        </a> 
     </div>
     <!-- /.navbar-header -->
     <ul class="nav navbar-top-links navbar-right">
+        <li>
+            <small>
+                <b><?php echo ucwords($this->session->userdata('role')); ?>: </b> <?php echo ucwords($this->session->userdata('scope_name')); ?>
+            </small> 
+        </li>
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 <i class="fa fa-user fa-fw"></i> <?php echo $this->session->userdata('firstname') . ' ' . $this->session->userdata('lastname'); ?> <i class="fa fa-caret-down"></i>
@@ -39,17 +43,6 @@
     <div class="navbar-default sidebar" role="navigation">
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
-                <li class="sidebar-search">
-                    <div class="input-group custom-search-form">
-                        <input type="text" class="form-control" placeholder="Search...">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </span>
-                    </div>
-                    <!-- /input-group -->
-                </li>
                 <li>
                     <a class="dashboard" href="<?php echo base_url() . 'manager/dashboard'; ?>"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                 </li>
@@ -63,10 +56,6 @@
                     echo "</ul> </li>";
                 }
                 ?>
-                <!--backups-->
-                <li>
-                    <a href="<?php echo base_url('#mftp'); ?>" ><i class="fa fa-cloud-upload"></i> Back_UPs</a>
-                </li>
             </ul>
         </div>
         <!--/.sidebar-collapse -->

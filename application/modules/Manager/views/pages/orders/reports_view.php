@@ -17,7 +17,7 @@
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-listing">
+                    <table width="100%" class="table table-striped table-bordered table-hover table-condensed display compact nowrap" id="dataTables-listing">
                         <thead>
                             <tr>
                                 <?php
@@ -43,13 +43,22 @@
 
 <script>
     $(document).ready(function () {
+        var role = "<?php echo $this->session->userdata('role'); ?>"
+        var filters = {
+            'national' : [0, 1, 2],
+            'county': [0, 1],
+            'subcounty': [0, 1]
+        }
         $('#dataTables-listing').DataTable({
             responsive: true,
-            order: [[2, "desc"]],
+            order: [[1, "desc"]],
             pagingType: "full_numbers",
             ajax: "<?php echo base_url() . 'Manager/Orders/get_orders'; ?>",
+            "columnDefs": [
+                {"width": "5%", "targets": 0}
+            ],
             initComplete: function () {
-                this.api().columns([2, 3, 4]).every(function () {
+                this.api().columns(filters[role]).every(function () {
                     var column = this;
                     var select = $('<br/><select><option value="">Show all</option></select>')
                             .appendTo($(column.header()))
