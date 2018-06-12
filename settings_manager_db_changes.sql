@@ -1,0 +1,52 @@
+-- Adminer 4.6.1 MySQL dump
+
+INSERT INTO `tbl_role_submodule` (`role_id`, `submodule_id`) VALUES
+(1,	1),
+(2,	2),
+(3,	2),
+(3,	3),
+(2,	2),
+(2,	4),
+(1,	6),
+(1,	7),
+(1,	8),
+(1,	9),
+(1,	10),
+(1,	11),
+(1,	12),
+(1,	13),
+(1,	14),
+(1,	15),
+(1,	16),
+(1,	17),
+(1,	18),
+(1,	20),
+(1,	21),
+(1,	22),
+(1,	23);
+
+INSERT INTO `tbl_submodule` (`id`, `name`, `module_id`) VALUES
+(1,	'county',	1),
+(2,	'reports',	2),
+(3,	'assign',	2),
+(4,	'reporting rates',	2),
+(5,	'allocation',	2),
+(6,	'subcounty',	1),
+(7,	'line',	1),
+(8,	'drug',	1),
+(9,	'facility',	1),
+(10,	'category',	1),
+(11,	'partner',	1),
+(12,	'generic',	1),
+(13,	'regimen',	1),
+(14,	'service',	1),
+(15,	'purpose',	1),
+(16,	'status',	1),
+(17,	'dose',	1),
+(18,	'change_reason',	1),
+(20,	'formulation',	1),
+(21,	'install',	1),
+(22,	'backup',	1),
+(23,	'user',	1);
+
+-- 2018-06-12 09:10:42
