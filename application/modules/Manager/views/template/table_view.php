@@ -17,8 +17,8 @@
                     <!--Add button controls-->
                     <div class="btn-group" role="group" id="action_btn" aria-label="...">
                         <button type="button" class="btn btn-default" onclick="add_<?php echo $page_name; ?>()"> <i class="fa fa-plus-square"></i> Add</button>
-                        <button type="button" class="btn btn-default" onclick="edit_<?php echo $page_name; ?>()"> <i class="fa fa-edit"></i> Edit</button>
-                        <button type="button" class="btn btn-default" onclick="delete_<?php echo $page_name; ?>()"> <i class="fa fa-trash"></i> Remove</button>
+                        <button type="button" class="btn btn-default" id="edit_btn" onclick="edit_<?php echo $page_name; ?>()"> <i class="fa fa-edit"></i> Edit</button>
+                        <button type="button" class="btn btn-default" id="del_btn" onclick="delete_<?php echo $page_name; ?>()"> <i class="fa fa-trash"></i> Remove</button>
                         <br/>
                         <br/>
                         <i class="label label-warning">Click on table row for Edit/Remove</i>
@@ -102,27 +102,36 @@ if ($page_name != 'backup' && $page_name != 'user') {
     var save_method;
     var table;
     var selected_id = 0;
+    $('#edit_btn').prop('disabled', true);
+    $('#del_btn').prop('disabled', true);
 
- //hide action_btn for table_view backup and user
+    //hide action_btn for table_view backup and user
 <?php if ($page_name == 'backup' || $page_name == 'user') { ?>
         $('#action_btn').hide();
     <?php
 }
 ?>
-
     $(document).ready(function () {
         table = $('#dataTables-listing').DataTable({
             responsive: true,
             ajax: "<?php echo base_url() . 'Manager/Admin/get_data/tbl_' . $page_name . '/'; ?>",
             select: {
                 style: 'single',
-            }
+            },
 
         });
-
     });
     $('#dataTables-listing tbody').on('click', 'tr', function () {
         selected_id = (table.row(this).data())[0];
+        if (table.row({selected: true}).indexes().length === 0) {
+            $('#edit_btn').prop('disabled', false);
+            $('#del_btn').prop('disabled', false);
+        } else
+        {
+            $('#edit_btn').prop('disabled', true);
+            $('#del_btn').prop('disabled', true);
+        }
+
     });
 
     //function add data to db_table
@@ -133,7 +142,7 @@ if ($page_name != 'backup' && $page_name != 'user') {
         $('.help-block').empty();
         $('#modal_form').modal('show');
         $('.modal-title').text('Add <?php echo ucwords(str_replace('_', ' ', $page_name)); ?>');
-        
+
         //select2
         $(".select2").select2({
             width: '100%',
@@ -196,7 +205,7 @@ if ($page_name != 'backup' && $page_name != 'user') {
                 $('[name="latitude"]').val(data.latitude);
                 $('[name="subcounty_id"]').val(data.subcounty_id);
                 $('[name="partner_id"]').val(data.partner_id);
-               
+
                 $('#modal_form').modal('show');
                 //select2
                 $(".select2").select2({
