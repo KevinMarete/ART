@@ -13,7 +13,7 @@ class User_model extends CI_Model {
 				$response['message'] = 'Welcome, <b>'.$user_data['firstname'].'</b> to the Commodity Manager!';
 				unset($user_data['password']);
 				$response['data'] = $user_data;
-				$response['data']['scope_name'] = 'National';
+				$response['data']['scope_name'] = 'NASCOP';
 				//Get menu data
 				$this->db->select('m.name module,m.icon, sm.name submodule, r.name role, IF(us.scope_id IS NULL, " ", us.scope_id) scope', FALSE);
 				$this->db->from('tbl_role_submodule rsm');
@@ -27,7 +27,6 @@ class User_model extends CI_Model {
 					$response['data']['modules'][$value['module']]['submodules'][] = $value['submodule'];
 					$response['data']['role'] = $value['role'];
 					$response['data']['scope'] = $value['scope'];
-
 				}
 				//Set scopename
 				if(in_array($response['data']['role'], array('subcounty', 'county'))){
@@ -58,7 +57,9 @@ class User_model extends CI_Model {
 			if($count > 0){
 				$data['id'] = $this->db->insert_id();
 				//Assign scope of user role
-				$this->db->replace('tbl_user_scope', array('scope_id' => $scope_id, 'role_id' => $data['role_id'], 'user_id' => $data['id']));
+				if($scope_id){
+					$this->db->replace('tbl_user_scope', array('scope_id' => $scope_id, 'role_id' => $data['role_id'], 'user_id' => $data['id']));	
+				}
 				//Set response message
 				$response['message'] = 'User account for <b>'.$data['firstname'].' '.$data['lasttname'].'</b> was created!';
 				$response['data'] = $data;

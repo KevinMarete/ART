@@ -11,8 +11,12 @@ class Orders_model extends CI_Model {
             $this->db->where('id', $orderid);
 
             if ($this->db->update('tbl_cdrr')){
-                    $array = array(
-                    'description' => $action,
+                $log_action = $action;
+                if($action == 'pending'){
+                    $log_action = 'updated';
+                }
+                $array = array(
+                    'description' => $log_action,
                     'user_id' => $user,
                     'cdrr_id' => $orderid,
                     'created' => date('Y-m-d H:i:s')
@@ -20,23 +24,18 @@ class Orders_model extends CI_Model {
                 $this->db->set($array);
                 $this->db->insert('tbl_cdrr_log');
 
-
-                // update maps
+                //update maps
                 $this->db->set('status', $action);
                 $this->db->where('id', $mapid);
                 if ($this->db->update('tbl_maps')){
-
-                $maps_log = array(
-                    'description' => $action,
-                    'user_id' => $user,
-                    'maps_id' => $mapid,
-                    'created' => date('Y-m-d H:i:s')
-                );
-                $this->db->insert('tbl_maps_log',$maps_log);
-                }               
-                // update maps  -/>
-
-
+                    $maps_log = array(
+                        'description' => $log_action,
+                        'user_id' => $user,
+                        'maps_id' => $mapid,
+                        'created' => date('Y-m-d H:i:s')
+                    );
+                    $this->db->insert('tbl_maps_log',$maps_log);
+                }    
                 $response['message'] = 'Order status was updated!';
                 $response['status'] = TRUE;
             } else {
@@ -72,33 +71,36 @@ class Orders_model extends CI_Model {
         $response = array('data'=> array());
         $column = "";
         $join = "";
-        $filter = "AND f.subcounty_id = '".$scope."'";
+        $filter = "";
         try {
             //Set conditions
             if($role == 'county'){
                 $column = "UCASE(sc.name) subcounty,";
                 $join = "INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id";
                 $filter = "AND sc.county_id = '".$scope."'";
+            }else if($role == 'subcounty'){
+                $filter = "AND f.subcounty_id = '".$scope."'";
+            }else if($role == 'national'){
+                $column = "UCASE(co.name) county, UCASE(sc.name) subcounty,";
+                $join = "INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id INNER JOIN tbl_county co ON sc.county_id = co.id";
             }
 
             $sql = "SELECT 
-            IF(c.code = 'D-CDRR', CONCAT('D-CDRR#', c.id), CONCAT('F-CDRR#', c.id)) cdrr_id,
-            IF(m.code = 'D-MAPS', CONCAT('D-MAPS#', m.id), CONCAT('F-MAPS#', m.id)) maps_id,
-            c.period_begin,
-            c.status,
-            $column
-            UCASE(f.name) facility_name,
-            CONCAT('<a href=view/', c.id,'/', m.id, '>View Order</a>') options
-            FROM tbl_facility f
-            $join
-            INNER JOIN tbl_cdrr c ON c.facility_id = f.id
-            INNER JOIN tbl_maps m ON m.facility_id = f.id
-            WHERE c.facility_id = m.facility_id
-            AND c.period_begin = m.period_begin
-            AND c.period_end = m.period_end
-            $filter
-            GROUP BY c.id 
-            ORDER BY c.period_begin DESC";
+                        UCASE(f.name) facility_name,
+                        c.period_begin,
+                        $column
+                        c.status,
+                        CONCAT('<a href=view/', c.id,'/', m.id, '>View Order</a>') options
+                    FROM tbl_facility f
+                    $join
+                    INNER JOIN tbl_cdrr c ON c.facility_id = f.id
+                    INNER JOIN tbl_maps m ON m.facility_id = f.id
+                    WHERE c.facility_id = m.facility_id
+                    AND c.period_begin = m.period_begin
+                    AND c.period_end = m.period_end
+                    $filter
+                    GROUP BY c.id 
+                    ORDER BY c.period_begin DESC";
             $table_data = $this->db->query($sql)->result_array();
             if (!empty($table_data)) {
                 foreach ($table_data as $result) {
@@ -122,37 +124,50 @@ class Orders_model extends CI_Model {
         try {
             $month_name = date('F Y', strtotime($period_begin));
 
-            if($role == 'county'){
+            if($role == 'national'){
                 $sql = "SELECT 
-                UCASE(sc.name) subcounty,
-                CONCAT_WS('/', SUM(IF(c.period_begin IS NOT NULL, 1, 0)), (SUM(IF(c.period_begin IS NOT NULL, 1, 0)) + SUM(IF(c.period_begin IS NULL, 1, 0)))) submitted,
-                ROUND(SUM(IF(c.period_begin IS NOT NULL, 1, 0))/(SUM(IF(c.period_begin IS NOT NULL, 1, 0))+ SUM(IF(c.period_begin IS NULL, 1, 0)))*100) progress
-                FROM tbl_facility f  
-                INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
-                LEFT JOIN tbl_cdrr c ON c.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
-                LEFT JOIN tbl_maps m ON m.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
-                WHERE sc.county_id = ?
-                AND f.category != 'satellite'
-                GROUP BY sc.name
-                ORDER BY sc.name ASC";
+                            UCASE(co.name) county,
+                            CONCAT_WS('/', SUM(IF(c.period_begin IS NOT NULL, 1, 0)), (SUM(IF(c.period_begin IS NOT NULL, 1, 0)) + SUM(IF(c.period_begin IS NULL, 1, 0)))) submitted,
+                            ROUND(SUM(IF(c.period_begin IS NOT NULL, 1, 0))/(SUM(IF(c.period_begin IS NOT NULL, 1, 0))+ SUM(IF(c.period_begin IS NULL, 1, 0)))*100) progress
+                        FROM tbl_facility f  
+                        INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
+                        INNER JOIN tbl_county co ON co.id = sc.county_id
+                        LEFT JOIN tbl_cdrr c ON c.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
+                        LEFT JOIN tbl_maps m ON m.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
+                        WHERE f.category != 'satellite'
+                        GROUP BY co.name
+                        ORDER BY co.name ASC";
+                $table_data = $this->db->query($sql, array($period_begin, $period_end, $period_begin, $period_end))->result_array();
+            } else if($role == 'county'){
+                $sql = "SELECT 
+                            UCASE(sc.name) subcounty,
+                            CONCAT_WS('/', SUM(IF(c.period_begin IS NOT NULL, 1, 0)), (SUM(IF(c.period_begin IS NOT NULL, 1, 0)) + SUM(IF(c.period_begin IS NULL, 1, 0)))) submitted,
+                            ROUND(SUM(IF(c.period_begin IS NOT NULL, 1, 0))/(SUM(IF(c.period_begin IS NOT NULL, 1, 0))+ SUM(IF(c.period_begin IS NULL, 1, 0)))*100) progress
+                        FROM tbl_facility f  
+                        INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
+                        LEFT JOIN tbl_cdrr c ON c.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
+                        LEFT JOIN tbl_maps m ON m.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
+                        WHERE sc.county_id = ?
+                        AND f.category != 'satellite'
+                        GROUP BY sc.name
+                        ORDER BY sc.name ASC";
                 $table_data = $this->db->query($sql, array($period_begin, $period_end, $period_begin, $period_end, $scope))->result_array();
             }else{
                 $allocation_cond = ($allocation) ? "IF(c.period_begin IS NOT NULL, CONCAT('<a href=../../../view_allocation/',c.id,'/',m.id,'>View</a>'), 'Not Reported ' ) options" : "IF(c.period_begin IS NOT NULL, CONCAT('<a href=view/',c.id,'/',m.id,'>View</a>'), 'Not Reported ' ) options" ;
 
                 $sql = "SELECT 
-                f.mflcode,
-                UCASE(f.name) facility_name,
-                IF(c.period_begin IS NOT NULL, ?, ?) reporting_status,
-                ? period,
-                $allocation_cond
-                FROM tbl_facility f  
-                LEFT JOIN tbl_cdrr c ON c.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
-                LEFT JOIN tbl_maps m ON m.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
-                WHERE f.subcounty_id = ?
-                AND f.category != 'satellite'
-                GROUP BY f.mflcode
-                ORDER BY f.name ASC";
-                // var_dump($sql);die;
+                            f.mflcode,
+                            UCASE(f.name) facility_name,
+                            IF(c.period_begin IS NOT NULL AND m.period_begin IS NOT NULL, ?, ?) reporting_status,
+                            ? period,
+                            IF(c.period_begin IS NOT NULL AND m.period_begin IS NOT NULL, CONCAT('<a href=view/',c.id,'/',m.id,'>View Order</a>'), 'Not Reported') options
+                        FROM tbl_facility f  
+                        LEFT JOIN tbl_cdrr c ON c.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
+                        LEFT JOIN tbl_maps m ON m.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
+                        WHERE f.subcounty_id = ?
+                        AND f.category != 'satellite'
+                        GROUP BY f.mflcode
+                        ORDER BY f.name ASC";
                 $table_data = $this->db->query($sql, array(
                     '<span class="label label-success">Submitted</span>',
                     '<span class="label label-danger">Pending</span>',
@@ -197,18 +212,22 @@ class Orders_model extends CI_Model {
                 $table_data = $this->db->query($sql, array($scope, $scope))->result_array();
             }else{
                 $sql = "SELECT                      
-                f.mflcode,
-                UCASE(f.name) facility_name,
-                IF(c.period_begin IS NULL, DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%M-%Y') ,DATE_FORMAT(c.period_begin, '%M-%Y')) period,
-                IF(c.status IS NULL, 'Not Reported', c.status) reporting_status,
-                IF(c.status = 'pending', CONCAT('<a href=allocate/', c.id,'/', m.id, '> Allocate</a>'), CONCAT('<a href=view_allocation/', c.id,'/', m.id, '>View Allocation</a>'))  options
-                FROM tbl_facility f
-                LEFT JOIN tbl_cdrr c ON c.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
-                LEFT JOIN tbl_maps m ON m.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
-                WHERE f.subcounty_id = ?
-                AND f.category != 'satellite'
-                GROUP BY f.mflcode
-                ORDER BY f.name ASC";
+                            f.mflcode,
+                            UCASE(f.name) facility_name,
+                            IF(c.period_begin IS NULL, DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%M-%Y') , DATE_FORMAT(c.period_begin, '%M-%Y')) period,
+                            IF(c.status IS NULL, 'Not Reported', c.status) reporting_status,
+                            CASE 
+                                WHEN c.status = 'pending' AND m.status = 'pending' THEN CONCAT('<a href=allocate/', c.id,'/', m.id, '> Allocate Order</a>')
+                                WHEN c.status != 'pending' AND m.status != 'pending' THEN CONCAT('<a href=view_allocation/', c.id,'/', m.id, '> View Allocation</a>') 
+                                ELSE 'Not Reported'
+                            END AS options
+                        FROM tbl_facility f
+                        LEFT JOIN tbl_cdrr c ON c.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
+                        LEFT JOIN tbl_maps m ON m.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
+                        WHERE f.subcounty_id = ?
+                        AND f.category != 'satellite'
+                        GROUP BY f.mflcode
+                        ORDER BY f.name ASC";
                 $table_data = $this->db->query($sql, array($period_begin, $period_end, $period_begin, $period_end, $scope))->result_array();
             }
 
@@ -283,28 +302,40 @@ class Orders_model extends CI_Model {
         return $response;
     }
 
-    public function get_cdrr_data($cdrr_id,$scope = null,$role = null){
+    public function get_cdrr_data($cdrr_id, $scope = null, $role = null){
+        $conditions = array(
+            "national" => "",
+            "county" => " AND county_id = '$scope'",
+            "subcounty" => " AND sc.id = '$scope'"
+        );
 
-        $role_cond = ($role == 'subcounty') ? " AND sc.id = $scope" : " AND county_id = $scope";
+        $role_cond = $conditions[$role];
 
         $response = array();
-        try{
-            $sql = "SELECT *,d.name as drug_name,f.name as facility_name,co.name as county, sc.name as subcounty,ci.id as cdrr_item_id
-            FROM tbl_cdrr c 
-            INNER JOIN tbl_cdrr_item ci ON ci.cdrr_id = c.id
-            INNER JOIN vw_drug_list d ON d.id = ci.drug_id
-            INNER JOIN tbl_facility f ON f.id = c.facility_id
-            INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
-            INNER JOIN tbl_county co ON co.id = sc.county_id
-            WHERE c.id = ?  ".$role_cond;
 
+        //Go back if no cdrr_id
+        if(!$cdrr_id){
+            return $response;
+        }
+
+        try{
+            $sql = "SELECT 
+                        *,d.name as drug_name,f.name as facility_name,co.name as county, sc.name as subcounty,ci.id as cdrr_item_id
+                    FROM tbl_cdrr c 
+                    INNER JOIN tbl_cdrr_item ci ON ci.cdrr_id = c.id
+                    INNER JOIN vw_drug_list d ON d.id = ci.drug_id
+                    INNER JOIN tbl_facility f ON f.id = c.facility_id
+                    INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
+                    INNER JOIN tbl_county co ON co.id = sc.county_id
+                    WHERE c.id = ?  ".$role_cond;
             $table_data = $this->db->query($sql, array($cdrr_id))->result_array();
 
-            $logs_sql = "SELECT cl.description,cl.created,u.firstname,u.lastname,r.name as role
-            FROM tbl_cdrr_log cl
-            inner join tbl_user u  on cl.user_id = u.id
-            inner join tbl_role r on u.role_id = r.id
-            where cdrr_id =? order by cl.id asc";
+            $logs_sql = "SELECT 
+                            cl.description,cl.created,u.firstname,u.lastname,r.name as role
+                        FROM tbl_cdrr_log cl
+                        inner join tbl_user u  on cl.user_id = u.id
+                        inner join tbl_role r on u.role_id = r.id
+                        where cdrr_id =? order by cl.id asc";
             $logs_table_data = $this->db->query($logs_sql, array($cdrr_id))->result_array();
 
             if(!empty($table_data)){
@@ -338,6 +369,7 @@ class Orders_model extends CI_Model {
                         'dispensed_packs' => $result['dispensed_packs'], 
                         'losses' => $result['losses'], 
                         'adjustments' => $result['adjustments'], 
+                        'adjustments_neg' => $result['adjustments_neg'], 
                         'count' => $result['count'], 
                         'expiry_quant' => $result['expiry_quant'], 
                         'expiry_date' => $result['expiry_date'], 
@@ -346,12 +378,11 @@ class Orders_model extends CI_Model {
                         'aggr_consumed' => $result['aggr_consumed'], 
                         'aggr_on_hand' => $result['aggr_on_hand'], 
                         'publish' => $result['publish'], 
-                        'drugamc' => $this->getDrugAMC( $result['mflcode'],$result['drug_id']),
+                        'drugamc' => $this->getDrugAMC($result['facility_id'], $result['period_begin'], $result['drug_id']),
                         'cdrr_id' => $result['cdrr_id'], 
                         'drug_id' => $result['drug_id'], 
                         'qty_allocated' => $result['qty_allocated'], 
-                        'feedback' => $result['feedback'], 
-                        'decision' => $result['decision']
+                        'feedback' => $result['feedback']
                     );
 
                     $response['data']['cdrr_logs'] = $logs_table_data;
@@ -370,25 +401,63 @@ class Orders_model extends CI_Model {
         return $response;
     }
 
-    public function getDrugAMC($mflcode,$drug){
-        $sql = "SELECT sum(aggr_consumed)/count(aggr_consumed) as AMC
-        FROM tbl_cdrr_item ci 
-        left join tbl_cdrr c on c.id = ci.cdrr_id
-        left join tbl_facility f on f.id = c.facility_id
-        WHERE 
-        period_begin >= '2018-03-01'
-        and mflcode = $mflcode
-        and  drug_id = $drug ";
+    public function getDrugAMC($facility_id, $period_begin, $drug_id){
+        $first = date('Y-m-01', strtotime($period_begin . "- 1 month"));
+        $second = date('Y-m-01', strtotime($period_begin . "- 2 month"));
+        $third = date('Y-m-01', strtotime($period_begin . "- 3 month"));
+        $amc = 0;
 
-        $amc_data = $this->db->query($sql)->result_array()[0]['AMC']+0;
-        
-        return $amc_data; 
+        $sql = "SELECT 
+                    SUM(ci.dispensed_packs) as dispensed_packs,
+                    SUM(ci.dispensed_units) as dispensed_units,
+                    SUM(ci.aggr_consumed) as aggr_consumed,
+                    SUM(ci.aggr_on_hand) as aggr_on_hand,
+                    SUM(ci.count) as count,
+                    c.code
+                FROM tbl_cdrr_item ci 
+                INNER JOIN (
+                    SELECT 
+                        max(id) as id, period_begin, code
+                    FROM tbl_cdrr 
+                    WHERE (period_begin = '$first' OR period_begin = '$second' OR period_begin = '$third')
+                    AND facility_id = '$facility_id'
+                    GROUP BY period_begin
+                ) c ON ci.cdrr_id = c.id
+                AND ci.drug_id = '$drug_id'
+                GROUP BY ci.drug_id";
+        $query = $this -> db -> query($sql);
+        $results = $query -> result_array();
+        if ($results) {
+            foreach ($results as $result) {
+                $code = trim($result['code']);
+                if ($code == "D-CDRR") {
+                    $amc = ($result['dispensed_packs'] + $result['aggr_consumed']) - ($result['aggr_on_hand'] + $result['count']);
+                } else if ($code == "F-CDRR_packs") {
+                    $amc = $result['dispensed_packs'] - $result['count'];
+                } else if ($code == "F-CDRR_units") {
+                    $amc = $result['dispensed_units'] - $result['count'];
+                }
+            }
+        }
+        return $amc;
     }
 
-    public function get_maps_data($maps_id,$scope = null,$role = null){
-        $role_cond = ($role == 'subcounty') ? " AND f.subcounty_id = $scope" : " AND sc.county_id = $scope";
+    public function get_maps_data($maps_id, $scope = null,$role = null){
+        $conditions = array(
+            "national" => "",
+            "county" => " AND sc.county_id = '$scope'",
+            "subcounty" => " AND f.subcounty_id = '$scope'"
+        );
+        
+        $role_cond = $conditions[$role];
 
         $response = array();
+
+        //Go back if no maps_id
+        if(!$maps_id){
+            return $response;
+        }
+
         try{
             $sql = "SELECT mi.total, mi.regimen_id
             FROM tbl_maps m 

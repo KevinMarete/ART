@@ -18,7 +18,7 @@ class User extends MX_Controller {
 						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						'.$response['message'].'</div>';
 			$this->session->set_flashdata('dashboard_msg', $message);
-			if(in_array($this->session->userdata('role'), array('subcounty', 'county'))){
+			if(in_array($this->session->userdata('role'), array('subcounty', 'county', 'national'))){
 				redirect('manager/orders/reporting_rates');	
 			}else{
 				redirect('manager/dashboard');
@@ -35,7 +35,7 @@ class User extends MX_Controller {
 
 	public function get_role_scope($role){
 		$response = array();
-		$exempted_scopes = array('admin');
+		$exempted_scopes = array('admin', 'national');
 		if(!in_array($role, $exempted_scopes)){
 			$response = $this->db->order_by('name', 'ASC')->get('tbl_' . $role)->result_array();
 		}

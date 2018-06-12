@@ -55,7 +55,7 @@
                                 <div class="form-group">
                                     <input class="form-control" placeholder="Password" name="password" type="password" value="" required>
                                 </div>
-                                <button type="submit" class="btn btn-lg btn-info btn-block"> <i class="fa fa-arrow-circle-o-right"></i> Login</button>
+                                <button type="submit" class="btn btn-md btn-primary btn-block"> <i class="fa fa-arrow-circle-o-right"></i> Login</button>
                             </fieldset>
                             <hr/>
                             <center>
