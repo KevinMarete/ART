@@ -599,16 +599,6 @@ END;;
 
 DELIMITER ;
 
-DROP TABLE IF EXISTS `tbl_role_submodule`;
-CREATE TABLE `tbl_role_submodule` (
-  `role_id` int(11) NOT NULL,
-  `submodule_id` int(11) NOT NULL,
-  KEY `role_id` (`role_id`),
-  KEY `submodule_id` (`submodule_id`),
-  CONSTRAINT `tbl_role_submodule_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `tbl_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `tbl_role_submodule_ibfk_3` FOREIGN KEY (`submodule_id`) REFERENCES `tbl_submodule` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 INSERT INTO `tbl_role_submodule` (`role_id`, `submodule_id`) VALUES
 (1,	1),
 (2,	2),
@@ -629,18 +619,10 @@ INSERT INTO `tbl_role_submodule` (`role_id`, `submodule_id`) VALUES
 (1,	16),
 (1,	17),
 (1,	18),
-(1,	20);
-
-DROP TABLE IF EXISTS `tbl_submodule`;
-CREATE TABLE `tbl_submodule` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  `module_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`),
-  KEY `module_id` (`module_id`),
-  CONSTRAINT `tbl_submodule_ibfk_1` FOREIGN KEY (`module_id`) REFERENCES `tbl_submodule` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+(1,	20),
+(1,	21),
+(1,	22),
+(1,	23);
 
 INSERT INTO `tbl_submodule` (`id`, `name`, `module_id`) VALUES
 (1,	'county',	1),
@@ -661,6 +643,9 @@ INSERT INTO `tbl_submodule` (`id`, `name`, `module_id`) VALUES
 (16,	'status',	1),
 (17,	'dose',	1),
 (18,	'change_reason',	1),
-(20,	'formulation',	1);
+(20,	'formulation',	1),
+(21,	'install',	1),
+(22,	'backup',	1),
+(23,	'user',	1);
 
--- 2018-06-07 07:06:43
+-- 2018-06-12 09:10:42
