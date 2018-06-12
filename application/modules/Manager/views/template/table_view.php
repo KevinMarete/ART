@@ -103,7 +103,7 @@ if ($page_name != 'backup' && $page_name != 'user') {
     var table;
     var selected_id = 0;
 
-    //hide action_btn for table_view backup and user
+ //hide action_btn for table_view backup and user
 <?php if ($page_name == 'backup' || $page_name == 'user') { ?>
         $('#action_btn').hide();
     <?php
@@ -133,6 +133,7 @@ if ($page_name != 'backup' && $page_name != 'user') {
         $('.help-block').empty();
         $('#modal_form').modal('show');
         $('.modal-title').text('Add <?php echo ucwords(str_replace('_', ' ', $page_name)); ?>');
+        
         //select2
         $(".select2").select2({
             width: '100%',
@@ -195,12 +196,7 @@ if ($page_name != 'backup' && $page_name != 'user') {
                 $('[name="latitude"]').val(data.latitude);
                 $('[name="subcounty_id"]').val(data.subcounty_id);
                 $('[name="partner_id"]').val(data.partner_id);
-                //user
-                $('[name="firstname"]').val(data.firstname);
-                $('[name="lastname"]').val(data.lastname);
-                $('[name="email_address"]').val(data.email_address);
-                $('[name="phone_number"]').val(data.phone_number);
-                $('[name="role_id"]').val(data.role_id);
+               
                 $('#modal_form').modal('show');
                 //select2
                 $(".select2").select2({
@@ -217,7 +213,7 @@ if ($page_name != 'backup' && $page_name != 'user') {
         });
     }
 
-    //function refresh table
+    //function refresh db_table
     function reload_table() {
         table.ajax.reload(null, false);
     }
