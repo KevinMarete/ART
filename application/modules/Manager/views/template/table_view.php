@@ -92,15 +92,19 @@
 </div><!-- /#page-wrapper -->
 
 <!--load settings_view_pages modal-->
-<?php $this->load->view('pages/admin/' . $page_name . '_view') ?>
+<?php
+if ($page_name != 'backup' && $page_name != 'user') {
+    $this->load->view('pages/admin/' . $page_name . '_view');
+}
+?>
 
 <script>
     var save_method;
     var table;
     var selected_id = 0;
 
-    //hide action_btn for backup
-<?php if ($page_name == 'backup') { ?>
+    //hide action_btn for table_view backup and user
+<?php if ($page_name == 'backup' || $page_name == 'user') { ?>
         $('#action_btn').hide();
     <?php
 }
@@ -173,12 +177,8 @@
                 $('[name="setup_date"]').val(data.setup_date);
                 $('[name="upgrade_date"]').val(data.upgrade_date);
                 $('[name="comments"]').val(data.comments);
-                // $('[name="is_usage"]').val(data.is_usage);
-                //$("input[name=is_usage][value=1]").prop('checked', true);
-                //$("input[name=is_usage][value=0]").prop('checked', true);
-                //$('[name="is_internet"]').val(data.is_internet);
-                //$("input[name=is_internet][value=1]").prop('checked', true);
-                //$("input[name=is_internet][value=0]").prop('checked', true);
+                $("input[name=is_usage][value=" + data.is_usage + "]").prop('checked', true);
+                $("input[name=is_internet][value=" + data.is_internet + "]").prop('checked', true);
                 $('[name="active_patients"]').val(data.active_patients);
                 $('[name="user_id"]').val(data.user_id);
                 //regimen
@@ -201,9 +201,7 @@
                 $('[name="email_address"]').val(data.email_address);
                 $('[name="phone_number"]').val(data.phone_number);
                 $('[name="role_id"]').val(data.role_id);
-
                 $('#modal_form').modal('show');
-
                 //select2
                 $(".select2").select2({
                     width: '100%',
@@ -211,7 +209,6 @@
                     dropdownParent: $("#modal_form")
                 });
                 $('.modal-title').text('Edit <?php echo ucwords(str_replace('_', ' ', $page_name)); ?>');
-
             },
             error: function ()
             {

@@ -88,7 +88,7 @@ class Admin extends MX_Controller {
             $data['error_string'][] = 'Abbreviation is required';
             //install
             $data['inputerror'][] = 'facility_id';
-            $data['error_string'][] = 'Facility is required';
+            $data['error_string'][] = 'Facility Name is required';
             $data['inputerror'][] = 'version';
             $data['error_string'][] = 'ADT Version is required';
             $data['inputerror'][] = 'setup_date';
@@ -105,11 +105,8 @@ class Admin extends MX_Controller {
             //$data['error_string'][] = 'Emrs is required';
             $data['inputerror'][] = 'active_patients';
             $data['error_string'][] = 'Active Patients is required';
-            $data['inputerror'][] = 'facility_id';
-            $data['error_string'][] = 'Facility Name is required';
             $data['inputerror'][] = 'user_id';
             $data['error_string'][] = 'Assignee Name is required';
-
             //regimen
             $data['inputerror'][] = 'code';
             $data['error_string'][] = 'Code is required';

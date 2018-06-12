@@ -91,7 +91,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">EMRS Used</label>
                             <div class="col-md-9">
-                                <select multiple class="form-control" name="emrs_used[]" id="emrs_used">
+                                <select multiple class="form-control" name="emrs_used" id="emrs_used">
                                     <option>IQCARE</option>
                                     <option>CPAD</option>
                                     <option>KENYAEMR</option>
