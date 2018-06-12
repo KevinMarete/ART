@@ -10,7 +10,7 @@ class Admin_model extends CI_Model {
             if ($table == 'tbl_backup') {
                 $this->db->select('b.id,b.filename,b.foldername,b.adt_version,b.run_time,f.name');
                 $this->db->from('tbl_backup b');
-                $this->db->join('tbl_facility f', 'f.id=b.facility_id');
+                $this->db->join('tbl_facility f', 'f.id=b.facility_id','inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_subcounty') {
                 $this->db->select('sc.id, sc.name, c.name county');
@@ -32,8 +32,8 @@ class Admin_model extends CI_Model {
             } else if ($table == 'tbl_install') {
                 $this->db->select('i.id,i.version,i.setup_date,i.upgrade_date,i.comments,i.contact_name,i.contact_phone,i.emrs_used,i.active_patients,i.is_internet,i.is_usage,f.name facility_name,u.firstname user_name');
                 $this->db->from('tbl_install i');
-                $this->db->join('tbl_facility f', 'f.id=i.facility_id');
-                $this->db->join('tbl_user u', 'u.id=i.user_id');
+                $this->db->join('tbl_facility f', 'f.id=i.facility_id','inner');
+                $this->db->join('tbl_user u', 'u.id=i.user_id','inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_regimen') {
                 $this->db->select('r.id,r.code,r.name,r.description,c.name category,s.name service,l.name line');
@@ -45,7 +45,7 @@ class Admin_model extends CI_Model {
             } else if ($table == 'tbl_user') {
                 $this->db->select('u.id,u.firstname,u.lastname,u.email_address,u.phone_number,u.password,r.name');
                 $this->db->from('tbl_user u');
-                $this->db->join('tbl_role r', 'r.id=u.role_id');
+                $this->db->join('tbl_role r', 'r.id=u.role_id','inner');
                 $table_data = $this->db->get()->result_array();
             } else {
                 $table_data = $this->db->get($table)->result_array();
