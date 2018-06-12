@@ -4,8 +4,8 @@
         <div class="col-lg-12">
             <ol class="breadcrumb page-header">
                 <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
-                <li><a href="<?php echo base_url('manager/orders/reports'); ?>">Orders</a></li>
-                <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i> <?php echo ucwords($page_name); ?></li>
+                <li><a href="<?php echo base_url('manager/orders/allocation'); ?>">Allocation</a></li>
+                <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i> View/Edit</li>
             </ol>
         </div>
     </div><!--end row-->
@@ -65,5 +65,9 @@
                 $('.panel-heading').html('Allocation Rate: <b>'+reporting_rate+'%</b><div class="progress"><div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="'+reporting_rate+'" aria-valuemin="0" aria-valuemax="100" style="width: '+reporting_rate+'%;">'+reporting_rate+'%</div></div>')
             }
         });
+
+        //Show Allocation sidemenu
+        $(".allocation").closest('ul').addClass("in");
+        $(".allocation").addClass("active active-page");
     });
 </script>

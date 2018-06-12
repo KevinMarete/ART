@@ -38,7 +38,7 @@
 <script>
     $(document).ready(function () {
         var role = "<?php echo $this->session->userdata('role'); ?>"
-        if(role == 'county'){
+        if(role == 'national' || role == 'county'){
             $('#dataTables-listing').DataTable({
                 responsive: true,
                 order: [[0, "a=desc"]],
@@ -89,10 +89,14 @@
                         });
                     });
                     //Show reporting rate
-                    var reporting_rate =  Math.ceil(($("#dataTables-listing td:nth-child(4):contains('allocated'),#dataTables-listing td:nth-child(4):contains('approved')").length / this.api().data().rows().count())*100)
+                    var reporting_rate =  Math.ceil(($("#dataTables-listing td:nth-child(4):contains('allocated'),#dataTables-listing td:nth-child(4):not(:contains('PENDING'))").length / this.api().data().rows().count())*100)
                     $('.panel-heading').html('Allocation Rate: <b>'+reporting_rate+'%</b><div class="progress"><div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="'+reporting_rate+'" aria-valuemin="0" aria-valuemax="100" style="width: '+reporting_rate+'%;">'+reporting_rate+'%</div></div>')
                 }
             });
         }
+
+        //Show Allocation sidemenu
+        $(".allocation").closest('ul').addClass("in");
+        $(".allocation").addClass("active active-page");
     });
 </script>

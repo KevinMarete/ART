@@ -205,30 +205,45 @@
 
 <script type="text/javascript">
     $(function(){
+        var base_url = "<?php echo base_url(); ?>";
         $('#side-menu').remove();
 
+        $('#reviewOrder').click(function(e){
+            $(this).prop('disabled', true);
+            $.get( base_url+"manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/reviewed", function( data ) {
+                alert(data);
+                window.location.href = "";
+            });
+        });
+
         $('#approveOrder').click(function(e){
-            $.get( "/ART/manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/approved", function( data ) {
-              alert(data);
-              window.location.href = "";
-          });
-        })
+            $(this).prop('disabled', true);
+            $.get( base_url+"manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/approved", function( data ) {
+                alert(data);
+                window.location.href = "";
+            });
+        });
+
         $('#rejectOrder').click(function(e){
-            $.get( "/ART/manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/rejected", function( data ) {
-              alert(data);
-              window.location.href = "";
-          });
-        })
+            $(this).prop('disabled', true);
+            $.get( base_url+"manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/rejected", function( data ) {
+                alert(data);
+                window.location.href = "";
+            });
+        });
+
         $('#complete_allocation').click(function(e){
-            $.get( "/ART/manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/allocated", function( data ) {
+            $(this).prop('disabled', true);
+            $.get( base_url+"manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/allocated", function( data ) {
               alert(data);
               window.location.href = "";
-          });
+            });
         });
 
         $('#save_allocation').click(function(e){
+            $(this).prop('disabled', true);
             var form = $('#orderForm');
-            var url ="/ART/manager/orders/updateOrder/<?= $cdrr_id.'/'.$map_id; ?>";
+            var url = base_url+"manager/orders/updateOrder/<?= $cdrr_id.'/'.$map_id; ?>";
 
             $.ajax( {
                 type: "POST",
@@ -236,24 +251,25 @@
                 data: form.serialize(),
                 success: function( response ) {
                     alert('Allocation Saved')
-                    $.get( "/ART/manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/pending");
+                    $.get( "manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/pending");
                     window.location.href = "";
                 }
             });
         });
 
-        <?php if ($columns['cdrrs']['data'][0]['status'] == 'allocated' || $columns['cdrrs']['data'][0]['status'] == 'approved') {?>
+        //Disable input fields
+        <?php if (in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed')) || in_array($columns['cdrrs']['data'][0]['status'], array('pending', 'reviewed')) &&  in_array($this->session->userdata('role'), array('county', 'national'))) {?>
             $('input').attr('disabled',true);
         <?php } ?>
     });
 </script>
 
 <style type="text/css">
-.breadcrumb{
-    padding: 8px 15px 5px 8px;
-    margin-bottom: 0px; 
-}
-.panel-default{
-    margin: 12px;
-}
+    .breadcrumb{
+        padding: 8px 15px 5px 8px;
+        margin-bottom: 0px; 
+    }
+    .panel-default{
+        margin: 12px;
+    }
 </style>

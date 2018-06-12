@@ -63,7 +63,7 @@
     <!--/.navbar-static-side -->
 </nav>
 <script>
-//sort settings_nav links alphabetically
+    //sort settings_nav links alphabetically
     var mylist = $('#settings_nav_links');
     var listitems = mylist.children('li').get();
 

@@ -3,8 +3,8 @@
         <div class="col-lg-12">
             <ol class="breadcrumb page-header">
                 <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
-                <li><a href="<?php echo base_url('manager/orders/reports'); ?>">Orders</a></li>
-                <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i> <?= ucwords(str_replace("_", " ", $page_name)); ?></li>
+                <li><a href="<?php echo base_url('manager/orders/edit_allocation').'/'.date('Y-m-d', strtotime('first day of last month')); ?>">Allocation</a></li>
+                <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i> Subcounty Orders</li>
             </ol>
         </div>
         <!-- /.col-lg-12 -->
@@ -66,11 +66,14 @@
                         select.append('<option value="' + val + '">' + val + '</option>');
                     });
                 });
-                    //Show reporting rate
-                    var reporting_rate =  Math.ceil(($("#dataTables-listing td:nth-child(3):contains('Submitted')").length / this.api().data().rows().count())*100)
-                    $('.panel-heading').html('Reporting Rate: <b>'+reporting_rate+'%</b><div class="progress"><div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="'+reporting_rate+'" aria-valuemin="0" aria-valuemax="100" style="width: '+reporting_rate+'%;">'+reporting_rate+'%</div></div>')
-                }
-            });
-        
+                //Show reporting rate
+                var reporting_rate =  Math.ceil(($("#dataTables-listing td:nth-child(3):not(:contains('PENDING'))").length / this.api().data().rows().count())*100)
+                $('.panel-heading').html('Reporting Rate: <b>'+reporting_rate+'%</b><div class="progress"><div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="'+reporting_rate+'" aria-valuemin="0" aria-valuemax="100" style="width: '+reporting_rate+'%;">'+reporting_rate+'%</div></div>')
+            }
+        });
+
+        //Show Allocation sidemenu
+        $(".allocation").closest('ul').addClass("in");
+        $(".allocation").addClass("active active-page");
     });
 </script>

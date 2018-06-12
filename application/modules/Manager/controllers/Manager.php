@@ -62,7 +62,7 @@ class Manager extends MX_Controller {
 					'allocation' => array(
 						'subcounty' => array('MFL Code','Facility Name', 'Period', 'Status', 'Actions'),
 						'county' => array('Period', 'Approved', 'Status', 'Actions'),
-						'national' => array('Period', 'Approved', 'Status', 'Actions')
+						'national' => array('Period', 'Reviewed', 'Status', 'Actions')
 					),
 					'allocate' => array(
 						'subcounty' => array(
@@ -90,9 +90,14 @@ class Manager extends MX_Controller {
 						'national' => array('County', 'Report Count', 'Status', 'Approval', 'Actions')
 					),
 					'subcounty_reports' => array(
-						'subcounty' => array('MFL Code', 'Facility Name', 'Status', 'Period', 'Actions'),
+						'subcounty' => array(),
 						'county' => array('MFL Code', 'Facility Name', 'Status', 'Period', 'Actions'),
-						'national' => array('MFL Code', 'Facility Name', 'Status', 'Period', 'Actions')
+						'national' => array()
+					),
+					'county_reports' => array(
+						'subcounty' => array(),
+						'county' => array(),
+						'national' => array('SubCounty', 'MFL Code', 'Facility Name', 'Status', 'Period', 'Actions')
 					)
 				);
 				$data['columns'] = $columns[$page][$this->session->userdata('role')];

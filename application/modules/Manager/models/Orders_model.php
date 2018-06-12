@@ -53,7 +53,6 @@ class Orders_model extends CI_Model {
         $response = array();
         try {   
             if ($this->db->update_batch('tbl_cdrr_item', $order, 'id') == 0) {
-
                 $response['message'] = 'Order was updated!';
                 $response['status'] = TRUE;
             } else {
@@ -119,7 +118,7 @@ class Orders_model extends CI_Model {
         return $response;
     }
 
-    public function get_reporting_data($scope, $role, $period_begin, $period_end,$allocation = false) {
+    public function get_reporting_data($scope, $role, $period_begin, $period_end, $allocation = false) {
         $response = array('data' => array());
         try {
             $month_name = date('F Y', strtotime($period_begin));
@@ -127,51 +126,69 @@ class Orders_model extends CI_Model {
             if($role == 'national'){
                 $sql = "SELECT 
                             UCASE(co.name) county,
-                            CONCAT_WS('/', SUM(IF(c.period_begin IS NOT NULL, 1, 0)), (SUM(IF(c.period_begin IS NOT NULL, 1, 0)) + SUM(IF(c.period_begin IS NULL, 1, 0)))) submitted,
-                            ROUND(SUM(IF(c.period_begin IS NOT NULL, 1, 0))/(SUM(IF(c.period_begin IS NOT NULL, 1, 0))+ SUM(IF(c.period_begin IS NULL, 1, 0)))*100) progress
+                            CONCAT_WS('/', COUNT(t.facility_id), COUNT(f.id)) submitted,
+                            ROUND(COUNT(t.facility_id)/(COUNT(f.id))*100) progress
                         FROM tbl_facility f  
                         INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
                         INNER JOIN tbl_county co ON co.id = sc.county_id
-                        LEFT JOIN tbl_cdrr c ON c.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
-                        LEFT JOIN tbl_maps m ON m.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
+                        LEFT JOIN
+                        (
+                            SELECT c.facility_id, c.period_begin, c.period_end
+                            FROM tbl_cdrr c 
+                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end
+                            WHERE c.period_begin = ? 
+                            AND c.period_end = ?
+                            GROUP BY c.facility_id, c.period_begin, c.period_end
+                        ) t ON t.facility_id = f.id
                         WHERE f.category != 'satellite'
                         GROUP BY co.name
                         ORDER BY co.name ASC";
-                $table_data = $this->db->query($sql, array($period_begin, $period_end, $period_begin, $period_end))->result_array();
+                $table_data = $this->db->query($sql, array($period_begin, $period_end))->result_array();
             } else if($role == 'county'){
                 $sql = "SELECT 
                             UCASE(sc.name) subcounty,
-                            CONCAT_WS('/', SUM(IF(c.period_begin IS NOT NULL, 1, 0)), (SUM(IF(c.period_begin IS NOT NULL, 1, 0)) + SUM(IF(c.period_begin IS NULL, 1, 0)))) submitted,
-                            ROUND(SUM(IF(c.period_begin IS NOT NULL, 1, 0))/(SUM(IF(c.period_begin IS NOT NULL, 1, 0))+ SUM(IF(c.period_begin IS NULL, 1, 0)))*100) progress
+                            CONCAT_WS('/', COUNT(t.facility_id), COUNT(f.id)) submitted,
+                            ROUND(COUNT(t.facility_id)/(COUNT(f.id))*100) progress
                         FROM tbl_facility f  
                         INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
-                        LEFT JOIN tbl_cdrr c ON c.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
-                        LEFT JOIN tbl_maps m ON m.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
+                        LEFT JOIN
+                        (
+                            SELECT c.facility_id, c.period_begin, c.period_end
+                            FROM tbl_cdrr c 
+                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end
+                            WHERE c.period_begin = ? 
+                            AND c.period_end = ?
+                            GROUP BY c.facility_id, c.period_begin, c.period_end
+                        ) t ON t.facility_id = f.id
                         WHERE sc.county_id = ?
                         AND f.category != 'satellite'
                         GROUP BY sc.name
                         ORDER BY sc.name ASC";
-                $table_data = $this->db->query($sql, array($period_begin, $period_end, $period_begin, $period_end, $scope))->result_array();
+                $table_data = $this->db->query($sql, array($period_begin, $period_end, $scope))->result_array();
             }else{
-                $allocation_cond = ($allocation) ? "IF(c.period_begin IS NOT NULL, CONCAT('<a href=../../../view_allocation/',c.id,'/',m.id,'>View</a>'), 'Not Reported ' ) options" : "IF(c.period_begin IS NOT NULL, CONCAT('<a href=view/',c.id,'/',m.id,'>View</a>'), 'Not Reported ' ) options" ;
+                $allocation_url = ($allocation) ? "../../../view_allocation" : "view" ;
 
                 $sql = "SELECT 
                             f.mflcode,
                             UCASE(f.name) facility_name,
-                            IF(c.period_begin IS NOT NULL AND m.period_begin IS NOT NULL, ?, ?) reporting_status,
+                            IF(t.period_begin IS NOT NULL, UCASE(t.status), 'PENDING') reporting_status,
                             ? period,
-                            IF(c.period_begin IS NOT NULL AND m.period_begin IS NOT NULL, CONCAT('<a href=view/',c.id,'/',m.id,'>View Order</a>'), 'Not Reported') options
+                            IF(t.period_begin IS NOT NULL, CONCAT('<a href=$allocation_url/',t.cdrr_id,'/',t.maps_id,'>View Order</a>'), 'Not Reported') options
                         FROM tbl_facility f  
-                        LEFT JOIN tbl_cdrr c ON c.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
-                        LEFT JOIN tbl_maps m ON m.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
+                        LEFT JOIN
+                        (
+                            SELECT c.facility_id, c.period_begin, c.period_end, c.id cdrr_id, m.id maps_id, c.status
+                            FROM tbl_cdrr c 
+                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end
+                            WHERE c.period_begin = ? 
+                            AND c.period_end = ?
+                            GROUP BY c.facility_id, c.period_begin, c.period_end, cdrr_id, maps_id
+                        ) t ON t.facility_id = f.id
                         WHERE f.subcounty_id = ?
                         AND f.category != 'satellite'
                         GROUP BY f.mflcode
                         ORDER BY f.name ASC";
-                $table_data = $this->db->query($sql, array(
-                    '<span class="label label-success">Submitted</span>',
-                    '<span class="label label-danger">Pending</span>',
-                    $month_name, $period_begin, $period_end, $period_begin, $period_end, $scope))->result_array();
+                $table_data = $this->db->query($sql, array($month_name, $period_begin, $period_end, $scope))->result_array();
             }
 
             if (!empty($table_data)) {
@@ -194,41 +211,62 @@ class Orders_model extends CI_Model {
     public function get_allocation_data($scope, $role, $period_begin, $period_end) {
         $response = array('data' => array());
         try {
-            if($role == 'county'){
+            if($role == 'national'){
                 $sql = "SELECT 
-                DATE_FORMAT(c.period_begin, '%M-%Y') period,
-                CONCAT_WS('/', SUM(IF(c.status = 'approved', 1, 0)) , sb.total) approved,
-                IF(SUM(IF(c.status = 'approved', 1, 0)) != sb.total, 'Incomplete', 'Complete') status,
-                CONCAT('<a href=edit_allocation/', c.period_begin, '>View/Edit</a>')  options
-                FROM tbl_cdrr c 
-                INNER JOIN tbl_maps m ON c.facility_id = m.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status IN('allocated', 'approved')
-                INNER JOIN tbl_facility f ON c.facility_id = f.id  
-                INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id,
-                (SELECT COUNT(DISTINCT fc.name) total FROM tbl_facility fc INNER JOIN tbl_subcounty sb ON fc.subcounty_id = sb.id WHERE sb.county_id = ? AND fc.category != 'satellite') sb
-                WHERE sc.county_id = ?
-                AND f.category != 'satellite'
-                GROUP BY period
-                ORDER BY period ASC";
+                            DATE_FORMAT(c.period_begin, '%M-%Y') period,
+                            CONCAT_WS('/', SUM(IF(c.status = 'reviewed', 1, 0)) , sb.total) reviewed,
+                            IF(SUM(IF(c.status = 'reviewed', 1, 0)) != sb.total, 'Incomplete', 'Complete') status,
+                            CONCAT('<a href=edit_allocation/', c.period_begin, '>View/Edit</a>')  options
+                        FROM tbl_cdrr c 
+                        INNER JOIN tbl_maps m ON c.facility_id = m.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status IN('allocated', 'approved', 'reviewed')
+                        INNER JOIN tbl_facility f ON c.facility_id = f.id,  
+                        (SELECT COUNT(DISTINCT fc.name) total FROM tbl_facility fc WHERE fc.category != 'satellite') sb
+                        WHERE f.category != 'satellite'
+                        GROUP BY period
+                        ORDER BY period ASC";
+                $table_data = $this->db->query($sql, array($scope, $scope))->result_array();
+            }else if($role == 'county'){
+                $sql = "SELECT 
+                            DATE_FORMAT(c.period_begin, '%M-%Y') period,
+                            CONCAT_WS('/', SUM(IF(c.status IN ('approved', 'reviewed'), 1, 0)) , sb.total) approved,
+                            IF(SUM(IF(c.status IN ('approved', 'reviewed'), 1, 0)) != sb.total, 'Incomplete', 'Complete') status,
+                            CONCAT('<a href=edit_allocation/', c.period_begin, '>View/Edit</a>')  options
+                        FROM tbl_cdrr c 
+                        INNER JOIN tbl_maps m ON c.facility_id = m.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status IN('allocated', 'approved', 'reviewed')
+                        INNER JOIN tbl_facility f ON c.facility_id = f.id  
+                        INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id,
+                        (SELECT COUNT(DISTINCT fc.name) total FROM tbl_facility fc INNER JOIN tbl_subcounty sb ON fc.subcounty_id = sb.id WHERE sb.county_id = ? AND fc.category != 'satellite') sb
+                        WHERE sc.county_id = ?
+                        AND f.category != 'satellite'
+                        GROUP BY period
+                        ORDER BY period ASC";
                 $table_data = $this->db->query($sql, array($scope, $scope))->result_array();
             }else{
                 $sql = "SELECT                      
                             f.mflcode,
                             UCASE(f.name) facility_name,
-                            IF(c.period_begin IS NULL, DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%M-%Y') , DATE_FORMAT(c.period_begin, '%M-%Y')) period,
-                            IF(c.status IS NULL, 'Not Reported', c.status) reporting_status,
+                            IF(t.period_begin IS NULL, DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%M-%Y') , DATE_FORMAT(t.period_begin, '%M-%Y')) period,
+                            IF(t.status IS NULL, 'PENDING', UCASE(t.status)) reporting_status,
                             CASE 
-                                WHEN c.status = 'pending' AND m.status = 'pending' THEN CONCAT('<a href=allocate/', c.id,'/', m.id, '> Allocate Order</a>')
-                                WHEN c.status != 'pending' AND m.status != 'pending' THEN CONCAT('<a href=view_allocation/', c.id,'/', m.id, '> View Allocation</a>') 
+                                WHEN t.status = 'pending' THEN CONCAT('<a href=allocate/', t.cdrr_id,'/', t.maps_id, '> Allocate Order</a>')
+                                WHEN t.status != 'pending' THEN CONCAT('<a href=view_allocation/', t.cdrr_id,'/', t.maps_id, '> View Allocation</a>') 
                                 ELSE 'Not Reported'
                             END AS options
                         FROM tbl_facility f
-                        LEFT JOIN tbl_cdrr c ON c.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
-                        LEFT JOIN tbl_maps m ON m.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
+                        LEFT JOIN
+                        (
+                            SELECT c.facility_id, c.period_begin, c.period_end, c.id cdrr_id, m.id maps_id, c.status
+                            FROM tbl_cdrr c 
+                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end
+                            WHERE c.period_begin = ? 
+                            AND c.period_end = ?
+                            GROUP BY c.facility_id, c.period_begin, c.period_end, cdrr_id, maps_id
+                        ) t ON t.facility_id = f.id
                         WHERE f.subcounty_id = ?
                         AND f.category != 'satellite'
                         GROUP BY f.mflcode
                         ORDER BY f.name ASC";
-                $table_data = $this->db->query($sql, array($period_begin, $period_end, $period_begin, $period_end, $scope))->result_array();
+                $table_data = $this->db->query($sql, array($period_begin, $period_end, $scope))->result_array();
             }
 
             if (!empty($table_data)) {
@@ -250,24 +288,57 @@ class Orders_model extends CI_Model {
 
     public function get_county_allocation_data($scope, $role, $period_begin, $period_end){
         $response = array('data' => array());
+        $currmonth = date('Y-m-d', strtotime('first day of last month'));
         try {
-            $currmonth = date('Ym');
-            $sql = "SELECT                      
-            UCASE(sc.name) subcounty,
-            CONCAT_WS('/', SUM(IF(c.period_begin IS NOT NULL, 1, 0)), (SUM(IF(c.period_begin IS NOT NULL, 1, 0)) + SUM(IF(c.period_begin IS NULL, 1, 0)))) submitted,
-            IF(SUM(IF(c.period_begin IS NOT NULL, 1, 0)) = (SUM(IF(c.period_begin IS NOT NULL, 1, 0)) + SUM(IF(c.period_begin IS NULL, 1, 0))), 'Allocated', 'Unallocated') allocation,
-            'N/A' approval_status,
-            IF(SUM(IF(c.period_begin IS NOT NULL, 1, 0)) = (SUM(IF(c.period_begin IS NOT NULL, 1, 0)) + SUM(IF(c.period_begin IS NULL, 1, 0))), CONCAT('<a href=view_allocate/', sc.id,'/', c.period_begin, '>View/Verify Allocation</a>'), CONCAT('<a href=','../allocation/subcounty/',sc.id,'/$currmonth','> Pending Allocation</a>')) options
-            FROM tbl_facility f
-            INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
-            LEFT JOIN tbl_cdrr c ON c.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
-            LEFT JOIN tbl_maps m ON m.facility_id = f.id  AND c.period_begin = ? AND c.period_end = ?
-            WHERE sc.county_id = ?
-            AND f.category != 'satellite'
-            GROUP BY sc.name
-            ORDER BY sc.name ASC";
-            $table_data = $this->db->query($sql, array($period_begin, $period_end, $period_begin, $period_end, $scope))->result_array();
-
+            if($role == 'national'){
+                $sql = "SELECT 
+                            UCASE(co.name) county,
+                            CONCAT_WS('/', COUNT(t.facility_id), COUNT(f.id)) submitted,
+                            IF(COUNT(t.facility_id) = COUNT(f.id), 'Reviewed', 'Unreviewed') approval,
+                            IF(COUNT(t.facility_id) = COUNT(f.id), 'Approved', 'N/A') reviewal_status,
+                            IF(COUNT(t.facility_id) = COUNT(f.id), CONCAT('<a href=','../allocation/subcounty/', sc.id,'/', t.period_begin, '>View/Verify Allocation</a>'), CONCAT('<a href=','../allocation/county/',co.id,'/$currmonth','> Pending Allocation</a>')) options
+                        FROM tbl_facility f  
+                        INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
+                        INNER JOIN tbl_county co ON co.id = sc.county_id
+                        LEFT JOIN
+                        (
+                            SELECT c.facility_id, c.period_begin, c.period_end
+                            FROM tbl_cdrr c 
+                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status = m.status
+                            WHERE c.period_begin = ? 
+                            AND c.period_end = ?
+                            AND c.status = 'reviewed'
+                            GROUP BY c.facility_id, c.period_begin, c.period_end
+                        ) t ON t.facility_id = f.id
+                        WHERE f.category != 'satellite'
+                        GROUP BY co.name
+                        ORDER BY co.name ASC";
+                $table_data = $this->db->query($sql, array($period_begin, $period_end))->result_array();
+            } else if($role == 'county'){
+                $sql = "SELECT 
+                            UCASE(sc.name) subcounty,
+                            CONCAT_WS('/', COUNT(t.facility_id), COUNT(f.id)) submitted,
+                            IF(COUNT(t.facility_id) = COUNT(f.id), 'Allocated', 'Unallocated') allocation,
+                            IF(COUNT(t.facility_id) = COUNT(f.id), 'Approved', 'N/A') approval_status,
+                            IF(COUNT(t.facility_id) = COUNT(f.id), CONCAT('<a href=','../allocation/subcounty/', sc.id,'/', t.period_begin, '>View/Verify Allocation</a>'), CONCAT('<a href=','../allocation/subcounty/',sc.id,'/$currmonth','> Pending Allocation</a>')) options
+                        FROM tbl_facility f  
+                        INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
+                        LEFT JOIN
+                        (
+                            SELECT c.facility_id, c.period_begin, c.period_end
+                            FROM tbl_cdrr c 
+                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status = m.status
+                            WHERE c.period_begin = ? 
+                            AND c.period_end = ?
+                            AND c.status IN ('approved', 'reviewed')
+                            GROUP BY c.facility_id, c.period_begin, c.period_end
+                        ) t ON t.facility_id = f.id
+                        WHERE sc.county_id = ?
+                        AND f.category != 'satellite'
+                        GROUP BY sc.name
+                        ORDER BY sc.name ASC";
+                $table_data = $this->db->query($sql, array($period_begin, $period_end, $scope))->result_array();
+            }
             if (!empty($table_data)) {
                 foreach ($table_data as $result) {
                     $response['data'][] = array_values($result);
@@ -485,4 +556,53 @@ class Orders_model extends CI_Model {
         }
         return $response;
     }	
+
+    public function get_county_reporting_data($scope, $role, $period_begin, $period_end, $allocation = false) {
+        $response = array('data' => array());
+        try {
+            $month_name = date('F Y', strtotime($period_begin));
+
+            $allocation_url = ($allocation) ? "../../../view_allocation" : "view" ;
+
+            $sql = "SELECT
+                        UCASE(sc.name) subcounty,
+                        f.mflcode,
+                        UCASE(f.name) facility_name,
+                        IF(t.period_begin IS NOT NULL, UCASE(t.status), 'N/A') reporting_status,
+                        ? period,
+                        IF(t.period_begin IS NOT NULL, CONCAT('<a href=$allocation_url/',t.cdrr_id,'/',t.maps_id,'>View Order</a>'), 'Not Reported') options
+                    FROM tbl_facility f
+                    INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
+                    LEFT JOIN
+                    (
+                        SELECT c.facility_id, c.period_begin, c.period_end, c.id cdrr_id, m.id maps_id, c.status
+                        FROM tbl_cdrr c 
+                        INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end
+                        WHERE c.period_begin = ? 
+                        AND c.period_end = ?
+                        GROUP BY c.facility_id, c.period_begin, c.period_end, cdrr_id, maps_id
+                    ) t ON t.facility_id = f.id
+                    WHERE sc.county_id = ?
+                    AND f.category != 'satellite'
+                    GROUP BY f.mflcode
+                    ORDER BY f.name ASC";
+            $table_data = $this->db->query($sql, array($month_name, $period_begin, $period_end, $scope))->result_array();
+
+            if (!empty($table_data)) {
+                foreach ($table_data as $result) {
+                    $response['data'][] = array_values($result);
+                }
+                $response['message'] = 'Table data was found!';
+                $response['status'] = TRUE;
+            } else {
+                $response['message'] = 'Table is empty!';
+                $response['status'] = FALSE;
+            }
+        } catch (Execption $e) {
+            $response['status'] = FALSE;
+            $response['message'] = $e->getMessage();
+        }
+        return $response;
+    }
+
 }

@@ -32,9 +32,9 @@ class Orders extends MX_Controller {
 	}
 
 	public function get_reporting_rates($role = null, $scope = null, $allocation = null){
-		$role = $this->session->userdata('role');
-		$scope = $this->session->userdata('scope');
-		$allocation = FALSE;
+		$role = ($role) ? $role : $this->session->userdata('role');
+		$scope = ($scope) ? $scope : $this->session->userdata('scope');
+		$allocation = ($allocation) ? TRUE : FALSE;
 		$response = $this->Orders_model->get_reporting_data($scope, $role, date('Y-m-d', strtotime('first day of last month')), date('Y-m-d', strtotime('last day of last month')), $allocation);
 		echo json_encode(array('data' => $response['data']));
 	}
@@ -46,6 +46,14 @@ class Orders extends MX_Controller {
 
 	public function get_county_allocation($period_begin){
 		$response = $this->Orders_model->get_county_allocation_data($this->session->userdata('scope'), $this->session->userdata('role'), $period_begin, date('Y-m-t', strtotime($period_begin)));
+		echo json_encode(array('data' => $response['data']));
+	}
+
+	public function get_county_reporting_rates($role = null, $scope = null, $allocation = null){
+		$role = ($role) ? $role : $this->session->userdata('role');
+		$scope = ($scope) ? $scope : $this->session->userdata('scope');
+		$allocation = ($allocation) ? TRUE : FALSE;
+		$response = $this->Orders_model->get_county_reporting_data($scope, $role, date('Y-m-d', strtotime('first day of last month')), date('Y-m-d', strtotime('last day of last month')), $allocation);
 		echo json_encode(array('data' => $response['data']));
 	}
 

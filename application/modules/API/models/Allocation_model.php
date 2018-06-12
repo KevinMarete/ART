@@ -5,25 +5,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Allocation_model extends CI_Model {
 
    //function list facilities that are not yet installed
-    public function read($mflcode,$period_begin = null) {
-        // echo date('Y-m-01', strtotime('-1 MONTH')), PHP_EOL;
+    public function read($mflcode, $period_begin = null) {
         $period_begin = ($period_begin == NULL) ? date('Y-m-01', strtotime('-1 MONTH')) : $period_begin ;
         $sql = "SELECT 
-        c.period_begin,c.code,f.mflcode,f.name as facility,
-        concat (g.name,' (',d.strength,') ',  d.packsize,' ',fm.name) as drug, ci.qty_allocated
-        from tbl_cdrr c
-        left join tbl_cdrr_item ci on ci.cdrr_id = c.id 
-        left join tbl_drug d on ci.drug_id = d.id 
-        left join tbl_generic g on g.id = d.generic_id
-        left join tbl_facility f on c.facility_id = f.id 
-        left join tbl_formulation fm on d.formulation_id = fm.id
-        where status = 'approved' 
-        AND f.mflcode = $mflcode
-        AND period_begin = '$period_begin'";
+                    c.period_begin,c.code,f.mflcode,f.name as facility,
+                    concat (g.name,' (',d.strength,') ',  d.packsize,' ',fm.name) as drug, ci.qty_allocated
+                from tbl_cdrr c
+                inner join tbl_cdrr_item ci on ci.cdrr_id = c.id 
+                inner join tbl_drug d on ci.drug_id = d.id 
+                inner join tbl_generic g on g.id = d.generic_id
+                inner join tbl_facility f on c.facility_id = f.id 
+                inner join tbl_formulation fm on d.formulation_id = fm.id
+                where status = 'reviewed' 
+                AND f.mflcode = ?
+                AND ci.qty_allocated > 0
+                AND period_begin = ?";
 
         $returnable = array();
         
-        $query = $this->db->query($sql);
+        $query = $this->db->query($sql, array($mflcode, $period_begin));
         if (count($query->result_array()) >0){
             foreach ($query->result() as $key => $value) {
 
@@ -38,7 +38,6 @@ class Allocation_model extends CI_Model {
             $returnable = false;
         }
         return $returnable;
-        // return $query->result();
     }
 
 }

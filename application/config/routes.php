@@ -78,6 +78,7 @@ $route['manager/orders/allocate/(:any)/(:any)'] = 'Manager/load_template/orders/
 $route['manager/orders/view_allocation/(:any)/(:any)'] = 'Manager/load_template/orders/allocate/Allocation/0';
 $route['manager/orders/reporting_rates'] = 'Manager/load_template/orders/reporting_rates/Reporting Rates/0';
 $route['manager/orders/allocation/subcounty/(:any)/(:any)'] = 'Manager/load_template/orders/subcounty_reports/Reporting Rates/0';
+$route['manager/orders/allocation/county/(:any)/(:any)'] = 'Manager/load_template/orders/county_reports/Reporting Rates/0';
 $route['manager/orders/edit_allocation/(:any)'] = 'Manager/load_template/orders/edit_allocation/Edit Allocation/0/$1';
 
 $route['manager/update_profile'] = 'Manager/user/update_profile';
