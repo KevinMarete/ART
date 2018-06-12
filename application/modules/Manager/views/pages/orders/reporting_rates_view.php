@@ -44,7 +44,7 @@
 <script>
     $(document).ready(function () {
         var role = "<?php echo $this->session->userdata('role'); ?>"
-        if(role == 'county'){
+        if(role == 'county' || role == 'national'){
             $('#dataTables-listing').DataTable({
                 responsive: true,
                 order: [[2, "desc"]],
@@ -70,6 +70,7 @@
                     });
                     //Show total reporting rate
                     var reporting_rate =  Math.ceil(this.api().columns([2]).data().average())
+                    reporting_rate = reporting_rate || 0
                     $('.panel-heading').html('Reporting Rate: <b>'+reporting_rate+'%</b><div class="progress"><div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="'+reporting_rate+'" aria-valuemin="0" aria-valuemax="100" style="width: '+reporting_rate+'%;">'+reporting_rate+'%</div></div>')
 
                     //Show row reporting rate
@@ -107,6 +108,7 @@
                     });
                     //Show reporting rate
                     var reporting_rate =  Math.ceil(($("#dataTables-listing td:nth-child(3):contains('Submitted')").length / this.api().data().rows().count())*100)
+                    reporting_rate = reporting_rate || 0
                     $('.panel-heading').html('Reporting Rate: <b>'+reporting_rate+'%</b><div class="progress"><div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="'+reporting_rate+'" aria-valuemin="0" aria-valuemax="100" style="width: '+reporting_rate+'%;">'+reporting_rate+'%</div></div>')
                 }
             });

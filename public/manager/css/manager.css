@@ -1,8 +1,49 @@
 .progress {
-	margin-bottom: 0px !important;
+    margin-bottom: 0px !important;
 }
 
 .progress-bar {
-	color: #000000 !important;
-	font-weight: bold;
+    color: #000000 !important;
+    font-weight: bold;
+}
+.navbar-default {
+    color: #fff;
+    background-color: #3d4a57;
+    border-color: #333;
+}
+.dropdown-menu li a {
+    word-wrap: break-word;
+    white-space: normal;
+}
+.nav > li > a:focus, .nav > li > a:hover{
+    color: #fff;
+    text-decoration: none;
+    background-color:#3d4a57;
+}
+a {
+    /*color: #ccc;*/
+    background-color:none;
+    text-decoration: none;
+}
+.navbar-default .navbar-brand {
+    color: #fff;
+}
+.sidebar{
+    margin-top: 55px;
+}
+.sidebar ul li a {
+    background-color: #fff;
+    color: #000;
+    text-decoration: none;
+}
+.sidebar ul li a.active{
+    color: #000;
+}
+.breadcrumb{
+    margin-top: 20px;
+}
+/*datatables background color of selected tbody row*/
+table.dataTable tbody tr.selected {
+    color: #fff;
+    background-color: #3d4a57;
 }

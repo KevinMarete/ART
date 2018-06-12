@@ -18,6 +18,7 @@ class Orders extends MX_Controller {
 		$response = $this->Orders_model->updateOrder($orderid,$mapid,$updateArray,$this->session->userdata('id'));
 		echo $response['message'];
 	}
+
 	public function actionOrder($orderid,$mapid,$action)
 	{	
 		$response = $this->Orders_model->actionOrder($orderid,$mapid,$action,$this->session->userdata('id'));
@@ -30,11 +31,11 @@ class Orders extends MX_Controller {
 		echo json_encode(array('data' => $response['data']));
 	}
 
-	public function get_reporting_rates($role = null,$scope = null,$allocation = null){
-		$role = (isset($role)) ? $role :  $this->session->userdata('role') ;
-		$scope = (isset($scope)) ? $scope :  $this->session->userdata('scope') ;
-		$allocation = (isset($allocation)) ? TRUE :  FALSE ;
-		$response = $this->Orders_model->get_reporting_data($scope,$role, date('Y-m-d', strtotime('first day of last month')), date('Y-m-d', strtotime('last day of last month')),$allocation);
+	public function get_reporting_rates($role = null, $scope = null, $allocation = null){
+		$role = $this->session->userdata('role');
+		$scope = $this->session->userdata('scope');
+		$allocation = FALSE;
+		$response = $this->Orders_model->get_reporting_data($scope, $role, date('Y-m-d', strtotime('first day of last month')), date('Y-m-d', strtotime('last day of last month')), $allocation);
 		echo json_encode(array('data' => $response['data']));
 	}
 

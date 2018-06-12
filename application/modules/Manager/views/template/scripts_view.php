@@ -13,6 +13,16 @@
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables/js/dataTables.select.min.js'; ?>"></script>
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables-plugins/average().js'; ?>"></script>
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables-plugins/sum().js'; ?>"></script>
+<!--select2 js-->
+<script src="<?php echo base_url() . 'public/manager/select2/js/select2.js'; ?>"></script>
+<!--bootstrap-sweetalert--->
+<script src="<?php echo base_url() . 'public/manager/bootstrap-sweetalert/js/sweetalert.min.js'; ?>"></script>
+<!--datepicker-->
+<script src="<?php echo base_url() . 'public/manager/lib/bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.min.js'; ?>"></script>
+<!--chosen-->
+<script src="<?php echo base_url() . 'public/manager/lib/chosen_v1.8.3/chosen.jquery.min.js'; ?>"></script>
+<!--bootstrap-multiselect-->
+<script src="<?php echo base_url() . 'public/manager/lib/bootstrap-multiselect/js/bootstrap-multiselect.js'; ?>"></script>
 <!-- Custom Theme JavaScript -->
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/dist/js/sb-admin-2.js'; ?>"></script>
 <script type="text/javascript">

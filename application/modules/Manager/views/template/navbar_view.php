@@ -7,25 +7,29 @@
             <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="<?php echo base_url() . 'manager/dashboard'; ?>">
-            <i class="fa fa-dashboard fa-fw"></i>
-            Commodity Manager: <b><?php echo ucwords($this->session->userdata('scope_name')).' '.ucwords($this->session->userdata('role')); ?></b>
-        </a>
+            <i class="fa fa-dashboard fa-fw"></i> Commodity Manager
+        </a> 
     </div>
     <!-- /.navbar-header -->
     <ul class="nav navbar-top-links navbar-right">
+        <li>
+            <small>
+                <b><?php echo ucwords($this->session->userdata('role')); ?>: </b> <?php echo ucwords($this->session->userdata('scope_name')); ?>
+            </small> 
+        </li>
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <i class="fa fa-user fa-fw"></i> <?php echo $this->session->userdata('firstname').' '.$this->session->userdata('lastname'); ?> <i class="fa fa-caret-down"></i>
+                <i class="fa fa-user fa-fw"></i> <?php echo $this->session->userdata('firstname') . ' ' . $this->session->userdata('lastname'); ?> <i class="fa fa-caret-down"></i>
             </a>
             <ul class="dropdown-menu dropdown-user">
                 <li>
-                    <a href="<?php echo base_url() . 'manager/profile';?>">
+                    <a href="<?php echo base_url() . 'manager/profile'; ?>">
                         <i class="fa fa-user fa-fw"></i>  Profile
                     </a>                   
                 </li>
                 <li class="divider"></li>
                 <li>
-                    <a href="<?php echo base_url() . 'manager/logout';?>">
+                    <a href="<?php echo base_url() . 'manager/logout'; ?>">
                         <i class="fa fa-sign-out fa-fw"></i> Logout
                     </a>
                 </li>
@@ -39,31 +43,33 @@
     <div class="navbar-default sidebar" role="navigation">
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
-                <li class="sidebar-search">
-                    <div class="input-group custom-search-form">
-                        <input type="text" class="form-control" placeholder="Search...">
-                        <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </span>
-                    </div>
-                    <!-- /input-group -->
-                </li>
                 <li>
                     <a class="dashboard" href="<?php echo base_url() . 'manager/dashboard'; ?>"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                 </li>
-                <?php foreach ($this->session->userdata('modules') as $module => $value) {
-                    echo "<li><a href='#'><i class='".$value['icon']."'></i> ".ucwords($module)."<span class='fa arrow'></span></a><ul class='nav nav-second-level'>";
+                <?php
+                foreach ($this->session->userdata('modules') as $module => $value) {
+                    echo "<li><a href='#'><i class='" . $value['icon'] . "'></i> " . ucwords($module) . "<span class='fa arrow'></span></a><ul class='nav nav-second-level' id='settings_nav_links'>";
                     foreach ($value['submodules'] as $orig_submodule) {
                         $submodule = str_replace(' ', '_', $orig_submodule);
-                        echo "<li><a class='".str_replace(' ', '_', $orig_submodule)."' href='".base_url() . "manager/".$module."/".$submodule."'>".ucwords($orig_submodule)."</a></li>";
+                        echo "<li><a class='" . str_replace(' ', '_', $orig_submodule) . "' href='" . base_url() . "manager/" . $module . "/" . $submodule . "'>" . ucwords(str_replace('_',' ', $orig_submodule)) . "</a></li>";
                     }
                     echo "</ul> </li>";
-                }?>
+                }
+                ?>
             </ul>
         </div>
         <!--/.sidebar-collapse -->
     </div>
     <!--/.navbar-static-side -->
 </nav>
+<script>
+//sort settings_nav links alphabetically
+    var mylist = $('#settings_nav_links');
+    var listitems = mylist.children('li').get();
+
+    listitems.sort(function (a, b) {
+        return $(a).text().toUpperCase().localeCompare($(b).text().toUpperCase());
+    })
+
+    mylist.empty().append(listitems)
+</script>

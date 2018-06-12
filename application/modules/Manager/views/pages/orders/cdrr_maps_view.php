@@ -1,9 +1,9 @@
- <div id="container">
+ <div id="container" class="container-fluid">
     <div class="col-lg-12">
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
             <li><a href="<?php echo base_url('manager/orders/reports'); ?>">Orders</a></li>
-            <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i> View Orders</li>
+            <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i> View Order</li>
         </ol>
     </div>
     <!-- /.col-lg-12 -->
@@ -12,161 +12,166 @@
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    CDRR
                 </div>
                 <!-- /.panel-heading -->
-             <div class="panel-body">
-                <div class="container-fluid">
+                <div class="panel-body">
                     <div class="row">
-                        <div class="col-md-4 ">
-                        </div>
-                        <div class="col-md-8 ">
-                            <span class="label label-info">* 1</span> - <small> Total Qty ISSUED to ARV dispensing sites (Satellite sites plus Central site dispensing point(s) where relevant)</small><br />
-                            <span class="label label-info">* 2</span> - <small> End of Month Physical </small>
-                            <br />
-                            <br />
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-condensed">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <b>Facility Name: </b>
+                                                <span class="facility_name"> <?= ucwords($columns['cdrrs']['data'][0]['facility_name']); ?></span>
+                                            </td>
+                                            <td>
+                                                <b>Facility code: </b>
+                                                <span class="mflcode"><?= ucwords($columns['cdrrs']['data'][0]['mflcode']); ?></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <b>County: </b>
+                                                <span class="county"><?= ucwords($columns['cdrrs']['data'][0]['county']); ?></span>
+                                            </td>
+                                            <td>
+                                                <b>Subcounty: </b>
+                                                <span class="subcounty"><?= ucwords($columns['cdrrs']['data'][0]['subcounty']); ?></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <b>Period of Reporting: </b>
+                                                <span><?= ucwords(date( 'F Y', strtotime($columns['cdrrs']['data'][0]['period_begin']))); ?></span>
+                                            </td>
+                                            <td>
+                                                <b>Status: </b> <span><?= ucwords($columns['cdrrs']['data'][0]['status']); ?></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table> 
+                            </div>                            
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
-
-                            <table cellpadding="4"  width="100%" class="table">
-                                <tbody>
-                                    <tr>
-                                        <td><b>Facility Name: </b><span class="facility_name"> <?= $columns['cdrrs']['data'][0]['facility_name']; ?></span></td>
-                                        <td><b>Facility code: </b><span class="mflcode"><?= $columns['cdrrs']['data'][0]['mflcode']; ?></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>County: </b><span class="county"><?= $columns['cdrrs']['data'][0]['county']; ?></span></td>
-                                        <td><b>Subcounty: </b><span class="subcounty"><?= $columns['cdrrs']['data'][0]['subcounty']; ?></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>Type of Service provided at the Facility: </b><span class="services"><?= $columns['cdrrs']['data'][0]['services']; ?></span></td>
-                                        <td><b>Non-ARV: </b> <?= $columns['cdrrs']['data'][0]['non_arv']; ?><input type="checkbox" class="non_arv" readonly="readonly"></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            <b>Period of Reporting: </b>
-                                            <b>Beginning:</b> <span class="period_begin"><?= $columns['cdrrs']['data'][0]['period_begin']; ?></span>
-                                            <b>Ending:</b> <span class="period_end"><?= $columns['cdrrs']['data'][0]['period_end']; ?></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            <b>order status: </b> <span class="period_begin"><?= $columns['cdrrs']['data'][0]['status']; ?></span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>                             
-
-                        </div>
-                        <div class="col-md-8 pull-left">
-                            <table class=" table-striped table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th rowspan="3">Drug Name</th>
-                                        <th rowspan="3">Pack Size</th>
-                                        <th>Beginning Balance</th>
-                                        <th>Quantity Received</th>
-                                        <th>Qty ISSUED  <span class="label label-info">* 1</span></th>
-                                        <th>End fo Month SAH <span class="label label-info">* 2</span></th>
-                                        <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
-                                            <th >Aggregate Consumed</th>
-                                            <th >Aggregate SAH</th>
-                                        <?php }?>
-                                        <th >Qty for RESUPPLY</th>
-                                    </tr>
-                                    <tr>
-                                        <th><small>(packs)</small></th>
-                                        <th><small>(packs)</small></th>
-                                        <th><small>(packs)</small></th>
-                                        <th><small>(packs)</small></th>
-                                        <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
-                                            <th><small>(packs)</small></th>
-                                            <th><small>(packs)</small></th>
-                                        <?php }?>
-                                        <th><small>(packs)</small></th>
-                                    </tr>
-                                    <tr>
-                                        <th>A</th>
-                                        <th>B</th>
-                                        <th>C</th>
-                                        <th>D</th>
-                                        <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
+                        <div class="col-sm-9">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2">Drug Name</th>
+                                            <th rowspan="2">Pack Size</th>
+                                            <th>Beginning Balance</th>
+                                            <th>Quantity Received</th>
+                                            <th>Quantity Issued</th>
+                                            <th>Losses & Wastage</th>
+                                            <th>Positive Adjustments</th>
+                                            <th>Negative Adjustments</th>
+                                            <th>End Month Stock on Hand</th>
+                                            <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
+                                                <th >Aggregate Consumed</th>
+                                                <th >Aggregate Stock on Hand</th>
+                                            <?php }?>
+                                            <th colspan="2">Commodities Expiring < 6 Months</th>
+                                            <th>Days out of Stock</th>
+                                            <th>Resupply Quantity</th>
+                                        </tr>
+                                        <tr>
+                                            <th>A</th>
+                                            <th>B</th>
+                                            <th>C</th>
+                                            <th>D</th>
+                                            <th>E</th>
                                             <th>F</th>
                                             <th>G</th>
-                                        <?php }?>
-                                        <th>J</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <form name="orderForm" id="orderForm">
-                                        <?php foreach ($columns['drugs'] as $key => $drug) {  ?>
-                                                <?php  $drugname = $drug['name']; if (in_array($drugname, array_keys($columns['cdrrs']['data']['cdrr_item']))){?>
-                                            <tr>
-                                                <td><?= $drug['name'];?></td>
-                                                <td><?= $drug['pack_size'];?></td>
-                                                <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['balance']; // beginning balance ?></td>
-                                                <td><?= (isset($columns['cdrrs']['data']['cdrr_item'][$drugname]['received'])) ? $columns['cdrrs']['data']['cdrr_item'][$drugname]['received'] : 0 ;; // qty received?></td>
-                                                <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['dispensed_units'];// Qty Issued ?></td>
-                                                <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['count'];?></td>
-                                                <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_consumed'];?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_on_hand'];?></td>
-                                                <?php }  ?>
-                                                <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['resupply'];?></td>
-
-                                                <?php }  ?>
-                                            </tr>
-                                        <?php } ?>
-                                    </form>
-                                </tbody>
-                            </table>
-                            <br />
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <th>Action</th>
-                                    <th>User</th>
-                                    <th>Date</th>
-                                </thead>
-                                <?php  foreach ($columns['cdrrs']['data']['cdrr_logs'] as $key => $log) {?>
-                                <tr>
-                                    <td><?= $log['description'];?>  </td>
-                                    <td> <?= $log['firstname'].'('.$log['role'].')';?> </td>
-                                    <td> <?= $log['created'];?></td>
-                                </tr>
-                                <?php } ?>
-                            </table>
-                        </div> <!--end of cdrr-->
-                        <div class="col-md-4 pull-right" style="max-width: 30%;">
-                            <table class="table table-striped table-bordered table-hover">
-                                <thead>
-                                    <th >Regimen Code</th>
-                                    <th >ARV Treatment Regimen</th>
-                                    <th >Active Patients on this regimen <span class="label label-info">* 1</span></th>
-                                </thead>
-                                <tbody>
-                                    <?php 
-                                    foreach ($columns['regimens'] as $category => $regimens ) {?>
-                                        <tr>
-                                            <td colspan="3"> <?= $category; ?></td>
+                                            <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
+                                                <th>I</th>
+                                                <th>J</th>
+                                            <?php }?>
+                                            <th>Quantity</th>
+                                            <th>Expiry Date</th>
+                                            <th>K</th>
+                                            <th>L</th>
                                         </tr>
-                                        <?php foreach($regimens as $regimen) { ?>
-                                            <?php if(in_array($regimen['id'], array_keys($columns['maps']['data']))){ ?>
-                                            <tr>
-                                                <td><?= $regimen['code'];?></td>
-                                                <td><?= $regimen['name'];?></td>
-                                                <td><?php echo $columns['maps']['data'][$regimen['id']];?></td>
-                                            </tr>
-                                        <?php } } ?>
+                                    </thead>
+                                    <tbody>
+                                        <form name="orderForm" id="orderForm">
+                                            <?php 
+                                            foreach ($columns['drugs'] as $key => $drug) {  
+                                                $drugname = $drug['name']; 
+                                                if (in_array($drugname, array_keys($columns['cdrrs']['data']['cdrr_item']))){
+                                            ?>
+                                                <tr>
+                                                    <td><?= $drug['name'];?></td>
+                                                    <td><?= $drug['pack_size'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['balance'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['received'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['dispensed_packs'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['losses'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['adjustments'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['adjustments_neg'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['count'];?></td>
+                                                    <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_consumed'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_on_hand'];?></td>
+                                                    <?php }  ?>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['expiry_quant'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['expiry_date'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['out_of_stock'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['resupply'];?></td>
+                                                    <?php }  ?>
+                                                </tr>
+                                            <?php } ?>
+                                        </form>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-condensed">
+                                    <thead>
+                                        <th>Status</th>
+                                        <th>User</th>
+                                        <th>Role</th>
+                                        <th>Timestamp</th>
+                                    </thead>
+                                    <?php  foreach ($columns['cdrrs']['data']['cdrr_logs'] as $key => $log) {?>
+                                    <tr>
+                                        <td><?= ucwords($log['description']);?>  </td>
+                                        <td><?= ucwords($log['firstname'].' '.$log['lastname']);?> </td>
+                                        <td><?= ucwords($log['role']);?> </td>
+                                        <td><?= $log['created'];?></td>
+                                    </tr>
                                     <?php } ?>
-                                </tbody>
-                            </table>
+                                </table>
+                            </div>
+                        </div> <!--end of cdrr-->
+                        <div class="col-sm-3">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-condensed">
+                                    <thead>
+                                        <th>Code | Regimen</th>
+                                        <th>Active Patients</th>
+                                    </thead>
+                                    <tbody>
+                                        <?php 
+                                        foreach ($columns['regimens'] as $category => $regimens ) {?>
+                                            <?php foreach($regimens as $regimen) { ?>
+                                                <?php if(in_array($regimen['id'], array_keys($columns['maps']['data']))){ ?>
+                                                <tr>
+                                                    <td><?= $regimen['name'];?></td>
+                                                    <td><?php echo $columns['maps']['data'][$regimen['id']];?></td>
+                                                </tr>
+                                            <?php } } ?>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div><!--end of maps-->
                     </div>
                 </div>
+                <!-- /.panel-body -->
             </div>
-            <!-- /.panel-body -->
         </div>
     </div>
     <!-- /.col-lg-12 -->
@@ -178,21 +183,21 @@
 <script type="text/javascript">
     $(function(){
         $('#side-menu').remove();
-        // alert('page-wrapper!');
-
 
         $('#approveOrder').click(function(e){
             $.get( "/ART/manager/orders/actionOrder/<?= $cdrr_id; ?>/approved", function( data ) {
               alert(data);
               window.location.href = "";
           });
-        })
+        });
+
         $('#rejectOrder').click(function(e){
             $.get( "/ART/manager/orders/actionOrder/<?= $cdrr_id; ?>/rejected", function( data ) {
               alert(data);
               window.location.href = "";
           });
-        })
+        });
+
         $('#complete_allocation').click(function(e){
             $.get( "/ART/manager/orders/actionOrder/<?= $cdrr_id; ?>/allocated", function( data ) {
               alert(data);
@@ -201,39 +206,29 @@
         });
 
         $('#save_allocation').click(function(e){
-            // $('form')..serializeArray();
             var form = $('#orderForm');
             var url ="/ART/manager/orders/updateOrder/<?= $cdrr_id; ?>";
 
-            $.ajax( {
-              type: "POST",
-              url: url,
-              data: form.serialize(),
-              success: function( response ) {
-                alert('Allocation Saved')
-
-                $.get( "/ART/manager/orders/actionOrder/<?= $cdrr_id; ?>/pending", function( data ) {
-              // alert(data);
-              // window.location.href = "";
-          });
-
-
-            }
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: form.serialize(),
+                success: function( response ) {
+                    alert('Allocation Saved')
+                    $.get("/ART/manager/orders/actionOrder/<?= $cdrr_id; ?>/pending");
+                }
+            });
         });
-        })
-
 
     });
 </script>
+
 <style type="text/css">
-.breadcrumb{
-    padding: 8px 15px 5px 8px;
-    margin-bottom: 0px; 
-}
-.panel-default{
-    margin: 12px;
-}
-td,th{
-    padding: 2px;
-}
+    .breadcrumb{
+        padding: 8px 15px 5px 8px;
+        margin-bottom: 0px; 
+    }
+    .panel-default{
+        margin: 12px;
+    }
 </style>

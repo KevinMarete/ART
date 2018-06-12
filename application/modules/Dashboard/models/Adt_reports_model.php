@@ -106,6 +106,7 @@ class Adt_reports_model extends CI_Model {
         if (!empty($filters)) {
             foreach ($filters as $category => $filter) {
                 if ($category == 'data_date') {
+                    $this->db->where("dispensing_date >= '2015-01-01'");
                     $this->db->where("dispensing_date <=", $filter);
                     continue;
                 }
@@ -160,6 +161,7 @@ class Adt_reports_model extends CI_Model {
         if (!empty($filters)) {
             foreach ($filters as $category => $filter) {
                 if ($category == 'data_date') {
+                    $this->db->where("dispensing_date >= '2015-01-01'");
                     $this->db->where("dispensing_date <=", $filter);
                     continue;
                 }
@@ -214,6 +216,7 @@ class Adt_reports_model extends CI_Model {
         if (!empty($filters)) {
             foreach ($filters as $category => $filter) {
                 if ($category == 'data_date') {
+                    $this->db->where("dispensing_date >= '2015-01-01'");
                     $this->db->where("dispensing_date <=", $filter);
                     continue;
                 }
@@ -315,6 +318,7 @@ class Adt_reports_model extends CI_Model {
         if (!empty($filters)) {
             foreach ($filters as $category => $filter) {
                 if ($category == 'data_date') {
+                    $this->db->where("dispensing_date >= '2015-01-01'");
                     $this->db->where("dispensing_date <=", $filter);
                     continue;
                 }

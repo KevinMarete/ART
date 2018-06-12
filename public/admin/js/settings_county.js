@@ -44,7 +44,7 @@ function add_county()
     $('.form-group').removeClass('has-error');
     $('.help-block').empty();
     $('#modal_form').modal('show');
-    $('.modal-title').text('ADD COUNTY');
+    $('.modal-title').text('Add County');
 }
 
 function edit_county(id)
@@ -66,7 +66,7 @@ function edit_county(id)
             $('[name="name"]').val(data.name);
 
             $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
-            $('.modal-title').text('EDIT COUNTY'); // Set title to Bootstrap modal title
+            $('.modal-title').text('Edit County'); // Set title to Bootstrap modal title
 
         },
         error: function (jqXHR, textStatus, errorThrown)

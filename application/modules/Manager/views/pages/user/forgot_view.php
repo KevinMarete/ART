@@ -52,7 +52,7 @@
                                 <div class="form-group">
                                     <input class="form-control" placeholder="E-mail" name="email_address" type="email" autofocus required>
                                 </div>
-                                <button type="submit" class="btn btn-lg btn-danger btn-block"> <i class="fa fa-refresh"></i> Reset Account</button>
+                                <button type="submit" class="btn btn-md btn-danger btn-block"> <i class="fa fa-refresh"></i> Reset Account</button>
                             </fieldset>
                             <hr/>
                             <center>
