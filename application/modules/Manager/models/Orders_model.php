@@ -7,6 +7,7 @@ class Orders_model extends CI_Model {
     public function actionOrder($orderid,$mapid,$action,$user) {
         $response = array();
         try {
+            $this->db->set('updated', date('Y-m-d H:i:s'));
             $this->db->set('status', $action);
             $this->db->where('id', $orderid);
 
@@ -24,7 +25,8 @@ class Orders_model extends CI_Model {
                 $this->db->set($array);
                 $this->db->insert('tbl_cdrr_log');
 
-                //update maps
+                //Update maps
+                $this->db->set('updated', date('Y-m-d H:i:s'));
                 $this->db->set('status', $action);
                 $this->db->where('id', $mapid);
                 if ($this->db->update('tbl_maps')){

@@ -251,14 +251,14 @@
                 data: form.serialize(),
                 success: function( response ) {
                     alert('Allocation Saved')
-                    $.get( "manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/pending");
+                    $.get( base_url+"manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/pending");
                     window.location.href = "";
                 }
             });
         });
 
         //Disable input fields
-        <?php if (in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed')) || in_array($columns['cdrrs']['data'][0]['status'], array('pending', 'reviewed')) &&  in_array($this->session->userdata('role'), array('county', 'national'))) {?>
+        <?php if (in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed')) || in_array($columns['cdrrs']['data'][0]['status'], array('pending', 'reviewed', 'rejected')) && in_array($this->session->userdata('role'), array('county', 'national'))) {?>
             $('input').attr('disabled',true);
         <?php } ?>
     });

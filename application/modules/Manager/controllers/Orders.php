@@ -15,13 +15,13 @@ class Orders extends MX_Controller {
 			$vals = array(explode('-', $key)[0] => $value, 'id'=>explode('-', $key)[1]+0 );
 			array_push($updateArray, $vals);
 		}
-		$response = $this->Orders_model->updateOrder($orderid,$mapid,$updateArray,$this->session->userdata('id'));
+		$response = $this->Orders_model->updateOrder($orderid, $mapid, $updateArray, $this->session->userdata('id'));
 		echo $response['message'];
 	}
 
 	public function actionOrder($orderid,$mapid,$action)
 	{	
-		$response = $this->Orders_model->actionOrder($orderid,$mapid,$action,$this->session->userdata('id'));
+		$response = $this->Orders_model->actionOrder($orderid, $mapid, $action, $this->session->userdata('id'));
 		echo $response['message'];
 	}
 
