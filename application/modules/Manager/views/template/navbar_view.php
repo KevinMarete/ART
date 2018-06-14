@@ -51,12 +51,16 @@
                     echo "<li><a href='#'><i class='" . $value['icon'] . "'></i> " . ucwords($module) . "<span class='fa arrow'></span></a><ul class='nav nav-second-level' id='settings_nav_links'>";
                     foreach ($value['submodules'] as $orig_submodule) {
                         $submodule = str_replace(' ', '_', $orig_submodule);
-                        echo "<li><a class='" . str_replace(' ', '_', $orig_submodule) . "' href='" . base_url() . "manager/" . $module . "/" . $submodule . "'>" . ucwords(str_replace('_',' ', $orig_submodule)) . "</a></li>";
+                        echo "<li><a class='" . str_replace(' ', '_', $orig_submodule) . "' href='" . base_url() . "manager/" . $module . "/" . $submodule . "'>" . ucwords(str_replace('_', ' ', $orig_submodule)) . "</a></li>";
                     }
                     echo "</ul> </li>";
                 }
                 ?>
+                <li>
+                    <a href="#"><i class="fa fa-cloud-upload"> Mftp</i></a>
+                </li>
             </ul>
+
         </div>
         <!--/.sidebar-collapse -->
     </div>
