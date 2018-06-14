@@ -55,20 +55,20 @@ class Admin extends MX_Controller {
             $data['inputerror'][] = 'name';
             $data['error_string'][] = 'Name is required';
             //dhis elements
-//            $data['inputerror'][] = 'dhis_code';
-//            $data['error_string'][] = 'Dhis Code is required';
-//            $data['inputerror'][] = 'dhis_name';
-//            $data['error_string'][] = 'Dhis Name is required';
-//            $data['inputerror'][] = 'dhis_report';
-//            $data['error_string'][] = 'Dhis Report is required';
-//            $data['inputerror'][] = 'target_report';
-//            $data['error_string'][] = 'Target Report is required';
-//            $data['inputerror'][] = 'target_name';
-//            $data['error_string'][] = 'Target Name is required';
-//            $data['inputerror'][] = 'target_category';
-//            $data['error_string'][] = 'Target category is required';
-//            $data['inputerror'][] = 'target_id';
-//            $data['error_string'][] = 'Target Elemnet is required';
+            $data['inputerror'][] = 'dhis_code';
+            $data['error_string'][] = 'Dhis Code is required';
+            $data['inputerror'][] = 'dhis_name';
+            $data['error_string'][] = 'Dhis Name is required';
+            $data['inputerror'][] = 'dhis_report';
+            $data['error_string'][] = 'Dhis Report is required';
+            $data['inputerror'][] = 'target_report';
+            $data['error_string'][] = 'Target Report is required';
+            $data['inputerror'][] = 'target_name';
+            $data['error_string'][] = 'Target Name is required';
+            $data['inputerror'][] = 'target_category';
+            $data['error_string'][] = 'Target category is required';
+            $data['inputerror'][] = 'target_id';
+            $data['error_string'][] = 'Target Elemnet is required';
             //dose
             $data['inputerror'][] = 'value';
             $data['error_string'][] = 'Value is required';

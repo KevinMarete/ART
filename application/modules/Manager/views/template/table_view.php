@@ -216,6 +216,9 @@ if ($page_name != 'backup' && $page_name != 'user') {
                 $('[name="category_id"]').val(data.category_id);
                 $('[name="service_id"]').val(data.service_id);
                 $('[name="line_id"]').val(data.line_id);
+                //role_submodule
+                $('[name="role_id"]').val(data.role_id);
+                $('[name="submodule_id"]').val(data.submodule_id);
                 //facility
                 $('[name="mflcode"]').val(data.mflcode);
                 $('[name="category"]').val(data.category);

@@ -50,9 +50,8 @@ class Admin_model extends CI_Model {
                 $this->db->join('tbl_line l', 'l.id=r.line_id', 'inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_role_submodule') {
-                $this->db->select('r.name  role_name,sbm.name submodule_name');
+                $this->db->select('rsbm.role_id,sbm.name submodule_name');
                 $this->db->from('tbl_role_submodule rsbm');
-                $this->db->join('tbl_role r', 'r.id=rsbm.role_id', 'inner');
                 $this->db->join('tbl_submodule sbm', 'sbm.module_id=rsbm.submodule_id', 'inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_submodule') {
@@ -101,11 +100,23 @@ class Admin_model extends CI_Model {
 
     //function get_by_id
     public function get_by_id($table, $id) {
-        $this->db->from($table);
-        $this->db->where('id', $id);
-        $query = $this->db->get();
 
-        return $query->row();
+        if ($table == 'tbl_dhis_elements') {
+            $this->db->from($table);
+            $this->db->where('dhis_code', $id);
+            $query = $this->db->get();
+            return $query->row();
+        } else if ($table == 'tbl_role_submodule') {
+            $this->db->from($table);
+            $this->db->where('role_id', $id);
+            $query = $this->db->get();
+            return $query->row();
+        } else {
+            $this->db->from($table);
+            $this->db->where('id', $id);
+            $query = $this->db->get();
+            return $query->row();
+        }
     }
 
     //function update db_table

@@ -8,19 +8,19 @@
             </div>
             <div class="modal-body form">
                 <form action="#" id="form" class="form-horizontal">
-                    <!--<input type="hidden" value="" name="id"/>--> 
+                    <input type="hidden" value="" name="role_id"/> 
                     <div class="form-body">
                         <div class="form-group">
                             <label class="control-label col-md-3">Role</label>
                             <div class="col-md-9">
-                                <select name="role_id"  id="role_id" class="form-control select2" type="text"></select>
+                                <input name="role_id"  id="role_id" class="form-control" placeholder="Role" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Module</label>
                             <div class="col-md-9">
-                                <select name="module_id" id="module_id" class="form-control select2" type="text"></select>
+                                <select name="submodule_id" id="submodule_id" class="form-control select2" type="text"></select>
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -38,12 +38,12 @@
 
 <script type="text/javascript">
     $(function () {
-        var moduleURL = '../../API/module';
-        $("#module_id").empty()
-        $.getJSON(moduleURL, function (modules) {
-            $("#module_id").append($("<option value=''>Select Module</option>"));
-            $.each(modules, function (index, module) {
-                $("#module_id").append($("<option value='" + module.id + "'>" + module.name.toUpperCase() + "</option>"));
+        var submoduleURL = '../../API/submodule';
+        $("#submodule_id").empty()
+        $.getJSON(submoduleURL, function (submodules) {
+            $("#submodule_id").append($("<option value=''>Select Submodule</option>"));
+            $.each(submodules, function (index, submodule) {
+                $("#submodule_id").append($("<option value='" + submodule.id + "'>" + submodule.name.toUpperCase() + "</option>"));
             });
         });
     });
