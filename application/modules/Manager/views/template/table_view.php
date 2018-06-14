@@ -67,6 +67,9 @@
                                     if ($column == 'module_id') {
                                         $column = 'module name';
                                     }
+                                    if ($column == 'submodule_id') {
+                                        $column = 'submodule';
+                                    }
                                     if ($column == 'foldername') {
                                         $column = 'folder name';
                                     }

@@ -8,12 +8,12 @@
             </div>
             <div class="modal-body form">
                 <form action="#" id="form" class="form-horizontal">
-                    <input type="hidden" value="" name="id"/> 
+                    <!--<input type="hidden" value="" name="id"/>--> 
                     <div class="form-body">
                         <div class="form-group">
-                            <label class="control-label col-md-3">Submodule</label>
+                            <label class="control-label col-md-3">Role</label>
                             <div class="col-md-9">
-                                <input name="name" placeholder="SubModule Name" class="form-control" type="text">
+                                <select name="role_id"  id="role_id" class="form-control select2" type="text"></select>
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -25,7 +25,7 @@
                             </div>
                         </div>
                     </div>
-                    <input name="_table_" type="hidden" value="tbl_submodule">
+                    <input name="_table_" type="hidden" value="tbl_role_submodule">
                 </form>
             </div>
             <div class="modal-footer">

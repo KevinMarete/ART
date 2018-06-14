@@ -49,6 +49,12 @@ class Admin_model extends CI_Model {
                 $this->db->join('tbl_service s', 's.id=r.service_id', 'inner');
                 $this->db->join('tbl_line l', 'l.id=r.line_id', 'inner');
                 $table_data = $this->db->get()->result_array();
+            } else if ($table == 'tbl_role_submodule') {
+                $this->db->select('r.name  role_name,sbm.name submodule_name');
+                $this->db->from('tbl_role_submodule rsbm');
+                $this->db->join('tbl_role r', 'r.id=rsbm.role_id', 'inner');
+                $this->db->join('tbl_submodule sbm', 'sbm.module_id=rsbm.submodule_id', 'inner');
+                $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_submodule') {
                 $this->db->select('sbm.id,sbm.name,m.name module_name');
                 $this->db->from('tbl_submodule sbm');
