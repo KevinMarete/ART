@@ -64,6 +64,9 @@
                                     if ($column == 'user_id') {
                                         $column = 'Assignee';
                                     }
+                                    if ($column == 'module_id') {
+                                        $column = 'module name';
+                                    }
                                     if ($column == 'foldername') {
                                         $column = 'folder name';
                                     }
@@ -218,6 +221,8 @@ if ($page_name != 'backup' && $page_name != 'user') {
                 $('[name="latitude"]').val(data.latitude);
                 $('[name="subcounty_id"]').val(data.subcounty_id);
                 $('[name="partner_id"]').val(data.partner_id);
+                //submodule
+                $('[name="module_id"]').val(data.module_id);
 
                 $('#modal_form').modal('show');
                 //select2
