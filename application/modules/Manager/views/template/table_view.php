@@ -34,6 +34,9 @@
                                     if ($column == 'county_id') {
                                         $column = 'County';
                                     }
+                                    if ($column == 'target_id') {
+                                        $column = 'target element';
+                                    }
                                     if ($column == 'generic_id') {
                                         $column = 'Generic';
                                     }
@@ -169,6 +172,14 @@ if ($page_name != 'backup' && $page_name != 'user') {
                 $('[name="name"]').val(data.name);
                 //subcounty
                 $('[name="county_id"]').val(data.county_id);
+                //dhis_elements
+                $('[name="dhis_code"]').val(data.dhis_code);
+                $('[name="dhis_name"]').val(data.dhis_name);
+                $('[name="dhis_report"]').val(data.dhis_report);
+                $('[name="target_report"]').val(data.target_report);
+                $('[name="target_name"]').val(data.target_name);
+                $('[name="target_category"]').val(data.target_category);
+                $('[name="target_id"]').val(data.target_id);
                 //dose
                 $('[name="value"]').val(data.value);
                 $('[name="frequency"]').val(data.frequency);

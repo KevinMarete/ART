@@ -50,10 +50,25 @@ class Admin extends MX_Controller {
         $data['inputerror'] = array();
         $data['status'] = TRUE;
 
-        if ($this->input->post('name') == '' && ($this->input->post('name') == '' || $this->input->post('value') == '' || $this->input->post('frequency') == '') && ($this->input->post('strength') == '' || $this->input->post('packsize') == '' || $this->input->post('generic_id') == '' || $this->input->post('formulation_id') == '') && ($this->input->post('name') == '' || $this->input->post('mflcode') == '' || $this->input->post('category') == '' || $this->input->post('dhiscode') == '' || $this->input->post('longitude') == '' || $this->input->post('latitude') == '' || $this->input->post('subcounty_id') == '' || $this->input->post('partner_id') == '') && ($this->input->post('name') == '' || $this->input->post('abbreviation') == '') && ($this->input->post('facility_id') == '' || $this->input->post('version') == '' || $this->input->post('setup_date') == '' || $this->input->post('upgrade_date') == '' || $this->input->post('comments') == '' || $this->input->post('contact_name') == '' || $this->input->post('contact_phone') == '' || $this->input->post('active_patients') == '' || $this->input->post('user_id') == '') && ($this->input->post('name') == '' || $this->input->post('code') == '' || $this->input->post('description') == '' || $this->input->post('category_id') == '' || $this->input->post('service_id') == '' || $this->input->post('line_id') == '') && ($this->input->post('name') == '' || $this->input->post('county_id') == '')) {
+        if ($this->input->post('name') == '' && ($this->input->post('dhis_code') == '' || $this->input->post('dhis_name') == '' || $this->input->post('dhis_report') == '' || $this->input->post('target_report') == '' || $this->input->post('target_name') == '' || $this->input->post('target_category') == '' || $this->input->post('target_id') == '' ) && ($this->input->post('name') == '' || $this->input->post('value') == '' || $this->input->post('frequency') == '') && ($this->input->post('strength') == '' || $this->input->post('packsize') == '' || $this->input->post('generic_id') == '' || $this->input->post('formulation_id') == '') && ($this->input->post('name') == '' || $this->input->post('mflcode') == '' || $this->input->post('category') == '' || $this->input->post('dhiscode') == '' || $this->input->post('longitude') == '' || $this->input->post('latitude') == '' || $this->input->post('subcounty_id') == '' || $this->input->post('partner_id') == '') && ($this->input->post('name') == '' || $this->input->post('abbreviation') == '') && ($this->input->post('facility_id') == '' || $this->input->post('version') == '' || $this->input->post('setup_date') == '' || $this->input->post('upgrade_date') == '' || $this->input->post('comments') == '' || $this->input->post('contact_name') == '' || $this->input->post('contact_phone') == '' || $this->input->post('active_patients') == '' || $this->input->post('user_id') == '') && ($this->input->post('name') == '' || $this->input->post('code') == '' || $this->input->post('description') == '' || $this->input->post('category_id') == '' || $this->input->post('service_id') == '' || $this->input->post('line_id') == '') && ($this->input->post('name') == '' || $this->input->post('county_id') == '')) {
             //common to many forms
             $data['inputerror'][] = 'name';
             $data['error_string'][] = 'Name is required';
+            //dhis elements
+//            $data['inputerror'][] = 'dhis_code';
+//            $data['error_string'][] = 'Dhis Code is required';
+//            $data['inputerror'][] = 'dhis_name';
+//            $data['error_string'][] = 'Dhis Name is required';
+//            $data['inputerror'][] = 'dhis_report';
+//            $data['error_string'][] = 'Dhis Report is required';
+//            $data['inputerror'][] = 'target_report';
+//            $data['error_string'][] = 'Target Report is required';
+//            $data['inputerror'][] = 'target_name';
+//            $data['error_string'][] = 'Target Name is required';
+//            $data['inputerror'][] = 'target_category';
+//            $data['error_string'][] = 'Target category is required';
+//            $data['inputerror'][] = 'target_id';
+//            $data['error_string'][] = 'Target Elemnet is required';
             //dose
             $data['inputerror'][] = 'value';
             $data['error_string'][] = 'Value is required';
