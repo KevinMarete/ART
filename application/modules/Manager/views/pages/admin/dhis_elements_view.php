@@ -1,4 +1,4 @@
-<!-- Add or Edit County modal -->
+<!-- Add or Edit modal -->
 <div class="modal fade" id="modal_form" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">

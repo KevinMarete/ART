@@ -190,6 +190,8 @@ if ($page_name != 'backup' && $page_name != 'user') {
                 $('[name="formulation_id"]').val(data.formulation_id);
                 //generic
                 $('[name="abbreviation"]').val(data.abbreviation);
+                //module
+                $('[name="icon"]').val(data.icon);
                 //install
                 $('[name="facility_id"]').val(data.facility_id);
                 $('[name="contact_name"]').val(data.contact_name);
