@@ -13,12 +13,12 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Role</label>
                             <div class="col-md-9">
-                                <input name="role_id"  id="role_id" class="form-control" placeholder="Role" type="text">
+                                <select name="role_id"  id="role_id" class="form-control select2" type="text"></select>
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Module</label>
+                            <label class="control-label col-md-3">Submodule</label>
                             <div class="col-md-9">
                                 <select name="submodule_id" id="submodule_id" class="form-control select2" type="text"></select>
                                 <span class="help-block"></span>
@@ -38,11 +38,20 @@
 <script type="text/javascript">
     $(function () {
         var submoduleURL = '../../API/submodule';
+        var roleURL = '../../API/role';
+
         $("#submodule_id").empty()
         $.getJSON(submoduleURL, function (submodules) {
             $("#submodule_id").append($("<option value=''>Select Submodule</option>"));
             $.each(submodules, function (index, submodule) {
                 $("#submodule_id").append($("<option value='" + submodule.id + "'>" + submodule.name.toUpperCase() + "</option>"));
+            });
+        });
+        $("#role_id").empty()
+        $.getJSON(roleURL, function (roles) {
+            $("#role_id").append($("<option value=''>Select Submodule</option>"));
+            $.each(roles, function (index, role) {
+                $("#role_id").append($("<option value='" + role.id + "'>" + role.name.toUpperCase() + "</option>"));
             });
         });
     });
