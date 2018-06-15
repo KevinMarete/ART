@@ -18,7 +18,6 @@
                             </div>
                         </div>
                     </div>
-                    <input name="_table_" type="hidden" value="tbl_change_reason">
                 </form>
             </div>
             <div class="modal-footer">

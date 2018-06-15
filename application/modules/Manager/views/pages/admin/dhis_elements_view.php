@@ -66,7 +66,6 @@
                             </div>
                         </div>
                     </div>
-                    <input name="_table_" type="hidden" value="tbl_dhis_elements">
                 </form>
             </div>
             <div class="modal-footer">

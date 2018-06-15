@@ -18,9 +18,9 @@ class Admin extends MX_Controller {
     }
 
     //function add data to db_table
-    public function add_data() {
+    public function add_data($table) {
         $this->_validate();
-        $insert = $this->Admin_model->save($_POST);
+        $this->Admin_model->save($table,$_POST);
         echo json_encode(array("status" => TRUE));
     }
 
@@ -31,9 +31,9 @@ class Admin extends MX_Controller {
     }
 
     //function update data from db_table
-    public function update_data() {
+    public function update_data($table) {
         $this->_validate();
-        $this->Admin_model->update(array('id' => $this->input->post('id')), $_POST);
+        $this->Admin_model->update($table,array('id' => $this->input->post('id')),$_POST);
         echo json_encode(array("status" => TRUE));
     }
 

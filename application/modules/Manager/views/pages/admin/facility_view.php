@@ -73,7 +73,6 @@
                             </div>
                         </div>
                     </div>
-                    <input name="_table_" type="hidden" value="tbl_facility">
                 </form>
             </div>
             <div class="modal-footer">

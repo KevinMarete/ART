@@ -257,9 +257,9 @@ if ($page_name != 'backup' && $page_name != 'user') {
         var url;
 
         if (save_method == 'add') {
-            url = "<?php echo base_url('Manager/Admin/add_data'); ?>";
+            url = "<?php echo base_url('Manager/Admin/add_data/tbl_'.$page_name); ?>";
         } else {
-            url = "<?php echo base_url('Manager/Admin/update_data'); ?>";
+            url = "<?php echo base_url('Manager/Admin/update_data/tbl_'.$page_name); ?>";
         }
         $.ajax({
             url: url,

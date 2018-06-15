@@ -85,16 +85,8 @@ class Admin_model extends CI_Model {
     }
 
     //function save data to database
-    public function save($data) {
-        $post_data = array();
-        $table = '';
-        foreach ($data as $key => $value) {
-            if ($key == '_table_')
-                $table = $value;
-            else
-                $post_data[$key] = $value;
-        }
-        $this->db->insert($table, $post_data);
+    public function save($table,$data) {
+        $this->db->insert($table, $data);
         return $this->db->insert_id();
     }
 
@@ -120,23 +112,23 @@ class Admin_model extends CI_Model {
     }
 
     //function update db_table
-    public function update($where, $data) {
-        $post_data = array();
-        $table = '';
-        foreach ($data as $key => $value) {
-            if ($key == '_table_')
-                $table = $value;
-            else
-                $post_data[$key] = $value;
-        }
-        $this->db->update($table, $post_data, $where);
+    public function update($table,$where,$data) {
+        $this->db->update($table, $data,$where);
         return $this->db->affected_rows();
     }
 
     //function delete from db_table
     public function delete_by_id($table, $id) {
-        $this->db->where('id', $id);
-        $this->db->delete($table);
+        if ($table == 'tbl_dhis_elements') {
+            $this->db->where('dhis_code', $id);
+            $this->db->delete($table);
+        } else if ($table == 'tbl_role_submodule') {
+            $this->db->where('role_id', $id);
+            $this->db->delete($table);
+        } else {
+            $this->db->where('id', $id);
+            $this->db->delete($table);
+        }
     }
 
 }

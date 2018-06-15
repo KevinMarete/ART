@@ -25,7 +25,6 @@
                             </div>
                         </div>
                     </div>
-                    <input name="_table_" type="hidden" value="tbl_generic">
                 </form>
             </div>
             <div class="modal-footer">

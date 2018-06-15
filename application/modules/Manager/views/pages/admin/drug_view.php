@@ -40,7 +40,6 @@
                             </div>
                         </div>
                     </div>
-                    <input name="_table_" type="hidden" value="tbl_drug">
                 </form>
             </div>
             <div class="modal-footer">

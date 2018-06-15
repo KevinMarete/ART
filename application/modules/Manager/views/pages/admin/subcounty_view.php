@@ -26,7 +26,6 @@
                             </div>
                         </div>
                     </div>
-                    <input name="_table_" type="hidden" value="tbl_subcounty">
                 </form>
             </div>
             <div class="modal-footer">

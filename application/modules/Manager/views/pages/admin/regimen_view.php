@@ -53,7 +53,6 @@
                             </div>
                         </div>
                     </div>
-                    <input name="_table_" type="hidden" value="tbl_regimen" >
                 </form>
                 <div class="modal-footer">
                     <button type="button" id="btnSave" onclick="save()" class="btn btn-default">Save</button>
