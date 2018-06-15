@@ -37,21 +37,22 @@
 
 <script type="text/javascript">
     $(function () {
-        var submoduleURL = '../../API/submodule';
         var roleURL = '../../API/role';
+        var submoduleURL = '../../API/submodule';
+
+        $("#role_id").empty()
+        $.getJSON(roleURL, function (roles) {
+            $("#role_id").append($("<option value=''>Select Role</option>"));
+            $.each(roles, function (index, role) {
+                $("#role_id").append($("<option value='" + role.id + "'>" + role.name.toUpperCase() + "</option>"));
+            });
+        });
 
         $("#submodule_id").empty()
         $.getJSON(submoduleURL, function (submodules) {
             $("#submodule_id").append($("<option value=''>Select Submodule</option>"));
             $.each(submodules, function (index, submodule) {
                 $("#submodule_id").append($("<option value='" + submodule.id + "'>" + submodule.name.toUpperCase() + "</option>"));
-            });
-        });
-        $("#role_id").empty()
-        $.getJSON(roleURL, function (roles) {
-            $("#role_id").append($("<option value=''>Select Submodule</option>"));
-            $.each(roles, function (index, role) {
-                $("#role_id").append($("<option value='" + role.id + "'>" + role.name.toUpperCase() + "</option>"));
             });
         });
     });

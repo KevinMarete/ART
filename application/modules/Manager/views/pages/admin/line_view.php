@@ -13,7 +13,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Line Name</label>
                             <div class="col-md-9">
-                                <input name="name" placeholder="Name" class="form-control" type="text">
+                                <input name="name" placeholder="nth-line" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>

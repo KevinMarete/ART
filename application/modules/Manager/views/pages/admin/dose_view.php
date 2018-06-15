@@ -13,21 +13,21 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Name</label>
                             <div class="col-md-9">
-                                <input name="name" placeholder="Name" class="form-control" type="text">
+                                <input name="name" placeholder="1.25OD" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Value</label>
                             <div class="col-md-9">
-                                <input name="value" placeholder="Value" class="form-control" type="text">
+                                <input name="value" placeholder="0.5" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Frequency</label>
                             <div class="col-md-9">
-                                <input name="frequency" placeholder="Frequency" class="form-control" type="text">
+                                <input name="frequency" placeholder="2" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>

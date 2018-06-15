@@ -13,14 +13,14 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Strength</label>
                             <div class="col-md-9">
-                                <input name="strength" placeholder="Strength" class="form-control" type="text">
+                                <input name="strength" placeholder="50mg" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Pack Size</label>
                             <div class="col-md-9">
-                                <input name="packsize" placeholder="Pack Size" class="form-control" type="text">
+                                <input name="packsize" placeholder="1*100ml" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
