@@ -8,14 +8,8 @@
             </div>
             <div class="modal-body form">
                 <form action="#" id="form" class="form-horizontal">
+                    <input type="hidden" value="" name="role_id"/> 
                     <div class="form-body">
-                        <div class="form-group">
-                            <label class="control-label col-md-3">Role</label>
-                            <div class="col-md-9">
-                                <select name="role_id"  id="role_id" class="form-control select2" type="text"></select>
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Submodule</label>
                             <div class="col-md-9">
@@ -36,19 +30,10 @@
 
 <script type="text/javascript">
     $(function () {
-        var roleURL = '../../API/role';
         var submoduleURL = '../../API/submodule';
 
-        $("#role_id").empty()
-        $.getJSON(roleURL, function (roles) {
-            $("#role_id").append($("<option value=''>Select Role</option>"));
-            $.each(roles, function (index, role) {
-                $("#role_id").append($("<option value='" + role.id + "'>" + role.name.toUpperCase() + "</option>"));
-            });
-        });
-
-        $("#submodule_id").empty()
         $.getJSON(submoduleURL, function (submodules) {
+            $("#submodule_id").empty()
             $("#submodule_id").append($("<option value=''>Select Submodule</option>"));
             $.each(submodules, function (index, submodule) {
                 $("#submodule_id").append($("<option value='" + submodule.id + "'>" + submodule.name.toUpperCase() + "</option>"));

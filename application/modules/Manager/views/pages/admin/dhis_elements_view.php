@@ -7,8 +7,8 @@
                 <h4 class="modal-title"></h4>
             </div>
             <div class="modal-body form">
-                <form action="#" id="form" class="form-horizontal">
-                    <div class="form-body">
+                <form action="#" id="form" class="form-horizontal">  
+                   <div class="form-body">
                         <div class="form-group">
                             <label class="control-label col-md-3">Code</label>
                             <div class="col-md-9">
