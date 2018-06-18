@@ -8,7 +8,6 @@
             </div>
             <div class="modal-body form">
                 <form action="#" id="form" class="form-horizontal">
-                    <input type="hidden" value="" name="role_id"/> 
                     <div class="form-body">
                         <div class="form-group">
                             <label class="control-label col-md-3">Role</label>
