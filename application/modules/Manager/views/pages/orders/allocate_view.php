@@ -17,10 +17,10 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <?php if ($role=='county' && $columns['cdrrs']['data'][0]['status'] == 'allocated'){?>
+                            <?php if ($role=='county' && date('d') <= 20 && $columns['cdrrs']['data'][0]['status'] == 'allocated'){?>
                                 <button type="submit" class="btn btn-success" id="approveOrder">Approve Order</button>
                                 <button type="submit" class="btn btn-danger" id="rejectOrder">Reject Order</button>
-                            <?php }else if($role=='national' && $columns['cdrrs']['data'][0]['status'] == 'approved'){?>
+                            <?php }else if($role=='national' && date('d') <= 20 && $columns['cdrrs']['data'][0]['status'] == 'approved'){?>
                                 <button type="submit" class="btn btn-success" id="reviewOrder">Review Order</button>
                             <?php }?>
                         </div>
@@ -66,108 +66,112 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <table class="table table-striped table-bordered table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th rowspan="2">Drug Name</th>
-                                        <th rowspan="2">Pack Size</th>
-                                        <th>Beginning Balance</th>
-                                        <th>Quantity Received</th>
-                                        <th>Quantity Issued</th>
-                                        <th>Losses & Wastage</th>
-                                        <th>Positive Adjustments</th>
-                                        <th>Negative Adjustments</th>
-                                        <th>End Month Stock on Hand</th>
-                                        <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
-                                            <th >Aggregate Consumed</th>
-                                            <th >Aggregate Stock on Hand</th>
-                                        <?php }?>
-                                        <th colspan="2">Commodities Expiring < 6 Months</th>
-                                        <th>Days out of Stock</th>
-                                        <th>Resupply Quantity</th>
-                                        <th>AMC</th>
-                                        <th>MOS</th>
-                                        <th>AutoCalc</th>
-                                        <th>Allocated</th>
-                                        <th rowspan="2">Comments</th>
-                                        <th rowspan="2">Decision</th>
-                                    </tr>
-                                    <tr>
-                                        <th>A</th>
-                                        <th>B</th>
-                                        <th>C</th>
-                                        <th>D</th>
-                                        <th>E</th>
-                                        <th>F</th>
-                                        <th>G</th>
-                                        <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
-                                            <th>I</th>
-                                            <th>J</th>
-                                        <?php }?>
-                                        <th>Quantity</th>
-                                        <th>Expiry Date</th>
-                                        <th>K</th>
-                                        <th>L</th>
-                                        <th>M</th>
-                                        <th>N</th>
-                                        <th>O</th>
-                                        <th>P</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <form name="orderForm" id="orderForm">
-                                        <?php foreach ($columns['drugs'] as $key => $drug) {  
-                                                $drugname = $drug['name']; 
-                                                if (in_array($drugname, array_keys($columns['cdrrs']['data']['cdrr_item']))){
-                                                    $count  = $columns['cdrrs']['data']['cdrr_item'][$drugname]['count'];
-                                                    $drugamc  = $columns['cdrrs']['data']['cdrr_item'][$drugname]['drugamc']; 
-                                                    $consumed  = $columns['cdrrs']['data']['cdrr_item'][$drugname]['dispensed_packs'];
-                                                    ?>
-                                                <tr>
-                                                    <td><?= $drug['name'];?></td>
-                                                    <td><?= $drug['pack_size'];?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['balance'];?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['received'];?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['dispensed_packs'];?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['losses'];?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['adjustments'];?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['adjustments_neg'];?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['count'];?></td>
-                                                    <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
-                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_consumed'];?></td>
-                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_on_hand'];?></td>
-                                                    <?php }  ?>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['expiry_quant'];?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['expiry_date'];?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['out_of_stock'];?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['resupply'];?></td>
-                                                    <td><?= $drugamc;?></td>
-                                                    <td id="mos"><?= $mos = ($count > 0 && $drugamc > 0) ? number_format($count/$drugamc) : 0;?></td>
-                                                    <td id="auto"><?= (($consumed * 3) - $count);?></td>
-                                                    <td>
-                                                        <input type="text" class="form-control" name="qty_allocated-<?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['cdrr_item_id'];?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugname]['qty_allocated'] > 0) ? $columns['cdrrs']['data']['cdrr_item'][$drugname]['qty_allocated'] : $columns['cdrrs']['data']['cdrr_item'][$drugname]['resupply'];?>">
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" class="form-control" name="feedback-<?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['cdrr_item_id'];?>" value="<?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['feedback'];?>">
-                                                    </td>
-                                                    <td>
-                                                        <?php 
-                                                            if ($mos < 3){
-                                                                echo '<span class="label label-danger">RESUPPLY</span>';
-                                                            }else if($mos > 3 && $mos < 6){
-                                                                echo '<span class="label label-warning">MONITOR</span>';
-                                                            }else{
-                                                                echo '<span class="label label-success">REDISTRIBUTE</span>';
-                                                            } 
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2">Drug Name</th>
+                                            <th rowspan="2">Pack Size</th>
+                                            <th>Beginning Balance</th>
+                                            <th>Quantity Received</th>
+                                            <th>Quantity Issued</th>
+                                            <th>Losses & Wastage</th>
+                                            <th>Positive Adjustments</th>
+                                            <th>Negative Adjustments</th>
+                                            <th>End Month Stock on Hand</th>
+                                            <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
+                                                <th >Aggregate Consumed</th>
+                                                <th >Aggregate Stock on Hand</th>
+                                            <?php }?>
+                                            <th colspan="2">Commodities Expiring < 6 Months</th>
+                                            <th>Days out of Stock</th>
+                                            <th>Resupply Quantity</th>
+                                            <th>AMC</th>
+                                            <th>MOS</th>
+                                            <th>AutoCalc</th>
+                                            <th>Allocated</th>
+                                            <th rowspan="2">Comments</th>
+                                            <th rowspan="2">Decision</th>
+                                        </tr>
+                                        <tr>
+                                            <th>A</th>
+                                            <th>B</th>
+                                            <th>C</th>
+                                            <th>D</th>
+                                            <th>E</th>
+                                            <th>F</th>
+                                            <th>G</th>
+                                            <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
+                                                <th>I</th>
+                                                <th>J</th>
+                                            <?php }?>
+                                            <th>Quantity</th>
+                                            <th>Expiry Date</th>
+                                            <th>K</th>
+                                            <th>L</th>
+                                            <th>M</th>
+                                            <th>N</th>
+                                            <th>O</th>
+                                            <th>P</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <form name="orderForm" id="orderForm">
+                                            <?php foreach ($columns['drugs'] as $key => $drug) {  
+                                                    $drugname = $drug['name']; 
+                                                    if (in_array($drugname, array_keys($columns['cdrrs']['data']['cdrr_item']))){
+                                                        $count  = $columns['cdrrs']['data']['cdrr_item'][$drugname]['count'];
+                                                        $drugamc  = $columns['cdrrs']['data']['cdrr_item'][$drugname]['drugamc']; 
+                                                        $consumed  = $columns['cdrrs']['data']['cdrr_item'][$drugname]['dispensed_packs'];
                                                         ?>
-                                                    </td>
-                                                </tr>
-                                            <?php 
-                                            }
-                                        }?>
-                                    </form>
-                                </tbody>
-                            </table>
+                                                    <tr>
+                                                        <td><?= $drug['name'];?></td>
+                                                        <td><?= $drug['pack_size'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['balance'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['received'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['dispensed_packs'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['losses'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['adjustments'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['adjustments_neg'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['count'];?></td>
+                                                        <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ 
+                                                            $count  = $columns['cdrrs']['data']['cdrr_item'][$drugname]['count'] + $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_on_hand'];
+                                                        ?> 
+                                                            <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_consumed'];?></td>
+                                                            <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_on_hand'];?></td>
+                                                        <?php }  ?>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['expiry_quant'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['expiry_date'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['out_of_stock'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['resupply'];?></td>
+                                                        <td><?= $drugamc;?></td>
+                                                        <td><?= $mos = ($count > 0 && $drugamc > 0) ? number_format($count/$drugamc) : 0;?></td>
+                                                        <td><?= (($drugamc * 3) - $count) > 0 ? (($drugamc * 3) - $count) : 0;?></td>
+                                                        <td>
+                                                            <input type="text" class="form-control" name="qty_allocated-<?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['cdrr_item_id'];?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugname]['qty_allocated'] > 0) ? $columns['cdrrs']['data']['cdrr_item'][$drugname]['qty_allocated'] : $columns['cdrrs']['data']['cdrr_item'][$drugname]['resupply'];?>">
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control" name="feedback-<?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['cdrr_item_id'];?>" value="<?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['feedback'];?>">
+                                                        </td>
+                                                        <td>
+                                                            <?php 
+                                                                if ($mos < 3){
+                                                                    echo '<span class="label label-danger">RESUPPLY</span>';
+                                                                }else if($mos > 3 && $mos < 6){
+                                                                    echo '<span class="label label-warning">MONITOR</span>';
+                                                                }else{
+                                                                    echo '<span class="label label-success">REDISTRIBUTE</span>';
+                                                                } 
+                                                            ?>
+                                                        </td>
+                                                    </tr>
+                                                <?php 
+                                                }
+                                            }?>
+                                        </form>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="table-responsive">
@@ -188,7 +192,7 @@
                                     <?php } ?>
                                 </table>
                             </div>
-                            <?php if ($role=='subcounty' && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))){?>
+                            <?php if ($role=='subcounty' && date('d') <= 20 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))){?>
                                 <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
                                 <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
                             <?php }?>

@@ -89,16 +89,18 @@ class Orders_model extends CI_Model {
             $sql = "SELECT 
                         UCASE(f.name) facility_name,
                         c.period_begin,
+                        CONCAT_WS('/', c.code, m.code) description,
                         $column
                         c.status,
                         CONCAT('<a href=view/', c.id,'/', m.id, '>View Order</a>') options
                     FROM tbl_facility f
                     $join
-                    INNER JOIN tbl_cdrr c ON c.facility_id = f.id
+                    INNER JOIN tbl_cdrr c ON c.facility_id = f.id 
                     INNER JOIN tbl_maps m ON m.facility_id = f.id
                     WHERE c.facility_id = m.facility_id
                     AND c.period_begin = m.period_begin
                     AND c.period_end = m.period_end
+                    AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1)
                     $filter
                     GROUP BY c.id 
                     ORDER BY c.period_begin DESC";
@@ -128,19 +130,19 @@ class Orders_model extends CI_Model {
             if($role == 'national'){
                 $sql = "SELECT 
                             UCASE(co.name) county,
-                            CONCAT_WS('/', COUNT(t.facility_id), COUNT(f.id)) submitted,
-                            ROUND(COUNT(t.facility_id)/(COUNT(f.id))*100) progress
+                            CONCAT_WS('/', COUNT(DISTINCT t.facility_id), COUNT(DISTINCT f.id)) submitted,
+                            ROUND(COUNT(DISTINCT t.facility_id)/(COUNT(DISTINCT f.id))*100) progress
                         FROM tbl_facility f  
                         INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
                         INNER JOIN tbl_county co ON co.id = sc.county_id
                         LEFT JOIN
                         (
-                            SELECT c.facility_id, c.period_begin, c.period_end
+                            SELECT c.facility_id, c.period_begin, c.period_end, c.code
                             FROM tbl_cdrr c 
-                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end
+                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1)
                             WHERE c.period_begin = ? 
                             AND c.period_end = ?
-                            GROUP BY c.facility_id, c.period_begin, c.period_end
+                            GROUP BY c.facility_id, c.period_begin, c.period_end, c.code
                         ) t ON t.facility_id = f.id
                         WHERE f.category != 'satellite'
                         GROUP BY co.name
@@ -149,18 +151,18 @@ class Orders_model extends CI_Model {
             } else if($role == 'county'){
                 $sql = "SELECT 
                             UCASE(sc.name) subcounty,
-                            CONCAT_WS('/', COUNT(t.facility_id), COUNT(f.id)) submitted,
-                            ROUND(COUNT(t.facility_id)/(COUNT(f.id))*100) progress
+                            CONCAT_WS('/', COUNT(DISTINCT t.facility_id), COUNT(DISTINCT f.id)) submitted,
+                            ROUND(COUNT(DISTINCT t.facility_id)/(COUNT(DISTINCT f.id))*100) progress
                         FROM tbl_facility f  
                         INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
                         LEFT JOIN
                         (
-                            SELECT c.facility_id, c.period_begin, c.period_end
+                            SELECT c.facility_id, c.period_begin, c.period_end, c.code
                             FROM tbl_cdrr c 
-                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end
+                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1)
                             WHERE c.period_begin = ? 
                             AND c.period_end = ?
-                            GROUP BY c.facility_id, c.period_begin, c.period_end
+                            GROUP BY c.facility_id, c.period_begin, c.period_end, c.code
                         ) t ON t.facility_id = f.id
                         WHERE sc.county_id = ?
                         AND f.category != 'satellite'
@@ -174,17 +176,18 @@ class Orders_model extends CI_Model {
                             f.mflcode,
                             UCASE(f.name) facility_name,
                             IF(t.period_begin IS NOT NULL, UCASE(t.status), 'PENDING') reporting_status,
+                            IF(t.period_begin IS NOT NULL, t.description, 'N/A') description,
                             ? period,
                             IF(t.period_begin IS NOT NULL, CONCAT('<a href=$allocation_url/',t.cdrr_id,'/',t.maps_id,'>View Order</a>'), 'Not Reported') options
                         FROM tbl_facility f  
                         LEFT JOIN
                         (
-                            SELECT c.facility_id, c.period_begin, c.period_end, c.id cdrr_id, m.id maps_id, c.status
+                            SELECT c.facility_id, c.period_begin, c.period_end, c.id cdrr_id, m.id maps_id, c.status, CONCAT_WS('/', c.code, m.code) description
                             FROM tbl_cdrr c 
-                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end
+                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1)
                             WHERE c.period_begin = ? 
                             AND c.period_end = ?
-                            GROUP BY c.facility_id, c.period_begin, c.period_end, cdrr_id, maps_id
+                            GROUP BY c.facility_id, c.period_begin, c.period_end, cdrr_id, maps_id, c.code
                         ) t ON t.facility_id = f.id
                         WHERE f.subcounty_id = ?
                         AND f.category != 'satellite'
@@ -220,7 +223,7 @@ class Orders_model extends CI_Model {
                             IF(SUM(IF(c.status = 'reviewed', 1, 0)) != sb.total, 'Incomplete', 'Complete') status,
                             CONCAT('<a href=edit_allocation/', c.period_begin, '>View/Edit</a>')  options
                         FROM tbl_cdrr c 
-                        INNER JOIN tbl_maps m ON c.facility_id = m.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status IN('allocated', 'approved', 'reviewed')
+                        INNER JOIN tbl_maps m ON c.facility_id = m.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status IN('allocated', 'approved', 'reviewed') AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1)
                         INNER JOIN tbl_facility f ON c.facility_id = f.id,  
                         (SELECT COUNT(DISTINCT fc.name) total FROM tbl_facility fc WHERE fc.category != 'satellite') sb
                         WHERE f.category != 'satellite'
@@ -234,7 +237,7 @@ class Orders_model extends CI_Model {
                             IF(SUM(IF(c.status IN ('approved', 'reviewed'), 1, 0)) != sb.total, 'Incomplete', 'Complete') status,
                             CONCAT('<a href=edit_allocation/', c.period_begin, '>View/Edit</a>')  options
                         FROM tbl_cdrr c 
-                        INNER JOIN tbl_maps m ON c.facility_id = m.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status IN('allocated', 'approved', 'reviewed')
+                        INNER JOIN tbl_maps m ON c.facility_id = m.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status IN('allocated', 'approved', 'reviewed') AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1)
                         INNER JOIN tbl_facility f ON c.facility_id = f.id  
                         INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id,
                         (SELECT COUNT(DISTINCT fc.name) total FROM tbl_facility fc INNER JOIN tbl_subcounty sb ON fc.subcounty_id = sb.id WHERE sb.county_id = ? AND fc.category != 'satellite') sb
@@ -248,6 +251,7 @@ class Orders_model extends CI_Model {
                             f.mflcode,
                             UCASE(f.name) facility_name,
                             IF(t.period_begin IS NULL, DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%M-%Y') , DATE_FORMAT(t.period_begin, '%M-%Y')) period,
+                            IF(t.period_begin IS NOT NULL, t.description, 'N/A') description,
                             IF(t.status IS NULL, 'PENDING', UCASE(t.status)) reporting_status,
                             CASE 
                                 WHEN t.status = 'pending' THEN CONCAT('<a href=allocate/', t.cdrr_id,'/', t.maps_id, '> Allocate Order</a>')
@@ -257,12 +261,12 @@ class Orders_model extends CI_Model {
                         FROM tbl_facility f
                         LEFT JOIN
                         (
-                            SELECT c.facility_id, c.period_begin, c.period_end, c.id cdrr_id, m.id maps_id, c.status
+                            SELECT c.facility_id, c.period_begin, c.period_end, c.id cdrr_id, m.id maps_id, c.status, CONCAT_WS('/', c.code, m.code) description
                             FROM tbl_cdrr c 
-                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end
+                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1)
                             WHERE c.period_begin = ? 
                             AND c.period_end = ?
-                            GROUP BY c.facility_id, c.period_begin, c.period_end, cdrr_id, maps_id
+                            GROUP BY c.facility_id, c.period_begin, c.period_end, cdrr_id, maps_id, c.code
                         ) t ON t.facility_id = f.id
                         WHERE f.subcounty_id = ?
                         AND f.category != 'satellite'
@@ -295,22 +299,22 @@ class Orders_model extends CI_Model {
             if($role == 'national'){
                 $sql = "SELECT 
                             UCASE(co.name) county,
-                            CONCAT_WS('/', COUNT(t.facility_id), COUNT(f.id)) submitted,
-                            IF(COUNT(t.facility_id) = COUNT(f.id), 'Reviewed', 'Unreviewed') approval,
-                            IF(COUNT(t.facility_id) = COUNT(f.id), 'Approved', 'N/A') reviewal_status,
-                            IF(COUNT(t.facility_id) = COUNT(f.id), CONCAT('<a href=','../allocation/subcounty/', sc.id,'/', t.period_begin, '>View/Verify Allocation</a>'), CONCAT('<a href=','../allocation/county/',co.id,'/$currmonth','> Pending Allocation</a>')) options
+                            CONCAT_WS('/', COUNT(DISTINCT t.facility_id), COUNT(DISTINCT f.id)) submitted,
+                            IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), 'Reviewed', 'Unreviewed') approval,
+                            IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), 'Approved', 'N/A') reviewal_status,
+                            IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), CONCAT('<a href=','../allocation/subcounty/', sc.id,'/', t.period_begin, '>View/Verify Allocation</a>'), CONCAT('<a href=','../allocation/county/', co.id,'/$currmonth','> Pending Allocation</a>')) options
                         FROM tbl_facility f  
                         INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
                         INNER JOIN tbl_county co ON co.id = sc.county_id
                         LEFT JOIN
                         (
-                            SELECT c.facility_id, c.period_begin, c.period_end
+                            SELECT c.facility_id, c.period_begin, c.period_end, c.code
                             FROM tbl_cdrr c 
-                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status = m.status
+                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status = m.status AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1)
                             WHERE c.period_begin = ? 
                             AND c.period_end = ?
                             AND c.status = 'reviewed'
-                            GROUP BY c.facility_id, c.period_begin, c.period_end
+                            GROUP BY c.facility_id, c.period_begin, c.period_end, c.code
                         ) t ON t.facility_id = f.id
                         WHERE f.category != 'satellite'
                         GROUP BY co.name
@@ -319,21 +323,21 @@ class Orders_model extends CI_Model {
             } else if($role == 'county'){
                 $sql = "SELECT 
                             UCASE(sc.name) subcounty,
-                            CONCAT_WS('/', COUNT(t.facility_id), COUNT(f.id)) submitted,
-                            IF(COUNT(t.facility_id) = COUNT(f.id), 'Allocated', 'Unallocated') allocation,
-                            IF(COUNT(t.facility_id) = COUNT(f.id), 'Approved', 'N/A') approval_status,
-                            IF(COUNT(t.facility_id) = COUNT(f.id), CONCAT('<a href=','../allocation/subcounty/', sc.id,'/', t.period_begin, '>View/Verify Allocation</a>'), CONCAT('<a href=','../allocation/subcounty/',sc.id,'/$currmonth','> Pending Allocation</a>')) options
+                            CONCAT_WS('/', COUNT(DISTINCT t.facility_id), COUNT(DISTINCT f.id)) submitted,
+                            IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), 'Allocated', 'Unallocated') allocation,
+                            IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), 'Approved', 'N/A') approval_status,
+                            IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), CONCAT('<a href=','../allocation/subcounty/', sc.id,'/', t.period_begin, '>View/Verify Allocation</a>'), CONCAT('<a href=','../allocation/subcounty/', sc.id,'/$currmonth','> Pending Allocation</a>')) options
                         FROM tbl_facility f  
                         INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
                         LEFT JOIN
                         (
-                            SELECT c.facility_id, c.period_begin, c.period_end
+                            SELECT c.facility_id, c.period_begin, c.period_end, c.code
                             FROM tbl_cdrr c 
-                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status = m.status
+                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status = m.status AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1)
                             WHERE c.period_begin = ? 
                             AND c.period_end = ?
                             AND c.status IN ('approved', 'reviewed')
-                            GROUP BY c.facility_id, c.period_begin, c.period_end
+                            GROUP BY c.facility_id, c.period_begin, c.period_end, c.code
                         ) t ON t.facility_id = f.id
                         WHERE sc.county_id = ?
                         AND f.category != 'satellite'
@@ -393,7 +397,7 @@ class Orders_model extends CI_Model {
 
         try{
             $sql = "SELECT 
-                        *,d.name as drug_name,f.name as facility_name,co.name as county, sc.name as subcounty,ci.id as cdrr_item_id
+                        *, d.name as drug_name, f.name as facility_name, co.name as county, sc.name as subcounty, ci.id as cdrr_item_id
                     FROM tbl_cdrr c 
                     INNER JOIN tbl_cdrr_item ci ON ci.cdrr_id = c.id
                     INNER JOIN vw_drug_list d ON d.id = ci.drug_id
@@ -404,7 +408,7 @@ class Orders_model extends CI_Model {
             $table_data = $this->db->query($sql, array($cdrr_id))->result_array();
 
             $logs_sql = "SELECT 
-                            cl.description,cl.created,u.firstname,u.lastname,r.name as role
+                            cl.description, cl.created, u.firstname, u.lastname, r.name as role
                         FROM tbl_cdrr_log cl
                         inner join tbl_user u  on cl.user_id = u.id
                         inner join tbl_role r on u.role_id = r.id
@@ -451,7 +455,7 @@ class Orders_model extends CI_Model {
                         'aggr_consumed' => $result['aggr_consumed'], 
                         'aggr_on_hand' => $result['aggr_on_hand'], 
                         'publish' => $result['publish'], 
-                        'drugamc' => $this->getDrugAMC($result['facility_id'], $result['period_begin'], $result['drug_id']),
+                        'drugamc' => $this->get_drug_amc($result['facility_id'], $result['period_begin'], $result['drug_id'], $result['code']),
                         'cdrr_id' => $result['cdrr_id'], 
                         'drug_id' => $result['drug_id'], 
                         'qty_allocated' => $result['qty_allocated'], 
@@ -474,7 +478,7 @@ class Orders_model extends CI_Model {
         return $response;
     }
 
-    public function getDrugAMC($facility_id, $period_begin, $drug_id){
+    public function get_drug_amc($facility_id, $period_begin, $drug_id, $code){
         $first = date('Y-m-01', strtotime($period_begin . "- 1 month"));
         $second = date('Y-m-01', strtotime($period_begin . "- 2 month"));
         $third = date('Y-m-01', strtotime($period_begin . "- 3 month"));
@@ -482,34 +486,31 @@ class Orders_model extends CI_Model {
 
         $sql = "SELECT 
                     SUM(ci.dispensed_packs) as dispensed_packs,
-                    SUM(ci.dispensed_units) as dispensed_units,
                     SUM(ci.aggr_consumed) as aggr_consumed,
                     SUM(ci.aggr_on_hand) as aggr_on_hand,
-                    SUM(ci.count) as count,
-                    c.code
+                    SUM(ci.count) as count
                 FROM tbl_cdrr_item ci 
                 INNER JOIN (
                     SELECT 
-                        max(id) as id, period_begin, code
+                        id, period_begin, code
                     FROM tbl_cdrr 
-                    WHERE (period_begin = '$first' OR period_begin = '$second' OR period_begin = '$third')
-                    AND facility_id = '$facility_id'
+                    WHERE period_begin IN (?, ?, ?) 
+                    AND facility_id = ?
+                    AND code = ?
                     GROUP BY period_begin
                 ) c ON ci.cdrr_id = c.id
-                AND ci.drug_id = '$drug_id'
+                AND ci.drug_id = ?
                 GROUP BY ci.drug_id";
-        $query = $this -> db -> query($sql);
+        $query = $this -> db -> query($sql, array($first, $second, $third, $facility_id, $code, $drug_id));
         $results = $query -> result_array();
         if ($results) {
             foreach ($results as $result) {
-                $code = trim($result['code']);
                 if ($code == "D-CDRR") {
                     $amc = ($result['dispensed_packs'] + $result['aggr_consumed']) - ($result['aggr_on_hand'] + $result['count']);
-                } else if ($code == "F-CDRR_packs") {
+                } else {
                     $amc = $result['dispensed_packs'] - $result['count'];
-                } else if ($code == "F-CDRR_units") {
-                    $amc = $result['dispensed_units'] - $result['count'];
                 }
+                $amc = ($amc > 0) ? $amc : 0;
             }
         }
         return $amc;
@@ -570,6 +571,7 @@ class Orders_model extends CI_Model {
                         UCASE(sc.name) subcounty,
                         f.mflcode,
                         UCASE(f.name) facility_name,
+                        IF(t.period_begin IS NOT NULL, t.description, 'N/A') description,
                         IF(t.period_begin IS NOT NULL, UCASE(t.status), 'N/A') reporting_status,
                         ? period,
                         IF(t.period_begin IS NOT NULL, CONCAT('<a href=$allocation_url/',t.cdrr_id,'/',t.maps_id,'>View Order</a>'), 'Not Reported') options
@@ -577,12 +579,12 @@ class Orders_model extends CI_Model {
                     INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
                     LEFT JOIN
                     (
-                        SELECT c.facility_id, c.period_begin, c.period_end, c.id cdrr_id, m.id maps_id, c.status
+                        SELECT c.facility_id, c.period_begin, c.period_end, c.id cdrr_id, m.id maps_id, c.status, CONCAT_WS('/', c.code, m.code) description
                         FROM tbl_cdrr c 
-                        INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end
+                        INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1)
                         WHERE c.period_begin = ? 
                         AND c.period_end = ?
-                        GROUP BY c.facility_id, c.period_begin, c.period_end, cdrr_id, maps_id
+                        GROUP BY c.facility_id, c.period_begin, c.period_end, cdrr_id, maps_id, c.code
                     ) t ON t.facility_id = f.id
                     WHERE sc.county_id = ?
                     AND f.category != 'satellite'

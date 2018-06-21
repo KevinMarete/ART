@@ -17,7 +17,7 @@
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-listing">
+                    <table width="100%" class="table table-striped table-bordered table-hover table-condensed" id="dataTables-listing">
                         <thead>
                             <tr>
                                 <?php
@@ -45,11 +45,11 @@
     $(document).ready(function () {
         $('#dataTables-listing').DataTable({
             responsive: true,
-            order: [[3, "desc"]],
+            order: [[4, "desc"]],
             pagingType: "full_numbers",
             ajax: "<?php echo base_url() . 'Manager/Orders/get_county_reporting_rates'. $retVal = ($seg_4 == "county") ? "/county/".$seg_5."/allocation" : "" ; ?>",
             initComplete: function () {
-                this.api().columns([0, 1, 2, 3]).every(function () {
+                this.api().columns([0, 1, 2]).every(function () {
                     var column = this;
                     var select = $('<br/><select><option value="">Show all</option></select>')
                     .appendTo($(column.header()))
@@ -67,7 +67,7 @@
                     });
                 });
                 //Show reporting rate
-                var reporting_rate =  Math.ceil(($("#dataTables-listing td:nth-child(4):contains('REVIEWED')").length / this.api().data().rows().count())*100)
+                var reporting_rate =  Math.ceil(($("#dataTables-listing td:nth-child(5):contains('REVIEWED')").length / this.api().data().rows().count())*100)
                 $('.panel-heading').html('Reporting Rate: <b>'+reporting_rate+'%</b><div class="progress"><div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="'+reporting_rate+'" aria-valuemin="0" aria-valuemax="100" style="width: '+reporting_rate+'%;">'+reporting_rate+'%</div></div>')
             }
         });

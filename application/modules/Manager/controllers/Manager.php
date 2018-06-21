@@ -29,12 +29,12 @@ class Manager extends MX_Controller {
 				$this->load->model('Orders_model');
 				$columns = array(
 					'reports' => array(
-						'subcounty' => array('Facility Name', 'Period Beginning', 'Status',  'Actions'),
-						'county' => array('Facility Name','Period Beginning', 'Subcounty', 'Status', 'Actions'),
-						'national' => array('Facility Name', 'Period Beginning', 'County', 'Subcounty', 'Status', 'Actions')
+						'subcounty' => array('Facility Name', 'Period Beginning', 'Description', 'Status',  'Actions'),
+						'county' => array('Facility Name','Period Beginning', 'Description', 'Subcounty', 'Status', 'Actions'),
+						'national' => array('Facility Name', 'Period Beginning', 'Description', 'County', 'Subcounty', 'Status', 'Actions')
 					),
 					'reporting_rates' => array(
-						'subcounty' => array('MFL Code', 'Facility Name', 'Status', 'Period', 'Actions'),
+						'subcounty' => array('MFL Code', 'Facility Name', 'Status', 'Description', 'Period', 'Actions'),
 						'county' => array('Subcounty', 'Submitted', 'Progress'),
 						'national' => array('County', 'Submitted', 'Progress')
 					),
@@ -59,7 +59,7 @@ class Manager extends MX_Controller {
 						)
 					),
 					'allocation' => array(
-						'subcounty' => array('MFL Code','Facility Name', 'Period', 'Status', 'Actions'),
+						'subcounty' => array('MFL Code','Facility Name', 'Period', 'Description', 'Status', 'Actions'),
 						'county' => array('Period', 'Approved', 'Status', 'Actions'),
 						'national' => array('Period', 'Reviewed', 'Status', 'Actions')
 					),
@@ -90,13 +90,13 @@ class Manager extends MX_Controller {
 					),
 					'subcounty_reports' => array(
 						'subcounty' => array(),
-						'county' => array('MFL Code', 'Facility Name', 'Status', 'Period', 'Actions'),
+						'county' => array('MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions'),
 						'national' => array()
 					),
 					'county_reports' => array(
 						'subcounty' => array(),
 						'county' => array(),
-						'national' => array('SubCounty', 'MFL Code', 'Facility Name', 'Status', 'Period', 'Actions')
+						'national' => array('SubCounty', 'MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions')
 					)
 				);
 				$data['columns'] = $columns[$page][$this->session->userdata('role')];
