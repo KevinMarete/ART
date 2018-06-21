@@ -19,20 +19,18 @@
 <!-- Sb-Admin CSS -->
 <link href="<?php echo base_url() . 'public/manager/lib/sbadmin2/dist/css/sb-admin-2.css'; ?>" rel="stylesheet">
 <!--select2 css-->
-<link href="<?php echo base_url() . 'public/manager/select2/css/select2.min.css'; ?>" rel="stylesheet" />
-<!-- Manager -->
-<link href="<?php echo base_url() . 'public/manager/css/manager.css'; ?>" rel="stylesheet">
-<!--favicon-->
-<link rel="shortcut icon" type="text/css" href="<?php echo base_url() . 'public/dashboard/img/favicon.ico'; ?>">
-<!--select2.min.css-->
-<link href="<?php echo base_url() . 'public/manager/select2/css/select2.min.css'; ?>" rel="stylesheet" type="text/css"/>
+<link href="<?php echo base_url() . 'public/manager/lib/select2/css/select2.min.css'; ?>" rel="stylesheet" type="text/css">
 <!--datepicker-->
 <link href="<?php echo base_url() . 'public/manager/lib/bootstrap-datepicker-1.6.4/css/bootstrap-datepicker.min.css'; ?>" rel="stylesheet" type="text/css">
 <!--chosen css-->
 <link href="<?php echo base_url() . 'public/manager/lib/chosen_v1.8.3/chosen.min.css'; ?>" rel="stylesheet" type="text/css">
 <!--bootstrap-multiselect-->
-<link href="<?php echo base_url() . 'public/manager/lib/bootstrap-multiselect/css/bootstrap-multiselect.css'; ?>" rel="stylesheet" type="text/css" />
+<link href="<?php echo base_url() . 'public/manager/lib/bootstrap-multiselect/css/bootstrap-multiselect.css'; ?>" rel="stylesheet" type="text/css">
 <!--bootstrap-sweetalert-->
-<link href="<?php echo base_url() . 'public/manager/bootstrap-sweetalert/css/sweetalert.min.css'; ?>" rel="stylesheet" />    
+<link href="<?php echo base_url() . 'public/manager/lib/bootstrap-sweetalert/css/sweetalert.min.css'; ?>" rel="stylesheet"> 
+<!-- Manager -->
+<link href="<?php echo base_url() . 'public/manager/css/manager.css'; ?>" rel="stylesheet">
+<!--favicon-->
+<link rel="shortcut icon" type="text/css" href="<?php echo base_url() . 'public/dashboard/img/favicon.ico'; ?>">   
 <!-- jQuery js-->
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables/js/jquery-1.12.4.js'; ?>"></script>

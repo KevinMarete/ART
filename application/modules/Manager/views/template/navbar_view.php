@@ -56,9 +56,6 @@
                     echo "</ul> </li>";
                 }
                 ?>
-                <li>
-                    <a href="#"><i class="fa fa-cloud-upload"> Mftp</i></a>
-                </li>
             </ul>
 
         </div>
