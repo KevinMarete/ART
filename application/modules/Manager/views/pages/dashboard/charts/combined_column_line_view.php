@@ -14,7 +14,7 @@
         Highcharts.chart(chartDIV, {
             legend: {
                 enabled: true,
-                reversed: true
+                reversed: false
             },
 
             chart: {

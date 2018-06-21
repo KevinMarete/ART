@@ -118,6 +118,11 @@ class Manager extends MX_Controller {
 	{
 		$chartname = $this->input->post('name');
         $selectedfilters = $this->get_filter($chartname, $this->input->post('selectedfilters'));
+        //Set filters based on role and scope
+        $role = $this->session->userdata('role');
+        if(!in_array($role, array('admin', 'national'))){
+        	$selectedfilters[$role] = $this->session->userdata('scope_name');
+        }
 		//Get chart configuration
 		$data['chart_name']  = $chartname;
 		$data['chart_title']  = $this->config->item($chartname.'_title');

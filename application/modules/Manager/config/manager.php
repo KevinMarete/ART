@@ -1,18 +1,13 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-//Default values
-$config['data_year'] = '2017';
-$config['data_month'] = 'Dec';
-$config['data_date'] = '2017-12-01';
-
 //reporting_rates_chart
-$config['reporting_rates_chart_chartview'] = 'pages/dashboard/charts/combined_column_line_view';
-$config['reporting_rates_chart_title'] = 'Patient (ART) Scaleup Trend';
-$config['reporting_rates_chart_yaxis_title'] = 'No. of Patients';
+$config['reporting_rates_chart_chartview'] = 'pages/dashboard/charts/column_rotated_label_view';
+$config['reporting_rates_chart_title'] = 'Reporting Rates Trend';
+$config['reporting_rates_chart_yaxis_title'] = 'No. of Orders';
 $config['reporting_rates_chart_source'] = 'Source: www.commodities.nascop.org';
 $config['reporting_rates_chart_has_drilldown'] = FALSE;
-$config['reporting_rates_chart_filters'] = array();
+$config['reporting_rates_chart_filters'] = array('county', 'subcounty');
 $config['reporting_rates_chart_filters_default'] = array();
 
 //patients_by_regimen_chart
@@ -21,17 +16,21 @@ $config['patients_by_regimen_chart_title'] = 'Regimen Patient Numbers';
 $config['patients_by_regimen_chart_yaxis_title'] = 'No. of Patients';
 $config['patients_by_regimen_chart_source'] = 'Source: www.commodities.nascop.org';
 $config['patients_by_regimen_chart_has_drilldown'] = TRUE;
-$config['patients_by_regimen_chart_filters'] = array();
-$config['patients_by_regimen_chart_filters_default'] = array();
+$config['patients_by_regimen_chart_filters'] = array('county', 'subcounty', 'data_date');
+$config['patients_by_regimen_chart_filters_default'] = array(
+	'data_date' => date('Y-m-d', strtotime('first day of last month'))
+);
 
 //drug_consumption_allocation_trend_chart
-$config['drug_consumption_allocation_trend_chart_chartview'] = 'pages/dashboard/charts/line_view';
+$config['drug_consumption_allocation_trend_chart_chartview'] = 'pages/dashboard/charts/combined_column_line_view';
 $config['drug_consumption_allocation_trend_chart_title'] = 'Commodity Consumption/Allocation Trend';
 $config['drug_consumption_allocation_trend_chart_yaxis_title'] = 'No. of Packs';
 $config['drug_consumption_allocation_trend_chart_source'] = 'Source: www.commodities.nascop.org';
 $config['drug_consumption_allocation_trend_chart_has_drilldown'] = FALSE;
-$config['drug_consumption_allocation_trend_chart_filters'] = array();
-$config['drug_consumption_allocation_trend_chart_filters_default'] = array();
+$config['drug_consumption_allocation_trend_chart_filters'] = array('county', 'subcounty', 'drug');
+$config['drug_consumption_allocation_trend_chart_filters_default'] = array(
+	'drug' => array('Dolutegravir (DTG) 50mg Tabs')
+);
 
 //facility_adt_version_distribution_chart
 $config['facility_adt_version_distribution_chart_chartview'] = 'pages/dashboard/charts/column_view';
