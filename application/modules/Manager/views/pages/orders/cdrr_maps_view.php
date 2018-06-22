@@ -64,7 +64,11 @@
                                             <th rowspan="2">Pack Size</th>
                                             <th>Beginning Balance</th>
                                             <th>Quantity Received</th>
-                                            <th>Quantity Issued</th>
+                                            <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
+                                                <th>Quantity Issued</th>
+                                            <?php }else {?>
+                                                <th>Quantity Dispensed</th>
+                                            <?php }?>
                                             <th>Losses & Wastage</th>
                                             <th>Positive Adjustments</th>
                                             <th>Negative Adjustments</th>
