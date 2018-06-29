@@ -208,6 +208,7 @@ if ($page_name != 'backup' && $page_name != 'user') {
                 $('[name="comments"]').val(data.comments);
                 $("input[name=is_usage][value=" + data.is_usage + "]").prop('checked', true);
                 $("input[name=is_internet][value=" + data.is_internet + "]").prop('checked', true);
+                $("#emrs_used option[value=" + data.emrs_used + "]").prop('selected', true);
                 $('[name="active_patients"]').val(data.active_patients);
                 $('[name="user_id"]').val(data.user_id);
                 //regimen
@@ -217,7 +218,7 @@ if ($page_name != 'backup' && $page_name != 'user') {
                 $('[name="service_id"]').val(data.service_id);
                 $('[name="line_id"]').val(data.line_id);
                 //role_submodule
-               // $('[name="role_id"]').val(data.role_id);
+                // $('[name="role_id"]').val(data.role_id);
                 $('[name="submodule_id"]').val(data.submodule_id);
                 //facility
                 $('[name="mflcode"]').val(data.mflcode);
@@ -257,9 +258,9 @@ if ($page_name != 'backup' && $page_name != 'user') {
         var url;
 
         if (save_method == 'add') {
-            url = "<?php echo base_url('Manager/Admin/add_data/tbl_'.$page_name); ?>";
+            url = "<?php echo base_url('Manager/Admin/add_data/tbl_' . $page_name); ?>";
         } else {
-            url = "<?php echo base_url('Manager/Admin/update_data/tbl_'.$page_name); ?>";
+            url = "<?php echo base_url('Manager/Admin/update_data/tbl_' . $page_name); ?>";
         }
         $.ajax({
             url: url,

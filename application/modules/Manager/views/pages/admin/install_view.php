@@ -92,11 +92,11 @@
                             <label class="control-label col-md-3">EMRS Used</label>
                             <div class="col-md-9">
                                 <select multiple class="form-control" name="emrs_used" id="emrs_used">
-                                    <option>IQCARE</option>
-                                    <option>CPAD</option>
-                                    <option>KENYAEMR</option>
-                                    <option>OPENMRS</option>
-                                    <option>EDITT</option>
+                                    <option value="IQCare">IQCARE</option>
+                                    <option value="CPAD">CPAD</option>
+                                    <option value="KENYAEMR">KENYAEMR</option>
+                                    <option value="OpenMRS">OpenMRS</option>
+                                    <option value="EDITT">EDITT</option>
                                 </select>
                             </div>
                         </div>
@@ -132,7 +132,7 @@
     $(function () {
         //Gets all facilities
         $("#facility").empty();
-        $.getJSON(facilityURL, function (facilities) {            
+        $.getJSON(facilityURL, function (facilities) {
             $("#facility").append($("<option value=''>Select Facility</option>"));
             $.each(facilities, function (index, facility) {
                 $("#facility").append($("<option value='" + facility.id + "'>" + facility.name.toUpperCase() + "</option>"));
@@ -149,7 +149,7 @@
         });
 
         //EMRS Used multiselect
-        $('#emrs_used').multiselect();
+        //$('#emrs_used').multiselect();
 
         //Date picker setup_date
         $.fn.datepicker.defaults.format = "yyyy/mm/dd";
