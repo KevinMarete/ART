@@ -37,7 +37,7 @@ class Admin_model extends CI_Model {
                 $this->db->join('tbl_partner p', 'p.id=f.partner_id', 'inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_install') {
-                $this->db->select('i.id,i.version,i.setup_date,i.upgrade_date,i.comments,i.contact_name,i.contact_phone,i.emrs_used,i.active_patients,i.is_internet,i.is_usage,f.name facility_name,u.firstname user_name');
+                $this->db->select('i.id,i.version,i.setup_date,i.upgrade_date,i.comments,i.contact_name,i.contact_phone,i.emrs_used,i.active_patients,IF(`is_internet`=1,"YES","NO"),IF(`is_usage`=1,"YES","NO"),f.name facility_name,u.firstname user_name');
                 $this->db->from('tbl_install i');
                 $this->db->join('tbl_facility f', 'f.id=i.facility_id', 'inner');
                 $this->db->join('tbl_user u', 'u.id=i.user_id', 'inner');
@@ -85,7 +85,7 @@ class Admin_model extends CI_Model {
     }
 
     //function save data to database
-    public function save($table,$data) {
+    public function save($table, $data) {
         $this->db->insert($table, $data);
         return $this->db->insert_id();
     }
@@ -112,8 +112,8 @@ class Admin_model extends CI_Model {
     }
 
     //function update db_table
-    public function update($table,$where,$data) {
-        $this->db->update($table, $data,$where);
+    public function update($table, $where, $data) {
+        $this->db->update($table, $data, $where);
         return $this->db->affected_rows();
     }
 
