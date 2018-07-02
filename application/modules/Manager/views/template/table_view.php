@@ -85,7 +85,7 @@
                                 }
                                 if ($page_name == 'install') {
                                     ?>
-                                <th>ID</th>
+                                    <th>ID</th>
                                     <th>Version</th> 
                                     <th>Facility</th> 
                                     <th>Setup Date</th>

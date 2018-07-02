@@ -4,14 +4,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Facility_model extends CI_Model {
 
-   //function list facilities that are not yet installed
     public function read() {
-        $this->db->select('tbl_facility.id,tbl_facility.name,tbl_facility.mflcode,tbl_facility.subcounty_id,tbl_facility.partner_id');
-        $this->db->from('tbl_facility');
-        $this->db->where('tbl_facility.id NOT IN (select tbl_install.facility_id from tbl_install)', NULL, FALSE);
-        $this->db->order_by('tbl_facility.name','asc');
-        $query = $this->db->get();
-        return $query->result();
+        $query = $this->db->get('tbl_facility');
+        return $query->result_array();
     }
 
     public function insert($data) {

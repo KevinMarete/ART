@@ -12,7 +12,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Facility Name</label>
                             <div class="col-md-9">
-                                <select class="form-control" id="facility" name="facility_id"></select>
+                                <select class="form-control select2" id="facility" name="facility_id"></select>
                                 <span class="help-block"></span>
                             </div>
                         </div>                        
@@ -94,7 +94,7 @@
                                 <select multiple class="form-control" name="emrs_used" id="emrs_used">
                                     <option value="IQCare">IQCARE</option>
                                     <option value="CPAD">CPAD</option>
-                                    <option value="KENYAEMR">KENYAEMR</option>
+                                    <option value="KenyaEMR">KENYAEMR</option>
                                     <option value="OpenMRS">OpenMRS</option>
                                     <option value="EDITT">EDITT</option>
                                 </select>
@@ -137,7 +137,7 @@
             $.each(facilities, function (index, facility) {
                 $("#facility").append($("<option value='" + facility.id + "'>" + facility.name.toUpperCase() + "</option>"));
             });
-            $("#facility").chosen({width: "100%"});
+            // $("#facility").chosen({width: "100%"});
         });
         //Gets all users
         $.getJSON(userURL, function (data) {

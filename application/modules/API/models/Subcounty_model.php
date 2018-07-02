@@ -5,14 +5,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Subcounty_model extends CI_Model {
 
     public function read($conditions) {
-//    public function read() {
         $query = $this->db->get_where('tbl_subcounty', $conditions);
         return $query->result_array();
-//        $this->db->select('tbl_subcounty.id,tbl_subcounty.name as s_name,tbl_county.id as c_id,tbl_county.name as c_name');
-//        $this->db->from('tbl_subcounty');
-//        $this->db->join('tbl_county', 'tbl_county.id=tbl_subcounty.county_id');
-//        $query = $this->db->get();
-//        return $query->result_array();
     }
 
     public function insert($data) {
