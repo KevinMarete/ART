@@ -96,7 +96,7 @@
                                     <option value="CPAD">CPAD</option>
                                     <option value="KenyaEMR">KENYAEMR</option>
                                     <option value="OpenMRS">OpenMRS</option>
-                                    <option value="EDITT">EDITT</option>
+                                    <option value="MARPS">MARPS</option>
                                 </select>
                             </div>
                         </div>
