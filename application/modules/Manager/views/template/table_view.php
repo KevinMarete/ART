@@ -61,9 +61,6 @@
                                     if ($column == 'facility_id') {
                                         $column = 'facility name';
                                     }
-                                    if ($column == 'user_id') {
-                                        $column = 'Assignee';
-                                    }
                                     if ($column == 'module_id') {
                                         $column = 'module name';
                                     }
@@ -82,7 +79,23 @@
                                     if ($column == 'role_id') {
                                         $column = 'role';
                                     }
-                                    echo"<th>" . ucwords(str_replace('_', ' ', $column)) . "</th>";
+                                    if ($page_name != 'install') {
+                                        echo"<th>" . ucwords(str_replace('_', ' ', $column)) . "</th>";
+                                    }
+                                }
+                                if ($page_name == 'install') {
+                                    ?> 
+                                    <th>Version</th> 
+                                    <th>Facility</th> 
+                                    <th>Setup Date</th>
+                                    <th>Contact Name</th> 
+                                    <th>Contact Phone</th> 
+                                    <th>Emrs Used</th>
+                                    <th>Active Patients</th> 
+                                    <th>Is Internet</th> 
+                                    <th>Is Usage</th> 
+                                    <th>Assignee</th> 
+                                    <?php
                                 }
                                 ?>
                             </tr>
