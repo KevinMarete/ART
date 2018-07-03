@@ -10,7 +10,7 @@
                     <input type="hidden" value="" name="id"/>
                     <div class="form-body">
                         <div class="form-group">
-                            <label class="control-label col-md-3">Facility Name</label>
+                            <label class="control-label col-md-3">Facility</label>
                             <div class="col-md-9">
                                 <select class="form-control select2" id="facility" name="facility_id"></select>
                                 <span class="help-block"></span>

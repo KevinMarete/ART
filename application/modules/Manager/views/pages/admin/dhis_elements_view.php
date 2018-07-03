@@ -8,7 +8,8 @@
             </div>
             <div class="modal-body form">
                 <form action="#" id="form" class="form-horizontal">  
-                   <div class="form-body">
+                    <div class="form-body">
+                        <input name="id" class="form-control" type="hidden">
                         <div class="form-group">
                             <label class="control-label col-md-3">Code</label>
                             <div class="col-md-9">
@@ -19,7 +20,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Name</label>
                             <div class="col-md-9">
-                                <input name="dhis_name" placeholder="Dhis Name" class="form-control" type="text">
+                                <textarea name="dhis_name" placeholder="Dhis Name" class="form-control" type="text" rows="2"></textarea>
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -33,14 +34,14 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Target Report</label>
                             <div class="col-md-9">
-                                <input name="target_report" placeholder="Dhis Target Report" class="form-control" type="text">
+                                <input name="target_report" placeholder="Target Report" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Target Name</label>
                             <div class="col-md-9">
-                                <input name="target_name" placeholder="Target Name" class="form-control" type="text">
+                                <textarea name="target_name" placeholder="Target Name" class="form-control" type="text" rows=2"></textarea>
                                 <span class="help-block"></span>
                             </div>
                         </div>

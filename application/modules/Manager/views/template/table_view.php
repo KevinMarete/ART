@@ -34,9 +34,6 @@
                                     if ($column == 'county_id') {
                                         $column = 'County';
                                     }
-                                    if ($column == 'target_id') {
-                                        $column = 'target element';
-                                    }
                                     if ($column == 'generic_id') {
                                         $column = 'Generic';
                                     }
@@ -79,7 +76,7 @@
                                     if ($column == 'role_id') {
                                         $column = 'role';
                                     }
-                                    if ($page_name != 'install') {
+                                    if ($page_name != 'install' && $page_name != 'dhis_elements') {
                                         echo"<th>" . ucwords(str_replace('_', ' ', $column)) . "</th>";
                                     }
                                 }
@@ -93,11 +90,21 @@
                                     <th>Contact Phone</th> 
                                     <th>Emrs Used</th>
                                     <th>Active Patients</th> 
-                                    <th>Is Internet</th> 
                                     <th>Is Usage</th> 
+                                    <th>Is Internet</th> 
                                     <th>Assignee</th> 
                                     <?php
                                 }
+                                if ($page_name == 'dhis_elements') {
+                                    ?>
+                                    <th>Code</th>
+                                    <th>Dhis Name</th>
+                                    <th>Dhis Report</th>
+                                    <th>Target Report</th>
+                                    <th>Target Name</th>
+                                    <th>Target Category</th>
+                                    <th>Target Element</th>
+                                <?php }
                                 ?>
                             </tr>
                         </thead>
@@ -134,6 +141,7 @@ if ($page_name != 'backup' && $page_name != 'user') {
     <?php
 }
 ?>
+
     $(document).ready(function () {
         table = $('#dataTables-listing').DataTable({
             responsive: true,
@@ -144,6 +152,7 @@ if ($page_name != 'backup' && $page_name != 'user') {
 
         });
     });
+
     $('#dataTables-listing tbody').on('click', 'tr', function () {
         selected_id = (table.row(this).data())[0];
         if (table.row({selected: true}).indexes().length === 0) {
@@ -222,7 +231,7 @@ if ($page_name != 'backup' && $page_name != 'user') {
                 $('[name="comments"]').val(data.comments);
                 $("input[name=is_usage][value=" + data.is_usage + "]").prop('checked', true);
                 $("input[name=is_internet][value=" + data.is_internet + "]").prop('checked', true);
-                $('select[name="emrs_used"] option[value="' + data.emrs_used + '"]').prop('selected',true);
+                $('select[name="emrs_used"] option[value="' + data.emrs_used + '"]').prop('selected', true);
                 $('[name="active_patients"]').val(data.active_patients);
                 $('[name="user_id"]').val(data.user_id);
                 //regimen
