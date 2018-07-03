@@ -222,7 +222,7 @@ if ($page_name != 'backup' && $page_name != 'user') {
                 $('[name="comments"]').val(data.comments);
                 $("input[name=is_usage][value=" + data.is_usage + "]").prop('checked', true);
                 $("input[name=is_internet][value=" + data.is_internet + "]").prop('checked', true);
-                $("#emrs_used option[value=" + data.emrs_used + "]").prop('selected', true);
+                $('select[name="emrs_used"] option[value="' + data.emrs_used + '"]').prop('selected',true);
                 $('[name="active_patients"]').val(data.active_patients);
                 $('[name="user_id"]').val(data.user_id);
                 //regimen
