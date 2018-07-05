@@ -97,6 +97,7 @@
                                 }
                                 if ($page_name == 'dhis_elements') {
                                     ?>
+                                    <th>Id</th>
                                     <th>Code</th>
                                     <th>Dhis Name</th>
                                     <th>Dhis Report</th>

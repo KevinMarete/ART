@@ -33,10 +33,7 @@ class Admin extends MX_Controller {
     //function update data from db_table
     public function update_data($table) {
         $this->_validate();
-        if ($table == 'tbl_dhis_elements') {
-            $this->Admin_model->update($table, $_POST);
-            echo json_encode(array("status" => TRUE));
-        } else if ($table == 'tbl_role_submodule') {
+         if ($table == 'tbl_role_submodule') {
             $this->Admin_model->update($table, array('role_id' => $this->input->post('role_id')), $_POST);
             echo json_encode(array("status" => TRUE));
         } else {

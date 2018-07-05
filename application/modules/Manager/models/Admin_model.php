@@ -13,7 +13,7 @@ class Admin_model extends CI_Model {
                 $this->db->join('tbl_facility f', 'f.id=b.facility_id', 'inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_dhis_elements') {
-                $sql = "SELECT dhis.dhis_code,dhis.dhis_name,dhis.dhis_report,dhis.target_report,dhis.target_name,dhis.target_category, "
+                $sql = "SELECT dhis.id, dhis.dhis_code,dhis.dhis_name,dhis.dhis_report,dhis.target_report,dhis.target_name,dhis.target_category, "
                         . "(CASE WHEN dhis.target_category='drug' THEN tbl_category.name ELSE tbl_regimen.name END) name "
                         . "FROM tbl_dhis_elements dhis "
                         . "LEFT JOIN tbl_category ON tbl_category.id=dhis.target_id "
@@ -92,13 +92,7 @@ class Admin_model extends CI_Model {
 
     //function get_by_id
     public function get_by_id($table, $id) {
-
-        if ($table == 'tbl_dhis_elements') {
-            $this->db->from($table);
-            $this->db->where('dhis_code', $id);
-            $query = $this->db->get();
-            return $query->row();
-        } else if ($table == 'tbl_role_submodule') {
+        if ($table == 'tbl_role_submodule') {
             $this->db->from($table);
             $this->db->where('role_id', $id);
             $query = $this->db->get();
@@ -119,10 +113,7 @@ class Admin_model extends CI_Model {
 
     //function delete from db_table
     public function delete_by_id($table, $id) {
-        if ($table == 'tbl_dhis_elements') {
-            $this->db->where('dhis_code', $id);
-            $this->db->delete($table);
-        } else if ($table == 'tbl_role_submodule') {
+        if ($table == 'tbl_role_submodule') {
             $this->db->where('role_id', $id);
             $this->db->delete($table);
         } else {

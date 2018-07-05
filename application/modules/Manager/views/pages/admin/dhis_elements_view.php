@@ -18,14 +18,14 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Name</label>
+                            <label class="control-label col-md-3">Dhis Name</label>
                             <div class="col-md-9">
                                 <textarea name="dhis_name" placeholder="Dhis Name" class="form-control" type="text" rows="2"></textarea>
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Report</label>
+                            <label class="control-label col-md-3">Dhis Report</label>
                             <div class="col-md-9">
                                 <input name="dhis_report" placeholder="Dhis Report" class="form-control" type="text">
                                 <span class="help-block"></span>
@@ -90,8 +90,7 @@
                     $("#target_id").append($("<option value='" + category.id + "'>" + category.name.toUpperCase() + "</option>"));
                 });
             });
-        } else
-        {
+        } else {
             $("#target_id").empty()
             $.getJSON(regimenURL, function (regimens) {
                 $("#target_id").append($("<option value=''>--Select Regimen--</option>"));
