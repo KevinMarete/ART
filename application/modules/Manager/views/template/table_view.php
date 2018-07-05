@@ -156,13 +156,15 @@ if ($page_name != 'backup' && $page_name != 'user') {
 
     $('#dataTables-listing tbody').on('click', 'tr', function () {
         selected_id = (table.row(this).data())[0];
-        if (table.row({selected: true}).indexes().length === 0) {
-            $('#edit_btn').prop('disabled', false);
-            $('#del_btn').prop('disabled', false);
-        } else
-        {
+        if ($(this).hasClass('selected')) {
             $('#edit_btn').prop('disabled', true);
             $('#del_btn').prop('disabled', true);
+            $(this).removeClass('selected');
+        } else {
+            table.$('tr.selected').removeClass('selected');
+            $('#edit_btn').prop('disabled', false);
+            $('#del_btn').prop('disabled', false);
+            $(this).addClass('selected');
         }
 
     });
