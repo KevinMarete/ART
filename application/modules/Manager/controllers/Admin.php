@@ -119,8 +119,6 @@ class Admin extends MX_Controller {
             $data['error_string'][] = 'Contact Name is required';
             $data['inputerror'][] = 'contact_phone';
             $data['error_string'][] = 'Contact Phone is required';
-            //$data['inputerror'][] = 'emrs_used';
-            //$data['error_string'][] = 'Emrs is required';
             $data['inputerror'][] = 'active_patients';
             $data['error_string'][] = 'Active Patients is required';
             $data['inputerror'][] = 'user_id';

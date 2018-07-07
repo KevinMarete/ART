@@ -27,7 +27,7 @@
                             <label class="control-label col-md-3">Setup Date</label>
                             <div class="col-md-9">
                                 <div class="input-group date" data-provide="datepicker">
-                                    <input type="text" class="form-control" id="setup_date" name="setup_date" required="">
+                                    <input type="text" class="form-control" id="setup_date" name="setup_date" placeholder="setup date" required="">
                                     <div class="input-group-addon">
                                         <span class="glyphicon glyphicon-th"></span>
                                     </div>
@@ -38,7 +38,7 @@
                             <label class="control-label col-md-3">Upgrade Date</label>
                             <div class="col-md-9">
                                 <div class="input-group date" data-provide="datepicker">
-                                    <input type="text" class="form-control" id="upgrade_date" name="upgrade_date" required="">
+                                    <input type="text" class="form-control" id="upgrade_date" name="upgrade_date" placeholder="upgrade date" required="">
                                     <div class="input-group-addon">
                                         <span class="glyphicon glyphicon-th"></span>
                                     </div>
@@ -55,14 +55,14 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Contact Name</label>
                             <div class="col-md-9">
-                                <input class="form-control" id="contact_name" name="contact_name" placeholder="Contact Name">
+                                <input class="form-control" id="contact_name" name="contact_name" placeholder="contact name">
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Contact Phone</label>
                             <div class="col-md-9">
-                                <input class="form-control" id="contact_phone" name="contact_phone" placeholder="Contact Phone">
+                                <input class="form-control" id="contact_phone" name="contact_phone" placeholder="contact phone">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -126,19 +126,9 @@
 </div><!--End Modal install Site-->
 
 <script type="text/javascript">
-    var facilityURL = '../../API/facility';
     var userURL = '../../API/user';
 
     $(function () {
-        //Gets all facilities
-        $("#facility").empty();
-        $.getJSON(facilityURL, function (facilities) {
-            $("#facility").append($("<option value=''>Select Facility</option>"));
-            $.each(facilities, function (index, facility) {
-                $("#facility").append($("<option value='" + facility.id + "'>" + facility.name.toUpperCase() + "</option>"));
-            });
-            // $("#facility").chosen({width: "100%"});
-        });
         //Gets all users
         $.getJSON(userURL, function (data) {
             $("#user option").empty();

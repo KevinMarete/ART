@@ -154,6 +154,7 @@ if ($page_name != 'backup' && $page_name != 'user') {
         });
     });
 
+    //tr.selected on tbody click
     $('#dataTables-listing tbody').on('click', 'tr', function () {
         selected_id = (table.row(this).data())[0];
         if ($(this).hasClass('selected')) {
@@ -184,6 +185,16 @@ if ($page_name != 'backup' && $page_name != 'user') {
             allowClear: true,
             dropdownParent: $("#modal_form")
         });
+
+        //Get all facilities not installed
+        var facilityinstallURL = '../../API/facility_install';
+        $("#facility").empty();
+        $.getJSON(facilityinstallURL, function (facilities) {
+            $("#facility").append($("<option value=''>Select Facility</option>"));
+            $.each(facilities, function (index, facility) {
+                $("#facility").append($("<option value='" + facility.id + "'>" + facility.name.toUpperCase() + "</option>"));
+            });
+        });
     }
 
     //function edit db_table data
@@ -192,6 +203,14 @@ if ($page_name != 'backup' && $page_name != 'user') {
         $('#form')[0].reset();
         $('.form-group').removeClass('has-error');
         $('.help-block').empty();
+
+        //Get all facilities
+        var facilityURL = '../../API/facility';
+        $.getJSON(facilityURL, function (facilities) {
+            $.each(facilities, function (index, facility) {
+                $("#facility").append($("<option value='" + facility.id + "'>" + facility.name.toUpperCase() + "</option>"));
+            });
+        });
 
         $.ajax({
             url: "<?php echo base_url('Manager/Admin/edit_data/tbl_' . $page_name); ?>/" + this.selected_id,
@@ -264,6 +283,7 @@ if ($page_name != 'backup' && $page_name != 'user') {
                     allowClear: true,
                     dropdownParent: $("#modal_form")
                 });
+
                 $('.modal-title').text('Edit <?php echo ucwords(str_replace('_', ' ', $page_name)); ?>');
             },
             error: function ()
