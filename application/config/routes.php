@@ -80,6 +80,7 @@ $route['manager/orders/reporting_rates'] = 'Manager/load_template/orders/reporti
 $route['manager/orders/allocation/subcounty/(:any)/(:any)'] = 'Manager/load_template/orders/subcounty_reports/Reporting Rates/0';
 $route['manager/orders/allocation/county/(:any)/(:any)'] = 'Manager/load_template/orders/county_reports/Reporting Rates/0';
 $route['manager/orders/edit_allocation/(:any)'] = 'Manager/load_template/orders/edit_allocation/Edit Allocation/0/$1';
+$route['manager/orders/view_satellites/(:any)/(:any)'] = 'Manager/load_template/orders/satellites/Satellites/0';
 
 $route['manager/update_profile'] = 'Manager/user/update_profile';
 $route['manager/update_password'] = 'Manager/user/update_password';

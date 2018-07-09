@@ -4,6 +4,9 @@
             <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
             <li><a href="<?php echo base_url('manager/orders/reports'); ?>">Orders</a></li>
             <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i> View Order</li>
+            <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
+                <a href="<?php echo base_url('manager/orders/view_satellites/').'/'.$this->uri->segment('4').'/'.$this->uri->segment('5');?>" class="btn btn-sm btn-warning pull-right"> <i class="glyphicon glyphicon-eye-open"></i> View Satellites</a>
+            <?php }?>
         </ol>
     </div>
     <!-- /.col-lg-12 -->

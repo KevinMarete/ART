@@ -139,15 +139,22 @@ class Orders_model extends CI_Model {
                         (
                             SELECT c.facility_id, c.period_begin, c.period_end, c.code
                             FROM tbl_cdrr c 
-                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1)
-                            WHERE c.period_begin = ? 
-                            AND c.period_end = ?
+                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.code = 'D-CDRR' AND m.code = 'D-MAPS'
+                            INNER JOIN tbl_facility f ON f.id = c.facility_id AND f.id = m.facility_id AND f.category = 'central'
+                            WHERE c.period_begin = ? AND c.period_end = ?
+                            GROUP BY c.facility_id, c.period_begin, c.period_end, c.code
+                            UNION
+                            SELECT c.facility_id, c.period_begin, c.period_end, c.code
+                            FROM tbl_cdrr c 
+                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.code = 'F-CDRR' AND m.code = 'F-MAPS'
+                            INNER JOIN tbl_facility f ON f.id = c.facility_id AND f.id = m.facility_id AND f.category = 'standalone'
+                            WHERE c.period_begin = ? AND c.period_end = ?
                             GROUP BY c.facility_id, c.period_begin, c.period_end, c.code
                         ) t ON t.facility_id = f.id
                         WHERE f.category != 'satellite'
                         GROUP BY co.name
                         ORDER BY co.name ASC";
-                $table_data = $this->db->query($sql, array($period_begin, $period_end))->result_array();
+                $table_data = $this->db->query($sql, array($period_begin, $period_end, $period_begin, $period_end))->result_array();
             } else if($role == 'county'){
                 $sql = "SELECT 
                             UCASE(sc.name) subcounty,
@@ -159,16 +166,23 @@ class Orders_model extends CI_Model {
                         (
                             SELECT c.facility_id, c.period_begin, c.period_end, c.code
                             FROM tbl_cdrr c 
-                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1)
-                            WHERE c.period_begin = ? 
-                            AND c.period_end = ?
+                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.code = 'D-CDRR' AND m.code = 'D-MAPS'
+                            INNER JOIN tbl_facility f ON f.id = c.facility_id AND f.id = m.facility_id AND f.category = 'central'
+                            WHERE c.period_begin = ? AND c.period_end = ?
+                            GROUP BY c.facility_id, c.period_begin, c.period_end, c.code
+                            UNION
+                            SELECT c.facility_id, c.period_begin, c.period_end, c.code
+                            FROM tbl_cdrr c 
+                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.code = 'F-CDRR' AND m.code = 'F-MAPS'
+                            INNER JOIN tbl_facility f ON f.id = c.facility_id AND f.id = m.facility_id AND f.category = 'standalone'
+                            WHERE c.period_begin = ? AND c.period_end = ?
                             GROUP BY c.facility_id, c.period_begin, c.period_end, c.code
                         ) t ON t.facility_id = f.id
                         WHERE sc.county_id = ?
                         AND f.category != 'satellite'
                         GROUP BY sc.name
                         ORDER BY sc.name ASC";
-                $table_data = $this->db->query($sql, array($period_begin, $period_end, $scope))->result_array();
+                $table_data = $this->db->query($sql, array($period_begin, $period_end, $period_begin, $period_end, $scope))->result_array();
             }else{
                 $allocation_url = ($allocation) ? "../../../view_allocation" : "view" ;
 
@@ -184,16 +198,23 @@ class Orders_model extends CI_Model {
                         (
                             SELECT c.facility_id, c.period_begin, c.period_end, c.id cdrr_id, m.id maps_id, c.status, CONCAT_WS('/', c.code, m.code) description
                             FROM tbl_cdrr c 
-                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1)
-                            WHERE c.period_begin = ? 
-                            AND c.period_end = ?
+                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.code = 'D-CDRR' AND m.code = 'D-MAPS'
+                            INNER JOIN tbl_facility f ON f.id = c.facility_id AND f.id = m.facility_id AND f.category = 'central'
+                            WHERE c.period_begin = ? AND c.period_end = ?
+                            GROUP BY c.facility_id, c.period_begin, c.period_end, cdrr_id, maps_id, c.code
+                            UNION 
+                            SELECT c.facility_id, c.period_begin, c.period_end, c.id cdrr_id, m.id maps_id, c.status, CONCAT_WS('/', c.code, m.code) description
+                            FROM tbl_cdrr c 
+                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.code = 'F-CDRR' AND m.code = 'F-MAPS'
+                            INNER JOIN tbl_facility f ON f.id = c.facility_id AND f.id = m.facility_id AND f.category = 'standalone'
+                            WHERE c.period_begin = ? AND c.period_end = ?
                             GROUP BY c.facility_id, c.period_begin, c.period_end, cdrr_id, maps_id, c.code
                         ) t ON t.facility_id = f.id
                         WHERE f.subcounty_id = ?
                         AND f.category != 'satellite'
                         GROUP BY f.mflcode
                         ORDER BY f.name ASC";
-                $table_data = $this->db->query($sql, array($month_name, $period_begin, $period_end, $scope))->result_array();
+                $table_data = $this->db->query($sql, array($month_name, $period_begin, $period_end, $period_begin, $period_end, $scope))->result_array();
             }
 
             if (!empty($table_data)) {
@@ -260,19 +281,26 @@ class Orders_model extends CI_Model {
                             END AS options
                         FROM tbl_facility f
                         LEFT JOIN
-                        (
+                        (   
                             SELECT c.facility_id, c.period_begin, c.period_end, c.id cdrr_id, m.id maps_id, c.status, CONCAT_WS('/', c.code, m.code) description
                             FROM tbl_cdrr c 
-                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1)
-                            WHERE c.period_begin = ? 
-                            AND c.period_end = ?
+                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.code = 'D-CDRR' AND m.code = 'D-MAPS'
+                            INNER JOIN tbl_facility f ON f.id = c.facility_id AND f.id = m.facility_id AND f.category = 'central'
+                            WHERE c.period_begin = ? AND c.period_end = ?
+                            GROUP BY c.facility_id, c.period_begin, c.period_end, cdrr_id, maps_id, c.code
+                            UNION
+                            SELECT c.facility_id, c.period_begin, c.period_end, c.id cdrr_id, m.id maps_id, c.status, CONCAT_WS('/', c.code, m.code) description
+                            FROM tbl_cdrr c 
+                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.code = 'F-CDRR' AND m.code = 'F-MAPS'
+                            INNER JOIN tbl_facility f ON f.id = c.facility_id AND f.id = m.facility_id AND f.category = 'standalone'
+                            WHERE c.period_begin = ? AND c.period_end = ?
                             GROUP BY c.facility_id, c.period_begin, c.period_end, cdrr_id, maps_id, c.code
                         ) t ON t.facility_id = f.id
                         WHERE f.subcounty_id = ?
                         AND f.category != 'satellite'
                         GROUP BY f.mflcode
                         ORDER BY f.name ASC";
-                $table_data = $this->db->query($sql, array($period_begin, $period_end, $scope))->result_array();
+                $table_data = $this->db->query($sql, array($period_begin, $period_end, $period_begin, $period_end, $scope))->result_array();
             }
 
             if (!empty($table_data)) {
@@ -435,7 +463,7 @@ class Orders_model extends CI_Model {
                         'facility_name' => $result['facility_name'], 
                         'mflcode' => $result['mflcode'], 
                         'county' => $result['county'], 
-                        'subcounty' => $result['subcounty'],
+                        'subcounty' => $result['subcounty']
                     );
 
                     $response['data']['cdrr_item'][$result['drug_name']] = array(
@@ -581,16 +609,23 @@ class Orders_model extends CI_Model {
                     (
                         SELECT c.facility_id, c.period_begin, c.period_end, c.id cdrr_id, m.id maps_id, c.status, CONCAT_WS('/', c.code, m.code) description
                         FROM tbl_cdrr c 
-                        INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1)
-                        WHERE c.period_begin = ? 
-                        AND c.period_end = ?
+                        INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.code = 'D-CDRR' AND m.code = 'D-MAPS'
+                        INNER JOIN tbl_facility f ON f.id = c.facility_id AND f.id = m.facility_id AND f.category = 'central'
+                        WHERE c.period_begin = ? AND c.period_end = ?
+                        GROUP BY c.facility_id, c.period_begin, c.period_end, cdrr_id, maps_id, c.code
+                        UNION
+                        SELECT c.facility_id, c.period_begin, c.period_end, c.id cdrr_id, m.id maps_id, c.status, CONCAT_WS('/', c.code, m.code) description
+                        FROM tbl_cdrr c 
+                        INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.code = 'F-CDRR' AND m.code = 'F-MAPS'
+                        INNER JOIN tbl_facility f ON f.id = c.facility_id AND f.id = m.facility_id AND f.category = 'standalone'
+                        WHERE c.period_begin = ? AND c.period_end = ?
                         GROUP BY c.facility_id, c.period_begin, c.period_end, cdrr_id, maps_id, c.code
                     ) t ON t.facility_id = f.id
                     WHERE sc.county_id = ?
                     AND f.category != 'satellite'
                     GROUP BY f.mflcode
                     ORDER BY f.name ASC";
-            $table_data = $this->db->query($sql, array($month_name, $period_begin, $period_end, $scope))->result_array();
+            $table_data = $this->db->query($sql, array($month_name, $period_begin, $period_end, $period_begin, $period_end, $scope))->result_array();
 
             if (!empty($table_data)) {
                 foreach ($table_data as $result) {

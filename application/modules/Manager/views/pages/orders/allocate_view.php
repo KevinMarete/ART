@@ -1,9 +1,11 @@
- <div id="container" class="container-fluid">
+<div id="container" class="container-fluid">
+
     <div class="col-lg-12">
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
             <li><a href="<?php echo base_url('manager/orders/allocation'); ?>">Allocation</a></li>
-            <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i>View Allocation </li>
+            <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i>View Allocation</li>
+            <a href="<?php echo base_url('manager/orders/view/').'/'.$this->uri->segment('4').'/'.$this->uri->segment('5');?>" class="btn btn-sm btn-warning pull-right" target="_blank"> <i class="glyphicon glyphicon-eye-open"></i> View Order</a>
         </ol>
     </div>
     <!-- /.col-lg-12 -->

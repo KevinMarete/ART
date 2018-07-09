@@ -98,6 +98,11 @@ class Manager extends MX_Controller {
 						'subcounty' => array(),
 						'county' => array(),
 						'national' => array('SubCounty', 'MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions')
+					),
+					'satellites' => array(
+						'subcounty' => array(),
+						'county' => array(),
+						'national' => array()
 					)
 				);
 				$data['columns'] = $columns[$page][$this->session->userdata('role')];
