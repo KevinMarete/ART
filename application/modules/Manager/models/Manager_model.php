@@ -10,6 +10,8 @@ class Manager_model extends CI_Model {
 
 		$this->db->select("CONCAT_WS('/', data_month, data_year) period, COUNT(DISTINCT facility) total", FALSE);
 		$this->db->where("data_date >=", date('Y-01-01'));
+		$this->db->where_in("category", array('central', 'standalone'));
+		$this->db->where_in("code", array('D-CDRR', 'F-CDRR_packs'));
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				if ($category == 'data_date'){

@@ -100,9 +100,24 @@ class Manager extends MX_Controller {
 						'national' => array('SubCounty', 'MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions')
 					),
 					'satellites' => array(
-						'subcounty' => array(),
-						'county' => array(),
-						'national' => array()
+						'subcounty' => array(
+							'drugs' => $this->Orders_model->get_drugs(),
+							'regimens' => $this->Orders_model->get_regimens(),
+							'cdrrs' => $this->Orders_model->get_satellite_cdrr($this->uri->segment('4')),
+							'maps' => $this->Orders_model->get_satellite_maps($this->uri->segment('5'))
+						),
+						'county' => array(
+							'drugs' => $this->Orders_model->get_drugs(),
+							'regimens' => $this->Orders_model->get_regimens(),
+							'cdrrs' => $this->Orders_model->get_satellite_cdrr($this->uri->segment('4')),
+							'maps' => $this->Orders_model->get_satellite_maps($this->uri->segment('5'))
+						),
+						'national' => array(
+							'drugs' => $this->Orders_model->get_drugs(),
+							'regimens' => $this->Orders_model->get_regimens(),
+							'cdrrs' => $this->Orders_model->get_satellite_cdrr($this->uri->segment('4')),
+							'maps' => $this->Orders_model->get_satellite_maps($this->uri->segment('5'))
+						)
 					)
 				);
 				$data['columns'] = $columns[$page][$this->session->userdata('role')];

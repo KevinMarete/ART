@@ -425,7 +425,7 @@ class Orders_model extends CI_Model {
 
         try{
             $sql = "SELECT 
-                        *, d.name as drug_name, f.name as facility_name, co.name as county, sc.name as subcounty, ci.id as cdrr_item_id
+                        *, d.name AS drug_name, f.name AS facility_name, co.name AS county, sc.name AS subcounty, ci.id AS cdrr_item_id
                     FROM tbl_cdrr c 
                     INNER JOIN tbl_cdrr_item ci ON ci.cdrr_id = c.id
                     INNER JOIN vw_drug_list d ON d.id = ci.drug_id
@@ -436,11 +436,12 @@ class Orders_model extends CI_Model {
             $table_data = $this->db->query($sql, array($cdrr_id))->result_array();
 
             $logs_sql = "SELECT 
-                            cl.description, cl.created, u.firstname, u.lastname, r.name as role
+                            cl.description, cl.created, u.firstname, u.lastname, r.name AS role
                         FROM tbl_cdrr_log cl
-                        inner join tbl_user u  on cl.user_id = u.id
-                        inner join tbl_role r on u.role_id = r.id
-                        where cdrr_id =? order by cl.id asc";
+                        INNER JOIN tbl_user u ON cl.user_id = u.id
+                        INNER JOIN tbl_role r ON u.role_id = r.id
+                        WHERE cdrr_id = ? 
+                        ORDER BY cl.id ASC";
             $logs_table_data = $this->db->query($logs_sql, array($cdrr_id))->result_array();
 
             if(!empty($table_data)){
@@ -466,7 +467,7 @@ class Orders_model extends CI_Model {
                         'subcounty' => $result['subcounty']
                     );
 
-                    $response['data']['cdrr_item'][$result['drug_name']] = array(
+                    $response['data']['cdrr_item'][$result['drug_id']] = array(
                         'cdrr_item_id' => $result['cdrr_item_id'],
                         'balance' => $result['balance'], 
                         'received' => $result['received'], 
@@ -634,6 +635,71 @@ class Orders_model extends CI_Model {
                 $response['message'] = 'Table data was found!';
                 $response['status'] = TRUE;
             } else {
+                $response['message'] = 'Table is empty!';
+                $response['status'] = FALSE;
+            }
+        } catch (Execption $e) {
+            $response['status'] = FALSE;
+            $response['message'] = $e->getMessage();
+        }
+        return $response;
+    }
+
+    public function get_satellite_cdrr($cdrr_id){
+        $response = array('data' => array());
+        try {
+            $sql = "SELECT CONCAT_WS('<br/>[', f.name, CONCAT(f.mflcode, ']')) facility, ci.drug_id,  IF(ci.dispensed_packs IS NOT NULL, ci.dispensed_packs, 0) consumed, IF(ci.count IS NOT NULL, ci.count, 0) stock_on_hand
+                    FROM tbl_cdrr c
+                    INNER JOIN tbl_facility f ON f.id = c.facility_id
+                    INNER JOIN tbl_cdrr_item ci ON ci.cdrr_id = c.id
+                    WHERE (f.parent_id, c.period_begin, c.period_end) IN (
+                        SELECT c.facility_id, c.period_begin, c.period_end
+                        FROM tbl_cdrr c
+                        WHERE c.id = ? )
+                    AND c.code = 'F-CDRR'
+                    GROUP BY f.name, ci.drug_id,  ci.dispensed_packs, ci.count
+                    ORDER BY f.name";
+            $table_data = $this->db->query($sql, array($cdrr_id))->result_array();
+            if(!empty($table_data)){
+                foreach ($table_data as $result) {
+                    $response['data'][$result['facility']][$result['drug_id']]['consumed'] = $result['consumed'];
+                    $response['data'][$result['facility']][$result['drug_id']]['stock_on_hand'] = $result['stock_on_hand'];
+                }
+                $response['message'] = 'Table data was found!';
+                $response['status'] = TRUE;
+            }else{
+                $response['message'] = 'Table is empty!';
+                $response['status'] = FALSE;
+            }
+        } catch (Execption $e) {
+            $response['status'] = FALSE;
+            $response['message'] = $e->getMessage();
+        }
+        return $response;
+    }
+
+    public function get_satellite_maps($maps_id){
+        $response = array('data' => array());
+        try {
+            $sql = "SELECT CONCAT_WS('<br/>[', f.name, CONCAT(f.mflcode, ']')) facility, mi.regimen_id, IF(mi.total IS NOT NULL, mi.total, 0) patients
+                    FROM tbl_maps m
+                    INNER JOIN tbl_facility f ON f.id = m.facility_id
+                    INNER JOIN tbl_maps_item mi ON mi.maps_id = m.id
+                    WHERE (f.parent_id, m.period_begin, m.period_end) IN (
+                        SELECT m.facility_id, m.period_begin, m.period_end
+                        FROM tbl_maps m
+                        WHERE m.id = ? )
+                    AND m.code = 'F-MAPS'
+                    GROUP BY f.name, mi.regimen_id,  mi.total
+                    ORDER BY f.name";
+            $table_data = $this->db->query($sql, array($maps_id))->result_array();
+            if(!empty($table_data)){
+                foreach ($table_data as $result) {
+                    $response['data'][$result['facility']][$result['regimen_id']]['patients'] = $result['patients'];
+                }
+                $response['message'] = 'Table data was found!';
+                $response['status'] = TRUE;
+            }else{
                 $response['message'] = 'Table is empty!';
                 $response['status'] = FALSE;
             }

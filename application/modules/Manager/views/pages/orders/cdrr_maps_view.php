@@ -5,7 +5,7 @@
             <li><a href="<?php echo base_url('manager/orders/reports'); ?>">Orders</a></li>
             <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i> View Order</li>
             <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
-                <a href="<?php echo base_url('manager/orders/view_satellites/').'/'.$this->uri->segment('4').'/'.$this->uri->segment('5');?>" class="btn btn-sm btn-warning pull-right"> <i class="glyphicon glyphicon-eye-open"></i> View Satellites</a>
+                <a href="<?php echo base_url('manager/orders/view_satellites/').'/'.$this->uri->segment('4').'/'.$this->uri->segment('5');?>" class="btn btn-sm btn-warning pull-right" target="_blank"> <i class="glyphicon glyphicon-eye-open"></i> View Satellites</a>
             <?php }?>
         </ol>
     </div>
@@ -106,27 +106,27 @@
                                         <form name="orderForm" id="orderForm">
                                             <?php 
                                             foreach ($columns['drugs'] as $key => $drug) {  
-                                                $drugname = $drug['name']; 
-                                                if (in_array($drugname, array_keys($columns['cdrrs']['data']['cdrr_item']))){
+                                                $drugid = $drug['id']; 
+                                                if (in_array($drugid, array_keys($columns['cdrrs']['data']['cdrr_item']))){
                                             ?>
                                                 <tr>
                                                     <td><?= $drug['name'];?></td>
                                                     <td><?= $drug['pack_size'];?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['balance'];?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['received'];?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['dispensed_packs'];?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['losses'];?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['adjustments'];?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['adjustments_neg'];?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['count'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['received'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['dispensed_packs'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['losses'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['adjustments'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['adjustments_neg'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'];?></td>
                                                     <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ ?> 
-                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_consumed'];?></td>
-                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_on_hand'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_consumed'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand'];?></td>
                                                     <?php }  ?>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['expiry_quant'];?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['expiry_date'];?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['out_of_stock'];?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['resupply'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_quant'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_date'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['out_of_stock'];?></td>
+                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply'];?></td>
                                                     <?php }  ?>
                                                 </tr>
                                             <?php } ?>

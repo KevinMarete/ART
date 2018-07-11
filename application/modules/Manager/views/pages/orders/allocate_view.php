@@ -124,40 +124,40 @@
                                     <tbody>
                                         <form name="orderForm" id="orderForm">
                                             <?php foreach ($columns['drugs'] as $key => $drug) {  
-                                                    $drugname = $drug['name']; 
-                                                    if (in_array($drugname, array_keys($columns['cdrrs']['data']['cdrr_item']))){
-                                                        $count  = $columns['cdrrs']['data']['cdrr_item'][$drugname]['count'];
-                                                        $drugamc  = $columns['cdrrs']['data']['cdrr_item'][$drugname]['drugamc']; 
-                                                        $consumed  = $columns['cdrrs']['data']['cdrr_item'][$drugname]['dispensed_packs'];
+                                                    $drugid = $drug['id']; 
+                                                    if (in_array($drugid, array_keys($columns['cdrrs']['data']['cdrr_item']))){
+                                                        $count  = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'];
+                                                        $drugamc  = $columns['cdrrs']['data']['cdrr_item'][$drugid]['drugamc']; 
+                                                        $consumed  = $columns['cdrrs']['data']['cdrr_item'][$drugid]['dispensed_packs'];
                                                         ?>
                                                     <tr>
                                                         <td><?= $drug['name'];?></td>
                                                         <td><?= $drug['pack_size'];?></td>
-                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['balance'];?></td>
-                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['received'];?></td>
-                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['dispensed_packs'];?></td>
-                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['losses'];?></td>
-                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['adjustments'];?></td>
-                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['adjustments_neg'];?></td>
-                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['count'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['received'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['dispensed_packs'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['losses'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['adjustments'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['adjustments_neg'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'];?></td>
                                                         <?php if($columns['cdrrs']['data'][0]['code'] == 'D-CDRR'){ 
-                                                            $count  = $columns['cdrrs']['data']['cdrr_item'][$drugname]['count'] + $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_on_hand'];
+                                                            $count  = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'] + $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand'];
                                                         ?> 
-                                                            <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_consumed'];?></td>
-                                                            <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['aggr_on_hand'];?></td>
+                                                            <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_consumed'];?></td>
+                                                            <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand'];?></td>
                                                         <?php }  ?>
-                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['expiry_quant'];?></td>
-                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['expiry_date'];?></td>
-                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['out_of_stock'];?></td>
-                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['resupply'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_quant'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_date'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['out_of_stock'];?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply'];?></td>
                                                         <td><?= $drugamc;?></td>
                                                         <td><?= $mos = ($count > 0 && $drugamc > 0) ? number_format($count/$drugamc) : 0;?></td>
                                                         <td><?= (($drugamc * 3) - $count) > 0 ? (($drugamc * 3) - $count) : 0;?></td>
                                                         <td>
-                                                            <input type="text" class="form-control" name="qty_allocated-<?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['cdrr_item_id'];?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugname]['qty_allocated'] > 0) ? $columns['cdrrs']['data']['cdrr_item'][$drugname]['qty_allocated'] : $columns['cdrrs']['data']['cdrr_item'][$drugname]['resupply'];?>">
+                                                            <input type="text" class="form-control" name="qty_allocated-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id'];?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'] > 0) ? $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'] : $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply'];?>">
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="form-control" name="feedback-<?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['cdrr_item_id'];?>" value="<?= $columns['cdrrs']['data']['cdrr_item'][$drugname]['feedback'];?>">
+                                                            <input type="text" class="form-control" name="feedback-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id'];?>" value="<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['feedback'];?>">
                                                         </td>
                                                         <td>
                                                             <?php 
