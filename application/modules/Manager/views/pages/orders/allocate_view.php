@@ -220,7 +220,7 @@
 
         $('#reviewOrder').click(function(e){
             $(this).prop('disabled', true);
-            $.get( base_url+"manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/reviewed", function( data ) {
+            $.get( base_url+"Manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/reviewed", function( data ) {
                 alert(data);
                 window.location.href = "";
             });
@@ -228,7 +228,7 @@
 
         $('#approveOrder').click(function(e){
             $(this).prop('disabled', true);
-            $.get( base_url+"manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/approved", function( data ) {
+            $.get( base_url+"Manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/approved", function( data ) {
                 alert(data);
                 window.location.href = "";
             });
@@ -236,7 +236,7 @@
 
         $('#rejectOrder').click(function(e){
             $(this).prop('disabled', true);
-            $.get( base_url+"manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/rejected", function( data ) {
+            $.get( base_url+"Manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/rejected", function( data ) {
                 alert(data);
                 window.location.href = "";
             });
@@ -253,7 +253,7 @@
         $('#save_allocation').click(function(e){
             $(this).prop('disabled', true);
             var form = $('#orderForm');
-            var url = base_url+"manager/orders/updateOrder/<?= $cdrr_id.'/'.$map_id; ?>";
+            var url = base_url+"Manager/orders/updateOrder/<?= $cdrr_id.'/'.$map_id; ?>";
 
             $.ajax( {
                 type: "POST",
@@ -261,7 +261,7 @@
                 data: form.serialize(),
                 success: function( response ) {
                     alert('Allocation Saved')
-                    $.get( base_url+"manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/pending");
+                    $.get( base_url+"Manager/orders/actionOrder/<?= $cdrr_id.'/'.$map_id; ?>/pending");
                     window.location.href = "";
                 }
             });
