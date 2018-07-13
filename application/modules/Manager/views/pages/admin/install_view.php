@@ -62,7 +62,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Contact Phone</label>
                             <div class="col-md-9">
-                                <input class="form-control" id="contact_phone" name="contact_phone" placeholder="contact phone">
+                                <input class="form-control" id="contact_phone" name="contact_phone" placeholder="700000000">
                                 <span class="help-block"></span>
                             </div>
                         </div>
