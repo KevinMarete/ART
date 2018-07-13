@@ -18,6 +18,8 @@
 		<?php $this->load->view('tabs/summary_view'); ?>
 		<!--trend-tab-->
 		<?php $this->load->view('tabs/trend_view'); ?>
+		<!--procurement-tab-->
+		<?php $this->load->view('tabs/procurement_view'); ?>
 		<!--county-tab-->
 		<?php $this->load->view('tabs/county_view'); ?>
 		<!--subcounty-tab-->

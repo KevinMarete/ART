@@ -9,6 +9,7 @@ var LatestDateURL = 'Dashboard/get_default_period'
 var mainFilterURLs = {
     'summary': [{'link': countyURL, 'type': 'county' }], 
     'trend': [{'link': countyURL, 'type': 'county'}],
+    'procurement': [{'link': drugListURL, 'type': 'drug'}],
     'county': [{'link': countyURL, 'type': 'county'}],
     'subcounty': [{'link': subcountyURL, 'type': 'sub_county'}],
     'facility': [{'link': facilityURL, 'type': 'facility'}],
@@ -24,6 +25,7 @@ var tabFiltersURLs = {
         {'link': drugListURL, 'type': 'drug', 'filters': ['#commodity_consumption_chart_filter', '#commodity_month_stock_chart_filter']}, 
         {'link': regimenListURL, 'type': 'regimen', 'filters': ['#patients_regimen_chart_filter']}
     ],
+    'procurement': [],
     'county': [],
     'subcounty': [],
     'facility': [],
@@ -40,6 +42,7 @@ var tabFiltersURLs = {
 var charts = {
     'summary': ['patient_scaleup_chart', 'patient_services_chart', 'national_mos_chart'],
     'trend': ['commodity_consumption_chart', 'patients_regimen_chart', 'commodity_month_stock_chart'],
+    'procurement': ['consumption_issues_chart', 'patients_on_drug_chart', 'pipeline_stock_chart', 'expected_delivery_chart'],
     'county': ['county_patient_distribution_chart', 'county_patient_distribution_table'],
     'subcounty': ['subcounty_patient_distribution_chart', 'subcounty_patient_distribution_table'],
     'facility': ['facility_patient_distribution_chart', 'facility_patient_distribution_table'],

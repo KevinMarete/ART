@@ -115,6 +115,14 @@ class Dashboard extends MX_Controller {
 			$main_data = $this->adt_reports_model->get_paediatric_patients_by_weight_age($filters);
 		} else if ($chartname == 'adt_reports_commodity_consumption_chart') {
             $main_data = $this->adt_reports_model->get_adt_reports_commodity_consumption($filters);
+        } else if ($chartname == 'consumption_issues_chart') {
+            $main_data = $this->procurement_model->get_procurement_consumption_issues($filters);
+        } else if ($chartname == 'patients_on_drug_chart') {
+            $main_data = $this->procurement_model->get_procurement_patients_on_drug($filters);
+        } else if($chartname == 'pipeline_stock_chart'){
+			$main_data = $this->procurement_model->get_procurement_pipeline_stock($filters);
+		} else if ($chartname == 'expected_delivery_chart') {
+            $main_data = $this->procurement_model->get_procurement_expected_delivery($filters);
         }
 		return $main_data;
 	}

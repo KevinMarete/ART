@@ -17,6 +17,7 @@
 			<ul class="nav navbar-nav navbar-right" id="main_tabs">
 				<li class="active"><a href="#summary" aria-controls="summary" role="tab" data-toggle="tab">Summary</a></li>
 				<li><a href="#trend" aria-controls="trend" role="tab" data-toggle="tab">Trend</a></li>
+				<li><a href="#procurement" aria-controls="procurement" role="tab" data-toggle="tab">Procurement</a></li>
 	          	<li class="dropdown">
 	          		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 	          			County/Subcounty
