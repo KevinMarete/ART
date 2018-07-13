@@ -178,7 +178,7 @@ $MAX_UPLOAD_SIZE = min(asBytes(ini_get('post_max_size')), asBytes(ini_get('uploa
         <link rel="shortcut icon" type="text/css" href="<?php echo base_url() . 'public/ftp/img/favicon.ico'; ?>">
         <style>
             body {font-family: "lucida grande","Segoe UI",Arial, sans-serif; font-size: 14px;width:1024;padding-right:5em;padding-left:5em;padding-top: 2em;margin:0;}
-            th {font-weight: normal; color: #1F75CC; background-color: #F0F9FF; padding:.5em 1em .5em .2em;
+            th {font-weight: normal; color: #333; background-color: #F0F9FF; padding:.5em 1em .5em .2em;
                 text-align: left;cursor:pointer;user-select: none;}
             th .indicator {margin-left: 6px }
             thead {border-top: 1px solid #82CFFA; border-bottom: 1px solid #96C4EA;border-left: 1px solid #E7F2FB;
@@ -199,7 +199,7 @@ $MAX_UPLOAD_SIZE = min(asBytes(ini_get('post_max_size')), asBytes(ini_get('uploa
             footer a, footer a:visited {color:#bbbbc5;}
             #breadcrumb { padding-top:34px; font-size:15px; color:#aaa;display:inline-block;float:left;}
             #folder_actions {width: 50%;float:right;}
-            a, a:visited { color:#00c; text-decoration: none}
+            a, a:visited { color:#333; text-decoration: none}
             a:hover {text-decoration: underline}
             .sort_hide{ display:none;}
             table {border-collapse: collapse;width:100%;}
