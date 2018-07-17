@@ -94,6 +94,9 @@ function LoadTabContent(tabName){
 
 function setDefaultPeriod(URL){
     $.getJSON(URL, function(data){
+        //Remove active-tab class
+        $(".filter-year").removeClass('active-tab')
+        $(".filter-month").removeClass('active-tab')
         //Set hidden values
         $("#filter_month").val(data.month)
         $("#filter_year").val(data.year)
@@ -302,7 +305,8 @@ function ClearBtnHandler(e){
 }
 
 function getMonth(monthStr){
-    return new Date(monthStr+'-1-01').getMonth()+1
+    monthval = new Date(monthStr+'-1-01').getMonth()+1
+    return ('0' + monthval).slice(-2)
 }
 
 function MainFilterHandler(e){
