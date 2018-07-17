@@ -2,9 +2,9 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 //Default values
-$config['data_year'] = '2018';
-$config['data_month'] = 'May';
-$config['data_date'] = '2018-05-01';
+$config['data_year'] = '2017';
+$config['data_month'] = 'Dec';
+$config['data_date'] = '2017-12-01';
 
 //patient_scaleup_chart
 $config['patient_scaleup_chart_chartview'] = 'charts/combined_column_line_view';
