@@ -60,7 +60,7 @@ class Admin_model extends CI_Model {
                 $this->db->join('tbl_module m', 'm.id=sbm.module_id', 'inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_user') {
-                $this->db->select('u.id,u.firstname,u.lastname,u.email_address,u.phone_number,u.password,r.name');
+                $this->db->select('u.id,u.firstname,u.lastname,u.email_address,u.phone_number,r.name');
                 $this->db->from('tbl_user u');
                 $this->db->join('tbl_role r', 'r.id=u.role_id', 'inner');
                 $table_data = $this->db->get()->result_array();

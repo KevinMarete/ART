@@ -72,7 +72,7 @@
                                 <span class="help-block"></span>
                             </div>
                         </div>
-                        <!--add-->
+                        <!--add parent_id-->
                         <div class="form-group parent_add">
                             <label class="control-label col-md-3">Parent ID</label>
                             <div class="col-md-9">
@@ -80,7 +80,7 @@
                                 <span class="help-block"></span>
                             </div>
                         </div>
-                        <!--edit-->
+                        <!--edit parent_id-->
                         <div class="form-group parent_edit">
                             <label class="control-label col-md-3">Parent ID</label>
                             <div class="col-md-9">

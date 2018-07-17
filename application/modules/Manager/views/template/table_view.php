@@ -76,7 +76,7 @@
                                     if ($column == 'role_id') {
                                         $column = 'role';
                                     }
-                                    if ($page_name != 'install' && $page_name != 'dhis_elements') {
+                                    if ($page_name != 'install' && $page_name != 'dhis_elements' && $page_name != 'user') {
                                         echo"<th>" . ucwords(str_replace('_', ' ', $column)) . "</th>";
                                     }
                                 }
@@ -105,8 +105,17 @@
                                     <th>Target Name</th>
                                     <th>Target Category</th>
                                     <th>Target Element</th>
-                                <?php }
-                                ?>
+                                    <?php
+                                }
+                                if ($page_name == 'user') {
+                                    ?>
+                                    <th>Id</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email Address</th>
+                                    <th>Phone Number</th>
+                                    <th>Role</th>
+                                <?php } ?>
                             </tr>
                         </thead>
                         <tbody>
