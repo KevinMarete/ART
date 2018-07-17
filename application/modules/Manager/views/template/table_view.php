@@ -138,7 +138,7 @@ if ($page_name != 'backup' && $page_name != 'user') {
 
     //hide action_btn for table_view backup and user
 <?php if ($page_name == 'backup' || $page_name == 'user') { ?>
-        $('#action_btn').hide();
+        $('#action_btn').hide(true);
     <?php
 }
 ?>
@@ -150,7 +150,6 @@ if ($page_name != 'backup' && $page_name != 'user') {
             select: {
                 style: 'single',
             },
-
         });
     });
 
@@ -178,6 +177,10 @@ if ($page_name != 'backup' && $page_name != 'user') {
         $('.help-block').empty();
         $('#modal_form').modal('show');
         $('.modal-title').text('Add <?php echo ucwords(str_replace('_', ' ', $page_name)); ?>');
+
+        //parent_id hide/show form_group
+        $('.parent_edit').hide(true);
+        $('.parent_add').show(true);
 
         //select2
         $(".select2").select2({
@@ -209,6 +212,19 @@ if ($page_name != 'backup' && $page_name != 'user') {
         $.getJSON(facilityURL, function (facilities) {
             $.each(facilities, function (index, facility) {
                 $("#facility").append($("<option value='" + facility.id + "'>" + facility.name.toUpperCase() + "</option>"));
+            });
+        });
+
+        //parent_id hide/show form_group
+        $('.parent_add').hide(true);
+        $('.parent_edit').show(true);
+
+        var parentURL = '../../API/facility';
+        $("#parent").empty();
+        $.getJSON(parentURL, function (parent_id) {
+            $("#parent").append($("<option value=''>Select Parent</option>"));
+            $.each(parent_id, function (index, parent) {
+                $("#parent").append($("<option value='" + parent.parent_id + "'>" + parent.parent_id + "</option>"));
             });
         });
 
@@ -273,6 +289,7 @@ if ($page_name != 'backup' && $page_name != 'user') {
                 $('[name="latitude"]').val(data.latitude);
                 $('[name="subcounty_id"]').val(data.subcounty_id);
                 $('[name="partner_id"]').val(data.partner_id);
+                $('[name="parent_id"]').val(data.parent_id);
                 //submodule
                 $('[name="module_id"]').val(data.module_id);
 

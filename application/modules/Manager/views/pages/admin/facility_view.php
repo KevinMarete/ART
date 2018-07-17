@@ -72,6 +72,22 @@
                                 <span class="help-block"></span>
                             </div>
                         </div>
+                        <!--add-->
+                        <div class="form-group parent_add">
+                            <label class="control-label col-md-3">Parent ID</label>
+                            <div class="col-md-9">
+                                <input name="parent_id" class="form-control" placeholder="Parent Id">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <!--edit-->
+                        <div class="form-group parent_edit">
+                            <label class="control-label col-md-3">Parent ID</label>
+                            <div class="col-md-9">
+                                <select name="parent_id" id="parent" class="form-control select2"> </select>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -87,6 +103,7 @@
     $(function () {
         var subcountyURL = '../../API/subcounty';
         var parnerURL = '../../API/partner';
+
         $("#subcounty").empty()
         $.getJSON(subcountyURL, function (subcounties) {
             $("#subcounty").append($("<option value=''>Select SubCounty</option>"));

@@ -31,7 +31,7 @@ class Admin_model extends CI_Model {
                 $this->db->join('tbl_formulation f', 'f.id=d.formulation_id', 'inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_facility') {
-                $this->db->select('f.id,f.name,f.mflcode,f.category,f.dhiscode,f.longitude,f.latitude,sc.name subcounty,p.name partner');
+                $this->db->select('f.id,f.name,f.mflcode,f.category,f.dhiscode,f.longitude,f.latitude,sc.name subcounty,p.name partner, f.parent_id');
                 $this->db->from('tbl_facility f');
                 $this->db->join('tbl_subcounty sc', 'sc.id=f.subcounty_id', 'inner');
                 $this->db->join('tbl_partner p', 'p.id=f.partner_id', 'inner');
