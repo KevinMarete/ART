@@ -49,9 +49,16 @@ class Admin_model extends CI_Model {
                 $this->db->join('tbl_service s', 's.id=r.service_id', 'inner');
                 $this->db->join('tbl_line l', 'l.id=r.line_id', 'inner');
                 $table_data = $this->db->get()->result_array();
+            } else if ($table == 'tbl_regimen_drug') {
+                $this->db->select('rg.id,r.name regimen_name,d.strength');
+                $this->db->from('tbl_regimen_drug rg');
+                $this->db->join('tbl_regimen r', 'r.id=rg.regimen_id', 'inner');
+                $this->db->join('tbl_drug d', 'd.id=rg.drug_id', 'inner');
+                $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_role_submodule') {
-                $this->db->select('rsbm.role_id,sbm.name submodule_name');
+                $this->db->select('rsbm.id,r.name,sbm.name submodule_name');
                 $this->db->from('tbl_role_submodule rsbm');
+                $this->db->join('tbl_role r', 'r.id=rsbm.role_id', 'inner');
                 $this->db->join('tbl_submodule sbm', 'sbm.module_id=rsbm.submodule_id', 'inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_submodule') {

@@ -73,6 +73,12 @@
                                     if ($column == 'lastname') {
                                         $column = 'last name';
                                     }
+                                    if ($column == 'regimen_id') {
+                                        $column = 'regimen';
+                                    }
+                                    if ($column == 'drug_id') {
+                                        $column = 'drug strength';
+                                    }
                                     if ($column == 'role_id') {
                                         $column = 'role';
                                     }
@@ -287,8 +293,11 @@ if ($page_name != 'backup' && $page_name != 'user') {
                 $('[name="category_id"]').val(data.category_id);
                 $('[name="service_id"]').val(data.service_id);
                 $('[name="line_id"]').val(data.line_id);
+                //regimen_drug
+                $('[name="regimen_id"]').val(data.regimen_id);
+                $('[name="drug_id"]').val(data.drug_id);
                 //role_submodule
-                // $('[name="role_id"]').val(data.role_id);
+                $('[name="role_id"]').val(data.role_id);
                 $('[name="submodule_id"]').val(data.submodule_id);
                 //facility
                 $('[name="mflcode"]').val(data.mflcode);

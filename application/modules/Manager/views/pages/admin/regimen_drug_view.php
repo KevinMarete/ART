@@ -11,18 +11,18 @@
                     <input type="hidden" value="" name="id"/> 
                     <div class="form-body">
                         <div class="form-group">
-                            <label class="control-label col-md-3">Role</label>
+                            <label class="control-label col-md-3">Regimen</label>
                             <div class="col-md-9">
-                                <select name="role_id" id="role_id" class="form-control select2" type="text"></select>
+                                <select name="regimen_id" id="regimen_id" class="form-control select2" type="text"></select>
                                 <span class="help-block"></span>
                             </div>
                         </div>
                     </div>
                     <div class="form-body">
                         <div class="form-group">
-                            <label class="control-label col-md-3">Submodule</label>
+                            <label class="control-label col-md-3">Drug Strength</label>
                             <div class="col-md-9">
-                                <select name="submodule_id" id="submodule_id" class="form-control select2" type="text"></select>
+                                <select name="drug_id" id="drug_id" class="form-control select2" type="text"></select>
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -39,22 +39,22 @@
 
 <script type="text/javascript">
     $(function () {
-        var roleURL = '../../API/role';
-        var submoduleURL = '../../API/submodule';
-        $("#role_id").empty()
-        $.getJSON(roleURL, function (roles) {
-           //$("#role_id").empty()
-            $("#role_id").append($("<option value=''>Select Role</option>"));
-            $.each(roles, function (index, role) {
-                $("#role_id").append($("<option value='" + role.id + "'>" + role.name.toUpperCase() + "</option>"));
+        var regimenURL = '../../API/regimen';
+        var drugURL = '../../API/drug';
+        $("#regimen_id").empty()
+        $.getJSON(regimenURL, function (regimens) {
+            //$("#role_id").empty()
+            $("#regimen_id").append($("<option value=''>Select Regimen</option>"));
+            $.each(regimens, function (index, regimen) {
+                $("#regimen_id").append($("<option value='" + regimen.id + "'>" + regimen.name.toUpperCase() + "</option>"));
             });
         });
-        $("#submodule_id").empty()
-        $.getJSON(submoduleURL, function (submodules) {
+        $("#drug_id").empty()
+        $.getJSON(drugURL, function (drugs) {
             //$("#submodule_id").empty()
-            $("#submodule_id").append($("<option value=''>Select Submodule</option>"));
-            $.each(submodules, function (index, submodule) {
-                $("#submodule_id").append($("<option value='" + submodule.id + "'>" + submodule.name.toUpperCase() + "</option>"));
+            $("#drug_id").append($("<option value=''>Select Drug</option>"));
+            $.each(drugs, function (index, drug) {
+                $("#drug_id").append($("<option value='" + drug.id + "'>" + drug.strength.toUpperCase() + "</option>"));
             });
         });
     });

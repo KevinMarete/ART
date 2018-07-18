@@ -92,6 +92,7 @@
                             <label class="control-label col-md-3">EMRS Used</label>
                             <div class="col-md-9">
                                 <select multiple class="form-control" name="emrs_used" id="emrs_used">
+                                    <option selected value=""></option>
                                     <option value="IQCare">IQCARE</option>
                                     <option value="CPAD">CPAD</option>
                                     <option value="KenyaEMR">KENYAEMR</option>
@@ -140,6 +141,12 @@
 
         //EMRS Used multiselect
         //$('#emrs_used').multiselect();
+
+        //Deselect on-mouse click
+        $('select option').on('mousedown', function (e) {
+            this.selected = !this.selected;
+            e.preventDefault();
+        });
 
         //Date picker setup_date
         $.fn.datepicker.defaults.format = "yyyy/mm/dd";
