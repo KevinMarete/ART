@@ -42,7 +42,7 @@ var tabFiltersURLs = {
 var charts = {
     'summary': ['patient_scaleup_chart', 'patient_services_chart', 'national_mos_chart'],
     'trend': ['commodity_consumption_chart', 'patients_regimen_chart', 'commodity_month_stock_chart'],
-    'procurement': ['consumption_issues_chart', 'patients_on_drug_chart', 'pipeline_stock_chart', 'expected_delivery_chart'],
+    'procurement': ['consumption_issues_chart', 'patients_on_drug_chart', 'pipeline_stock_chart', 'expected_delivery_chart', 'pipeline_mos_chart'],
     'county': ['county_patient_distribution_chart', 'county_patient_distribution_table'],
     'subcounty': ['subcounty_patient_distribution_chart', 'subcounty_patient_distribution_table'],
     'facility': ['facility_patient_distribution_chart', 'facility_patient_distribution_table'],
@@ -94,6 +94,9 @@ function LoadTabContent(tabName){
 
 function setDefaultPeriod(URL){
     $.getJSON(URL, function(data){
+        //Remove active-tab class
+        $(".filter-year").removeClass('active-tab')
+        $(".filter-month").removeClass('active-tab')
         //Set hidden values
         $("#filter_month").val(data.month)
         $("#filter_year").val(data.year)
@@ -302,7 +305,8 @@ function ClearBtnHandler(e){
 }
 
 function getMonth(monthStr){
-    return new Date(monthStr+'-1-01').getMonth()+1
+    monthval = new Date(monthStr+'-1-01').getMonth()+1
+    return ('0' + monthval).slice(-2)
 }
 
 function MainFilterHandler(e){

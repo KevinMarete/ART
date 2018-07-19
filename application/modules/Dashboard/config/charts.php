@@ -93,17 +93,16 @@ $config['consumption_issues_chart_title'] = 'Commodity/Issues Trend';
 $config['consumption_issues_chart_yaxis_title'] = 'No. of Packs';
 $config['consumption_issues_chart_source'] = 'Source: www.commodities.nascop.org';
 $config['consumption_issues_chart_has_drilldown'] = FALSE;
-$config['consumption_issues_chart_filters'] = array('data_year', 'data_month', 'drug');
+$config['consumption_issues_chart_filters'] = array('data_date', 'drug');
 $config['consumption_issues_chart_filters_default'] = array(
-    'data_year' => $config['data_year'], 
-    'data_month' => $config['data_month'], 
+    'data_date' => $config['data_date'],
     'drug' => array(
         'Dolutegravir (DTG) 50mg Tabs'
     )
 );
 
 //patients_on_drug_chart
-$config['patients_on_drug_chart_chartview'] = 'charts/column_rotated_label_view';
+$config['patients_on_drug_chart_chartview'] = 'charts/column_view';
 $config['patients_on_drug_chart_title'] = 'Patients on Drug';
 $config['patients_on_drug_chart_yaxis_title'] = 'No. of Patients';
 $config['patients_on_drug_chart_source'] = 'Source: www.commodities.nascop.org';
@@ -119,8 +118,8 @@ $config['patients_on_drug_chart_filters_default'] = array(
 
 //pipeline_stock_chart
 $config['pipeline_stock_chart_chartview'] = 'charts/stacked_bar_view';
-$config['pipeline_stock_chart_title'] = 'Pipeline Months of Stock(MOS)';
-$config['pipeline_stock_chart_yaxis_title'] = 'Months of Stock(MOS)';
+$config['pipeline_stock_chart_title'] = 'Pipeline Stocks';
+$config['pipeline_stock_chart_yaxis_title'] = 'Stock Quantity';
 $config['pipeline_stock_chart_source'] = 'Source: www.commodities.nascop.org';
 $config['pipeline_stock_chart_has_drilldown'] = FALSE;
 $config['pipeline_stock_chart_filters'] = array('data_year', 'data_month', 'drug');
@@ -138,8 +137,22 @@ $config['expected_delivery_chart_title'] = 'Expected Delivery';
 $config['expected_delivery_chart_yaxis_title'] = 'No. of Patients';
 $config['expected_delivery_chart_source'] = 'Source: www.commodities.nascop.org';
 $config['expected_delivery_chart_has_drilldown'] = FALSE;
-$config['expected_delivery_chart_filters'] = array('data_year', 'data_month', 'drug');
+$config['expected_delivery_chart_filters'] = array('data_date');
 $config['expected_delivery_chart_filters_default'] = array(
+    'data_date' => $config['data_date'],
+    'drug' => array(
+        'Dolutegravir (DTG) 50mg Tabs'
+    )
+);
+
+//pipeline_mos_chart
+$config['pipeline_mos_chart_chartview'] = 'charts/stacked_bar_view';
+$config['pipeline_mos_chart_title'] = 'Pipeline Months of Stock';
+$config['pipeline_mos_chart_yaxis_title'] = 'mos Quantity';
+$config['pipeline_mos_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['pipeline_mos_chart_has_drilldown'] = FALSE;
+$config['pipeline_mos_chart_filters'] = array('data_year', 'data_month', 'drug');
+$config['pipeline_mos_chart_filters_default'] = array(
     'data_year' => $config['data_year'], 
     'data_month' => $config['data_month'], 
     'drug' => array(

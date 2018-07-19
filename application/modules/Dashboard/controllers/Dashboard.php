@@ -123,6 +123,8 @@ class Dashboard extends MX_Controller {
 			$main_data = $this->procurement_model->get_procurement_pipeline_stock($filters);
 		} else if ($chartname == 'expected_delivery_chart') {
             $main_data = $this->procurement_model->get_procurement_expected_delivery($filters);
+        } else if ($chartname == 'pipeline_mos_chart') {
+            $main_data = $this->procurement_model->get_procurement_pipeline_mos($filters);
         }
 		return $main_data;
 	}
