@@ -92,7 +92,7 @@
                             <label class="control-label col-md-3">EMRS Used</label>
                             <div class="col-md-9">
                                 <select multiple class="form-control" name="emrs_used" id="emrs_used">
-                                    <option selected value=""></option>
+                                    <option selected value="" class="emrs_option"></option>
                                     <option value="IQCare">IQCARE</option>
                                     <option value="CPAD">CPAD</option>
                                     <option value="KenyaEMR">KENYAEMR</option>
@@ -159,5 +159,7 @@
         $.fn.datepicker.defaults.endDate = '0d';
         $('#upgrade_date').datepicker({
         });
+        
+        $('.emrs_option').hide(true);
     });
 </script>

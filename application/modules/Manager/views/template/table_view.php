@@ -197,13 +197,6 @@ if ($page_name != 'backup' && $page_name != 'user') {
         $('.parent_edit').hide(true);
         $('.parent_add').show(true);
 
-        //select2
-        $(".select2").select2({
-            width: '100%',
-            allowClear: true,
-            dropdownParent: $("#modal_form")
-        });
-
         //Get all facilities not installed
         var facilityinstallURL = '../../API/facility_install';
         $("#facility").empty();
@@ -213,6 +206,43 @@ if ($page_name != 'backup' && $page_name != 'user') {
                 $("#facility").append($("<option value='" + facility.id + "'>" + facility.name.toUpperCase() + "</option>"));
             });
         });
+
+        //regimen_drug
+        $('.regimen_drug_edit').hide(true);
+        $('.regimen_drug_add').show(true);
+
+        var regimenURL = '../../API/regimen_regimen_drug';
+        $("#regimen_add").empty()
+        $.getJSON(regimenURL, function (regimens) {
+            $("#regimen_add").append($("<option value=''>Select Regimen</option>"));
+            $.each(regimens, function (index, regimen) {
+                $("#regimen_add").append($("<option value='" + regimen.id + "'>" + regimen.name.toUpperCase() + "</option>"));
+            });
+        });
+
+        var drugURL = '../../API/drug_regimen_drug';
+        $("#drug_add").empty()
+        $.getJSON(drugURL, function (drugs) {
+            $("#drug_add").append($("<option value=''>Select Drug</option>"));
+            $.each(drugs, function (index, drug) {
+                $("#drug_add").append($("<option value='" + drug.id + "'>" + drug.strength.toUpperCase() + "</option>"));
+            });
+        });
+
+        //select2
+        $(".select2").select2({
+            width: '100%',
+            allowClear: true,
+            dropdownParent: $("#modal_form")
+        });
+
+        //select2
+        $(".select").select2({
+            width: '100%',
+            allowClear: true,
+            dropdownParent: $("#modal_form")
+        });
+
     }
 
     //function edit db_table data
@@ -240,6 +270,28 @@ if ($page_name != 'backup' && $page_name != 'user') {
             $("#parent").append($("<option value=''>Select Parent</option>"));
             $.each(parent_id, function (index, parent) {
                 $("#parent").append($("<option value='" + parent.parent_id + "'>" + parent.parent_id + "</option>"));
+            });
+        });
+
+        //regimen_drug
+        $('.regimen_drug_add').hide(true);
+        $('.regimen_drug_edit').show(true);
+
+        var regimenURL = '../../API/regimen';
+        $("#regimen_edit").empty()
+        $.getJSON(regimenURL, function (regimens) {
+            $("#regimen_edit").append($("<option value=''>Select Regimen</option>"));
+            $.each(regimens, function (index, regimen) {
+                $("#regimen_edit").append($("<option value='" + regimen.id + "'>" + regimen.name.toUpperCase() + "</option>"));
+            });
+        });
+
+        var drugURL = '../../API/drug';
+        $("#drug_edit").empty()
+        $.getJSON(drugURL, function (drugs) {
+            $("#drug_edit").append($("<option value=''>Select Drug</option>"));
+            $.each(drugs, function (index, drug) {
+                $("#drug_edit").append($("<option value='" + drug.id + "'>" + drug.strength.toUpperCase() + "</option>"));
             });
         });
 
