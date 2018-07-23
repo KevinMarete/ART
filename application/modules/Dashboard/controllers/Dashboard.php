@@ -117,6 +117,10 @@ class Dashboard extends MX_Controller {
             $main_data = $this->adt_reports_model->get_adt_reports_commodity_consumption($filters);
         } else if ($chartname == 'consumption_issues_chart') {
             $main_data = $this->procurement_model->get_procurement_consumption_issues($filters);
+        } else if ($chartname == 'actual_consumption_issues_chart') {
+            $main_data = $this->procurement_model->get_procurement_actual_consumption_issues($filters);
+        } else if ($chartname == 'kemsa_soh_chart') {
+            $main_data = $this->procurement_model->get_procurement_kemsa_soh($filters);
         } else if ($chartname == 'patients_on_drug_chart') {
             $main_data = $this->procurement_model->get_procurement_patients_on_drug($filters);
         } else if($chartname == 'pipeline_stock_chart'){

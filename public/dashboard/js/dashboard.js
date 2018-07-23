@@ -42,7 +42,7 @@ var tabFiltersURLs = {
 var charts = {
     'summary': ['patient_scaleup_chart', 'patient_services_chart', 'national_mos_chart'],
     'trend': ['commodity_consumption_chart', 'patients_regimen_chart', 'commodity_month_stock_chart'],
-    'procurement': ['consumption_issues_chart', 'patients_on_drug_chart', 'pipeline_stock_chart', 'expected_delivery_chart', 'pipeline_mos_chart'],
+    'procurement': ['consumption_issues_chart', 'actual_consumption_issues_chart', 'kemsa_soh_chart', 'patients_on_drug_chart', 'pipeline_stock_chart', 'expected_delivery_chart', 'pipeline_mos_chart'],
     'county': ['county_patient_distribution_chart', 'county_patient_distribution_table'],
     'subcounty': ['subcounty_patient_distribution_chart', 'subcounty_patient_distribution_table'],
     'facility': ['facility_patient_distribution_chart', 'facility_patient_distribution_table'],
