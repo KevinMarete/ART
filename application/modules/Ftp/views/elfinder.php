@@ -13,6 +13,8 @@
         <!-- elFinder CSS (REQUIRED) -->
         <link rel="stylesheet" type="text/css" href="<?php echo base_url() . 'public/ftp/file_manager/css/elfinder.min.css'; ?>">
         <link rel="stylesheet" type="text/css" href="<?php echo base_url() . 'public/ftp/file_manager/css/theme.css'; ?>">
+        <!--bootstrap-->
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url() . 'public/ftp/bootstrap/css/bootstrap.min.css'; ?>">
 
         <!-- elFinder JS (REQUIRED) -->
         <script src="<?php echo base_url() . 'public/ftp/file_manager/js/elfinder.min.js'; ?>"></script>

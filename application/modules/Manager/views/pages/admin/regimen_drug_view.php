@@ -10,19 +10,33 @@
                 <form action="#" id="form" class="form-horizontal">
                     <input type="hidden" value="" name="id"/> 
                     <div class="form-body">
-                        <div class="form-group">
+                        <!--regimen_drug_add-->
+                        <div class="form-group regimen_drug_add">
                             <label class="control-label col-md-3">Regimen</label>
                             <div class="col-md-9">
-                                <select name="regimen_id" id="regimen_id" class="form-control select2" type="text"></select>
+                                <select name="regimen_id" id="regimen_add" class="form-control select" type="text"></select>
                                 <span class="help-block"></span>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-body">
-                        <div class="form-group">
+                        <div class="form-group regimen_drug_add">
                             <label class="control-label col-md-3">Drug Strength</label>
                             <div class="col-md-9">
-                                <select name="drug_id" id="drug_id" class="form-control select2" type="text"></select>
+                                <select name="drug_id" id="drug_add" class="form-control select" type="text"></select>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <!--regimen_drug_edit-->
+                        <div class="form-group regimen_drug_edit">
+                            <label class="control-label col-md-3">Regimen</label>
+                            <div class="col-md-9">
+                                <select name="regimen_id" id="regimen_edit" class="form-control select2" type="text"></select>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>                       
+                        <div class="form-group regimen_drug_edit">
+                            <label class="control-label col-md-3">Drug Strength</label>
+                            <div class="col-md-9">
+                                <select name="drug_id" id="drug_edit" class="form-control select2" type="text"></select>
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -36,26 +50,3 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
-<script type="text/javascript">
-    $(function () {
-        var regimenURL = '../../API/regimen';
-        var drugURL = '../../API/drug';
-        $("#regimen_id").empty()
-        $.getJSON(regimenURL, function (regimens) {
-            //$("#role_id").empty()
-            $("#regimen_id").append($("<option value=''>Select Regimen</option>"));
-            $.each(regimens, function (index, regimen) {
-                $("#regimen_id").append($("<option value='" + regimen.id + "'>" + regimen.name.toUpperCase() + "</option>"));
-            });
-        });
-        $("#drug_id").empty()
-        $.getJSON(drugURL, function (drugs) {
-            //$("#submodule_id").empty()
-            $("#drug_id").append($("<option value=''>Select Drug</option>"));
-            $.each(drugs, function (index, drug) {
-                $("#drug_id").append($("<option value='" + drug.id + "'>" + drug.strength.toUpperCase() + "</option>"));
-            });
-        });
-    });
-</script>
