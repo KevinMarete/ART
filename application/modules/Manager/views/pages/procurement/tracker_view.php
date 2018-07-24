@@ -39,7 +39,7 @@
 </div><!--end page wrapper--->
 <!--modal(s)-->
 <div class="modal fade" id="add_procurement_modal">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form action="<?php echo base_url().'create_app';?>" method="POST">
                 <div class="modal-header">
