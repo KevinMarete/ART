@@ -116,7 +116,7 @@ $config['actual_consumption_issues_chart_filters_default'] = array(
 );
 
 //kemsa_soh_chart
-$config['kemsa_soh_chart_chartview'] = 'charts/combined_column_line_view';
+$config['kemsa_soh_chart_chartview'] = 'charts/combined_column_line_plotlines_view';
 $config['kemsa_soh_chart_title'] = 'KEMSA Stock on Hand Trend';
 $config['kemsa_soh_chart_yaxis_title'] = 'No. of Packs';
 $config['kemsa_soh_chart_source'] = 'Source: www.commodities.nascop.org';

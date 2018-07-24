@@ -90,7 +90,7 @@ class Procurement_model extends CI_Model {
 			foreach ($filters as $category => $filter) {
 				if ($category == 'data_date'){
 					$this->db->where("data_date >=", $filter);
-					$this->db->where("data_date <=", date('Y-m-01', strtotime($filter . "+ 1 year")));
+					$this->db->where("data_date <=", date('Y-m-01', strtotime($filter . "+ 2 year")));
 				}else{
                     $this->db->where_in($category, $filter);
                 }
