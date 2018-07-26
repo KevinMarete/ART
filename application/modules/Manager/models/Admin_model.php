@@ -99,17 +99,10 @@ class Admin_model extends CI_Model {
 
     //function get_by_id
     public function get_by_id($table, $id) {
-        if ($table == 'tbl_role_submodule') {
-            $this->db->from($table);
-            $this->db->where('role_id', $id);
-            $query = $this->db->get();
-            return $query->row();
-        } else {
-            $this->db->from($table);
-            $this->db->where('id', $id);
-            $query = $this->db->get();
-            return $query->row();
-        }
+        $this->db->from($table);
+        $this->db->where('id', $id);
+        $query = $this->db->get();
+        return $query->row();
     }
 
     //function update db_table
@@ -120,13 +113,8 @@ class Admin_model extends CI_Model {
 
     //function delete from db_table
     public function delete_by_id($table, $id) {
-        if ($table == 'tbl_role_submodule') {
-            $this->db->where('role_id', $id);
-            $this->db->delete($table);
-        } else {
-            $this->db->where('id', $id);
-            $this->db->delete($table);
-        }
+        $this->db->where('id', $id);
+        $this->db->delete($table);
     }
 
 }

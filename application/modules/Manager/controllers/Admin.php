@@ -145,8 +145,8 @@ class Admin extends MX_Controller {
             $data['error_string'][] = 'Module Name is required';
             $data['status'] = FALSE;
             //role submodule
-            //  $data['inputerror'][] = 'role_id';
-            //$data['error_string'][] = 'Role is required';
+            $data['inputerror'][] = 'role_id';
+            $data['error_string'][] = 'Role is required';
             $data['inputerror'][] = 'submodule_id';
             $data['error_string'][] = 'Submodule is required';
         }

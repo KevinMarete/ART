@@ -88,9 +88,9 @@ $opts = array(
 		// ),
         array(
             'driver' => 'FTP',
-            'host'   => 'localhost',
-            'user'   => 'ftpuser',
-            'pass'   => 'al',
+            'host'   => 'localhost', //hostname of the ftp
+            'user'   => 'ftpuser', //username used to connect to the ftp
+            'pass'   => 'al', //password used to connect to the ftp
             'path'   => '/'
         )
 	)
