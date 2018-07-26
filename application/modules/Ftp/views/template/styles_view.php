@@ -2,6 +2,8 @@
 <link href="<?php echo base_url() . 'public/ftp/lib/sbadmin2/vendor/bootstrap/css/bootstrap.min.css'; ?>" rel="stylesheet">
 <!-- Custom Fonts -->
 <link href="<?php echo base_url() . 'public/ftp/lib/sbadmin2/vendor/font-awesome/css/font-awesome.min.css'; ?>" rel="stylesheet" type="text/css">
+<!-- Sb-Admin CSS -->
+<link href="<?php echo base_url() . 'public/ftp/lib/sbadmin2/dist/css/sb-admin-2.css'; ?>" rel="stylesheet">
 <!--favicon-->
 <link rel="shortcut icon" type="text/css" href="<?php echo base_url() . 'public/ftp/img/favicon.ico'; ?>">  
 <!-- jQuery and jQuery UI (REQUIRED) -->
