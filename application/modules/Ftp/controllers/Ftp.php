@@ -1,9 +1,16 @@
 <?php
 
-class Ftp extends CI_Controller {
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Ftp extends MX_Controller {
 
     function index() {
-        $this->load->view('elfinder');
+        if ($this->session->userdata('id')) {
+            $data['page_title'] = 'ART | FTP';
+            $this->load->view('template/elfinder', $data);
+        } else {
+            redirect("manager/login");
+        }
     }
 
 }

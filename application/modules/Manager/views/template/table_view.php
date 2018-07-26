@@ -236,7 +236,7 @@ if ($page_name != 'backup' && $page_name != 'user') {
             dropdownParent: $("#modal_form")
         });
 
-        //select2
+        //select2 Add regimen_drug
         $(".select").select2({
             width: '100%',
             allowClear: true,
