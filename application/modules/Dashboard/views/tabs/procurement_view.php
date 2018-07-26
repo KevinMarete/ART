@@ -64,43 +64,62 @@
 		 	</div>
 		</div>
 		<div class="row">
-		  	<div class="col-sm-12">
-			  	<!--patients_on_drug_chart-->
+		  	<div class="col-sm-6">
+			  	<!--adult_patients_on_drug_chart-->
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
-						<strong>PATIENTS ON SELECTED DRUG</strong>
+						<strong>ADULT PATIENTS ON SELECTED DRUG</strong>
 						<div class="nav navbar-right">
-							<button data-toggle="modal" data-target="#patients_on_drug_chart_filter_modal" class="btn btn-warning btn-xs">
+							<button data-toggle="modal" data-target="#adult_patients_on_drug_chart_filter_modal" class="btn btn-warning btn-xs">
 								<span class="glyphicon glyphicon-filter"></span>
 							</button>
 						</div>
 					</div>
 					<div class="chart-stage">
-						<div id="patients_on_drug_chart"></div>
+						<div id="adult_patients_on_drug_chart"></div>
 					</div>
 					<div class="chart-notes">
-						<span class="patients_on_drug_chart_heading heading"></span>
+						<span class="adult_patients_on_drug_chart_heading heading"></span>
+					</div>
+				</div>
+		 	</div>
+		 	<div class="col-sm-6">
+			  	<!--ppaed_atients_on_drug_chart-->
+		    	<div class="chart-wrapper">
+					<div class="chart-title">
+						<strong>PAEDIATRIC PATIENTS ON SELECTED DRUG</strong>
+						<div class="nav navbar-right">
+							<button data-toggle="modal" data-target="#paed_patients_on_drug_chart_filter_modal" class="btn btn-warning btn-xs">
+								<span class="glyphicon glyphicon-filter"></span>
+							</button>
+						</div>
+					</div>
+					<div class="chart-stage">
+						<div id="paed_patients_on_drug_chart"></div>
+					</div>
+					<div class="chart-notes">
+						<span class="paed_patients_on_drug_chart_heading heading"></span>
 					</div>
 				</div>
 		 	</div>
 	    </div>
 		<div class="row">
 		  	<div class="col-sm-6">
-			  	<!--pipeline_stock_chart-->
+			  	<!--stock_status_chart-->
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
-						<strong>PIPELINE STOCK(S)</strong>
+						<strong>STOCK STATUS</strong>
 						<div class="nav navbar-right">
-							<button data-toggle="modal" data-target="#pipeline_stock_chart_filter_modal" class="btn btn-warning btn-xs">
+							<button data-toggle="modal" data-target="#stock_status_chart_filter_modal" class="btn btn-warning btn-xs">
 								<span class="glyphicon glyphicon-filter"></span>
 							</button>
 						</div>
 					</div>
 					<div class="chart-stage">
-						<div id="pipeline_stock_chart"></div>
+						<div id="stock_status_chart"></div>
 					</div>
 					<div class="chart-notes">
-						<span class="pipeline_stock_chart_heading heading"></span>
+						<span class="stock_status_chart_heading heading"></span>
 					</div>
 				</div>
 		 	</div>
@@ -124,27 +143,6 @@
 				</div>
 		 	</div>
 	    </div>
-	    <div class="row">
-		  	<div class="col-sm-12">
-			  	<!--pipeline_mos_chart-->
-		    	<div class="chart-wrapper">
-					<div class="chart-title">
-						<strong>MONTH(S) OF STOCK</strong>
-						<div class="nav navbar-right">
-							<button data-toggle="modal" data-target="#pipeline_mos_chart_filter_modal" class="btn btn-warning btn-xs">
-								<span class="glyphicon glyphicon-filter"></span>
-							</button>
-						</div>
-					</div>
-					<div class="chart-stage">
-						<div id="pipeline_mos_chart"></div>
-					</div>
-					<div class="chart-notes">
-						<span class="pipeline_mos_chart_heading heading"></span>
-					</div>
-				</div>
-		 	</div>
-		</div>
 		<!--modal(s)-->
 		<div class="modal fade" id="consumption_issues_chart_filter_modal">
 		    <div class="modal-dialog">
@@ -209,7 +207,7 @@
 		        </div>
 		    </div>
 		</div>
-		<div class="modal fade" id="patients_on_drug_chart_filter_modal">
+		<div class="modal fade" id="adult_patients_on_drug_chart_filter_modal">
 		    <div class="modal-dialog">
 		        <div class="modal-content">
 		            <div class="modal-header">
@@ -219,32 +217,53 @@
 		            <div class="modal-body">
 						<div class="row">
 							<div class="col-sm-9">
-								<select id="patients_on_drug_chart_filter" data-filter_type="drug" size="2"></select>
+								<select id="adult_patients_on_drug_chart_filter" data-filter_type="drug" size="2"></select>
 							</div>
 							<div class="col-sm-3">
-								<button id="patients_on_drug_chart_filter_clear_btn" class="btn btn-danger btn-sm clear_btn"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
-								<button id="patients_on_drug_chart_filter_btn" class="btn btn-warning btn-sm filter_btn"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+								<button id="adult_patients_on_drug_chart_filter_clear_btn" class="btn btn-danger btn-sm clear_btn"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+								<button id="adult_patients_on_drug_chart_filter_btn" class="btn btn-warning btn-sm filter_btn"><span class="glyphicon glyphicon-filter"></span> Filter</button>
 		            		</div>
 						</div>
 					</div>
 		        </div>
 		    </div>
 		</div>
-		<div class="modal fade" id="pipeline_stock_chart_filter_modal">
+		<div class="modal fade" id="paed_patients_on_drug_chart_filter_modal">
 		    <div class="modal-dialog">
 		        <div class="modal-content">
 		            <div class="modal-header">
 		                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-		                <h4 class="modal-title"><strong>PIPELINE STOCK(S) FILTER</strong></h4>
+		                <h4 class="modal-title"><strong>PATIENTS ON SELECTED DRUG FILTER</strong></h4>
 		            </div>
 		            <div class="modal-body">
 						<div class="row">
 							<div class="col-sm-9">
-								<select id="pipeline_stock_chart_filter" data-filter_type="drug" size="2"></select>
+								<select id="paed_patients_on_drug_chart_filter" data-filter_type="drug" size="2"></select>
 							</div>
 							<div class="col-sm-3">
-								<button id="pipeline_stock_chart_filter_clear_btn" class="btn btn-danger btn-sm clear_btn"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
-								<button id="pipeline_stock_chart_filter_btn" class="btn btn-warning btn-sm filter_btn"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+								<button id="paed_patients_on_drug_chart_filter_clear_btn" class="btn btn-danger btn-sm clear_btn"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+								<button id="paed_patients_on_drug_chart_filter_btn" class="btn btn-warning btn-sm filter_btn"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+		            		</div>
+						</div>
+					</div>
+		        </div>
+		    </div>
+		</div>
+		<div class="modal fade" id="stock_status_chart_filter_modal">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+		                <h4 class="modal-title"><strong>STOCK STATUS FILTER</strong></h4>
+		            </div>
+		            <div class="modal-body">
+						<div class="row">
+							<div class="col-sm-9">
+								<select id="stock_status_chart_filter" data-filter_type="drug" size="2"></select>
+							</div>
+							<div class="col-sm-3">
+								<button id="stock_status_chart_filter_clear_btn" class="btn btn-danger btn-sm clear_btn"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+								<button id="stock_status_chart_filter_btn" class="btn btn-warning btn-sm filter_btn"><span class="glyphicon glyphicon-filter"></span> Filter</button>
 		            		</div>
 						</div>
 					</div>
@@ -266,27 +285,6 @@
 							<div class="col-sm-3">
 								<button id="expected_delivery_chart_filter_clear_btn" class="btn btn-danger btn-sm clear_btn"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
 								<button id="expected_delivery_chart_filter_btn" class="btn btn-warning btn-sm filter_btn"><span class="glyphicon glyphicon-filter"></span> Filter</button>
-		            		</div>
-						</div>
-					</div>
-		        </div>
-		    </div>
-		</div>
-		<div class="modal fade" id="pipeline_mos_chart_filter_modal">
-		    <div class="modal-dialog">
-		        <div class="modal-content">
-		            <div class="modal-header">
-		                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-		                <h4 class="modal-title"><strong>MONTH(S) OF STOCK FILTER</strong></h4>
-		            </div>
-		            <div class="modal-body">
-						<div class="row">
-							<div class="col-sm-9">
-								<select id="pipeline_mos_chart_filter" data-filter_type="drug" size="2"></select>
-							</div>
-							<div class="col-sm-3">
-								<button id="pipeline_mos_chart_filter_clear_btn" class="btn btn-danger btn-sm clear_btn"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
-								<button id="pipeline_mos_chart_filter_btn" class="btn btn-warning btn-sm filter_btn"><span class="glyphicon glyphicon-filter"></span> Filter</button>
 		            		</div>
 						</div>
 					</div>

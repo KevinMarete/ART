@@ -7,10 +7,12 @@ class Procurement_model extends CI_Model {
 		$columns = array();
 		$scaleup_data = array(
 			array('type' => 'line', 'name' => 'Avg Consumption', 'data' => array()),
-			array('type' => 'line', 'name' => 'Avg Issues', 'data' => array())
+			array('type' => 'line', 'name' => 'Avg Issues', 'data' => array()),
+			array('type' => 'line', 'name' => 'Total Patients', 'data' => array())
 		);
+		$patient_data = array();
 
-		$this->db->select("CONCAT_WS('/', data_month, data_year) period, SUM(avg_consumption) consumption_avg, SUM(avg_issues) issues_avg", FALSE);
+		$this->db->select("CONCAT_WS('/', data_month, data_year) period, SUM(avg_consumption) consumption_avg, SUM(avg_issues) issues_avg, 0 patients", FALSE);
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				if ($category == 'data_date'){
@@ -26,6 +28,30 @@ class Procurement_model extends CI_Model {
 		$query = $this->db->get('vw_procurement_list');
 		$results = $query->result_array();
 
+		//Get patient numbers
+		$this->db->select("CONCAT_WS('/', data_month, data_year) period, SUM(p.total) total", FALSE);
+		$this->db->from('dsh_patient p');
+		$this->db->join('vw_regimen_drug_list rd', 'rd.regimen = p.regimen', 'inner');
+		if(!empty($filters)){
+			foreach ($filters as $category => $filter) {
+				if ($category == 'data_date'){
+					$this->db->where("data_date >=", date('Y-m-01', strtotime($filter . "- 1 year")));
+					$this->db->where("data_date <=", date('Y-m-01', strtotime($filter . "+ 1 year")));
+				}else{
+                    $this->db->where_in($category, $filter);
+                }
+			}
+		}
+		$this->db->group_by('period');
+		$this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
+		$query = $this->db->get();
+		$patient_results = $query->result_array();
+		if($patient_results){
+			foreach ($patient_results as $patient_result) {
+				$patient_data[$patient_result['period']] = $patient_result['total'];
+			}
+		}
+
 		if($results){
 			foreach ($results as $result) {
 				$columns[] = $result['period'];
@@ -34,6 +60,8 @@ class Procurement_model extends CI_Model {
 						array_push($scaleup_data[$index]['data'], $result['consumption_avg']);
 					}else if($scaleup['name'] == 'Avg Issues'){
 						array_push($scaleup_data[$index]['data'], $result['issues_avg']);
+					}else if($scaleup['name'] == 'Total Patients'){
+						array_push($scaleup_data[$index]['data'], (isset($patient_data[$result['period']]) ? $patient_data[$result['period']] : 0) );
 					}
 				}
 			}
@@ -116,50 +144,170 @@ class Procurement_model extends CI_Model {
 		return array('main' => $scaleup_data, 'columns' => $columns);
 	}
 
-	public function get_procurement_patients_on_drug($filters){
+	public function get_procurement_adult_patients_on_drug($filters){
 		$columns = array();
+		$tmp_data = array();
+		$main_data = array();
+        $regimens = array();
+		$patient_data = array();
 
-		$this->db->select("CONCAT(UCASE(SUBSTRING(m.regimen, 1, 1)),UPPER(SUBSTRING(m.regimen, 2))) name, SUM(m.total) y", FALSE);
-		$this->db->from('vw_maps_list m');
-		$this->db->join('vw_regimen_drug_list rd', 'rd.regimen = m.regimen', 'inner');
+		$this->db->select("p.regimen, CONCAT_WS('/', data_month, data_year) period, SUM(p.total) total", FALSE);
+		$this->db->from('dsh_patient p');
+		$this->db->join('vw_regimen_drug_list rd', 'rd.regimen = p.regimen', 'inner');
+		$this->db->where_in('age_category', 'adult');
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
-				$this->db->where_in($category, $filter);
+				if ($category == 'data_date'){
+					$this->db->where("data_date >=", date('Y-m-01', strtotime($filter . "- 1 year")));
+					$this->db->where("data_date <=", $filter);
+				}else{
+                    $this->db->where_in($category, $filter);
+                }
 			}
 		}
-		$this->db->group_by('name');
-		$this->db->order_by('y', 'DESC');
+		$this->db->group_by('p.regimen, period');
+		$this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
 		$query = $this->db->get();
 		$results = $query->result_array();
 
 		foreach ($results as $result) {
-			array_push($columns, $result['name']);
-		}
+            $regimen =  $result['regimen'];
+            $period =  $result['period'];
+            array_push($columns, $period);
+            array_push($regimens, $regimen);
+            $tmp_data[$regimen][$period] = $result['total'];
+        }
+        
+        //Reset array values to unique
+        $columns = array_values(array_unique($columns));
+        $regimens = array_values(array_unique($regimens));
 
-		return array('main' => $results, 'columns' => $columns);
+		//Ensure values match for all regimens
+        foreach ($regimens as $regimen) {
+            foreach($columns as $column){
+                if(isset($tmp_data[$regimen][$column])){
+                    $main_data[$regimen]['data'][]  =  $tmp_data[$regimen][$column];
+                }else{
+                    $main_data[$regimen]['data'][]  = 0;
+                }  
+            } 
+        }
+
+		$counter = 0;
+		foreach ($main_data as $name => $item) {
+			$patient_data[$counter]['name'] = $name;
+			$patient_data[$counter]['data'] = $item['data'];
+			$counter++;
+		}
+		return array('main' => $patient_data, 'columns' => $columns);
 	}
 
-	public function get_procurement_pipeline_stock($filters){
-		$columns = array('In Stock', 'In Transit', 'Under Manufacturing', 'Waiting for Call Down'); 
+	public function get_procurement_paed_patients_on_drug($filters){
+		$columns = array();
+		$tmp_data = array();
+		$main_data = array();
+        $regimens = array();
+		$patient_data = array();
+
+		$this->db->select("p.regimen, CONCAT_WS('/', data_month, data_year) period, SUM(p.total) total", FALSE);
+		$this->db->from('dsh_patient p');
+		$this->db->join('vw_regimen_drug_list rd', 'rd.regimen = p.regimen', 'inner');
+		$this->db->where_in('age_category', 'paed');
+		if(!empty($filters)){
+			foreach ($filters as $category => $filter) {
+				if ($category == 'data_date'){
+					$this->db->where("data_date >=", date('Y-m-01', strtotime($filter . "- 1 year")));
+					$this->db->where("data_date <=", $filter);
+				}else{
+                    $this->db->where_in($category, $filter);
+                }
+			}
+		}
+		$this->db->group_by('p.regimen, period');
+		$this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
+		$query = $this->db->get();
+		$results = $query->result_array();
+
+		foreach ($results as $result) {
+            $regimen =  $result['regimen'];
+            $period =  $result['period'];
+            array_push($columns, $period);
+            array_push($regimens, $regimen);
+            $tmp_data[$regimen][$period] = $result['total'];
+        }
+        
+        //Reset array values to unique
+        $columns = array_values(array_unique($columns));
+        $regimens = array_values(array_unique($regimens));
+
+		//Ensure values match for all regimens
+        foreach ($regimens as $regimen) {
+            foreach($columns as $column){
+                if(isset($tmp_data[$regimen][$column])){
+                    $main_data[$regimen]['data'][]  =  $tmp_data[$regimen][$column];
+                }else{
+                    $main_data[$regimen]['data'][]  = 0;
+                }  
+            } 
+        }
+
+		$counter = 0;
+		foreach ($main_data as $name => $item) {
+			$patient_data[$counter]['name'] = $name;
+			$patient_data[$counter]['data'] = $item['data'];
+			$counter++;
+		}
+		return array('main' => $patient_data, 'columns' => $columns);
+	}
+
+	public function get_procurement_stock_status($filters){
+		$columns = array();
 		$pipeline_data = array(
-			array('name' => 'USAID', 'data' => array()),
-			array('name' => 'GF', 'data' => array()),
-			array('name' => 'CPF', 'data' => array())
+			array('name' => 'Contracted', 'data' => array()),
+			array('name' => 'Pending', 'data' => array()),
+			array('name' => 'In Stock', 'data' => array())
 		);
 
-		foreach ($columns as $column) {
-			foreach ($pipeline_data as $index => $pipeline) {
-				if($pipeline['name'] == 'USAID'){
-					array_push($pipeline_data[$index]['data'], mt_rand(1500,10000));
-				}else if($pipeline['name'] == 'GF'){
-					array_push($pipeline_data[$index]['data'], mt_rand(1000,5000));
-				}else if($pipeline['name'] == 'CPF'){
-					array_push($pipeline_data[$index]['data'], mt_rand(500, 3000));	
-				}
+		$this->db->select("drug, ROUND(SUM(close_kemsa)/avg_issues) soh_mos, ROUND(SUM(receipts_usaid + receipts_gf + receipts_cpf)/avg_issues) pending_mos, avg_issues", FALSE);
+		if(!empty($filters)){
+			foreach ($filters as $category => $filter) {
+				if ($category == 'data_date'){
+					$this->db->where("data_date =", $filter);
+				}else{
+                    $this->db->where_in($category, $filter);
+                }
+			}
+		}
+		$this->db->group_by('drug');
+		$query = $this->db->get('vw_procurement_list');
+		$result = $query->row_array();
+
+		//Get contracted
+		$this->db->select("drug, SUM(receipts_usaid + receipts_gf + receipts_cpf) contracted_total", FALSE);
+		if(!empty($filters)){
+			foreach ($filters as $category => $filter) {
+				if ($category == 'data_date'){
+					$this->db->where("data_date >", $filter);
+				}else{
+                    $this->db->where_in($category, $filter);
+                }
+			}
+		}
+		$this->db->group_by('drug');
+		$query = $this->db->get('vw_procurement_list');
+		$contracted_result = $query->row_array();
+
+		foreach ($pipeline_data as $index => $pipeline) {
+			if($pipeline['name'] == 'In Stock'){
+				array_push($pipeline_data[$index]['data'], (isset($result['soh_mos']) ? $result['soh_mos'] : 0));
+			}else if($pipeline['name'] == 'Pending'){
+				array_push($pipeline_data[$index]['data'], (isset($result['pending_mos']) ? $result['pending_mos'] : 0));
+			}else if($pipeline['name'] == 'Contracted'){
+				array_push($pipeline_data[$index]['data'], (isset($contracted_result['contracted_total']) ? round($contracted_result['contracted_total']/$result['avg_issues']) : 0));	
 			}
 		}
 
-		return array('main' => $pipeline_data, 'columns' => $columns);
+		return array('main' => $pipeline_data, 'columns' => array('MOS'));
 	}
 
 	public function get_procurement_expected_delivery($filters){
@@ -203,28 +351,4 @@ class Procurement_model extends CI_Model {
 		return array('main' => $scaleup_data, 'columns' => $columns);
 	}
 
-	public function get_procurement_pipeline_mos($filters){
-		$columns = array('Months of Stock'); 
-		$pipeline_data = array(
-			array('name' => 'USAID', 'data' => array()),
-			array('name' => 'GF', 'data' => array()),
-			array('name' => 'CPF', 'data' => array())
-		);
-		$consumption = 500;
-
-		foreach ($columns as $column) {
-			foreach ($pipeline_data as $index => $pipeline) {
-				if($pipeline['name'] == 'USAID'){
-					array_push($pipeline_data[$index]['data'], round(mt_rand(1500,10000)/$consumption));
-				}else if($pipeline['name'] == 'GF'){
-					array_push($pipeline_data[$index]['data'], round(mt_rand(1000,5000)/$consumption));
-				}else if($pipeline['name'] == 'CPF'){
-					array_push($pipeline_data[$index]['data'], round(mt_rand(500, 3000)/$consumption));	
-				}
-			}
-		}
-
-		return array('main' => $pipeline_data, 'columns' => $columns);
-	}
-	
 }

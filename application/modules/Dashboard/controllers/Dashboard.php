@@ -11,7 +11,10 @@ class Dashboard extends MX_Controller {
     
     public function get_default_period()
 	{	
-		$default_period = array('year' => $this->config->item('data_year'), 'month' => $this->config->item('data_month'));
+		$default_period = array(
+			'year' => $this->config->item('data_year'), 
+			'month' => $this->config->item('data_month'), 
+			'drug' => $this->config->item('drug'));
 		echo json_encode($default_period);
     }
 
@@ -121,14 +124,14 @@ class Dashboard extends MX_Controller {
             $main_data = $this->procurement_model->get_procurement_actual_consumption_issues($filters);
         } else if ($chartname == 'kemsa_soh_chart') {
             $main_data = $this->procurement_model->get_procurement_kemsa_soh($filters);
-        } else if ($chartname == 'patients_on_drug_chart') {
-            $main_data = $this->procurement_model->get_procurement_patients_on_drug($filters);
-        } else if($chartname == 'pipeline_stock_chart'){
-			$main_data = $this->procurement_model->get_procurement_pipeline_stock($filters);
+        } else if ($chartname == 'adult_patients_on_drug_chart') {
+            $main_data = $this->procurement_model->get_procurement_adult_patients_on_drug($filters);
+        } else if ($chartname == 'paed_patients_on_drug_chart') {
+            $main_data = $this->procurement_model->get_procurement_paed_patients_on_drug($filters);
+        } else if($chartname == 'stock_status_chart'){
+			$main_data = $this->procurement_model->get_procurement_stock_status($filters);
 		} else if ($chartname == 'expected_delivery_chart') {
             $main_data = $this->procurement_model->get_procurement_expected_delivery($filters);
-        } else if ($chartname == 'pipeline_mos_chart') {
-            $main_data = $this->procurement_model->get_procurement_pipeline_mos($filters);
         }
 		return $main_data;
 	}
