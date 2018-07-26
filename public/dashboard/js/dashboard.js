@@ -9,7 +9,7 @@ var LatestDateURL = 'Dashboard/get_default_period'
 var mainFilterURLs = {
     'summary': [{'link': countyURL, 'type': 'county' }], 
     'trend': [{'link': countyURL, 'type': 'county'}],
-    'procurement': [{'link': drugListURL, 'type': 'drug'}],
+    'procurement': [{'link': countyURL, 'type': 'county'}],
     'county': [{'link': countyURL, 'type': 'county'}],
     'subcounty': [{'link': subcountyURL, 'type': 'sub_county'}],
     'facility': [{'link': facilityURL, 'type': 'facility'}],
@@ -25,7 +25,7 @@ var tabFiltersURLs = {
         {'link': drugListURL, 'type': 'drug', 'filters': ['#commodity_consumption_chart_filter', '#commodity_month_stock_chart_filter']}, 
         {'link': regimenListURL, 'type': 'regimen', 'filters': ['#patients_regimen_chart_filter']}
     ],
-    'procurement': [],
+    'procurement': [{'link': drugListURL, 'type': 'drug', 'filters': ['#consumption_issues_chart_filter', '#actual_consumption_issues_chart_filter', '#kemsa_soh_chart_filter', '#patients_on_drug_chart_filter', '#pipeline_stock_chart_filter', '#expected_delivery_chart_filter', '#pipeline_mos_chart_filter']}],
     'county': [],
     'subcounty': [],
     'facility': [],
@@ -42,7 +42,7 @@ var tabFiltersURLs = {
 var charts = {
     'summary': ['patient_scaleup_chart', 'patient_services_chart', 'national_mos_chart'],
     'trend': ['commodity_consumption_chart', 'patients_regimen_chart', 'commodity_month_stock_chart'],
-    'procurement': ['consumption_issues_chart', 'patients_on_drug_chart', 'pipeline_stock_chart', 'expected_delivery_chart', 'pipeline_mos_chart'],
+    'procurement': ['consumption_issues_chart', 'actual_consumption_issues_chart', 'kemsa_soh_chart', 'patients_on_drug_chart', 'pipeline_stock_chart', 'expected_delivery_chart', 'pipeline_mos_chart'],
     'county': ['county_patient_distribution_chart', 'county_patient_distribution_table'],
     'subcounty': ['subcounty_patient_distribution_chart', 'subcounty_patient_distribution_table'],
     'facility': ['facility_patient_distribution_chart', 'facility_patient_distribution_table'],

@@ -89,12 +89,40 @@ $config['commodity_month_stock_chart_filters_default'] = array(
 
 //consumption_issues_chart
 $config['consumption_issues_chart_chartview'] = 'charts/line_view';
-$config['consumption_issues_chart_title'] = 'Commodity/Issues Trend';
+$config['consumption_issues_chart_title'] = 'Average Consumption/Issues Trend';
 $config['consumption_issues_chart_yaxis_title'] = 'No. of Packs';
 $config['consumption_issues_chart_source'] = 'Source: www.commodities.nascop.org';
 $config['consumption_issues_chart_has_drilldown'] = FALSE;
 $config['consumption_issues_chart_filters'] = array('data_date', 'drug');
 $config['consumption_issues_chart_filters_default'] = array(
+    'data_date' => $config['data_date'],
+    'drug' => array(
+        'Dolutegravir (DTG) 50mg Tabs'
+    )
+);
+
+//actual_consumption_issues_chart
+$config['actual_consumption_issues_chart_chartview'] = 'charts/combined_column_view';
+$config['actual_consumption_issues_chart_title'] = 'Actual Consumption/Issues Trend';
+$config['actual_consumption_issues_chart_yaxis_title'] = 'No. of Packs';
+$config['actual_consumption_issues_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['actual_consumption_issues_chart_has_drilldown'] = FALSE;
+$config['actual_consumption_issues_chart_filters'] = array('data_date', 'drug');
+$config['actual_consumption_issues_chart_filters_default'] = array(
+    'data_date' => $config['data_date'],
+    'drug' => array(
+        'Dolutegravir (DTG) 50mg Tabs'
+    )
+);
+
+//kemsa_soh_chart
+$config['kemsa_soh_chart_chartview'] = 'charts/combined_column_line_plotlines_view';
+$config['kemsa_soh_chart_title'] = 'KEMSA Stock on Hand Trend';
+$config['kemsa_soh_chart_yaxis_title'] = 'No. of Packs';
+$config['kemsa_soh_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['kemsa_soh_chart_has_drilldown'] = FALSE;
+$config['kemsa_soh_chart_filters'] = array('data_date', 'drug');
+$config['kemsa_soh_chart_filters_default'] = array(
     'data_date' => $config['data_date'],
     'drug' => array(
         'Dolutegravir (DTG) 50mg Tabs'

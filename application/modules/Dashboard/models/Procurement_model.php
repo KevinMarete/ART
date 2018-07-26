@@ -6,8 +6,46 @@ class Procurement_model extends CI_Model {
 	public function get_procurement_consumption_issues($filters){
 		$columns = array();
 		$scaleup_data = array(
-			array('type' => 'line', 'name' => 'Consumption', 'data' => array()),
-			array('type' => 'line', 'name' => 'Issues', 'data' => array())
+			array('type' => 'line', 'name' => 'Avg Consumption', 'data' => array()),
+			array('type' => 'line', 'name' => 'Avg Issues', 'data' => array())
+		);
+
+		$this->db->select("CONCAT_WS('/', data_month, data_year) period, SUM(avg_consumption) consumption_avg, SUM(avg_issues) issues_avg", FALSE);
+		if(!empty($filters)){
+			foreach ($filters as $category => $filter) {
+				if ($category == 'data_date'){
+					$this->db->where("data_date >=", date('Y-m-01', strtotime($filter . "- 1 year")));
+					$this->db->where("data_date <=", date('Y-m-01', strtotime($filter . "+ 1 year")));
+				}else{
+                    $this->db->where_in($category, $filter);
+                }
+			}
+		}
+		$this->db->group_by('period');
+		$this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
+		$query = $this->db->get('vw_procurement_list');
+		$results = $query->result_array();
+
+		if($results){
+			foreach ($results as $result) {
+				$columns[] = $result['period'];
+				foreach ($scaleup_data as $index => $scaleup) {
+					if($scaleup['name'] == 'Avg Consumption'){
+						array_push($scaleup_data[$index]['data'], $result['consumption_avg']);
+					}else if($scaleup['name'] == 'Avg Issues'){
+						array_push($scaleup_data[$index]['data'], $result['issues_avg']);
+					}
+				}
+			}
+		}
+		return array('main' => $scaleup_data, 'columns' => $columns);
+	}
+
+	public function get_procurement_actual_consumption_issues($filters){
+		$columns = array();
+		$scaleup_data = array(
+			array('type' => 'column', 'name' => 'Consumption', 'data' => array()),
+			array('type' => 'column', 'name' => 'Issues', 'data' => array())
 		);
 
 		$this->db->select("CONCAT_WS('/', data_month, data_year) period, SUM(consumption) consumption_total, SUM(issues) issues_total", FALSE);
@@ -33,6 +71,44 @@ class Procurement_model extends CI_Model {
 						array_push($scaleup_data[$index]['data'], $result['consumption_total']);
 					}else if($scaleup['name'] == 'Issues'){
 						array_push($scaleup_data[$index]['data'], $result['issues_total']);
+					}
+				}
+			}
+		}
+		return array('main' => $scaleup_data, 'columns' => $columns);
+	}
+
+	public function get_procurement_kemsa_soh($filters){
+		$columns = array();
+		$scaleup_data = array(
+			array('type' => 'line', 'name' => 'SOH', 'data' => array()),
+			array('type' => 'column', 'name' => 'Contracted', 'data' => array())
+		);
+
+		$this->db->select("CONCAT_WS('/', data_month, data_year) period, SUM(close_kemsa) soh_total, SUM(receipts_usaid + receipts_gf + receipts_cpf) contracted_total", FALSE);
+		if(!empty($filters)){
+			foreach ($filters as $category => $filter) {
+				if ($category == 'data_date'){
+					$this->db->where("data_date >=", $filter);
+					$this->db->where("data_date <=", date('Y-m-01', strtotime($filter . "+ 2 year")));
+				}else{
+                    $this->db->where_in($category, $filter);
+                }
+			}
+		}
+		$this->db->group_by('period');
+		$this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
+		$query = $this->db->get('vw_procurement_list');
+		$results = $query->result_array();
+
+		if($results){
+			foreach ($results as $result) {
+				$columns[] = $result['period'];
+				foreach ($scaleup_data as $index => $scaleup) {
+					if($scaleup['name'] == 'SOH'){
+						array_push($scaleup_data[$index]['data'], $result['soh_total']);
+					}else if($scaleup['name'] == 'Contracted'){
+						array_push($scaleup_data[$index]['data'], $result['contracted_total']);
 					}
 				}
 			}
