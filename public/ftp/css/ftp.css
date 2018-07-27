@@ -28,22 +28,3 @@ a {
 .navbar-default .navbar-brand {
     color: #fff;
 }
-.sidebar{
-    margin-top: 55px;
-}
-.sidebar ul li a {
-    background-color: #fff;
-    color: #000;
-    text-decoration: none;
-}
-.sidebar ul li a.active{
-    color: #000;
-}
-.breadcrumb{
-    margin-top: 20px;
-}
-/*datatables background color of selected tbody row*/
-table.dataTable tbody tr.selected {
-    color: #fff;
-    background-color: #3d4a57;
-}
