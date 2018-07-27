@@ -508,16 +508,14 @@ class Orders_model extends CI_Model {
     }
 
     public function get_drug_amc($facility_id, $period_begin, $drug_id, $code){
-        $first = date('Y-m-01', strtotime($period_begin . "- 1 month"));
-        $second = date('Y-m-01', strtotime($period_begin . "- 2 month"));
-        $third = date('Y-m-01', strtotime($period_begin . "- 3 month"));
+        $first = date('Y-m-01', strtotime($period_begin));
+        $second = date('Y-m-01', strtotime($period_begin . "- 1 month"));
+        $third = date('Y-m-01', strtotime($period_begin . "- 2 month"));
         $amc = 0;
 
         $sql = "SELECT 
-                    SUM(ci.dispensed_packs) as dispensed_packs,
-                    SUM(ci.aggr_consumed) as aggr_consumed,
-                    SUM(ci.aggr_on_hand) as aggr_on_hand,
-                    SUM(ci.count) as count
+                    ROUND(SUM(ci.dispensed_packs) / 3) as dispensed_packs,
+                    ROUND(SUM(ci.aggr_consumed) / 3) as aggr_consumed
                 FROM tbl_cdrr_item ci 
                 INNER JOIN (
                     SELECT 
@@ -535,9 +533,9 @@ class Orders_model extends CI_Model {
         if ($results) {
             foreach ($results as $result) {
                 if ($code == "D-CDRR") {
-                    $amc = ($result['dispensed_packs'] + $result['aggr_consumed']) - ($result['aggr_on_hand'] + $result['count']);
+                    $amc = $result['aggr_consumed'];
                 } else {
-                    $amc = $result['dispensed_packs'] - $result['count'];
+                    $amc = $result['dispensed_packs'];
                 }
                 $amc = ($amc > 0) ? $amc : 0;
             }

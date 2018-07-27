@@ -6,10 +6,11 @@ var drugListURL = 'API/drug/list'
 var regimenListURL = 'API/regimen/list'
 var chartURL = 'Dashboard/get_chart'
 var LatestDateURL = 'Dashboard/get_default_period'
+var singleSelectTabs = ['procurement']
 var mainFilterURLs = {
     'summary': [{'link': countyURL, 'type': 'county' }], 
     'trend': [{'link': countyURL, 'type': 'county'}],
-    'procurement': [{'link': countyURL, 'type': 'county'}],
+    'procurement': [{'link': drugListURL, 'type': 'drug'}],
     'county': [{'link': countyURL, 'type': 'county'}],
     'subcounty': [{'link': subcountyURL, 'type': 'sub_county'}],
     'facility': [{'link': facilityURL, 'type': 'facility'}],
@@ -25,7 +26,7 @@ var tabFiltersURLs = {
         {'link': drugListURL, 'type': 'drug', 'filters': ['#commodity_consumption_chart_filter', '#commodity_month_stock_chart_filter']}, 
         {'link': regimenListURL, 'type': 'regimen', 'filters': ['#patients_regimen_chart_filter']}
     ],
-    'procurement': [{'link': drugListURL, 'type': 'drug', 'filters': ['#consumption_issues_chart_filter', '#actual_consumption_issues_chart_filter', '#kemsa_soh_chart_filter', '#patients_on_drug_chart_filter', '#pipeline_stock_chart_filter', '#expected_delivery_chart_filter', '#pipeline_mos_chart_filter']}],
+    'procurement': [{'link': drugListURL, 'type': 'drug', 'filters': ['#consumption_issues_chart_filter', '#actual_consumption_issues_chart_filter', '#kemsa_soh_chart_filter', '#adult_patients_on_drug_chart_filter', '#paed_patients_on_drug_chart_filter', '#stock_status_chart_filter', '#expected_delivery_chart_filter']}],
     'county': [],
     'subcounty': [],
     'facility': [],
@@ -42,7 +43,7 @@ var tabFiltersURLs = {
 var charts = {
     'summary': ['patient_scaleup_chart', 'patient_services_chart', 'national_mos_chart'],
     'trend': ['commodity_consumption_chart', 'patients_regimen_chart', 'commodity_month_stock_chart'],
-    'procurement': ['consumption_issues_chart', 'actual_consumption_issues_chart', 'kemsa_soh_chart', 'patients_on_drug_chart', 'pipeline_stock_chart', 'expected_delivery_chart', 'pipeline_mos_chart'],
+    'procurement': ['consumption_issues_chart', 'actual_consumption_issues_chart', 'kemsa_soh_chart', 'adult_patients_on_drug_chart', 'paed_patients_on_drug_chart', 'stock_status_chart', 'expected_delivery_chart'],
     'county': ['county_patient_distribution_chart', 'county_patient_distribution_table'],
     'subcounty': ['subcounty_patient_distribution_chart', 'subcounty_patient_distribution_table'],
     'facility': ['facility_patient_distribution_chart', 'facility_patient_distribution_table'],
@@ -57,8 +58,6 @@ var tabName = 'summary'
 
 //Autoload
 $(function() {
-    //Set default period
-    setDefaultPeriod(LatestDateURL)
     //Load default tab charts
     LoadTabContent(tabName)
     //Tab change Event
@@ -92,7 +91,7 @@ function LoadTabContent(tabName){
     setTabFilter(tabName)
 }
 
-function setDefaultPeriod(URL){
+function setDefaultPeriod(URL, tabName){
     $.getJSON(URL, function(data){
         //Remove active-tab class
         $(".filter-year").removeClass('active-tab')
@@ -102,7 +101,11 @@ function setDefaultPeriod(URL){
         $("#filter_year").val(data.year)
         //Display labels
         $(".filter-month[data-value='" + data.month + "']").addClass("active-tab"); 
-        $(".filter-year[data-value='" + data.year + "']").addClass("active-tab"); 
+        $(".filter-year[data-value='" + data.year + "']").addClass("active-tab");
+        //Single select tab filters
+        if($.inArray(tabName, singleSelectTabs) != -1){
+            $('#filter_item').val(data.drug).multiselect('refresh');
+        } 
     });
 }
 
@@ -110,7 +113,14 @@ function setMainFilter(tabName){
     $.each(mainFilterURLs[tabName], function(key, value){
         $.getJSON(value.link, function(data){
             //Create multiselect box
-            CreateSelectBox("#filter_item", "250px", 10)
+            if($.inArray(tabName, singleSelectTabs) != -1){
+                $('#filter_item').removeAttr("multiple");
+                $('#filter_item').attr("size", 2);
+            }else{
+                $('#filter_item').attr("multiple", "multiple");
+                $('#filter_item').removeAttr("size"); 
+            }
+            CreateSelectBox("#filter_item", "250px", 10) 
             //Add data to selectbox
             $("#filter_item option").remove();
             $.each(data, function(i, v) {
@@ -118,6 +128,8 @@ function setMainFilter(tabName){
             });
             $('#filter_item').multiselect('rebuild');
             $("#filter_item").data('filter_type', value.type)
+            //Set default period
+            setDefaultPeriod(LatestDateURL, tabName)
         }); 
     });
 }
@@ -245,8 +257,6 @@ function TabFilterHandler(e){
         tabName = filtername.replace('#', '');
         //Clear heading
         $(".heading").empty();
-        //Set default period
-        setDefaultPeriod(LatestDateURL)
         //Load selected tab charts
         LoadTabContent(tabName)
     }
