@@ -52,10 +52,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 
 $route['default_controller'] = 'Dashboard';
-$route['ftp'] = 'FtpService';
-$route['upload'] = 'FtpService/upload';
-$route['files/(:any)'] = 'FtpService/get_files/$1';
-$route['analysis'] = 'FtpService/analysis';
+$route['ftp'] = 'Ftp';
 $route['admin'] = 'Admin';
 $route['manager'] = 'Manager';
 $route['manager/login'] = 'Manager/load_page/user/login/Login';
