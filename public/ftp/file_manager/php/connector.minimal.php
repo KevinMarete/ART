@@ -88,9 +88,9 @@ $opts = array(
 		// ),
         array(
             'driver' => 'FTP',
-            'host'   => 'localhost', //hostname of the ftp
+            'host'   => 'commodities.nascop.org', //hostname of the ftp
             'user'   => 'ftpuser', //username used to connect to the ftp
-            'pass'   => 'al', //password used to connect to the ftp
+            'pass'   => 'ftpuser', //password used to connect to the ftp
             'path'   => '/'
         )
 	)

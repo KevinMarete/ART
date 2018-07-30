@@ -50,8 +50,13 @@
                 foreach ($this->session->userdata('modules') as $module => $value) {
                     echo "<li><a href='#'><i class='" . $value['icon'] . "'></i> " . ucwords($module) . "<span class='fa arrow'></span></a><ul class='nav nav-second-level' id='settings_nav_links'>";
                     foreach ($value['submodules'] as $orig_submodule) {
+                        $_blanks = array('ftp');
                         $submodule = str_replace(' ', '_', $orig_submodule);
-                        echo "<li><a class='" . str_replace(' ', '_', $orig_submodule) . "' href='" . base_url() . "manager/" . $module . "/" . $submodule . "'>" . ucwords(str_replace('_', ' ', $orig_submodule)) . "</a></li>";
+                        if(in_array($submodule, $_blanks)){
+                            echo "<li><a href='" . base_url() . "ftp' target='_blank'>" . ucwords(str_replace('_', ' ', $orig_submodule)) . "</a></li>";
+                        }else{
+                            echo "<li><a class='" . str_replace(' ', '_', $orig_submodule) . "' href='" . base_url() . "manager/" . $module . "/" . $submodule . "'>" . ucwords(str_replace('_', ' ', $orig_submodule)) . "</a></li>";
+                        }
                     }
                     echo "</ul> </li>";
                 }
