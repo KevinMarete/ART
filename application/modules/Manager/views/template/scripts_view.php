@@ -33,6 +33,8 @@
 <script type="text/javascript" src="<?php echo base_url().'public/dashboard/js/disable_back_button.js';?>"></script>
 <!--spin-->
 <script type="text/javascript" src="<?php echo base_url().'public/dashboard/js/spin.min.js';?>"></script>
+<!--bootbox-->
+<script type="text/javascript" src="<?php echo base_url().'public/manager/lib/bootbox/js/bootbox.min.js';?>"></script>
 <!-- Custom Theme JavaScript -->
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/dist/js/sb-admin-2.js'; ?>"></script>
 <script type="text/javascript">

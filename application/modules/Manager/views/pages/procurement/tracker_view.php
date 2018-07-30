@@ -18,7 +18,7 @@
                 </div>
                 <div class="panel-body">
                     
-                    <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-listing">
+                    <table width="100%" class="table table-striped table-bordered table-hover" id="procurement-listing">
                         <thead>
                             <tr>
                                 <th>Commodity</th>
@@ -47,13 +47,12 @@
                 <ul class="nav nav-tabs pull-right">
                     <li class="active"><a data-toggle="tab" href="#drug_procurement">Procurement</a></li>
                     <li><a data-toggle="tab" href="#drug_transactions">Transactions</a></li>
-                    <li><a data-toggle="tab" href="#drug_logs">Logs</a></li>
                 </ul>
                 <div class="tab-content">
                     <div id="drug_procurement" class="tab-pane fade in active">
                         <h3>Procurement Order</h3>
                         <p>
-                            <form action="<?php echo base_url().'create_app';?>" method="POST" class="form-horizontal" role="form">
+                            <form action="<?php echo base_url().'manager/save_procurement';?>" method="POST" class="form-horizontal" role="form">
                                 <div class="form-group row">
                                     <label for="open_kemsa" class="col-sm-3 col-form-label">Commodity Name</label>
                                     <div class="col-sm-9">
@@ -63,7 +62,7 @@
                                 <div class="form-group row">
                                     <label for="receipts_usaid" class="col-sm-3 col-form-label">Stock on Hand (SOH)</label>
                                     <div class="col-sm-3">
-                                        <input type="number" readonly class="form-control" id="commodity_soh">
+                                        <input type="text" readonly class="form-control" id="commodity_soh">
                                     </div>
                                     <label for="receipts_usaid" class="col-sm-3 col-form-label">Months of Stock (MOS)</label>
                                     <div class="col-sm-3">
@@ -73,7 +72,7 @@
                                 <div class="form-group row">
                                     <label for="receipts_usaid" class="col-sm-3 col-form-label">Expected Order Quantity</label>
                                     <div class="col-sm-3">
-                                        <input type="number" readonly class="form-control" id="expected_qty">
+                                        <input type="text" readonly class="form-control" id="expected_qty">
                                     </div>
                                     <label for="receipts_usaid" class="col-sm-3 col-form-label">Actual Order Quantity</label>
                                     <div class="col-sm-3">
@@ -82,57 +81,53 @@
                                 </div>
                                 <div class="form-group row" id="commodity_frm">
                                     <div class="col-sm-12">
-                                        <table class="table table-bordered table-striped table-hover table-condensed">
-                                            <thead>
-                                                <th>Quantity</th>
-                                                <th>Month/Year</th>
-                                                <th>Category</th>
-                                                <th>Funding Agent</th>
-                                                <th>Supplier</th>
-                                                <th>Action</th>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <input type="number" name="receipt_qty[]" required="">
-                                                    </td>
-                                                    <td>
-                                                        <input type="date" name="transaction_date[]" required="">
-                                                    </td>
-                                                    <td>
-                                                        <select name="category[]" required="">
-                                                            <option value="contracted" selected="selected">Contracted</option>
-                                                        </select>
-                                                    </td>
-                                                    <td>
-                                                        <select name="funding_agent[]" required="">
-                                                            <option value="usaid" selected="selected">USAID</option> 
-                                                        </select>
-                                                    </td>
-                                                    <td>
-                                                        <select name="supplier[]" required="">
-                                                            <option value="aurobindo" selected="selected">Aurobindo PTY</option> 
-                                                        </select>
-                                                    </td>
-                                                    <td>
-                                                        <a href="#"> <i class="fa fa-plus"></i></a>
-                                                        <a href="#"> <i class="fa fa-minus"></i></a>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-striped table-hover table-condensed" id="procurement_tbl">
+                                                <thead>
+                                                    <th>Quantity</th>
+                                                    <th>Transaction Date</th>
+                                                    <th>Status</th>
+                                                    <th>Funding Agent</th>
+                                                    <th>Supplier</th>
+                                                    <th>Action</th>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <input type="number" name="receipt_qty[]" required="" class="receipt_qty col-md-12">
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" name="transaction_date[]" required="" class="transaction_date col-md-12">
+                                                        </td>
+                                                        <td>
+                                                            <select name="category[]" required="" class="procurement_status"></select>
+                                                        </td>
+                                                        <td>
+                                                            <select name="funding_agent[]" required="" class="funding_agent"></select>
+                                                        </td>
+                                                        <td>
+                                                            <select name="supplier[]" required="" class="supplier col-md-12"></select>
+                                                        </td>
+                                                        <td>
+                                                            <a href="#" class="add"> <i class="fa fa-plus"></i></a>
+                                                            <a href="#" class="remove"> <i class="fa fa-minus"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="receipts_usaid" class="col-sm-3 col-form-label">Justification/Comments</label>
                                     <div class="col-sm-9">
-                                        <textarea class="form-control" name="comments" required="" ></textarea>
+                                        <textarea class="form-control" name="comments" required="" rows="5"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-12">
                                         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-remove"></i> Close</button>
-                                        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Create Order</button>
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save Order</button>
                                     </div>
                                 </div>
                             </form>
@@ -141,10 +136,6 @@
                     <div id="drug_transactions" class="tab-pane fade">
                         <h3>Transactions</h3>
                         <p>Some Transactions</p>
-                    </div>
-                    <div id="drug_logs" class="tab-pane fade">
-                        <h3>Logs</h3>
-                        <p>Some Logs</p>
                     </div>
                 </div>
             </div><!--/modal-body-->
@@ -156,7 +147,7 @@
 
 <script>
     $(document).ready(function () {
-        $('#dataTables-listing').DataTable({
+        $('#procurement-listing').DataTable({
             responsive: true,
             order: [[0, "asc"]],
             pagingType: "full_numbers",
@@ -166,5 +157,109 @@
         //Show tracker sidemenu
         $(".tracker").closest('ul').addClass("in");
         $(".tracker").addClass("active active-page");
+
+        //Load Commodity Data when Modal shown
+        $("#add_procurement_modal").on("show.bs.modal", function(e) {
+            var drug_name = $(e.relatedTarget).data('drug_name');
+            var trackerURL = "<?php echo base_url() . 'Manager/Procurement/get_tracker/'; ?>"
+            $.post(trackerURL, {"drug_name": drug_name}, function(json){
+                $.each($.parseJSON(json).data, function(key, value){
+                    $("#"+ key).val(value)
+                });
+            });
+        });
+
+        //Get dropdown data
+        getDropdown('../../API/procurement_status', 'procurement_status')
+        getDropdown('../../API/funding_agent', 'funding_agent')
+        getDropdown('../../API/supplier', 'supplier')
+
+        //Add datepicker
+        $(".transaction_date").datepicker({
+            format: 'yyyy-mm-dd',
+            startDate: '1d'
+        });
+
+        //Validate receipt_qty
+        $(".receipt_qty").on('keyup', function(){
+            var curr_element = $(this)
+            var sum = 0;
+            var overall_qty = $("#actual_qty").val()
+            $('.receipt_qty').each(function(){
+                sum += parseInt(this.value);
+                if(sum > overall_qty){
+                    bootbox.alert({
+                        title: "Quantity Alert",
+                        message: "Quantity cannot be more than Actual Order Quantity!",
+                        callback: function(){
+                            curr_element.val('');
+                        }
+                    });
+                }
+            });
+        });
+
+        //Add row to table
+        $(".add").click(function(){
+            var last_row = $(this).closest('tr');
+
+            if (last_row.find(".receipt_qty").val() == "" || last_row.find(".transaction_date").val() == "" || last_row.find(".procurement_status").val() == "" || last_row.find(".funding_agent").val() == "" || last_row.find(".supplier").val() == "") {
+                bootbox.alert({
+                    title: "Required Alert",
+                    message: "All values must be entered/selected!"
+                });
+            }else{
+                $(".transaction_date").datepicker('destroy');
+                var cloned_row = last_row.clone(true);
+                cloned_row.find('select,input').val('');
+                cloned_row.insertAfter(last_row);
+                $(".transaction_date").datepicker({
+                    format: 'yyyy-mm-dd',
+                    startDate: '1d'
+                });
+            }
+        });
+
+        //Remove row from table
+        $(".remove").click(function() {
+            var rows = $("#procurement_tbl > tbody").find("tr").length;
+            if(rows > 1){
+                bootbox.confirm({
+                    title: "Remove Confirmation",
+                    message: "Are you sure?",
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn-success'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-danger'
+                        }
+                    },
+                    callback: function(res){
+                        if(res){
+                            $(this).closest('tr').remove();     
+                        }
+                    }
+                });                                            
+            }else{
+                bootbox.alert({
+                    title: "Remove Alert",
+                    message: "You cannot remove the last row!"
+                });
+            }
+        });
+
     });
+
+    function getDropdown(dataURL, elementClass){
+        $.getJSON(dataURL, function(data){
+            $("."+elementClass+" option").remove();
+            $("."+elementClass).append($("<option value=''>Select One</option>"));          
+            $.each(data, function(i, v) {
+                $("."+elementClass).append($("<option value='" + v.id + "'>" + v.name.toUpperCase() + "</option>"));
+            });
+        });
+    }
 </script>
