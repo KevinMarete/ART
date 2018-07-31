@@ -40,6 +40,9 @@
                                     if ($column == 'formulation_id') {
                                         $column = 'Formulation';
                                     }
+                                    if ($column == 'parent_id') {
+                                        $column = 'parent name';
+                                    }
                                     if ($column == 'subcounty_id') {
                                         $column = 'Subcounty';
                                     }
@@ -77,7 +80,7 @@
                                         $column = 'regimen';
                                     }
                                     if ($column == 'drug_id') {
-                                        $column = 'drug strength';
+                                        $column = 'drug name';
                                     }
                                     if ($column == 'role_id') {
                                         $column = 'role';
@@ -193,10 +196,6 @@ if ($page_name != 'backup' && $page_name != 'user') {
         $('#modal_form').modal('show');
         $('.modal-title').text('Add <?php echo ucwords(str_replace('_', ' ', $page_name)); ?>');
 
-        //parent_id hide/show form_group
-        $('.parent_edit').hide(true);
-        $('.parent_add').show(true);
-
         //Get all facilities not installed
         var facilityinstallURL = '../../API/facility_install';
         $("#facility").empty();
@@ -257,19 +256,6 @@ if ($page_name != 'backup' && $page_name != 'user') {
         $.getJSON(facilityURL, function (facilities) {
             $.each(facilities, function (index, facility) {
                 $("#facility").append($("<option value='" + facility.id + "'>" + facility.name.toUpperCase() + "</option>"));
-            });
-        });
-
-        //parent_id hide/show form_group
-        $('.parent_add').hide(true);
-        $('.parent_edit').show(true);
-
-        var parentURL = '../../API/facility';
-        $("#parent").empty();
-        $.getJSON(parentURL, function (parent_id) {
-            $("#parent").append($("<option value=''>Select Parent</option>"));
-            $.each(parent_id, function (index, parent) {
-                $("#parent").append($("<option value='" + parent.parent_id + "'>" + parent.parent_id + "</option>"));
             });
         });
 
