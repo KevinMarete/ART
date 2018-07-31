@@ -218,25 +218,8 @@ if ($page_name != 'backup' && $page_name != 'user') {
                 $("#regimen_add").append($("<option value='" + regimen.id + "'>" + regimen.name.toUpperCase() + "</option>"));
             });
         });
-
-        var drugURL = '../../API/drug_regimen_drug';
-        $("#drug_add").empty()
-        $.getJSON(drugURL, function (drugs) {
-            $("#drug_add").append($("<option value=''>Select Drug</option>"));
-            $.each(drugs, function (index, drug) {
-                $("#drug_add").append($("<option value='" + drug.id + "'>" + drug.strength.toUpperCase() + "</option>"));
-            });
-        });
-
         //select2
         $(".select2").select2({
-            width: '100%',
-            allowClear: true,
-            dropdownParent: $("#modal_form")
-        });
-
-        //select2 Add regimen_drug
-        $(".select").select2({
             width: '100%',
             allowClear: true,
             dropdownParent: $("#modal_form")
@@ -269,15 +252,6 @@ if ($page_name != 'backup' && $page_name != 'user') {
             $("#regimen_edit").append($("<option value=''>Select Regimen</option>"));
             $.each(regimens, function (index, regimen) {
                 $("#regimen_edit").append($("<option value='" + regimen.id + "'>" + regimen.name.toUpperCase() + "</option>"));
-            });
-        });
-
-        var drugURL = '../../API/drug';
-        $("#drug_edit").empty()
-        $.getJSON(drugURL, function (drugs) {
-            $("#drug_edit").append($("<option value=''>Select Drug</option>"));
-            $.each(drugs, function (index, drug) {
-                $("#drug_edit").append($("<option value='" + drug.id + "'>" + drug.strength.toUpperCase() + "</option>"));
             });
         });
 
