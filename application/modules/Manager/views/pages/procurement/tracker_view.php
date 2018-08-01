@@ -56,7 +56,8 @@
                                 <div class="form-group row">
                                     <label for="open_kemsa" class="col-sm-3 col-form-label">Commodity Name</label>
                                     <div class="col-sm-9">
-                                        <input type="text" readonly class="form-control" id="commodity_name" name="commodity_name">
+                                        <input type="hidden" readonly class="form-control" id="drug_id" name="drug_id">
+                                        <input type="text" readonly class="form-control" id="commodity_name">
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -100,7 +101,7 @@
                                                             <input type="text" name="transaction_date[]" required="" class="transaction_date col-md-12">
                                                         </td>
                                                         <td>
-                                                            <select name="category[]" required="" class="procurement_status"></select>
+                                                            <select name="status[]" required="" class="procurement_status"></select>
                                                         </td>
                                                         <td>
                                                             <select name="funding_agent[]" required="" class="funding_agent"></select>

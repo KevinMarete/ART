@@ -37,6 +37,7 @@ class Procurement_model extends CI_Model {
         $response = array('data'=> array());
         try {
             $sql = "SELECT 
+                        drug_id,
                         drug commodity_name, 
                         FORMAT(close_kemsa, 0) commodity_soh, 
                         ROUND(close_kemsa/avg_issues) commodity_mos, 

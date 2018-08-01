@@ -19,8 +19,22 @@ class Procurement extends MX_Controller {
 	}
 
 	public function save_tracker(){
-		echo '<pre>';
-		print_r($this->input->post());
+		$drug_id = $this->input->post('drug_id');
+		$receipts = $this->input->post('receipt_qty');
+		$transaction_date = $this->input->post('transaction_date');
+		$status = $this->input->post('status');
+		$funding_agent = $this->input->post('funding_agent');
+		$supplier = $this->input->post('supplier');
+		foreach ($receipts as $key => $qty) {
+			$query = $this->db->query("CALL proc_save_tracker(?, ?, ? ,?, ?, ?, ?, ?)", array(
+				date('Y', strtotime($transaction_date[$key])), date('M', strtotime($transaction_date[$key])), $drug_id, $qty, $funding_agent[$key], $supplier[$key], $status[$key], $this->session->userdata('id')
+			));
+		}
+		$message = '<div class="alert alert-success alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<strong>Success!</strong> Procurement was Added</div>';
+		$this->session->set_flashdata('tracker_msg', $message);
+		redirect('manager/procurement/tracker');
 	}
 
 }
