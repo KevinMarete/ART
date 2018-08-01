@@ -72,17 +72,8 @@
                                 <span class="help-block"></span>
                             </div>
                         </div>
-                        <!--add parent_id-->
-                        <div class="form-group parent_add">
-                            <label class="control-label col-md-3">Parent ID</label>
-                            <div class="col-md-9">
-                                <input name="parent_id" class="form-control" placeholder="Parent Id">
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-                        <!--edit parent_id-->
-                        <div class="form-group parent_edit">
-                            <label class="control-label col-md-3">Parent ID</label>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Parent Name</label>
                             <div class="col-md-9">
                                 <select name="parent_id" id="parent" class="form-control select2"> </select>
                                 <span class="help-block"></span>
@@ -103,7 +94,8 @@
     $(function () {
         var subcountyURL = '../../API/subcounty';
         var parnerURL = '../../API/partner';
-
+        var parentURL = '../../API/facility';
+        
         $("#subcounty").empty()
         $.getJSON(subcountyURL, function (subcounties) {
             $("#subcounty").append($("<option value=''>Select SubCounty</option>"));
@@ -116,6 +108,13 @@
             $("#partner").append($("<option value=''>Select Partner</option>"));
             $.each(partners, function (index, partner) {
                 $("#partner").append($("<option value='" + partner.id + "'>" + partner.name.toUpperCase() + "</option>"));
+            });
+        });
+        $("#parent").empty();
+        $.getJSON(parentURL, function (parent_id) {
+            $("#parent").append($("<option value=''>Select Parent</option>"));
+            $.each(parent_id, function (index, parent) {
+                $("#parent").append($("<option value='" + parent.parent_id + "'>" + parent.name.toUpperCase() + "</option>"));
             });
         });
     });

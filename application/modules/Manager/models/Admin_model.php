@@ -31,11 +31,11 @@ class Admin_model extends CI_Model {
                 $this->db->join('tbl_formulation f', 'f.id=d.formulation_id', 'inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_facility') {
-                $this->db->select('f.id,f.name,f.mflcode,f.category,f.dhiscode,f.longitude,f.latitude,sc.name subcounty,p.name partner, f.parent_id');
-                $this->db->from('tbl_facility f');
-                $this->db->join('tbl_subcounty sc', 'sc.id=f.subcounty_id', 'inner');
-                $this->db->join('tbl_partner p', 'p.id=f.partner_id', 'inner');
-                $table_data = $this->db->get()->result_array();
+                $sql = "SELECT f.id,f.name,f.mflcode,f.category,f.dhiscode,f.longitude,f.latitude,sc.name subcounty,p.name partner,(CASE WHEN f.parent_id=f.id THEN f.name END) fname "
+                        . "FROM tbl_facility f "
+                        . "LEFT JOIN tbl_subcounty sc ON sc.id=f.subcounty_id "
+                        . "LEFT JOIN tbl_partner p ON p.id=f.partner_id";
+                $table_data = $this->db->query($sql)->result_array();
             } else if ($table == 'tbl_install') {
                 $this->db->select('i.id,i.version,UCASE(f.name)facility_name,i.setup_date,i.contact_name,i.contact_phone,i.emrs_used,i.active_patients,IF(`is_usage`=1,"Yes","No"),IF(`is_internet`=1,"Yes","No"),u.firstname user_name');
                 $this->db->from('tbl_install i');
@@ -50,10 +50,10 @@ class Admin_model extends CI_Model {
                 $this->db->join('tbl_line l', 'l.id=r.line_id', 'inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_regimen_drug') {
-                $this->db->select('rg.id,r.name regimen_name,d.strength');
+                $this->db->select('rg.id,r.name regimen_name,vdl.name drug_name');
                 $this->db->from('tbl_regimen_drug rg');
                 $this->db->join('tbl_regimen r', 'r.id=rg.regimen_id', 'inner');
-                $this->db->join('tbl_drug d', 'd.id=rg.drug_id', 'inner');
+                $this->db->join('vw_drug_list vdl', 'vdl.id=rg.drug_id', 'inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_role_submodule') {
                 $this->db->select('rsbm.id,r.name,sbm.name submodule_name');
