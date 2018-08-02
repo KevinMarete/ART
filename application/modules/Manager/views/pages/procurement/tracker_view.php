@@ -22,11 +22,11 @@
                         <thead>
                             <tr>
                                 <th>Commodity</th>
+                                <th>Packsize</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-
                         </tbody>
                     </table>
                 </div>
@@ -47,6 +47,8 @@
                 <ul class="nav nav-tabs pull-right">
                     <li class="active"><a data-toggle="tab" href="#drug_procurement">Procurement</a></li>
                     <li><a data-toggle="tab" href="#drug_transactions">Transactions</a></li>
+                    <li><a data-toggle="tab" href="#drug_orders">Orders</a></li>
+                    <li><a data-toggle="tab" href="#drug_logs">Logs</a></li>
                 </ul>
                 <div class="tab-content">
                     <div id="drug_procurement" class="tab-pane fade in active">
@@ -136,7 +138,28 @@
                     </div>
                     <div id="drug_transactions" class="tab-pane fade">
                         <h3>Transactions</h3>
-                        <p>Some Transactions</p>
+                        <p>
+                            <div class="form-control" id="year-filter">
+                                <input type="hidden" name="filter_year" id="filter_year" value="" />
+                                Year: 
+                                <a href="#" class="filter-year" data-value="2015"> 2015 </a>|
+                                <a href="#" class="filter-year" data-value="2016"> 2016 </a>|
+                                <a href="#" class="filter-year" data-value="2017"> 2017 </a>|
+                                <a href="#" class="filter-year" data-value="2018"> 2018 </a>|
+                                <a href="#" class="filter-year" data-value="2019"> 2019 </a>|
+                                <a href="#" class="filter-year" data-value="2020"> 2020 </a>|
+                                <a href="#" class="filter-year" data-value="2021"> 2021 </a>
+                            </div>
+                        </p>
+                        <div id="transaction_tbl"></div>
+                    </div>
+                    <div id="drug_orders" class="tab-pane fade">
+                        <h3>Orders</h3>
+                        <div id="orders_tbl"></div>
+                    </div>
+                    <div id="drug_logs" class="tab-pane fade">
+                        <h3>Logs</h3>
+                        <div id="logs_tbl"></div>
                     </div>
                 </div>
             </div><!--/modal-body-->
@@ -161,13 +184,20 @@
 
         //Load Commodity Data when Modal shown
         $("#add_procurement_modal").on("show.bs.modal", function(e) {
-            var drug_name = $(e.relatedTarget).data('drug_name');
-            var trackerURL = "<?php echo base_url() . 'Manager/Procurement/get_tracker/'; ?>"
-            $.post(trackerURL, {"drug_name": drug_name}, function(json){
-                $.each($.parseJSON(json).data, function(key, value){
+            //Clear fields
+            $('select,input').val('');
+            var drugID = $(e.relatedTarget).data('drug_id');
+            //Load TrackerInfo
+            var trackerURL = "<?php echo base_url() . 'Manager/Procurement/get_tracker/'; ?>"+drugID
+            $.getJSON(trackerURL, function(json){
+                $.each(json.data, function(key, value){
                     $("#"+ key).val(value)
                 });
             });
+            //Load Drug Data
+            getTransactionsTable(drugID, '2018', "#transaction_tbl")
+            getDrugOrders(drugID, "#orders_tbl")
+            getDrugLogs(drugID, "#logs_tbl")
         });
 
         //Get dropdown data
@@ -252,6 +282,13 @@
             }
         });
 
+        //Filter transaction year
+        $(".filter-year").click(function(){
+            var periodYear = $(this).data('value');
+            var drugID = $("#drug_id").val();
+            getTransactionsTable(drugID, periodYear, "#transaction_tbl")
+        });
+
     });
 
     function getDropdown(dataURL, elementClass){
@@ -263,4 +300,42 @@
             });
         });
     }
+
+    function getTransactionsTable(drugID, periodYear, tableID){
+        //Load Spinner
+        LoadSpinner(tableID)
+        //Load Table
+        var transactionURL = "<?php echo base_url() . 'Manager/Procurement/get_transaction_table/'; ?>"+drugID+'/'+periodYear
+        $.get(transactionURL, function(table){
+            $(tableID).html(table)
+        });
+    }
+
+    function getDrugOrders(drugID, tableID){
+        //Load Spinner
+        LoadSpinner(tableID)
+        //Load Table
+        var ordersURL = "<?php echo base_url() . 'Manager/Procurement/get_order_table/'; ?>"+drugID
+        $.get(ordersURL, function(table){
+            $(tableID).html(table)
+        });
+    }
+
+    function getDrugLogs(drugID, tableID){
+        //Load Spinner
+        LoadSpinner(tableID)
+        //Load Table
+        var logsURL = "<?php echo base_url() . 'Manager/Procurement/get_log_table/'; ?>"+drugID
+        $.get(logsURL, function(table){
+            $(tableID).html(table)
+        });
+    }
+
+    function LoadSpinner(divID){
+        var spinner = new Spinner().spin()
+        $(divID).empty('')
+        $(divID).height('auto')
+        $(divID).append(spinner.el)
+    }
+
 </script>
