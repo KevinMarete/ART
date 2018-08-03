@@ -109,11 +109,13 @@ class Procurement_model extends CI_Model {
 	public function get_procurement_kemsa_soh($filters){
 		$columns = array();
 		$scaleup_data = array(
+			array('type' => 'line', 'name' => 'Minimum Stock', 'data' => array()),
 			array('type' => 'line', 'name' => 'SOH', 'data' => array()),
+			array('type' => 'line', 'name' => 'Maximum Stock', 'data' => array()),
 			array('type' => 'column', 'name' => 'Contracted', 'data' => array())
 		);
 
-		$this->db->select("CONCAT_WS('/', data_month, data_year) period, SUM(close_kemsa) soh_total, SUM(receipts_usaid + receipts_gf + receipts_cpf) contracted_total", FALSE);
+		$this->db->select("CONCAT_WS('/', data_month, data_year) period, SUM(close_kemsa) soh_total, SUM(receipts_usaid + receipts_gf + receipts_cpf) contracted_total, (avg_issues * 9) minimum_total, (avg_issues * 15) maximum_total", FALSE);
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				if ($category == 'data_date'){
@@ -137,6 +139,10 @@ class Procurement_model extends CI_Model {
 						array_push($scaleup_data[$index]['data'], $result['soh_total']);
 					}else if($scaleup['name'] == 'Contracted'){
 						array_push($scaleup_data[$index]['data'], $result['contracted_total']);
+					}else if($scaleup['name'] == 'Minimum Stock'){
+						array_push($scaleup_data[$index]['data'], $result['minimum_total']);
+					}else if($scaleup['name'] == 'Maximum Stock'){
+						array_push($scaleup_data[$index]['data'], $result['maximum_total']);
 					}
 				}
 			}

@@ -73,7 +73,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="receipts_usaid" class="col-sm-3 col-form-label">Expected Order Quantity</label>
+                                    <label for="receipts_usaid" class="col-sm-3 col-form-label">System Calculated Order Quantity</label>
                                     <div class="col-sm-3">
                                         <input type="text" readonly class="form-control" id="expected_qty">
                                     </div>
@@ -184,8 +184,6 @@
 
         //Load Commodity Data when Modal shown
         $("#add_procurement_modal").on("show.bs.modal", function(e) {
-            //Clear fields
-            $('select,input').val('');
             var drugID = $(e.relatedTarget).data('drug_id');
             //Load TrackerInfo
             var trackerURL = "<?php echo base_url() . 'Manager/Procurement/get_tracker/'; ?>"+drugID
@@ -198,6 +196,11 @@
             getTransactionsTable(drugID, '2018', "#transaction_tbl")
             getDrugOrders(drugID, "#orders_tbl")
             getDrugLogs(drugID, "#logs_tbl")
+        });
+
+        //Clean up fields when modal is closed
+        $('#add_procurement_modal').on('hidden.bs.modal', function(e) {
+            $('select,input').val('');
         });
 
         //Get dropdown data
