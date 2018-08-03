@@ -6,9 +6,9 @@ class Procurement_model extends CI_Model {
 	public function get_procurement_consumption_issues($filters){
 		$columns = array();
 		$scaleup_data = array(
-			array('type' => 'line', 'name' => 'Avg Consumption', 'data' => array()),
-			array('type' => 'line', 'name' => 'Avg Issues', 'data' => array()),
-			array('type' => 'line', 'name' => 'Total Patients', 'data' => array())
+			array('type' => 'line', 'name' => 'Avg Consumption', 'data' => array(), 'zoneAxis' => 'x', 'zones' => array(array('value' => 12, 'dashStyle' => 'solid'), array('value' => 24, 'dashStyle' => 'dot'))),
+			array('type' => 'line', 'name' => 'Avg Issues', 'data' => array(), 'zoneAxis' => 'x', 'zones' => array(array('value' => 12, 'dashStyle' => 'solid'), array('value' => 24, 'dashStyle' => 'dot'))),
+			array('type' => 'line', 'name' => 'Total Patients', 'data' => array(), 'zoneAxis' => 'x', 'zones' => array(array('value' => 12, 'dashStyle' => 'solid'), array('value' => 24, 'dashStyle' => 'dot')))
 		);
 		$patient_data = array();
 
