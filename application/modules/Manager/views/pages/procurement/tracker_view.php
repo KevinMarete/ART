@@ -1,3 +1,8 @@
+<style type="text/css">
+    .active-tab{
+        color:red;
+    }
+</style>
 <div id="page-wrapper">
     <!--row-->
     <div class="row">
@@ -6,331 +11,469 @@
                 <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
                 <li><a href="#">Procurement</a></li>
                 <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i> <?php echo ucwords($page_name); ?></li>
-                <?php echo $this->session->flashdata('tracker_msg'); ?>
             </ol>
         </div>
     </div><!--end row-->
-    <!--row-->
+
     <div class="row">
         <div class="col-lg-12">
-            <div class="panel panel-default"><!--panel default-->
-                <div class="panel-heading">
-                </div>
-                <div class="panel-body">
-                    
-                    <table width="100%" class="table table-striped table-bordered table-hover" id="procurement-listing">
-                        <thead>
-                            <tr>
-                                <th>Commodity</th>
-                                <th>Packsize</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div><!--end panel default-->
-        </div>
-    </div><!--end row-->
-</div><!--end page wrapper--->
-<!--modal(s)-->
-<div class="modal fade" id="add_procurement_modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div><!--/modal-header-->
-            <div class="modal-body">
-                <ul class="nav nav-tabs pull-right">
-                    <li class="active"><a data-toggle="tab" href="#drug_procurement">Procurement</a></li>
-                    <li><a data-toggle="tab" href="#drug_transactions">Transactions</a></li>
-                    <li><a data-toggle="tab" href="#drug_orders">Orders</a></li>
-                    <li><a data-toggle="tab" href="#drug_logs">Logs</a></li>
-                </ul>
-                <div class="tab-content">
-                    <div id="drug_procurement" class="tab-pane fade in active">
-                        <h3>Procurement Order</h3>
-                        <p>
-                            <form action="<?php echo base_url().'manager/save_procurement';?>" method="POST" class="form-horizontal" role="form">
-                                <div class="form-group row">
-                                    <label for="open_kemsa" class="col-sm-3 col-form-label">Commodity Name</label>
-                                    <div class="col-sm-9">
-                                        <input type="hidden" readonly class="form-control" id="drug_id" name="drug_id">
-                                        <input type="text" readonly class="form-control" id="commodity_name">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="receipts_usaid" class="col-sm-3 col-form-label">Stock on Hand (SOH)</label>
-                                    <div class="col-sm-3">
-                                        <input type="text" readonly class="form-control" id="commodity_soh">
-                                    </div>
-                                    <label for="receipts_usaid" class="col-sm-3 col-form-label">Months of Stock (MOS)</label>
-                                    <div class="col-sm-3">
-                                        <input type="number" readonly class="form-control" id="commodity_mos">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="receipts_usaid" class="col-sm-3 col-form-label">System Calculated Order Quantity</label>
-                                    <div class="col-sm-3">
-                                        <input type="text" readonly class="form-control" id="expected_qty">
-                                    </div>
-                                    <label for="receipts_usaid" class="col-sm-3 col-form-label">Actual Order Quantity</label>
-                                    <div class="col-sm-3">
-                                        <input type="number" class="form-control" id="actual_qty" name="receipt_total_qty" required="">
-                                    </div>
-                                </div>
-                                <div class="form-group row" id="commodity_frm">
-                                    <div class="col-sm-12">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered table-striped table-hover table-condensed" id="procurement_tbl">
-                                                <thead>
-                                                    <th>Quantity</th>
-                                                    <th>Transaction Date</th>
-                                                    <th>Status</th>
-                                                    <th>Funding Agent</th>
-                                                    <th>Supplier</th>
-                                                    <th>Action</th>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            <input type="number" name="receipt_qty[]" required="" class="receipt_qty col-md-12">
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" name="transaction_date[]" required="" class="transaction_date col-md-12">
-                                                        </td>
-                                                        <td>
-                                                            <select name="status[]" required="" class="procurement_status"></select>
-                                                        </td>
-                                                        <td>
-                                                            <select name="funding_agent[]" required="" class="funding_agent"></select>
-                                                        </td>
-                                                        <td>
-                                                            <select name="supplier[]" required="" class="supplier col-md-12"></select>
-                                                        </td>
-                                                        <td>
-                                                            <a href="#" class="add"> <i class="fa fa-plus"></i></a>
-                                                            <a href="#" class="remove"> <i class="fa fa-minus"></i></a>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="receipts_usaid" class="col-sm-3 col-form-label">Justification/Comments</label>
-                                    <div class="col-sm-9">
-                                        <textarea class="form-control" name="comments" required="" rows="5"></textarea>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-12">
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-remove"></i> Close</button>
-                                        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save Order</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </p>
-                    </div>
-                    <div id="drug_transactions" class="tab-pane fade">
-                        <h3>Transactions</h3>
-                        <p>
-                            <div class="form-control" id="year-filter">
-                                <input type="hidden" name="filter_year" id="filter_year" value="" />
-                                Year: 
-                                <a href="#" class="filter-year" data-value="2015"> 2015 </a>|
-                                <a href="#" class="filter-year" data-value="2016"> 2016 </a>|
-                                <a href="#" class="filter-year" data-value="2017"> 2017 </a>|
-                                <a href="#" class="filter-year" data-value="2018"> 2018 </a>|
-                                <a href="#" class="filter-year" data-value="2019"> 2019 </a>|
-                                <a href="#" class="filter-year" data-value="2020"> 2020 </a>|
-                                <a href="#" class="filter-year" data-value="2021"> 2021 </a>
+            <div class="navbar navbar-default">
+                <div class="container">
+                    <div class="navbar-collapse collapse" id="navbar-filter">
+                        <div class="navbar-form" role="search">
+                            <div class="form-group">
+                                <select id="filter_item" size="2" name="filter_item[]" data-filter_type="" class="form-control"></select>
                             </div>
-                        </p>
-                        <div id="transaction_tbl"></div>
-                    </div>
-                    <div id="drug_orders" class="tab-pane fade">
-                        <h3>Orders</h3>
-                        <div id="orders_tbl"></div>
-                    </div>
-                    <div id="drug_logs" class="tab-pane fade">
-                        <h3>Logs</h3>
-                        <div id="logs_tbl"></div>
+                            <div class="form-group">
+                                <div class="filter form-control" id="year-filter">
+                                    <input type="hidden" name="filter_year" id="filter_year" value="" />
+                                    Year: 
+                                    <a href="#" class="filter-year" data-value="2015"> 2015 </a>|
+                                    <a href="#" class="filter-year" data-value="2016"> 2016 </a>|
+                                    <a href="#" class="filter-year" data-value="2017"> 2017 </a>|
+                                    <a href="#" class="filter-year" data-value="2018"> 2018 </a>
+                                </div>
+                                <div class="filter form-control" id="month-filter">
+                                    <input type="hidden" name="filter_month" id="filter_month" value="" />
+                                    Month: 
+                                    <a href="#" class="filter-month" data-value="Jan"> Jan </a>|
+                                    <a href="#" class="filter-month" data-value="Feb"> Feb </a>|
+                                    <a href="#" class="filter-month" data-value="Mar"> Mar </a>|
+                                    <a href="#" class="filter-month" data-value="Apr"> Apr </a>|
+                                    <a href="#" class="filter-month" data-value="May"> May </a>|
+                                    <a href="#" class="filter-month" data-value="Jun"> Jun </a>|
+                                    <a href="#" class="filter-month" data-value="Jul"> Jul </a>|
+                                    <a href="#" class="filter-month" data-value="Aug"> Aug </a>|
+                                    <a href="#" class="filter-month" data-value="Sep"> Sep </a>| 
+                                    <a href="#" class="filter-month" data-value="Oct"> Oct </a>|
+                                    <a href="#" class="filter-month" data-value="Nov"> Nov </a>|
+                                    <a href="#" class="filter-month" data-value="Dec"> Dec</a>
+                                </div>
+                            </div>
+                            <button id="btn_clear" class="btn btn-danger btn-md"><span class="glyphicon glyphicon-refresh"></span></button>
+                            <button id="btn_filter" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-filter"></span></button>
+                        </div>
                     </div>
                 </div>
-            </div><!--/modal-body-->
-            <div class="modal-footer">
-            </div><!--/modal-footer-->
-        </div><!--/modal-content-->
-    </div><!--/modal-dialog-->
-</div><!--/modal-->
+            </div>      
+        </div>
+    </div><!--/filter-row-->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <i class="fa fa-clock-o fa-fw"></i> AVERAGE CONSUMPTION/ISSUES TREND
+                            <div class="nav navbar-right">
+                                <button data-toggle="modal" data-target="#consumption_issues_chart_filter_modal" class="btn btn-warning btn-xs">
+                                    <span class="glyphicon glyphicon-filter"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div id="consumption_issues_chart"></div>
+                        </div>
+                        <!-- /.panel-body -->
+                        <div class="panel-footer">
+                            <span class="consumption_issues_chart_heading heading"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <i class="fa fa-clock-o fa-fw"></i> ACTUAL CONSUMPTION/ISSUES TREND
+                            <div class="nav navbar-right">
+                                <button data-toggle="modal" data-target="#actual_consumption_issues_chart_filter_modal" class="btn btn-warning btn-xs">
+                                    <span class="glyphicon glyphicon-filter"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div id="actual_consumption_issues_chart"></div>
+                        </div>
+                        <!-- /.panel-body -->
+                        <div class="panel-footer">
+                            <span class="actual_consumption_issues_chart_heading heading"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <i class="fa fa-clock-o fa-fw"></i> KEMSA STOCK ON HAND(SOH) TREND
+                            <div class="nav navbar-right">
+                                <button data-toggle="modal" data-target="#kemsa_soh_chart_filter_modal" class="btn btn-warning btn-xs">
+                                    <span class="glyphicon glyphicon-filter"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div id="kemsa_soh_chart"></div>
+                        </div>
+                        <!-- /.panel-body -->
+                        <div class="panel-footer">
+                            <span class="kemsa_soh_chart_heading heading"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <i class="fa fa-bar-chart-o fa-fw"></i> ADULT PATIENTS ON SELECTED DRUG
+                            <div class="nav navbar-right">
+                                <button data-toggle="modal" data-target="#adult_patients_on_drug_chart_filter_modal" class="btn btn-warning btn-xs">
+                                    <span class="glyphicon glyphicon-filter"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div id="adult_patients_on_drug_chart"></div>
+                        </div>
+                        <!-- /.panel-body -->
+                        <div class="panel-footer">
+                            <span class="adult_patients_on_drug_chart_heading heading"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <i class="fa fa-bar-chart-o fa-fw"></i> PAEDIATRIC PATIENTS ON SELECTED DRUG
+                            <div class="nav navbar-right">
+                                <button data-toggle="modal" data-target="#paed_patients_on_drug_chart_filter_modal" class="btn btn-warning btn-xs">
+                                    <span class="glyphicon glyphicon-filter"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div id="paed_patients_on_drug_chart"></div>
+                        </div>
+                        <!-- /.panel-body -->
+                        <div class="panel-footer">
+                            <span class="paed_patients_on_drug_chart_heading heading"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <i class="fa fa-bar-chart-o fa-fw"></i> STOCK STATUS
+                            <div class="nav navbar-right">
+                                <button data-toggle="modal" data-target="#stock_status_chart_filter_modal" class="btn btn-warning btn-xs">
+                                    <span class="glyphicon glyphicon-filter"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div id="stock_status_chart"></div>
+                        </div>
+                        <!-- /.panel-body -->
+                        <div class="panel-footer">
+                            <span class="stock_status_chart_heading heading"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <i class="fa fa-bar-chart-o fa-fw"></i> EXPECTED DELIVERY
+                            <div class="nav navbar-right">
+                                <button data-toggle="modal" data-target="#expected_delivery_chart_filter_modal" class="btn btn-warning btn-xs">
+                                    <span class="glyphicon glyphicon-filter"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div id="expected_delivery_chart"></div>
+                        </div>
+                        <!-- /.panel-body -->
+                        <div class="panel-footer">
+                            <span class="expected_delivery_chart_heading heading"></span>
+                        </div>
+                    </div>
+                </div>
+            </div><!--/row-->
+        </div><!--/col-lg-12-->
+    </div><!--/row-->
+
+    <!--modal(s)-->
+    <div class="modal fade" id="consumption_issues_chart_filter_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title"><strong>AVERAGE CONSUMPTION/ISSUES TREND FILTER</strong></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <select id="consumption_issues_chart_filter" data-filter_type="drug" size="2"></select>
+                        </div>
+                        <div class="col-sm-3">
+                            <button id="consumption_issues_chart_filter_clear_btn" class="btn btn-danger btn-xs clear_btn"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+                            <button id="consumption_issues_chart_filter_btn" class="btn btn-warning btn-xs filter_btn"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="actual_consumption_issues_chart_filter_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title"><strong>ACTUAL CONSUMPTION/ISSUES TREND FILTER</strong></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <select id="actual_consumption_issues_chart_filter" data-filter_type="drug" size="2"></select>
+                        </div>
+                        <div class="col-sm-3">
+                            <button id="actual_consumption_issues_chart_filter_clear_btn" class="btn btn-danger btn-xs clear_btn"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+                            <button id="actual_consumption_issues_chart_filter_btn" class="btn btn-warning btn-xs filter_btn"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="kemsa_soh_chart_filter_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title"><strong>KEMSA STOCK ON HAND(SOH) TREND FILTER</strong></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <select id="kemsa_soh_chart_filter" data-filter_type="drug" size="2"></select>
+                        </div>
+                        <div class="col-sm-3">
+                            <button id="kemsa_soh_chart_filter_clear_btn" class="btn btn-danger btn-xs clear_btn"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+                            <button id="kemsa_soh_chart_filter_btn" class="btn btn-warning btn-xs filter_btn"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="adult_patients_on_drug_chart_filter_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title"><strong>ADULT PATIENTS ON SELECTED DRUG FILTER</strong></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <select id="adult_patients_on_drug_chart_filter" data-filter_type="drug" size="2"></select>
+                        </div>
+                        <div class="col-sm-3">
+                            <button id="adult_patients_on_drug_chart_filter_clear_btn" class="btn btn-danger btn-xs clear_btn"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+                            <button id="adult_patients_on_drug_chart_filter_btn" class="btn btn-warning btn-xs filter_btn"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="paed_patients_on_drug_chart_filter_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title"><strong>PAED PATIENTS ON SELECTED DRUG FILTER</strong></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <select id="paed_patients_on_drug_chart_filter" data-filter_type="drug" size="2"></select>
+                        </div>
+                        <div class="col-sm-3">
+                            <button id="paed_patients_on_drug_chart_filter_clear_btn" class="btn btn-danger btn-xs clear_btn"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+                            <button id="paed_patients_on_drug_chart_filter_btn" class="btn btn-warning btn-xs filter_btn"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="stock_status_chart_filter_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title"><strong>STOCK STATUS FILTER</strong></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <select id="stock_status_chart_filter" data-filter_type="drug" size="2"></select>
+                        </div>
+                        <div class="col-sm-3">
+                            <button id="stock_status_chart_filter_clear_btn" class="btn btn-danger btn-xs clear_btn"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+                            <button id="stock_status_chart_filter_btn" class="btn btn-warning btn-xs filter_btn"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="expected_delivery_chart_filter_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title"><strong>EXPECTED DELIVERY FILTER</strong></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <select id="expected_delivery_chart_filter" data-filter_type="drug" size="2"></select>
+                        </div>
+                        <div class="col-sm-3">
+                            <button id="expected_delivery_chart_filter_clear_btn" class="btn btn-danger btn-xs clear_btn"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+                            <button id="expected_delivery_chart_filter_btn" class="btn btn-warning btn-xs filter_btn"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div><!--end page wrapper--->
 
 <script>
+    var chartURL = '../../Manager/Procurement/get_chart'
+    var drugListURL = '../../API/drug/list'
+    var LatestDateURL = '../../Manager/Procurement/get_default_period'
+    var charts = ['consumption_issues_chart', 'actual_consumption_issues_chart', 'kemsa_soh_chart', 'adult_patients_on_drug_chart', 'paed_patients_on_drug_chart', 'stock_status_chart', 'expected_delivery_chart']
+    var filters = {}
     $(document).ready(function () {
-        $('#procurement-listing').DataTable({
-            responsive: true,
-            order: [[0, "asc"]],
-            pagingType: "full_numbers",
-            ajax: "<?php echo base_url() . 'Manager/Procurement/get_commodities'; ?>"
-        });
-
-        //Show tracker sidemenu
+        //Show dashboard sidemenu
         $(".tracker").closest('ul').addClass("in");
         $(".tracker").addClass("active active-page");
-
-        //Load Commodity Data when Modal shown
-        $("#add_procurement_modal").on("show.bs.modal", function(e) {
-            var drugID = $(e.relatedTarget).data('drug_id');
-            //Load TrackerInfo
-            var trackerURL = "<?php echo base_url() . 'Manager/Procurement/get_tracker/'; ?>"+drugID
-            $.getJSON(trackerURL, function(json){
-                $.each(json.data, function(key, value){
-                    $("#"+ key).val(value)
-                });
-            });
-            //Load Drug Data
-            getTransactionsTable(drugID, '2018', "#transaction_tbl")
-            getDrugOrders(drugID, "#orders_tbl")
-            getDrugLogs(drugID, "#logs_tbl")
+        //Load Main filter
+        setMainFilter(drugListURL);
+        //Load Charts
+        $.each(charts, function(key, chartName) {
+            setChartFilter(chartName, drugListURL);
         });
-
-        //Clean up fields when modal is closed
-        $('#add_procurement_modal').on('hidden.bs.modal', function(e) {
-            $('select,input').val('');
-        });
-
-        //Get dropdown data
-        getDropdown('../../API/procurement_status', 'procurement_status')
-        getDropdown('../../API/funding_agent', 'funding_agent')
-        getDropdown('../../API/supplier', 'supplier')
-
-        //Add datepicker
-        $(".transaction_date").datepicker({
-            format: 'yyyy-mm-dd',
-            startDate: '1d'
-        });
-
-        //Validate receipt_qty
-        $(".receipt_qty").on('keyup', function(){
-            var curr_element = $(this)
-            var sum = 0;
-            var overall_qty = $("#actual_qty").val()
-            $('.receipt_qty').each(function(){
-                sum += parseInt(this.value);
-                if(sum > overall_qty){
-                    bootbox.alert({
-                        title: "Quantity Alert",
-                        message: "Quantity cannot be more than Actual Order Quantity!",
-                        callback: function(){
-                            curr_element.val('');
-                        }
-                    });
-                }
-            });
-        });
-
-        //Add row to table
-        $(".add").click(function(){
-            var last_row = $(this).closest('tr');
-
-            if (last_row.find(".receipt_qty").val() == "" || last_row.find(".transaction_date").val() == "" || last_row.find(".procurement_status").val() == "" || last_row.find(".funding_agent").val() == "" || last_row.find(".supplier").val() == "") {
-                bootbox.alert({
-                    title: "Required Alert",
-                    message: "All values must be entered/selected!"
-                });
-            }else{
-                $(".transaction_date").datepicker('destroy');
-                var cloned_row = last_row.clone(true);
-                cloned_row.find('select,input').val('');
-                cloned_row.insertAfter(last_row);
-                $(".transaction_date").datepicker({
-                    format: 'yyyy-mm-dd',
-                    startDate: '1d'
-                });
-            }
-        });
-
-        //Remove row from table
-        $(".remove").click(function() {
-            var rows = $("#procurement_tbl > tbody").find("tr").length;
-            if(rows > 1){
-                bootbox.confirm({
-                    title: "Remove Confirmation",
-                    message: "Are you sure?",
-                    buttons: {
-                        confirm: {
-                            label: 'Yes',
-                            className: 'btn-success'
-                        },
-                        cancel: {
-                            label: 'No',
-                            className: 'btn-danger'
-                        }
-                    },
-                    callback: function(res){
-                        if(res){
-                            $(this).closest('tr').remove();     
-                        }
-                    }
-                });                                            
-            }else{
-                bootbox.alert({
-                    title: "Remove Alert",
-                    message: "You cannot remove the last row!"
-                });
-            }
-        });
-
-        //Filter transaction year
-        $(".filter-year").click(function(){
-            var periodYear = $(this).data('value');
-            var drugID = $("#drug_id").val();
-            getTransactionsTable(drugID, periodYear, "#transaction_tbl")
-        });
-
+        //Filter click Event
+        $(".filter_btn").on("click", FilterBtnHandler);
+        //Clear click Event
+        $(".clear_btn").on("click", ClearBtnHandler);
+        //Year click event
+        $(".filter-year").on("click", function(){ $("#filter_year").val($(this).data("value")) });
+        //Month click event
+        $(".filter-month").on("click", function(){ $("#filter_month").val($(this).data("value")) });
+        //Main filter click event
+        $("#btn_filter").on("click", MainFilterHandler);
+        //Main clear click event 
+        $("#btn_clear").on("click", MainClearHandler);
     });
 
-    function getDropdown(dataURL, elementClass){
-        $.getJSON(dataURL, function(data){
-            $("."+elementClass+" option").remove();
-            $("."+elementClass).append($("<option value=''>Select One</option>"));          
+    function setMainFilter(filterURL){
+        $.getJSON(filterURL, function(data){
+            //Create multiselect box
+            CreateSelectBox("#filter_item", "250px", 10) 
+            //Add data to selectbox
+            $("#filter_item option").remove();
             $.each(data, function(i, v) {
-                $("."+elementClass).append($("<option value='" + v.id + "'>" + v.name.toUpperCase() + "</option>"));
+                $("#filter_item").append($("<option value='" + v.name + "'>" + v.name.toUpperCase() + "</option>"));
             });
+            $('#filter_item').multiselect('rebuild');
+            $("#filter_item").data('filter_type', 'drug');
+            //Set default period
+            setDefaultPeriod(LatestDateURL)
+        }); 
+    }
+
+    function setDefaultPeriod(URL){
+        $.getJSON(URL, function(data){
+            //Remove active-tab class
+            $(".filter-year").removeClass('active-tab')
+            $(".filter-month").removeClass('active-tab')
+            //Set hidden values
+            $("#filter_month").val(data.month)
+            $("#filter_year").val(data.year)
+            //Display labels
+            $(".filter-month[data-value='" + data.month + "']").addClass("active-tab"); 
+            $(".filter-year[data-value='" + data.year + "']").addClass("active-tab");
+            //Dropdown tab filters
+            $('#filter_item').val(data.drug).multiselect('refresh');
         });
     }
 
-    function getTransactionsTable(drugID, periodYear, tableID){
-        //Load Spinner
-        LoadSpinner(tableID)
-        //Load Table
-        var transactionURL = "<?php echo base_url() . 'Manager/Procurement/get_transaction_table/'; ?>"+drugID+'/'+periodYear
-        $.get(transactionURL, function(table){
-            $(tableID).html(table)
+    function setChartFilter(chartName, filterURL){
+        $.ajax({
+            url: filterURL,
+            datatype: 'JSON',
+            success: function(data){
+                filterID = '#'+chartName+'_filter'
+                //Create multiselect box
+                CreateSelectBox(filterID, '100%', 10)
+                //Add data to selectbox
+                $(filterID+ " option").remove();
+                $.each(data, function(i, v) {
+                    $(filterID).append($("<option value='" + v.name + "'>" + v.name.toUpperCase() + "</option>"));
+                });
+                $(filterID).multiselect('rebuild');
+                $(filterID).data('filter_type', 'drug');
+            },
+            complete: function(){
+                LoadChart('#'+chartName, chartURL, chartName, {})
+            }
         });
     }
 
-    function getDrugOrders(drugID, tableID){
-        //Load Spinner
-        LoadSpinner(tableID)
-        //Load Table
-        var ordersURL = "<?php echo base_url() . 'Manager/Procurement/get_order_table/'; ?>"+drugID
-        $.get(ordersURL, function(table){
-            $(tableID).html(table)
-        });
-    }
-
-    function getDrugLogs(drugID, tableID){
-        //Load Spinner
-        LoadSpinner(tableID)
-        //Load Table
-        var logsURL = "<?php echo base_url() . 'Manager/Procurement/get_log_table/'; ?>"+drugID
-        $.get(logsURL, function(table){
-            $(tableID).html(table)
+    function CreateSelectBox(elementID, width, limit){
+        $(elementID).val('').multiselect({
+            enableCaseInsensitiveFiltering: true,
+            enableFiltering: true,
+            disableIfEmpty: true,
+            maxHeight: 300,
+            buttonWidth: width,
+            nonSelectedText: 'None selected',
+            includeSelectAllOption: false,
+            selectAll: false, 
+            onChange: function(option, checked) {
+                //Get selected options.
+                var selectedOptions = $(elementID + ' option:selected');
+                if (selectedOptions.length >= limit) {
+                    //Disable all other checkboxes.
+                    var nonSelectedOptions = $(elementID + ' option').filter(function() {
+                        return !$(this).is(':selected');
+                    });
+                    nonSelectedOptions.each(function() {
+                        var input = $('input[value="' + $(this).val() + '"]');
+                        input.prop('disabled', true);
+                        input.parent('li').addClass('disabled');
+                    });
+                }
+                else {
+                    //Enable all checkboxes.
+                    $(elementID + ' option').each(function() {
+                        var input = $('input[value="' + $(this).val() + '"]');
+                        input.prop('disabled', false);
+                        input.parent('li').addClass('disabled');
+                    });
+                }
+            }
         });
     }
 
@@ -341,4 +484,118 @@
         $(divID).append(spinner.el)
     }
 
+    function LoadChart(divID, chartURL, chartName, selectedfilters){
+        //Load Spinner
+        LoadSpinner(divID)
+        //Load Chart*
+        $(divID).load(chartURL, {'name':chartName, 'selectedfilters': selectedfilters}, function(){
+            //Pre-select filters for charts
+            $.each($(divID + '_filters').data('filters'), function(key, data){
+                if($.inArray(key, ['data_year', 'data_month', 'data_date', 'county', 'subcounty']) == -1){
+                    $(divID + "_filter").val(data).multiselect('refresh');
+                    //Output filters
+                    var filtermsg = '<b><u>'+key.toUpperCase()+':</u></b><br/>'
+                    if($.isArray(data)){
+                        filtermsg += data.join('<br/>')
+                    }else{
+                        filtermsg += data
+                    }
+                    $("."+chartName+"_heading").html(filtermsg) 
+                }
+            });
+        });
+    }
+
+    function FilterBtnHandler(e){
+        var filterName = String($(e.target).attr("id")).replace('_btn', '')
+        var filterID = "#"+filterName
+        var filterType = $(filterID).data('filter_type')
+        var chartName = filterName.replace('_filter', '')
+        var chartID = "#"+chartName
+
+
+        if($(filterID).val() != null){
+            filters[filterType] = $(filterID).val()
+        }
+
+        LoadChart(chartID, chartURL, chartName, filters)
+
+        //Hide Modal
+        $(filterID+'_modal').modal('hide')
+    }
+
+    function ClearBtnHandler(e){
+        var filterName = String($(e.target).attr("id")).replace('_clear_btn', '')
+        var filterID = "#"+filterName
+        var filterType = $(filterID).data('filter_type')
+
+        //Clear filterType
+        filters[filterType] = {}
+
+        //Filter multiple multiselect
+        $(filterID).multiselect('deselectAll', false);
+        $(filterID).multiselect('updateButtonText');
+        $(filterID).multiselect('refresh');
+        
+        //Trigger filter event
+        $(filterID+'_btn').trigger('click');
+    }
+
+    function getMonth(monthStr){
+        monthval = new Date(monthStr+'-1-01').getMonth()+1
+        return ('0' + monthval).slice(-2)
+    }
+
+    function MainFilterHandler(e){
+        var filter_year = $("#filter_year").val()
+        var filter_month = $("#filter_month").val()
+        
+        //Add filters to request
+        filters['data_year'] = filter_year
+        filters['data_month'] = filter_month
+        filters['data_date'] = filter_year + '-' + getMonth(filter_month) + '-01'
+
+        if($("#filter_item").val() != null){
+            filters[$("#filter_item").data("filter_type")] = $("#filter_item").val()
+        }
+
+        if(filters['data_year'] != '' || filters['data_month'] != '')
+        {   
+            //Load charts
+            $.each(charts, function(key, chartName) {
+                chartID = '#'+chartName
+                LoadChart(chartID, chartURL, chartName, filters)
+                //Remove active-tab class
+                $(".filter-year").removeClass('active-tab')
+                $(".filter-month").removeClass('active-tab')
+                //Set colors for filters
+                $(".filter-year[data-value='" +  $("#filter_year").val() + "']").addClass("active-tab")
+                $(".filter-month[data-value='" + $("#filter_month").val() + "']").addClass("active-tab")
+            });
+        }else{
+            alert('Filter Year or Month cannot be Blank!')
+        }
+    }
+
+    function MainClearHandler(e){
+        //Clear filters
+        filters = {}
+        //Get default month and year
+        $.getJSON(LatestDateURL, function(data){
+            //Set hidden values
+            $("#filter_month").val(data.month)
+            $("#filter_year").val(data.year)
+            //Display labels
+            $(".filter-month[data-value='" + data.month + "']").addClass("active-tab"); 
+            $(".filter-year[data-value='" + data.year + "']").addClass("active-tab"); 
+            //Clear filter_item dropdown multi-select
+            $('#filter_item option:selected').each(function() {
+                $(this).prop('selected', false);
+            });
+            //Set default drug dropdeon
+            $('#filter_item').val(data.drug).multiselect('refresh');
+            //Trigger filter event
+            $("#btn_filter").trigger("click");
+        });
+    }
 </script>
