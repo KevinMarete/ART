@@ -1,8 +1,9 @@
 <?php
-
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
+require APPPATH . 'modules/API/models/Facility_model.php';
+// use \modules\API\models\Facility_model;
 
 /**
  *
@@ -24,7 +25,8 @@ class Facility extends \API\Libraries\REST_Controller  {
     public function index_get()
     {
         // facilitys from a data store e.g. database
-        $facilitys = $this->facility_model->read();
+        // $facilitys = $this->facility_model->read();
+        $facilitys = Facility_model::all();
 
         $id = $this->get('id');
 
