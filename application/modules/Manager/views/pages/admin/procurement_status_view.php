@@ -1,4 +1,4 @@
-<!-- Add or Edit Funding Agent modal -->
+<!-- Add or Edit Procurement Status modal -->
 <div class="modal fade" id="modal_form" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -11,9 +11,9 @@
                     <input type="hidden" value="" name="id"/> 
                     <div class="form-body">
                         <div class="form-group">
-                            <label class="control-label col-md-3">Funding Agent</label>
+                            <label class="control-label col-md-3">Procurement Status</label>
                             <div class="col-md-9">
-                                <input name="name" placeholder="Funding Agent" class="form-control" type="text">
+                                <input name="name" placeholder="Procurement Status" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
