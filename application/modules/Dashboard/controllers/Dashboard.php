@@ -13,8 +13,8 @@ class Dashboard extends MX_Controller {
 	{	
 		$default_period = array(
 			'year' => $this->config->item('data_year'), 
-			'month' => $this->config->item('data_month'), 
-			'drug' => $this->config->item('drug'));
+			'month' => $this->config->item('data_month')
+		);
 		echo json_encode($default_period);
     }
 
@@ -118,21 +118,7 @@ class Dashboard extends MX_Controller {
 			$main_data = $this->adt_reports_model->get_paediatric_patients_by_weight_age($filters);
 		} else if ($chartname == 'adt_reports_commodity_consumption_chart') {
             $main_data = $this->adt_reports_model->get_adt_reports_commodity_consumption($filters);
-        } else if ($chartname == 'consumption_issues_chart') {
-            $main_data = $this->procurement_model->get_procurement_consumption_issues($filters);
-        } else if ($chartname == 'actual_consumption_issues_chart') {
-            $main_data = $this->procurement_model->get_procurement_actual_consumption_issues($filters);
-        } else if ($chartname == 'kemsa_soh_chart') {
-            $main_data = $this->procurement_model->get_procurement_kemsa_soh($filters);
-        } else if ($chartname == 'adult_patients_on_drug_chart') {
-            $main_data = $this->procurement_model->get_procurement_adult_patients_on_drug($filters);
-        } else if ($chartname == 'paed_patients_on_drug_chart') {
-            $main_data = $this->procurement_model->get_procurement_paed_patients_on_drug($filters);
-        } else if($chartname == 'stock_status_chart'){
-			$main_data = $this->procurement_model->get_procurement_stock_status($filters);
-		} else if ($chartname == 'expected_delivery_chart') {
-            $main_data = $this->procurement_model->get_procurement_expected_delivery($filters);
-        }
+        } 
 		return $main_data;
 	}
 

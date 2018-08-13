@@ -195,4 +195,5 @@ class Manager extends MX_Controller {
 		}
 		return $main_data;
 	}
+
 }
