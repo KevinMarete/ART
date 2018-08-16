@@ -63,11 +63,49 @@ class Procurement_model extends CI_Model {
         return $response;
     }
 
+    public function get_decision_data($drug_id){
+        $response = array('data'=> array());
+        try {
+            $sql = "SELECT 
+                        d.decision_date,
+                        d.discussion,
+                        d.recommendation,
+                        t.created,
+                        CONCAT_WS(' ', u.firstname, u.lastname) user
+                    FROM tbl_decision d 
+                    INNER JOIN (
+                        SELECT *
+                        FROM tbl_decision_log l
+                        WHERE (l.created, l.decision_id) IN
+                        (SELECT MAX(created), decision_id
+                        FROM tbl_decision_log 
+                        GROUP BY decision_id)
+                    ) t ON t.decision_id = d.id
+                    INNER JOIN tbl_user u ON u.id = t.user_id
+                    WHERE d.drug_id = ? 
+                    GROUP BY d.decision_date
+                    ORDER BY d.decision_date DESC";
+            $table_data = $this->db->query($sql, array($drug_id))->result_array();
+            if (!empty($table_data)) {
+                $response['data'] = $table_data;
+                $response['message'] = 'Table data was found!';
+                $response['status'] = TRUE;
+            } else {
+                $response['message'] = 'Table is empty!';
+                $response['status'] = FALSE;
+            }
+        } catch (Execption $e) {
+            $response['status'] = FALSE;
+            $response['message'] = $e->getMessage();
+        }
+        return $response;   
+    }
+
     public function get_transaction_data($drug_id, $period_year){
         $response = array('data'=> array());
         try {
             $sql = "SELECT 
-                        CONCAT_WS('<br/>', data_month, data_year) period,
+                        CONCAT_WS(' ', data_month, data_year) period,
                         FORMAT(open_kemsa, 0) open_kemsa,
                         FORMAT(receipts_kemsa, 0) receipts_kemsa,
                         FORMAT(issues, 0) issues_kemsa,

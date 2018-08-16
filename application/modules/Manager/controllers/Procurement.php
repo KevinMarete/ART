@@ -37,6 +37,48 @@ class Procurement extends MX_Controller {
 		redirect('manager/procurement/tracker');
 	}
 
+	public function get_decisions($drug_id){
+		$html_timeline = '';
+		$response = $this->Procurement_model->get_decision_data($drug_id);
+		foreach ($response['data'] as $values) {
+			$html_timeline .= '<div class="row timeline-movement">
+						            <div class="timeline-badge">
+						                <span class="timeline-balloon-date-day">'.date("d", strtotime($values["decision_date"])).'</span>
+						                <span class="timeline-balloon-date-month">'.date("M/y", strtotime($values["decision_date"])).'</span>
+						            </div>
+						            <div class="col-sm-6  timeline-item">
+						                <div class="row">
+						                    <div class="col-sm-11">
+						                        <div class="timeline-panel credits">
+						                            <ul class="timeline-panel-ul">
+						                                <li><span class="importo">Discussions</span></li>
+						                                <li><span class="causale">'.$values["discussion"].'</span> </li>
+						                                <li><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>Last updated by '.$values["user"].' on '.date('d/m/Y h:i:s a', strtotime($values["created"])).'</small></p> </li>
+						                            </ul>
+						                        </div>
+
+						                    </div>
+						                </div>
+						            </div>
+						            <div class="col-sm-6  timeline-item">
+						                <div class="row">
+						                    <div class="col-sm-offset-1 col-sm-11">
+						                        <div class="timeline-panel debits">
+						                            <ul class="timeline-panel-ul">
+						                                <li><span class="importo">Recommendations</span></li>
+						                                <li><span class="causale">'.$values["recommendation"].'</span> </li>
+						                                <li><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> Last updated by '.$values["user"].' on '.date('d/m/Y h:i:s a', strtotime($values["created"])).'</small></p> </li>
+						                            </ul>
+						                        </div>
+
+						                    </div>
+						                </div>
+						            </div>
+						        </div>';
+		}
+		echo $html_timeline;
+	}
+
 	public function get_transaction_table($drug_id, $period_year){
 		$response = $this->Procurement_model->get_transaction_data($drug_id, $period_year);
 		$open_kemsa = '';
@@ -59,11 +101,11 @@ class Procurement extends MX_Controller {
 				}else if($key == 'receipts_kemsa'){
 					$receipts_kemsa .= '<td>'.$value.'</td>';
 				}else if($key == 'issues_kemsa'){
-					$issues_kemsa .= '<td>'.$value.'</td>';
+					$issues_kemsa .= '<td><input type="text" class="col-lg-12" value="'.str_ireplace(',', '', $value).'"/></td>';
 				}else if($key == 'close_kemsa'){
 					$close_kemsa .= '<td>'.$value.'</td>';
 				}else if($key == 'monthly_consumption'){
-					$monthly_consumption .= '<td>'.$value.'</td>';
+					$monthly_consumption .= '<td><input type="text" class="col-lg-12" value="'.str_ireplace(',', '', $value).'"/></td>';
 				}else if($key == 'avg_issues'){
 					$avg_issues .= '<td>'.$value.'</td>';
 				}else if($key == 'avg_consumption'){
@@ -83,14 +125,14 @@ class Procurement extends MX_Controller {
 			}
 		}
 		$thead .= '</tr></thead><tbody>';
-		$tbody .= '<tr><td>Open Balance</td>'.$open_kemsa.'</tr>';
-		$tbody .= '<tr><td>Receipts from Suppliers</td>'.$receipts_kemsa.'</tr>';
-		$tbody .= '<tr><td>Issues to Facility</td>'.$issues_kemsa.'</tr>';
-		$tbody .= '<tr><td>Closing Balance</td>'.$close_kemsa.'</tr>';
-		$tbody .= '<tr><td>Monthly Consumption</td>'.$monthly_consumption.'</tr>';
-		$tbody .= '<tr><td>Average Issues</td>'.$avg_issues.'</tr>';
-		$tbody .= '<tr><td>Average Consumption</td>'.$avg_consumption.'</tr>';
-		$tbody .= '<tr><td>Months of Stock</td>'.$mos.'</tr>';
+		$tbody .= '<tr><td nowrap>Open Balance</td>'.$open_kemsa.'</tr>';
+		$tbody .= '<tr><td nowrap>Receipts from Suppliers</td>'.$receipts_kemsa.'</tr>';
+		$tbody .= '<tr><td nowrap>Issues to Facility</td>'.$issues_kemsa.'</tr>';
+		$tbody .= '<tr><td nowrap>Closing Balance</td>'.$close_kemsa.'</tr>';
+		$tbody .= '<tr><td nowrap>Monthly Consumption</td>'.$monthly_consumption.'</tr>';
+		$tbody .= '<tr><td nowrap>Average Issues</td>'.$avg_issues.'</tr>';
+		$tbody .= '<tr><td nowrap>Average Consumption</td>'.$avg_consumption.'</tr>';
+		$tbody .= '<tr><td nowrap>Months of Stock</td>'.$mos.'</tr>';
 		$html_table .= $thead;
 		$html_table .= $tbody;
 		$html_table .= '</tbody></table>';
@@ -99,7 +141,7 @@ class Procurement extends MX_Controller {
 
 	public function get_order_table($drug_id){
 		$response = $this->Procurement_model->get_order_data($drug_id);
-		$html_table = '<table class="table table-condensed table-striped table-bordered">';
+		$html_table = '<table class="table table-condensed table-striped table-bordered order_tbl">';
 		$thead = '<thead><tr>';
 		$tbody = '<tbody>';
 		foreach ($response['data'] as $count => $values) {
@@ -121,7 +163,7 @@ class Procurement extends MX_Controller {
 
 	public function get_log_table($drug_id){
 		$response = $this->Procurement_model->get_log_data($drug_id);
-		$html_table = '<table class="table table-condensed table-striped table-bordered">';
+		$html_table = '<table class="table table-condensed table-striped table-bordered log_tbl">';
 		$thead = '<thead><tr>';
 		$tbody = '<tbody>';
 		foreach ($response['data'] as $count => $values) {
@@ -213,6 +255,22 @@ class Procurement extends MX_Controller {
             $main_data = $this->Procurement_model->get_procurement_expected_delivery($filters);
         }
 		return $main_data;
+	}
+
+	public function edit_order(){
+		$input = $this->input->post();
+		
+		//Evaluate type of action
+		if ($input['action'] == 'edit') {
+			unset($input['action']);
+			//Add code for editing order
+			$input['action'] = 'edit';
+		} else if ($input['action'] == 'delete') {
+			unset($input['action']);
+			//Add code for deleting order
+			$input['action'] = 'delete';
+		} 
+		echo json_encode($input);
 	}
 
 }

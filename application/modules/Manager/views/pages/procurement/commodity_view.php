@@ -1,3 +1,4 @@
+<link href="<?php echo base_url() . 'public/manager/css/procurement.css'; ?>" rel="stylesheet"> 
 <div id="page-wrapper">
     <!--row-->
     <div class="row">
@@ -36,7 +37,7 @@
 </div><!--end page wrapper--->
 <!--modal(s)-->
 <div class="modal fade" id="add_procurement_modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -45,14 +46,36 @@
             </div><!--/modal-header-->
             <div class="modal-body">
                 <ul class="nav nav-tabs pull-right">
-                    <li class="active"><a data-toggle="tab" href="#drug_procurement">Procurement</a></li>
+                    <li class="active"><a data-toggle="tab" href="#drug_decision">Decision</a></li>
+                    <li><a data-toggle="tab" href="#drug_procurement">Procurement</a></li>
                     <li><a data-toggle="tab" href="#drug_transactions">Transactions</a></li>
                     <li><a data-toggle="tab" href="#drug_orders">Orders</a></li>
                     <li><a data-toggle="tab" href="#drug_logs">Logs</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div id="drug_procurement" class="tab-pane fade in active">
-                        <h3>Procurement Order</h3>
+                    <div id="drug_decision" class="tab-pane fade in active">
+                        <h3>Decisions</h3>
+                        <div class="container-fluid">
+                            <div id="timeline">
+                                <div class="row timeline-movement timeline-movement-top">
+                                    <div class="timeline-badge timeline-future-movement">
+                                        <a href="#">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </a>
+                                    </div>
+                                    <div class="timeline-badge timeline-filter-movement">
+                                        <a href="#">
+                                            <span class="glyphicon glyphicon-time"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div id="decision_tbl"></div>
+                            </div>
+                        </div>
+                    </div>
+                 
+                    <div id="drug_procurement" class="tab-pane fade">
+                        <h3>Procurement Form</h3>
                         <p>
                             <form action="<?php echo base_url().'manager/save_procurement';?>" method="POST" class="form-horizontal" role="form">
                                 <div class="form-group row">
@@ -82,13 +105,14 @@
                                         <input type="number" class="form-control" id="actual_qty" name="receipt_total_qty" required="">
                                     </div>
                                 </div>
+                                <div id="procurement_loader"></div>
                                 <div class="form-group row" id="commodity_frm">
                                     <div class="col-sm-12">
                                         <div class="table-responsive">
                                             <table class="table table-bordered table-striped table-hover table-condensed" id="procurement_tbl">
                                                 <thead>
                                                     <th>Quantity</th>
-                                                    <th>Transaction Date</th>
+                                                    <th>Procurement Period</th>
                                                     <th>Status</th>
                                                     <th>Funding Agent</th>
                                                     <th>Supplier</th>
@@ -106,10 +130,10 @@
                                                             <select name="status[]" required="" class="procurement_status"></select>
                                                         </td>
                                                         <td>
-                                                            <select name="funding_agent[]" required="" class="funding_agent"></select>
+                                                            <select name="funding_agent[]" required="" class="funding_agent contracted"></select>
                                                         </td>
                                                         <td>
-                                                            <select name="supplier[]" required="" class="supplier col-md-12"></select>
+                                                            <select name="supplier[]" required="" class="supplier contracted col-md-12"></select>
                                                         </td>
                                                         <td>
                                                             <a href="#" class="add"> <i class="fa fa-plus"></i></a>
@@ -151,11 +175,11 @@
                                 <a href="#" class="filter-year" data-value="2021"> 2021 </a>
                             </div>
                         </p>
-                        <div id="transaction_tbl"></div>
+                        <div id="transaction_tbl" class="table-responsive"></div>
                     </div>
                     <div id="drug_orders" class="tab-pane fade">
                         <h3>Orders</h3>
-                        <div id="orders_tbl"></div>
+                        <div id="orders_tbl" class="table-responsive"></div>
                     </div>
                     <div id="drug_logs" class="tab-pane fade">
                         <h3>Logs</h3>
@@ -184,6 +208,9 @@
 
         //Load Commodity Data when Modal shown
         $("#add_procurement_modal").on("show.bs.modal", function(e) {
+            //Load Spinner
+            LoadSpinner("#procurement_loader")
+
             var drugID = $(e.relatedTarget).data('drug_id');
             //Load TrackerInfo
             var trackerURL = "<?php echo base_url() . 'Manager/Procurement/get_tracker/'; ?>"+drugID
@@ -191,8 +218,10 @@
                 $.each(json.data, function(key, value){
                     $("#"+ key).val(value)
                 });
+                $("#procurement_loader").empty() //Kill Loader
             });
             //Load Drug Data
+            getDecisions(drugID, "#decision_tbl")
             getTransactionsTable(drugID, '2018', "#transaction_tbl")
             getDrugOrders(drugID, "#orders_tbl")
             getDrugLogs(drugID, "#logs_tbl")
@@ -222,12 +251,10 @@
             $('.receipt_qty').each(function(){
                 sum += parseInt(this.value);
                 if(sum > overall_qty){
-                    bootbox.alert({
-                        title: "Quantity Alert",
-                        message: "Quantity cannot be more than Actual Order Quantity!",
-                        callback: function(){
-                            curr_element.val('');
-                        }
+                    swal({
+                        title: "Excess Quantity!",
+                        text: "Quantity cannot be more than Actual Order Quantity!",
+                        icon: "error",
                     });
                 }
             });
@@ -237,10 +264,11 @@
         $(".add").click(function(){
             var last_row = $(this).closest('tr');
 
-            if (last_row.find(".receipt_qty").val() == "" || last_row.find(".transaction_date").val() == "" || last_row.find(".procurement_status").val() == "" || last_row.find(".funding_agent").val() == "" || last_row.find(".supplier").val() == "") {
-                bootbox.alert({
-                    title: "Required Alert",
-                    message: "All values must be entered/selected!"
+            if (last_row.find(".receipt_qty").val() == "" || last_row.find(".transaction_date").val() == "" || last_row.find(".procurement_status").val() == "") {
+                swal({
+                    title: "Required!",
+                    text: "All values must be entered/selected!",
+                    icon: "error",
                 });
             }else{
                 $(".transaction_date").datepicker('destroy');
@@ -251,6 +279,7 @@
                     format: 'yyyy-mm-dd',
                     startDate: '1d'
                 });
+                cloned_row.find('.contracted').hide();
             }
         });
 
@@ -258,29 +287,22 @@
         $(".remove").click(function() {
             var rows = $("#procurement_tbl > tbody").find("tr").length;
             if(rows > 1){
-                bootbox.confirm({
-                    title: "Remove Confirmation",
-                    message: "Are you sure?",
-                    buttons: {
-                        confirm: {
-                            label: 'Yes',
-                            className: 'btn-success'
-                        },
-                        cancel: {
-                            label: 'No',
-                            className: 'btn-danger'
-                        }
-                    },
-                    callback: function(res){
-                        if(res){
-                            $(this).closest('tr').remove();     
-                        }
-                    }
-                });                                            
-            }else{
-                bootbox.alert({
+                swal({
                     title: "Remove Alert",
-                    message: "You cannot remove the last row!"
+                    text: "Are you sure, You want to delete this row?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((willDelete) => {
+                    if (willDelete) {
+                        $(this).closest('tr').remove(); 
+                    }
+                });                                           
+            }else{
+                swal({
+                    title: "Invalid!",
+                    text: "You cannot remove the last row!",
+                    icon: "error",
                 });
             }
         });
@@ -292,6 +314,19 @@
             getTransactionsTable(drugID, periodYear, "#transaction_tbl")
         });
 
+        //Hide contracted fields
+        $(".contracted").hide()
+
+        //Procurement status change event
+        $(".procurement_status").on('change', function(){
+            var selected_text = $(this).closest('tr').find(".procurement_status option:selected").text().toLowerCase();
+            if(selected_text == 'contracted'){
+                $(this).closest('tr').find('.contracted').show();
+            }else{
+                $(this).closest('tr').find('.contracted').hide();
+            }
+        });
+
     });
 
     function getDropdown(dataURL, elementClass){
@@ -301,6 +336,16 @@
             $.each(data, function(i, v) {
                 $("."+elementClass).append($("<option value='" + v.id + "'>" + v.name.toUpperCase() + "</option>"));
             });
+        });
+    }
+
+    function getDecisions(drugID, divID){
+        //Load Spinner
+        LoadSpinner(divID)
+        //Load Table
+        var decisionsURL = "<?php echo base_url() . 'Manager/Procurement/get_decisions/'; ?>"+drugID
+        $.get(decisionsURL, function(timeline){
+            $(divID).html(timeline)
         });
     }
 
@@ -319,8 +364,31 @@
         LoadSpinner(tableID)
         //Load Table
         var ordersURL = "<?php echo base_url() . 'Manager/Procurement/get_order_table/'; ?>"+drugID
+        var editOrderURL = "<?php echo base_url() . 'Manager/Procurement/edit_order/'; ?>"
         $.get(ordersURL, function(table){
             $(tableID).html(table)
+            $(".order_tbl").Tabledit({
+                url: editOrderURL,
+                columns: {
+                    identifier: [0, 'id'],
+                    editable: [[1, 'quantity'], [2, 'status'], [3, 'funding_agent'], [4, 'supplier']]
+                },
+                buttons: {
+                  edit: {
+                      class: 'btn btn-sm btn-default',
+                      html: '<span class="fa fa-pencil-square-o"></span>',
+                      action: 'edit'
+                  },
+                  delete: {
+                      class: 'btn btn-sm btn-default',
+                      html: '<span class="fa fa-trash-o"></span>',
+                      action: 'delete'
+                  }
+                },
+                onSuccess: function(data, textStatus, jqXHR) {
+                   getDrugOrders(drugID, tableID)
+                }
+              });
         });
     }
 
@@ -331,6 +399,29 @@
         var logsURL = "<?php echo base_url() . 'Manager/Procurement/get_log_table/'; ?>"+drugID
         $.get(logsURL, function(table){
             $(tableID).html(table)
+            $('.log_tbl').DataTable({
+                pagingType: "full_numbers",
+                order: [[1, "desc"]],
+                initComplete: function () {
+                    this.api().columns([1, 2, 3]).every(function () {
+                        var column = this;
+                        var select = $('<br/><select><option value="">Show all</option></select>')
+                                .appendTo($(column.header()))
+                                .on('change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                            $(this).val()
+                                            );
+                                    column
+                                            .search(val ? '^' + val + '$' : '', true, false)
+                                            .draw();
+                                });
+                        column.data().unique().sort().each(function (d, j) {
+                            var val = $('<div/>').html(d).text();
+                            select.append('<option value="' + val + '">' + val + '</option>');
+                        });
+                    });
+                }
+            });
         });
     }
 
