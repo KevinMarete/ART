@@ -45,6 +45,7 @@ class Manager_model extends CI_Model {
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				$this->db->where_in($category, $filter);
+				$this->db->where_in('category', array('central', 'standalone'));
 			}
 		}
 		$this->db->group_by('name');
@@ -59,6 +60,7 @@ class Manager_model extends CI_Model {
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				$this->db->where_in($category, $filter);
+				$this->db->where_in('category', array('central', 'standalone'));
 			}
 		}
 		$this->db->group_by('drilldown');
@@ -91,6 +93,7 @@ class Manager_model extends CI_Model {
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				$this->db->where_in($category, $filter);
+				$this->db->where_in('category', array('central', 'standalone'));
 			}
 		}
 		$this->db->group_by('name');
