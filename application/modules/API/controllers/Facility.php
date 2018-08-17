@@ -3,7 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
 require APPPATH . 'modules/API/models/Facility_model.php';
-// use \modules\API\models\Facility_model;
 
 /**
  *
@@ -61,7 +60,7 @@ class Facility extends \API\Libraries\REST_Controller  {
             // Get the facility from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $facility = Facility_model::find($id);
+            $facility = Facility_model::with('partner')->find($id);
 
 
             if (!empty($facility))
@@ -101,7 +100,7 @@ class Facility extends \API\Libraries\REST_Controller  {
 
     public function index_put()
     {   
-        $id = (int) $this->get('id');
+        $id = (int) $this->query('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -119,7 +118,7 @@ class Facility extends \API\Libraries\REST_Controller  {
 
         if($facility->save())
         {
-            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            $this->set_response($facility, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
@@ -132,7 +131,7 @@ class Facility extends \API\Libraries\REST_Controller  {
 
     public function index_delete()
     {
-        $id = (int) $this->get('id');
+        $id = (int) $this->query('id');
 
         // Validate the id.
         if ($id <= 0)
