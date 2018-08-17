@@ -194,6 +194,9 @@
 </div><!--/modal-->
 
 <script>
+    var statusURL = '../../API/procurement_status'
+    var fundingURL = '../../API/funding_agent'
+    var supplierURL = '../../API/supplier'
     $(document).ready(function () {
         $('#procurement-listing').DataTable({
             responsive: true,
@@ -233,9 +236,9 @@
         });
 
         //Get dropdown data
-        getDropdown('../../API/procurement_status', 'procurement_status')
-        getDropdown('../../API/funding_agent', 'funding_agent')
-        getDropdown('../../API/supplier', 'supplier')
+        getDropdown(statusURL, 'procurement_status')
+        getDropdown(fundingURL, 'funding_agent')
+        getDropdown(supplierURL, 'supplier')
 
         //Add datepicker
         $(".transaction_date").datepicker({
@@ -365,30 +368,34 @@
         //Load Table
         var ordersURL = "<?php echo base_url() . 'Manager/Procurement/get_order_table/'; ?>"+drugID
         var editOrderURL = "<?php echo base_url() . 'Manager/Procurement/edit_order/'; ?>"
+        var itemURL = "<?php echo base_url() . 'Manager/Procurement/get_order_items/'; ?>"
         $.get(ordersURL, function(table){
-            $(tableID).html(table)
-            $(".order_tbl").Tabledit({
-                url: editOrderURL,
-                columns: {
-                    identifier: [0, 'id'],
-                    editable: [[1, 'quantity'], [2, 'status'], [3, 'funding_agent'], [4, 'supplier']]
-                },
-                buttons: {
-                  edit: {
-                      class: 'btn btn-sm btn-default',
-                      html: '<span class="fa fa-pencil-square-o"></span>',
-                      action: 'edit'
-                  },
-                  delete: {
-                      class: 'btn btn-sm btn-default',
-                      html: '<span class="fa fa-trash-o"></span>',
-                      action: 'delete'
-                  }
-                },
-                onSuccess: function(data, textStatus, jqXHR) {
-                   getDrugOrders(drugID, tableID)
-                }
-              });
+            $.getJSON(itemURL, function(jsondata){
+                $(tableID).html(table)
+                $(".order_tbl").Tabledit({
+                    url: editOrderURL,
+                    hideIdentifier: true,
+                    columns: {
+                        identifier: [0, 'id'],
+                        editable: [[1, 'transaction_year', '{"2018": "2018", "2019": "2019", "2020": "2020", "2021": "2021"}'], [2, 'transaction_month', '{"Jan": "Jan", "Feb": "Feb", "Mar": "Mar", "Apr": "Apr", "May": "May", "Jun": "Jun", "Jul": "Jul", "Aug": "Aug", "Sep": "Sep", "Oct": "Oct", "Nov": "Nov", "Dec": "Dec"}'], [3, 'quantity'], [4, 'procurement_status_id', JSON.stringify(jsondata.status)], [5, 'funding_agent_id', JSON.stringify(jsondata.funding)], [6, 'supplier_id', JSON.stringify(jsondata.supplier)]]
+                    },
+                    buttons: {
+                      edit: {
+                          class: 'btn btn-sm btn-default',
+                          html: '<span class="fa fa-pencil-square-o"></span>',
+                          action: 'edit'
+                      },
+                      delete: {
+                          class: 'btn btn-sm btn-default',
+                          html: '<span class="fa fa-trash-o"></span>',
+                          action: 'delete'
+                      }
+                    },
+                    onSuccess: function(data, textStatus, jqXHR) {
+                       getDrugOrders(drugID, tableID)
+                    }
+                });
+            });     
         });
     }
 

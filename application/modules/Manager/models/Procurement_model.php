@@ -139,18 +139,20 @@ class Procurement_model extends CI_Model {
         $response = array('data'=> array());
         try {
             $sql = "SELECT 
-                        CONCAT_WS('-', transaction_month, transaction_year) period,
-                        FORMAT(quantity, 0) quantity,
+                        pi.id,
+                        transaction_year procurement_year, 
+                        transaction_month procurement_month,
+                        quantity quantity,
                         ps.name status,
                         fa.name funding_agent,
-                        IF(s.name IS NULL, 'N/A', s.name) supplier
+                        IF(s.name IS NULL, '', s.name) supplier
                     FROM tbl_procurement_item pi 
                     INNER JOIN tbl_procurement p ON p.id = pi.procurement_id
-                    INNER JOIN tbl_procurement_status ps ON ps.id = pi.procurement_status_id
-                    INNER JOIN tbl_funding_agent fa ON fa.id = pi.funding_agent_id
+                    LEFT JOIN tbl_procurement_status ps ON ps.id = pi.procurement_status_id
+                    LEFT JOIN tbl_funding_agent fa ON fa.id = pi.funding_agent_id
                     LEFT JOIN tbl_supplier s ON s.id = pi.supplier_id
                     WHERE p.drug_id = ? 
-                    GROUP BY period, status, funding_agent, supplier
+                    GROUP BY pi.id
                     ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ) DESC";
             $table_data = $this->db->query($sql, array($drug_id))->result_array();
             if (!empty($table_data)) {
@@ -553,5 +555,61 @@ class Procurement_model extends CI_Model {
         return array('main' => $scaleup_data, 'columns' => $columns);
     }
 
+    public function edit_procurement_item($input_data){
+        $procurement_item_arr = $this->db->get_where('tbl_procurement_item', array('id' => $input_data['id']))->row_array();
+        $procurement_id = $procurement_item_arr['procurement_id'];
+        $procurement_arr = $this->db->get_where('tbl_procurement', array('id' => $procurement_id))->row_array();
+
+        $update_data = array(
+            'procurement_status_id' => ($input_data['procurement_status_id'] == 0) ? NULL : $input_data['procurement_status_id'], 
+            'supplier_id' => ($input_data['supplier_id'] == 0) ? NULL : $input_data['supplier_id'], 
+            'funding_agent_id' => ($input_data['funding_agent_id'] == 0) ? NULL : $input_data['funding_agent_id'], 
+            'quantity' => $input_data['quantity']
+        );
+
+        if($procurement_arr['transaction_year'] == $input_data['transaction_year'] && $procurement_arr['transaction_month'] == $input_data['transaction_month']){
+            //Update procurement_item based on same id
+            $this->db->update('tbl_procurement_item', $update_data, array('id' => $input_data['id']));
+        }else{
+            //Get new procurement_id 
+            $new_procurement_arr = $this->db->get_where('tbl_procurement', array('transaction_year' => $input_data['transaction_year'], 'transaction_month' => $input_data['transaction_month'], 'drug_id' => $procurement_arr['drug_id']))->row_array();
+            if(!empty($new_procurement_arr)){
+                $new_procurement_id = $new_procurement_arr['id'];
+                //Update procurement_item based on new id
+                $new_procurement_item_arr = $this->db->get_where('tbl_procurement_item', array('procurement_id' => $new_procurement_id))->row_array();
+                if(empty($new_procurement_item_arr)){
+                    $update_data['procurement_id'] = $new_procurement_id;
+                    $this->db->insert('tbl_procurement_item', $update_data); 
+                }else{
+                    $this->db->update('tbl_procurement_item', $update_data, array('id' => $new_procurement_item_arr['id']));  
+                }
+            }
+        }
+
+        $count = $this->db->affected_rows();
+        if($count > 0)
+        {
+            $data['status'] = TRUE;
+        }
+        else
+        {
+            $data['status'] = FALSE;
+        }
+        return $data;
+    }
+
+    public function delete_procurement_item($id){
+        $this->db->delete('tbl_procurement_item', array('id' => $id)); 
+        $count = $this->db->affected_rows();
+        if($count > 0)
+        {
+            $data['status'] = TRUE;
+        }
+        else
+        {
+            $data['status'] = FALSE;
+        }
+        return $data;
+    }
 
 }

@@ -259,18 +259,33 @@ class Procurement extends MX_Controller {
 
 	public function edit_order(){
 		$input = $this->input->post();
-		
 		//Evaluate type of action
 		if ($input['action'] == 'edit') {
 			unset($input['action']);
-			//Add code for editing order
+			$this->Procurement_model->edit_procurement_item($input);
 			$input['action'] = 'edit';
 		} else if ($input['action'] == 'delete') {
 			unset($input['action']);
-			//Add code for deleting order
+			$this->Procurement_model->delete_procurement_item($input);
 			$input['action'] = 'delete';
 		} 
 		echo json_encode($input);
+	}
+
+	public function get_order_items(){
+		$response = array();
+		$item_urls = array(
+			'status' => base_url().'API/procurement_status',
+			'funding' =>  base_url().'API/funding_agent',
+			'supplier' =>  base_url().'API/supplier'
+		);
+		foreach ($item_urls as $key => $item_url) {
+			$response[$key][0] = 'Select one';
+			foreach (json_decode(file_get_contents($item_url), TRUE) as $values) {
+			 	$response[$key][$values['id']] = $values['name'];
+			} 
+		}
+		echo json_encode($response);
 	}
 
 }
