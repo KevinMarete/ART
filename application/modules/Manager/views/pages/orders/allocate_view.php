@@ -1,9 +1,10 @@
 <style>
 
 
+
 </style>
 <div id="container" class="container-fluid">
-
+    <?php print_r($this->session->userdata()); ?>
     <div class="col-lg-12">
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
@@ -73,9 +74,9 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="table-responsive">
+                            
                                 <table class="table table-striped table-bordered table-condensed" id="AllocationTable">
-                                    <thead style="">
+                                    <thead id="THEAD" >
                                         <tr>
                                             <th >Drug Name</th>
                                             <th >Pack Size</th>
@@ -132,54 +133,82 @@
                                             <th>U</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="TBODY">
                                     <form name="orderForm" id="orderForm">
                                         <?php
-                                        // echo '<pre>';
-                                        //print_r($columns);
-                                        //echo '</pre>';
-                                        // exit;
                                         foreach ($columns['drugs'] as $key => $drug) {
                                             $drugid = $drug['id'];
+
+
                                             if (in_array($drugid, array_keys($columns['cdrrs']['data']['cdrr_item']))) {
                                                 $count = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'];
                                                 $drugamc = $columns['cdrrs']['data']['cdrr_item'][$drugid]['drugamc'];
                                                 $consumed = $columns['cdrrs']['data']['cdrr_item'][$drugid]['dispensed_packs'];
+                                                $new = @$columns['pcdrrs']['data']['cdrr_item'][$drugid]['count'];
+                                                $diff = @(int) $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'] - @(int) $columns['pcdrrs']['data']['cdrr_item'][$drugid]['count'];
                                                 ?>
                                                 <tr>
-                                                    <td  style="" class='stickyColumn' ><?= $drug['name']; ?></td>
+                                                    <td class='stickyColumn'><?= $drug['name']; ?></td>
                                                     <td><?= $drug['pack_size']; ?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance']; ?></td>
+                                                    <td title="Previous: <?= $new; ?>     Difference: <?= $diff; ?>"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'] ?>
+                                                        <?php
+                                                        if (@(int) $columns['pcdrrs']['data']['cdrr_item'][$drugid]['count'] == ' ') {
+                                                            
+                                                        } else if (@(int) $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'] > @(int) $columns['pcdrrs']['data']['cdrr_item'][$drugid]['count']) {
+                                                            echo '<i style="color:red" class="glyphicon glyphicon-triangle-bottom"></i>';
+                                                        } else if (@(int) $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'] < @(int) $columns['pcdrrs']['data']['cdrr_item'][$drugid]['count']) {
+                                                            echo '<i style="color:red" class="glyphicon glyphicon-triangle-top" title="' . $new . '<sup>' . $diff . '</sup>"></i>';
+                                                        } else {
+                                                            
+                                                        }
+                                                        ?>
+
+                                                    </td>
+                                                    <?php
+                                                    $disabled = '';
+                                                    $comment = '';
+                                                    $status = $columns['cdrrs']['data']['cdrr_item'][$drugid]['stock_status'];
+                                                    if ($status == 2) {
+                                                        $disabled = 'disabled';
+                                                        $comment = 'Stocked Out';
+                                                    }
+                                                    ?>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['received']; ?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['dispensed_packs']; ?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['losses']; ?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['adjustments']; ?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['adjustments_neg']; ?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['count']; ?></td>
+                                                    <td class="eMOSH"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['count']; ?></td>
                                                     <?php
                                                     if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') {
                                                         $count = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'] + $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand'];
                                                         ?> 
-                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_consumed']; ?></td>
-                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand']; ?></td>
+                                                        <td class=""><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_consumed']; ?></td>
+                                                        <td class="aggSOH"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand']; ?></td>
                                                     <?php } ?>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_quant']; ?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_date']; ?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['out_of_stock']; ?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply']; ?></td>
-                                                    <td><?= $drugamc; ?></td>
-                                                    <td><?= $mos = ($count > 0 && $drugamc > 0) ? number_format($count / $drugamc) : 0; ?></td>
+                                                    <td class="AMC"><?= $drugamc; ?></td>
+                                                    <td ><?= $mos = ($count > 0 && $drugamc > 0) ? number_format($count / $drugamc) : 0; ?></td>
                                                     <td><?= (($drugamc * 3) - $count) > 0 ? (($drugamc * 3) - $count) : 0; ?></td>
 
                                                     <td>
-                                                        <input type="text" class="form-control AMOS Allocated"  data-toggle="tooltip" title="" data-drug="<?= $drugid ?>"  name="qty_allocated-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'] > 0) ? $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'] : $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply']; ?>">
+                                                        <input type="text" class="form-control AMOS Allocated"  data-toggle="tooltip" title="" <?= $disabled; ?> data-drug="<?= $drugid ?>"  name="qty_allocated-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'] > 0) ? $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'] : $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply']; ?>">
                                                     </td>
                                                     <td>
-                                                        <input type="text" class="form-control MOS AllocatedMOS" data-toggle="tooltip" title="Max MOS 6months" name="qty_allocated_mos-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos']; ?>">
+                                                        <?php
+                                                        $min_mos = $columns['cdrrs']['data']['cdrr_item'][$drugid]['min_mos'];
+                                                        $max_mos = $columns['cdrrs']['data']['cdrr_item'][$drugid]['max_mos'];
+                                                        ?>
+                                                        <input type="hidden" class="MIN" value="<?= $min_mos; ?>"/>
+                                                        <input type="hidden" class="MAX" value="<?= $max_mos; ?>"/>
+                                                        <input type="text"  class="form-control MOS AllocatedMOS" data-toggle="tooltip" <?= $disabled; ?> title="Max MOS 6months" name="qty_allocated_mos-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'] == '') ? $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'] : $mos ?>">
                                                     </td>
 
                                                     <td>
-                                                        <input type="text" class="form-control" name="feedback-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['feedback']; ?>">
+                                                        <input type="text" class="form-control" <?= $disabled; ?> name="feedback-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['feedback']; ?>">
                                                     </td>
 
 
@@ -205,10 +234,11 @@
                                         ?>
                                     </form>
                                     </tbody>
+                                    
                                 </table>
                             </div>
                         </div>
-                        <div class="col-sm-12">
+                    <div class="col-sm-12" style="margin-top:20px;">
                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped table-condensed" id="TimeLog">
                                     <thead>
@@ -251,46 +281,63 @@
     <script type="text/javascript">
         $(function () {
             var base_url = "<?php echo base_url(); ?>";
-            //  $("#AllocationTable").CongelarFilaColumna({lboHoverTr:false});
-            thedrug = '';
-            lower_limit = '';
-            upper_limit = '';
-            $('.AMOS').hover(function () {
 
-                var drug = $(this).attr('data-drug');
-                $.post(base_url + 'manager/orders/get_drug/x', {drug: drug}, function (res) {
-                    thedrug = res[0].name;
-                    lower_limit = res[0].min_qty_alloc;
-                    upper_limit = res[0].max_qty_alloc;
 
-                }, 'json');
+            var table = $('#AllocationTable').DataTable({
+                scrollY: "800px",
+                scrollX: true,
+                scrollCollapse: true,
+                paging: false,
+                fixedColumns: true,
+                searching: false, 
+                info: false
             });
 
+
+            $('#AllocationTable tr').hover(function () {
+                row = $(this).closest('tr');
+                drugname = row.find('.stickyColumn').text();
+                //console.log(drugname)
+            });
+
+
+
             $('.AMOS').focusout(function () {
+                row = $(this).closest('tr');
                 input_val = $(this).val();
-                if (input_val < lower_limit) {
+                min_mos = row.find('.MIN').val();
+                max_mos = row.find('.MAX').val();
+                eMOSH = row.find('.eMOSH').text();
+                aggSOH = row.find('.aggSOH').text();
+                AMC = row.find('.AMC').text();
+                cMOS = (parseInt(eMOSH) + parseInt(aggSOH) + parseInt(input_val)) / parseInt(AMC);
+                row.find('.AllocatedMOS').val(Math.floor(cMOS));
+                AllMOS = row.find('.AllocatedMOS').val();
+                console.log(AllMOS);
+                if (AllMOS < 3) {
                     swal({
-                        title: "Low Allocation",
-                        text: "The lowest that can be allocated for " + thedrug + ' is ' + lower_limit,
+                        title: "Low Allocation MOS",
+                        text: "The lowest that can be allocated for" + ' is ' + 3,
                         icon: "error",
                     });
                     $(this).val('');
-                    thedrug = '';
-                    lower_limit = '';
-                    upper_limit = '';
+
                     return false;
-                } else if (input_val > upper_limit) {
+                } else if (AllMOS > 6) {
                     swal({
-                        title: "Excess Allocation",
-                        text: "The highest that can be allocated for " + thedrug + ' is ' + upper_limit,
+                        title: "Excess Allocation MOS",
+                        text: "The highest that can be allocated is " + 6,
                         icon: "error",
                     });
-                    thedrug = '';
-                    lower_limit = '';
-                    upper_limit = '';
+
                     $(this).val('');
                     return false;
+                } else {
+
                 }
+
+
+
 
             });
 
@@ -383,3 +430,4 @@
             margin: 12px;
         }
     </style>
+

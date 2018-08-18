@@ -20,6 +20,7 @@
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables/js/dataTables.select.min.js'; ?>"></script>
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables-plugins/average().js'; ?>"></script>
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables-plugins/sum().js'; ?>"></script>
+
 <!--select2 js-->
 <script src="<?php echo base_url() . 'public/manager/lib/select2/js/select2.js'; ?>"></script>
 <!--bootstrap-sweetalert--->
@@ -44,7 +45,7 @@
 <script type="text/javascript" src="<?php echo base_url() . 'public/manager/lib/jexcel/js/excel-formula.min.js'; ?>"></script>
 <script type="text/javascript" src="<?php echo base_url() . 'public/manager/lib/jexcel/js/jquery.jexcel.js'; ?>"></script>
 <script type="text/javascript" src="<?php echo base_url() . 'public/dashboard/js/jquery.tabletojson.js'; ?>"></script>
-<script type="text/javascript" src="<?php echo base_url() . 'public/manager/js/jquery.CongelarFilaColumna.js'; ?>"></script>
+<script type="text/javascript" src="<?php echo base_url() . 'public/manager/js/gridviewscroll.js'; ?>"></script>
 <!-- Custom Theme JavaScript -->
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/dist/js/sb-admin-2.js'; ?>"></script>
 >

@@ -443,7 +443,7 @@ class Orders_model extends CI_Model {
                     INNER JOIN tbl_county co ON co.id = sc.county_id
                     WHERE period_end LIKE '$this->_currentMonth%' AND c.id = ?  " . $role_cond;
             $table_data = $this->db->query($sql, array($cdrr_id))->result_array();
-         
+
             $logs_sql = "SELECT 
                             cl.description, cl.created, u.firstname, u.lastname, r.name AS role
                         FROM tbl_cdrr_log cl
@@ -498,7 +498,10 @@ class Orders_model extends CI_Model {
                         'cdrr_id' => $result['cdrr_id'],
                         'drug_id' => $result['drug_id'],
                         'qty_allocated' => $result['qty_allocated'],
-                        'qty_allocated_mos' =>  $result['qty_allocated_mos'],
+                        'qty_allocated_mos' => $result['qty_allocated_mos'],
+                        'max_mos' => $result['max_mos'],
+                        'min_mos' => $result['min_mos'],
+                        'stock_status' => $result['stock_status'],
                         'feedback' => $result['feedback']
                     );
 
@@ -517,7 +520,14 @@ class Orders_model extends CI_Model {
         return $response;
     }
 
-    public function get_previous_cdrr_data($cdrr_id, $scope = null, $role = null) {        
+    public function get_cdrr_data_previous($cdrr_id, $scope = null, $role = null) {
+        $conditions = array(
+            "national" => "",
+            "county" => " AND county_id = '$scope'",
+            "subcounty" => " AND sc.id = '$scope'"
+        );
+
+        $role_cond = $conditions[$role];
 
         $response = array();
 
@@ -527,16 +537,81 @@ class Orders_model extends CI_Model {
         }
 
         try {
-            $sql = "SELECT * FROM `vw_lastmonth_bal` WHERE `drug_name`='Abacavir (ABC) 300mg Tabs' AND facility='St Mulumba Mission Hospital";  
+            $sql = "SELECT 
+                        *, d.name AS drug_name, f.name AS facility_name, co.name AS county, sc.name AS subcounty, ci.id AS cdrr_item_id
+                    FROM tbl_cdrr c 
+                    INNER JOIN tbl_cdrr_item ci ON ci.cdrr_id = c.id
+                    INNER JOIN vw_drug_list d ON d.id = ci.drug_id
+                    INNER JOIN tbl_facility f ON f.id = c.facility_id
+                    INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
+                    INNER JOIN tbl_county co ON co.id = sc.county_id
+                    WHERE period_end LIKE '%$this->_previousMonth%' AND c.id = ?  " . $role_cond;
             $table_data = $this->db->query($sql, array($cdrr_id))->result_array();
 
+            $logs_sql = "SELECT 
+                            cl.description, cl.created, u.firstname, u.lastname, r.name AS role
+                        FROM tbl_cdrr_log cl
+                        INNER JOIN tbl_user u ON cl.user_id = u.id
+                        INNER JOIN tbl_role r ON u.role_id = r.id
+                        WHERE cdrr_id = ? 
+                        ORDER BY cl.id ASC";
+            $logs_table_data = $this->db->query($logs_sql, array($cdrr_id))->result_array();
 
             if (!empty($table_data)) {
-               
-                $response['message'] = 'Result found!';
+                foreach ($table_data as $result) {
+                    $response['data'][] = array(
+                        'status' => $result['status'],
+                        'created' => $result['created'],
+                        'updated' => $result['updated'],
+                        'code' => $result['code'],
+                        'period_begin' => $result['period_begin'],
+                        'period_end' => $result['period_end'],
+                        'comments' => $result['comments'],
+                        'reports_expected' => $result['reports_expected'],
+                        'reports_actual' => $result['reports_actual'],
+                        'services' => $result['services'],
+                        'sponsors' => $result['sponsors'],
+                        'non_arv' => $result['non_arv'],
+                        'delivery_note' => $result['delivery_note'],
+                        'order_id' => $result['order_id'],
+                        'facility_id' => $result['facility_id'],
+                        'facility_name' => $result['facility_name'],
+                        'mflcode' => $result['mflcode'],
+                        'county' => $result['county'],
+                        'subcounty' => $result['subcounty']
+                    );
+
+                    $response['data']['cdrr_item'][$result['drug_id']] = array(
+                        'cdrr_item_id' => $result['cdrr_item_id'],
+                        'balance' => $result['balance'],
+                        'received' => $result['received'],
+                        'dispensed_units' => $result['dispensed_units'],
+                        'dispensed_packs' => $result['dispensed_packs'],
+                        'losses' => $result['losses'],
+                        'adjustments' => $result['adjustments'],
+                        'adjustments_neg' => $result['adjustments_neg'],
+                        'count' => $result['count'],
+                        'expiry_quant' => $result['expiry_quant'],
+                        'expiry_date' => $result['expiry_date'],
+                        'out_of_stock' => $result['out_of_stock'],
+                        'resupply' => $result['resupply'],
+                        'aggr_consumed' => $result['aggr_consumed'],
+                        'aggr_on_hand' => $result['aggr_on_hand'],
+                        'publish' => $result['publish'],
+                        'drugamc' => $this->get_drug_amc($result['facility_id'], $result['period_begin'], $result['drug_id'], $result['code']),
+                        'cdrr_id' => $result['cdrr_id'],
+                        'drug_id' => $result['drug_id'],
+                        'qty_allocated' => $result['qty_allocated'],
+                        'qty_allocated_mos' => $result['qty_allocated_mos'],
+                        'feedback' => $result['feedback']
+                    );
+
+                    $response['data']['cdrr_logs'] = $logs_table_data;
+                }
+                $response['message'] = 'Table data was found!';
                 $response['status'] = TRUE;
             } else {
-                $response['message'] = 'Result is empty!';
+                $response['message'] = 'Table is empty!';
                 $response['status'] = FALSE;
             }
         } catch (Execption $e) {
@@ -691,7 +766,7 @@ class Orders_model extends CI_Model {
         $response = array('data' => array());
         try {
             $month_name = date('F Y', strtotime($period_begin));
-            $base_url = base_url().'manager/orders/pdf';
+            $base_url = base_url() . 'manager/orders/pdf';
             $allocation_url = ($allocation) ? "../../../view_allocation" : "view";
 
             $sql = "SELECT

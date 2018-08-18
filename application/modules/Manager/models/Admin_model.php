@@ -25,11 +25,12 @@ class Admin_model extends CI_Model {
                 $this->db->join('tbl_county c', 'c.id = sc.county_id', 'inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_drug') {
-                $this->db->select('d.id,d.strength,d.packsize,g.name generic,f.name formulation,dc.name category,d.min_qty_alloc, d.max_qty_alloc');
+                $this->db->select('d.id,d.strength,d.packsize,g.name generic,f.name formulation,dc.name category,d.min_mos, d.max_mos,st.name stock_status');
                 $this->db->from('tbl_drug d');
                 $this->db->join('tbl_generic g', 'g.id=d.generic_id', 'inner');
                 $this->db->join('tbl_formulation f', 'f.id=d.formulation_id', 'inner');
                 $this->db->join('tbl_drug_category dc', 'dc.id=d.drug_category', 'inner');
+                $this->db->join('tbl_stock_status st', 'd.stock_status=st.id', 'inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_mailing_list') {
                 $this->db->select('ml.id,ml.name name, ml.email,c.name category,ml.sent_date , s.name status');

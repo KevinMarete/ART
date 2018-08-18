@@ -283,8 +283,9 @@ if ($page_name != 'backup' && $page_name != 'user') {
                 $('[name="generic_id"]').val(data.generic_id);
                 $('[name="formulation_id"]').val(data.formulation_id);
                 $('[name="drug_category"]').val(data.drug_category);
-                $('[name="min_qty_alloc"]').val(data.min_qty_alloc);
-                $('[name="max_qty_alloc"]').val(data.max_qty_alloc);
+                $('[name="min_mos"]').val(data.min_mos);
+                $('[name="max_mos"]').val(data.max_mos);
+                $('[name="stock_status"]').val(data.stock_status);
                 //generic
                 $('[name="abbreviation"]').val(data.abbreviation);
                 //module

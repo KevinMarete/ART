@@ -48,16 +48,24 @@
                             </div>
                         </div>
                           <div class="form-group">
-                            <label class="control-label col-md-3">Min. Qty Allocated</label>
+                            <label class="control-label col-md-3">Min.MOS</label>
                             <div class="col-md-9">
-                                <input name="min_qty_alloc" placeholder="200" class="form-control" type="number">
+                                <input name="min_mos" placeholder="3" class="form-control" type="number">
                                 <span class="help-block"></span>
                             </div>
                         </div>
                          <div class="form-group">
-                            <label class="control-label col-md-3">Max. Qty Allocated</label>
+                            <label class="control-label col-md-3">Max.MOS</label>
                             <div class="col-md-9">
-                                <input name="max_qty_alloc" placeholder="200" class="form-control" type="number">
+                                <input name="max_mos" placeholder="15" class="form-control" type="number">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                         <div class="form-group">
+                            <label class="control-label col-md-3">Status</label>
+                            <div class="col-md-9">
+                                <select name="stock_status" id="stock_status" class="form-control select2">
+                                </select>
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -77,6 +85,7 @@
         var genericURL = '../../API/generic';
         var formulationURL = '../../API/formulation';
         var drug_categoryURL = '../../API/Drug_category';
+        var stockStatusURL = '../../API/Stock_status';
         $("#generic_id").empty()
         $.getJSON(genericURL, function (generics) {
             $("#generic_id").append($("<option value=''>Select Generic</option>"));
@@ -97,6 +106,14 @@
             $("#formulation_id").append($("<option value=''>Select Formulation</option>"));
             $.each(categories, function (index, category) {
                 $("#drug_category").append($("<option value='" + category.id + "'>" + category.name.toUpperCase() + "</option>"));
+            });
+        });
+        
+        $("#stock_status").empty()
+        $.getJSON(stockStatusURL, function (categories) {
+            $("#stock_status").append($("<option value=''>Select Status</option>"));
+            $.each(categories, function (index, category) {
+                $("#stock_status").append($("<option value='" + category.id + "'>" + category.name.toUpperCase() + "</option>"));
             });
         });
         
