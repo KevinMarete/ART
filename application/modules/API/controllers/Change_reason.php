@@ -3,6 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
+require APPPATH . 'modules/API/models/Change_reason_model.php';
 
 /**
  *
@@ -23,14 +24,15 @@ class Change_reason extends \API\Libraries\REST_Controller  {
 
     public function index_get()
     {
-        // change_reasons from a data store e.g. database
-        $change_reasons = $this->change_reason_model->read();
 
         $id = $this->get('id');
 
         // If the id parameter doesn't exist return all the change_reasons
         if ($id === NULL)
         {
+            // change_reasons from a data store e.g. database
+            $change_reasons = Change_reason_model::all();
+
             // Check if the change_reasons data store contains change_reasons (in case the database result returns NULL)
             if ($change_reasons)
             {
@@ -60,18 +62,7 @@ class Change_reason extends \API\Libraries\REST_Controller  {
             // Get the change_reason from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $change_reason = NULL;
-
-            if (!empty($change_reasons))
-            {      
-                foreach ($change_reasons as $key => $value)
-                {   
-                    if ($value['id'] == $id)
-                    {
-                        $change_reason = $value;
-                    }
-                }
-            }
+            $change_reason = Change_reason_model::find($id);
 
             if (!empty($change_reason))
             {
@@ -89,18 +80,15 @@ class Change_reason extends \API\Libraries\REST_Controller  {
 
     public function index_post()
     {   
-        $data = array(
-            'name' => $this->post('name')
-        );
-        $data = $this->change_reason_model->insert($data);
-        if($data['status'])
+        $change_reason = new Change_reason_model;
+        $change_reason->name = $this->post('name');
+        
+        if($change_reason->save())
         {
-            unset($data['status']);
-            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            $this->set_response($change_reason, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -110,7 +98,7 @@ class Change_reason extends \API\Libraries\REST_Controller  {
 
     public function index_put()
     {   
-        $id = (int) $this->get('id');
+        $id = (int) $this->query('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -119,18 +107,15 @@ class Change_reason extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $data = array(
-            'name' => $this->put('name')
-        );
-        $data = $this->change_reason_model->update($id, $data);
-        if($data['status'])
+        $change_reason = Change_reason_model::find($id);
+        $change_reason->name = $this->put('name');
+
+        if($change_reason->save())
         {
-            unset($data['status']);
-            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            $this->set_response($change_reason, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -140,7 +125,7 @@ class Change_reason extends \API\Libraries\REST_Controller  {
 
     public function index_delete()
     {
-        $id = (int) $this->get('id');
+        $id = (int) $this->query('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -149,10 +134,9 @@ class Change_reason extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $data = $this->change_reason_model->delete($id);
-        if($data['status'])
+        $deleted = Change_reason_model::destroy($id);
+        if($deleted)
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => TRUE,
                 'message' => 'Data is deleted successfully'
@@ -160,7 +144,6 @@ class Change_reason extends \API\Libraries\REST_Controller  {
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
