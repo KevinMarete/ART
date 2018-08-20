@@ -97,15 +97,15 @@ class Procurement extends MX_Controller {
 				if($key == 'period'){
 					$thead .= '<th>'.$value.'</th>';
 				}else if($key == 'open_kemsa'){
-					$open_kemsa .= '<td>'.$value.'</td>';
+					$open_kemsa .= '<td class="open_kemsa">'.$value.'</td>';
 				}else if($key == 'receipts_kemsa'){
-					$receipts_kemsa .= '<td>'.$value.'</td>';
+					$receipts_kemsa .= '<td class="receipts_kemsa">'.$value.'</td>';
 				}else if($key == 'issues_kemsa'){
-					$issues_kemsa .= '<td><input type="text" class="col-lg-12" value="'.str_ireplace(',', '', $value).'"/></td>';
+					$issues_kemsa .= '<td><input type="text" class="col-lg-12 issues_kemsa" value="'.str_ireplace(',', '', $value).'"/></td>';
 				}else if($key == 'close_kemsa'){
-					$close_kemsa .= '<td>'.$value.'</td>';
+					$close_kemsa .= '<td class="close_kemsa">'.$value.'</td>';
 				}else if($key == 'monthly_consumption'){
-					$monthly_consumption .= '<td><input type="text" class="col-lg-12" value="'.str_ireplace(',', '', $value).'"/></td>';
+					$monthly_consumption .= '<td><input type="text" class="col-lg-12 monthly_consumption" value="'.str_ireplace(',', '', $value).'"/></td>';
 				}else if($key == 'avg_issues'){
 					$avg_issues .= '<td>'.$value.'</td>';
 				}else if($key == 'avg_consumption'){
@@ -266,7 +266,7 @@ class Procurement extends MX_Controller {
 			$input['action'] = 'edit';
 		} else if ($input['action'] == 'delete') {
 			unset($input['action']);
-			$this->Procurement_model->delete_procurement_item($input);
+			$this->Procurement_model->delete_procurement_item($input['id']);
 			$input['action'] = 'delete';
 		} 
 		echo json_encode($input);
@@ -280,7 +280,9 @@ class Procurement extends MX_Controller {
 			'supplier' =>  base_url().'API/supplier'
 		);
 		foreach ($item_urls as $key => $item_url) {
-			$response[$key][0] = 'Select one';
+			if($key != 'status'){
+				$response[$key][0] = 'Select one';
+			}
 			foreach (json_decode(file_get_contents($item_url), TRUE) as $values) {
 			 	$response[$key][$values['id']] = $values['name'];
 			} 

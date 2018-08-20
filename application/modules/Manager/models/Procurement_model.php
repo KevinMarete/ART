@@ -562,8 +562,8 @@ class Procurement_model extends CI_Model {
 
         $update_data = array(
             'procurement_status_id' => ($input_data['procurement_status_id'] == 0) ? NULL : $input_data['procurement_status_id'], 
-            'supplier_id' => ($input_data['supplier_id'] == 0) ? NULL : $input_data['supplier_id'], 
-            'funding_agent_id' => ($input_data['funding_agent_id'] == 0) ? NULL : $input_data['funding_agent_id'], 
+            'supplier_id' => ($input_data['supplier_id'] == 0 || $input_data['procurement_status_id'] == 1) ? NULL : $input_data['supplier_id'], //Check for "proposed"
+            'funding_agent_id' => ($input_data['funding_agent_id'] == 0 || $input_data['procurement_status_id'] == 1) ? NULL : $input_data['funding_agent_id'], 
             'quantity' => $input_data['quantity']
         );
 
@@ -574,15 +574,9 @@ class Procurement_model extends CI_Model {
             //Get new procurement_id 
             $new_procurement_arr = $this->db->get_where('tbl_procurement', array('transaction_year' => $input_data['transaction_year'], 'transaction_month' => $input_data['transaction_month'], 'drug_id' => $procurement_arr['drug_id']))->row_array();
             if(!empty($new_procurement_arr)){
-                $new_procurement_id = $new_procurement_arr['id'];
                 //Update procurement_item based on new id
-                $new_procurement_item_arr = $this->db->get_where('tbl_procurement_item', array('procurement_id' => $new_procurement_id))->row_array();
-                if(empty($new_procurement_item_arr)){
-                    $update_data['procurement_id'] = $new_procurement_id;
-                    $this->db->insert('tbl_procurement_item', $update_data); 
-                }else{
-                    $this->db->update('tbl_procurement_item', $update_data, array('id' => $new_procurement_item_arr['id']));  
-                }
+                $update_data['procurement_id'] = $new_procurement_arr['id'];
+                $this->db->update('tbl_procurement_item', $update_data, array('id' => $input_data['id']));  
             }
         }
 

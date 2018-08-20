@@ -130,10 +130,10 @@
                                                             <select name="status[]" required="" class="procurement_status"></select>
                                                         </td>
                                                         <td>
-                                                            <select name="funding_agent[]" required="" class="funding_agent contracted"></select>
+                                                            <select name="funding_agent[]" class="funding_agent contracted"></select>
                                                         </td>
                                                         <td>
-                                                            <select name="supplier[]" required="" class="supplier contracted col-md-12"></select>
+                                                            <select name="supplier[]" class="supplier contracted col-md-12"></select>
                                                         </td>
                                                         <td>
                                                             <a href="#" class="add"> <i class="fa fa-plus"></i></a>
@@ -210,7 +210,7 @@
         $(".commodity").addClass("active active-page");
 
         //Load Commodity Data when Modal shown
-        $("#add_procurement_modal").on("show.bs.modal", function(e) {
+        $("#add_procurement_modal").on("shown.bs.modal", function(e) {
             //Load Spinner
             LoadSpinner("#procurement_loader")
 
@@ -328,6 +328,13 @@
             }else{
                 $(this).closest('tr').find('.contracted').hide();
             }
+        });
+
+        //Filter balances
+        $(document).on("keyup", ".issues_kemsa", function(){
+            var open_bal = $(this).closest('.open_kemsa').text();
+            var prevCell = $(this).closest('td').prev().text();
+            console.log(prevCell)
         });
 
     });
