@@ -16,12 +16,6 @@ require APPPATH . 'modules/API/models/Category_model.php';
  */
 class Category extends \API\Libraries\REST_Controller  {
 
-    function __construct()
-    {
-        parent::__construct();
-        $this->load->model('category_model');
-    }
-
     public function index_get()
     {
 

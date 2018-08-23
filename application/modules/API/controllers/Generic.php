@@ -16,12 +16,6 @@ require APPPATH . 'modules/API/models/Generic_model.php';
  */
 class Generic extends \API\Libraries\REST_Controller  {
 
-    function __construct()
-    {
-        parent::__construct();
-        $this->load->model('generic_model');
-    }
-
     public function index_get()
     {
 

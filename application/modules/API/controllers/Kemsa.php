@@ -3,6 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
+require APPPATH . 'modules/API/models/Kemsa_model.php';
 
 /**
  *
@@ -15,12 +16,6 @@ require APPPATH . '/libraries/REST_Controller.php';
  */
 class Kemsa extends \API\Libraries\REST_Controller  {
 
-    function __construct()
-    {
-        parent::__construct();
-        $this->load->model('kemsa_model');
-    }
-
     public function index_get()
     {   
         //Default parameters
@@ -28,20 +23,15 @@ class Kemsa extends \API\Libraries\REST_Controller  {
         $month = $this->get('month');
         $drug = (int) $this->get('drug');
 
-        //Conditions
-        $conditions = array(
-            'period_year' => $year,
-            'period_month' => $month,
-            'drug_id' => $drug
-        );
-        $conditions = array_filter($conditions);
-
-        // kemsa from a data store e.g. database
-        $kemsas = $this->kemsa_model->read($conditions);
-
         // If parameters don't exist return all the kemsa
         if ($drug <= 0)
         {
+            // kemsa from a data store e.g. database
+            $kemsas = Kemsa_model::with('drug');
+            if(!empty($month)) $kemsas = $kemsas->where('period_month', $month);
+            if(!empty($year)) $kemsas = $kemsas->where('period_year', $year);
+            $kemsas = $kemsas->get();
+
             // Check if the kemsa data store contains kemsa (in case the database result returns NULL)
             if ($kemsas)
             {
@@ -69,18 +59,11 @@ class Kemsa extends \API\Libraries\REST_Controller  {
             // Get the kemsa from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $kemsa = NULL;
-
-            if (!empty($kemsas))
-            {      
-                foreach ($kemsas as $key => $value)
-                {   
-                    if ($value['period_year'] == $year && $value['period_month'] == $month && $value['drug_id'] == $drug)
-                    {
-                        $kemsa = $value;
-                    }
-                }
-            }
+            $kemsa = Kemsa_model::with('drug');
+            if(!empty($drug)) $kemsa = $kemsa->where('drug_id', $drug);
+            if(!empty($month)) $kemsa = $kemsa->where('period_month', $month);
+            if(!empty($year)) $kemsa = $kemsa->where('period_year', $year);
+            $kemsa = $kemsa->first();
 
             if (!empty($kemsa))
             {
@@ -98,24 +81,21 @@ class Kemsa extends \API\Libraries\REST_Controller  {
 
     public function index_post()
     {   
-        $data = array(
-            'issue_total' => $this->post('issue_total'),
-            'soh_total' => $this->post('soh_total'),
-            'supplier_total' => $this->post('supplier_total'),
-            'received_total' => $this->post('received_total'),
-            'period_year' => $this->post('period_year'),
-            'period_month' => $this->post('period_month'),
-            'drug_id' => $this->post('drug_id')
-        );
-        $data = $this->kemsa_model->insert($data);
-        if($data['status'])
+        $kemsa = new Kemsa_model;
+        $kemsa->issue_total = $this->post('issue_total');
+        $kemsa->soh_total = $this->post('soh_total');
+        $kemsa->supplier_total = $this->post('supplier_total');
+        $kemsa->received_total = $this->post('received_total');
+        $kemsa->period_year = $this->post('period_year');
+        $kemsa->period_month = $this->post('period_month');
+        $kemsa->drug_id = $this->post('drug_id');
+        
+        if($kemsa->save())
         {
-            unset($data['status']);
-            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            $this->set_response($kemsa, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -125,13 +105,7 @@ class Kemsa extends \API\Libraries\REST_Controller  {
 
     public function index_put()
     {   
-        $drug = (int) $this->get('drug');
-
-        $conditions = array(
-            'period_year' => $this->get('year'),
-            'period_month' => $this->get('month'),
-            'drug_id' => $drug
-        );
+        $drug = (int) $this->query('drug');
 
         // Validate drug.
         if ($drug <= 0)
@@ -140,21 +114,22 @@ class Kemsa extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $data = array(
-            'issue_total' => $this->put('issue_total'),
-            'soh_total' => $this->put('soh_total'),
-            'supplier_total' => $this->put('supplier_total'),
-            'received_total' => $this->put('received_total')
-        );
-        $data = $this->kemsa_model->update($conditions, $data);
-        if($data['status'])
+        $kemsa = Kemsa_model::where('drug_id', $drug);
+        if(!empty($month)) $kemsa = $kemsa->where('period_month', $month);
+        if(!empty($year)) $kemsa = $kemsa->where('period_year', $year);
+        $kemsa = $kemsa->first();
+
+        $kemsa->issue_total = $this->put('issue_total');
+        $kemsa->soh_total = $this->put('soh_total');
+        $kemsa->supplier_total = $this->put('supplier_total');
+        $kemsa->received_total = $this->put('received_total');
+        
+        if($kemsa->save())
         {
-            unset($data['status']);
-            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            $this->set_response($kemsa, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -164,13 +139,7 @@ class Kemsa extends \API\Libraries\REST_Controller  {
 
     public function index_delete()
     {
-        $drug = (int) $this->get('drug');
-
-        $conditions = array(
-            'period_year' => $this->get('year'),
-            'period_month' => $this->get('month'),
-            'drug_id' => $drug
-        );
+        $drug = (int) $this->query('drug');
 
         // Validate drug.
         if ($drug <= 0)
@@ -179,10 +148,14 @@ class Kemsa extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $data = $this->kemsa_model->delete($conditions);
-        if($data['status'])
+        $kemsa = Kemsa_model::where('drug_id', $drug);
+        if(!empty($month)) $kemsa = $kemsa->where('period_month', $month);
+        if(!empty($year)) $kemsa = $kemsa->where('period_year', $year);
+        
+        $deleted = $kemsa->delete();
+
+        if($deleted)
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => TRUE,
                 'message' => 'Data is deleted successfully'
@@ -190,7 +163,6 @@ class Kemsa extends \API\Libraries\REST_Controller  {
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'

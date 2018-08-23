@@ -16,12 +16,6 @@ require APPPATH . 'modules/API/models/County_model.php';
  */
 class County extends \API\Libraries\REST_Controller  {
 
-    function __construct()
-    {
-        parent::__construct();
-        $this->load->model('county_model');
-    }
-
     public function index_get()
     {
 

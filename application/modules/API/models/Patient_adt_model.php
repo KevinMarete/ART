@@ -1,58 +1,35 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Patient_adt_model extends CI_Model {
+use \Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Application\modules\API\models\Regimen_model;
+use Application\modules\API\models\Service_model;
+use Application\modules\API\models\Status_model;
 
-	public function read($conditions)
-	{	
-		$query = $this->db->get_where('tbl_patient_adt', $conditions);
-		return $query->result_array();
-	}
+class Patient_adt_model extends Eloquent {
 
-	public function insert($data)
-	{	
-		$this->db->insert('tbl_patient_adt', $data);
-		$count = $this->db->affected_rows();
-		if($count > 0)
-		{	
-			$data['id'] = $this->db->insert_id();
-			$data['status'] = TRUE;
-		}
-		else
-		{
-			$data['status'] = FALSE;
-		}
-		return $data;
-	}
-
-	public function update($id, $data)
-	{	
-		$this->db->update('tbl_patient_adt', $data, array('id' => $id));
-		$count = $this->db->affected_rows();
-		if($count > 0)
-		{
-			$data['status'] = TRUE;
-		}
-		else
-		{
-			$data['status'] = FALSE;
-		}
-		return $data;
-	}
-
-	public function delete($id)
-	{	
-		$this->db->delete('tbl_patient_adt', array('id' => $id)); 
-		$count = $this->db->affected_rows();
-		if($count > 0)
-		{
-			$data['status'] = TRUE;
-		}
-		else
-		{
-			$data['status'] = FALSE;
-		}
-		return $data;
-	}
+	use SoftDeletes;
+	protected $table = "tbl_patient_adt"; // table name
+	
+	public function start_regimen()
+    {
+        return $this->belongsTo('Regimen_model','start_regimen_id');
+    }
+	
+	public function current_regimen()
+    {
+        return $this->belongsTo('Regimen_model','current_regimen_id');
+    }
+	
+	public function service()
+    {
+        return $this->belongsTo('Service_model','service_id');
+    }
+	
+	public function status()
+    {
+        return $this->belongsTo('Status_model','status_id');
+    }
 
 }

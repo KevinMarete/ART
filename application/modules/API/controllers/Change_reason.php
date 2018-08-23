@@ -16,12 +16,6 @@ require APPPATH . 'modules/API/models/Change_reason_model.php';
  */
 class Change_reason extends \API\Libraries\REST_Controller  {
 
-    function __construct()
-    {
-        parent::__construct();
-        $this->load->model('change_reason_model');
-    }
-
     public function index_get()
     {
 

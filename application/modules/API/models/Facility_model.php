@@ -1,7 +1,8 @@
 <?php
 use \Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
-require APPPATH . 'modules/API/models/Partner_model.php';
+use Application\modules\API\models\Partner_model;
+use Application\modules\API\models\Subcounty_model;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
@@ -13,5 +14,10 @@ class Facility_model extends Eloquent {
     public function partner()
     {
         return $this->belongsTo('partner_model','partner_id');
+    }
+
+    public function subcounty()
+    {
+        return $this->belongsTo('Subcounty_model','subcounty_id');
     }
 }

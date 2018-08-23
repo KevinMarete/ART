@@ -3,6 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
+require APPPATH . 'modules/API/models/Stock_model.php';
 
 /**
  *
@@ -15,12 +16,6 @@ require APPPATH . '/libraries/REST_Controller.php';
  */
 class Stock extends \API\Libraries\REST_Controller  {
 
-    function __construct()
-    {
-        parent::__construct();
-        $this->load->model('stock_model');
-    }
-
     public function index_get()
     {   
         //Default parameters
@@ -29,21 +24,15 @@ class Stock extends \API\Libraries\REST_Controller  {
         $facility = (int) $this->get('facility');
         $drug = (int) $this->get('drug');
 
-        //Conditions
-        $conditions = array(
-            'period_year' => $year,
-            'period_month' => $month,
-            'facility_id' => $facility,
-            'drug_id' => $drug
-        );
-        $conditions = array_filter($conditions);
-
-        // stock from a data store e.g. database
-        $stocks = $this->stock_model->read($conditions);
-
         // If parameters don't exist return all the stock
         if ($facility <= 0 || $drug <= 0)
         {
+            // stock from a data store e.g. database
+            $stocks = Stock_model::with('facility','drug');
+            if(!empty($month)) $stocks = $stocks->where('period_month', $month);
+            if(!empty($year)) $stocks = $stocks->where('period_year', $year);
+            $stocks = $stocks->get();
+
             // Check if the stock data store contains stock (in case the database result returns NULL)
             if ($stocks)
             {
@@ -71,18 +60,12 @@ class Stock extends \API\Libraries\REST_Controller  {
             // Get the stock from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $stock = NULL;
-
-            if (!empty($stocks))
-            {      
-                foreach ($stocks as $key => $value)
-                {   
-                    if ($value['period_year'] == $year && $value['period_month'] == $month && $value['facility_id'] == $facility && $value['drug_id'] == $drug)
-                    {
-                        $stock = $value;
-                    }
-                }
-            }
+            $stock = Stock_model::with('facility','drug');
+            if(!empty($facility)) $stock = $stock->where('facility_id', $facility);
+            if(!empty($drug)) $stock = $stock->where('drug_id', $drug);
+            if(!empty($month)) $stock = $stock->where('period_month', $month);
+            if(!empty($year)) $stock = $stock->where('period_year', $year);
+            $stock = $stock->first();
 
             if (!empty($stock))
             {
@@ -100,22 +83,19 @@ class Stock extends \API\Libraries\REST_Controller  {
 
     public function index_post()
     {   
-        $data = array(
-            'total' => $this->post('total'),
-            'period_year' => $this->post('period_year'),
-            'period_month' => $this->post('period_month'),
-            'facility_id' => $this->post('facility_id'),
-            'drug_id' => $this->post('drug_id')
-        );
-        $data = $this->stock_model->insert($data);
-        if($data['status'])
+        $stock = new Stock_model;
+        $stock->total = $this->post('total');
+        $stock->period_year = $this->post('period_year');
+        $stock->period_month = $this->post('period_month');
+        $stock->facility_id = $this->post('facility_id');
+        $stock->drug_id = $this->post('drug_id');
+        
+        if($stock->save())
         {
-            unset($data['status']);
-            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            $this->set_response($stock, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -128,13 +108,6 @@ class Stock extends \API\Libraries\REST_Controller  {
         $facility = (int) $this->get('facility');
         $drug = (int) $this->get('drug');
 
-        $conditions = array(
-            'period_year' => $this->get('year'),
-            'period_month' => $this->get('month'),
-            'facility_id' => $facility,
-            'drug_id' => $drug
-        );
-
         // Validate facility and drug.
         if ($facility <= 0 || $drug <= 0)
         {
@@ -142,18 +115,18 @@ class Stock extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $data = array(
-            'total' => $this->put('total')
-        );
-        $data = $this->stock_model->update($conditions, $data);
-        if($data['status'])
+        $stock = Stock_model::where('facility_id', $facility)->where('drug_id', $drug);
+        if(!empty($month)) $stock = $stock->where('period_month', $month);
+        if(!empty($year)) $stock = $stock->where('period_year', $year);
+        $stock = $stock->first();
+        $stock->total = $this->put('total');
+        
+        if($stock->save())
         {
-            unset($data['status']);
-            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            $this->set_response($stock, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -166,13 +139,6 @@ class Stock extends \API\Libraries\REST_Controller  {
         $facility = (int) $this->get('facility');
         $drug = (int) $this->get('drug');
 
-        $conditions = array(
-            'period_year' => $this->get('year'),
-            'period_month' => $this->get('month'),
-            'facility_id' => $facility,
-            'drug_id' => $drug
-        );
-
         // Validate facility and drug.
         if ($facility <= 0 || $drug <= 0)
         {
@@ -180,10 +146,13 @@ class Stock extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $data = $this->stock_model->delete($conditions);
-        if($data['status'])
+        $stock = Stock_model::where('facility_id', $facility)->where('drug_id', $drug);
+        if(!empty($month)) $stock = $stock->where('period_month', $month);
+        if(!empty($year)) $stock = $stock->where('period_year', $year);
+        $deleted = $stock->delete();
+        
+        if($deleted)
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => TRUE,
                 'message' => 'Data is deleted successfully'
@@ -191,7 +160,6 @@ class Stock extends \API\Libraries\REST_Controller  {
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'

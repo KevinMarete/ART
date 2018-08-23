@@ -15,22 +15,16 @@ require APPPATH . 'modules/API/models/Facility_model.php';
  */
 class Facility extends \API\Libraries\REST_Controller  {
 
-    function __construct()
-    {
-        parent::__construct();
-        $this->load->model('facility_model');
-    }
-
     public function index_get()
     {
-        // facilitys from a data store e.g. database
-        $facilitys = Facility_model::all();
-
         $id = $this->get('id');
 
         // If the id parameter doesn't exist return all the facilitys
         if ($id === NULL)
         {
+            // facilitys from a data store e.g. database
+            $facilitys = Facility_model::with('partner', 'subcounty')->get();
+
             // Check if the facilitys data store contains facilitys (in case the database result returns NULL)
             if ($facilitys)
             {
@@ -60,7 +54,7 @@ class Facility extends \API\Libraries\REST_Controller  {
             // Get the facility from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $facility = Facility_model::with('partner')->find($id);
+            $facility = Facility_model::with('partner', 'subcounty')->find($id);
 
 
             if (!empty($facility))

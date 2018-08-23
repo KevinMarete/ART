@@ -16,12 +16,6 @@ require APPPATH . 'modules/API/models/Formulation_model.php';
  */
 class Formulation extends \API\Libraries\REST_Controller  {
 
-    function __construct()
-    {
-        parent::__construct();
-        $this->load->model('formulation_model');
-    }
-
     public function index_get()
     {
 

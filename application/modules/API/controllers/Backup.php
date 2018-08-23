@@ -3,6 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
+require APPPATH . 'modules/API/models/Backup_model.php';
 
 /**
  *
@@ -15,22 +16,16 @@ require APPPATH . '/libraries/REST_Controller.php';
  */
 class Backup extends \API\Libraries\REST_Controller  {
 
-    function __construct()
-    {
-        parent::__construct();
-        $this->load->model('backup_model');
-    }
-
     public function index_get()
     {
-        // backups from a data store e.g. database
-        $backups = $this->backup_model->read();
-
         $id = $this->get('id');
 
         // If the id parameter doesn't exist return all the backups
         if ($id === NULL)
         {
+            // backups from a data store e.g. database
+            $backups = Backup_model::with('facility')->get();
+
             // Check if the backups data store contains backups (in case the database result returns NULL)
             if ($backups)
             {
@@ -60,18 +55,7 @@ class Backup extends \API\Libraries\REST_Controller  {
             // Get the backup from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $backup = NULL;
-
-            if (!empty($backups))
-            {      
-                foreach ($backups as $key => $value)
-                {   
-                    if ($value['id'] == $id)
-                    {
-                        $backup = $value;
-                    }
-                }
-            }
+            $backup = Backup_model::where('id',$id)->with('facility')->first();
 
             if (!empty($backup))
             {
@@ -89,21 +73,18 @@ class Backup extends \API\Libraries\REST_Controller  {
 
     public function index_post()
     {   
-        $data = array(
-            'filename' => $this->post('filename'),
-            'foldername' => $this->post('foldername'),
-            'adt_version' => $this->post('adt_version'),
-            'facility_id' => $this->post('facility_id')
-        );
-        $data = $this->backup_model->insert($data);
-        if($data['status'])
+        $backup = new Backup_model;
+        $backup->filename = $this->post('filename');
+        $backup->foldername = $this->post('foldername');
+        $backup->adt_version = $this->post('adt_version');
+        $backup->facility_id = $this->post('facility_id');
+        
+        if($backup->save())
         {
-            unset($data['status']);
-            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            $this->set_response($backup, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -113,7 +94,7 @@ class Backup extends \API\Libraries\REST_Controller  {
 
     public function index_put()
     {   
-        $id = (int) $this->get('id');
+        $id = (int) $this->query('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -122,21 +103,18 @@ class Backup extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $data = array(
-            'filename' => $this->put('filename'),
-            'foldername' => $this->put('foldername'),
-            'adt_version' => $this->put('adt_version'),
-            'facility_id' => $this->put('facility_id')
-        );
-        $data = $this->backup_model->update($id, $data);
-        if($data['status'])
+        $backup = Backup_model::find($id);
+        $backup->filename = $this->post('filename');
+        $backup->foldername = $this->post('foldername');
+        $backup->adt_version = $this->post('adt_version');
+        $backup->facility_id = $this->post('facility_id');
+        
+        if($backup->save())
         {
-            unset($data['status']);
-            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            $this->set_response($backup, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -146,7 +124,7 @@ class Backup extends \API\Libraries\REST_Controller  {
 
     public function index_delete()
     {
-        $id = (int) $this->get('id');
+        $id = (int) $this->query('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -155,10 +133,9 @@ class Backup extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $data = $this->backup_model->delete($id);
-        if($data['status'])
+        $deleted = Backup_model::destroy($id);
+        if($deleted)
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => TRUE,
                 'message' => 'Data is deleted successfully'
@@ -166,7 +143,6 @@ class Backup extends \API\Libraries\REST_Controller  {
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
