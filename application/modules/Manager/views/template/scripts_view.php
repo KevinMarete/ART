@@ -39,6 +39,9 @@
 <script type="text/javascript" src="<?php echo base_url().'public/manager/js/sweetalert.min.js';?>"></script>
 <!--tabledit-->
 <script type="text/javascript" src="<?php echo base_url().'public/manager/js/jquery.tabledit.min.js';?>"></script>
+<!--jexcel-->
+<script type="text/javascript" src="<?php echo base_url().'public/manager/lib/jexcel/js/excel-formula.min.js';?>"></script>
+<script type="text/javascript" src="<?php echo base_url().'public/manager/lib/jexcel/js/jquery.jexcel.js';?>"></script>
 <!-- Custom Theme JavaScript -->
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/dist/js/sb-admin-2.js'; ?>"></script>
 <script type="text/javascript">

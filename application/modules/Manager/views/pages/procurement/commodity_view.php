@@ -175,7 +175,15 @@
                                 <a href="#" class="filter-year" data-value="2021"> 2021 </a>
                             </div>
                         </p>
-                        <div id="transaction_tbl" class="table-responsive"></div>
+                        <p>
+                            <div id="transaction_tbl" class="table-responsive"></div>
+                        </p>
+                        <p>
+                            <button id="trans_download" class="btn btn-primary btn-md pull-left"><i class="fa fa-download"></i> Download as CSV</button>
+                            <button id="trans_save" class="btn btn-success btn-md pull-right"><i class="fa fa-save"></i> Update Changes</button>
+                        </p>
+
+                        
                     </div>
                     <div id="drug_orders" class="tab-pane fade">
                         <h3>Orders</h3>
@@ -330,11 +338,14 @@
             }
         });
 
-        //Filter balances
-        $(document).on("keyup", ".issues_kemsa", function(){
-            var open_bal = $(this).closest('.open_kemsa').text();
-            var prevCell = $(this).closest('td').prev().text();
-            console.log(prevCell)
+        //Transaction table download
+        $('#trans_download').on('click', function () {
+            $('#transaction_tbl').jexcel('download');
+        });
+
+        //Transaction table save
+        $('#trans_save').on('click', function () {
+            $('#transaction_tbl').jexcel('getData', false);
         });
 
     });
@@ -362,10 +373,34 @@
     function getTransactionsTable(drugID, periodYear, tableID){
         //Load Spinner
         LoadSpinner(tableID)
-        //Load Table
+        //Load tableData
         var transactionURL = "<?php echo base_url() . 'Manager/Procurement/get_transaction_table/'; ?>"+drugID+'/'+periodYear
-        $.get(transactionURL, function(table){
-            $(tableID).html(table)
+        $.get(transactionURL, function(tableData){
+            var readonlyRows = ['0', '1', '3', '5', '6', '7']
+            //Create table
+            $(tableID).jexcel($.parseJSON(tableData));
+            //Settings for table
+            $(tableID).jexcel('updateSettings', {
+                table: function (instance, cell, col, row, val, id) {
+                    //Make rows readonly
+                    if($.inArray(row, readonlyRows) != -1){
+                        $(cell).addClass('readonly');
+                    }
+                    //Add colors to mos row
+                    if (row == 7 && col > 0) {
+                        if(val >= 6 && val <= 9){
+                            $(cell).css('background-color', '#32CD32');
+                        }else if(val >= 4  && val <= 5){
+                            $(cell).css('background-color', '#CCCC00');
+                        }else if(val <= 3){
+                            $(cell).css('background-color', '#DC143C');
+                        }else{
+                            $(cell).css('background-color', '#87CEFA');
+                        }
+                        $(cell).css('color', '#000');  
+                    }
+                }
+            });
         });
     }
 

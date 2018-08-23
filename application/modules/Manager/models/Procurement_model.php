@@ -106,13 +106,14 @@ class Procurement_model extends CI_Model {
         try {
             $sql = "SELECT 
                         CONCAT_WS(' ', data_month, data_year) period,
-                        FORMAT(open_kemsa, 0) open_kemsa,
-                        FORMAT(receipts_kemsa, 0) receipts_kemsa,
-                        FORMAT(issues, 0) issues_kemsa,
-                        FORMAT(close_kemsa, 0) close_kemsa,
-                        FORMAT(consumption, 0) monthly_consumption,
-                        FORMAT(avg_issues, 0) avg_issues,
-                        FORMAT(avg_consumption, 0) avg_consumption,
+                        p.drug,
+                        open_kemsa,
+                        receipts_kemsa,
+                        issues issues_kemsa,
+                        close_kemsa,
+                        consumption monthly_consumption,
+                        avg_issues,
+                        avg_consumption,
                         ROUND(close_kemsa/avg_issues) mos
                     FROM vw_procurement_list p
                     WHERE p.drug_id = ? 

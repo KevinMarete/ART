@@ -27,7 +27,9 @@
 <!--bootstrap-multiselect-->
 <link href="<?php echo base_url() . 'public/manager/lib/bootstrap-multiselect/css/bootstrap-multiselect.css'; ?>" rel="stylesheet" type="text/css">
 <!--bootstrap-sweetalert-->
-<link href="<?php echo base_url() . 'public/manager/lib/bootstrap-sweetalert/css/sweetalert.min.css'; ?>" rel="stylesheet"> 
+<link href="<?php echo base_url() . 'public/manager/lib/bootstrap-sweetalert/css/sweetalert.min.css'; ?>" rel="stylesheet">
+<!--jexcel-->
+ <link href="<?php echo base_url() . 'public/manager/lib/jexcel/css/jquery.jexcel.css'; ?>" rel="stylesheet">
 <!-- Manager -->
 <link href="<?php echo base_url() . 'public/manager/css/manager.css'; ?>" rel="stylesheet">
 <!--favicon-->

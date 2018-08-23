@@ -80,63 +80,59 @@ class Procurement extends MX_Controller {
 	}
 
 	public function get_transaction_table($drug_id, $period_year){
+		$responses = array();
+		$headers = array();
+		$widths = array();
+		$columns = array();
+		$alignments = array();
+		$column_indices = array('B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M');
+		$drug_name = '';
 		$response = $this->Procurement_model->get_transaction_data($drug_id, $period_year);
-		$open_kemsa = '';
-		$receipts_kemsa = '';
-		$issues_kemsa = '';
-		$close_kemsa = '';
-		$monthly_consumption = '';
-		$avg_issues = '';
-		$avg_consumption = '';
-		$mos = '';
-		$html_table = '<table class="table table-condensed table-striped table-bordered">';
-		$thead = '<thead><tr><th>Description</th>';
-		$tbody = '';
-		foreach ($response['data'] as $values) {
-			foreach ($values as $key => $value) {
-				if($key == 'period'){
-					$thead .= '<th>'.$value.'</th>';
-				}else if($key == 'open_kemsa'){
-					$open_kemsa .= '<td class="open_kemsa">'.$value.'</td>';
-				}else if($key == 'receipts_kemsa'){
-					$receipts_kemsa .= '<td class="receipts_kemsa">'.$value.'</td>';
-				}else if($key == 'issues_kemsa'){
-					$issues_kemsa .= '<td><input type="text" class="col-lg-12 issues_kemsa" value="'.str_ireplace(',', '', $value).'"/></td>';
-				}else if($key == 'close_kemsa'){
-					$close_kemsa .= '<td class="close_kemsa">'.$value.'</td>';
-				}else if($key == 'monthly_consumption'){
-					$monthly_consumption .= '<td><input type="text" class="col-lg-12 monthly_consumption" value="'.str_ireplace(',', '', $value).'"/></td>';
-				}else if($key == 'avg_issues'){
-					$avg_issues .= '<td>'.$value.'</td>';
-				}else if($key == 'avg_consumption'){
-					$avg_consumption .= '<td>'.$value.'</td>';
-				}else if($key == 'mos'){
-					if($value >= 6 && $value <= 9){
-						$label = 'success';
-					}else if($value >= 4  && $value <= 5){
-						$label = 'warning';
-					}else if($value <= 3){
-						$label = 'danger';
-					}else{
-						$label = 'info';
-					}
-					$mos .= '<td class="'.$label.'">'.$value.'</td>';
-				}
+		//Initial sidebar labels
+		$responses = array(
+			'open_kemsa' => array('Open Balance'), 
+			'receipts_kemsa' => array('Receipts from Suppliers'), 
+			'issues_kemsa' => array('Issues to Facility'), 
+			'close_kemsa' => array('Closing Balance'), 
+			'monthly_consumption' => array('Monthly Consumption'), 
+			'avg_issues' => array('Average Issues'), 
+			'avg_consumption' => array('Average Consumption'), 
+			'mos' => array('Months of Stock')
+		);
+		$headers[] = 'Description';
+		$widths[] = '160';
+		$columns[] = array('type' => 'text', 'readOnly' => true);
+		$alignments[] = 'left';
+		foreach ($response['data'] as $key => $value) {
+			$headers[] = $value['period'];
+			$widths[] = '80';
+			$columns[] = array('type' => 'numeric');
+			$alignments[] = 'center';
+			//Put formaulas
+			if($key == 0){
+				$drug_name = $value['drug'];
+				$responses['open_kemsa'][] = $value['open_kemsa'];
+			}else{
+				$responses['open_kemsa'][] = '='.$column_indices[$key-1].'4';
 			}
+			$responses['receipts_kemsa'][] = $value['receipts_kemsa'];
+			$responses['issues_kemsa'][] = $value['issues_kemsa'];
+			$responses['close_kemsa'][] = '='.$column_indices[$key].'1+'.$column_indices[$key].'2-'.$column_indices[$key].'3';
+			$responses['monthly_consumption'][] = $value['monthly_consumption'];
+			$responses['avg_issues'][] = $value['avg_issues'];
+			$responses['avg_consumption'][] = $value['avg_consumption'];
+			$responses['mos'][] = $value['mos'];
 		}
-		$thead .= '</tr></thead><tbody>';
-		$tbody .= '<tr><td nowrap>Open Balance</td>'.$open_kemsa.'</tr>';
-		$tbody .= '<tr><td nowrap>Receipts from Suppliers</td>'.$receipts_kemsa.'</tr>';
-		$tbody .= '<tr><td nowrap>Issues to Facility</td>'.$issues_kemsa.'</tr>';
-		$tbody .= '<tr><td nowrap>Closing Balance</td>'.$close_kemsa.'</tr>';
-		$tbody .= '<tr><td nowrap>Monthly Consumption</td>'.$monthly_consumption.'</tr>';
-		$tbody .= '<tr><td nowrap>Average Issues</td>'.$avg_issues.'</tr>';
-		$tbody .= '<tr><td nowrap>Average Consumption</td>'.$avg_consumption.'</tr>';
-		$tbody .= '<tr><td nowrap>Months of Stock</td>'.$mos.'</tr>';
-		$html_table .= $thead;
-		$html_table .= $tbody;
-		$html_table .= '</tbody></table>';
-		echo $html_table;
+		echo json_encode(array(
+			'data' => array_values($responses), 
+			'colHeaders' => $headers, 
+			'colWidths' => $widths, 
+			'columns' => $columns,
+			'colAlignments' => $alignments,
+			'csvFileName' => $drug_name.' Procurement Tracker for '.$period_year,
+			'columnSorting' => false,
+			'csvHeaders' => true
+		), JSON_NUMERIC_CHECK);
 	}
 
 	public function get_order_table($drug_id){
