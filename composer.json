@@ -1,0 +1,10 @@
+{
+    "require": {
+        "illuminate/database": "5.1.16"
+    },
+    "autoload": {
+        "classmap": [
+            "application/modules/API/models"
+        ]
+    }
+}

@@ -3,6 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
+require APPPATH . 'modules/API/models/Purpose_model.php';
 
 /**
  *
@@ -23,14 +24,14 @@ class Purpose extends \API\Libraries\REST_Controller  {
 
     public function index_get()
     {
-        // purposes from a data store e.g. database
-        $purposes = $this->purpose_model->read();
-
         $id = $this->get('id');
 
         // If the id parameter doesn't exist return all the purposes
         if ($id === NULL)
         {
+            // purposes from a data store e.g. database
+            $purposes = Purpose_model::all();
+
             // Check if the purposes data store contains purposes (in case the database result returns NULL)
             if ($purposes)
             {
@@ -60,18 +61,7 @@ class Purpose extends \API\Libraries\REST_Controller  {
             // Get the purpose from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $purpose = NULL;
-
-            if (!empty($purposes))
-            {      
-                foreach ($purposes as $key => $value)
-                {   
-                    if ($value['id'] == $id)
-                    {
-                        $purpose = $value;
-                    }
-                }
-            }
+            $purpose = Purpose_model::find($id);
 
             if (!empty($purpose))
             {
@@ -89,18 +79,15 @@ class Purpose extends \API\Libraries\REST_Controller  {
 
     public function index_post()
     {   
-        $data = array(
-            'name' => $this->post('name')
-        );
-        $data = $this->purpose_model->insert($data);
-        if($data['status'])
+        $purpose = new Purpose_model;
+        $purpose->name = $this->post('name');
+
+        if($purpose->save())
         {
-            unset($data['status']);
-            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            $this->set_response($purpose, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -110,7 +97,7 @@ class Purpose extends \API\Libraries\REST_Controller  {
 
     public function index_put()
     {   
-        $id = (int) $this->get('id');
+        $id = (int) $this->query('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -119,18 +106,15 @@ class Purpose extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $data = array(
-            'name' => $this->put('name')
-        );
-        $data = $this->purpose_model->update($id, $data);
-        if($data['status'])
+        $purpose = Purpose_model::find($id);
+        $purpose->name = $this->put('name');
+
+        if($purpose->save())
         {
-            unset($data['status']);
-            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            $this->set_response($purpose, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -140,7 +124,7 @@ class Purpose extends \API\Libraries\REST_Controller  {
 
     public function index_delete()
     {
-        $id = (int) $this->get('id');
+        $id = (int) $this->query('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -149,10 +133,9 @@ class Purpose extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $data = $this->purpose_model->delete($id);
-        if($data['status'])
+        $deleted = Purpose_model::destroy($id);
+        if($deleted)
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => TRUE,
                 'message' => 'Data is deleted successfully'
@@ -160,7 +143,6 @@ class Purpose extends \API\Libraries\REST_Controller  {
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'

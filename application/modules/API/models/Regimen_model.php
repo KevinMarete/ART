@@ -1,64 +1,31 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Regimen_model extends CI_Model {
+use \Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Application\modules\API\models\Category_model;
+use Application\modules\API\models\Line_model;
+use Application\modules\API\models\Service_model;
 
-	public function read()
-	{
-		$query = $this->db->get('tbl_regimen');
-		return $query->result_array();
-	}
 
-	public function read_list()
-	{
-		$query = $this->db->get('vw_regimen_list');
-		return $query->result_array();
-	}
+class Regimen_model extends Eloquent {
 
-	public function insert($data)
-	{	
-		$this->db->insert('tbl_regimen',	$data);
-		$count = $this->db->affected_rows();
-		if($count > 0)
-		{
-			$data['id'] = $this->db->insert_id();
-			$data['status'] = TRUE;
-		}
-		else
-		{
-			$data['status'] = FALSE;
-		}
-		return $data;
-	}
-
-	public function update($id, $data)
-	{	
-		$this->db->update('tbl_regimen', $data, array('id' => $id));
-		$count = $this->db->affected_rows();
-		if($count > 0)
-		{
-			$data['status'] = TRUE;
-		}
-		else
-		{
-			$data['status'] = FALSE;
-		}
-		return $data;
-	}
-
-	public function delete($id)
-	{	
-		$this->db->delete('tbl_regimen', array('id' => $id)); 
-		$count = $this->db->affected_rows();
-		if($count > 0)
-		{
-			$data['status'] = TRUE;
-		}
-		else
-		{
-			$data['status'] = FALSE;
-		}
-		return $data;
-	}
+	use SoftDeletes;
+	protected $table = "tbl_regimen"; // table name
+	
+	public function category()
+    {
+        return $this->belongsTo('Category_model','category_id');
+    }
+	
+	public function line()
+    {
+        return $this->belongsTo('Line_model','line_id');
+    }
+	
+	public function service()
+    {
+        return $this->belongsTo('Service_model','service_id');
+    }
 
 }
