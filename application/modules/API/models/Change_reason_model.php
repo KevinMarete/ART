@@ -8,5 +8,6 @@ class Change_reason_model extends Eloquent {
 
 	use SoftDeletes;
     protected $table = "tbl_change_reason"; // table name
+    protected $hidden = ['deleted_at', 'created_at', 'updated_at'];
 
 }

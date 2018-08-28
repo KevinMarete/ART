@@ -7,5 +7,6 @@ class Role_model extends Eloquent {
 
 	use SoftDeletes;
     protected $table = "tbl_role"; // table name
+    protected $hidden = ['deleted_at', 'created_at', 'updated_at'];
 
 }

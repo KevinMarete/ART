@@ -11,6 +11,7 @@ class Patient_adt_model extends Eloquent {
 
 	use SoftDeletes;
 	protected $table = "tbl_patient_adt"; // table name
+    protected $hidden = ['deleted_at', 'created_at', 'updated_at'];
 	
 	public function start_regimen()
     {

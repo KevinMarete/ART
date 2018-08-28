@@ -8,5 +8,6 @@ class Line_model extends Eloquent {
 
 	use SoftDeletes;
 	protected $table = "tbl_line"; // table name
+    protected $hidden = ['deleted_at', 'created_at', 'updated_at'];
 	
 }

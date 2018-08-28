@@ -8,5 +8,6 @@ class Funding_agent_model extends Eloquent {
 
 	use SoftDeletes;
     protected $table = "tbl_funding_agent"; // table name
+    protected $hidden = ['deleted_at', 'created_at', 'updated_at'];
 
 }

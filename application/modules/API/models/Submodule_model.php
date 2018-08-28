@@ -13,7 +13,8 @@ use Application\modules\API\models\Module_model;
 class Submodule_model extends Eloquent {
 
     use SoftDeletes;
-    protected $table = "tbl_submodule"; // table name
+    protected $table = "tbl_submodule"; // table name    
+    protected $hidden = ['deleted_at', 'created_at', 'updated_at'];
 
     public function module()
     {

@@ -9,6 +9,7 @@ class Nnrti_model extends Eloquent {
 
 	use SoftDeletes;
 	protected $table = "tbl_nnrti"; // table name
+    protected $hidden = ['deleted_at', 'created_at', 'updated_at'];
 	
 	public function regimen()
     {

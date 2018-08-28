@@ -10,6 +10,7 @@ class Stock_model extends Eloquent {
 
 	use SoftDeletes;
 	protected $table = "tbl_stock"; // table name
+    protected $hidden = ['deleted_at', 'created_at', 'updated_at'];
 
 	public function facility()
     {

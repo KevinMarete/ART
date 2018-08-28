@@ -8,5 +8,6 @@ class partner_model extends Eloquent {
 
 	use SoftDeletes;
     protected $table = "tbl_partner";
+    protected $hidden = ['deleted_at', 'created_at', 'updated_at'];
 
 }

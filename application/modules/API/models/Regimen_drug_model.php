@@ -10,6 +10,7 @@ class Regimen_drug_model extends Eloquent {
 
 	use SoftDeletes;
     protected $table = "tbl_regimen_drug"; // table name
+    protected $hidden = ['deleted_at', 'created_at', 'updated_at'];
 
 	public function regimen()
     {

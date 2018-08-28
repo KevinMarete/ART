@@ -10,6 +10,7 @@ class Facility_model extends Eloquent {
 
     use SoftDeletes;
     protected $table = "tbl_facility"; // table name
+    protected $hidden = ['deleted_at', 'created_at', 'updated_at'];
 
     public function partner()
     {
