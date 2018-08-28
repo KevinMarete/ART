@@ -3,7 +3,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
-require APPPATH . 'modules/API/models/Consumption_model.php';
 
 /**
  *
@@ -16,6 +15,12 @@ require APPPATH . 'modules/API/models/Consumption_model.php';
  */
 class Consumption extends \API\Libraries\REST_Controller  {
 
+    function __construct()
+    {
+        parent::__construct();
+        $this->load->model('consumption_model');
+    }
+
     public function index_get()
     {   
         //Default parameters
@@ -24,17 +29,21 @@ class Consumption extends \API\Libraries\REST_Controller  {
         $facility = (int) $this->get('facility');
         $drug = (int) $this->get('drug');
 
+        //Conditions
+        $conditions = array(
+            'period_year' => $year,
+            'period_month' => $month,
+            'facility_id' => $facility,
+            'drug_id' => $drug
+        );
+        $conditions = array_filter($conditions);
+
+        // consumption from a data store e.g. database
+        $consumptions = $this->consumption_model->read($conditions);
+
         // If parameters don't exist return all the consumption
         if ($facility <= 0 || $drug <= 0)
         {
-            // consumption from a data store e.g. database
-            $consumptions = Consumption_model::with('facility');
-            if(!empty($year)) $consumptions = $consumptions->where('period_year', $year);
-            if(!empty($month)) $consumptions = $consumptions->where('period_month', $month);
-            if(!empty($facility)) $consumptions = $consumptions->where('facility_id', $facility);
-            if(!empty($drug)) $consumptions = $consumptions->where('drug_id', $drug);
-            $consumptions = $consumptions->get();
-
             // Check if the consumption data store contains consumption (in case the database result returns NULL)
             if ($consumptions)
             {
@@ -62,12 +71,18 @@ class Consumption extends \API\Libraries\REST_Controller  {
             // Get the consumption from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $consumptions = Consumption_model::with('facility');
-            if(!empty($year)) $consumptions = $consumptions->where('period_year', $year);
-            if(!empty($month)) $consumptions = $consumptions->where('period_month', $month);
-            if(!empty($facility)) $consumptions = $consumptions->where('facility_id', $facility);
-            if(!empty($drug)) $consumptions = $consumptions->where('drug_id', $drug);
-            $consumptions = $consumptions->first();
+            $consumption = NULL;
+
+            if (!empty($consumptions))
+            {      
+                foreach ($consumptions as $key => $value)
+                {   
+                    if ($value['period_year'] == $year && $value['period_month'] == $month && $value['facility_id'] == $facility && $value['drug_id'] == $drug)
+                    {
+                        $consumption = $value;
+                    }
+                }
+            }
 
             if (!empty($consumption))
             {
@@ -85,19 +100,22 @@ class Consumption extends \API\Libraries\REST_Controller  {
 
     public function index_post()
     {   
-        $consumption = new Consumption_model;
-        $consumption->total = $this->post('total');
-        $consumption->period_year = $this->post('period_year');
-        $consumption->period_month = $this->post('period_month');
-        $consumption->facility_id = $this->post('facility_id');
-        $consumption->drug_id = $this->post('drug_id');
-
-        if($consumption->save())
+        $data = array(
+            'total' => $this->post('total'),
+            'period_year' => $this->post('period_year'),
+            'period_month' => $this->post('period_month'),
+            'facility_id' => $this->post('facility_id'),
+            'drug_id' => $this->post('drug_id')
+        );
+        $data = $this->consumption_model->insert($data);
+        if($data['status'])
         {
-            $this->set_response($consumption, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -107,10 +125,15 @@ class Consumption extends \API\Libraries\REST_Controller  {
 
     public function index_put()
     {   
-        $facility = (int) $this->query('facility');
-        $drug = (int) $this->query('drug');
-        $year = $this->query('year');
-        $month = $this->query('month');
+        $facility = (int) $this->get('facility');
+        $drug = (int) $this->get('drug');
+
+        $conditions = array(
+            'period_year' => $this->get('year'),
+            'period_month' => $this->get('month'),
+            'facility_id' => $facility,
+            'drug_id' => $drug
+        );
 
         // Validate facility and drug.
         if ($facility <= 0 || $drug <= 0)
@@ -119,21 +142,18 @@ class Consumption extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $consumption = Consumption_model::with('facility');
-        if(!empty($year)) $consumption = $consumption->where('period_year', $year);
-        if(!empty($month)) $consumption = $consumption->where('period_month', $month);
-        if(!empty($facility)) $consumption = $consumption->where('facility_id', $facility);
-        if(!empty($drug)) $consumption = $consumption->where('drug_id', $drug);
-        $consumption = $consumption->first();
-
-        $consumption->total = $this->put('total');
-
-        if($consumption->save())
+        $data = array(
+            'total' => $this->put('total')
+        );
+        $data = $this->consumption_model->update($conditions, $data);
+        if($data['status'])
         {
-            $this->set_response($consumption, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -143,10 +163,15 @@ class Consumption extends \API\Libraries\REST_Controller  {
 
     public function index_delete()
     {
-        $facility = (int) $this->query('facility');
-        $drug = (int) $this->query('drug');
-        $year = $this->query('year');
-        $month = $this->query('month');
+        $facility = (int) $this->get('facility');
+        $drug = (int) $this->get('drug');
+
+        $conditions = array(
+            'period_year' => $this->get('year'),
+            'period_month' => $this->get('month'),
+            'facility_id' => $facility,
+            'drug_id' => $drug
+        );
 
         // Validate facility and drug.
         if ($facility <= 0 || $drug <= 0)
@@ -155,15 +180,10 @@ class Consumption extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $consumption = Consumption_model::with('facility');
-        if(!empty($year)) $consumption = $consumption->where('period_year', $year);
-        if(!empty($month)) $consumption = $consumption->where('period_month', $month);
-        if(!empty($facility)) $consumption = $consumption->where('facility_id', $facility);
-        if(!empty($drug)) $consumption = $consumption->where('drug_id', $drug);
-        $deleted = $consumption->delete();
-
-        if($deleted)
+        $data = $this->consumption_model->delete($conditions);
+        if($data['status'])
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => TRUE,
                 'message' => 'Data is deleted successfully'
@@ -171,6 +191,7 @@ class Consumption extends \API\Libraries\REST_Controller  {
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'

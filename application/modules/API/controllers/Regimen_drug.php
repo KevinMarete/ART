@@ -3,7 +3,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
-require APPPATH . 'modules/API/models/Regimen_drug_model.php';
 
 /**
  *
@@ -16,17 +15,29 @@ require APPPATH . 'modules/API/models/Regimen_drug_model.php';
  */
 class Regimen_drug extends \API\Libraries\REST_Controller  {
 
+    function __construct()
+    {
+        parent::__construct();
+        $this->load->model('regimen_drug_model');
+    }
+
     public function index_get()
     {   
         //Default parameters
         $regimen = $this->get('regimen');
 
+        //Conditions
+        $conditions = array(
+            'regimen_id' => $regimen
+        );
+        $conditions = array_filter($conditions);
+
+        //regimen_drugs from a data store e.g. database
+        $regimen_drugs = $this->regimen_drug_model->read($conditions);
+
         // If parameters don't exist return all the regimen_drugs
         if ($regimen <= 0)
         {
-            //regimen_drugs from a data store e.g. database
-            $regimen_drugs = Regimen_drug_model::with('drug','regimen')->get();
-    
             // Check if the regimen_drug data store contains regimen_drug (in case the database result returns NULL)
             if ($regimen_drugs)
             {
@@ -54,7 +65,18 @@ class Regimen_drug extends \API\Libraries\REST_Controller  {
             // Get the regimen_drug from the array, using the regimen_id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $regimen_drug = Regimen_drug_model::with('drug','regimen')->where('regimen_id', $regimen)->first();
+            $regimen_drug = NULL;
+
+            if (!empty($regimen_drugs))
+            {      
+                foreach ($regimen_drugs as $key => $value)
+                {   
+                    if ($value['regimen_id'] == $regimen)
+                    {
+                        $regimen_drug = $value;
+                    }
+                }
+            }
 
             if (!empty($regimen_drug))
             {
@@ -72,16 +94,19 @@ class Regimen_drug extends \API\Libraries\REST_Controller  {
 
     public function index_post()
     {   
-        $regimen_drug = new Regimen_drug_model;
-        $regimen_drug->regimen_id = $this->post('regimen_id');
-        $regimen_drug->drug_id = $this->post('drug_id');
-
-        if($regimen_drug->save())
+        $data = array(
+            'regimen_id' => $this->post('regimen_id'),
+            'drug_id' => $this->post('drug_id')
+        );
+        $data = $this->regimen_drug_model->insert($data);
+        if($data['status'])
         {
-            $this->set_response($regimen_drug, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -91,7 +116,7 @@ class Regimen_drug extends \API\Libraries\REST_Controller  {
 
     public function index_put()
     {   
-        $regimen_id = (int) $this->query('regimen');
+        $regimen_id = (int) $this->get('regimen');
 
         // Validate the regimen_id.
         if ($regimen_id <= 0)
@@ -100,15 +125,18 @@ class Regimen_drug extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $regimen_drug = Regimen_drug_model::where('regimen_id', $regimen_id)->first();
-        $regimen_drug->drug_id = $this->put('drug_id');
-
-        if($regimen_drug->save())
+        $data = array(
+            'drug_id' => $this->put('drug_id')
+        );
+        $data = $this->regimen_drug_model->update($regimen_id, $data);
+        if($data['status'])
         {
-            $this->set_response($regimen_drug, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -118,7 +146,7 @@ class Regimen_drug extends \API\Libraries\REST_Controller  {
 
     public function index_delete()
     {
-        $regimen_id = (int) $this->query('regimen');
+        $regimen_id = (int) $this->get('regimen');
 
         // Validate the regimen_id.
         if ($regimen_id <= 0)
@@ -127,9 +155,10 @@ class Regimen_drug extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $deleted = Regimen_drug_model::where("regimen_id", $regimen_id)->delete();
-        if($deleted)
+        $data = $this->regimen_drug_model->delete($regimen_id);
+        if($data['status'])
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => TRUE,
                 'message' => 'Data is deleted successfully'
@@ -137,6 +166,7 @@ class Regimen_drug extends \API\Libraries\REST_Controller  {
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'

@@ -1,24 +1,57 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-use \Illuminate\Database\Eloquent\Model as Eloquent;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Application\modules\API\models\Regimen_model;
-use Application\modules\API\models\Drug_model;
+class Regimen_drug_model extends CI_Model {
 
-class Regimen_drug_model extends Eloquent {
+	public function read()
+	{
+		$query = $this->db->get('tbl_regimen_drug');
+		return $query->result_array();
+	}
 
-	use SoftDeletes;
-    protected $table = "tbl_regimen_drug"; // table name
+	public function insert($data)
+	{	
+		$this->db->insert('tbl_regimen_drug',	$data);
+		$count = $this->db->affected_rows();
+		if($count > 0)
+		{
+			$data['status'] = TRUE;
+		}
+		else
+		{
+			$data['status'] = FALSE;
+		}
+		return $data;
+	}
 
-	public function regimen()
-    {
-        return $this->belongsTo('Regimen_model','regimen_id');
-    }
-	
-	public function drug()
-    {
-        return $this->belongsTo('Drug_model','drug_id');
-    }
+	public function update($regimen_id, $data)
+	{	
+		$this->db->update('tbl_regimen_drug', $data, array('regimen_id' => $regimen_id));
+		$count = $this->db->affected_rows();
+		if($count > 0)
+		{
+			$data['status'] = TRUE;
+		}
+		else
+		{
+			$data['status'] = FALSE;
+		}
+		return $data;
+	}
+
+	public function delete($regimen_id)
+	{	
+		$this->db->delete('tbl_regimen_drug', array('regimen_id' => $regimen_id)); 
+		$count = $this->db->affected_rows();
+		if($count > 0)
+		{
+			$data['status'] = TRUE;
+		}
+		else
+		{
+			$data['status'] = FALSE;
+		}
+		return $data;
+	}
 
 }

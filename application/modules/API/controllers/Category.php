@@ -3,7 +3,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
-require APPPATH . 'modules/API/models/Category_model.php';
 
 /**
  *
@@ -16,17 +15,22 @@ require APPPATH . 'modules/API/models/Category_model.php';
  */
 class Category extends \API\Libraries\REST_Controller  {
 
+    function __construct()
+    {
+        parent::__construct();
+        $this->load->model('category_model');
+    }
+
     public function index_get()
     {
+        // categories from a data store e.g. database
+        $categories = $this->category_model->read();
 
         $id = $this->get('id');
 
         // If the id parameter doesn't exist return all the categories
         if ($id === NULL)
         {
-            // categories from a data store e.g. database
-            $categories = Category_model::all();
-
             // Check if the categories data store contains categories (in case the database result returns NULL)
             if ($categories)
             {
@@ -56,7 +60,18 @@ class Category extends \API\Libraries\REST_Controller  {
             // Get the category from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $category = Category_model::find($id);
+            $category = NULL;
+
+            if (!empty($categories))
+            {      
+                foreach ($categories as $key => $value)
+                {   
+                    if ($value['id'] == $id)
+                    {
+                        $category = $value;
+                    }
+                }
+            }
 
             if (!empty($category))
             {
@@ -74,15 +89,18 @@ class Category extends \API\Libraries\REST_Controller  {
 
     public function index_post()
     {   
-        $category = new Category_model;
-        $category->name = $this->post('name');
-        
-        if($category->save())
+        $data = array(
+            'name' => $this->post('name')
+        );
+        $data = $this->category_model->insert($data);
+        if($data['status'])
         {
-            $this->set_response($category, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -92,7 +110,7 @@ class Category extends \API\Libraries\REST_Controller  {
 
     public function index_put()
     {   
-        $id = (int) $this->query('id');
+        $id = (int) $this->get('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -101,15 +119,18 @@ class Category extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $category = Category_model::find($id);
-        $category->name = $this->put('name');
-        
-        if($category->save())
+        $data = array(
+            'name' => $this->put('name')
+        );
+        $data = $this->category_model->update($id, $data);
+        if($data['status'])
         {
-            $this->set_response($category, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -119,7 +140,7 @@ class Category extends \API\Libraries\REST_Controller  {
 
     public function index_delete()
     {
-        $id = (int) $this->query('id');
+        $id = (int) $this->get('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -128,9 +149,10 @@ class Category extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $deleted = Category_model::destroy($id);
-        if($deleted)
+        $data = $this->category_model->delete($id);
+        if($data['status'])
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => TRUE,
                 'message' => 'Data is deleted successfully'
@@ -138,6 +160,7 @@ class Category extends \API\Libraries\REST_Controller  {
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'

@@ -3,7 +3,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
-require APPPATH . 'modules/API/models/Nrti_model.php';
 
 /**
  *
@@ -16,10 +15,25 @@ require APPPATH . 'modules/API/models/Nrti_model.php';
  */
 class Nrti extends \API\Libraries\REST_Controller  {
 
+    function __construct()
+    {
+        parent::__construct();
+        $this->load->model('nrti_model');
+    }
+
     public function index_get()
     {   
         //Default parameters
         $regimen = $this->get('regimen');
+
+        //Conditions
+        $conditions = array(
+            'regimen_id' => $regimen
+        );
+        $conditions = array_filter($conditions);
+
+        //nrtis from a data store e.g. database
+        $nrtis = $this->nrti_model->read($conditions);
 
         // If parameters don't exist return all the nrtis
         if ($regimen <= 0)
@@ -27,9 +41,6 @@ class Nrti extends \API\Libraries\REST_Controller  {
             // Check if the nrti data store contains nrti (in case the database result returns NULL)
             if ($nrtis)
             {
-                //nrtis from a data store e.g. database
-                $nrtis = Nrti_model::with('regimen')->get();
-
                 // Set the response and exit
                 $this->response($nrtis, \API\Libraries\REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
             }
@@ -54,7 +65,18 @@ class Nrti extends \API\Libraries\REST_Controller  {
             // Get the nrti from the array, using the regimen_id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $nrti = $nrti = Nnrti_model::with('regimen')->where('regimen_id', $regimen)->first();
+            $nrti = NULL;
+
+            if (!empty($nrtis))
+            {      
+                foreach ($nrtis as $key => $value)
+                {   
+                    if ($value['regimen_id'] == $regimen)
+                    {
+                        $nrti = $value;
+                    }
+                }
+            }
 
             if (!empty($nrti))
             {
@@ -72,16 +94,19 @@ class Nrti extends \API\Libraries\REST_Controller  {
 
     public function index_post()
     {   
-        $nrti = new Nrti_model;
-        $nrti->regimen_id = $this->post('regimen_id');
-        $nrti->name = $this->post('name');
-        
-        if($nrti->save())
+        $data = array(
+            'regimen_id' => $this->post('regimen_id'),
+            'name' => $this->post('name')
+        );
+        $data = $this->nrti_model->insert($data);
+        if($data['status'])
         {
-            $this->set_response($nrti, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -91,7 +116,7 @@ class Nrti extends \API\Libraries\REST_Controller  {
 
     public function index_put()
     {   
-        $regimen_id = (int) $this->query('regimen');
+        $regimen_id = (int) $this->get('regimen');
 
         // Validate the regimen_id.
         if ($regimen_id <= 0)
@@ -100,15 +125,18 @@ class Nrti extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $nrti = Nrti_model::where('regimen_id', $regimen)->first();
-        $nrti->name = $this->put('name');
-        
-        if($nrti)
+        $data = array(
+            'name' => $this->put('name')
+        );
+        $data = $this->nrti_model->update($regimen_id, $data);
+        if($data['status'])
         {
-            $this->set_response($nrti, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -118,7 +146,7 @@ class Nrti extends \API\Libraries\REST_Controller  {
 
     public function index_delete()
     {
-        $regimen_id = (int) $this->query('regimen');
+        $regimen_id = (int) $this->get('regimen');
 
         // Validate the regimen_id.
         if ($regimen_id <= 0)
@@ -127,9 +155,10 @@ class Nrti extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $deleted = Nrti_model::where('regimen_id', $regimen)->delete();
-        if($deleted)
+        $data = $this->nrti_model->delete($regimen_id);
+        if($data['status'])
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => TRUE,
                 'message' => 'Data is deleted successfully'
@@ -137,6 +166,7 @@ class Nrti extends \API\Libraries\REST_Controller  {
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'

@@ -3,7 +3,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
-require APPPATH . 'modules/API/models/Partner_model.php';
 
 /**
  *
@@ -25,7 +24,7 @@ class Partner extends \API\Libraries\REST_Controller  {
     public function index_get()
     {
         // partners from a data store e.g. database
-        $partners = Partner_model::all();
+        $partners = $this->partner_model->read();
 
         $id = $this->get('id');
 
@@ -61,7 +60,18 @@ class Partner extends \API\Libraries\REST_Controller  {
             // Get the partner from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $partner = Partner_model::find($id);
+            $partner = NULL;
+
+            if (!empty($partners))
+            {      
+                foreach ($partners as $key => $value)
+                {   
+                    if ($value['id'] == $id)
+                    {
+                        $partner = $value;
+                    }
+                }
+            }
 
             if (!empty($partner))
             {
@@ -79,15 +89,18 @@ class Partner extends \API\Libraries\REST_Controller  {
 
     public function index_post()
     {   
-        $partner = new Partner_model;
-        $partner->name = $this->post('name');
-         
-        if($partner->save())
+        $data = array(
+            'name' => $this->post('name')
+        );
+        $data = $this->partner_model->insert($data);
+        if($data['status'])
         {
-            $this->set_response($partner, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -97,7 +110,7 @@ class Partner extends \API\Libraries\REST_Controller  {
 
     public function index_put()
     {   
-        $id = (int) $this->query('id');
+        $id = (int) $this->get('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -106,15 +119,18 @@ class Partner extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $partner = Partner_model::find($id);
-        $partner->name = $this->put('name');
-        
-        if($partner->save())
+        $data = array(
+            'name' => $this->put('name')
+        );
+        $data = $this->partner_model->update($id, $data);
+        if($data['status'])
         {
-            $this->set_response($partner, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -124,7 +140,7 @@ class Partner extends \API\Libraries\REST_Controller  {
 
     public function index_delete()
     {
-        $id = (int) $this->query('id');
+        $id = (int) $this->get('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -133,9 +149,10 @@ class Partner extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $deleted = Partner_model::destroy($id);
-        if($deleted)
+        $data = $this->partner_model->delete($id);
+        if($data['status'])
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => TRUE,
                 'message' => 'Data is deleted successfully'
@@ -143,6 +160,7 @@ class Partner extends \API\Libraries\REST_Controller  {
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'

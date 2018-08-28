@@ -3,7 +3,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
-require APPPATH . 'modules/API/models/Funding_agent_model.php';
 
 /**
  *
@@ -16,16 +15,22 @@ require APPPATH . 'modules/API/models/Funding_agent_model.php';
  */
 class Funding_agent extends \API\Libraries\REST_Controller  {
 
+    function __construct()
+    {
+        parent::__construct();
+        $this->load->model('Funding_agent_model');
+    }
+
     public function index_get()
     {
+        // Funding_agents from a data store e.g. database
+        $Funding_agents = $this->Funding_agent_model->read();
+
         $id = $this->get('id');
 
         // If the id parameter doesn't exist return all the Funding_agents
         if ($id === NULL)
         {
-            // Funding_agents from a data store e.g. database
-            $Funding_agents = Funding_agent_model::all();
-    
             // Check if the Funding_agents data store contains Funding_agents (in case the database result returns NULL)
             if ($Funding_agents)
             {
@@ -55,7 +60,18 @@ class Funding_agent extends \API\Libraries\REST_Controller  {
             // Get the Funding_agent from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $Funding_agent = Funding_agent_model::find($id);
+            $Funding_agent = NULL;
+
+            if (!empty($Funding_agents))
+            {      
+                foreach ($Funding_agents as $key => $value)
+                {   
+                    if ($value['id'] == $id)
+                    {
+                        $Funding_agent = $value;
+                    }
+                }
+            }
 
             if (!empty($Funding_agent))
             {
@@ -73,15 +89,18 @@ class Funding_agent extends \API\Libraries\REST_Controller  {
 
     public function index_post()
     {   
-        $Funding_agent = new Funding_agent_model;
-        $Funding_agent->name = $this->post('name');
-
-        if($Funding_agent->save())
+        $data = array(
+            'name' => $this->post('name')
+        );
+        $data = $this->Funding_agent_model->insert($data);
+        if($data['status'])
         {
-            $this->set_response($Funding_agent, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -91,7 +110,7 @@ class Funding_agent extends \API\Libraries\REST_Controller  {
 
     public function index_put()
     {   
-        $id = (int) $this->query('id');
+        $id = (int) $this->get('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -100,15 +119,18 @@ class Funding_agent extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $Funding_agent = Funding_agent_model::find($id);
-        $Funding_agent->name = $this->put('name');
-
-        if($Funding_agent->save())
+        $data = array(
+            'name' => $this->put('name')
+        );
+        $data = $this->Funding_agent_model->update($id, $data);
+        if($data['status'])
         {
-            $this->set_response($Funding_agent, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -118,7 +140,7 @@ class Funding_agent extends \API\Libraries\REST_Controller  {
 
     public function index_delete()
     {
-        $id = (int) $this->query('id');
+        $id = (int) $this->get('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -127,9 +149,10 @@ class Funding_agent extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $deleted = Funding_agent_model::destroy($id);
-        if($deleted)
+        $data = $this->Funding_agent_model->delete($id);
+        if($data['status'])
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => TRUE,
                 'message' => 'Data is deleted successfully'
@@ -137,6 +160,7 @@ class Funding_agent extends \API\Libraries\REST_Controller  {
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'

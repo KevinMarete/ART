@@ -3,7 +3,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
-require APPPATH . 'modules/API/models/Status_model.php';
 
 /**
  *
@@ -16,16 +15,22 @@ require APPPATH . 'modules/API/models/Status_model.php';
  */
 class Status extends \API\Libraries\REST_Controller  {
 
+    function __construct()
+    {
+        parent::__construct();
+        $this->load->model('status_model');
+    }
+
     public function index_get()
     {
+        // statuss from a data store e.g. database
+        $statuss = $this->status_model->read();
+
         $id = $this->get('id');
 
         // If the id parameter doesn't exist return all the statuss
         if ($id === NULL)
         {
-            // statuss from a data store e.g. database
-            $statuss = Status_model::all();
-
             // Check if the statuss data store contains statuss (in case the database result returns NULL)
             if ($statuss)
             {
@@ -55,7 +60,18 @@ class Status extends \API\Libraries\REST_Controller  {
             // Get the status from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $status = Status_model::find($id);
+            $status = NULL;
+
+            if (!empty($statuss))
+            {      
+                foreach ($statuss as $key => $value)
+                {   
+                    if ($value['id'] == $id)
+                    {
+                        $status = $value;
+                    }
+                }
+            }
 
             if (!empty($status))
             {
@@ -73,15 +89,18 @@ class Status extends \API\Libraries\REST_Controller  {
 
     public function index_post()
     {   
-        $status = new Status_model;
-        $status->name = $this->post('name');
-
-        if($status->save())
+        $data = array(
+            'name' => $this->post('name')
+        );
+        $data = $this->status_model->insert($data);
+        if($data['status'])
         {
-            $this->set_response($status, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -91,7 +110,7 @@ class Status extends \API\Libraries\REST_Controller  {
 
     public function index_put()
     {   
-        $id = (int) $this->query('id');
+        $id = (int) $this->get('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -100,15 +119,18 @@ class Status extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $status = Status_model::find($id);
-        $status->name = $this->put('name');
-        
-        if($status->save())
+        $data = array(
+            'name' => $this->put('name')
+        );
+        $data = $this->status_model->update($id, $data);
+        if($data['status'])
         {
-            $this->set_response($status, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -118,7 +140,7 @@ class Status extends \API\Libraries\REST_Controller  {
 
     public function index_delete()
     {
-        $id = (int) $this->query('id');
+        $id = (int) $this->get('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -127,9 +149,10 @@ class Status extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $deleted = Status_model::destroy($id);
-        if($deleted)
+        $data = $this->status_model->delete($id);
+        if($data['status'])
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => TRUE,
                 'message' => 'Data is deleted successfully'
@@ -137,6 +160,7 @@ class Status extends \API\Libraries\REST_Controller  {
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'

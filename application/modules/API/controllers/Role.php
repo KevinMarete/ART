@@ -3,7 +3,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
-require APPPATH . 'modules/API/models/Role_model.php';
 
 /**
  *
@@ -16,16 +15,22 @@ require APPPATH . 'modules/API/models/Role_model.php';
  */
 class Role extends \API\Libraries\REST_Controller  {
 
+    function __construct()
+    {
+        parent::__construct();
+        $this->load->model('role_model');
+    }
+
     public function index_get()
     {
+        // roles from a data store e.g. database
+        $roles = $this->role_model->read();
+
         $id = $this->get('id');
 
         // If the id parameter doesn't exist return all the roles
         if ($id === NULL)
         {
-            // roles from a data store e.g. database
-            $roles = Role_model::all();
-    
             // Check if the roles data store contains roles (in case the database result returns NULL)
             if ($roles)
             {
@@ -55,7 +60,18 @@ class Role extends \API\Libraries\REST_Controller  {
             // Get the role from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $role = Role_model::find($id);
+            $role = NULL;
+
+            if (!empty($roles))
+            {      
+                foreach ($roles as $key => $value)
+                {   
+                    if ($value['id'] == $id)
+                    {
+                        $role = $value;
+                    }
+                }
+            }
 
             if (!empty($role))
             {
@@ -73,15 +89,18 @@ class Role extends \API\Libraries\REST_Controller  {
 
     public function index_post()
     {   
-        $role = new Role_model;
-        $role->name = $this->post('name');
-
-        if($role->save())
+        $data = array(
+            'name' => $this->post('name')
+        );
+        $data = $this->role_model->insert($data);
+        if($data['status'])
         {
-            $this->set_response($role, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -91,7 +110,7 @@ class Role extends \API\Libraries\REST_Controller  {
 
     public function index_put()
     {   
-        $id = (int) $this->query('id');
+        $id = (int) $this->get('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -100,15 +119,18 @@ class Role extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $role = Role_model::find($id);
-        $role->name = $this->put('name');
-
-        if($role->save())
+        $data = array(
+            'name' => $this->put('name')
+        );
+        $data = $this->role_model->update($id, $data);
+        if($data['status'])
         {
-            $this->set_response($role, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -118,7 +140,7 @@ class Role extends \API\Libraries\REST_Controller  {
 
     public function index_delete()
     {
-        $id = (int) $this->query('id');
+        $id = (int) $this->get('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -127,9 +149,10 @@ class Role extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $deleted = Role_model::destroy($id);
-        if($deleted)
+        $data = $this->role_model->delete($id);
+        if($data['status'])
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => TRUE,
                 'message' => 'Data is deleted successfully'
@@ -137,6 +160,7 @@ class Role extends \API\Libraries\REST_Controller  {
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'

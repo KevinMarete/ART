@@ -3,7 +3,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
-require APPPATH . 'modules/API/models/Generic_model.php';
 
 /**
  *
@@ -16,17 +15,22 @@ require APPPATH . 'modules/API/models/Generic_model.php';
  */
 class Generic extends \API\Libraries\REST_Controller  {
 
+    function __construct()
+    {
+        parent::__construct();
+        $this->load->model('generic_model');
+    }
+
     public function index_get()
     {
+        // generics from a data store e.g. database
+        $generics = $this->generic_model->read();
 
         $id = $this->get('id');
 
         // If the id parameter doesn't exist return all the generics
         if ($id === NULL)
         {
-            // generics from a data store e.g. database
-            $generics = Generic_model::all();
-
             // Check if the generics data store contains generics (in case the database result returns NULL)
             if ($generics)
             {
@@ -56,7 +60,18 @@ class Generic extends \API\Libraries\REST_Controller  {
             // Get the generic from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $generic = Generic_model::find($id);
+            $generic = NULL;
+
+            if (!empty($generics))
+            {      
+                foreach ($generics as $key => $value)
+                {   
+                    if ($value['id'] == $id)
+                    {
+                        $generic = $value;
+                    }
+                }
+            }
 
             if (!empty($generic))
             {
@@ -74,16 +89,19 @@ class Generic extends \API\Libraries\REST_Controller  {
 
     public function index_post()
     {   
-        $generic = new Generic_model;
-        $generic->name = $this->post('name');
-        $generic->abbreviation = $this->post('abbreviation');
-        
-        if($generic->save())
+        $data = array(
+            'name' => $this->post('name'),
+            'abbreviation' => $this->post('abbreviation')
+        );
+        $data = $this->generic_model->insert($data);
+        if($data['status'])
         {
-            $this->set_response($generic, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -93,7 +111,7 @@ class Generic extends \API\Libraries\REST_Controller  {
 
     public function index_put()
     {   
-        $id = (int) $this->query('id');
+        $id = (int) $this->get('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -102,16 +120,19 @@ class Generic extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $generic = Generic_model::find($id);
-        $generic->name = $this->put('name');
-        $generic->abbreviation = $this->put('abbreviation');
-        
-        if($generic->save())
+        $data = array(
+            'name' => $this->put('name'),
+            'abbreviation' => $this->put('abbreviation')
+        );
+        $data = $this->generic_model->update($id, $data);
+        if($data['status'])
         {
-            $this->set_response($generic, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -121,7 +142,7 @@ class Generic extends \API\Libraries\REST_Controller  {
 
     public function index_delete()
     {
-        $id = (int) $this->query('id');
+        $id = (int) $this->get('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -130,9 +151,10 @@ class Generic extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $deleted = Generic_model::destroy($id);
-        if($deleted)
+        $data = $this->generic_model->delete($id);
+        if($data['status'])
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => TRUE,
                 'message' => 'Data is deleted successfully'
@@ -140,6 +162,7 @@ class Generic extends \API\Libraries\REST_Controller  {
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'

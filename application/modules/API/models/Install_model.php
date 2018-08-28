@@ -1,24 +1,58 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-use \Illuminate\Database\Eloquent\Model as Eloquent;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Application\modules\API\models\Facility_model;
-use Application\modules\API\models\User_model;
+class Install_model extends CI_Model {
 
-class Install_model extends Eloquent {
-
-	use SoftDeletes;
-	protected $table = "tbl_install"; // table name
-	
-	public function facility()
-    {
-        return $this->belongsTo('Facility_model', 'facility_id');
+	public function read()
+	{
+		$query = $this->db->get('tbl_install');
+		return $query->result_array();
 	}
-	
-	public function user()
-    {
-        return $this->belongsTo('User_model', 'user_id');
-    }
+
+	public function insert($data)
+	{	
+		$this->db->insert('tbl_install',	$data);
+		$count = $this->db->affected_rows();
+		if($count > 0)
+		{
+			$data['id'] = $this->db->insert_id();
+			$data['status'] = TRUE;
+		}
+		else
+		{
+			$data['status'] = FALSE;
+		}
+		return $data;
+	}
+
+	public function update($id, $data)
+	{	
+		$this->db->update('tbl_install', $data, array('id' => $id));
+		$count = $this->db->affected_rows();
+		if($count > 0)
+		{
+			$data['status'] = TRUE;
+		}
+		else
+		{
+			$data['status'] = FALSE;
+		}
+		return $data;
+	}
+
+	public function delete($id)
+	{	
+		$this->db->delete('tbl_install', array('id' => $id)); 
+		$count = $this->db->affected_rows();
+		if($count > 0)
+		{
+			$data['status'] = TRUE;
+		}
+		else
+		{
+			$data['status'] = FALSE;
+		}
+		return $data;
+	}
 
 }

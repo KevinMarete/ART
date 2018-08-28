@@ -3,8 +3,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
-require APPPATH . 'modules/API/models/Drug_model.php';
-require APPPATH . 'modules/API/models/Vw_drug_list_model.php';
 
 /**
  *
@@ -17,17 +15,22 @@ require APPPATH . 'modules/API/models/Vw_drug_list_model.php';
  */
 class Drug extends \API\Libraries\REST_Controller  {
 
+    function __construct()
+    {
+        parent::__construct();
+        $this->load->model('drug_model');
+    }
+
     public function index_get()
     {
+        // drugs from a data store e.g. database
+        $drugs = $this->drug_model->read();
 
         $id = $this->get('id');
 
         // If the id parameter doesn't exist return all the drugs
         if ($id === NULL)
         {
-            // drugs from a data store e.g. database
-            $drugs = Drug_model::with('generic', 'formulation')->get();
-
             // Check if the drugs data store contains drugs (in case the database result returns NULL)
             if ($drugs)
             {
@@ -57,7 +60,18 @@ class Drug extends \API\Libraries\REST_Controller  {
             // Get the drug from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $drug = Drug_model::where('id',$id)->with('generic', 'formulation')->first();
+            $drug = NULL;
+
+            if (!empty($drugs))
+            {      
+                foreach ($drugs as $key => $value)
+                {   
+                    if ($value['id'] == $id)
+                    {
+                        $drug = $value;
+                    }
+                }
+            }
 
             if (!empty($drug))
             {
@@ -75,14 +89,14 @@ class Drug extends \API\Libraries\REST_Controller  {
 
     public function list_get()
     {
+        // drugs from a data store e.g. database
+        $drugs = $this->drug_model->read_list();
+
         $id = $this->get('id');
 
         // If the id parameter doesn't exist return all the drugs
         if ($id === NULL)
         {
-            // drugs from a data store e.g. database
-            $drugs = Vw_drug_list_model::all();
-
             // Check if the drugs data store contains drugs (in case the database result returns NULL)
             if ($drugs)
             {
@@ -112,7 +126,18 @@ class Drug extends \API\Libraries\REST_Controller  {
             // Get the drug from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $drug = Vw_drug_list_model::find($id);
+            $drug = NULL;
+
+            if (!empty($drugs))
+            {      
+                foreach ($drugs as $key => $value)
+                {   
+                    if ($value['id'] == $id)
+                    {
+                        $drug = $value;
+                    }
+                }
+            }
 
             if (!empty($drug))
             {
@@ -130,18 +155,21 @@ class Drug extends \API\Libraries\REST_Controller  {
 
     public function index_post()
     {   
-        $drug = new Drug_model;
-        $drug->strength = $this->post('strength');
-        $drug->packsize = $this->post('packsize');
-        $drug->generic_id = $this->post('generic_id');
-        $drug->formulation_id = $this->post('formulation_id');
-        
-        if($drug->save())
+        $data = array(
+            'strength' => $this->post('strength'),
+            'packsize' => $this->post('packsize'),
+            'generic_id' => $this->post('generic_id'),
+            'formulation_id' => $this->post('formulation_id')
+        );
+        $data = $this->drug_model->insert($data);
+        if($data['status'])
         {
-            $this->set_response($drug, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -151,7 +179,7 @@ class Drug extends \API\Libraries\REST_Controller  {
 
     public function index_put()
     {   
-        $id = (int) $this->query('id');
+        $id = (int) $this->get('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -160,18 +188,21 @@ class Drug extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $drug = Drug_model::find($id);
-        $drug->strength = $this->post('strength');
-        $drug->packsize = $this->post('packsize');
-        $drug->generic_id = $this->post('generic_id');
-        $drug->formulation_id = $this->post('formulation_id');
-        
-        if($drug->save())
+        $data = array(
+            'strength' => $this->put('strength'),
+            'packsize' => $this->put('packsize'),
+            'generic_id' => $this->put('generic_id'),
+            'formulation_id' => $this->put('formulation_id')
+        );
+        $data = $this->drug_model->update($id, $data);
+        if($data['status'])
         {
-            $this->set_response($drug, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -181,7 +212,7 @@ class Drug extends \API\Libraries\REST_Controller  {
 
     public function index_delete()
     {
-        $id = (int) $this->query('id');
+        $id = (int) $this->get('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -190,9 +221,10 @@ class Drug extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $deleted = Drug_model::destroy($id);
-        if($deleted)
+        $data = $this->drug_model->delete($id);
+        if($data['status'])
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => TRUE,
                 'message' => 'Data is deleted successfully'
@@ -200,6 +232,7 @@ class Drug extends \API\Libraries\REST_Controller  {
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'

@@ -3,7 +3,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
-require APPPATH . 'modules/API/models/User_model.php';
 
 /**
  *
@@ -16,16 +15,22 @@ require APPPATH . 'modules/API/models/User_model.php';
  */
 class User extends \API\Libraries\REST_Controller  {
 
+    function __construct()
+    {
+        parent::__construct();
+        $this->load->model('user_model');
+    }
+
     public function index_get()
     {
+        // users from a data store e.g. database
+        $users = $this->user_model->read();
+
         $id = $this->get('id');
 
         // If the id parameter doesn't exist return all the users
         if ($id === NULL)
         {
-            // users from a data store e.g. database
-            $users = User_model::all();
-    
             // Check if the users data store contains users (in case the database result returns NULL)
             if ($users)
             {
@@ -55,7 +60,18 @@ class User extends \API\Libraries\REST_Controller  {
             // Get the user from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $user = User_model::find($id);
+            $user = NULL;
+
+            if (!empty($users))
+            {      
+                foreach ($users as $key => $value)
+                {   
+                    if ($value['id'] == $id)
+                    {
+                        $user = $value;
+                    }
+                }
+            }
 
             if (!empty($user))
             {
@@ -73,16 +89,18 @@ class User extends \API\Libraries\REST_Controller  {
 
     public function index_post()
     {   
-        $user = new User_model;
-        $user->name = $this->post('name');
-        $user->phone = $this->post('phone');
-        
-        if($user->save())
+        $data = array(
+            'name' => $this->post('name')
+        );
+        $data = $this->user_model->insert($data);
+        if($data['status'])
         {
-            $this->set_response($user, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -92,7 +110,7 @@ class User extends \API\Libraries\REST_Controller  {
 
     public function index_put()
     {   
-        $id = (int) $this->query('id');
+        $id = (int) $this->get('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -101,16 +119,18 @@ class User extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $user = User_model::find($id);
-        $user->name = $this->put('name');
-        $user->phone = $this->put('phone');
-        
-        if($user->save())
+        $data = array(
+            'name' => $this->put('name')
+        );
+        $data = $this->user_model->update($id, $data);
+        if($data['status'])
         {
-            $this->set_response($user, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            unset($data['status']);
+            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -120,7 +140,7 @@ class User extends \API\Libraries\REST_Controller  {
 
     public function index_delete()
     {
-        $id = (int) $this->query('id');
+        $id = (int) $this->get('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -129,9 +149,10 @@ class User extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $deleted = User_model::destroy($id);
-        if($deleted)
+        $data = $this->user_model->delete($id);
+        if($data['status'])
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => TRUE,
                 'message' => 'Data is deleted successfully'
@@ -139,6 +160,7 @@ class User extends \API\Libraries\REST_Controller  {
         }
         else
         {
+            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
