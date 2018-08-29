@@ -125,3 +125,7 @@
   color: #468c1f;
   font-size: 1.3em;
 }
+
+.tabledit-delete-button{
+    display: none !important;
+}

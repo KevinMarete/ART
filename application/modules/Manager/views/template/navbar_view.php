@@ -52,10 +52,10 @@
                     foreach ($value['submodules'] as $orig_submodule) {
                         $_blanks = array('ftp');
                         $submodule = str_replace(' ', '_', $orig_submodule);
-                        if(in_array($submodule, $_blanks)){
-                            echo "<li><a href='" . base_url() . "ftp' target='_blank'>" . ucwords(str_replace('_', ' ', $orig_submodule)) . "</a></li>";
-                        }else{
-                            echo "<li><a class='" . str_replace(' ', '_', $orig_submodule) . "' href='" . base_url() . "manager/" . $module . "/" . $submodule . "'>" . ucwords(str_replace('_', ' ', $orig_submodule)) . "</a></li>";
+                        if (in_array($submodule, $_blanks)) {
+                            echo "<li><a href='" . base_url() . "ftp' target='_blank'>" . ucwords(str_replace('_', ' ', $orig_submodule . '_')) . "</a></li>";
+                        } else {
+                            echo "<li><a class='" . str_replace(' ', '_', $orig_submodule . '_') . "' href='" . base_url() . "manager/" . $module . "/" . $submodule . "'>" . ucwords(str_replace('_', ' ', $orig_submodule)) . "</a></li>";
                         }
                     }
                     echo "</ul> </li>";
