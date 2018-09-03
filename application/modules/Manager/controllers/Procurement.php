@@ -7,6 +7,80 @@ class Procurement extends MX_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Procurement_model');
+        $this->load->library('email_sender');
+    }
+
+    public function get_test_email() {
+
+        $date = date('Y') . "-" . sprintf("%02d", date('m') - 1);
+        $drug_ids = "SELECT GROUP_CONCAT(id) id FROM `tbl_decision`";
+        $table_ids = $this->db->query($drug_ids)->result_array();
+        $drugids_ = $table_ids[0]["id"];
+        $sql = "SELECT d.id drug_id ,"
+                . "CONCAT(g.name,' ', d.strength,' - ',f.name) drug "
+                . "FROM tbl_drug d "
+                . "LEFT JOIN tbl_generic g ON d.generic_id = g.id "
+                . "LEFT JOIN tbl_formulation f ON d.formulation_id = f.id "
+                . "WHERE d.id IN ($drugids_) ORDER BY g.name ASC";
+        $table_data = $this->db->query($sql)->result_array();
+
+        $sql2 = "SELECT 
+                        d.id,
+                        d.decision_date,
+                        d.discussion,
+                        d.recommendation,
+                        d.drug_id,
+                        t.created,
+                        CONCAT_WS(' ', u.firstname, u.lastname) user
+                    FROM tbl_decision d 
+                    INNER JOIN (
+                        SELECT *
+                        FROM tbl_decision_log l
+                        WHERE (l.created, l.decision_id) IN
+                        (SELECT MAX(created), decision_id
+                        FROM tbl_decision_log 
+                        GROUP BY decision_id)
+                    ) t ON t.decision_id = d.id
+                    INNER JOIN tbl_user u ON u.id = t.user_id 
+                    WHERE d.decision_date LIKE '%$date%'                        
+                    AND d.deleted = '0'                    
+                    ORDER BY d.decision_date DESC";
+        $items = $this->db->query($sql2)->result_array();
+
+
+        foreach ($table_data as &$mt) {
+            foreach ($items as $it) {
+                if ($it['drug_id'] == $mt['drug_id']) {
+                    if (!isset($mt['decisions'])) {
+                        $mt['decisions'] = [];
+                    }
+                    $mt['decisions'][] = $it;
+                }
+            }
+        }
+
+        $final_string = '<table style="border:1px solid black;"><tr><th><strong>Product</strong></th><th><strong>Discussion</strong></th><th><strong>Recommendations</strong></th></tr>';
+        $final_string .= '<tr colspan="3" style="background:#FBD4B4;border:1px solid black;"><td colspan="3"><strong>Antiretroviral Therapy</strong></td></tr>';
+
+        foreach ($table_data as $d) {
+            $final_string .= '<tr style="border:1px solid black;">';
+            if (isset($d['decisions'])) {
+                $final_string .= '<td style="border:1px solid black;">' . $d['drug'] . '</td>';
+            } else {
+                
+            }
+            if (isset($d['decisions'])) {
+                foreach ($d['decisions'] as $e) {
+                    $final_string .= '<td style="border:1px solid black;">' . $e['discussion'] . '</td><td style="border:1px solid black;">' . $e['recommendation'] . '</td>';
+                }
+            } else {
+                
+            }
+            $final_string .= '</tr>';
+        }
+        $final_string .= '</table>';
+     
+        $this->email_sender->send_email('Procurement', 'Meeting Minutes', $this->config->item('committee_emails'), $names = '', $final_string);
     }
 
     public function get_commodities() {
@@ -126,6 +200,109 @@ class Procurement extends MX_Controller {
             'user_id' => $this->session->userdata('id'),
             'decision_id' => $decision_id
         ]);
+    }
+
+    public function get_timeline() {
+
+        $drug_ids = "SELECT GROUP_CONCAT(id) id FROM `tbl_decision`";
+        $table_ids = $this->db->query($drug_ids)->result_array();
+        $drugids_ = $table_ids[0]["id"];
+        $sql = "SELECT d.id drug_id ,"
+                . "CONCAT(g.name,' ', d.strength,' - ',f.name) drug "
+                . "FROM tbl_drug d "
+                . "LEFT JOIN tbl_generic g ON d.generic_id = g.id "
+                . "LEFT JOIN tbl_formulation f ON d.formulation_id = f.id "
+                . "WHERE d.id IN ($drugids_) ORDER BY g.name ASC";
+        $table_data = $this->db->query($sql)->result_array();
+
+        $sql2 = "SELECT 
+                        d.id,
+                        d.decision_date,
+                        d.discussion,
+                        d.recommendation,
+                        d.drug_id,
+                        t.created,
+                        CONCAT_WS(' ', u.firstname, u.lastname) user
+                    FROM tbl_decision d 
+                    INNER JOIN (
+                        SELECT *
+                        FROM tbl_decision_log l
+                        WHERE (l.created, l.decision_id) IN
+                        (SELECT MAX(created), decision_id
+                        FROM tbl_decision_log 
+                        GROUP BY decision_id)
+                    ) t ON t.decision_id = d.id
+                    INNER JOIN tbl_user u ON u.id = t.user_id 
+                    WHERE d.drug_id IN ($drugids_)
+                    AND d.deleted = '0'                    
+                    ORDER BY d.decision_date DESC";
+        $items = $this->db->query($sql2)->result_array();
+
+
+        foreach ($table_data as &$mt) {
+            foreach ($items as $it) {
+                if ($it['drug_id'] == $mt['drug_id']) {
+                    if (!isset($mt['decisions'])) {
+                        $mt['decisions'] = [];
+                    }
+                    $mt['decisions'][] = $it;
+                }
+            }
+        }
+
+        $final_string = '';
+
+        foreach ($table_data as $d) {
+            if (isset($d['decisions'])) {
+                $final_string .= '<p style="font-weight:bold; font-size:16px; color:blue;">' . $d['drug'] . '</p>';
+            } else {
+                
+            }
+            if (isset($d['decisions'])) {
+                foreach ($d['decisions'] as $e) {
+                    $final_string .= '<div class="row timeline-movement">
+        <div class="timeline-badge">
+            <span class="timeline-balloon-date-day">' . date("d", strtotime($e["decision_date"])) . '</span>
+            <span class="timeline-balloon-date-month">' . date("M/y", strtotime($e["decision_date"])) . '</span>
+        </div>
+        <div class="col-sm-6  timeline-item">
+            <div class="row ">
+                <div class="col-sm-11 ">
+                    <div class="timeline-panel credits mainContent">
+                        <ul class="timeline-panel-ul ">
+                            <li><span class="decAction"><a style="display:none;" href="#edit" data-toggle="modal" data-target="#editModal" class="btn btn-sm btn-primary edit" data-id=' . $e["id"] . '><i class="glyphicon glyphicon-edit"></i> | Edit</span></a>  <a style="display:none;" href="#trash" data-toggle="modal" data-target="#trashModal" class="btn btn-sm btn-danger trash" data-id=' . $e["id"] . '><i class="glyphicon glyphicon-trash"></i> | Trash</span></a></span></li>
+                            <li><span class="importo">Discussions</span></li>
+                            <li><span class="causale _disc' . $e["id"] . '">' . $e["discussion"] . '</span> </li>
+                            <li><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>Last updated by ' . $e["user"] . ' on ' . date('d/m/Y h:i:s a', strtotime($e["created"])) . '</small></p> </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6  timeline-item">
+            <div class="row">
+                <div class="col-sm-offset-1 col-sm-11">
+                    <div class="timeline-panel debits mainContent">
+                        <ul class="timeline-panel-ul">
+                            <li><span class="decAction"><a style="display:none;" href="#edit" data-toggle="modal" data-target="#editModal"  class="btn btn-sm btn-primary edit" data-id=' . $e["id"] . '><i class="glyphicon glyphicon-edit"></i> | Edit</span></a> <a style="display:none;" href="#trash" data-toggle="modal" data-target="#trashModal" class="btn btn-sm btn-danger trash" data-id=' . $e["id"] . '><i class="glyphicon glyphicon-trash"></i> | Trash</span></a></span></li>
+                            <li><span class="importo">Recommendations</span></li>
+                            <li><span  class="causale _rec' . $e["id"] . '">' . $e["recommendation"] . '</spsn> </li>
+                            <li><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> Last updated by ' . $e["user"] . ' on ' . date('d/m/Y h:i:s a', strtotime($e["created"])) . '</small></p> </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>';
+                }
+            } else {
+                
+            }
+        }
+
+        echo $final_string;
     }
 
     public function get_decisions($drug_id) {
@@ -249,9 +426,30 @@ class Procurement extends MX_Controller {
             $tbody .= '</tr>';
         }
         $thead .= '</tr></thead>';
-        $replace_year = str_replace('procurement_year', 'expected_year', $thead);
-        $newhead = str_replace('procurement_month', 'expected_month', $replace_year);
-        $html_table .= $newhead;
+        $html_table .= $thead;
+        $html_table .= $tbody;
+        $html_table .= '</tbody></table>';
+        echo $html_table;
+    }
+
+    public function get_order_table_history($drug_id) {
+        $response = $this->Procurement_model->get_history_data($drug_id);
+
+        $html_table = '<table class="table table-condensed table-striped table-bordered order_tbl_history">';
+        $thead = '<thead><tr>';
+        $tbody = '<tbody>';
+        foreach ($response['data'] as $count => $values) {
+            $tbody .= '<tr>';
+            foreach ($values as $key => $value) {
+                if ($count == 0) {
+                    $thead .= '<th>' . $key . '</th>';
+                }
+                $tbody .= '<td>' . $value . '</td>';
+            }
+            $tbody .= '</tr>';
+        }
+        $thead .= '</tr></thead>';
+        $html_table .= $thead;
         $html_table .= $tbody;
         $html_table .= '</tbody></table>';
         echo $html_table;

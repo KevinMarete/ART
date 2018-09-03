@@ -1,3 +1,12 @@
+<style>
+    .stickyColumn {
+    background: #fff;
+    left: 0;
+    position: absolute;
+    top: auto;
+    width: 300px;
+}
+</style>
 <div id="container" class="container-fluid">
 
     <div class="col-lg-12">
@@ -72,7 +81,7 @@
                                 <table class="table table-striped table-bordered table-condensed">
                                     <thead>
                                         <tr>
-                                            <th rowspan="2">Drug Name</th>
+                                            <th rowspan="2" width='700' >Drug Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                                             <th rowspan="2">Pack Size</th>
                                             <th>Beginning Balance</th>
                                             <th>Quantity Received</th>
@@ -131,7 +140,7 @@
                                                         $consumed  = $columns['cdrrs']['data']['cdrr_item'][$drugid]['dispensed_packs'];
                                                         ?>
                                                     <tr>
-                                                        <td><?= $drug['name'];?></td>
+                                                        <td  class='stickyColumn' style="background: #fff;"><?= $drug['name'];?></td>
                                                         <td><?= $drug['pack_size'];?></td>
                                                         <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'];?></td>
                                                         <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['received'];?></td>
@@ -161,12 +170,15 @@
                                                         </td>
                                                         <td>
                                                             <?php 
+                                                           // echo $mos;
                                                                 if ($mos < 3){
                                                                     echo '<span class="label label-danger">RESUPPLY</span>';
-                                                                }else if($mos > 3 && $mos < 6){
+                                                                }else if($mos >= 3 && $mos <= 6){
                                                                     echo '<span class="label label-warning">MONITOR</span>';
-                                                                }else{
+                                                                }else if($mos > 6){
                                                                     echo '<span class="label label-success">REDISTRIBUTE</span>';
+                                                                }else{
+                                                                  echo '<span class="label label-success"></span>';  
                                                                 } 
                                                             ?>
                                                         </td>

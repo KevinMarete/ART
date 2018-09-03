@@ -63,7 +63,37 @@ class Procurement_model extends CI_Model {
         return $response;
     }
 
-    public function get_decision_data($drug_id) {
+    function get_timeline_data($limit = '', $offset = '') {
+        $response = array('data' => array());
+        try {
+            $results_array = [];
+            $drug_ids = "SELECT GROUP_CONCAT(id) id FROM `tbl_decision`";
+            $table_ids = $this->db->query($drug_ids)->result_array();
+            $drugids_ = $table_ids[0]["id"];
+            $sql = "SELECT d.id drug_id ,"
+                    . "CONCAT(g.name,' ', d.strength,' - ',f.name) drug "
+                    . "FROM tbl_drug d "
+                    . "LEFT JOIN tbl_generic g ON d.generic_id = g.id "
+                    . "LEFT JOIN tbl_formulation f ON d.formulation_id = f.id "
+                    . "WHERE d.id IN ($drugids_) ORDER BY g.name ASC";
+            $table_data = $this->db->query($sql)->result_array();
+
+            if (!empty($table_data)) {
+                $response['data'] = $table_data;
+                $response['message'] = 'Table data was found!';
+                $response['status'] = TRUE;
+            } else {
+                $response['message'] = 'Table is empty!';
+                $response['status'] = FALSE;
+            }
+        } catch (Execption $e) {
+            $response['status'] = FALSE;
+            $response['message'] = $e->getMessage();
+        }
+        return $response;
+    }
+
+    public function get_decision_data($drug_id = '') {
         $response = array('data' => array());
         try {
             $sql = "SELECT 
@@ -82,12 +112,11 @@ class Procurement_model extends CI_Model {
                         FROM tbl_decision_log 
                         GROUP BY decision_id)
                     ) t ON t.decision_id = d.id
-                    INNER JOIN tbl_user u ON u.id = t.user_id
-                    WHERE d.drug_id = ? 
+                    INNER JOIN tbl_user u ON u.id = t.user_id                    
                     AND d.deleted = '0'
                     GROUP BY d.decision_date
                     ORDER BY d.decision_date DESC";
-            $table_data = $this->db->query($sql, array($drug_id))->result_array();
+            $table_data = $this->db->query($sql)->result_array();
             if (!empty($table_data)) {
                 $response['data'] = $table_data;
                 $response['message'] = 'Table data was found!';
@@ -171,8 +200,8 @@ class Procurement_model extends CI_Model {
         try {
             $sql = "SELECT
 pi.id,
- transaction_year procurement_year,
- transaction_month procurement_month,
+ CONCAT(transaction_year ,' - ', transaction_month) expected_period,
+ pi.date_added date_added,
  quantity quantity,
  ps.name status,
  fa.name funding_agent,
@@ -185,6 +214,41 @@ LEFT JOIN tbl_supplier s ON s.id = pi.supplier_id
 WHERE p.drug_id = ?
 GROUP BY pi.id
 ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ) DESC";
+            $table_data = $this->db->query($sql, array($drug_id))->result_array();
+            if (!empty($table_data)) {
+                $response['data'] = $table_data;
+                $response['message'] = 'Table data was found!';
+                $response['status'] = TRUE;
+            } else {
+                $response['message'] = 'Table is empty!';
+                $response['status'] = FALSE;
+            }
+        } catch (Execption $e) {
+            $response['status'] = FALSE;
+            $response['message'] = $e->getMessage();
+        }
+        return $response;
+    }
+
+    public function get_history_data($drug_id) {
+        $response = array('data' => array());
+        try {
+            $sql = "SELECT
+                  
+                     CONCAT(transaction_year ,' - ', transaction_month) expected_period,
+                     pi.date_added date_added,
+                     quantity quantity,
+                     ps.name status,
+                     fa.name funding_agent,
+                     IF(s.name IS NULL, '', s.name) supplier
+                    FROM tbl_procurement_item pi
+                    INNER JOIN tbl_procurement p ON p.id = pi.procurement_id
+                    LEFT JOIN tbl_procurement_status ps ON ps.id = pi.procurement_status_id
+                    LEFT JOIN tbl_funding_agent fa ON fa.id = pi.funding_agent_id
+                    LEFT JOIN tbl_supplier s ON s.id = pi.supplier_id
+                    WHERE p.drug_id = ?
+                    GROUP BY pi.id
+                    ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ) DESC LIMIT 1";
             $table_data = $this->db->query($sql, array($drug_id))->result_array();
             if (!empty($table_data)) {
                 $response['data'] = $table_data;

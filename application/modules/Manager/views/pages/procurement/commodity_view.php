@@ -46,20 +46,17 @@
             </div><!--/modal-header-->
             <div class="modal-body">
                 <ul class="nav nav-tabs pull-right">
-                    <li class="active"><a data-toggle="tab" href="#drug_decision">Decision</a></li>
+                    <li class="active"><a data-toggle="tab" href="#drug_decision">All Decisions</a></li>
                     <li><a data-toggle="tab" href="#drug_procurement">Procurement</a></li>
-                    <li><a data-toggle="tab" href="#drug_transactions">Transactions</a></li>
-                    <li><a data-toggle="tab" href="#drug_orders">Orders</a></li>
+                    <li><a data-toggle="tab" href="#drug_transactions">Product Tracker</a></li>
+                    <li><a data-toggle="tab" href="#drug_orders">Transactions</a></li>
                     <li><a data-toggle="tab" href="#drug_logs">Logs</a></li>
                 </ul>
                 <div class="tab-content">
-                    <p><span style="font-size: 16px;" class="label label-info" id="productTitle">Product - Month</span></p>
                     <div id="drug_decision" class="tab-pane fade in active">
-                        <h3>Decisions</h3>
+                        <h3>All Product Decisions</h3>
                         <div class="container-fluid">
-                            <div class="row pull-right">
-                                <button id="addDecision" data-toggle="modal" data-target="#decisionModal" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus"></i> Add Decision</button>
-                            </div>
+
                             <div id="timeline" style="margin-top: 10px;">
                                 <div class="row timeline-movement timeline-movement-top">
                                     <div class="timeline-badge timeline-future-movement">
@@ -73,6 +70,7 @@
                                         </a>
                                     </div>
                                 </div>
+
                                 <div id="decision_tbl"></div>
                             </div>
                         </div>
@@ -80,9 +78,14 @@
 
                     <div id="drug_procurement" class="tab-pane fade">
                         <h3>Procurement Form</h3>
-                        <p>
+                        <p><span style="font-size: 16px;" class="label label-info " id="productTitle1">Product - Month</span></p>
+
+
                         <form action="<?php echo base_url() . 'manager/save_procurement'; ?>" method="POST" class="form-horizontal" role="form">
                             <div class="form-group row">
+                                <div class="row pull-right" style="margin-right: 100px;">
+                                    <button id="addDecision" data-toggle="modal" data-target="#decisionModal" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus"></i> Add Decision</button>
+                                </div>
                                 <label for="open_kemsa" class="col-sm-3 col-form-label">Commodity Name</label>
                                 <div class="col-sm-9">
                                     <input type="hidden" readonly class="form-control" id="drug_id" name="drug_id">
@@ -104,19 +107,30 @@
                                 <div class="col-sm-3">
                                     <input type="text" readonly class="form-control" id="expected_qty">
                                 </div>
-                                <label for="receipts_usaid" class="col-sm-3 col-form-label">Actual Order Quantity</label>
+                                <label for="receipts_usaid" class="col-sm-3 col-form-label">Proposed Order Quantity</label>
                                 <div class="col-sm-3">
                                     <input type="number" class="form-control" id="actual_qty" name="receipt_total_qty" required="">
                                 </div>
                             </div>
                             <div id="procurement_loader"></div>
-                            <div class="form-group row" id="commodity_frm">
+                            <div class="row procurement_history">
                                 <div class="col-sm-12">
+                                    <div class="table-responsive">
+                                        <strong><em>Product's Last Procurement History</em></strong>
+                                        <div id="procurement_history"></div>
+                                    </div>
+                                </div>                              
+                            </div>
+
+                            <div class="form-group row" id="commodity_frm">                              
+                                <div class="col-sm-12">
+                                    <h4>Order Form</h4>
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-striped table-hover table-condensed" id="procurement_tbl">
                                             <thead>
                                             <th>Quantity</th>
-                                            <th>Expected Period</th>
+                                            <th>Qty in percentage (%)</th>
+                                            <th>Proposed procurement Date</th>
                                             <th>Status</th>
                                             <th>Funding Agent</th>
                                             <th>Supplier</th>
@@ -126,6 +140,9 @@
                                                 <tr>
                                                     <td>
                                                         <input type="number" name="receipt_qty[]" required="" class="receipt_qty col-md-12">
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" name="receipt_qty_percentage[]" required="" class="receipt_qty_percentage col-md-12">
                                                     </td>
                                                     <td>
                                                         <input type="text" name="transaction_date[]" required="" class="transaction_date col-md-12">
@@ -149,23 +166,43 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label for="receipts_usaid" class="col-sm-3 col-form-label">Justification/Comments</label>
-                                <div class="col-sm-9">
-                                    <textarea class="form-control" name="comments" required="" rows="5"></textarea>
-                                </div>
-                            </div>
+
                             <div class="form-group row">
                                 <div class="col-sm-12">
                                     <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-remove"></i> Close</button>
                                     <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save Order</button>
                                 </div>
                             </div>
+
+                            <div class="form-group row col-md-11 col-md-offset-0">
+                                <label for="receipts_usaid" class="col-sm-3 col-form-label"><h4>Product Decisions</h4></label>
+                                <div id="timeline" style="margin-top: 5px;">
+                                    <div class="row timeline-movement timeline-movement-top">
+                                        <div class="timeline-badge timeline-future-movement">
+                                            <a href="#" data-toggle="modal" data-target="#decisionModal">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </a>
+                                        </div>
+                                        <div class="timeline-badge timeline-filter-movement">
+                                            <a href="#">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12" id='decision_tbl_procurement'>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
                         </form>
                         </p>
                     </div>
                     <div id="drug_transactions" class="tab-pane fade">
                         <h3>Transactions</h3>
+                        <p><span style="font-size: 16px;" class="label label-info " id="productTitle1">Product - Month</span></p>
+
                         <p>
                         <div class="form-control" id="year-filter">
                             <input type="hidden" name="filter_year" id="filter_year" value="" />
@@ -191,10 +228,14 @@
                     </div>
                     <div id="drug_orders" class="tab-pane fade">
                         <h3>Orders</h3>
+                        <p><span style="font-size: 16px;" class="label label-info productTitle" id="productTitle2">Product - Month</span></p>
+
                         <div id="orders_tbl" class="table-responsive"></div>
                     </div>
                     <div id="drug_logs" class="tab-pane fade">
                         <h3>Logs</h3>
+                        <p><span style="font-size: 16px;" class="label label-info productTitle" id="productTitle3">Product - Month</span></p>
+
                         <div id="logs_tbl"></div>
                     </div>
                 </div>
@@ -303,6 +344,7 @@
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         return months[monthNumber];
     }
+    var totalPercentage = 0;
 
 
     var statusURL = '../../API/procurement_status'
@@ -397,28 +439,32 @@
 
             drugID = $(e.relatedTarget).data('drug_id');
             $('#Drug_ID').val(drugID);
-            $('#productTitle').empty();
+            $('.productTitle').empty();
             //Load TrackerInfo
             var trackerURL = "<?php echo base_url() . 'Manager/Procurement/get_tracker/'; ?>" + drugID;
             $.getJSON(trackerURL, function (json) {
                 $.each(json.data, function (key, value) {
                     $("#" + key).val(value)
                 });
-                console.log(json);
+
                 if (json.data.length < 1) {
-                    $('#productTitle').text("No tracker data found for this product, please add");
+                    $('#productTitle1,#productTitle2,#productTitle3,#productTitle4').text("No tracker data found for this product, please add");
                     $('#decisionModalTitle').text('Add Decisions and Reccomendations for this product');
                 } else {
-                    $('#productTitle').text(json.data.commodity_name + " | " + lastMonth + "-" + currentYear + " Tracker");
-                    $('#decisionModalTitle').text('Edit Decisions and Reccomendations for ' + json.data.commodity_name + " | " + lastMonth + "-" + currentYear + " Tracker");
+                    $('#productTitle1,#productTitle2,#productTitle3,#productTitle4').text(json.data.commodity_name + " | " + lastMonth + "-" + currentYear + " Tracker");
+                    $('.decisionModalTitle').text('Edit Decisions and Reccomendations for ' + json.data.commodity_name + " | " + lastMonth + "-" + currentYear + " Tracker");
                 }
                 $("#procurement_loader").empty(); //Kill Loader
+                $('#actual_qty').val('');
             });
             //Load Drug Data
-            getDecisions(drugID, "#decision_tbl")
-            getTransactionsTable(drugID, '2018', "#transaction_tbl")
+            getDecisionsTimeline(drugID, "#decision_tbl");
+            getDecisions(drugID, "#decision_tbl_procurement");
+            getTransactionsTable(drugID, currentYear, "#transaction_tbl");
             getDrugOrders(drugID, "#orders_tbl")
-            getDrugLogs(drugID, "#logs_tbl")
+            getDrugOrdersHistory(drugID, '#procurement_history');
+            getDrugLogs(drugID, "#logs_tbl");
+
         });
         //Clean up fields when modal is closed
         $('#add_procurement_modal').on('hidden.bs.modal', function (e) {
@@ -434,6 +480,36 @@
             format: 'yyyy-mm-dd',
             startDate: '1d'
         });
+
+        $("#actual_qty").on('keyup', function () {
+            var curr_element = parseInt($(this).val());
+            var overall_qty = $("#expected_qty").val();
+            var new_ = overall_qty.replace(",", "");
+
+            if (curr_element > parseInt(new_)) {
+                swal({
+                    title: "Excess Quantity!",
+                    text: "Quantity cannot be more than System Calculated Order Quantity!",
+                    icon: "error",
+                });
+                $(this).val('')
+            } else {
+            }
+
+        });
+
+        $(document).on('click', '.receipt_qty,.receipt_qty_percentage', function () {
+            var overall_qty = $("#actual_qty").val()
+            if (overall_qty === '') {
+                swal({
+                    title: "No Proposed Quantity!",
+                    text: "Please enter value for Proposed Actual Quantity",
+                    icon: "error",
+                });
+            }
+        })
+
+
         //Validate receipt_qty
         $(".receipt_qty").on('keyup', function () {
             var curr_element = $(this)
@@ -444,7 +520,7 @@
                 if (sum > overall_qty) {
                     swal({
                         title: "Excess Quantity!",
-                        text: "Quantity cannot be more than Actual Order Quantity!",
+                        text: "Quantity cannot be more than Proposed Order Quantity!",
                         icon: "error",
                     });
                 }
@@ -452,25 +528,60 @@
         });
         //Add row to table
         $(".add").click(function () {
-            var last_row = $(this).closest('tr');
-            if (last_row.find(".receipt_qty").val() == "" || last_row.find(".transaction_date").val() == "" || last_row.find(".procurement_status").val() == "") {
+            var sum = 0;
+            $(".receipt_qty_percentage").each(function () {
+                sum += +$(this).val();
+            });
+            if (sum > 100) {
                 swal({
-                    title: "Required!",
-                    text: "All values must be entered/selected!",
+                    title: "Quantity Error!",
+                    text: "You have exeeded the value of proposed quantity !",
                     icon: "error",
                 });
+                return false;
+
             } else {
-                $(".transaction_date").datepicker('destroy');
-                var cloned_row = last_row.clone(true);
-                cloned_row.find('select,input').val('');
-                cloned_row.insertAfter(last_row);
-                $(".transaction_date").datepicker({
-                    format: 'yyyy-mm-dd',
-                    startDate: '1d'
-                });
-                cloned_row.find('.contracted').hide();
+
+
+                var last_row = $(this).closest('tr');
+                if (last_row.find(".receipt_qty").val() == "" || last_row.find(".transaction_date").val() == "" || last_row.find(".procurement_status").val() == "") {
+                    swal({
+                        title: "Required!",
+                        text: "All values must be entered/selected!",
+                        icon: "error",
+                    });
+                } else {
+                    $(".transaction_date").datepicker('destroy');
+                    var cloned_row = last_row.clone(true);
+                    cloned_row.find('select,input').val('');
+                    cloned_row.insertAfter(last_row);
+                    $(".transaction_date").datepicker({
+                        format: 'yyyy-mm-dd',
+                        startDate: '1d'
+                    });
+                    cloned_row.find('.contracted').hide();
+                }
             }
         });
+
+        $(document).on('keyup', '.receipt_qty_percentage', function () {
+            var row_data = $(this).closest('tr');
+            var actual_qty = $('#actual_qty').val();
+            var qty_ = row_data.find('.receipt_qty');
+            var percentage = row_data.find('.receipt_qty_percentage').val();
+            var calculated_qty = (parseInt(percentage) / 100) * parseInt(actual_qty);
+            qty_.val(Math.ceil(calculated_qty));
+        });
+
+        $(document).on('keyup', '.receipt_qty', function () {
+            var row_data = $(this).closest('tr');
+            var actual_qty = $('#actual_qty').val();
+            var qty_ = row_data.find('.receipt_qty').val();
+            var percentage = row_data.find('.receipt_qty_percentage');
+            var calculated_perc = ((parseInt(qty_) / parseInt(actual_qty)) * 100);
+            percentage.val(Math.ceil(calculated_perc));
+        });
+
         //Remove row from table
         $(".remove").click(function () {
             var rows = $("#procurement_tbl > tbody").find("tr").length;
@@ -523,7 +634,7 @@
             tbl = html2json();
             newdata = JSON.parse(tbl);
             $.post("<?php echo base_url() . 'Manager/Procurement/get_transaction_data/'; ?>", {data: newdata, drug_id: drugID}, function () {
-             $('#transaction_tbl').empty();
+                $('#transaction_tbl').empty();
             }).done(function () {
                 getTransactionsTable(drugID, '2018', "#transaction_tbl");
                 $('#trans_save').prop('disabled', false);
@@ -531,6 +642,15 @@
             });
 
         });
+    });
+
+    $("#actual_qty").keypress(function (e) {
+        //if the letter is not digit then display error and don't type anything
+        if (e.which !== 8 && e.which !== 0 && (e.which < 48 || e.which > 57)) {
+            //display error message
+
+            return false;
+        }
     });
 
 
@@ -557,6 +677,16 @@
             $.each(data, function (i, v) {
                 $("." + elementClass).append($("<option value='" + v.id + "'>" + v.name.toUpperCase() + "</option>"));
             });
+        });
+    }
+
+    function getDecisionsTimeline(drugID, divID) {
+        //Load Spinner
+        LoadSpinner(divID)
+        //Load Table
+        var decisionsURL = "<?php echo base_url() . 'Manager/Procurement/get_timeline/'; ?>" + drugID
+        $.get(decisionsURL, function (timeline) {
+            $(divID).html(timeline)
         });
     }
 
@@ -618,28 +748,42 @@
                     url: editOrderURL,
                     hideIdentifier: true,
                     columns: {
-                        identifier: [0, 'id'],
+                        //identifier: [0, 'id'],
                         editable: [[1, 'transaction_year', '{"2018": "2018", "2019": "2019", "2020": "2020", "2021": "2021"}'], [2, 'transaction_month', '{"Jan": "Jan", "Feb": "Feb", "Mar": "Mar", "Apr": "Apr", "May": "May", "Jun": "Jun", "Jul": "Jul", "Aug": "Aug", "Sep": "Sep", "Oct": "Oct", "Nov": "Nov", "Dec": "Dec"}'], [3, 'quantity'], [4, 'procurement_status_id', JSON.stringify(jsondata.status)], [5, 'funding_agent_id', JSON.stringify(jsondata.funding)], [6, 'supplier_id', JSON.stringify(jsondata.supplier)]]
                     },
-                    buttons: {
-                        edit: {
-                            class: 'btn btn-sm btn-default',
-                            html: '<span class="fa fa-pencil-square-o"></span>',
-                            action: 'edit'
-                        }, /*
-                         delete: {
-                         class: 'btn btn-sm btn-default',
-                         html: '<span class="fa fa-trash-o"></span>',
-                         action: 'delete'
-                         }*/
-                    },
+                    /*buttons: {
+                     edit: {
+                     class: 'btn btn-sm btn-default',
+                     html: '<span class="fa fa-pencil-square-o"></span>',
+                     action: 'edit'
+                     }, /*
+                     delete: {
+                     class: 'btn btn-sm btn-default',
+                     html: '<span class="fa fa-trash-o"></span>',
+                     action: 'delete'
+                     }
+                     },*/
                     onSuccess: function (data, textStatus, jqXHR) {
                         getDrugOrders(drugID, tableID)
+
+
                     }
                 });
             });
         });
-        $('.tabledit-delete-button').hide();
+        $('.tabledit-delete-button,.tabledit-edit-button').hide();
+
+    }
+
+
+    function getDrugOrdersHistory(drugID, divID) {
+
+        var ordersURL = "<?php echo base_url() . 'Manager/Procurement/get_order_table_history/'; ?>" + drugID;
+
+        $.get(ordersURL, function (data) {
+            $(divID).empty();
+            $(divID).append(data);
+        });
     }
 
     function getDrugLogs(drugID, tableID) {
@@ -673,6 +817,7 @@
                 }
             });
         });
+        $('#actual_qty').val('');
     }
 
     function LoadSpinner(divID) {

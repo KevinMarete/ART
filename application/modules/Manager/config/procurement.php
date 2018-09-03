@@ -4,8 +4,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //Default values
 $config['data_year'] = date('Y');
 $config['data_month'] = date('M', strtotime('-1 month'));
+$config['data_month_full'] = date('F', strtotime('-1 month'));
 $config['data_date'] = date('Y-m-01', strtotime('-1 month'));
 $config['drug'] = 'Dolutegravir (DTG) 50mg Tabs';
+
+$config['committee_names']=['Alphonce Ochieng'];
+$config['committee_emails']=['alpho07@gmail.com'];
 
 //consumption_issues_chart
 $config['consumption_issues_chart_chartview'] = 'pages/procurement/charts/line_view';
@@ -79,7 +83,7 @@ $config['paed_patients_on_drug_chart_filters_default'] = array(
 
 //stock_status_chart
 $config['stock_status_chart_chartview'] = 'pages/procurement/charts/stacked_bar_country_view';
-$config['stock_status_chart_title'] = 'Stocks Status';
+$config['stock_status_chart_title'] = 'Stocks Status As of '.$config['data_month_full']."-".$config['data_year'];
 $config['stock_status_chart_yaxis_title'] = 'Stock Quantity';
 $config['stock_status_chart_source'] = 'Source: www.commodities.nascop.org';
 $config['stock_status_chart_has_drilldown'] = FALSE;
@@ -104,3 +108,6 @@ $config['expected_delivery_chart_filters_default'] = array(
         $config['drug']
     )
 );
+
+//Committee emails
+$config['committee_emails'] = "alpho07@gmail.com,awstra07@gmail.com,oneshopke@gmail.com";
