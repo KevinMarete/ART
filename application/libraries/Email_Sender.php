@@ -22,7 +22,8 @@ class Email_Sender extends MX_Controller {
         $this->load->library('email', $this->_config);
         $this->email->set_newline("\r\n");
         $this->email->from('webartmanager2018@gmail.com', $module . ' Manager');
-        $this->email->to($recepients);
+        $this->email->to('webartmanager2018@gmail.com');
+        $this->email->cc($recepients);
         $this->email->subject($module . ' Manager | ' . $action);
         //$this->email->set_mailtype('html');
         $data['email_content']=$data_content;

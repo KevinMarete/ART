@@ -290,6 +290,7 @@ if ($page_name != 'backup' && $page_name != 'user') {
                 //module
                 $('[name="icon"]').val(data.icon);
                 //mailing_list
+                $('[name="name"]').val(data.name);
                 $('[name="email"]').val(data.email);
                 $('[name="email_type"]').val(data.email_type);
                 //install

@@ -1,6 +1,9 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require APPPATH . 'libraries\dompdf\autoload.inc.php';
+
+use Dompdf\Dompdf;
 
 class Procurement extends MX_Controller {
 
@@ -9,6 +12,8 @@ class Procurement extends MX_Controller {
         $this->load->model('Procurement_model');
         $this->load->library('email_sender');
     }
+
+  
 
     function getAllDrugs() {
         $query = "SELECT d.id, UPPER(CONCAT(g.name,' ',g.abbreviation, d.strength,' - ',f.name)) name  
@@ -19,7 +24,44 @@ class Procurement extends MX_Controller {
         echo json_encode($this->db->query($query)->result());
     }
 
+    function save_minutes() {
+        $title = $this->input->post('title');
+        $raw_present_names = $this->input->post('present_names');
+        $raw_present_emails = $this->input->post('present_emails');
+        $raw_absent_names = $this->input->post('absent_names');
+        $raw_absent_email = $this->input->post('absent_emails');
+
+        $present_names = $this->sanitize($raw_present_names);
+        $present_emails = $this->sanitize($raw_present_emails);
+        $absent_names = $this->sanitize($raw_absent_names);
+        $absent_email = $this->sanitize($raw_absent_email);
+        $opening_description = $this->input->post('opening_description');
+        $aob = $this->input->post('aob');
+
+        $this->db->insert('tbl_minutes', [
+            'title' => $title,
+            'present_names' => $present_names,
+            'present_emails' => $present_emails,
+            'absent_names' => $absent_names,
+            'absent_emails' => $absent_email,
+            'opening_description' => $opening_description,
+            'aob' => $aob,
+        ]);
+    }
+
+    function sanitize($array) {
+        $final_string = '';
+        foreach ($array as $s) {
+            $final_string .= $s . ",";
+        }
+        return rtrim($final_string, ',');
+    }
+
     public function get_test_email() {
+
+        $date = date('Y') . "-" . sprintf("%02d", date('m') - 0);
+        $minutes = $this->db->query("SELECT * FROM tbl_minutes WHERE date LIKE '%$date%'")->result();
+        $recepients = $minutes[0]->present_emails . ',' . $minutes[0]->absent_emails;
 
         $date = date('Y') . "-" . sprintf("%02d", date('m') - 1);
         $drug_ids = "SELECT GROUP_CONCAT(id) id FROM `tbl_decision`";
@@ -67,8 +109,36 @@ class Procurement extends MX_Controller {
                 }
             }
         }
+        $present = explode(",", $minutes[0]->present_names);
+        $absent = explode(",", $minutes[0]->absent_names);
+        $final_string = '<div class="row">
+                <p><strong>' . $minutes[0]->title . '</strong></p>
+            </div>
+            <p><strong>Members Present</strong></p>
+            <p></p>
+            <ol id="membersPresent">';
+        foreach ($present as $p) {
+            $final_string .= '<li>' . $p . '</li>';
+        }
+        $final_string .= '</ol>
 
-        $final_string = '<table style="border:1px solid black;"><tr><th><strong>Product</strong></th><th><strong>Discussion</strong></th><th><strong>Recommendations</strong></th></tr>';
+            <p><strong>Absent with Apology</strong></p>
+            <p></p>
+            <ol id="membersAbsent">';
+        foreach ($absent as $a) {
+            $final_string .= '<li>' . $a . '</li>';
+        }
+        $final_string .= '</ol>
+
+            <div class="row" style="margin-top:20px;">
+               
+                <p>' . $minutes[0]->opening_description . '</p>
+            </div>';
+        $final_string .= '<div class="row" style="margin-top:20px;">
+                <p><strong>MINUTE 2: STOCK STATUS PER PRODUCT AND REQUIRED DELIVERIES AND NEW PROCUREMENTS</strong></p>
+            </div> ';
+
+        $final_string .= '<table style="border:1px solid black; margin-top:10px;"><tr><th><strong>Product</strong></th><th><strong>Discussion</strong></th><th><strong>Recommendations</strong></th></tr>';
         $final_string .= '<tr colspan="3" style="background:#FBD4B4;border:1px solid black;"><td colspan="3"><strong>Antiretroviral Therapy</strong></td></tr>';
 
         foreach ($table_data as $d) {
@@ -89,7 +159,15 @@ class Procurement extends MX_Controller {
         }
         $final_string .= '</table>';
 
-        $this->email_sender->send_email('Procurement', 'Meeting Minutes', $this->config->item('committee_emails'), $names = '', $final_string);
+        $final_string .= '
+            <p style="margin-top:20px;"><strong>A.O.B</strong></p>
+            <div class="row" style="margin-top:10px;">
+                <p>' . $minutes[0]->aob . '</p>
+            </div> ';
+
+
+
+        $this->email_sender->send_email('Procurement', 'Meeting Minutes', $recepients, $names = '', $final_string);
     }
 
     public function get_commodities() {

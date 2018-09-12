@@ -1,12 +1,113 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require APPPATH . 'libraries\dompdf\autoload.inc.php';
+
+use Dompdf\Dompdf;
 
 class Orders extends MX_Controller {
 
     public function __construct() {
         parent::__construct();
         $this->load->model('Orders_model');
+    }
+
+    function pdf() {
+        $pdfBuilder = '';
+        $columns = @$this->Orders_model->get_cdrr_data($this->uri->segment('4'), $this->session->userdata('scope'), $this->session->userdata('role'));
+        $drugs = $this->Orders_model->get_drugs();
+
+        $pdfBuilder .= '<style> 
+                         table {table-layout: fixed;min-width:400px; max-width:800px;}
+                         table td{border:1px solid black;}
+                         
+                       </style>            
+                        
+                                <table style="border:1px solid black;">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <b>Facility Name: </b>
+                                                <span class="facility_name">' . ucwords($columns["data"][0]["facility_name"]) . '</span>
+                                            </td>
+                                            
+                                            <td>
+                                                <b>Facility code: </b>
+                                                <span class="mflcode">' . ucwords($columns["data"][0]["mflcode"]) . '</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <b>County: </b>
+                                                <span class="county">' . ucwords($columns["data"][0]["county"]) . '</span>
+                                            </td>
+                                            <td>
+                                                <b>Subcounty: </b>
+                                                <span class="subcounty">' . ucwords($columns["data"][0]["subcounty"]) . '</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <b>Period of Reporting: </b>
+                                                <span>' . ucwords(date("F Y", strtotime($columns["data"][0]["period_begin"]))) . '</span>
+                                            </td>
+                                            <td>
+                                                
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table> 
+                         ';
+
+        $pdfBuilder .= '<table >
+                                    <thead style="">
+                                        <tr>
+                                            <th width="300px;">DRUG NAME</th>
+                                          
+                                            <th >RESUPPLY QTY</th>
+                                         
+                                        </tr>
+                                        
+                                    </thead>
+                                    <tbody>
+                                    <form name="orderForm" id="orderForm">';
+
+        foreach ($drugs as $drug) {
+            $drugid = $drug['id'];
+
+            if (in_array($drugid, array_keys($columns['data']['cdrr_item']))) {
+
+                $pdfBuilder .= '<tr>
+                                                    <td  width="300px">' . $drug["name"] . '</td>
+                                                 
+                                                    <td style="text-align:right; font-weight:bold;">' . $columns["data"]["cdrr_item"][$drugid]["resupply"] . '</td>
+                                                    
+                                                </tr>';
+            }
+        }
+
+        $pdfBuilder .= '</form>
+                                    </tbody>
+                                </table>
+                              <span style="page-break-after:always;"></span>';
+
+
+        echo $pdfBuilder;
+   exit;
+
+
+        $dompdf = new Dompdf;
+        // Load HTML content
+        $dompdf->loadHtml($pdfBuilder);
+        $dompdf->set_option('isHtml5ParserEnabled', true);
+// (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'landscape');
+
+// Render the HTML as PDF
+        $dompdf->render();
+
+// Output the generated PDF to Browser
+        $dompdf->stream();
     }
 
     function get_drug() {

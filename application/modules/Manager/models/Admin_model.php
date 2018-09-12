@@ -32,7 +32,7 @@ class Admin_model extends CI_Model {
                 $this->db->join('tbl_drug_category dc', 'dc.id=d.drug_category', 'inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_mailing_list') {
-                $this->db->select('ml.id,ml.email,c.name category,ml.sent_date , s.name status');
+                $this->db->select('ml.id,ml.name name, ml.email,c.name category,ml.sent_date , s.name status');
                 $this->db->from('tbl_mailing_list ml');
                 $this->db->join('tbl_email_status s', 'ml.status=s.id', 'left');
                 $this->db->join('tbl_email_category c', 'c.id=ml.email_type', 'left');

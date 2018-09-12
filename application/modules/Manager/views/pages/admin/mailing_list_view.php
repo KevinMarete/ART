@@ -10,6 +10,13 @@
                 <form action="#" id="form" class="form-horizontal">
                     <input type="hidden" value="" name="id"/> 
                     <div class="form-body">
+                         <div class="form-group">
+                            <label class="control-label col-md-3">Email</label>
+                            <div class="col-md-9">
+                                <input name="name" placeholder="Name - Role" class="form-control" type="text">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Email</label>
                             <div class="col-md-9">
