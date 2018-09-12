@@ -47,7 +47,7 @@
 
 <script>
     $(function () {
-        tinymce.init({selector: 'textarea', body_id: 'elm1=my_id, elm2=my_id2'});
+        tinymce.init({selector: '#opening_description,#aob'});
         present = '<li style="margin-top:10px;"><input type="text" class="member" placeholder="Name -  Role" name="present_names[]"/>&nbsp;&nbsp;<input type="email" class="member" placeholder="Email" name="present_emails[]"/>&nbsp;&nbsp;<i class="fa fa-minus-circle remMemberPresent"></i></li>';
         absent = '<li style="margin-top:10px;"><input type="text" class="member" placeholder="Name -  Role" name="absent_names[]"/>&nbsp;&nbsp;<input type="email" class="member" placeholder="Email" name="absent_emails[]"/>&nbsp;&nbsp;<i class="fa fa-minus-circle remMemberAbsent"></i></li>';
 
