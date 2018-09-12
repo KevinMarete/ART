@@ -10,6 +10,15 @@ class Procurement extends MX_Controller {
         $this->load->library('email_sender');
     }
 
+    function getAllDrugs() {
+        $query = "SELECT d.id, UPPER(CONCAT(g.name,' ',g.abbreviation, d.strength,' - ',f.name)) name  
+                    FROM tbl_drug d 
+                    LEFT JOIN tbl_generic g ON d.generic_id = g.id 
+                    LEFT JOIN tbl_formulation f ON d.formulation_id = f.id 
+                    ORDER BY g.name ASC";
+        echo json_encode($this->db->query($query)->result());
+    }
+
     public function get_test_email() {
 
         $date = date('Y') . "-" . sprintf("%02d", date('m') - 1);
@@ -79,7 +88,7 @@ class Procurement extends MX_Controller {
             $final_string .= '</tr>';
         }
         $final_string .= '</table>';
-     
+
         $this->email_sender->send_email('Procurement', 'Meeting Minutes', $this->config->item('committee_emails'), $names = '', $final_string);
     }
 

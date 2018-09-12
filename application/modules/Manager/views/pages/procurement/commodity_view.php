@@ -7,6 +7,7 @@
                 <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
                 <li><a href="#">Procurement</a></li>
                 <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i> <?php echo ucwords($page_name); ?></li>
+                <li><span class="glyphicon glyphicon-question-sign" data-toggle="modal" data-target="#helpModal"></span></li>
                 <?php echo $this->session->flashdata('tracker_msg'); ?>
             </ol>
         </div>
@@ -24,6 +25,7 @@
                             <tr>
                                 <th>Commodity</th>
                                 <th>Packsize</th>
+                                <th>Category</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -47,6 +49,7 @@
             <div class="modal-body">
                 <ul class="nav nav-tabs pull-right">
                     <li class="active"><a data-toggle="tab" href="#drug_decision">All Decisions</a></li>
+                    <li> <a data-toggle="tab" href="#minutes">Minutes</a></li>
                     <li><a data-toggle="tab" href="#drug_procurement">Procurement</a></li>
                     <li><a data-toggle="tab" href="#drug_transactions">Product Tracker</a></li>
                     <li><a data-toggle="tab" href="#drug_orders">Transactions</a></li>
@@ -75,9 +78,17 @@
                             </div>
                         </div>
                     </div>
+                    
+                     <div id="minutes" class="tab-pane fade">
+                        <h3>Minutes</h3>
+                      <?php $this->load->view('pages/procurement/minutes_view');?>
+                    </div>
+
 
                     <div id="drug_procurement" class="tab-pane fade">
+
                         <h3>Procurement Form</h3>
+                        <p>Switch Drug:<select class="form-control select2" id="DrugList"></select></p>
                         <p><span style="font-size: 16px;" class="label label-info " id="productTitle1">Product - Month</span></p>
 
 
@@ -131,7 +142,7 @@
                                             <th>Quantity</th>
                                             <th>Qty in percentage (%)</th>
                                             <th>Proposed procurement Date</th>
-                                            <th>Status</th>
+                                            <th>Transaction Type</th>
                                             <th>Funding Agent</th>
                                             <th>Supplier</th>
                                             <th>Action</th>
@@ -151,7 +162,7 @@
                                                         <select name="status[]" required="" class="procurement_status"></select>
                                                     </td>
                                                     <td>
-                                                        <select name="funding_agent[]" class="funding_agent contracted"></select>
+                                                        <select name="funding_agent[]" class="funding_agent "></select>
                                                     </td>
                                                     <td>
                                                         <select name="supplier[]" class="supplier contracted col-md-12"></select>
@@ -332,6 +343,24 @@
     </div>
 </div>
 
+
+
+
+<div id="ReceiveFormDiv" style="display:none;">
+    <form id="ReceiveForm" style="z-index:1000000;">
+
+        <p>
+            <input type="text" class="form-control" placeholder="Batch No."/>
+        </p>
+        <p>
+            <input type="text" class="form-control" placeholder="Expiry Date." />
+        </p>
+        <p>
+            <input type="button" class="form-control" value="Submit" />
+        </p>
+    </form>
+</div>
+
 <script>
 
 
@@ -345,7 +374,15 @@
         return months[monthNumber];
     }
     var totalPercentage = 0;
-
+    formTemplate = $('#ReceiveForm').clone()[0];
+    var swalConfig = {
+        title: 'Received Form',
+        content: formTemplate,
+        button: {
+            text: 'Submit',
+            closeModal: false
+        }
+    };
 
     var statusURL = '../../API/procurement_status'
     var fundingURL = '../../API/funding_agent'
@@ -413,11 +450,46 @@
 
 
 
-
             //console.log('its me' +disc_id)
 
             //console.log(disc)
         });
+
+        $.getJSON("<?php echo base_url() . 'Manager/Procurement/getAllDrugs/'; ?>", function (res) {
+            drug_list = $('#DrugList');
+            drug_list.append('<option value="">--Select Drug--</option>');
+            $.each(res, function (i, d) {
+                drug_list.append('<option value="' + d.id + '">' + d.name + '</option>');
+            });
+        }, 'json');
+
+        $('#DrugList').on('change', function () {
+            var id = $(this).val();
+            LoadSpinner("#procurement_loader");
+            var trackerURL = "<?php echo base_url() . 'Manager/Procurement/get_tracker/'; ?>" + id;
+            $.getJSON(trackerURL, function (json) {
+                $.each(json.data, function (key, value) {
+                    $("#" + key).val(value)
+                });
+
+                if (json.data.length < 1) {
+                    $('#productTitle1,#productTitle2,#productTitle3,#productTitle4').text("No tracker data found for this product, please add");
+                    $('#decisionModalTitle').text('Add Decisions and Reccomendations for this product');
+                } else {
+                    $('#productTitle1,#productTitle2,#productTitle3,#productTitle4').text(json.data.commodity_name + " | " + lastMonth + "-" + currentYear + " Tracker");
+                    $('.decisionModalTitle').text('Edit Decisions and Reccomendations for ' + json.data.commodity_name + " | " + lastMonth + "-" + currentYear + " Tracker");
+                }
+                $("#procurement_loader").empty(); //Kill Loader
+                $('#actual_qty').val('');
+            });
+            $('.productTitle').empty();
+            getDecisions(id, "#decision_tbl_procurement");
+            getTransactionsTable(id, currentYear, "#transaction_tbl");
+            getDrugOrders(id, "#orders_tbl")
+            getDrugOrdersHistory(id, '#procurement_history');
+            getDrugLogs(id, "#logs_tbl");
+        })
+
 
 
 
@@ -427,7 +499,26 @@
             responsive: true,
             order: [[0, "asc"]],
             pagingType: "full_numbers",
-            ajax: "<?php echo base_url() . 'Manager/Procurement/get_commodities'; ?>"
+            ajax: "<?php echo base_url() . 'Manager/Procurement/get_commodities'; ?>",
+            initComplete: function () {
+                this.api().columns([2]).every(function () {
+                    var column = this;
+                    var select = $('<br/><select><option value="">Show all</option></select>')
+                            .appendTo($(column.header()))
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                        );
+                                column
+                                        .search(val ? '^' + val + '$' : '', true, false)
+                                        .draw();
+                            });
+                    column.data().unique().sort().each(function (d, j) {
+                        var val = $('<div/>').html(d).text();
+                        select.append('<option value="' + val + '">' + val + '</option>');
+                    });
+                });
+            }
         });
         //Show tracker sidemenu
         $(".commodity").closest('ul').addClass("in");
@@ -481,22 +572,22 @@
             startDate: '1d'
         });
 
-        $("#actual_qty").on('keyup', function () {
-            var curr_element = parseInt($(this).val());
-            var overall_qty = $("#expected_qty").val();
-            var new_ = overall_qty.replace(",", "");
-
-            if (curr_element > parseInt(new_)) {
-                swal({
-                    title: "Excess Quantity!",
-                    text: "Quantity cannot be more than System Calculated Order Quantity!",
-                    icon: "error",
-                });
-                $(this).val('')
-            } else {
-            }
-
-        });
+        /* $("#actual_qty").on('keyup', function () {
+         var curr_element = parseInt($(this).val());
+         var overall_qty = $("#expected_qty").val();
+         var new_ = overall_qty.replace(",", "");
+         
+         if (curr_element > parseInt(new_)) {
+         swal({
+         title: "Excess Quantity!",
+         text: "Quantity cannot be more than System Calculated Order Quantity!",
+         icon: "error",
+         });
+         $(this).val('')
+         } else {
+         }
+         
+         });*/
 
         $(document).on('click', '.receipt_qty,.receipt_qty_percentage', function () {
             var overall_qty = $("#actual_qty").val()
@@ -514,7 +605,7 @@
         $(".receipt_qty").on('keyup', function () {
             var curr_element = $(this)
             var sum = 0;
-            var overall_qty = $("#actual_qty").val()
+            var overall_qty = parseInt($("#actual_qty").val());
             $('.receipt_qty').each(function () {
                 sum += parseInt(this.value);
                 if (sum > overall_qty) {
@@ -522,6 +613,59 @@
                         title: "Excess Quantity!",
                         text: "Quantity cannot be more than Proposed Order Quantity!",
                         icon: "error",
+                    });
+                } else {
+                    var bal = overall_qty - sum;
+                    
+                }
+            });
+        });
+        
+         $(".receipt_qty").on('focusout', function () {
+            var curr_element = $(this)
+            var sum = 0;
+            var overall_qty = parseInt($("#actual_qty").val());
+            $('.receipt_qty').each(function () {
+                sum += parseInt(this.value);
+                if (sum > overall_qty) {
+                    swal({
+                        title: "Excess Quantity!",
+                        text: "Quantity cannot be more than Proposed Order Quantity!",
+                        icon: "error",
+                    });
+                } else {
+                    var bal = overall_qty - sum;
+                    swal({
+                        title: "Balance in numbers",
+                        text: "You are remaining with "+bal+" to order",
+                        icon: "info",
+                    });
+                }
+            });
+        });
+        
+        
+          $(".receipt_qty_percentage").on('focusout', function () {
+            var curr_element = $(this);
+            var sum = 0;
+            var overall_qty = 100;
+            $('.receipt_qty_percentage').each(function () {
+                sum += parseInt(this.value);
+                if (sum > overall_qty) {
+                    swal({
+                        title: "Excess Quantity!",
+                        text: "Precentage cannot exceed 100%",
+                        icon: "error",
+                    });
+                } else {
+                     bal = overall_qty - sum;
+                    if(isNaN(bal)){
+                        bal=0;
+                    };
+                    swal({
+                        title: "Balance in Percentage(%)",
+                        text: "You are remaining with "+bal+"% to order",
+                        icon: "info",
                     });
                 }
             });
@@ -572,7 +716,8 @@
             var calculated_qty = (parseInt(percentage) / 100) * parseInt(actual_qty);
             qty_.val(Math.ceil(calculated_qty));
         });
-
+        
+      
         $(document).on('keyup', '.receipt_qty', function () {
             var row_data = $(this).closest('tr');
             var actual_qty = $('#actual_qty').val();
@@ -617,10 +762,20 @@
         //Procurement status change event
         $(".procurement_status").on('change', function () {
             var selected_text = $(this).closest('tr').find(".procurement_status option:selected").text().toLowerCase();
-            if (selected_text === 'contracted' || selected_text === 'proposed') {
+
+            if (selected_text === 'contracted') {
+                $(this).closest('tr').find('.contracted').show();
+                $(this).closest('tr').find('.funding_agent').hide();
+            } else if (selected_text === 'proposed') {
+                $(this).closest('tr').find('.contracted').show();
+                $(this).closest('tr').find('.funding_agent').show();
+            } else if (selected_text === 'received') {
+                swal(swalConfig);
+                $(this).closest('tr').find('.funding_agent').hide();
                 $(this).closest('tr').find('.contracted').show();
             } else {
                 $(this).closest('tr').find('.contracted').hide();
+                $(this).closest('tr').find('.funding_agent').hide();
             }
         });
         //Transaction table download
@@ -747,22 +902,30 @@
                 $(".order_tbl").Tabledit({
                     url: editOrderURL,
                     hideIdentifier: true,
+                    deleteButton: false,
                     columns: {
                         //identifier: [0, 'id'],
-                        editable: [[1, 'transaction_year', '{"2018": "2018", "2019": "2019", "2020": "2020", "2021": "2021"}'], [2, 'transaction_month', '{"Jan": "Jan", "Feb": "Feb", "Mar": "Mar", "Apr": "Apr", "May": "May", "Jun": "Jun", "Jul": "Jul", "Aug": "Aug", "Sep": "Sep", "Oct": "Oct", "Nov": "Nov", "Dec": "Dec"}'], [3, 'quantity'], [4, 'procurement_status_id', JSON.stringify(jsondata.status)], [5, 'funding_agent_id', JSON.stringify(jsondata.funding)], [6, 'supplier_id', JSON.stringify(jsondata.supplier)]]
+                        editable: [
+                            [1, 'transaction_year', '{"2018": "2018", "2019": "2019", "2020": "2020", "2021": "2021"}'],
+                            [2, 'transaction_month', '{"Jan": "Jan", "Feb": "Feb", "Mar": "Mar", "Apr": "Apr", "May": "May", "Jun": "Jun", "Jul": "Jul", "Aug": "Aug", "Sep": "Sep", "Oct": "Oct", "Nov": "Nov", "Dec": "Dec"}'],
+                            // [3, 'date_added', JSON.stringify(jsondata.date_added)],
+                            [3, 'quantity'],
+                            [4, 'procurement_status_id', JSON.stringify(jsondata.status)],
+                            [5, 'funding_agent_id', JSON.stringify(jsondata.funding)],
+                            [6, 'supplier_id', JSON.stringify(jsondata.supplier)]]
                     },
-                    /*buttons: {
-                     edit: {
-                     class: 'btn btn-sm btn-default',
-                     html: '<span class="fa fa-pencil-square-o"></span>',
-                     action: 'edit'
-                     }, /*
-                     delete: {
-                     class: 'btn btn-sm btn-default',
-                     html: '<span class="fa fa-trash-o"></span>',
-                     action: 'delete'
-                     }
-                     },*/
+                    buttons: {
+                        edit: {
+                            class: 'btn btn-sm btn-default',
+                            html: '<span class="fa fa-pencil-square-o"></span>',
+                            action: 'edit'
+                        },
+                        delete: {
+                            class: 'btn btn-sm btn-default',
+                            html: '<span class="fa fa-trash-o"></span>',
+                            action: 'delete'
+                        }
+                    },
                     onSuccess: function (data, textStatus, jqXHR) {
                         getDrugOrders(drugID, tableID)
 
@@ -771,7 +934,7 @@
                 });
             });
         });
-        $('.tabledit-delete-button,.tabledit-edit-button').hide();
+        // $('.tabledit-delete-button').hide();
 
     }
 
@@ -816,6 +979,7 @@
                     });
                 }
             });
+            //$('#procurement_loader').hide();
         });
         $('#actual_qty').val('');
     }

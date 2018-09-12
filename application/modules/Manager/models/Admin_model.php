@@ -25,12 +25,20 @@ class Admin_model extends CI_Model {
                 $this->db->join('tbl_county c', 'c.id = sc.county_id', 'inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_drug') {
-                $this->db->select('d.id,d.strength,d.packsize,g.name generic,f.name formulation');
+                $this->db->select('d.id,d.strength,d.packsize,g.name generic,f.name formulation,dc.name category,d.min_qty_alloc, d.max_qty_alloc');
                 $this->db->from('tbl_drug d');
                 $this->db->join('tbl_generic g', 'g.id=d.generic_id', 'inner');
                 $this->db->join('tbl_formulation f', 'f.id=d.formulation_id', 'inner');
+                $this->db->join('tbl_drug_category dc', 'dc.id=d.drug_category', 'inner');
                 $table_data = $this->db->get()->result_array();
-            } else if ($table == 'tbl_facility') {
+            } else if ($table == 'tbl_mailing_list') {
+                $this->db->select('ml.id,ml.email,c.name category,ml.sent_date , s.name status');
+                $this->db->from('tbl_mailing_list ml');
+                $this->db->join('tbl_email_status s', 'ml.status=s.id', 'left');
+                $this->db->join('tbl_email_category c', 'c.id=ml.email_type', 'left');
+                $table_data = $this->db->get()->result_array();
+            
+            }else if ($table == 'tbl_facility') {
                 $sql = "SELECT f.id,f.name,f.mflcode,f.category,f.dhiscode,f.longitude,f.latitude,sc.name subcounty,p.name partner,(CASE WHEN f.parent_id=f.id THEN f.name END) fname "
                         . "FROM tbl_facility f "
                         . "LEFT JOIN tbl_subcounty sc ON sc.id=f.subcounty_id "

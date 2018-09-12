@@ -18,6 +18,7 @@ class Manager extends MX_Controller {
     }
 
     public function load_template($module = 'dashboard', $page = 'dashboard', $title = 'Dashboard', $is_table = TRUE) {
+        //echo   $this->session->userdata('scope').$this->session->userdata('role');
         if ($this->session->userdata('id')) {
             $data['page_name'] = $page;
             $data['content_view'] = 'pages/' . $module . '/' . $page . '_view';
@@ -27,7 +28,9 @@ class Manager extends MX_Controller {
             }
 
             if ($module == 'orders') {
+
                 $this->load->model('Orders_model');
+
                 $columns = array(
                     'reports' => array(
                         'subcounty' => array('Facility Name', 'Period Beginning', 'Description', 'Status', 'Actions'),
@@ -44,7 +47,8 @@ class Manager extends MX_Controller {
                             'drugs' => $this->Orders_model->get_drugs(),
                             'regimens' => $this->Orders_model->get_regimens(),
                             'cdrrs' => $this->Orders_model->get_cdrr_data($this->uri->segment('4'), $this->session->userdata('scope'), $this->session->userdata('role')),
-                            'maps' => $this->Orders_model->get_maps_data($this->uri->segment('5'), $this->session->userdata('scope'), $this->session->userdata('role'))
+                            'maps' => $this->Orders_model->get_maps_data($this->uri->segment('5'), $this->session->userdata('scope'), $this->session->userdata('role')),
+                            'previousmaps' => $this->Orders_model->get_previous_maps_data($this->uri->segment('5'), $this->session->userdata('scope'), $this->session->userdata('role'))
                         ),
                         'county' => array(
                             'drugs' => $this->Orders_model->get_drugs(),
@@ -134,6 +138,8 @@ class Manager extends MX_Controller {
             redirect("manager/login");
         }
     }
+
+   
 
     public function get_chart() {
         $chartname = $this->input->post('name');

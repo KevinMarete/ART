@@ -83,7 +83,7 @@ $config['paed_patients_on_drug_chart_filters_default'] = array(
 
 //stock_status_chart
 $config['stock_status_chart_chartview'] = 'pages/procurement/charts/stacked_bar_country_view';
-$config['stock_status_chart_title'] = 'Stocks Status As of '.$config['data_month_full']."-".$config['data_year'];
+$config['stock_status_chart_title'] = 'Stocks Status As at End of '.$config['data_month_full']."-".$config['data_year'];
 $config['stock_status_chart_yaxis_title'] = 'Stock Quantity';
 $config['stock_status_chart_source'] = 'Source: www.commodities.nascop.org';
 $config['stock_status_chart_has_drilldown'] = FALSE;

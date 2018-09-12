@@ -13,18 +13,18 @@ require APPPATH . '/libraries/REST_Controller.php';
  * @license         MIT
  * @link            https://github.com/KevinMarete/ART
  */
-class Formulation extends \API\Libraries\REST_Controller  {
+class Drug_category extends \API\Libraries\REST_Controller  {
 
     function __construct()
     {
         parent::__construct();
-        $this->load->model('formulation_model');
+        $this->load->model('drug_category_model');
     }
 
     public function index_get()
     {
         // formulations from a data store e.g. database
-        $formulations = $this->formulation_model->read();
+        $formulations = $this->drug_category_model->read();
 
         $id = $this->get('id');
 
@@ -92,7 +92,7 @@ class Formulation extends \API\Libraries\REST_Controller  {
         $data = array(
             'name' => $this->post('name')
         );
-        $data = $this->formulation_model->insert($data);
+        $data = $this->drug_category_model->insert($data);
         if($data['status'])
         {
             unset($data['status']);
@@ -122,7 +122,7 @@ class Formulation extends \API\Libraries\REST_Controller  {
         $data = array(
             'name' => $this->put('name')
         );
-        $data = $this->formulation_model->update($id, $data);
+        $data = $this->drug_category_model->update($id, $data);
         if($data['status'])
         {
             unset($data['status']);
@@ -149,7 +149,7 @@ class Formulation extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $data = $this->formulation_model->delete($id);
+        $data = $this->drug_category_model->delete($id);
         if($data['status'])
         {
             unset($data['status']);

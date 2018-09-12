@@ -39,6 +39,28 @@
                                 <span class="help-block"></span>
                             </div>
                         </div>
+                          <div class="form-group">
+                            <label class="control-label col-md-3">Category</label>
+                            <div class="col-md-9">
+                                <select name="drug_category" id="drug_category" class="form-control select2">
+                                </select>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                          <div class="form-group">
+                            <label class="control-label col-md-3">Min. Qty Allocated</label>
+                            <div class="col-md-9">
+                                <input name="min_qty_alloc" placeholder="200" class="form-control" type="number">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                         <div class="form-group">
+                            <label class="control-label col-md-3">Max. Qty Allocated</label>
+                            <div class="col-md-9">
+                                <input name="max_qty_alloc" placeholder="200" class="form-control" type="number">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -54,6 +76,7 @@
     $(function () {
         var genericURL = '../../API/generic';
         var formulationURL = '../../API/formulation';
+        var drug_categoryURL = '../../API/Drug_category';
         $("#generic_id").empty()
         $.getJSON(genericURL, function (generics) {
             $("#generic_id").append($("<option value=''>Select Generic</option>"));
@@ -68,5 +91,14 @@
                 $("#formulation_id").append($("<option value='" + formulation.id + "'>" + formulation.name.toUpperCase() + "</option>"));
             });
         });
+        
+        $("#drug_category").empty()
+        $.getJSON(drug_categoryURL, function (categories) {
+            $("#formulation_id").append($("<option value=''>Select Formulation</option>"));
+            $.each(categories, function (index, category) {
+                $("#drug_category").append($("<option value='" + category.id + "'>" + category.name.toUpperCase() + "</option>"));
+            });
+        });
+        
     });
 </script>

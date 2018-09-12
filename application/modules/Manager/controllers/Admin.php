@@ -19,7 +19,7 @@ class Admin extends MX_Controller {
 
     //function add data to db_table
     public function add_data($table) {
-        $this->_validate();
+       // $this->_validate();
         $this->Admin_model->save($table, $_POST);
         echo json_encode(array("status" => TRUE));
     }
@@ -32,7 +32,7 @@ class Admin extends MX_Controller {
 
     //function update data from db_table
     public function update_data($table) {
-        $this->_validate();
+       // $this->_validate();
         $this->Admin_model->update($table, array('id' => $this->input->post('id')), $_POST);
         echo json_encode(array("status" => TRUE));
     }
@@ -50,7 +50,14 @@ class Admin extends MX_Controller {
         $data['inputerror'] = array();
         $data['status'] = TRUE;
 
-        if ($this->input->post('name') == '' && ($this->input->post('dhis_code') == '' || $this->input->post('dhis_name') == '' || $this->input->post('dhis_report') == '' || $this->input->post('target_report') == '' || $this->input->post('target_name') == '' || $this->input->post('target_category') == '' || $this->input->post('target_id') == '' ) && ($this->input->post('name') == '' || $this->input->post('value') == '' || $this->input->post('frequency') == '') && ($this->input->post('strength') == '' || $this->input->post('packsize') == '' || $this->input->post('generic_id') == '' || $this->input->post('formulation_id') == '') && ($this->input->post('name') == '' || $this->input->post('mflcode') == '' || $this->input->post('category') == '' || $this->input->post('dhiscode') == '' || $this->input->post('longitude') == '' || $this->input->post('latitude') == '' || $this->input->post('subcounty_id') == '' || $this->input->post('partner_id') == '') && ($this->input->post('name') == '' || $this->input->post('module_id') == '') && ($this->input->post('name') == '' || $this->input->post('abbreviation') == '') && ($this->input->post('facility_id') == '' || $this->input->post('version') == '' || $this->input->post('setup_date') == '' || $this->input->post('upgrade_date') == '' || $this->input->post('user_id') == '') && ($this->input->post('name') == '' || $this->input->post('icon') == '') && ($this->input->post('name') == '' || $this->input->post('code') == '' || $this->input->post('description') == '' || $this->input->post('category_id') == '' || $this->input->post('service_id') == '' || $this->input->post('line_id') == '') && ($this->input->post('drug_id') == '' || $this->input->post('regimen_id') == '') && ($this->input->post('submodule_id') == '') && ($this->input->post('name') == '' || $this->input->post('county_id') == '')) {
+        if ($this->input->post('name') == '' && 
+                ($this->input->post('dhis_code') == '' 
+                || $this->input->post('dhis_name') == '' 
+                || $this->input->post('dhis_report') == '' 
+                || $this->input->post('target_report') == '' 
+                || $this->input->post('target_name') == '' 
+                || $this->input->post('target_category') == '' 
+                || $this->input->post('target_id') == '' ) && ($this->input->post('name') == '' || $this->input->post('value') == '' || $this->input->post('frequency') == '') && ($this->input->post('strength') == '' || $this->input->post('packsize') == '' || $this->input->post('generic_id') == '' || $this->input->post('formulation_id') == '') && ($this->input->post('name') == '' || $this->input->post('mflcode') == '' || $this->input->post('category') == '' || $this->input->post('dhiscode') == '' || $this->input->post('longitude') == '' || $this->input->post('latitude') == '' || $this->input->post('subcounty_id') == '' || $this->input->post('partner_id') == '') && ($this->input->post('name') == '' || $this->input->post('module_id') == '') && ($this->input->post('name') == '' || $this->input->post('abbreviation') == '') && ($this->input->post('facility_id') == '' || $this->input->post('version') == '' || $this->input->post('setup_date') == '' || $this->input->post('upgrade_date') == '' || $this->input->post('user_id') == '') && ($this->input->post('name') == '' || $this->input->post('icon') == '') && ($this->input->post('name') == '' || $this->input->post('code') == '' || $this->input->post('description') == '' || $this->input->post('category_id') == '' || $this->input->post('service_id') == '' || $this->input->post('line_id') == '') && ($this->input->post('drug_id') == '' || $this->input->post('regimen_id') == '') && ($this->input->post('submodule_id') == '') && ($this->input->post('name') == '' || $this->input->post('county_id') == '' )) {
             //common to many forms
             $data['inputerror'][] = 'name';
             $data['error_string'][] = 'Name is required';

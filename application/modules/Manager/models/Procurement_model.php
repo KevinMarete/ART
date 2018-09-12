@@ -7,7 +7,7 @@ class Procurement_model extends CI_Model {
     public function get_commodity_data() {
         $response = array('data' => array());
         try {
-            $sql = "SELECT id, UCASE(name) commodity, pack_size
+            $sql = "SELECT id, UCASE(name) commodity, pack_size,drug_category
                     FROM vw_drug_list
                     GROUP BY id";
             $table_data = $this->db->query($sql)->result_array();
@@ -16,6 +16,7 @@ class Procurement_model extends CI_Model {
                     $response['data'][] = array(
                         $results['commodity'],
                         $results['pack_size'],
+                        $results['drug_category'],
                         '<a class="btn btn-xs btn-primary tracker_drug" data-toggle="modal" data-target="#add_procurement_modal" data-drug_id="' . $results['id'] . '"> 
                             <i class="fa fa-search"></i> View Options
                         </a>'
@@ -200,10 +201,10 @@ class Procurement_model extends CI_Model {
         try {
             $sql = "SELECT
 pi.id,
- CONCAT(transaction_year ,' - ', transaction_month) expected_period,
- pi.date_added date_added,
+ CONCAT(transaction_year ,' - ', transaction_month) expected_delivery_date,
+ pi.date_added transaction_date,
  quantity quantity,
- ps.name status,
+ ps.name transaction_type,
  fa.name funding_agent,
  IF(s.name IS NULL, '', s.name) supplier
 FROM tbl_procurement_item pi
@@ -235,10 +236,10 @@ ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'A
         try {
             $sql = "SELECT
                   
-                     CONCAT(transaction_year ,' - ', transaction_month) expected_period,
-                     pi.date_added date_added,
+                     CONCAT(transaction_year ,' - ', transaction_month) expected_delivery_date,
+                     pi.date_added transaction_date,
                      quantity quantity,
-                     ps.name status,
+                     ps.name transaction_type,
                      fa.name funding_agent,
                      IF(s.name IS NULL, '', s.name) supplier
                     FROM tbl_procurement_item pi
@@ -405,10 +406,11 @@ ORDER BY transaction_time DESC, transaction_year DESC, FIELD(transaction_month, 
             array('type' => 'line', 'name' => 'Minimum Stock', 'data' => array()),
             array('type' => 'line', 'name' => 'SOH', 'data' => array()),
             array('type' => 'line', 'name' => 'Maximum Stock', 'data' => array()),
-            array('type' => 'column', 'name' => 'Contracted', 'data' => array())
+            array('type' => 'column', 'name' => 'Contracted', 'data' => array()),
+            array('type' => 'column', 'name' => 'Pending', 'data' => array())
         );
 
-        $this->db->select("CONCAT_WS('/', data_month, data_year) period, SUM(close_kemsa) soh_total, SUM(receipts_usaid + receipts_gf + receipts_cpf) contracted_total, (avg_issues * 9) minimum_total, (avg_issues * 15) maximum_total", FALSE);
+        $this->db->select("CONCAT_WS('/', data_month, data_year) period, SUM(close_kemsa) soh_total, SUM(receipts_usaid + receipts_gf + receipts_cpf) contracted_total, (avg_issues * 9) minimum_total, (avg_issues * 15) maximum_total,SUM(close_kemsa) - SUM(receipts_usaid + receipts_gf + receipts_cpf) pending", FALSE);
         if (!empty($filters)) {
             foreach ($filters as $category => $filter) {
                 if ($category == 'data_date') {
@@ -436,6 +438,8 @@ ORDER BY transaction_time DESC, transaction_year DESC, FIELD(transaction_month, 
                         array_push($scaleup_data[$index]['data'], $result['minimum_total']);
                     } else if ($scaleup['name'] == 'Maximum Stock') {
                         array_push($scaleup_data[$index]['data'], $result['maximum_total']);
+                    }else if ($scaleup['name'] == 'Pending') {
+                        array_push($scaleup_data[$index]['data'], $result['pending']);
                     }
                 }
             }
@@ -564,7 +568,7 @@ ORDER BY transaction_time DESC, transaction_year DESC, FIELD(transaction_month, 
         $pipeline_data = array(
             array('name' => 'Contracted', 'data' => array()),
             array('name' => 'Pending', 'data' => array()),
-            array('name' => 'In Stock', 'data' => array())
+            array('name' => 'Stock on hand', 'data' => array())
         );
 
         $this->db->select("drug, ROUND(SUM(close_kemsa)/avg_issues) soh_mos, ROUND(SUM(receipts_kemsa)/avg_issues) pending_mos, avg_issues", FALSE);

@@ -20,4 +20,21 @@
         <!--Scripts-->
         <?php $this->load->view('scripts_view'); ?>
     </body>
+    
+    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Help Manual</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Help Narrative              
+            </div>
+           
+        </div>
+    </div>
+</div>
 </html>

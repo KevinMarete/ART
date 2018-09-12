@@ -5,6 +5,8 @@
                 <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
                 <li><a href="<?php echo base_url('manager/orders/reports'); ?>">Orders</a></li>
                 <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i> <?= ucwords(str_replace("_", " ", $page_name)); ?></li>
+                <li><span class="glyphicon glyphicon-question-sign" data-toggle="modal" data-target="#helpModal"></span></li>
+
             </ol>
         </div>
         <!-- /.col-lg-12 -->
@@ -44,7 +46,7 @@
 <script>
     $(document).ready(function () {
         var role = "<?php echo $this->session->userdata('role'); ?>"
-        if(role == 'county' || role == 'national'){
+        if (role == 'county' || role == 'national') {
             $('#dataTables-listing').DataTable({
                 responsive: true,
                 order: [[2, "desc"]],
@@ -69,25 +71,25 @@
                         });
                     });
                     //Show total reporting rate
-                    var reporting_rate =  Math.ceil(this.api().columns([2]).data().average())
+                    var reporting_rate = Math.ceil(this.api().columns([2]).data().average())
                     reporting_rate = reporting_rate || 0
-                    $('.panel-heading').html('Reporting Rate: <b>'+reporting_rate+'%</b><div class="progress"><div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="'+reporting_rate+'" aria-valuemin="0" aria-valuemax="100" style="width: '+reporting_rate+'%;">'+reporting_rate+'%</div></div>')
+                    $('.panel-heading').html('Reporting Rate: <b>' + reporting_rate + '%</b><div class="progress"><div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="' + reporting_rate + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + reporting_rate + '%;">' + reporting_rate + '%</div></div>')
 
                     //Show row reporting rate
-                    this.api().rows().every( function ( rowIdx, tableLoop, rowLoop ) {
+                    this.api().rows().every(function (rowIdx, tableLoop, rowLoop) {
                         var data = this.data();
-                        data[2] = '<div class="progress"><div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="'+data[2]+'" aria-valuemin="0" aria-valuemax="100" style="width: '+data[2]+'%;">'+data[2]+'%</div></div>'
+                        data[2] = '<div class="progress"><div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="' + data[2] + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + data[2] + '%;">' + data[2] + '%</div></div>'
                         this.data(data)
                     });
 
                 }
             });
-        }else{
+        } else {
             $('#dataTables-listing').DataTable({
                 responsive: true,
                 order: [[1, "asc"]],
                 pagingType: "full_numbers",
-                ajax: "<?php echo base_url() . 'Manager/Orders/get_reporting_rates';?>",
+                ajax: "<?php echo base_url() . 'Manager/Orders/get_reporting_rates'; ?>",
                 initComplete: function () {
                     this.api().columns([1, 2]).every(function () {
                         var column = this;
@@ -107,9 +109,9 @@
                         });
                     });
                     //Show reporting rate
-                    var reporting_rate =  Math.ceil(($("#dataTables-listing td:nth-child(3):not(:contains('PENDING'))").length / this.api().data().rows().count())*100)
+                    var reporting_rate = Math.ceil(($("#dataTables-listing td:nth-child(3):not(:contains('PENDING'))").length / this.api().data().rows().count()) * 100)
                     reporting_rate = reporting_rate || 0
-                    $('.panel-heading').html('Reporting Rate: <b>'+reporting_rate+'%</b><div class="progress"><div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="'+reporting_rate+'" aria-valuemin="0" aria-valuemax="100" style="width: '+reporting_rate+'%;">'+reporting_rate+'%</div></div>')
+                    $('.panel-heading').html('Reporting Rate: <b>' + reporting_rate + '%</b><div class="progress"><div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="' + reporting_rate + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + reporting_rate + '%;">' + reporting_rate + '%</div></div>')
                 }
             });
         }

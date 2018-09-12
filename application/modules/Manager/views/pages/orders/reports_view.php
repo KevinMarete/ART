@@ -4,7 +4,9 @@
             <ol class="breadcrumb page-header">
                 <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
                 <li><a href="<?php echo base_url('manager/orders/reports'); ?>">Orders</a></li>
-                <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i> <?= ucwords(str_replace("_", " ",$page_name));?></li>
+                <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i> <?= ucwords(str_replace("_", " ", $page_name)); ?></li>
+                <li><span class="glyphicon glyphicon-question-sign" data-toggle="modal" data-target="#helpModal"></span></li>
+
             </ol>
         </div>
         <!-- /.col-lg-12 -->
@@ -45,7 +47,7 @@
     $(document).ready(function () {
         var role = "<?php echo $this->session->userdata('role'); ?>"
         var filters = {
-            'national' : [0, 1, 2],
+            'national': [0, 1, 2],
             'county': [0, 1],
             'subcounty': [0, 1]
         }

@@ -4,16 +4,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Orders_model extends CI_Model {
 
-    public function actionOrder($orderid,$mapid,$action,$user) {
+    private $_currentMonth = '';
+    private $_previousMonth = '';
+
+    public function __construct() {
+        parent::__construct();
+        $this->_currentMonth = date('Y') . "-" . (sprintf("%02d", date('m') - 1));
+        $this->_previousMonth = date('Y') . "-" . (sprintf("%02d", date('m') - 2));
+    }
+
+    public function actionOrder($orderid, $mapid, $action, $user) {
         $response = array();
         try {
             $this->db->set('updated', date('Y-m-d H:i:s'));
             $this->db->set('status', $action);
             $this->db->where('id', $orderid);
 
-            if ($this->db->update('tbl_cdrr')){
+            if ($this->db->update('tbl_cdrr')) {
                 $log_action = $action;
-                if($action == 'pending'){
+                if ($action == 'pending') {
                     $log_action = 'updated';
                 }
                 $array = array(
@@ -29,15 +38,15 @@ class Orders_model extends CI_Model {
                 $this->db->set('updated', date('Y-m-d H:i:s'));
                 $this->db->set('status', $action);
                 $this->db->where('id', $mapid);
-                if ($this->db->update('tbl_maps')){
+                if ($this->db->update('tbl_maps')) {
                     $maps_log = array(
                         'description' => $log_action,
                         'user_id' => $user,
                         'maps_id' => $mapid,
                         'created' => date('Y-m-d H:i:s')
                     );
-                    $this->db->insert('tbl_maps_log',$maps_log);
-                }    
+                    $this->db->insert('tbl_maps_log', $maps_log);
+                }
                 $response['message'] = 'Order status was updated!';
                 $response['status'] = TRUE;
             } else {
@@ -51,9 +60,9 @@ class Orders_model extends CI_Model {
         return $response;
     }
 
-    public function updateOrder($orderid,$mapid,$order,$user) {
+    public function updateOrder($orderid, $mapid, $order, $user) {
         $response = array();
-        try {   
+        try {
             if ($this->db->update_batch('tbl_cdrr_item', $order, 'id') == 0) {
                 $response['message'] = 'Order was updated!';
                 $response['status'] = TRUE;
@@ -69,19 +78,19 @@ class Orders_model extends CI_Model {
     }
 
     public function get_order_data($scope, $role) {
-        $response = array('data'=> array());
+        $response = array('data' => array());
         $column = "";
         $join = "";
         $filter = "";
         try {
             //Set conditions
-            if($role == 'county'){
+            if ($role == 'county') {
                 $column = "UCASE(sc.name) subcounty,";
                 $join = "INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id";
-                $filter = "AND sc.county_id = '".$scope."'";
-            }else if($role == 'subcounty'){
-                $filter = "AND f.subcounty_id = '".$scope."'";
-            }else if($role == 'national'){
+                $filter = "AND sc.county_id = '" . $scope . "'";
+            } else if ($role == 'subcounty') {
+                $filter = "AND f.subcounty_id = '" . $scope . "'";
+            } else if ($role == 'national') {
                 $column = "UCASE(co.name) county, UCASE(sc.name) subcounty,";
                 $join = "INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id INNER JOIN tbl_county co ON sc.county_id = co.id";
             }
@@ -127,7 +136,7 @@ class Orders_model extends CI_Model {
         try {
             $month_name = date('F Y', strtotime($period_begin));
 
-            if($role == 'national'){
+            if ($role == 'national') {
                 $sql = "SELECT 
                             UCASE(co.name) county,
                             CONCAT_WS('/', COUNT(DISTINCT t.facility_id), COUNT(DISTINCT f.id)) submitted,
@@ -155,7 +164,7 @@ class Orders_model extends CI_Model {
                         GROUP BY co.name
                         ORDER BY co.name ASC";
                 $table_data = $this->db->query($sql, array($period_begin, $period_end, $period_begin, $period_end))->result_array();
-            } else if($role == 'county'){
+            } else if ($role == 'county') {
                 $sql = "SELECT 
                             UCASE(sc.name) subcounty,
                             CONCAT_WS('/', COUNT(DISTINCT t.facility_id), COUNT(DISTINCT f.id)) submitted,
@@ -183,8 +192,8 @@ class Orders_model extends CI_Model {
                         GROUP BY sc.name
                         ORDER BY sc.name ASC";
                 $table_data = $this->db->query($sql, array($period_begin, $period_end, $period_begin, $period_end, $scope))->result_array();
-            }else{
-                $allocation_url = ($allocation) ? "../../../view_allocation" : "view" ;
+            } else {
+                $allocation_url = ($allocation) ? "../../../view_allocation" : "view";
 
                 $sql = "SELECT 
                             f.mflcode,
@@ -237,21 +246,21 @@ class Orders_model extends CI_Model {
     public function get_allocation_data($scope, $role, $period_begin, $period_end) {
         $response = array('data' => array());
         try {
-            if($role == 'national'){
+            if ($role == 'national') {
                 $sql = "SELECT 
                             DATE_FORMAT(c.period_begin, '%M-%Y') period,
                             CONCAT_WS('/', SUM(IF(c.status = 'reviewed', 1, 0)) , sb.total) reviewed,
                             IF(SUM(IF(c.status = 'reviewed', 1, 0)) != sb.total, 'Incomplete', 'Complete') status,
                             CONCAT('<a href=edit_allocation/', c.period_begin, '>View/Edit</a>')  options
                         FROM tbl_cdrr c 
-                        INNER JOIN tbl_maps m ON c.facility_id = m.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status IN('allocated', 'approved', 'reviewed') AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1)
+                        INNER JOIN tbl_maps m ON c.facility_id = m.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status IN('allocated', 'approved', 'reviewed') AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1) AND c.period_begin=? AND c.period_end=?
                         INNER JOIN tbl_facility f ON c.facility_id = f.id,  
                         (SELECT COUNT(DISTINCT fc.name) total FROM tbl_facility fc WHERE fc.category != 'satellite') sb
                         WHERE f.category != 'satellite'
                         GROUP BY period
                         ORDER BY period ASC";
-                $table_data = $this->db->query($sql, array($scope, $scope))->result_array();
-            }else if($role == 'county'){
+                $table_data = $this->db->query($sql, array($period_begin, $period_end))->result_array();
+            } else if ($role == 'county') {
                 $sql = "SELECT 
                             DATE_FORMAT(c.period_begin, '%M-%Y') period,
                             CONCAT_WS('/', SUM(IF(c.status IN ('approved', 'reviewed'), 1, 0)) , sb.total) approved,
@@ -267,7 +276,7 @@ class Orders_model extends CI_Model {
                         GROUP BY period
                         ORDER BY period ASC";
                 $table_data = $this->db->query($sql, array($scope, $scope))->result_array();
-            }else{
+            } else {
                 $sql = "SELECT                      
                             f.mflcode,
                             UCASE(f.name) facility_name,
@@ -320,11 +329,11 @@ class Orders_model extends CI_Model {
         return $response;
     }
 
-    public function get_county_allocation_data($scope, $role, $period_begin, $period_end){
+    public function get_county_allocation_data($scope, $role, $period_begin, $period_end) {
         $response = array('data' => array());
         $currmonth = date('Y-m-d', strtotime('first day of last month'));
         try {
-            if($role == 'national'){
+            if ($role == 'national') {
                 $sql = "SELECT 
                             UCASE(co.name) county,
                             CONCAT_WS('/', COUNT(DISTINCT t.facility_id), COUNT(DISTINCT f.id)) submitted,
@@ -348,7 +357,7 @@ class Orders_model extends CI_Model {
                         GROUP BY co.name
                         ORDER BY co.name ASC";
                 $table_data = $this->db->query($sql, array($period_begin, $period_end))->result_array();
-            } else if($role == 'county'){
+            } else if ($role == 'county') {
                 $sql = "SELECT 
                             UCASE(sc.name) subcounty,
                             CONCAT_WS('/', COUNT(DISTINCT t.facility_id), COUNT(DISTINCT f.id)) submitted,
@@ -407,7 +416,7 @@ class Orders_model extends CI_Model {
         return $response;
     }
 
-    public function get_cdrr_data($cdrr_id, $scope = null, $role = null){
+    public function get_cdrr_data($cdrr_id, $scope = null, $role = null) {
         $conditions = array(
             "national" => "",
             "county" => " AND county_id = '$scope'",
@@ -419,11 +428,11 @@ class Orders_model extends CI_Model {
         $response = array();
 
         //Go back if no cdrr_id
-        if(!$cdrr_id){
+        if (!$cdrr_id) {
             return $response;
         }
 
-        try{
+        try {
             $sql = "SELECT 
                         *, d.name AS drug_name, f.name AS facility_name, co.name AS county, sc.name AS subcounty, ci.id AS cdrr_item_id
                     FROM tbl_cdrr c 
@@ -432,9 +441,9 @@ class Orders_model extends CI_Model {
                     INNER JOIN tbl_facility f ON f.id = c.facility_id
                     INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
                     INNER JOIN tbl_county co ON co.id = sc.county_id
-                    WHERE c.id = ?  ".$role_cond;
+                    WHERE period_end LIKE '$this->_currentMonth%' AND c.id = ?  " . $role_cond;
             $table_data = $this->db->query($sql, array($cdrr_id))->result_array();
-
+         
             $logs_sql = "SELECT 
                             cl.description, cl.created, u.firstname, u.lastname, r.name AS role
                         FROM tbl_cdrr_log cl
@@ -444,70 +453,100 @@ class Orders_model extends CI_Model {
                         ORDER BY cl.id ASC";
             $logs_table_data = $this->db->query($logs_sql, array($cdrr_id))->result_array();
 
-            if(!empty($table_data)){
+            if (!empty($table_data)) {
                 foreach ($table_data as $result) {
-                    $response['data'][] = array('status' => $result['status'], 
-                        'created' => $result['created'], 
-                        'updated' => $result['updated'], 
-                        'code' => $result['code'], 
-                        'period_begin' => $result['period_begin'], 
-                        'period_end' => $result['period_end'], 
-                        'comments' => $result['comments'], 
-                        'reports_expected' => $result['reports_expected'], 
-                        'reports_actual' => $result['reports_actual'], 
-                        'services' => $result['services'], 
-                        'sponsors' => $result['sponsors'], 
-                        'non_arv' => $result['non_arv'], 
-                        'delivery_note' => $result['delivery_note'], 
-                        'order_id' => $result['order_id'], 
+                    $response['data'][] = array(
+                        'status' => $result['status'],
+                        'created' => $result['created'],
+                        'updated' => $result['updated'],
+                        'code' => $result['code'],
+                        'period_begin' => $result['period_begin'],
+                        'period_end' => $result['period_end'],
+                        'comments' => $result['comments'],
+                        'reports_expected' => $result['reports_expected'],
+                        'reports_actual' => $result['reports_actual'],
+                        'services' => $result['services'],
+                        'sponsors' => $result['sponsors'],
+                        'non_arv' => $result['non_arv'],
+                        'delivery_note' => $result['delivery_note'],
+                        'order_id' => $result['order_id'],
                         'facility_id' => $result['facility_id'],
-                        'facility_name' => $result['facility_name'], 
-                        'mflcode' => $result['mflcode'], 
-                        'county' => $result['county'], 
+                        'facility_name' => $result['facility_name'],
+                        'mflcode' => $result['mflcode'],
+                        'county' => $result['county'],
                         'subcounty' => $result['subcounty']
                     );
 
                     $response['data']['cdrr_item'][$result['drug_id']] = array(
                         'cdrr_item_id' => $result['cdrr_item_id'],
-                        'balance' => $result['balance'], 
-                        'received' => $result['received'], 
-                        'dispensed_units' => $result['dispensed_units'], 
-                        'dispensed_packs' => $result['dispensed_packs'], 
-                        'losses' => $result['losses'], 
-                        'adjustments' => $result['adjustments'], 
-                        'adjustments_neg' => $result['adjustments_neg'], 
-                        'count' => $result['count'], 
-                        'expiry_quant' => $result['expiry_quant'], 
-                        'expiry_date' => $result['expiry_date'], 
-                        'out_of_stock' => $result['out_of_stock'], 
-                        'resupply' => $result['resupply'], 
-                        'aggr_consumed' => $result['aggr_consumed'], 
-                        'aggr_on_hand' => $result['aggr_on_hand'], 
-                        'publish' => $result['publish'], 
+                        'balance' => $result['balance'],
+                        'received' => $result['received'],
+                        'dispensed_units' => $result['dispensed_units'],
+                        'dispensed_packs' => $result['dispensed_packs'],
+                        'losses' => $result['losses'],
+                        'adjustments' => $result['adjustments'],
+                        'adjustments_neg' => $result['adjustments_neg'],
+                        'count' => $result['count'],
+                        'expiry_quant' => $result['expiry_quant'],
+                        'expiry_date' => $result['expiry_date'],
+                        'out_of_stock' => $result['out_of_stock'],
+                        'resupply' => $result['resupply'],
+                        'aggr_consumed' => $result['aggr_consumed'],
+                        'aggr_on_hand' => $result['aggr_on_hand'],
+                        'publish' => $result['publish'],
                         'drugamc' => $this->get_drug_amc($result['facility_id'], $result['period_begin'], $result['drug_id'], $result['code']),
-                        'cdrr_id' => $result['cdrr_id'], 
-                        'drug_id' => $result['drug_id'], 
-                        'qty_allocated' => $result['qty_allocated'], 
+                        'cdrr_id' => $result['cdrr_id'],
+                        'drug_id' => $result['drug_id'],
+                        'qty_allocated' => $result['qty_allocated'],
+                        'qty_allocated_mos' =>  $result['qty_allocated_mos'],
                         'feedback' => $result['feedback']
                     );
 
                     $response['data']['cdrr_logs'] = $logs_table_data;
-
                 }
                 $response['message'] = 'Table data was found!';
                 $response['status'] = TRUE;
-            }else{
+            } else {
                 $response['message'] = 'Table is empty!';
                 $response['status'] = FALSE;
             }
-        }catch(Execption $e){
+        } catch (Execption $e) {
             $response['status'] = FALSE;
             $response['message'] = $e->getMessage();
         }
         return $response;
     }
 
-    public function get_drug_amc($facility_id, $period_begin, $drug_id, $code){
+    public function get_previous_cdrr_data($cdrr_id, $scope = null, $role = null) {        
+
+        $response = array();
+
+        //Go back if no cdrr_id
+        if (!$cdrr_id) {
+            return $response;
+        }
+
+        try {
+            $sql = "SELECT * FROM `vw_lastmonth_bal` WHERE `drug_name`='Abacavir (ABC) 300mg Tabs' AND facility='St Mulumba Mission Hospital";  
+            $table_data = $this->db->query($sql, array($cdrr_id))->result_array();
+
+
+            if (!empty($table_data)) {
+               
+                $response['message'] = 'Result found!';
+                $response['status'] = TRUE;
+            } else {
+                $response['message'] = 'Result is empty!';
+                $response['status'] = FALSE;
+            }
+        } catch (Execption $e) {
+            $response['status'] = FALSE;
+            $response['message'] = $e->getMessage();
+        }
+        return $response;
+    }
+
+    public function get_drug_amc($facility_id, $period_begin, $drug_id, $code) {
         $first = date('Y-m-01', strtotime($period_begin));
         $second = date('Y-m-01', strtotime($period_begin . "- 1 month"));
         $third = date('Y-m-01', strtotime($period_begin . "- 2 month"));
@@ -528,8 +567,8 @@ class Orders_model extends CI_Model {
                 ) c ON ci.cdrr_id = c.id
                 AND ci.drug_id = ?
                 GROUP BY ci.drug_id";
-        $query = $this -> db -> query($sql, array($first, $second, $third, $facility_id, $code, $drug_id));
-        $results = $query -> result_array();
+        $query = $this->db->query($sql, array($first, $second, $third, $facility_id, $code, $drug_id));
+        $results = $query->result_array();
         if ($results) {
             foreach ($results as $result) {
                 if ($code == "D-CDRR") {
@@ -543,23 +582,28 @@ class Orders_model extends CI_Model {
         return $amc;
     }
 
-    public function get_maps_data($maps_id, $scope = null,$role = null){
+    public function get_maps_data($maps_id, $scope = null, $role = null) {
         $conditions = array(
             "national" => "",
             "county" => " AND sc.county_id = '$scope'",
             "subcounty" => " AND f.subcounty_id = '$scope'"
         );
-        
+
         $role_cond = $conditions[$role];
+        //print_r($role_cond);
 
         $response = array();
 
         //Go back if no maps_id
-        if(!$maps_id){
+        if (!$maps_id) {
             return $response;
         }
+        //echo $role_cond;
 
-        try{
+        try {
+
+
+
             $sql = "SELECT mi.total, mi.regimen_id
             FROM tbl_maps m 
             INNER JOIN tbl_maps_item mi ON mi.maps_id = m.id
@@ -567,32 +611,88 @@ class Orders_model extends CI_Model {
             INNER JOIN tbl_facility f ON f.id = m.facility_id
             INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
             INNER JOIN tbl_county co ON co.id = sc.county_id
-            WHERE m.id = ? ".$role_cond;
+            WHERE period_end LIKE '%$this->_currentMonth%' AND m.id = ? " . $role_cond;
+
+
+
 
             $table_data = $this->db->query($sql, array($maps_id))->result_array();
-            if(!empty($table_data)){
+            if (!empty($table_data)) {
                 foreach ($table_data as $result) {
                     $response['data'][$result['regimen_id']] = $result['total'];
                 }
+
                 $response['message'] = 'Table data was found!';
                 $response['status'] = TRUE;
-            }else{
+            } else {
                 $response['message'] = 'Table is empty!';
                 $response['status'] = FALSE;
             }
-        }catch(Execption $e){
+        } catch (Execption $e) {
             $response['status'] = FALSE;
             $response['message'] = $e->getMessage();
         }
         return $response;
-    }	
+    }
+
+    public function get_previous_maps_data($maps_id, $scope = null, $role = null) {
+        $conditions = array(
+            "national" => "",
+            "county" => " AND sc.county_id = '$scope'",
+            "subcounty" => " AND f.subcounty_id = '$scope'"
+        );
+
+        $role_cond = $conditions[$role];
+        //print_r($role_cond);
+
+        $response = array();
+
+        //Go back if no maps_id
+        if (!$maps_id) {
+            return $response;
+        }
+        //echo $role_cond;
+
+        try {
+            $previous = date('Y') . "-" . (sprintf("%02d", date('m') - 2));
+
+            $sql = "SELECT mi.total, mi.regimen_id
+            FROM tbl_maps m 
+            INNER JOIN tbl_maps_item mi ON mi.maps_id = m.id
+            INNER JOIN vw_regimen_list r ON r.id = mi.regimen_id
+            INNER JOIN tbl_facility f ON f.id = m.facility_id
+            INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
+            INNER JOIN tbl_county co ON co.id = sc.county_id
+            WHERE period_end LIKE '%$this->_previousMonth%' AND m.id = ? " . $role_cond;
+
+
+
+
+            $table_data = $this->db->query($sql, array($maps_id))->result_array();
+            if (!empty($table_data)) {
+                foreach ($table_data as $result) {
+                    $response['data'][$result['regimen_id']] = $result['total'];
+                }
+
+                $response['message'] = 'Table data was found!';
+                $response['status'] = TRUE;
+            } else {
+                $response['message'] = 'Table is empty!';
+                $response['status'] = FALSE;
+            }
+        } catch (Execption $e) {
+            $response['status'] = FALSE;
+            $response['message'] = $e->getMessage();
+        }
+        return $response;
+    }
 
     public function get_county_reporting_data($scope, $role, $period_begin, $period_end, $allocation = false) {
         $response = array('data' => array());
         try {
             $month_name = date('F Y', strtotime($period_begin));
 
-            $allocation_url = ($allocation) ? "../../../view_allocation" : "view" ;
+            $allocation_url = ($allocation) ? "../../../view_allocation" : "view";
 
             $sql = "SELECT
                         UCASE(sc.name) subcounty,
@@ -643,7 +743,7 @@ class Orders_model extends CI_Model {
         return $response;
     }
 
-    public function get_satellite_cdrr($cdrr_id){
+    public function get_satellite_cdrr($cdrr_id) {
         $response = array('data' => array());
         try {
             $sql = "SELECT CONCAT_WS('<br/>[', f.name, CONCAT(f.mflcode, ']')) facility, ci.drug_id,  IF(ci.dispensed_packs IS NOT NULL, ci.dispensed_packs, 0) consumed, IF(ci.count IS NOT NULL, ci.count, 0) stock_on_hand
@@ -658,14 +758,14 @@ class Orders_model extends CI_Model {
                     GROUP BY f.name, ci.drug_id,  ci.dispensed_packs, ci.count
                     ORDER BY f.name";
             $table_data = $this->db->query($sql, array($cdrr_id))->result_array();
-            if(!empty($table_data)){
+            if (!empty($table_data)) {
                 foreach ($table_data as $result) {
                     $response['data'][$result['facility']][$result['drug_id']]['consumed'] = $result['consumed'];
                     $response['data'][$result['facility']][$result['drug_id']]['stock_on_hand'] = $result['stock_on_hand'];
                 }
                 $response['message'] = 'Table data was found!';
                 $response['status'] = TRUE;
-            }else{
+            } else {
                 $response['message'] = 'Table is empty!';
                 $response['status'] = FALSE;
             }
@@ -676,7 +776,7 @@ class Orders_model extends CI_Model {
         return $response;
     }
 
-    public function get_satellite_maps($maps_id){
+    public function get_satellite_maps($maps_id) {
         $response = array('data' => array());
         try {
             $sql = "SELECT CONCAT_WS('<br/>[', f.name, CONCAT(f.mflcode, ']')) facility, mi.regimen_id, IF(mi.total IS NOT NULL, mi.total, 0) patients
@@ -691,13 +791,13 @@ class Orders_model extends CI_Model {
                     GROUP BY f.name, mi.regimen_id,  mi.total
                     ORDER BY f.name";
             $table_data = $this->db->query($sql, array($maps_id))->result_array();
-            if(!empty($table_data)){
+            if (!empty($table_data)) {
                 foreach ($table_data as $result) {
                     $response['data'][$result['facility']][$result['regimen_id']]['patients'] = $result['patients'];
                 }
                 $response['message'] = 'Table data was found!';
                 $response['status'] = TRUE;
-            }else{
+            } else {
                 $response['message'] = 'Table is empty!';
                 $response['status'] = FALSE;
             }

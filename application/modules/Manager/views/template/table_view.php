@@ -282,10 +282,16 @@ if ($page_name != 'backup' && $page_name != 'user') {
                 $('[name="packsize"]').val(data.packsize);
                 $('[name="generic_id"]').val(data.generic_id);
                 $('[name="formulation_id"]').val(data.formulation_id);
+                $('[name="drug_category"]').val(data.drug_category);
+                $('[name="min_qty_alloc"]').val(data.min_qty_alloc);
+                $('[name="max_qty_alloc"]').val(data.max_qty_alloc);
                 //generic
                 $('[name="abbreviation"]').val(data.abbreviation);
                 //module
                 $('[name="icon"]').val(data.icon);
+                //mailing_list
+                $('[name="email"]').val(data.email);
+                $('[name="email_type"]').val(data.email_type);
                 //install
                 $('[name="facility_id"]').val(data.facility_id);
                 $('[name="contact_name"]').val(data.contact_name);
@@ -311,6 +317,7 @@ if ($page_name != 'backup' && $page_name != 'user') {
                 //role_submodule
                 $('[name="role_id"]').val(data.role_id);
                 $('[name="submodule_id"]').val(data.submodule_id);
+                
                 //facility
                 $('[name="mflcode"]').val(data.mflcode);
                 $('[name="category"]').val(data.category);
