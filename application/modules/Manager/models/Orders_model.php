@@ -691,7 +691,7 @@ class Orders_model extends CI_Model {
         $response = array('data' => array());
         try {
             $month_name = date('F Y', strtotime($period_begin));
-
+            $base_url = base_url().'manager/orders/pdf';
             $allocation_url = ($allocation) ? "../../../view_allocation" : "view";
 
             $sql = "SELECT
@@ -701,7 +701,8 @@ class Orders_model extends CI_Model {
                         IF(t.period_begin IS NOT NULL, t.description, 'N/A') description,
                         IF(t.period_begin IS NOT NULL, UCASE(t.status), 'N/A') reporting_status,
                         ? period,
-                        IF(t.period_begin IS NOT NULL, CONCAT('<a href=$allocation_url/',t.cdrr_id,'/',t.maps_id,'>View Order</a>'), 'Not Reported') options
+                        IF(t.period_begin IS NOT NULL, CONCAT('<a href=$allocation_url/',t.cdrr_id,'/',t.maps_id,'>View Order</a>'), 'Not Reported') options,
+                        IF(t.period_begin IS NOT NULL, CONCAT('<a href=$base_url/',t.cdrr_id,'/',t.maps_id,'>Download Order</a>'), 'Not Action') download
                     FROM tbl_facility f
                     INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
                     LEFT JOIN

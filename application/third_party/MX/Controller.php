@@ -1,7 +1,9 @@
-<?php (defined('BASEPATH')) OR exit('No direct script access allowed');
+<?php
 
-/** load the CI class for Modular Extensions **/
-require dirname(__FILE__).'/Base.php';
+(defined('BASEPATH')) OR exit('No direct script access allowed');
+
+/** load the CI class for Modular Extensions * */
+require dirname(__FILE__) . '/Base.php';
 
 /**
  * Modular Extensions - HMVC
@@ -35,30 +37,46 @@ require dirname(__FILE__).'/Base.php';
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- **/
-class MX_Controller 
-{
-	public $autoload = array();
-	
-	public function __construct() 
-	{
-		$class = str_replace(CI::$APP->config->item('controller_suffix'), '', get_class($this));
-		log_message('debug', $class." MX_Controller Initialized");
-		Modules::$registry[strtolower($class)] = $this;	
-		
-		/* copy a loader instance and initialize */
-		$this->load = clone load_class('Loader');
-		$this->load->initialize($this);	
-		
-		/* autoload module items */
-		$this->load->_autoloader($this->autoload);
+ * */
+class MX_Controller {
 
-		/*Add default timezone*/
-		date_default_timezone_set("Africa/Nairobi");
-	}
-	
-	public function __get($class) 
-	{
-		return CI::$APP->$class;
-	}
+    public $autoload = array();
+
+    public function __construct() {
+        $class = str_replace(CI::$APP->config->item('controller_suffix'), '', get_class($this));
+        log_message('debug', $class . " MX_Controller Initialized");
+        Modules::$registry[strtolower($class)] = $this;
+
+        /* copy a loader instance and initialize */
+        $this->load = clone load_class('Loader');
+        $this->load->initialize($this);
+
+        /* autoload module items */
+        $this->load->_autoloader($this->autoload);
+
+        /* Add default timezone */
+        date_default_timezone_set("Africa/Nairobi");
+    }
+
+    public function __get($class) {
+        return CI::$APP->$class;
+    }
+
+    function sendReminder() {
+        $this->load->library('email_sender');
+        $date = date('d');
+        $list = '';
+        $mailing_list = $this->db->where('email_type', '3')->get('tbl_mailing_list')->result();
+        foreach ($mailing_list as $m) {
+            $list .= $m->email . ',';
+        }
+        $mails = rtrim($list, ",");
+
+        if ($date == 14 || $date == 15 || $date == 18 || $date==20) {
+            $data ='<p><strong>ALLOCATION REMINDER NOTICE</strong></p>';
+            $data .='<p>This is to remind you of your pending drug allocations report. Kindly do allocation befor the due date of 20th.</p>';
+            $this->email_sender->send_email_reminders('Allocation Manager','Allocate',$mails,$names='',$data);
+        }
+    }
+
 }

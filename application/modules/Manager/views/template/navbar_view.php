@@ -17,6 +17,7 @@
                 <b><?php echo ucwords($this->session->userdata('role')); ?>: </b> <?php echo ucwords($this->session->userdata('scope_name')); ?>
             </small> 
         </li>
+
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 <i class="fa fa-user fa-fw"></i> <?php echo $this->session->userdata('firstname') . ' ' . $this->session->userdata('lastname'); ?> <i class="fa fa-caret-down"></i>
@@ -68,6 +69,13 @@
     </div>
     <!--/.navbar-static-side -->
 </nav>
+<?php
+$date = date('d');
+if ($date == 13 || $date == 15 || $date == 18 || $date == 20 && $this->session->userdata('role') == 'subcounty') {
+    ?>
+    <div style="margin: 10px;" class="alert alert-warning pull-right"><i class="fa fa-warning"></i> Kindly ensure that you have already submitted your allocation report before the 20<sup>th</sup></div>
+<?php } ?>
+
 <script>
     //sort settings_nav links alphabetically
     var mylist = $('#settings_nav_links');

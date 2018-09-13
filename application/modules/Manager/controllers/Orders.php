@@ -18,12 +18,14 @@ class Orders extends MX_Controller {
         $drugs = $this->Orders_model->get_drugs();
 
         $pdfBuilder .= '<style> 
-                         table {table-layout: fixed;min-width:400px; max-width:800px;}
-                         table td{border:1px solid black;}
-                         
+                         table {table-layout: fixed;width:900px; padding:10px;}
+                         table ,th, td{border:1px solid black; max-width:300px; border-collapse: collapse;}
+                         th {text-align: left; background-color: #4CAF50;color: white; height: 50px;}
+                         tr,td{height:20px;}
+                         tr:nth-child(even) {background-color: #f2f2f2;}
                        </style>            
                         
-                                <table style="border:1px solid black;">
+                                <table style="border:1px solid black;" >
                                     <tbody>
                                         <tr>
                                             <td>
@@ -59,18 +61,17 @@ class Orders extends MX_Controller {
                                 </table> 
                          ';
 
-        $pdfBuilder .= '<table >
+        $pdfBuilder .= '<table style="margin-top:20px;" >
                                     <thead style="">
-                                        <tr>
+                                        <tr width="500px;">
                                             <th width="300px;">DRUG NAME</th>
                                           
-                                            <th >RESUPPLY QTY</th>
+                                            <th width="100px;" >RESUPPLY QTY</th>
                                          
                                         </tr>
                                         
                                     </thead>
-                                    <tbody>
-                                    <form name="orderForm" id="orderForm">';
+                                    <tbody>';
 
         foreach ($drugs as $drug) {
             $drugid = $drug['id'];
@@ -86,14 +87,14 @@ class Orders extends MX_Controller {
             }
         }
 
-        $pdfBuilder .= '</form>
-                                    </tbody>
+        $pdfBuilder .= '</tbody>
                                 </table>
                               <span style="page-break-after:always;"></span>';
 
 
-        echo $pdfBuilder;
-   exit;
+       // echo $pdfBuilder;
+      // echo htmlspecialchars($pdfBuilder);
+ //  exit;
 
 
         $dompdf = new Dompdf;

@@ -235,7 +235,7 @@ ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'A
         $response = array('data' => array());
         try {
             $sql = "SELECT
-                  
+                    pi.id,
                      CONCAT(transaction_year ,' - ', transaction_month) expected_delivery_date,
                      pi.date_added transaction_date,
                      quantity quantity,
@@ -243,13 +243,13 @@ ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'A
                      fa.name funding_agent,
                      IF(s.name IS NULL, '', s.name) supplier
                     FROM tbl_procurement_item pi
-                    INNER JOIN tbl_procurement p ON p.id = pi.procurement_id
+                    LEFT JOIN tbl_procurement p ON p.id = pi.procurement_id
                     LEFT JOIN tbl_procurement_status ps ON ps.id = pi.procurement_status_id
                     LEFT JOIN tbl_funding_agent fa ON fa.id = pi.funding_agent_id
                     LEFT JOIN tbl_supplier s ON s.id = pi.supplier_id
                     WHERE p.drug_id = ?
                     GROUP BY pi.id
-                    ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ) DESC LIMIT 1";
+                    ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ) DESC LIMIT 5";
             $table_data = $this->db->query($sql, array($drug_id))->result_array();
             if (!empty($table_data)) {
                 $response['data'] = $table_data;

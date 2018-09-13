@@ -78,10 +78,10 @@
                             </div>
                         </div>
                     </div>
-                    
-                     <div id="minutes" class="tab-pane fade">
+
+                    <div id="minutes" class="tab-pane fade">
                         <h3>Minutes</h3>
-                      <?php $this->load->view('pages/procurement/minutes_view');?>
+                        <?php $this->load->view('pages/procurement/minutes_view'); ?>
                     </div>
 
 
@@ -616,12 +616,12 @@
                     });
                 } else {
                     var bal = overall_qty - sum;
-                    
+
                 }
             });
         });
-        
-         $(".receipt_qty").on('focusout', function () {
+
+        $(".receipt_qty").on('focusout', function () {
             var curr_element = $(this)
             var sum = 0;
             var overall_qty = parseInt($("#actual_qty").val());
@@ -637,15 +637,15 @@
                     var bal = overall_qty - sum;
                     swal({
                         title: "Balance in numbers",
-                        text: "You are remaining with "+bal+" to order",
+                        text: "You are remaining with " + bal + " to order",
                         icon: "info",
                     });
                 }
             });
         });
-        
-        
-          $(".receipt_qty_percentage").on('focusout', function () {
+
+
+        $(".receipt_qty_percentage").on('focusout', function () {
             var curr_element = $(this);
             var sum = 0;
             var overall_qty = 100;
@@ -658,13 +658,14 @@
                         icon: "error",
                     });
                 } else {
-                     bal = overall_qty - sum;
-                    if(isNaN(bal)){
-                        bal=0;
-                    };
+                    bal = overall_qty - sum;
+                    if (isNaN(bal)) {
+                        bal = 0;
+                    }
+                    ;
                     swal({
                         title: "Balance in Percentage(%)",
-                        text: "You are remaining with "+bal+"% to order",
+                        text: "You are remaining with " + bal + "% to order",
                         icon: "info",
                     });
                 }
@@ -716,8 +717,8 @@
             var calculated_qty = (parseInt(percentage) / 100) * parseInt(actual_qty);
             qty_.val(Math.ceil(calculated_qty));
         });
-        
-      
+
+
         $(document).on('keyup', '.receipt_qty', function () {
             var row_data = $(this).closest('tr');
             var actual_qty = $('#actual_qty').val();
@@ -942,11 +943,48 @@
     function getDrugOrdersHistory(drugID, divID) {
 
         var ordersURL = "<?php echo base_url() . 'Manager/Procurement/get_order_table_history/'; ?>" + drugID;
-
-        $.get(ordersURL, function (data) {
+        var editOrderURL = "<?php echo base_url() . 'Manager/Procurement/edit_order/'; ?>"
+        var itemURL = "<?php echo base_url() . 'Manager/Procurement/get_order_items/'; ?>"
+        $.get(ordersURL, function (table) {
             $(divID).empty();
-            $(divID).append(data);
+            $(divID).append(table);
+            $(".order_tbl_history").Tabledit({
+                url: editOrderURL,
+                hideIdentifier: true,
+                deleteButton: false,
+                columns: {
+                    identifier: [0, 'id'],
+                    editable: [
+                        //[1, 'transaction_year'],
+                        //[2, 'transaction_month'],
+                        //[3, 'transaction_date'],
+                        //[3, 'quantity'],
+                        [4, 'procurement_status_id', '{"1": "Proposed", "2": "Contracted", "3": "Received", "5": "Cancelled"}']
+                                // [5, 'funding_agent_id', '{"USID": "1", "GF": "2", "CPF": "3"}'],
+                                // [6, 'supplier_id', '{"Aurobindo Pharma Limited": "1", "Laboratory & Allied Limited": "2", "Abbott Laboratories S.A. (Pty) Limited": "3", "Dawa Limited": "3" ,"Cipla Limited": "3"}']
+                    ]
+                },
+                buttons: {
+                    edit: {
+                        class: 'btn btn-sm btn-default',
+                        html: '<span class="fa fa-pencil-square-o"></span>',
+                        action: 'edit'
+                    },
+                    delete: {
+                        class: 'btn btn-sm btn-default',
+                        html: '<span class="fa fa-trash-o"></span>',
+                        action: 'delete'
+                    }
+                },
+                onSuccess: function (data, textStatus, jqXHR) {
+                    getDrugOrders(drugID, divID)
+
+
+                }
+            });
         });
+
+
     }
 
     function getDrugLogs(drugID, tableID) {

@@ -95,13 +95,13 @@ class Manager extends MX_Controller {
                     ),
                     'subcounty_reports' => array(
                         'subcounty' => array(),
-                        'county' => array('MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions'),
+                        'county' => array('MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions','Download'),
                         'national' => array()
                     ),
                     'county_reports' => array(
                         'subcounty' => array(),
                         'county' => array(),
-                        'national' => array('SubCounty', 'MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions')
+                        'national' => array('SubCounty', 'MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions','Download')
                     ),
                     'satellites' => array(
                         'subcounty' => array(

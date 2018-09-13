@@ -12,8 +12,11 @@ class Procurement extends MX_Controller {
         $this->load->model('Procurement_model');
         $this->load->library('email_sender');
     }
-
-  
+    
+    function Reminder(){
+        $this->sendReminder();
+    }
+              
 
     function getAllDrugs() {
         $query = "SELECT d.id, UPPER(CONCAT(g.name,' ',g.abbreviation, d.strength,' - ',f.name)) name  
