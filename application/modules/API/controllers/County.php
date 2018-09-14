@@ -3,6 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
+require APPPATH . 'modules/API/models/County_model.php';
 
 /**
  *
@@ -15,22 +16,17 @@ require APPPATH . '/libraries/REST_Controller.php';
  */
 class County extends \API\Libraries\REST_Controller  {
 
-    function __construct()
-    {
-        parent::__construct();
-        $this->load->model('county_model');
-    }
-
     public function index_get()
     {
-        // counties from a data store e.g. database
-        $counties = $this->county_model->read();
 
         $id = $this->get('id');
 
         // If the id parameter doesn't exist return all the counties
         if ($id === NULL)
         {
+            // counties from a data store e.g. database
+            $counties = County_model::all();
+
             // Check if the counties data store contains counties (in case the database result returns NULL)
             if ($counties)
             {
@@ -60,18 +56,7 @@ class County extends \API\Libraries\REST_Controller  {
             // Get the county from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $county = NULL;
-
-            if (!empty($counties))
-            {      
-                foreach ($counties as $key => $value)
-                {   
-                    if ($value['id'] == $id)
-                    {
-                        $county = $value;
-                    }
-                }
-            }
+            $county = County_model::with('subcounties')->find($id);
 
             if (!empty($county))
             {
@@ -89,18 +74,15 @@ class County extends \API\Libraries\REST_Controller  {
 
     public function index_post()
     {   
-        $data = array(
-            'name' => $this->post('name')
-        );
-        $data = $this->county_model->insert($data);
-        if($data['status'])
+        $county = new County_model;
+        $county->name = $this->post('name');
+        
+        if($county->save())
         {
-            unset($data['status']);
-            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            $this->set_response($county, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -110,7 +92,7 @@ class County extends \API\Libraries\REST_Controller  {
 
     public function index_put()
     {   
-        $id = (int) $this->get('id');
+        $id = (int) $this->query('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -119,18 +101,15 @@ class County extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $data = array(
-            'name' => $this->put('name')
-        );
-        $data = $this->county_model->update($id, $data);
-        if($data['status'])
+        $county = County_model::find($id);
+        $county->name = $this->put('name');
+        
+        if($county->save())
         {
-            unset($data['status']);
-            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            $this->set_response($county, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -140,7 +119,7 @@ class County extends \API\Libraries\REST_Controller  {
 
     public function index_delete()
     {
-        $id = (int) $this->get('id');
+        $id = (int) $this->query('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -149,10 +128,9 @@ class County extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $data = $this->county_model->delete($id);
-        if($data['status'])
+        $deleted = County_model::destroy($id);
+        if($deleted)
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => TRUE,
                 'message' => 'Data is deleted successfully'
@@ -160,7 +138,6 @@ class County extends \API\Libraries\REST_Controller  {
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'

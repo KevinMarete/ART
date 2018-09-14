@@ -3,6 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
+require APPPATH . 'modules/API/models/Line_model.php';
 
 /**
  *
@@ -23,14 +24,15 @@ class Line extends \API\Libraries\REST_Controller  {
 
     public function index_get()
     {
-        // lines from a data store e.g. database
-        $lines = $this->line_model->read();
 
         $id = $this->get('id');
 
         // If the id parameter doesn't exist return all the lines
         if ($id === NULL)
         {
+            // lines from a data store e.g. database
+            $lines = Line_model::all();
+
             // Check if the lines data store contains lines (in case the database result returns NULL)
             if ($lines)
             {
@@ -60,18 +62,7 @@ class Line extends \API\Libraries\REST_Controller  {
             // Get the line from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $line = NULL;
-
-            if (!empty($lines))
-            {      
-                foreach ($lines as $key => $value)
-                {   
-                    if ($value['id'] == $id)
-                    {
-                        $line = $value;
-                    }
-                }
-            }
+            $line = Line_model::find($id);
 
             if (!empty($line))
             {
@@ -89,18 +80,15 @@ class Line extends \API\Libraries\REST_Controller  {
 
     public function index_post()
     {   
-        $data = array(
-            'name' => $this->post('name')
-        );
-        $data = $this->line_model->insert($data);
-        if($data['status'])
+        $line = new Line_model;
+        $line->name = $this->post('name');
+
+        if($line->save())
         {
-            unset($data['status']);
-            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            $this->set_response($line, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -110,7 +98,7 @@ class Line extends \API\Libraries\REST_Controller  {
 
     public function index_put()
     {   
-        $id = (int) $this->get('id');
+        $id = (int) $this->query('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -119,18 +107,15 @@ class Line extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $data = array(
-            'name' => $this->put('name')
-        );
-        $data = $this->line_model->update($id, $data);
-        if($data['status'])
+        $line = Line_model::find($id);
+        $line->name = $this->put('name');
+
+        if($line->save())
         {
-            unset($data['status']);
-            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            $this->set_response($line, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -140,7 +125,7 @@ class Line extends \API\Libraries\REST_Controller  {
 
     public function index_delete()
     {
-        $id = (int) $this->get('id');
+        $id = (int) $this->query('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -149,10 +134,9 @@ class Line extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $data = $this->line_model->delete($id);
-        if($data['status'])
+        $deleted = Line_model::destroy($id);
+        if($deleted)
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => TRUE,
                 'message' => 'Data is deleted successfully'
@@ -160,7 +144,6 @@ class Line extends \API\Libraries\REST_Controller  {
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'

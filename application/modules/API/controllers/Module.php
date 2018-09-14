@@ -8,22 +8,18 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
+require APPPATH . 'modules/API/models/Module_model.php';
 
 class Module extends \API\Libraries\REST_Controller {
 
-    function __construct() {
-        parent::__construct();
-        $this->load->model('module_model');
-    }
-
     public function index_get() {
-        // modules from a data store e.g. database
-        $modules = $this->module_model->read();
-
         $id = $this->get('id');
 
         // If the id parameter doesn't exist return all the modules
         if ($id === NULL) {
+            // modules from a data store e.g. database
+            $modules = Module_model::all();
+    
             // Check if the modules data store contains modules (in case the database result returns NULL)
             if ($modules) {
                 // Set the response and exit
@@ -49,15 +45,7 @@ class Module extends \API\Libraries\REST_Controller {
             // Get the module from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $module = NULL;
-
-            if (!empty($modules)) {
-                foreach ($modules as $key => $value) {
-                    if ($value['id'] == $id) {
-                        $module = $value;
-                    }
-                }
-            }
+            $module = Module_model::find($id);
 
             if (!empty($module)) {
                 $this->set_response($module, \API\Libraries\REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
@@ -71,16 +59,13 @@ class Module extends \API\Libraries\REST_Controller {
     }
 
     public function index_post() {
-        $data = array(
-            'name' => $this->post('name'),
-            'icon' => $this->post('icon')
-        );
-        $data = $this->module_model->insert($data);
-        if ($data['status']) {
-            unset($data['status']);
-            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+        $module = new Module_model;
+        $module->name = $this->post('name');
+        $module->icon = $this->post('icon');
+
+        if ($module->save()) {
+            $this->set_response($module, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         } else {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -89,7 +74,7 @@ class Module extends \API\Libraries\REST_Controller {
     }
 
     public function index_put() {
-        $id = (int) $this->get('id');
+        $id = (int) $this->query('id');
 
         // Validate the id.
         if ($id <= 0) {
@@ -97,16 +82,13 @@ class Module extends \API\Libraries\REST_Controller {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $data = array(
-            'name' => $this->put('name'),
-            'icon' => $this->put('icon')
-        );
-        $data = $this->module_model->update($id, $data);
-        if ($data['status']) {
-            unset($data['status']);
-            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+        $module = Module_model::find($id);
+        $module->name = $this->put('name');
+        $module->icon = $this->put('icon');
+
+        if ($module->save()) {
+            $this->set_response($module, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         } else {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -115,7 +97,7 @@ class Module extends \API\Libraries\REST_Controller {
     }
 
     public function index_delete() {
-        $id = (int) $this->get('id');
+        $id = (int) $this->query('id');
 
         // Validate the id.
         if ($id <= 0) {
@@ -123,15 +105,13 @@ class Module extends \API\Libraries\REST_Controller {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $data = $this->module_model->delete($id);
-        if ($data['status']) {
-            unset($data['status']);
+        $deleted = Module_model::destroy($id);
+        if ($deleted) {
             $this->set_response([
                 'status' => TRUE,
                 'message' => 'Data is deleted successfully'
                     ], \API\Libraries\REST_Controller::HTTP_NO_CONTENT); // NO_CONTENT (204) being the HTTP response code
         } else {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'

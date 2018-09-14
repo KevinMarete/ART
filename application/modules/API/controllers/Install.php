@@ -3,6 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
+require APPPATH . 'modules/API/models/Install_model.php';
 
 /**
  *
@@ -15,22 +16,16 @@ require APPPATH . '/libraries/REST_Controller.php';
  */
 class Install extends \API\Libraries\REST_Controller  {
 
-    function __construct()
-    {
-        parent::__construct();
-        $this->load->model('install_model');
-    }
-
     public function index_get()
     {
-        // installs from a data store e.g. database
-        $installs = $this->install_model->read();
-
         $id = $this->get('id');
 
         // If the id parameter doesn't exist return all the installs
         if ($id === NULL)
         {
+            // installs from a data store e.g. database
+            $installs = Install_model::with('facility','user')->get();
+    
             // Check if the installs data store contains installs (in case the database result returns NULL)
             if ($installs)
             {
@@ -60,18 +55,7 @@ class Install extends \API\Libraries\REST_Controller  {
             // Get the install from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $install = NULL;
-
-            if (!empty($installs))
-            {      
-                foreach ($installs as $key => $value)
-                {   
-                    if ($value['id'] == $id)
-                    {
-                        $install = $value;
-                    }
-                }
-            }
+            $install = Install_model::with('facility','user')->find($id);
 
             if (!empty($install))
             {
@@ -89,29 +73,26 @@ class Install extends \API\Libraries\REST_Controller  {
 
     public function index_post()
     {   
-        $data = array(
-            'version' => $this->post('version'),
-            'setup_date' => $this->post('setup_date'),
-            'upgrade_date' => $this->post('update_date'),
-            'comments' => $this->post('comments'),
-            'contact_name' => $this->post('contact_name'),
-            'contact_phone' => $this->post('contact_phone'),
-            'emrs_used' => $this->post('emrs_used'),
-            'active_patients' => $this->post('active_patients'),
-            'is_internet' => $this->post('is_internet'),
-            'is_usage' => $this->post('is_usage'),
-            'facility_id' => $this->post('facility_id'),
-            'user_id' => $this->post('user_id')
-        );
-        $data = $this->install_model->insert($data);
-        if($data['status'])
+        $install = new Install_model;
+        $install->version = $this->post('version');
+        $install->setup_date = $this->post('setup_date');
+        $install->upgrade_date = $this->post('update_date');
+        $install->comments = $this->post('comments');
+        $install->contact_name = $this->post('contact_name');
+        $install->contact_phone = $this->post('contact_phone');
+        $install->emrs_used = $this->post('emrs_used');
+        $install->active_patients = $this->post('active_patients');
+        $install->is_internet = $this->post('is_internet');
+        $install->is_usage = $this->post('is_usage');
+        $install->facility_id = $this->post('facility_id');
+        $install->user_id = $this->post('user_id');
+        
+        if($install->save())
         {
-            unset($data['status']);
-            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            $this->set_response($install, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -121,7 +102,7 @@ class Install extends \API\Libraries\REST_Controller  {
 
     public function index_put()
     {   
-        $id = (int) $this->get('id');
+        $id = (int) $this->query('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -130,29 +111,26 @@ class Install extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $data = array(
-            'version' => $this->put('version'),
-            'setup_date' => $this->put('setup_date'),
-            'upgrade_date' => $this->put('upgrade_date'),
-            'comments' => $this->put('comments'),
-            'contact_name' => $this->put('contact_name'),
-            'contact_phone' => $this->put('contact_phone'),
-            'emrs_used' => $this->put('emrs_used'),
-            'active_patients' => $this->put('active_patients'),
-            'is_internet' => $this->put('is_internet'),
-            'is_usage' => $this->put('is_usage'),
-            'facility_id' => $this->put('facility_id'),
-            'user_id' => $this->put('user_id')
-        );
-        $data = $this->install_model->update($id, $data);
-        if($data['status'])
+        $install = Install_model::find($id);
+        $install->version = $this->put('version');
+        $install->setup_date = $this->put('setup_date');
+        $install->upgrade_date = $this->put('upgrade_date');
+        $install->comments = $this->put('comments');
+        $install->contact_name = $this->put('contact_name');
+        $install->contact_phone = $this->put('contact_phone');
+        $install->emrs_used = $this->put('emrs_used');
+        $install->active_patients = $this->put('active_patients');
+        $install->is_internet = $this->put('is_internet');
+        $install->is_usage = $this->put('is_usage');
+        $install->facility_id = $this->put('facility_id');
+        $install->user_id = $this->put('user_id');
+        
+        if($install->save())
         {
-            unset($data['status']);
-            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            $this->set_response($install, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -162,7 +140,7 @@ class Install extends \API\Libraries\REST_Controller  {
 
     public function index_delete()
     {
-        $id = (int) $this->get('id');
+        $id = (int) $this->query('id');
 
         // Validate the id.
         if ($id <= 0)
@@ -171,10 +149,9 @@ class Install extends \API\Libraries\REST_Controller  {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $data = $this->install_model->delete($id);
-        if($data['status'])
+        $deleted = Install_model::destroy($id);
+        if($deleted)
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => TRUE,
                 'message' => 'Data is deleted successfully'
@@ -182,7 +159,6 @@ class Install extends \API\Libraries\REST_Controller  {
         }
         else
         {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'

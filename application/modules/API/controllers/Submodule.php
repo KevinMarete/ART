@@ -8,31 +8,22 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
+require APPPATH . 'modules/API/models/Submodule_model.php';
 
 class Submodule extends \API\Libraries\REST_Controller {
-
-    function __construct() {
-        parent::__construct();
-        $this->load->model('submodule_model');
-    }
 
     public function index_get() {
         //Default parameters
         $id = $this->get('id');
         $module = $this->get('module');
 
-        //Conditions
-        $conditions = array(
-            'id' => $id,
-            'module_id' => $module
-        );
-        $conditions = array_filter($conditions);
-
-        //$submodules from a data store e.g. database
-        $submodules = $this->submodule_model->read($conditions);
-//        $submodules = $this->submodule_model->read();
         //If the id parameter doesn't exist return all the submodules
         if ($id === NULL) {
+            //$submodules from a data store e.g. database
+            $submodules = Submodule_model::with('module');
+            if(!empty($module)) $submodules = $submodules->where('module_id', $module);
+            $submodules = $submodules->get();
+
             //Check if the submodules data store contains submodules (in case the database result returns NULL)
             if ($submodules) {
                 //Set the response and exit
@@ -58,15 +49,9 @@ class Submodule extends \API\Libraries\REST_Controller {
             // Get the submodule from the array, using the id as key for retrieval.
             // Usually a model is to be used for this.
 
-            $submodule = NULL;
-
-            if (!empty($submodules)) {
-                foreach ($submodules as $key => $value) {
-                    if ($value['id'] == $id) {
-                        $submodule = $value;
-                    }
-                }
-            }
+            $submodule = Submodule_model::with('module');
+            if(!empty($module)) $submodule = $submodule->where('module_id', $module);
+            $submodule = $submodule->where('id', $id)->first();
 
             if (!empty($submodule)) {
                 $this->set_response($submodule, \API\Libraries\REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
@@ -80,16 +65,13 @@ class Submodule extends \API\Libraries\REST_Controller {
     }
 
     public function index_post() {
-        $data = array(
-            'name' => $this->post('name'),
-            'module_id' => $this->post('module_id')
-        );
-        $data = $this->submodule_model->insert($data);
-        if ($data['status']) {
-            unset($data['status']);
-            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+        $submodule = new Submodule_model;
+        $submodule->name = $this->post('name');
+        $submodule->module_id = $this->post('module_id');
+
+        if ($submodule->save()) {
+            $this->set_response($submodule, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         } else {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -98,7 +80,7 @@ class Submodule extends \API\Libraries\REST_Controller {
     }
 
     public function index_put() {
-        $id = (int) $this->get('id');
+        $id = (int) $this->query('id');
 
         // Validate the id.
         if ($id <= 0) {
@@ -106,16 +88,13 @@ class Submodule extends \API\Libraries\REST_Controller {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $data = array(
-            'name' => $this->put('name'),
-            'module_id' => $this->put('module_id')
-        );
-        $data = $this->submodule_model->update($id, $data);
-        if ($data['status']) {
-            unset($data['status']);
-            $this->set_response($data, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+        $submodule = Submodule_model::find($id);
+        $submodule->name = $this->put('name');
+        $submodule->module_id = $this->put('module_id');
+
+        if ($submodule->save()) {
+            $this->set_response($submodule, \API\Libraries\REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
         } else {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
@@ -124,7 +103,7 @@ class Submodule extends \API\Libraries\REST_Controller {
     }
 
     public function index_delete() {
-        $id = (int) $this->get('id');
+        $id = (int) $this->query('id');
 
         // Validate the id.
         if ($id <= 0) {
@@ -132,15 +111,13 @@ class Submodule extends \API\Libraries\REST_Controller {
             $this->response(NULL, \API\Libraries\REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
         }
 
-        $data = $this->submodule_model->delete($id);
-        if ($data['status']) {
-            unset($data['status']);
+        $deleted = Submodule_model::destroy($id);
+        if ($deleted) {
             $this->set_response([
                 'status' => TRUE,
                 'message' => 'Data is deleted successfully'
                     ], \API\Libraries\REST_Controller::HTTP_NO_CONTENT); // NO_CONTENT (204) being the HTTP response code
         } else {
-            unset($data['status']);
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Error has occurred'
