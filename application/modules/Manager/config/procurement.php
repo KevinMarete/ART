@@ -111,3 +111,7 @@ $config['expected_delivery_chart_filters_default'] = array(
 
 //Committee emails
 $config['committee_emails'] = "alpho07@gmail.com,awstra07@gmail.com,oneshopke@gmail.com";
+
+//Approvers
+$config['Kiambu'] = "alpho07@gmail.com";
+

@@ -10,6 +10,7 @@ class Orders extends MX_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Orders_model');
+        $this->load->library('email_sender');
     }
 
     function pdf() {
@@ -92,9 +93,9 @@ class Orders extends MX_Controller {
                               <span style="page-break-after:always;"></span>';
 
 
-       // echo $pdfBuilder;
-      // echo htmlspecialchars($pdfBuilder);
- //  exit;
+        // echo $pdfBuilder;
+        // echo htmlspecialchars($pdfBuilder);
+        //  exit;
 
 
         $dompdf = new Dompdf;
@@ -109,6 +110,14 @@ class Orders extends MX_Controller {
 
 // Output the generated PDF to Browser
         $dompdf->stream();
+    }
+
+    function send_allocation_request() {
+        $requester = $this->session->userdata('email_address');
+        $approver = $this->config->item($this->session->userdata('county_pharm'));
+        $facility = $this->session->userdata('facility_name');
+        $final_string = '<p>Hello Sir/Madam,<br>You have a new allocation request order from "' . $facility . '"</p>';
+        $this->email_sender->send_allocation_request('ART Orders', 'Allocation', $requester, $approver, $final_string);
     }
 
     function get_drug() {
@@ -130,13 +139,16 @@ class Orders extends MX_Controller {
         echo $response['message'];
     }
 
+
+
     public function actionOrder($orderid, $mapid, $action) {
+        $this->send_allocation_request();
         $response = $this->Orders_model->actionOrder($orderid, $mapid, $action, $this->session->userdata('id'));
         echo $response['message'];
     }
 
-    public function get_orders() {
-        $response = $this->Orders_model->get_order_data($this->session->userdata('scope'), $this->session->userdata('role'));
+    public function get_orders($subcounty='') {
+        $response = $this->Orders_model->get_order_data($this->session->userdata('scope'), $this->session->userdata('role'),$subcounty);
         echo json_encode(array('data' => $response['data']));
     }
 

@@ -4,7 +4,7 @@
 
 </style>
 <div id="container" class="container-fluid">
-    <?php print_r($this->session->userdata()); ?>
+   
     <div class="col-lg-12">
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
@@ -42,6 +42,9 @@
                                             <td>
                                                 <b>Facility Name: </b>
                                                 <span class="facility_name"> <?= ucwords($columns['cdrrs']['data'][0]['facility_name']); ?></span>
+                                                <?php  $this->session->set_userdata('facility_name',ucwords($columns['cdrrs']['data'][0]['facility_name']));?>
+                                                <?php  $this->session->set_userdata('county_pharm',ucwords($columns['cdrrs']['data'][0]['county']));?>
+                                                 
                                             </td>
                                             <td>
                                                 <b>Facility code: </b>
@@ -74,7 +77,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            
+                            <form name="orderForm" id="orderForm">
                                 <table class="table table-striped table-bordered table-condensed" id="AllocationTable">
                                     <thead id="THEAD" >
                                         <tr>
@@ -134,7 +137,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="TBODY">
-                                    <form name="orderForm" id="orderForm">
+
                                         <?php
                                         foreach ($columns['drugs'] as $key => $drug) {
                                             $drugid = $drug['id'];
@@ -232,202 +235,203 @@
                                             }
                                         }
                                         ?>
-                                    </form>
+
                                     </tbody>
-                                    
+
                                 </table>
-                            </div>
+                            </form>
                         </div>
-                    <div class="col-sm-12" style="margin-top:20px;">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-condensed" id="TimeLog">
-                                    <thead>
-                                    <th>Status</th>
-                                    <th>User</th>
-                                    <th>Role</th>
-                                    <th>Timestamp</th>
-                                    <th>Time Taken</th>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($columns['cdrrs']['data']['cdrr_logs'] as $key => $log) { ?>
-                                            <tr>
-                                                <td><?= ucwords($log['description']); ?>  </td>
-                                                <td><?= ucwords($log['firstname'] . ' ' . $log['lastname']); ?> </td>
-                                                <td><?= ucwords($log['role']); ?> </td>
-                                                <td class="start_date"><?= $log['created']; ?><input type="hidden" class="end_date"/></td>
-                                                <td>0 Day(s)</td>
-                                            </tr>
-                                        <?php } ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <?php if ($role == 'subcounty' && date('d') <= 20 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
-                                <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
-                                <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
-                            <?php } else { ?>
-                                <p><div class="alert alert-warning"><strong>NB: Allocation period has ended. No more allocations allowed beyond the 20<sup>th</sup> of each month. </strong></div></p>
-                            <?php } ?>
-                        </div> <!--end of cdrr-->
                     </div>
-                    <!-- /.panel-body -->
+                    <div class="col-sm-12" style="margin-top:20px;">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-condensed" id="TimeLog">
+                                <thead>
+                                <th>Status</th>
+                                <th>User</th>
+                                <th>Role</th>
+                                <th>Timestamp</th>
+                                <th>Time Taken</th>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($columns['cdrrs']['data']['cdrr_logs'] as $key => $log) { ?>
+                                        <tr>
+                                            <td><?= ucwords($log['description']); ?>  </td>
+                                            <td><?= ucwords($log['firstname'] . ' ' . $log['lastname']); ?> </td>
+                                            <td><?= ucwords($log['role']); ?> </td>
+                                            <td class="start_date"><?= $log['created']; ?><input type="hidden" class="end_date"/></td>
+                                            <td>0 Day(s)</td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <?php if ($role == 'subcounty' && date('d') <= 20 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
+                            <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
+                            <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
+                        <?php } else { ?>
+                            <p><div class="alert alert-warning"><strong>NB: Allocation period has ended. No more allocations allowed beyond the 20<sup>th</sup> of each month. </strong></div></p>
+                        <?php } ?>
+                    </div> <!--end of cdrr-->
                 </div>
+                <!-- /.panel-body -->
             </div>
-            <!-- /.col-lg-12 -->
         </div>
-        <!-- /.row -->
+        <!-- /.col-lg-12 -->
     </div>
-    <!-- /#page-wrapper -->
+    <!-- /.row -->
+</div>
+<!-- /#page-wrapper -->
 
-    <script type="text/javascript">
-        $(function () {
-            var base_url = "<?php echo base_url(); ?>";
-
-
-            var table = $('#AllocationTable').DataTable({
-                scrollY: "800px",
-                scrollX: true,
-                scrollCollapse: true,
-                paging: false,
-                fixedColumns: true,
-                searching: false, 
-                info: false
-            });
+<script type="text/javascript">
+    $(function () {
+        var base_url = "<?php echo base_url(); ?>";
 
 
-            $('#AllocationTable tr').hover(function () {
-                row = $(this).closest('tr');
-                drugname = row.find('.stickyColumn').text();
-                //console.log(drugname)
-            });
+        var table = $('#AllocationTable').DataTable({
+            scrollY: "800px",
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+            fixedColumns: true,
+            searching: false,
+            info: false
+        });
 
 
-
-            $('.AMOS').focusout(function () {
-                row = $(this).closest('tr');
-                input_val = $(this).val();
-                min_mos = row.find('.MIN').val();
-                max_mos = row.find('.MAX').val();
-                eMOSH = row.find('.eMOSH').text();
-                aggSOH = row.find('.aggSOH').text();
-                AMC = row.find('.AMC').text();
-                cMOS = (parseInt(eMOSH) + parseInt(aggSOH) + parseInt(input_val)) / parseInt(AMC);
-                row.find('.AllocatedMOS').val(Math.floor(cMOS));
-                AllMOS = row.find('.AllocatedMOS').val();
-                console.log(AllMOS);
-                if (AllMOS < 3) {
-                    swal({
-                        title: "Low Allocation MOS",
-                        text: "The lowest that can be allocated for" + ' is ' + 3,
-                        icon: "error",
-                    });
-                    $(this).val('');
-
-                    return false;
-                } else if (AllMOS > 6) {
-                    swal({
-                        title: "Excess Allocation MOS",
-                        text: "The highest that can be allocated is " + 6,
-                        icon: "error",
-                    });
-
-                    $(this).val('');
-                    return false;
-                } else {
-
-                }
+        $('#AllocationTable tr').hover(function () {
+            row = $(this).closest('tr');
+            drugname = row.find('.stickyColumn').text();
+            //console.log(drugname)
+        });
 
 
 
+        $('.AMOS').focusout(function () {
+            row = $(this).closest('tr');
+            input_val = $(this).val();
+            min_mos = row.find('.MIN').val();
+            max_mos = row.find('.MAX').val();
+            eMOSH = row.find('.eMOSH').text();
+            aggSOH = row.find('.aggSOH').text();
+            AMC = row.find('.AMC').text();
+            cMOS = (parseInt(eMOSH) + parseInt(aggSOH) + parseInt(input_val)) / parseInt(AMC);
+            row.find('.AllocatedMOS').val(Math.floor(cMOS));
+            AllMOS = row.find('.AllocatedMOS').val();
+            console.log(AllMOS);
+            if (AllMOS < 3) {
+                swal({
+                    title: "Low Allocation MOS",
+                    text: "The lowest that can be allocated for" + ' is ' + 3,
+                    icon: "error",
+                });
+                $(this).val('');
 
-            });
+                return false;
+            } else if (AllMOS > 6) {
+                swal({
+                    title: "Excess Allocation MOS",
+                    text: "The highest that can be allocated is " + 6,
+                    icon: "error",
+                });
+
+                $(this).val('');
+                return false;
+            } else {
+
+            }
 
 
-            //$('[data-toggle="tooltip"]').tooltip();
-            row = 1;
+
+
+        });
+
+
+        //$('[data-toggle="tooltip"]').tooltip();
+        row = 1;
+        $('#TimeLog  tr').each(function (i, j) {
+
+            var start_date = $("#TimeLog tr:nth-child(" + row + ") td:nth-child(4)").text();
+            $("#TimeLog tr:nth-child(" + i + ") td:nth-child(4)").find('.end_date').val(start_date);
+            row++;
+            //console.log(diffDays);
+        });
+        setTimeout(function () {
+
+            datediff = '';
             $('#TimeLog  tr').each(function (i, j) {
 
-                var start_date = $("#TimeLog tr:nth-child(" + row + ") td:nth-child(4)").text();
-                $("#TimeLog tr:nth-child(" + i + ") td:nth-child(4)").find('.end_date').val(start_date);
-                row++;
-                //console.log(diffDays);
+                var start_date = $("#TimeLog tr:nth-child(" + i + ") td:nth-child(4)").text();
+                var end_date = $("#TimeLog tr:nth-child(" + i + ") td:nth-child(4)").find('.end_date').val();
+                var date1 = new Date(start_date);
+                var date2 = new Date(end_date);
+                var timeDiff = Math.abs(date2 - date1);
+                var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                if (isNaN(diffDays)) {
+                    datediff = 'N/A';
+                } else {
+                    datediff = diffDays + " Day(s)";
+                }
+                $("#TimeLog tr:nth-child(" + i + ") td:nth-child(5)").html(datediff);
             });
-            setTimeout(function () {
-
-                datediff = '';
-                $('#TimeLog  tr').each(function (i, j) {
-
-                    var start_date = $("#TimeLog tr:nth-child(" + i + ") td:nth-child(4)").text();
-                    var end_date = $("#TimeLog tr:nth-child(" + i + ") td:nth-child(4)").find('.end_date').val();
-                    var date1 = new Date(start_date);
-                    var date2 = new Date(end_date);
-                    var timeDiff = Math.abs(date2 - date1);
-                    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-                    if (isNaN(diffDays)) {
-                        datediff = 'N/A';
-                    } else {
-                        datediff = diffDays + " Day(s)";
-                    }
-                    $("#TimeLog tr:nth-child(" + i + ") td:nth-child(5)").html(datediff);
-                });
-            }, 5000);
-            $('#side-menu').remove();
-            $('#reviewOrder').click(function (e) {
-                $(this).prop('disabled', true);
-                $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/reviewed", function (data) {
-                    alert(data);
-                    window.location.href = "";
-                });
+        }, 5000);
+        $('#side-menu').remove();
+        $('#reviewOrder').click(function (e) {
+            $(this).prop('disabled', true);
+            $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/reviewed", function (data) {
+                alert(data);
+                window.location.href = "";
             });
-            $('#approveOrder').click(function (e) {
-                $(this).prop('disabled', true);
-                $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/approved", function (data) {
-                    alert(data);
-                    window.location.href = "";
-                });
-            });
-            $('#rejectOrder').click(function (e) {
-                $(this).prop('disabled', true);
-                $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/rejected", function (data) {
-                    alert(data);
-                    window.location.href = "";
-                });
-            });
-            $('#complete_allocation').click(function (e) {
-                $(this).prop('disabled', true);
-                $.get(base_url + "manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/allocated", function (data) {
-                    alert(data);
-                    window.location.href = "";
-                });
-            });
-            $('#save_allocation').click(function (e) {
-                $(this).prop('disabled', true);
-                var form = $('#orderForm');
-                var url = base_url + "Manager/orders/updateOrder/<?= $cdrr_id . '/' . $map_id; ?>";
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: form.serialize(),
-                    success: function (response) {
-                        alert('Allocation Saved')
-                        $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/pending");
-                        window.location.href = "";
-                    }
-                });
-            });
-            //Disable input fields
-<?php if (in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed')) || in_array($columns['cdrrs']['data'][0]['status'], array('pending', 'reviewed', 'rejected')) && in_array($this->session->userdata('role'), array('county', 'national'))) { ?>
-                $('input').attr('disabled', true);
-<?php } ?>
         });
-    </script>
+        $('#approveOrder').click(function (e) {
+            $(this).prop('disabled', true);
+            $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/approved", function (data) {
+                alert(data);
+                window.location.href = "";
+            });
+        });
+        $('#rejectOrder').click(function (e) {
+            $(this).prop('disabled', true);
+            $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/rejected", function (data) {
+                alert(data);
+                window.location.href = "";
+            });
+        });
+        $('#complete_allocation').click(function (e) {
+            $(this).prop('disabled', true);
+            $.get(base_url + "manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/allocated", function (data) {
+                alert(data);
+                window.location.href = "";
+            });
+        });
+        $('#save_allocation').click(function (e) {
+            $(this).prop('disabled', true);
+            var form = $('#orderForm');
+            var url = base_url + "Manager/orders/updateOrder/<?= $cdrr_id . '/' . $map_id; ?>";
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: form.serialize(),
+                success: function (response) {
+                    alert('Allocation Saved')
+                    $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/pending");
+                    window.location.href = "";
+                }
+            });
+        });
+        //Disable input fields
+<?php if (in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed')) || in_array($columns['cdrrs']['data'][0]['status'], array('pending', 'reviewed', 'rejected')) && in_array($this->session->userdata('role'), array('county', 'national'))) { ?>
+            $('input').attr('disabled', true);
+<?php } ?>
+    });
+</script>
 
-    <style type="text/css">
-        .breadcrumb{
-            padding: 8px 15px 5px 8px;
-            margin-bottom: 0px; 
-        }
-        .panel-default{
-            margin: 12px;
-        }
-    </style>
+<style type="text/css">
+    .breadcrumb{
+        padding: 8px 15px 5px 8px;
+        margin-bottom: 0px; 
+    }
+    .panel-default{
+        margin: 12px;
+    }
+</style>
 

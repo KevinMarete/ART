@@ -77,11 +77,17 @@ class Orders_model extends CI_Model {
         return $response;
     }
 
-    public function get_order_data($scope, $role) {
+    public function get_order_data($scope, $role,$subcounty) {
         $response = array('data' => array());
         $column = "";
         $join = "";
         $filter = "";
+        $sql='';
+        if(!empty($subcounty)){
+            $sql .=" AND f.subcounty_id='$subcounty'";
+        }else{
+           $sql .=" AND f.subcounty_id='139'";  
+        }
         try {
             //Set conditions
             if ($role == 'county') {
@@ -92,7 +98,7 @@ class Orders_model extends CI_Model {
                 $filter = "AND f.subcounty_id = '" . $scope . "'";
             } else if ($role == 'national') {
                 $column = "UCASE(co.name) county, UCASE(sc.name) subcounty,";
-                $join = "INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id INNER JOIN tbl_county co ON sc.county_id = co.id";
+                $join = "INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id INNER JOIN tbl_county co ON sc.county_id = co.id  ".$sql;
             }
 
             $sql = "SELECT 

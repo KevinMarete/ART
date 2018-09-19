@@ -130,6 +130,7 @@ class Manager extends MX_Controller {
                     )
                 );
                 $data['columns'] = $columns[$page][$this->session->userdata('role')];
+                $data['county']= $this->getCountySubcounty();
                 $data['role'] = $this->session->userdata('role');
                 $data['cdrr_id'] = $this->uri->segment('4');
                 $data['map_id'] = $this->uri->segment('5');

@@ -72,11 +72,25 @@ class MX_Controller {
         }
         $mails = rtrim($list, ",");
 
-        if ($date == 14 || $date == 15 || $date == 18 || $date==20) {
-            $data ='<p><strong>ALLOCATION REMINDER NOTICE</strong></p>';
-            $data .='<p>This is to remind you of your pending drug allocations report. Kindly do allocation befor the due date of 20th.</p>';
-            $this->email_sender->send_email_reminders('Allocation Manager','Allocate',$mails,$names='',$data);
+        if ($date == 14 || $date == 15 || $date == 18 || $date == 20) {
+            $data = '<p><strong>ALLOCATION REMINDER NOTICE</strong></p>';
+            $data .= '<p>This is to remind you of your pending drug allocations report. Kindly do allocation befor the due date of 20th.</p>';
+            $this->email_sender->send_email_reminders('Allocation Manager', 'Allocate', $mails, $names = '', $data);
         }
+    }
+
+    function getCountySubcounty() {
+        $select = '';
+        $county = $this->db->order_by('id', 'asc')->get('tbl_county')->result();
+        foreach ($county as $c):
+            $select .= '<optgroup data-id="' . $c->id . '" label="' . ucfirst($c->name) . '"></optgroup>';
+            $subcounty = $this->db->where('county_id', $c->id)->order_by('id', 'asc')->get('tbl_subcounty')->result();
+            foreach ($subcounty as $sc):
+                $select .= '<option value="' . $sc->id . '">' . ucfirst($sc->name) . '</option>';
+            endforeach;
+        endforeach;
+
+        return $select;
     }
 
 }

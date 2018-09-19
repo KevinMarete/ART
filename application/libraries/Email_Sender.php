@@ -79,4 +79,35 @@ class Email_Sender extends MX_Controller {
        // print_r($data);
     }
 
+
+
+
+ public function send_allocation_request($module, $action, $requester, $approver,$data_content) {          
+
+        $this->load->library('email', $this->_config);
+        $this->email->set_newline("\r\n");
+        $this->email->from('webartmanager2018@gmail.com', $module . ' Manager');        
+        $this->email->to($approver);
+        $this->email->cc($requester);
+        $this->email->subject($module . ' Allocation Manager - Request Notice | ' . $action);
+        $data['email_content']=$data_content;
+        $this->email->message( $this->load->view('template/email/email_template',$data,TRUE));
+
+        if ($this->email->send()) {
+            $data['message'] = '<div class="alert alert-success alert-dismissible" role="alert">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<strong>Success!</strong> Committee emails sent <b>' . @$email_address . '</b></div>';
+            $data['status'] = TRUE;
+            $this->email->clear(TRUE);
+        } else {
+            $data['message'] = '<div class="alert alert-danger alert-dismissible" role="alert">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<strong>Error!</strong> ' . $this->email->print_debugger() . '</div>';
+            ;
+            $data['status'] = FALSE;
+        }
+       // print_r($data);
+    }
+
 }
+

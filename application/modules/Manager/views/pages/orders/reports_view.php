@@ -19,6 +19,11 @@
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
+                    <div class="row" style="margin: 20px;">
+                        <select id="COUNTY" name="" class="form-control">
+                            <?= $county; ?>
+                        </select>
+                    </div>
                     <table width="100%" class="table table-striped table-bordered table-hover table-condensed display compact nowrap" id="dataTables-listing">
                         <thead>
                             <tr>
@@ -46,6 +51,11 @@
 <script>
     $(document).ready(function () {
         var role = "<?php echo $this->session->userdata('role'); ?>"
+
+        $('#COUNTY').select2({placeholder: "Select a Subcounty"});
+
+
+
         var filters = {
             'national': [0, 1, 2],
             'county': [0, 1],
@@ -78,6 +88,43 @@
                     });
                 });
             }
+        });
+
+        $('#COUNTY').change(function () {
+            val = $(this).val();
+            $('#dataTables-listing').DataTable().destroy();
+            $('#dataTables-listing > tbody').empty();
+              $('#dataTables-listing select').remove();
+
+            $('#dataTables-listing').DataTable({
+                responsive: true,
+                order: [[1, "desc"]],
+                pagingType: "full_numbers",
+                ajax: "<?php echo base_url() . 'Manager/Orders/get_orders'; ?>/" + val,
+                "columnDefs": [
+                    {"width": "5%", "targets": 0}
+                ],
+                initComplete: function () {
+                    this.api().columns(filters[role]).every(function () {
+                        var column = this;
+                        var select = $('<select class="hfilter"><option value="">Show all</option></select>')
+                                .appendTo($(column.header()))
+                                .on('change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                            $(this).val()
+                                            );
+                                    column
+                                            .search(val ? '^' + val + '$' : '', true, false)
+                                            .draw();
+                                });
+                        column.data().unique().sort().each(function (d, j) {
+                            var val = $('<div/>').html(d).text();
+                            select.append('<option value="' + val + '">' + val + '</option>');
+                        });
+                    });
+                }
+            });
+
         });
 
         //Show reports sidemenu
