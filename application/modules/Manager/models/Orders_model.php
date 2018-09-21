@@ -906,7 +906,7 @@ class Orders_model extends CI_Model {
     function getSummaryTables() {
         $filter = $this->input->post('selectedfilters');
         $date = date('Y');
-        $month = 'May'       
+        $month = 'May' ;      
         $qadd = "WHERE data_year='$date' AND data_month='$month' ";
         $params = $this->sanitizeParams();
         if (!empty($filter)) {
