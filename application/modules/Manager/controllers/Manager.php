@@ -6,7 +6,7 @@ class Manager extends MX_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('Orders_model');
+        $this->load->model('orders_model');
     }
 
     public function index() {
