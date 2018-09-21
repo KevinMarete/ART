@@ -177,5 +177,10 @@ class Orders extends MX_Controller {
         $response = $this->Orders_model->get_county_reporting_data($scope, $role, date('Y-m-d', strtotime('first day of last month')), date('Y-m-d', strtotime('last day of last month')), $allocation);
         echo json_encode(array('data' => $response['data']));
     }
+    
+    
+     function getSummaryTable(){
+          $this->Orders_model->getSummaryTables();  
+      }
 
 }

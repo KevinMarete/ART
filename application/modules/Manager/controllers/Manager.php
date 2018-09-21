@@ -4,6 +4,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Manager extends MX_Controller {
 
+    public function __construct() {
+        parent::__construct();
+        $this->load->model('Orders_model');
+    }
+
     public function index() {
         $this->load_page('user', 'login', 'Login');
     }
@@ -29,7 +34,7 @@ class Manager extends MX_Controller {
 
             if ($module == 'orders') {
 
-                $this->load->model('Orders_model');
+
 
                 $columns = array(
                     'reports' => array(
@@ -130,7 +135,7 @@ class Manager extends MX_Controller {
                     )
                 );
                 $data['columns'] = $columns[$page][$this->session->userdata('role')];
-                $data['county']= $this->getCountySubcounty();
+                $data['county'] = $this->getCountySubcounty();
                 $data['role'] = $this->session->userdata('role');
                 $data['cdrr_id'] = $this->uri->segment('4');
                 $data['map_id'] = $this->uri->segment('5');
@@ -198,6 +203,8 @@ class Manager extends MX_Controller {
             $main_data = $this->manager_model->get_facility_adt_version_distribution($filters);
         } else if ($chartname == 'facility_internet_access_chart') {
             $main_data = $this->manager_model->get_facility_internet_access($filters);
+        } else if ($chartname == 'stock_status_trend_chart') {
+            $main_data = $this->Orders_model->getStockChart();
         }
         return $main_data;
     }

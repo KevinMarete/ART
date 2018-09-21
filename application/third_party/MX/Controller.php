@@ -75,7 +75,7 @@ class MX_Controller {
         if ($date == 14 || $date == 15 || $date == 18 || $date == 20) {
             $data = '<p><strong>ALLOCATION REMINDER NOTICE</strong></p>';
             $data .= '<p>This is to remind you of your pending drug allocations report. Kindly do allocation befor the due date of 20th.</p>';
-            $this->email_sender->send_email_reminders('Allocation Manager', 'Allocate', $mails, $names = '', $data);
+           // $this->email_sender->send_email_reminders('Allocation Manager', 'Allocate', $mails, $names = '', $data);
         }
     }
 

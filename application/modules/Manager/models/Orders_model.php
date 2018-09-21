@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
@@ -6,11 +7,23 @@ class Orders_model extends CI_Model {
 
     private $_currentMonth = '';
     private $_previousMonth = '';
+    private $_role = '';
+    private $_name = '';
+    private $_q_addon = '';
 
     public function __construct() {
         parent::__construct();
         $this->_currentMonth = date('Y') . "-" . (sprintf("%02d", date('m') - 1));
         $this->_previousMonth = date('Y') . "-" . (sprintf("%02d", date('m') - 2));
+        $this->_name = $this->session->userdata('scope_name'); //county or subcounty name
+        $this->_role = $this->session->userdata('role'); //county or subcounty
+        if ($this->_role == 'subcounty') {
+            $this->_q_addon .= "AND $this->_role ='$this->_name'";
+        } else if ($this->_role == 'county') {
+            $this->_q_addon .= "AND $this->_role ='$this->_name'";
+        } else {
+            $this->_q_addon .= "";
+        }
     }
 
     public function actionOrder($orderid, $mapid, $action, $user) {
@@ -77,16 +90,16 @@ class Orders_model extends CI_Model {
         return $response;
     }
 
-    public function get_order_data($scope, $role,$subcounty) {
+    public function get_order_data($scope, $role, $subcounty) {
         $response = array('data' => array());
         $column = "";
         $join = "";
         $filter = "";
-        $sql='';
-        if(!empty($subcounty)){
-            $sql .=" AND f.subcounty_id='$subcounty'";
-        }else{
-           $sql .=" AND f.subcounty_id='139'";  
+        $sql = '';
+        if (!empty($subcounty)) {
+            $sql .= " AND f.subcounty_id='$subcounty'";
+        } else {
+            $sql .= " AND f.subcounty_id='139'";
         }
         try {
             //Set conditions
@@ -98,7 +111,7 @@ class Orders_model extends CI_Model {
                 $filter = "AND f.subcounty_id = '" . $scope . "'";
             } else if ($role == 'national') {
                 $column = "UCASE(co.name) county, UCASE(sc.name) subcounty,";
-                $join = "INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id INNER JOIN tbl_county co ON sc.county_id = co.id  ".$sql;
+                $join = "INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id INNER JOIN tbl_county co ON sc.county_id = co.id  " . $sql;
             }
 
             $sql = "SELECT 
@@ -888,6 +901,83 @@ class Orders_model extends CI_Model {
             $response['message'] = $e->getMessage();
         }
         return $response;
+    }
+
+    function getSummaryTables() {
+        $filter = $this->input->post('selectedfilters');
+        $date = date('Y');
+        $month = 'May'       
+        $qadd = "WHERE data_year='$date' AND data_month='$month' ";
+        $params = $this->sanitizeParams();
+        if (!empty($filter)) {
+            $qadd = '';
+            $qadd .= "WHERE data_year=" . $params["year"] . " AND data_month=" . $params["month"] . "                            
+                  AND drug IN (" . $params["drugs"] . ")";
+        }
+
+        $query = "SELECT drug commodity,SUM(allocated) allocated,SUM(closing_bal) balance,mos,data_year year,data_month month 
+                            FROM vw_cdrr_list
+                            $qadd                            
+                            $this->_q_addon
+                            AND closing_bal IS NOT NULL
+                            GROUP BY drug
+                            ORDER BY balance DESC";
+        $result = $this->db->query($query)->result();
+        echo json_encode(['data' => $result]);
+    }
+
+    function getStockChart() {
+        $filter = $this->input->post('selectedfilters');
+        $date = date('Y');
+        $qadd = "WHERE data_year='$date'                          
+                  AND drug IN ('Dolutegravir (DTG) 50mg Tabs')";
+        $params = $this->sanitizeParams();
+        if (!empty($filter)) {
+            $qadd = '';
+            $qadd .= "WHERE data_year=" . $params["year"] . "                          
+                  AND drug IN (" . $params["drugs"] . ")";
+        }
+        $columns = array();
+        $tmp_data = array();
+        $reporting_data = array();
+
+        $query = "SELECT  CONCAT(data_month,'/',data_year) name,SUM(closing_bal) y
+                            FROM vw_cdrr_list
+                            $qadd                             
+                            $this->_q_addon
+                            AND closing_bal IS NOT NULL
+                            GROUP BY data_month
+                 ORDER BY FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )";
+        $results = $this->db->query($query)->result();
+
+
+        foreach ($results as $result) {
+            array_push($columns, $result->name);
+            $tmp_data['StockLevel']['data'][] = $result->y;
+        }
+
+        $counter = 0;
+        foreach ($tmp_data as $name => $item) {
+            $reporting_data[$counter]['name'] = $name;
+            $reporting_data[$counter]['data'] = $item['data'];
+            $counter++;
+        }
+        return array('main' => $reporting_data, 'columns' => array_values(array_unique($columns)));
+    }
+
+    function sanitizeParams() {
+        $list = '';
+        $filter = $this->input->post('selectedfilters');
+        foreach (@$filter['drugs'] as $d) {
+            $list .= "'$d'" . ',';
+        }
+        $dlist = rtrim($list, ",");
+        $array = [
+            'year' => $filter['data_year'],
+            'month' => $filter['data_month'],
+            'drugs' => $dlist
+        ];
+        return $array;
     }
 
 }

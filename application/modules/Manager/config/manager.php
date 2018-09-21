@@ -32,6 +32,18 @@ $config['drug_consumption_allocation_trend_chart_filters_default'] = array(
 	'drug' => array('Dolutegravir (DTG) 50mg Tabs')
 );
 
+
+
+$config['stock_status_trend_chart_chartview'] = 'pages/dashboard/charts/combined_column_line_view_1';
+$config['stock_status_trend_chart_title'] = 'Stock Status Chart';
+$config['stock_status_trend_yaxis_title'] = 'Stock Level';
+$config['stock_status_trend_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['stock_status_trend_chart_has_drilldown'] = FALSE;
+$config['stock_status_trend_chart_filters'] = array('county', 'subcounty', 'drug');
+$config['stock_status_trend_chart_filters_default'] = array(
+	'drug' => array('Dolutegravir (DTG) 50mg Tabs')
+);
+
 //facility_adt_version_distribution_chart
 $config['facility_adt_version_distribution_chart_chartview'] = 'pages/dashboard/charts/column_view';
 $config['facility_adt_version_distribution_chart_title'] = 'ADT Site(s) Installation (By Version)';
