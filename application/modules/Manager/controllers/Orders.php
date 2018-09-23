@@ -179,8 +179,14 @@ class Orders extends MX_Controller {
     }
     
     
-     function getSummaryTable(){
-          $this->Orders_model->getSummaryTables();  
+     function getLowMos(){
+          $this->Orders_model->getLowMos();  
       }
+      
+     function getHighMos(){
+          $this->Orders_model->getHighMos();  
+      }
+      
+      
 
 }

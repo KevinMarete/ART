@@ -903,7 +903,7 @@ class Orders_model extends CI_Model {
         return $response;
     }
 
-    function getSummaryTables() {
+    function getLowMos() {
         $filter = $this->input->post('selectedfilters');
         $date = date('Y');
         $month = 'May' ;      
@@ -919,6 +919,31 @@ class Orders_model extends CI_Model {
                             FROM vw_cdrr_list
                             $qadd                            
                             $this->_q_addon
+                            AND mos < 3
+                            AND closing_bal IS NOT NULL
+                            GROUP BY drug
+                            ORDER BY balance DESC";
+        $result = $this->db->query($query)->result();
+        echo json_encode(['data' => $result]);
+    }
+    
+       function getHighMos() {
+        $filter = $this->input->post('selectedfilters');
+        $date = date('Y');
+        $month = 'May' ;      
+        $qadd = "WHERE data_year='$date' AND data_month='$month' ";
+        $params = $this->sanitizeParams();
+        if (!empty($filter)) {
+            $qadd = '';
+            $qadd .= "WHERE data_year=" . $params["year"] . " AND data_month=" . $params["month"] . "                            
+                  AND drug IN (" . $params["drugs"] . ")";
+        }
+
+        $query = "SELECT drug commodity,SUM(allocated) allocated,SUM(closing_bal) balance,mos,data_year year,data_month month 
+                            FROM vw_cdrr_list
+                            $qadd                            
+                            $this->_q_addon
+                             AND mos > 6
                             AND closing_bal IS NOT NULL
                             GROUP BY drug
                             ORDER BY balance DESC";

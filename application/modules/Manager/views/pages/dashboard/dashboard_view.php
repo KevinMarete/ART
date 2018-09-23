@@ -109,6 +109,7 @@
                 </div>
 
                 <div class="col-lg-12 col-md-12">
+
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             <i class="fa fa-clock-o fa-fw"></i> Stock On Hand Trend
@@ -128,37 +129,69 @@
                 </div>
 
                 <div class="col-lg-12 col-md-12">
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            <i class="fa fa-clock-o fa-fw"></i> Summary Table
-                            <div class="nav navbar-right">
+                    <div class="col-lg-6">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <i class="fa fa-clock-o fa-fw"></i> Low MOS Commodities
+                                <div class="nav navbar-right">
 
+                                </div>
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <table class="table table-responsive table-striped" id="summaryTable2">
+                                    <thead>
+                                        <tr>
+                                            <th>Commodity</th>
+                                            <th>Balance</th>
+                                            <th>MOS</th>
+                                            <th>Facility</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.panel-body -->
+                            <div class="panel-footer">
+                                <span class="stock_status_ heading">Low MOS Commodities</span>
                             </div>
                         </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <table class="table table-responsive table-striped" id="summaryTable">
-                                <thead>
-                                    <tr>
-                                        <th>Commodity</th>
-                                        <th>Allocated</th>
-                                        <th>Balance</th>
-                                        <th>MOS</th>
-                                        <th>Year</th>
-                                        <th>Month</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.panel-body -->
-                        <div class="panel-footer">
-                            <span class="stock_status_ heading">Commodity Summaries</span>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <i class="fa fa-clock-o fa-fw"></i> High MOS Commodities
+                                <div class="nav navbar-right">
+
+                                </div>
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <table class="table table-responsive table-striped" id="summaryTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Commodity</th>
+                                            <th>Balance</th>
+                                            <th>MOS</th>
+                                            <th>Facility</th>                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.panel-body -->
+                            <div class="panel-footer">
+                                <span class="stock_status_ heading">High MOS Commodities</span>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+
 
             </div>
         </div>
@@ -195,7 +228,6 @@
     var filters = {}
     $(document).ready(function () {
         dt = new Date();
-
         newmonth = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         year = dt.getFullYear(), month = newmonth[dt.getMonth()], drug = 'Dolutegravir (DTG) 50mg Tabs';
         //alert(year + monthname)
@@ -203,23 +235,18 @@
         $('#filter_item').change(function () {
             drug = $('#filter_item').val();
         });
-
-
-
         $('.filter-year').click(function () {
             $('a.filter-year').removeClass('active-red');
             $(this).addClass('active-red');
             year = $(this).text();
         });
-
         $('.filter-month').click(function () {
             $('a.filter-month').removeClass('active-red');
             $(this).addClass('active-red');
             month = $(this).text();
         });
-
         $('#btn_filter').click(function () {
-           // alert(drug + '---' + month + '----' + year);
+            // alert(drug + '---' + month + '----' + year);
         })
 
 
@@ -231,18 +258,42 @@
             "ordering": false,
             "info": false,
             "searching": false,
-            "sAjaxSource": "<?= base_url(); ?>Manager/orders/getSummaryTable/summary",
+            "sAjaxSource": "<?= base_url(); ?>Manager/orders/getHighMos/summary",
             "aoColumns": [
                 {mData: 'commodity'},
-                {mData: 'allocated'},
+                //{mData: 'allocated'},
                 {mData: 'balance'},
                 {mData: 'mos'},
-                {mData: 'year'},
-                {mData: 'month'}
+                {mData: null, mRender: function (data, type, row) {
+                        return '<a href="#facility">View</a>';
+                    }
+                }
+                // {mData: 'month'}
             ]
 
         });
+        $('#summaryTable2').DataTable({
 
+            "bProcessing": true,
+            "order": [[3, "desc"]],
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "searching": false,
+            "sAjaxSource": "<?= base_url(); ?>Manager/orders/getLowMos/summary",
+            "aoColumns": [
+                {mData: 'commodity'},
+                //{mData: 'allocated'},
+                {mData: 'balance'},
+                {mData: 'mos'},
+                {mData: null, mRender: function (data, type, row) {
+                        return '<a href="#facility">View</a>';
+                    }, 
+                }
+                // {mData: 'month'}
+            ]
+
+        });
         charts = ['stock_status_trend_chart', 'drug_consumption_allocation_trend_chart', 'reporting_rates_chart', 'patients_by_regimen_chart']
 
         //Add filter to chart then load chart
@@ -252,18 +303,13 @@
         $.each(charts, function (key, chartName) {
             LoadChart('#' + chartName, chartURL, chartName, {})
         });
-
         //Show dashboard sidemenu
         $(".dashboard").closest('ul').addClass("in");
         $(".dashboard").addClass("active active-page");
-
         //Filter click Event
         $("#btn_filter").on("click", MainFilterHandler);
-
         //Clear click Event
         $("#btn_clear").on("click", ClearBtnHandler);
-
-
         $.getJSON(drugListURL, function (resp) {
             $('#filter_item').empty();
             $.each(resp, function (i, d) {
@@ -274,13 +320,7 @@
                 enableFiltering: true,
                 filterBehavior: 'value'
             });
-
         });
-
-
-
-
-
         function setChartFilter(chartName, filterURL) {
             $.ajax({
                 url: filterURL,
@@ -373,13 +413,10 @@
         function MainFilterHandler(e) {
             var filter_year = year;
             var filter_month = month;
-
             //Add filters to request
             filters['data_year'] = filter_year;
             filters['data_month'] = filter_month;
             filters['drugs'] = drug;
-
-
             if ($("#filter_item").val() != null) {
                 filters[$("#filter_item").data("filter_type")] = $("#filter_item").val()
             }
@@ -388,7 +425,6 @@
             {
                 $('#summaryTable').DataTable().destroy();
                 $('#summaryTable > tbody').empty();
-
                 $('#summaryTable').DataTable({
 
                     "bProcessing": true,
@@ -397,19 +433,17 @@
                     "ordering": false,
                     "info": false,
                     "searching": false,
-                    "ajax": {type:'post',url:"<?= base_url(); ?>manager/orders/getSummaryTable/summary",data:filters},
+                    "ajax": {type: 'post', url: "<?= base_url(); ?>manager/orders/getSummaryTable/summary", data: filters},
                     "aoColumns": [
                         {mData: 'commodity'},
-                        {mData: 'allocated'},
+                        // {mData: 'allocated'},
                         {mData: 'balance'},
                         {mData: 'mos'},
                         {mData: 'year'},
-                        {mData: 'month'}
+                                // {mData: 'month'}
                     ]
 
                 });
-
-
                 //Load charts
                 $.each(charts, function (key, chartName) {
                     chartID = '#' + chartName
@@ -474,7 +508,6 @@
             $(filterID).multiselect('deselectAll', false);
             $(filterID).multiselect('updateButtonText');
             $(filterID).multiselect('refresh');
-
             //Trigger filter event
             $(filterID + '_btn').trigger('click');
         }
