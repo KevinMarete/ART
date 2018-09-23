@@ -8,6 +8,8 @@ class Manager_model extends CI_Model {
         $columns = array();
         $tmp_data = array();
         $reporting_data = array();
+        $nreporting_data = array();
+        $alldata = [];
 
         $this->db->select("CONCAT_WS('/', data_month, data_year) period, COUNT(DISTINCT facility) total", FALSE);
         $this->db->where("data_date >=", date('Y-01-01'));
@@ -26,18 +28,26 @@ class Manager_model extends CI_Model {
         $this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
         $query = $this->db->get('vw_cdrr_list');
         $results = $query->result_array();
-
+        $newarr = array_map(function($m) {
+            return 417 - (int) $m['total'];
+        }, $results);
+         
         foreach ($results as $result) {
             array_push($columns, $result['period']);
-            $tmp_data['Orders']['data'][] = $result['total'];
+            $tmp_data['Reported']['data'][] = $result['total'];
         }
-
+       // $tmp_data['NotReported']['data'] = $newarr;
+        
+        $arr1 = ['name'=>'Not Reported','data'=>$newarr];
+       
         $counter = 0;
         foreach ($tmp_data as $name => $item) {
-            $reporting_data[$counter]['name'] = $name;
+            $reporting_data[$counter]['name'] = 'Reported';
             $reporting_data[$counter]['data'] = $item['data'];
             $counter++;
         }
+        array_push($reporting_data, $arr1);
+
         return array('main' => $reporting_data, 'columns' => array_values(array_unique($columns)));
     }
 
@@ -129,8 +139,8 @@ class Manager_model extends CI_Model {
     public function get_drug_consumption_allocation_trend($filters) {
         $columns = array();
         $scaleup_data = array(
-            array('type' => 'column', 'name' => 'Allocated', 'data' => array()),
-            array('type' => 'column', 'name' => 'Consumed', 'data' => array())
+            array('type' => 'areaspline', 'name' => 'Allocated', 'data' => array()),
+            array('type' => 'areaspline', 'name' => 'Consumed', 'data' => array())
         );
 
         $this->db->select("CONCAT_WS('/', data_month, data_year) period, SUM(allocated) allocated_total, SUM(consumed) consumed_total", FALSE);
@@ -205,7 +215,5 @@ class Manager_model extends CI_Model {
 
         return array('main' => $results, 'columns' => $columns);
     }
-
-    
 
 }

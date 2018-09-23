@@ -1,6 +1,6 @@
 <?php
 
-class Email_Sender extends MX_Controller {
+class Email_sender extends MX_Controller {
 
     private $_config = [];
 

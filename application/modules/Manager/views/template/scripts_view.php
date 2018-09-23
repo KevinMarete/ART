@@ -53,7 +53,7 @@
         $(function () {
             $('.<?= $page_name; ?>').addClass("active-page");
 
-            $.get("<?= base_url() ?>manager/procurement/reminder/q", function () {
+            $.get("<?= base_url() ?>Manager/procurement/reminder/q", function () {
             });
             
             

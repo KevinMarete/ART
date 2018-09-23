@@ -5,22 +5,22 @@
 <!--highcharts_configuration-->
 <script type="text/javascript">
     $(function () {
-        var chartDIV = '<?php echo $chart_name."_container"; ?>'
+        var chartDIV = '<?php echo $chart_name . "_container"; ?>'
 
         Highcharts.setOptions({
             global: {
                 useUTC: false,
-                
+
             },
             lang: {
-              decimalPoint: '.',
-              thousandsSep: ','
+                decimalPoint: '.',
+                thousandsSep: ','
             }
         });
 
         Highcharts.chart(chartDIV, {
             chart: {
-                type: 'column'
+                type: 'line'
             },
             title: {
                 text: '<?php echo $chart_title; ?>'
@@ -44,11 +44,11 @@
                     //Get growth rate
                     var prevPoint = this.point.x == 0 ? null : this.series.data[this.point.x - 1];
                     var rV = '<b>' + this.x + '</b><br/>'
-                    rV += '<span style="color:'+ this.series.color + '"><b>Total</b></span>: ' + Highcharts.numberFormat(this.y, 0) + '<br/>'
-                    if (prevPoint){
+                    rV += '<span style="color:' + this.series.color + '"><b>Total</b></span>: ' + Highcharts.numberFormat(this.y, 0) + '<br/>'
+                    if (prevPoint) {
                         var diff = this.y - prevPoint.y;
                         var percentage = (diff / prevPoint.y) * 100;
-                        rV += '<br><b>Growth:</b> ' + Highcharts.numberFormat(percentage, 1) + ' %'
+                        // rV += '<br><b>Growth:</b> ' + Highcharts.numberFormat(percentage, 1) + ' %'
                     }
                     return rV;
                 }
@@ -67,6 +67,12 @@
                         y: 10
                     }
                 },
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: false
+                }
             },
             series: <?php echo $chart_series_data; ?>
         });

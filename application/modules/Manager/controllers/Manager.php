@@ -6,7 +6,7 @@ class Manager extends MX_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('orders_model');
+        $this->load->model('Orders_model');
     }
 
     public function index() {
@@ -148,6 +148,14 @@ class Manager extends MX_Controller {
         } else {
             redirect("manager/login");
         }
+    }
+    
+    function getChart($filter=''){
+       
+          $main_data = $this->manager_model->get_reporting_rates($filters);
+           echo '<pre>';
+          print_r($main_data);
+          echo '</pre>';
     }
 
     public function get_chart() {

@@ -111,7 +111,7 @@
                 <div class="col-lg-12 col-md-12">
                     <div class="panel panel-info">
                         <div class="panel-heading">
-                            <i class="fa fa-clock-o fa-fw"></i> Stock Status Level
+                            <i class="fa fa-clock-o fa-fw"></i> Stock On Hand Trend
                             <div class="nav navbar-right">
 
                             </div>
@@ -231,7 +231,7 @@
             "ordering": false,
             "info": false,
             "searching": false,
-            "sAjaxSource": "<?= base_url(); ?>manager/orders/getSummaryTable/summary",
+            "sAjaxSource": "<?= base_url(); ?>Manager/orders/getSummaryTable/summary",
             "aoColumns": [
                 {mData: 'commodity'},
                 {mData: 'allocated'},

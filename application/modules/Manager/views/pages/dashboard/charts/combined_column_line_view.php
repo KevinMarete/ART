@@ -18,7 +18,7 @@
             },
 
             chart: {
-                type: 'column'
+                type: 'areaspline'
             },
             
             title: {

@@ -5,10 +5,10 @@
 <!--highcharts_configuration-->
 <script type="text/javascript">
     $(function () {
-        var chartDIV = '<?php echo $chart_name."_container"; ?>';
+        var chartDIV = '<?php echo $chart_name . "_container"; ?>';
 
         Highcharts.setOptions({
-            colors: ['#5cb85c', '#f0ad4e', '#5bc0de','#808080','#ac5353','#0080ff','#ff4000']
+            colors: ['#5cb85c', '#f0ad4e', '#5bc0de', '#808080', '#ac5353', '#0080ff', '#ff4000']
         });
 
         Highcharts.chart(chartDIV, {
@@ -18,9 +18,9 @@
             },
 
             chart: {
-                type: 'column'
+                type: 'line'
             },
-            
+
             title: {
                 text: '<?php echo $chart_title; ?>'
             },
@@ -44,7 +44,7 @@
             tooltip: {
                 headerFormat: '<b>{point.x}</b><br/>',
                 pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b><br/>',
-               // footerFormat: 'Total: <b>{point.total:,.0f}</b>',
+                // footerFormat: 'Total: <b>{point.total:,.0f}</b>',
                 shared: true
             },
 
@@ -55,6 +55,12 @@
                         enabled: true,
                         color: 'black'
                     }
+                },
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: false
                 }
             },
 
