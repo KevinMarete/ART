@@ -63,7 +63,7 @@ class MX_Controller {
     }
 
     function sendReminder() {
-        $this->load->library('email_sender');
+        $this->load->library('Email_sender');
         $date = date('d');
         $list = '';
         $mailing_list = $this->db->where('email_type', '3')->get('tbl_mailing_list')->result();
@@ -72,11 +72,12 @@ class MX_Controller {
         }
         $mails = rtrim($list, ",");
 
-        if ($date == 14 || $date == 15 || $date == 18 || $date == 20) {
+        if ($date == 24 || $date == 15 || $date == 18 || $date == 20) {
             $data = '<p><strong>ALLOCATION REMINDER NOTICE</strong></p>';
-            $data .= '<p>This is to remind you of your pending drug allocations report. Kindly do allocation befor the due date of 20th.</p>';
+            $data .= '<p>This is to remind you of your pending drug allocations report. Kindly do allocation befor the due date of 20<sup>th</sup>.</p>';
            // $this->email_sender->send_email_reminders('Allocation Manager', 'Allocate', $mails, $names = '', $data);
         }
+       
     }
 
     function getCountySubcounty() {

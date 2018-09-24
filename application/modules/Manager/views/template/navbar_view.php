@@ -70,10 +70,15 @@
     <!--/.navbar-static-side -->
 </nav>
 <?php
-$date = date('d');
-if ($date == 13 || $date == 15 || $date == 18 || $date == 20 && $this->session->userdata('role') == 'subcounty') {
+ $date = date('d');
+ $segment2=$this->uri->segment('2');
+if ($this->session->userdata('role') == 'subcounty' && $segment2=='orders' && $date == 18 || $date == 19  ) {
     ?>
-    <div style="margin: 10px;" class="alert alert-warning pull-right"><i class="fa fa-warning"></i> Kindly ensure that you have already submitted your allocation report before the 20<sup>th</sup></div>
+    <div style="margin: 10px;" class="alert alert-warning pull-right"><i class="fa fa-warning"></i> Kindly ensure that you have already submitted your allocation report before the 20<sup>th</sup>
+    <?php
+       
+?>
+    </div>
 <?php } ?>
 
 <script>

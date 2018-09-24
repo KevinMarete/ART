@@ -142,7 +142,7 @@
 
 <!--load settings_view_pages modal-->
 <?php
-if ($page_name != 'backup' && $page_name != 'user') {
+if ($page_name != 'backup') {
     $this->load->view('pages/admin/' . $page_name . '_view');
 }
 ?>
@@ -155,7 +155,7 @@ if ($page_name != 'backup' && $page_name != 'user') {
     $('#del_btn').prop('disabled', true);
 
     //hide action_btn for table_view backup and user
-<?php if ($page_name == 'backup' || $page_name == 'user') { ?>
+<?php if ($page_name == 'backup') { ?>
         $('#action_btn').hide(true);
     <?php
 }
@@ -189,6 +189,7 @@ if ($page_name != 'backup' && $page_name != 'user') {
 
     //function add data to db_table
     function add_<?php echo $page_name; ?>() {
+
         save_method = 'add';
         $('#form')[0].reset();
         $('.form-group').removeClass('has-error');
@@ -319,7 +320,15 @@ if ($page_name != 'backup' && $page_name != 'user') {
                 //role_submodule
                 $('[name="role_id"]').val(data.role_id);
                 $('[name="submodule_id"]').val(data.submodule_id);
-                
+
+                //User
+                $('[name="firstname"]').val(data.firstname);
+                $('[name="lastname"]').val(data.lastname);
+                $('[name="email_address"]').val(data.email_address);
+                $('[name="phone_number"]').val(data.phone_number);
+                $('[name="role"]').val(data.role_id);
+              
+
                 //facility
                 $('[name="mflcode"]').val(data.mflcode);
                 $('[name="category"]').val(data.category);

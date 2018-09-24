@@ -38,8 +38,7 @@ class Admin_model extends CI_Model {
                 $this->db->join('tbl_email_status s', 'ml.status=s.id', 'left');
                 $this->db->join('tbl_email_category c', 'c.id=ml.email_type', 'left');
                 $table_data = $this->db->get()->result_array();
-            
-            }else if ($table == 'tbl_facility') {
+            } else if ($table == 'tbl_facility') {
                 $sql = "SELECT f.id,f.name,f.mflcode,f.category,f.dhiscode,f.longitude,f.latitude,sc.name subcounty,p.name partner,(CASE WHEN f.parent_id=f.id THEN f.name END) fname "
                         . "FROM tbl_facility f "
                         . "LEFT JOIN tbl_subcounty sc ON sc.id=f.subcounty_id "
@@ -102,7 +101,27 @@ class Admin_model extends CI_Model {
 
     //function save data to database
     public function save($table, $data) {
-        $this->db->insert($table, $data);
+        if ($table == 'tbl_user') {
+            $user_array = [
+                'firstname' => $this->input->post('firstname'),
+                'lastname' => $this->input->post('lastname'),
+                'email_address' => $this->input->post('email_address'),
+                'phone_number' => $this->input->post('phone_number'),
+                'role_id' => $this->input->post('role'),
+                'password' => md5($this->input->post('password'))
+            ];
+            $this->db->insert($table, $user_array);
+            $id = $this->db->insert_id();
+
+            $scope_array = [
+                'scope_id' => $this->input->post('scope_id'),
+                'role_id' => $this->input->post('role'),
+                'user_id' => $id
+            ];
+            $this->db->insert($table . '_scope', $scope_array);
+        } else {
+            $this->db->insert($table, $data);
+        }
         return $this->db->insert_id();
     }
 
@@ -116,7 +135,27 @@ class Admin_model extends CI_Model {
 
     //function update db_table
     public function update($table, $where, $data) {
-        $this->db->update($table, $data, $where);
+        if ($table == 'tbl_user') {
+            $user_array = [
+                'firstname' => $this->input->post('firstname'),
+                'lastname' => $this->input->post('lastname'),
+                'email_address' => $this->input->post('email_address'),
+                'phone_number' => $this->input->post('phone_number'),
+                'role_id' => $this->input->post('role'),
+               // 'password' => md5($this->input->post('password'))
+            ];
+            $this->db->update($table,  $where, $user_array);
+
+
+            $scope_array = [
+                'scope_id' => $this->input->post('scope_id'),
+                'role_id' => $this->input->post('role'),                
+            ];
+            //$this->db->insert($table . '_scope', $scope_array);
+            $this->db->update($table.'_scope', $scope_array, ['user_id'=> $this->input->post('id')]);
+        } else {
+            $this->db->update($table, $data, $where);
+        }
         return $this->db->affected_rows();
     }
 

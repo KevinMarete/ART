@@ -1,4 +1,8 @@
 <link href="<?php echo base_url() . 'public/manager/css/procurement.css'; ?>" rel="stylesheet"> 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jexcel/1.5.7/js/jquery.jexcel.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jexcel/1.5.7/css/jquery.jexcel.bootstrap.min.css" type="text/css" />
+
 <div id="page-wrapper">
     <!--row-->
     <div class="row">
@@ -863,15 +867,23 @@
         var transactionURL = "<?php echo base_url() . 'Manager/Procurement/get_transaction_table/'; ?>" + drugID + '/' + periodYear
         $.get(transactionURL, function (tableData) {
             var readonlyRows = ['0', '1', '3', '5', '6', '7']
+            months = ['Sep 2018'];
             //Create table
             $(tableID).jexcel($.parseJSON(tableData));
             //Settings for table
             $(tableID).jexcel('updateSettings', {
                 table: function (instance, cell, col, row, val, id) {
                     //Make rows readonly
+                   // m = "<?= date("n", strtotime("-1 month")); ?>";
+                    m = "<?= date("n"); ?>";
+                    
+
+
                     if ($.inArray(row, readonlyRows) != -1) {
                         $(cell).addClass('readonly');
                     }
+
+
                     //Add colors to mos row
                     if (row == 7 && col > 0) {
                         if (val >= 6 && val <= 9) {
@@ -885,6 +897,8 @@
                         }
                         $(cell).css('color', '#000');
                     }
+                    
+                    $('.c'+m).css('background-color', '#e67e22');
                 }
             });
         });
@@ -902,10 +916,11 @@
                 $(tableID).html(table)
                 $(".order_tbl").Tabledit({
                     url: editOrderURL,
-                    hideIdentifier: true,
+                    editButton: false,
                     deleteButton: false,
+                    hideIdentifier: true,
                     columns: {
-                        //identifier: [0, 'id'],
+                        identifier: [0, 'id'],
                         editable: [
                             [1, 'transaction_year', '{"2018": "2018", "2019": "2019", "2020": "2020", "2021": "2021"}'],
                             [2, 'transaction_month', '{"Jan": "Jan", "Feb": "Feb", "Mar": "Mar", "Apr": "Apr", "May": "May", "Jun": "Jun", "Jul": "Jul", "Aug": "Aug", "Sep": "Sep", "Oct": "Oct", "Nov": "Nov", "Dec": "Dec"}'],

@@ -1,7 +1,7 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
-require APPPATH . 'libraries\dompdf\autoload.inc.php';
+require APPPATH . 'libraries/dompdf/autoload.inc.php';
 
 use Dompdf\Dompdf;
 
@@ -10,7 +10,7 @@ class Procurement extends MX_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Procurement_model');
-        $this->load->library('email_sender');
+        $this->load->library('Email_sender');
     }
     
     function Reminder(){
@@ -19,11 +19,7 @@ class Procurement extends MX_Controller {
               
 
     function getAllDrugs() {
-        $query = "SELECT d.id, UPPER(CONCAT(g.name,' ',g.abbreviation, d.strength,' - ',f.name)) name  
-                    FROM tbl_drug d 
-                    LEFT JOIN tbl_generic g ON d.generic_id = g.id 
-                    LEFT JOIN tbl_formulation f ON d.formulation_id = f.id 
-                    ORDER BY g.name ASC";
+        $query = "SELECT * FROM `vw_drug_list`  ORDER BY name ASC";
         echo json_encode($this->db->query($query)->result());
     }
 
@@ -465,7 +461,7 @@ class Procurement extends MX_Controller {
         );
         $headers[] = 'Description';
         $widths[] = '160';
-        $columns[] = array('type' => 'text', 'readOnly' => true);
+        $columns[] = array('type' => 'text', 'readOnly' => true,'class'=>'data');
         $alignments[] = 'left';
         foreach ($response['data'] as $key => $value) {
             $headers[] = $value['period'];
