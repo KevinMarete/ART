@@ -5,7 +5,16 @@
 		  		<!--patient_scaleup_chart-->
 		    	<div class="chart-wrapper">
 					<div class="chart-title">
-						<strong>PATIENT SCALEUP TREND</strong>
+						<div class="row">
+							<div class="col-md-3">
+								<strong>PATIENT SCALEUP TREND</strong>
+							</div>
+							<div class="col-md-9">
+								<div class="alert alert-danger">
+								  <strong>Note!</strong> Reporting Switched from LMIS to DHIS from April 2018, hence a lower reporting rate than usual
+								</div>
+							</div>
+						</div>
 					</div>
 					<div class="chart-stage">
 						<div id="patient_scaleup_chart"></div>
