@@ -19,6 +19,9 @@
                         <button type="button" class="btn btn-default" onclick="add_<?php echo $page_name; ?>()"> <i class="fa fa-plus-square"></i> Add</button>
                         <button type="button" class="btn btn-default" id="edit_btn" onclick="edit_<?php echo $page_name; ?>()"> <i class="fa fa-edit"></i> Edit</button>
                         <button type="button" class="btn btn-default" id="del_btn" onclick="delete_<?php echo $page_name; ?>()"> <i class="fa fa-trash"></i> Remove</button>
+                        <?php if ($page_name == 'meeting') { ?>
+                            <button type="button" class="btn btn-default" id="view_btn" onclick="view()"> <i class="fa fa-zoom "></i> View</button>
+                        <?php } ?>
                         <br/>
                         <br/>
                         <i class="label label-warning">Click on table row for Edit/Remove</i>
@@ -125,6 +128,7 @@
                                     <th>Phone Number</th>
                                     <th>Role</th>
                                 <?php } ?>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -151,8 +155,10 @@ if ($page_name != 'backup') {
     var save_method;
     var table;
     var selected_id = 0;
+    selected_date = '';
     $('#edit_btn').prop('disabled', true);
     $('#del_btn').prop('disabled', true);
+    $('#view_btn').prop('disabled', true);
 
     //hide action_btn for table_view backup and user
 <?php if ($page_name == 'backup') { ?>
@@ -171,21 +177,31 @@ if ($page_name != 'backup') {
         });
     });
 
+    
+
     //tr.selected on tbody click
     $('#dataTables-listing tbody').on('click', 'tr', function () {
-        selected_id = (table.row(this).data())[0];
+        selected_id = (table.row(this).data())[0];        
+        selected_date = (table.row(this).data())[1];
+
         if ($(this).hasClass('selected')) {
             $('#edit_btn').prop('disabled', true);
             $('#del_btn').prop('disabled', true);
+            $('#view_btn').prop('disabled', true);
             $(this).removeClass('selected');
         } else {
             table.$('tr.selected').removeClass('selected');
             $('#edit_btn').prop('disabled', false);
             $('#del_btn').prop('disabled', false);
+            $('#view_btn').prop('disabled', false);
             $(this).addClass('selected');
         }
 
     });
+    
+    function view(){
+        window.location.href='<?=base_url();?>manager/procurement/minute/ART/'+selected_date;
+    };
 
     //function add data to db_table
     function add_<?php echo $page_name; ?>() {
@@ -198,7 +214,7 @@ if ($page_name != 'backup') {
         $('.modal-title').text('Add <?php echo ucwords(str_replace('_', ' ', $page_name)); ?>');
 
         //Get all facilities not installed
-        var facilityinstallURL = '../../API/facility_install';
+        var facilityinstallURL = '<?=base_url();?>API/facility_install';
         $("#facility").empty();
         $.getJSON(facilityinstallURL, function (facilities) {
             $("#facility").append($("<option value=''>Select Facility</option>"));
@@ -211,7 +227,7 @@ if ($page_name != 'backup') {
         $('.regimen_drug_edit').hide(true);
         $('.regimen_drug_add').show(true);
 
-        var regimenURL = '../../API/regimen_regimen_drug';
+        var regimenURL = '<?=base_url();?>API/regimen_regimen_drug';
         $("#regimen_add").empty()
         $.getJSON(regimenURL, function (regimens) {
             $("#regimen_add").append($("<option value=''>Select Regimen</option>"));
@@ -236,7 +252,7 @@ if ($page_name != 'backup') {
         $('.help-block').empty();
 
         //Get all facilities
-        var facilityURL = '../../API/facility';
+        var facilityURL = '<?=base_url();?>API/facility';
         $.getJSON(facilityURL, function (facilities) {
             $.each(facilities, function (index, facility) {
                 $("#facility").append($("<option value='" + facility.id + "'>" + facility.name.toUpperCase() + "</option>"));
@@ -247,7 +263,7 @@ if ($page_name != 'backup') {
         $('.regimen_drug_add').hide(true);
         $('.regimen_drug_edit').show(true);
 
-        var regimenURL = '../../API/regimen';
+        var regimenURL = '<?=base_url();?>API/regimen';
         $("#regimen_edit").empty()
         $.getJSON(regimenURL, function (regimens) {
             $("#regimen_edit").append($("<option value=''>Select Regimen</option>"));
@@ -289,6 +305,8 @@ if ($page_name != 'backup') {
                 $('[name="stock_status"]').val(data.stock_status);
                 //generic
                 $('[name="abbreviation"]').val(data.abbreviation);
+                //meeting
+                $('[name="meeting_date"]').val(data.meeting_date);
                 //module
                 $('[name="icon"]').val(data.icon);
                 //mailing_list
@@ -298,6 +316,7 @@ if ($page_name != 'backup') {
                 //install
                 $('[name="facility_id"]').val(data.facility_id);
                 $('[name="contact_name"]').val(data.contact_name);
+                $('[name="contact_name"]').trigger('change');
                 $('[name="contact_phone"]').val(data.contact_phone);
                 $('[name="version"]').val(data.version);
                 $('[name="setup_date"]').val(data.setup_date);
@@ -327,7 +346,7 @@ if ($page_name != 'backup') {
                 $('[name="email_address"]').val(data.email_address);
                 $('[name="phone_number"]').val(data.phone_number);
                 $('[name="role"]').val(data.role_id);
-              
+
 
                 //facility
                 $('[name="mflcode"]').val(data.mflcode);

@@ -12,15 +12,123 @@ class Procurement extends MX_Controller {
         $this->load->model('Procurement_model');
         $this->load->library('Email_sender');
     }
-    
-    function Reminder(){
+
+    function Reminder() {
         $this->sendReminder();
     }
-              
 
     function getAllDrugs() {
         $query = "SELECT * FROM `vw_drug_list`  ORDER BY name ASC";
         echo json_encode($this->db->query($query)->result());
+    }
+
+    function saveMeetingData() {
+        $id = $this->input->post('drug_id');
+        $did = $this->input->post('decision_id');
+        $category = $this->input->post('drug_category');
+        $discussion = $this->input->post('decision');
+        $reccommendation = $this->input->post('recommendation');
+
+        $cat = $category[0];
+        $date = date('Y-m-d');
+
+        if ($this->checkDecisionSave($cat, $date) > 0) {
+            echo 1;
+
+            for ($i = 0; $i < count($id); $i++) {
+                $this->db->where('drug_id', $id[$i])->where('decision_date', $date)->update('tbl_decision', [
+                    'discussion' => $discussion[$i],
+                    'recommendation' => $reccommendation[$i],
+                ]);
+
+                $this->db->insert('tbl_decision_log', [
+                    'description' => 'Updated',
+                    'user_id' => $this->session->userdata('id'),
+                    'decision_id' => $did[$i]
+                ]);
+            }
+            $this->updateSysLogs('Updated  (tbl_decision - Meeting Minute  > Discussion and Reccommendations  )');
+        } else {
+            echo 2;
+
+            for ($i = 0; $i < count($discussion); $i++) {
+                $this->db->insert('tbl_decision', [
+                    'discussion' => $discussion[$i],
+                    'recommendation' => $reccommendation[$i],
+                    'decision_date' => date('Y-m-d'),
+                    'drug_id' => $id[$i],
+                    'drug_category' => $category[$i]
+                ]);
+
+                $decision = $this->db->insert_id();
+
+                $this->db->insert('tbl_decision_log', [
+                    'description' => 'Created',
+                    'user_id' => $this->session->userdata('id'),
+                    'decision_id' => $decision
+                ]);
+            }
+            $this->db->where('discussion=', '')->delete('tbl_decision');
+            $this->updateSysLogs('Created  (tbl_decision - Meeting Minute  > Discussion and Reccommendations  )');
+        }
+        echo json_encode(['status' => true]);
+    }
+
+    function checkDecisionSave($cat, $date) {
+        return $this->db->where('drug_category', $cat)->where('decision_date', $date)->get('tbl_decision')->num_rows();
+    }
+
+    function loadLastMinutes() {
+        echo json_encode($this->db->order_by('id', 'desc')->get('tbl_meeting')->result());
+    }
+
+    function loadLastMinutesHF() {
+        echo json_encode($this->db->order_by('id', 'desc')->get('tbl_minutes')->result());
+    }
+    
+     function loadLastMinutesBody($id) {
+        echo json_encode(['data'=>$this->db->where('id', $id)->get('tbl_minutes')->result()]);
+    }
+
+    public function getMinutesData($cat, $date) {
+        //$mindate = substr($date, 0, -3);
+
+        $sql = "SELECT d.*, de.discussion,de.recommendation,de.decision_date,de.id decision_id
+                        FROM `vw_drug_list` d
+                        LEFT JOIN tbl_decision de ON d.id = de.drug_id
+                        WHERE de.decision_date = '$date'
+                        AND d.drug_category='$cat' 
+                       
+
+                        UNION ALL 
+
+                        SELECT d.*, de.discussion,de.recommendation,de.decision_date,de.id decision_id
+                        FROM `vw_drug_list` d
+                        LEFT JOIN tbl_decision de ON d.id = de.drug_id
+                        WHERE de.decision_date IS NULL
+                         AND d.drug_category='$cat' ";
+        $table_data = $this->db->query($sql)->result_array();
+
+        $table = '<table   width="100%" class="table "  id="minutesTable">';
+        $table .= '<thead><tr><th><br>COMMODITY </th><th>DISCUSSION</th><th>RECCOMMENDATION</th><th>TRACKER</th></tr></thead>';
+        $table .= '<tbody>';
+        $i = 0;
+        foreach ($table_data as $d) {
+            $table .= '<tr>';
+            $table .= '<td><input type="hidden" name=decision_id[] value=' . $d['decision_id'] . '><input type="hidden" name=drug_id[] value=' . $d['id'] . '><strong>' . $d['name'] . '</strong></td><td><textarea class="textarea" name=decision[] >' . $d['discussion'] . '</textarea></td><td><textarea class="textarea" name=recommendation[]>' . $d['recommendation'] . '</textarea></td><td> 
+                           <a class="btn btn-xs btn-primary tracker_drug" data-toggle="modal" data-target="#add_procurement_modal" data-drug_id="' . $d['id'] . '"> 
+                            <i class="fa fa-search"></i> View Options
+                        </a>
+                        <input type="hidden" name=drug_category[] value=' . $d['drug_category'] . '>
+                        </td>';
+            $table .= '</tr>';
+
+            $i++;
+        }
+        $table .= '</tbody>'
+                . '</table>';
+
+        echo $table;
     }
 
     function save_minutes() {
@@ -46,6 +154,7 @@ class Procurement extends MX_Controller {
             'opening_description' => $opening_description,
             'aob' => $aob,
         ]);
+        $this->updateSysLogs('Updated  (tbl_minutes - Meeting Minute  > Minute Agenda & A.O.Bs)');
     }
 
     function sanitize($array) {
@@ -216,6 +325,7 @@ class Procurement extends MX_Controller {
             'user_id' => $this->session->userdata('id'),
             'procurement_id' => 1
         ]);
+        $this->updateSysLogs('Updated  (Product Tracker Updated)');
         echo 'Data updated Successfully';
     }
 
@@ -231,11 +341,14 @@ class Procurement extends MX_Controller {
                 date('Y', strtotime($transaction_date[$key])), date('M', strtotime($transaction_date[$key])), $drug_id, $qty, $funding_agent[$key], $supplier[$key], $status[$key], $this->session->userdata('id')
             ));
         }
+
+
         $message = '<div class="alert alert-success alert-dismissible" role="alert">
 						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						<strong>Success!</strong> Procurement was Added</div>';
+        $this->updateSysLogs('Updated  (Tracker data updated)');
         $this->session->set_flashdata('tracker_msg', $message);
-        redirect('manager/procurement/commodity');
+        // redirect('manager/procurement/commodity');
     }
 
     function save_decision() {
@@ -255,6 +368,7 @@ class Procurement extends MX_Controller {
             'user_id' => $this->session->userdata('id'),
             'decision_id' => $insert_id
         ]);
+        $this->updateSysLogs('Created  (tbl_decision > New Discussion/Reccommendation )');
     }
 
     function edit_decision() {
@@ -273,6 +387,7 @@ class Procurement extends MX_Controller {
             'user_id' => $this->session->userdata('id'),
             'decision_id' => $decision_id
         ]);
+        $this->updateSysLogs('Updated  (tbl_decision > Discussion/Reccommendation )');
     }
 
     public function delete_decision() {
@@ -286,6 +401,8 @@ class Procurement extends MX_Controller {
             'user_id' => $this->session->userdata('id'),
             'decision_id' => $decision_id
         ]);
+
+        $this->updateSysLogs('Deleted  (tbl_decision > Discussion/Reccommendation )');
     }
 
     public function get_timeline() {
@@ -293,12 +410,7 @@ class Procurement extends MX_Controller {
         $drug_ids = "SELECT GROUP_CONCAT(id) id FROM `tbl_decision`";
         $table_ids = $this->db->query($drug_ids)->result_array();
         $drugids_ = $table_ids[0]["id"];
-        $sql = "SELECT d.id drug_id ,"
-                . "CONCAT(g.name,' ', d.strength,' - ',f.name) drug "
-                . "FROM tbl_drug d "
-                . "LEFT JOIN tbl_generic g ON d.generic_id = g.id "
-                . "LEFT JOIN tbl_formulation f ON d.formulation_id = f.id "
-                . "WHERE d.id IN ($drugids_) ORDER BY g.name ASC";
+        $sql = "SELECT * FROM vw_drug_list";
         $table_data = $this->db->query($sql)->result_array();
 
         $sql2 = "SELECT 
@@ -310,7 +422,7 @@ class Procurement extends MX_Controller {
                         t.created,
                         CONCAT_WS(' ', u.firstname, u.lastname) user
                     FROM tbl_decision d 
-                    INNER JOIN (
+                    LEFT JOIN (
                         SELECT *
                         FROM tbl_decision_log l
                         WHERE (l.created, l.decision_id) IN
@@ -318,8 +430,7 @@ class Procurement extends MX_Controller {
                         FROM tbl_decision_log 
                         GROUP BY decision_id)
                     ) t ON t.decision_id = d.id
-                    INNER JOIN tbl_user u ON u.id = t.user_id 
-                    WHERE d.drug_id IN ($drugids_)
+                    INNER JOIN tbl_user u ON u.id = t.user_id                    
                     AND d.deleted = '0'                    
                     ORDER BY d.decision_date DESC";
         $items = $this->db->query($sql2)->result_array();
@@ -327,7 +438,7 @@ class Procurement extends MX_Controller {
 
         foreach ($table_data as &$mt) {
             foreach ($items as $it) {
-                if ($it['drug_id'] == $mt['drug_id']) {
+                if ($it['drug_id'] == $mt['id']) {
                     if (!isset($mt['decisions'])) {
                         $mt['decisions'] = [];
                     }
@@ -340,7 +451,7 @@ class Procurement extends MX_Controller {
 
         foreach ($table_data as $d) {
             if (isset($d['decisions'])) {
-                $final_string .= '<p style="font-weight:bold; font-size:16px; color:blue;">' . $d['drug'] . '</p>';
+                $final_string .= '<p style="font-weight:bold; font-size:16px; color:blue;">' . $d['name'] . '</p>';
             } else {
                 
             }
@@ -461,7 +572,7 @@ class Procurement extends MX_Controller {
         );
         $headers[] = 'Description';
         $widths[] = '160';
-        $columns[] = array('type' => 'text', 'readOnly' => true,'class'=>'data');
+        $columns[] = array('type' => 'text', 'readOnly' => true, 'class' => 'data');
         $alignments[] = 'left';
         foreach ($response['data'] as $key => $value) {
             $headers[] = $value['period'];
@@ -638,11 +749,13 @@ class Procurement extends MX_Controller {
         if ($input['action'] == 'edit') {
             unset($input['action']);
             $this->Procurement_model->edit_procurement_item($input);
+            $this->updateSysLogs('Updated  (Order edited )');
             $input['action'] = 'edit';
         } else if ($input['action'] == 'delete') {
             unset($input['action']);
             $this->Procurement_model->delete_procurement_item($input['id']);
             $input['action'] = 'delete';
+            $this->updateSysLogs('Deleted  (Order deleted )');
         }
         echo json_encode($input);
     }

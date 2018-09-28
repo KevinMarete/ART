@@ -79,7 +79,7 @@ $route['manager/orders/allocation/county/(:any)/(:any)'] = 'Manager/load_templat
 $route['manager/orders/edit_allocation/(:any)'] = 'Manager/load_template/orders/edit_allocation/Edit Allocation/0/$1';
 $route['manager/orders/view_satellites/(:any)/(:any)'] = 'Manager/load_template/orders/satellites/Satellites/0';
 
-$route['manager/minutes/minute'] = 'Manager/load_template/minute/minute/Minute/0';
+$route['manager/procurement/minute/(:any)/(:any)'] = 'Manager/load_template/minute/minute/Minute/0/$1/$2';
 
 $route['manager/procurement/commodity'] = 'Manager/load_template/procurement/commodity/Procurement Commodities/0';
 $route['manager/procurement/tracker'] = 'Manager/load_template/procurement/tracker/Procurement Tracker/0';

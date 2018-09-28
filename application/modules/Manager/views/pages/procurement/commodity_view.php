@@ -132,6 +132,7 @@
                                 <div class="col-sm-12">
                                     <div class="table-responsive">
                                         <strong><em>Product's Last Procurement History</em></strong>
+                                        <p><strong>Expected Delivery</strong></p>
                                         <div id="procurement_history"></div>
                                     </div>
                                 </div>                              
@@ -139,7 +140,7 @@
 
                             <div class="form-group row" id="commodity_frm">                              
                                 <div class="col-sm-12">
-                                    <h4>Order Form</h4>
+                                    <h4>Order Form <div id="REMID" style="background: green; color: white;font-weight: bold; padding: 5px; border-radius: 5px; display: none;"></div></h4>
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-striped table-hover table-condensed" id="procurement_tbl">
                                             <thead>
@@ -266,7 +267,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="decisionModalTitle">Add Decision & Reccomendations</h5>
+                <h5 class="modal-title" id="decisionModalTitle">Add Decision & Reccommendations</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -377,6 +378,8 @@
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         return months[monthNumber];
     }
+
+
     var totalPercentage = 0;
     formTemplate = $('#ReceiveForm').clone()[0];
     var swalConfig = {
@@ -388,9 +391,9 @@
         }
     };
 
-    var statusURL = '../../API/procurement_status'
-    var fundingURL = '../../API/funding_agent'
-    var supplierURL = '../../API/supplier'
+    var statusURL = '<?= base_url(); ?>API/procurement_status';
+    var fundingURL = '<?= base_url(); ?>API/funding_agent';
+    var supplierURL = '<?= base_url(); ?>API/supplier';
     $(document).ready(function () {
 
         $('#saveDecision').click(function () {
@@ -639,11 +642,8 @@
                     });
                 } else {
                     var bal = overall_qty - sum;
-                    swal({
-                        title: "Balance in numbers",
-                        text: "You are remaining with " + bal + " to order",
-                        icon: "info",
-                    });
+                    $('#REMID').text('You have  ' + bal + '(qty.) left to assign.').show();
+
                 }
             });
         });
@@ -667,11 +667,9 @@
                         bal = 0;
                     }
                     ;
-                    swal({
-                        title: "Balance in Percentage(%)",
-                        text: "You are remaining with " + bal + "% to order",
-                        icon: "info",
-                    });
+
+                    $('#REMID').text('You have  ' + bal + '% left to assign.').show();
+
                 }
             });
         });
@@ -764,9 +762,47 @@
         //Hide contracted fields
         $(".contracted").hide()
 
+        $(document).on('change', '[name="procurement_status_id"]', function () {
+            row = $(this).closest('tr');
+            m = row.find('[name="month"]').val();
+            var months = {
+                'Jan': '01',
+                'Feb': '02',
+                'Mar': '03',
+                'Apr': '04',
+                'May': '05',
+                'Jun': '06',
+                'Jul': '07',
+                'Aug': '08',
+                'Sep': '09',
+                'Oct': '10',
+                'Nov': '11',
+                'Dec': '12'
+            }
+
+            date = row.find('[name="year"]').val() + '-' + months[m] + '-01';
+            received= row.find('[name="procurement_status_id"] option:selected').text(); 
+           
+
+            var now = new Date();
+            var end = new Date(date);
+          
+            if (end > now  && received=='Received') {
+                swal({
+                    title: "Invalid!",
+                    text: "You cannot receive this order at this time.",
+                    icon: "error",
+                });
+                row.find('[name="procurement_status_id"] option:eq(1)').prop('selected', true);
+                return false;
+            }
+        });
+
         //Procurement status change event
         $(".procurement_status").on('change', function () {
+            row = $(this).closest('tr');
             var selected_text = $(this).closest('tr').find(".procurement_status option:selected").text().toLowerCase();
+            transaction_date = row.find('.transaction_date').val();
 
             if (selected_text === 'contracted') {
                 $(this).closest('tr').find('.contracted').show();
@@ -775,7 +811,18 @@
                 $(this).closest('tr').find('.contracted').show();
                 $(this).closest('tr').find('.funding_agent').show();
             } else if (selected_text === 'received') {
-                swal(swalConfig);
+                var start = new Date();
+                var end = new Date(transaction_date);
+                if (end > start) {
+                    swal({
+                        title: "Invalid!",
+                        text: "You cannot receive this order at this time.",
+                        icon: "error",
+                    });
+                    row.find('.procurement_status option:eq(0)').prop('selected', true);
+                    return false;
+                }
+                //  swal(swalConfig);
                 $(this).closest('tr').find('.funding_agent').hide();
                 $(this).closest('tr').find('.contracted').show();
             } else {
@@ -874,9 +921,9 @@
             $(tableID).jexcel('updateSettings', {
                 table: function (instance, cell, col, row, val, id) {
                     //Make rows readonly
-                   // m = "<?= date("n", strtotime("-1 month")); ?>";
-                    m = "<?= date("n"); ?>";
-                    
+                     m = "<?= date("n", strtotime("-1 month")); ?>";
+                    //m = "<?= date("n"); ?>";
+
 
 
                     if ($.inArray(row, readonlyRows) != -1) {
@@ -897,8 +944,8 @@
                         }
                         $(cell).css('color', '#000');
                     }
-                    
-                    $('.c'+m).css('background-color', '#e67e22');
+
+                    $('.c' + m).css('background-color', '#e67e22');
                 }
             });
         });
@@ -922,8 +969,8 @@
                     columns: {
                         identifier: [0, 'id'],
                         editable: [
-                            [1, 'transaction_year', '{"2018": "2018", "2019": "2019", "2020": "2020", "2021": "2021"}'],
-                            [2, 'transaction_month', '{"Jan": "Jan", "Feb": "Feb", "Mar": "Mar", "Apr": "Apr", "May": "May", "Jun": "Jun", "Jul": "Jul", "Aug": "Aug", "Sep": "Sep", "Oct": "Oct", "Nov": "Nov", "Dec": "Dec"}'],
+                            [1, 'year', '{"2018": "2018", "2019": "2019", "2020": "2020", "2021": "2021"}'],
+                            [2, 'month', '{"Jan": "Jan", "Feb": "Feb", "Mar": "Mar", "Apr": "Apr", "May": "May", "Jun": "Jun", "Jul": "Jul", "Aug": "Aug", "Sep": "Sep", "Oct": "Oct", "Nov": "Nov", "Dec": "Dec"}'],
                             // [3, 'date_added', JSON.stringify(jsondata.date_added)],
                             [3, 'quantity'],
                             [4, 'procurement_status_id', JSON.stringify(jsondata.status)],
@@ -960,44 +1007,47 @@
         var ordersURL = "<?php echo base_url() . 'Manager/Procurement/get_order_table_history/'; ?>" + drugID;
         var editOrderURL = "<?php echo base_url() . 'Manager/Procurement/edit_order/'; ?>"
         var itemURL = "<?php echo base_url() . 'Manager/Procurement/get_order_items/'; ?>"
-        $.get(ordersURL, function (table) {
-            $(divID).empty();
-            $(divID).append(table);
-            $(".order_tbl_history").Tabledit({
-                url: editOrderURL,
-                hideIdentifier: true,
-                deleteButton: false,
-                columns: {
-                    identifier: [0, 'id'],
-                    editable: [
-                        //[1, 'transaction_year'],
-                        //[2, 'transaction_month'],
-                        //[3, 'transaction_date'],
-                        //[3, 'quantity'],
-                        [4, 'procurement_status_id', '{"1": "Proposed", "2": "Contracted", "3": "Received", "5": "Cancelled"}']
-                                // [5, 'funding_agent_id', '{"USID": "1", "GF": "2", "CPF": "3"}'],
-                                // [6, 'supplier_id', '{"Aurobindo Pharma Limited": "1", "Laboratory & Allied Limited": "2", "Abbott Laboratories S.A. (Pty) Limited": "3", "Dawa Limited": "3" ,"Cipla Limited": "3"}']
-                    ]
-                },
-                buttons: {
-                    edit: {
-                        class: 'btn btn-sm btn-default',
-                        html: '<span class="fa fa-pencil-square-o"></span>',
-                        action: 'edit'
+        $.getJSON(itemURL, function (jsondata) {
+            $.get(ordersURL, function (table) {
+                $(divID).empty();
+                $(divID).append(table);
+                $(".order_tbl_history").Tabledit({
+                    url: editOrderURL,
+                    hideIdentifier: true,
+                    deleteButton: false,
+                    columns: {
+                        identifier: [0, 'id'],
+                        editable: [
+                            [1, 'year', '{"2018": "2018", "2019": "2019", "2020": "2020", "2021": "2021"}'],
+                            [2, 'month', '{"Jan": "Jan", "Feb": "Feb", "Mar": "Mar", "Apr": "Apr", "May": "May", "Jun": "Jun", "Jul": "Jul", "Aug": "Aug", "Sep": "Sep", "Oct": "Oct", "Nov": "Nov", "Dec": "Dec"}'],
+                            //[3, 'transaction_date'],
+                            [4, 'quantity'],
+                            [5, 'procurement_status_id', JSON.stringify(jsondata.status)],
+                            [6, 'funding_agent_id', JSON.stringify(jsondata.funding)],
+                            [7, 'supplier_id', JSON.stringify(jsondata.supplier)]
+                        ]
+
                     },
-                    delete: {
-                        class: 'btn btn-sm btn-default',
-                        html: '<span class="fa fa-trash-o"></span>',
-                        action: 'delete'
+                    buttons: {
+                        edit: {
+                            class: 'btn btn-sm btn-default',
+                            html: '<span class="fa fa-pencil-square-o"></span>',
+                            action: 'edit'
+                        },
+                        delete: {
+                            class: 'btn btn-sm btn-default',
+                            html: '<span class="fa fa-trash-o"></span>',
+                            action: 'delete'
+                        }
+                    },
+                    onSuccess: function (data, textStatus, jqXHR) {
+                        getDrugOrdersHistory(drugID, divID)
+
+
                     }
-                },
-                onSuccess: function (data, textStatus, jqXHR) {
-                    getDrugOrders(drugID, divID)
-
-
-                }
+                });
             });
-        });
+        })
 
 
     }
@@ -1043,5 +1093,4 @@
         $(divID).height('auto')
         $(divID).append(spinner.el)
     }
-
 </script>

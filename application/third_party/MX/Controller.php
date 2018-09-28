@@ -62,6 +62,16 @@ class MX_Controller {
         return CI::$APP->$class;
     }
 
+    function updateSysLogs($action) {
+        $data = [
+            'log_date' => date('Y-m-d H:i:s'),
+            'action' => $action,
+            'user' => $this->session->userdata('id'),
+            'module' => $this->uri->segment(2)
+        ];
+        $this->db->insert('tbl_syslogs', $data);
+    }
+
     function sendReminder() {
         $this->load->library('Email_sender');
         $date = date('d');
@@ -75,9 +85,8 @@ class MX_Controller {
         if ($date == 24 || $date == 15 || $date == 18 || $date == 20) {
             $data = '<p><strong>ALLOCATION REMINDER NOTICE</strong></p>';
             $data .= '<p>This is to remind you of your pending drug allocations report. Kindly do allocation befor the due date of 20<sup>th</sup>.</p>';
-           // $this->email_sender->send_email_reminders('Allocation Manager', 'Allocate', $mails, $names = '', $data);
+            // $this->email_sender->send_email_reminders('Allocation Manager', 'Allocate', $mails, $names = '', $data);
         }
-       
     }
 
     function getCountySubcounty() {
@@ -92,6 +101,10 @@ class MX_Controller {
         endforeach;
 
         return $select;
+    }
+    
+    function query(){
+        echo $this->db->last_query();
     }
 
 }

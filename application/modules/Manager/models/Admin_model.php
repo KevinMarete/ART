@@ -79,7 +79,19 @@ class Admin_model extends CI_Model {
                 $this->db->from('tbl_user u');
                 $this->db->join('tbl_role r', 'r.id=u.role_id', 'inner');
                 $table_data = $this->db->get()->result_array();
-            } else {
+            } else if ($table == 'tbl_meeting') {
+               
+                $this->db->select('id,meeting_date,meeting_date as action');
+                $this->db->from('tbl_meeting');
+  
+                $table_data = $this->db->get()->result_array();
+            }else if ($table == 'tbl_syslogs') {
+                $table_data = $this->db->query("SELECT sy.id,sy.log_date,sy.action,sy.module,CONCAT_WS(' ',u.firstname,u.lastname) user
+                                                                               FROM tbl_syslogs sy LEFT JOIN tbl_user u ON sy.user = u.id
+                                                                              ORDER BY sy.id DESC;
+                                                                            ")->result_array();
+            
+            }else {
                 $table_data = $this->db->get($table)->result_array();
             }
             if (!empty($table_data)) {
@@ -119,10 +131,12 @@ class Admin_model extends CI_Model {
                 'user_id' => $id
             ];
             $this->db->insert($table . '_scope', $scope_array);
+           
         } else {
             $this->db->insert($table, $data);
         }
-        return $this->db->insert_id();
+        //echo $this->db->last_query();
+        echo json_encode(array("status" => TRUE));
     }
 
     //function get_by_id
@@ -142,17 +156,17 @@ class Admin_model extends CI_Model {
                 'email_address' => $this->input->post('email_address'),
                 'phone_number' => $this->input->post('phone_number'),
                 'role_id' => $this->input->post('role'),
-               // 'password' => md5($this->input->post('password'))
+                    // 'password' => md5($this->input->post('password'))
             ];
-            $this->db->update($table,  $where, $user_array);
+            $this->db->update($table, $where, $user_array);
 
 
             $scope_array = [
                 'scope_id' => $this->input->post('scope_id'),
-                'role_id' => $this->input->post('role'),                
+                'role_id' => $this->input->post('role'),
             ];
             //$this->db->insert($table . '_scope', $scope_array);
-            $this->db->update($table.'_scope', $scope_array, ['user_id'=> $this->input->post('id')]);
+            $this->db->update($table . '_scope', $scope_array, ['user_id' => $this->input->post('id')]);
         } else {
             $this->db->update($table, $data, $where);
         }

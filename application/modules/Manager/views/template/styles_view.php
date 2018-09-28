@@ -34,5 +34,7 @@
 <link href="<?php echo base_url() . 'public/manager/css/manager.css'; ?>" rel="stylesheet">
 <!--favicon-->
 <link rel="shortcut icon" type="text/css" href="<?php echo base_url() . 'public/dashboard/img/favicon.ico'; ?>">   
+<link href="<?php echo base_url() . 'public/manager/getcontenttools/content-tools.min.css'; ?>" rel="stylesheet">
+
 <!-- jQuery js-->
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables/js/jquery-1.12.4.js'; ?>"></script>

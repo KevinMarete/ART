@@ -105,7 +105,7 @@ class Procurement_model extends CI_Model {
                         t.created,
                         CONCAT_WS(' ', u.firstname, u.lastname) user
                     FROM tbl_decision d 
-                    INNER JOIN (
+                    LEFT JOIN (
                         SELECT *
                         FROM tbl_decision_log l
                         WHERE (l.created, l.decision_id) IN
@@ -115,8 +115,9 @@ class Procurement_model extends CI_Model {
                     ) t ON t.decision_id = d.id
                     INNER JOIN tbl_user u ON u.id = t.user_id                    
                     AND d.deleted = '0'
+                    AND d.drug_id='$drug_id'
                     GROUP BY d.decision_date
-                    ORDER BY d.decision_date DESC";
+                    ORDER BY d.id DESC";
             $table_data = $this->db->query($sql)->result_array();
             if (!empty($table_data)) {
                 $response['data'] = $table_data;
@@ -236,7 +237,7 @@ ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'A
         try {
             $sql = "SELECT
                     pi.id,
-                     CONCAT(transaction_year ,' - ', transaction_month) expected_delivery_date,
+                     transaction_year year, transaction_month month,
                      pi.date_added transaction_date,
                      quantity quantity,
                      ps.name transaction_type,
@@ -438,7 +439,7 @@ ORDER BY transaction_time DESC, transaction_year DESC, FIELD(transaction_month, 
                         array_push($scaleup_data[$index]['data'], $result['minimum_total']);
                     } else if ($scaleup['name'] == 'Maximum Stock') {
                         array_push($scaleup_data[$index]['data'], $result['maximum_total']);
-                    }else if ($scaleup['name'] == 'Pending') {
+                    } else if ($scaleup['name'] == 'Pending') {
                         array_push($scaleup_data[$index]['data'], $result['pending']);
                     }
                 }
@@ -666,19 +667,19 @@ ORDER BY transaction_time DESC, transaction_year DESC, FIELD(transaction_month, 
             'quantity' => $input_data['quantity']
         );
 
-        if ($procurement_arr['transaction_year'] == $input_data['transaction_year'] && $procurement_arr['transaction_month'] == $input_data['transaction_month']) {
+        if ($procurement_arr['transaction_year'] == $input_data['year'] && $procurement_arr['transaction_month'] == $input_data['month']) {
             //Update procurement_item based on same id
             $this->db->update('tbl_procurement_item', $update_data, array('id' => $input_data['id']));
         } else {
             //Get new procurement_id 
-            $new_procurement_arr = $this->db->get_where('tbl_procurement', array('transaction_year' => $input_data['transaction_year'], 'transaction_month' => $input_data['transaction_month'], 'drug_id' => $procurement_arr['drug_id']))->row_array();
+            $new_procurement_arr = $this->db->get_where('tbl_procurement', array('transaction_year' => $input_data['year'], 'transaction_month' => $input_data['month'], 'drug_id' => $procurement_arr['drug_id']))->row_array();
             if (!empty($new_procurement_arr)) {
                 //Update procurement_item based on new id
                 $update_data['procurement_id'] = $new_procurement_arr['id'];
                 $this->db->update('tbl_procurement_item', $update_data, array('id' => $input_data['id']));
             }
         }
-
+        
         $count = $this->db->affected_rows();
         if ($count > 0) {
             $data['status'] = TRUE;
