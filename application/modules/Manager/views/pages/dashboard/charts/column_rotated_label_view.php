@@ -5,77 +5,59 @@
 <!--highcharts_configuration-->
 <script type="text/javascript">
     $(function () {
-        var chartDIV = '<?php echo $chart_name . "_container"; ?>'
-
-        Highcharts.setOptions({
-            global: {
-                useUTC: false,
-
-            },
-            lang: {
-                decimalPoint: '.',
-                thousandsSep: ','
-            }
-        });
+        var chartDIV = '<?php echo $chart_name."_container"; ?>';
 
         Highcharts.chart(chartDIV, {
-            chart: {
-                type: 'line'
+            legend: {
+                enabled: true
             },
+            chart: {
+                type: 'column'
+            },
+
+            colors: ['green', 'red', 'blue'],
+
             title: {
                 text: '<?php echo $chart_title; ?>'
             },
             subtitle: {
                 text: '<?php echo $chart_source; ?>'
             },
-            credits: false,
+
             xAxis: {
                 categories: <?php echo $chart_categories; ?>,
                 crosshair: true
             },
+
             yAxis: {
+                allowDecimals: false,
                 min: 0,
                 title: {
-                    text: '<?php echo $chart_yaxis_title; ?>'
+                    text: '<?php echo $chart_yaxis_title; ?>',
                 }
             },
+
             tooltip: {
-                formatter: function () {
-                    //Get growth rate
-                    var prevPoint = this.point.x == 0 ? null : this.series.data[this.point.x - 1];
-                    var rV = '<b>' + this.x + '</b><br/>'
-                    rV += '<span style="color:' + this.series.color + '"><b>Total</b></span>: ' + Highcharts.numberFormat(this.y, 0) + '<br/>'
-                    if (prevPoint) {
-                        var diff = this.y - prevPoint.y;
-                        var percentage = (diff / prevPoint.y) * 100;
-                        // rV += '<br><b>Growth:</b> ' + Highcharts.numberFormat(percentage, 1) + ' %'
-                    }
-                    return rV;
-                }
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
+                footerFormat: 'Total: <b>{point.total:,.1f}</b>',
+                shared: true
             },
+
             plotOptions: {
                 column: {
-                    pointPadding: 0.2,
-                    borderWidth: 0,
-                    colorByPoint: true,
-                    dataLabels: {
-                        enabled: true,
-                        rotation: -90,
-                        color: '#FFFFFF',
-                        align: 'right',
-                        format: '{point.y:,.0f}',
-                        y: 10
-                    }
-                },
-                line: {
+                    stacking: 'percent',
                     dataLabels: {
                         enabled: true
-                    },
-                    enableMouseTracking: false
+                    }
                 }
             },
-            series: <?php echo $chart_series_data; ?>
-        });
 
-    });
-</script>        
+            credits: {
+                enabled: false
+            },
+
+            series: <?php echo $chart_series_data; ?>,
+        });
+    })
+</script>

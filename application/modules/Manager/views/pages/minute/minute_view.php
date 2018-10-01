@@ -27,6 +27,31 @@
         display:block;
     }
 
+    .jexcel bossanova-ui {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+    .jexcel bossanova-ui td,
+    .jexcel bossanova-ui th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+    .jexcel bossanova-ui th {
+        background-color: #ccd;
+    }
+    .jexcel bossanova-ui > tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+    jexcel bossanova-ui > tr:nth-child(odd) {
+        background-color: #ddeedd;
+    }
+    .highlight {
+        background-color: Yellow;
+        color: Green;
+    }
+
 </style>
 <div id="page-wrapper">
     <!--row-->
@@ -50,7 +75,10 @@
                     Category:  <select id="drugCategory"></select>
                 </div>
                 <div class="col-md-3">
-                    Minute Date: <select id="lastMinutes"></select>
+                    Decision Date: <select id="lastMinutes"></select>
+                </div>
+                <div class="col-md-3">
+                    <a href="#minutes" data-toggle="modal" data-target="#MinuteD"  class="btn btn-warning">Create / Load Minute</a> 
                 </div>
             </div><br>
             <div class="row" style="font-weight: bold; font-size: 14px; margin-left: 20px;" >MINUTE 2: STOCK STATUS PER PRODUCT AND REQUIRED DELIVERIES AND NEW PROCUREMENTS</div>
@@ -60,10 +88,10 @@
 
                 </div>
             </form>
-            <?php if(date('m')<10){?>
-            <button id="meetingSave" class="btn btn-lg btn-success" ><i class="fa fa-save"></i> Save Meeting Data</button>
-            <?php } else{?>
-            <div class="alert alert-warning"><i class="fa fa-warning"></i> You cannot make changes on this page at this time</div>
+            <?php if (date('m') < 10) { ?>
+                <button id="meetingSave" class="btn btn-lg btn-success" ><i class="fa fa-save"></i> Save Meeting Data</button>
+            <?php } else { ?>
+                <div class="alert alert-warning"><i class="fa fa-warning"></i> You cannot make changes on this page at this time</div>
             <?php } ?>
 
         </div>
@@ -104,7 +132,7 @@
 
         var lastURL = '<?= base_url(); ?>Manager/Procurement/loadLastMinutes';
         $("#lastMinutes").empty();
-        $('#lastMinutes').append("<option value='<?=date('Y-m-d');?>'></option>")
+        $('#lastMinutes').append("<option value='<?= date('Y-m-d'); ?>'></option>")
         $.getJSON(lastURL, function (d) {
             $.each(d, function (index, cat) {
                 $("#lastMinutes").append($("<option value='" + cat.meeting_date + "'>" + cat.meeting_date.toUpperCase() + "</option>"));
@@ -203,7 +231,7 @@
                     fixedHeader: true
                 });
 
-             
+
 
             });
         }
@@ -231,8 +259,8 @@
             <div class="modal-body">
                 <ul class="nav nav-tabs pull-right">
                     <!--li class="active"><a data-toggle="tab" href="#drug_decision">All Decisions</a></li-->
-                    <li  class="active"> <a data-toggle="tab" href="#minutes">Minutes</a></li>
-                    <li><a data-toggle="tab" href="#drug_procurement">Procurement</a></li>
+                    <!--li  class="active"> <a data-toggle="tab" href="#minutes">Minutes</a></li-->
+                    <li  class="active"><a data-toggle="tab" href="#drug_procurement">Procurement</a></li>
                     <li><a data-toggle="tab" href="#drug_transactions">Product Tracker</a></li>
                     <li><a data-toggle="tab" href="#drug_orders">Transactions</a></li>
                     <li><a data-toggle="tab" href="#drug_logs">Logs</a></li>
@@ -261,13 +289,13 @@
                         </div>
                     </div-->
 
-                    <div id="minutes" class="tab-pane fade">
+                    <!--div id="minutes" class="tab-pane fade">
                         <h3>Minutes</h3>
-                        <?php $this->load->view('pages/procurement/minutes_view'); ?>
-                    </div>
+                    <?php $this->load->view('pages/procurement/minutes_view'); ?>
+                    </div-->
 
 
-                    <div id="drug_procurement" class="tab-pane fade">
+                    <div id="drug_procurement" class="tab-pane fade in active">
 
                         <h3>Procurement Form</h3>
                         <p>Switch Drug:<select class="form-control select2" id="DrugList"></select></p>
@@ -445,7 +473,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="decisionModalTitle">Add Decision & Reccomendations</h5>
+                <h5 class="modal-title" id="decisionModalTitle">Add Decision & Reccommendations</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -471,12 +499,36 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div id="MinuteD" class="modal fade" role="dialog"  >
+    <div class="modal-dialog modal-lg" style="width:90%;">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Minutes</h4>
+            </div>
+            <div class="modal-body">
+                <p>    <?php $this->load->view('pages/procurement/minutes_view'); ?></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="margin-top: 20px;">Close</button>
+                <input type="button" id="saveMinute" class="btn btn-primary" style="margin-top: 20px; width: 100px;" value="Save Minute"/>
+                <input type="button" id="saveMinuteEmail" class="btn btn-warning" style="margin-top: 20px;  width: 250px;" value="Save Minute & Dispatch Emails"/>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <!--Add decision Modal-->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="decisionModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="decisionModalTitle">Edit Decision & Reccomendations</h5>
+                <h5 class="modal-title" id="decisionModalTitle">Edit Decision & Reccommendations</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -573,6 +625,35 @@
     var fundingURL = '<?= base_url(); ?>API/funding_agent';
     var supplierURL = '<?= base_url(); ?>API/supplier';
     $(document).ready(function () {
+        ls = window.localStorage;
+
+        document.oncontextmenu = function () {
+            return false;
+        };
+
+        $(document).on('mousedown', '.jexcel td', function (e) {
+            if (e.button == 2) {
+                if ($(this).hasClass('readonly')) {
+
+                } else {
+                    var value = ls.getItem('cd', value);
+                    $(this).text(value);
+                    return false;
+                }
+            }
+            return true;
+        });
+
+
+        $(document).on('click', '.jexcel td', function () {
+            if ($(this).hasClass('readonly')) {
+
+            } else {
+                var value = $(this).text();
+                ls.setItem('cd', value);
+            }
+            //  alert(value);
+        })
 
         $('#saveDecision').click(function () {
             $(this).text('Please Wait...');
@@ -1097,7 +1178,7 @@
             $(tableID).jexcel('updateSettings', {
                 table: function (instance, cell, col, row, val, id) {
                     //Make rows readonly
-                     m = "<?= date("n", strtotime("-1 month")); ?>";
+                    m = "<?= date("n", strtotime("-1 month")); ?>";
                     //m = "<?= date("n"); ?>";
 
 

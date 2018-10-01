@@ -365,8 +365,8 @@ if ($page_name != 'backup') {
                 $(".select2").select2({
                     width: '100%',
                     allowClear: true,
-                    dropdownParent: $("#modal_form")
-                });
+                   // dropdownParent: $("#modal_form")
+                }).trigger('change');
 
                 $('.modal-title').text('Edit <?php echo ucwords(str_replace('_', ' ', $page_name)); ?>');
             },

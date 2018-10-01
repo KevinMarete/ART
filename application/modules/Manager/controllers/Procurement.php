@@ -85,9 +85,9 @@ class Procurement extends MX_Controller {
     function loadLastMinutesHF() {
         echo json_encode($this->db->order_by('id', 'desc')->get('tbl_minutes')->result());
     }
-    
-     function loadLastMinutesBody($id) {
-        echo json_encode(['data'=>$this->db->where('id', $id)->get('tbl_minutes')->result()]);
+
+    function loadLastMinutesBody($id) {
+        echo json_encode($this->db->where('id', $id)->get('tbl_minutes')->result());
     }
 
     public function getMinutesData($cat, $date) {
@@ -145,16 +145,36 @@ class Procurement extends MX_Controller {
         $opening_description = $this->input->post('opening_description');
         $aob = $this->input->post('aob');
 
-        $this->db->insert('tbl_minutes', [
-            'title' => $title,
-            'present_names' => $present_names,
-            'present_emails' => $present_emails,
-            'absent_names' => $absent_names,
-            'absent_emails' => $absent_email,
-            'opening_description' => $opening_description,
-            'aob' => $aob,
-        ]);
-        $this->updateSysLogs('Updated  (tbl_minutes - Meeting Minute  > Minute Agenda & A.O.Bs)');
+        if ($this->checkMinuteSave(date('Y-m')) > 0) {
+            echo 'Update';
+            $this->db->like('date',date('Y-m'),'both')->update('tbl_minutes', [
+                'title' => $title,
+                'present_names' => $present_names,
+                'present_emails' => $present_emails,
+                'absent_names' => $absent_names,
+                'absent_emails' => $absent_email,
+                'opening_description' => $opening_description,
+                'aob' => $aob,
+            ]);
+            echo $this->db->last_query();
+            $this->updateSysLogs('Updated  (tbl_minutes - Meeting Minute  > Minute Agenda & A.O.Bs)');
+        } else {
+            echo 'Inserted';
+            $this->db->insert('tbl_minutes', [
+                'title' => $title,
+                'present_names' => $present_names,
+                'present_emails' => $present_emails,
+                'absent_names' => $absent_names,
+                'absent_emails' => $absent_email,
+                'opening_description' => $opening_description,
+                'aob' => $aob,
+            ]);
+            $this->updateSysLogs('Created  (tbl_minutes - Meeting Minute  > Minute Agenda & A.O.Bs)');
+        }
+    }
+
+    function checkMinuteSave($date) {
+        return $this->db->like('date', $date, 'both')->get('tbl_minutes')->num_rows();
     }
 
     function sanitize($array) {

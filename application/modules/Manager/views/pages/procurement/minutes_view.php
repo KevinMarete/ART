@@ -11,13 +11,13 @@
             <div class="row">
                 <p><strong><input type="text" class="form-control" name="title" value="MINUTES OF PROCUREMENT PLANNING MEETING HELD AT NASCOP ON <?= date('d/m/Y'); ?> FROM 9.00 AM-2.00 PM" style="width:100%;"/></strong></p>
             </div>
-            <p><strong>Members Present</strong></p>
+            <p><strong>Members Present</strong> <i class="fa fa-plus-circle addMemberPresent"></i> Add</p>
             <p></p>
             <ol id="membersPresent">
                 <li><input type="text" class="member" placeholder="Name -  Role" name="present_names[]"/>&nbsp;&nbsp;<input type="email" class="member" placeholder="Email" name="present_emails[]"/>&nbsp;&nbsp;<i class="fa fa-plus-circle addMemberPresent"></i></li>
             </ol>
 
-            <p><strong>Absent with Apology</strong></p>
+            <p><strong>Absent with Apology</strong> <i class="fa fa-plus-circle addMemberAbsent"></i> Add</p>
             <p></p>
             <ol id="membersAbsent">
                 <li><input type="text" class="member" placeholder="Name -  Role" name="absent_names[]"/>&nbsp;&nbsp;<input type="email" class="member" placeholder="Email" name="absent_emails[]"/>&nbsp;&nbsp;<i class="fa fa-plus-circle addMemberAbsent"></i></li>
@@ -30,7 +30,7 @@
 
             <div class="row" style="margin-top:20px;">
                 <p><strong>MINUTE 2: STOCK STATUS PER PRODUCT AND REQUIRED DELIVERIES AND NEW PROCUREMENTS</strong></p>
-                <p><div class="alert alert-info">Please refer to Procurement > Meetings Menu***</div></p>
+                <p><div class="alert alert-info">Please refer to section behind this pop-up minute window**</div></p>
             </div> 
             <div class="row">
                 <p><strong>A.O.B</strong></p>
@@ -40,7 +40,7 @@
                 <textarea id="opening_description_" name="opening_description"></textarea>
                 <textarea id="aob_" name="aob"></textarea>
             </div>
-            <input type="button" id="saveMinute" class="btn btn-primary" style="margin-top: 20px;" value="Save Minute"/>
+           
         </div>
     </div>
 </form>
@@ -60,9 +60,34 @@
         $('#template').change(function () {
             id = $(this).val();
             $.getJSON(mloaderURL + '/' + id, function (resp) {
-                alert(resp.data);
-                $('#opening_description').val(d[0].opening_description);
-                $('#aob').val(d[0].aob);
+                $('#membersPresent').empty();
+                $('#membersAbsent').empty();
+                for (var i = 0; i < resp.length; i++) {
+                    pren = resp[i].present_names;
+                    pree = resp[i].present_emails;
+
+                    absen = resp[i].absent_names;
+                    absee = resp[i].absent_emails;
+
+                    prenames = pren.split(',');
+                    premails = pree.split(',');
+                    
+                    absnames =  absen.split(',');
+                    absmails = absee.split(',');
+                    for (var p = 0; p < prenames.length; p++) {
+                        $('#membersPresent').append('<li style="margin-top:10px;"><input type="text" class="member" value="' + prenames[p] + '" name="present_names[]"/>&nbsp;&nbsp;<input type="email" class="member" value="' + premails[p] + '" name="present_emails[]"/>&nbsp;&nbsp;<i class="fa fa-minus-circle remMemberPresent"></i></li>');
+                    }
+
+                    for (var a = 0; a < absnames.length; a++) {
+                        $('#membersAbsent').append('<li style="margin-top:10px;"><input type="text" class="member"  value="'+ absnames[a] + '" name="absent_names[]"/>&nbsp;&nbsp;<input type="email" class="member" value="' + absmails[a] + 'l" name="absent_emails[]"/>&nbsp;&nbsp;<i class="fa fa-minus-circle remMemberAbsent"></i></li>');
+                    }
+                    tinymce.get('opening_description').setContent(resp[i].opening_description);
+                    tinymce.get('aob').setContent(resp[i].aob);
+                }
+
+                //  tinymce.editors = [];
+                //tinymce.init({selector: '#opening_description,#aob'});
+
             });
         });
 

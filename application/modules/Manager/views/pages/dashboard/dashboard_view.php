@@ -253,11 +253,11 @@
         $('#summaryTable').DataTable({
 
             "bProcessing": true,
-            "order": [[3, "desc"]],
-            "paging": false,
-            "ordering": false,
-            "info": false,
-            "searching": false,
+            "order": [[2, "desc"]],
+            //"paging": false,
+            //"ordering": false,
+            //"info": false,
+            //"searching": false,
             "sAjaxSource": "<?= base_url(); ?>Manager/orders/getHighMos/summary",
             "aoColumns": [
                 {mData: 'commodity'},
@@ -275,11 +275,11 @@
         $('#summaryTable2').DataTable({
 
             "bProcessing": true,
-            "order": [[3, "desc"]],
-            "paging": false,
-            "ordering": false,
-            "info": false,
-            "searching": false,
+            "order": [[2, "desc"]],
+            //"paging": false,
+            //"ordering": false,
+            //"info": false,
+            //"searching": false,
             "sAjaxSource": "<?= base_url(); ?>Manager/orders/getLowMos/summary",
             "aoColumns": [
                 {mData: 'commodity'},

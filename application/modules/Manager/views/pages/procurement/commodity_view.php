@@ -52,15 +52,15 @@
             </div><!--/modal-header-->
             <div class="modal-body">
                 <ul class="nav nav-tabs pull-right">
-                    <li class="active"><a data-toggle="tab" href="#drug_decision">All Decisions</a></li>
-                    <li> <a data-toggle="tab" href="#minutes">Minutes</a></li>
-                    <li><a data-toggle="tab" href="#drug_procurement">Procurement</a></li>
+<!--                    <li class="active"><a data-toggle="tab" href="#drug_decision">All Decisions</a></li>
+                    <li> <a data-toggle="tab" href="#minutes">Minutes</a></li>-->
+                    <li class="active"><a data-toggle="tab" href="#drug_procurement">Procurement</a></li>
                     <li><a data-toggle="tab" href="#drug_transactions">Product Tracker</a></li>
                     <li><a data-toggle="tab" href="#drug_orders">Transactions</a></li>
                     <li><a data-toggle="tab" href="#drug_logs">Logs</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div id="drug_decision" class="tab-pane fade in active">
+<!--                    <div id="drug_decision" class="tab-pane fade in active">
                         <h3>All Product Decisions</h3>
                         <div class="container-fluid">
 
@@ -86,10 +86,10 @@
                     <div id="minutes" class="tab-pane fade">
                         <h3>Minutes</h3>
                         <?php $this->load->view('pages/procurement/minutes_view'); ?>
-                    </div>
+                    </div>-->
 
 
-                    <div id="drug_procurement" class="tab-pane fade">
+                    <div id="drug_procurement" class="tab-pane fade in active">
 
                         <h3>Procurement Form</h3>
                         <p>Switch Drug:<select class="form-control select2" id="DrugList"></select></p>
