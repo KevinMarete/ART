@@ -2,7 +2,7 @@
     .active-red{
         color:red;
     }
-    span.multiselect-native-select{position:relative}span.multiselect-native-select select{border:0!important;clip:rect(0 0 0 0)!important;height:1px!important;margin:-1px -1px -1px -3px!important;overflow:hidden!important;padding:0!important;position:absolute!important;width:1px!important;left:50%;top:30px}.multiselect-container{position:absolute;list-style-type:none;margin:0;padding:0}.multiselect-container .input-group{margin:5px}.multiselect-container .multiselect-reset .input-group{width:93%}.multiselect-container>li{padding:0}.multiselect-container>li>a.multiselect-all label{font-weight:700}.multiselect-container>li.multiselect-group label{margin:0;padding:3px 20px;height:100%;font-weight:700}.multiselect-container>li.multiselect-group-clickable label{cursor:pointer}.multiselect-container>li>a{padding:0}.multiselect-container>li>a>label{margin:0;height:100%;cursor:pointer;font-weight:400;padding:3px 20px 3px 40px}.multiselect-container>li>a>label.checkbox,.multiselect-container>li>a>label.radio{margin:0}.multiselect-container>li>a>label>input[type=checkbox]{margin-bottom:5px}.btn-group>.btn-group:nth-child(2)>.multiselect.btn{border-top-left-radius:4px;border-bottom-left-radius:4px}.form-inline .multiselect-container label.checkbox,.form-inline .multiselect-container label.radio{padding:3px 20px 3px 40px}.form-inline .multiselect-container li a label.checkbox input[type=checkbox],.form-inline .multiselect-container li a label.radio input[type=radio]{margin-left:-20px;margin-right:0}
+
 </style>
 <div id="page-wrapper">
     <div class="row">
@@ -222,6 +222,28 @@
         </div>
     </div>
 </div>
+
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="FHead"></h4>
+            </div>
+            <div class="modal-body">
+                <div id="FacilityLoader"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
 <script>
     var chartURL = '../Manager/get_chart'
     var drugListURL = '../API/drug/list'
@@ -231,6 +253,32 @@
         newmonth = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         year = dt.getFullYear(), month = newmonth[dt.getMonth()], drug = 'Dolutegravir (DTG) 50mg Tabs';
         //alert(year + monthname)
+
+        $(document).on('click', '.LOWAMC', function () {
+            LoadSpinner('#FacilityLoader');           
+            var drug = $(this).attr('data-commodity');
+            $.post("<?= base_url(); ?>Manager/orders/getFacilitiesMOS/", {drug: drug, mos: 3, level: 'Low'}, function (resp) {
+                 $('#FacilityLoader,#FHead').empty();
+                $('#FHead').html("COMMODITY: " + drug);
+                $('#FacilityLoader').append(resp);
+                $('#MosTable').DataTable();
+            });
+
+
+        });
+
+        $(document).on('click', '.HIGHAMC', function () {
+            LoadSpinner('#FacilityLoader');          
+            var drug = $(this).attr('data-commodity');
+            $.post("<?= base_url(); ?>Manager/orders/getFacilitiesMOS/", {drug: drug, mos: 6, level: 'High'}, function (resp) {
+                 $('#FacilityLoader,#FHead').empty();
+                $('#FHead').html("COMMODITY: " + drug);
+                $('#FacilityLoader').append(resp);
+                $('#MosTable').DataTable();
+            });
+
+            LoadSpinner('#FacilityLoader');
+        });
 
         $('#filter_item').change(function () {
             drug = $('#filter_item').val();
@@ -265,7 +313,7 @@
                 {mData: 'balance'},
                 {mData: 'mos'},
                 {mData: null, mRender: function (data, type, row) {
-                        return '<a href="#facility">View</a>';
+                        return '<a data-commodity="' + row.commodity + '" data-toggle="modal" data-target="#myModal" href="#facility" class="HIGHAMC">View</a>';
                     }
                 }
                 // {mData: 'month'}
@@ -287,8 +335,8 @@
                 {mData: 'balance'},
                 {mData: 'mos'},
                 {mData: null, mRender: function (data, type, row) {
-                        return '<a href="#facility">View</a>';
-                    }, 
+                        return '<a data-commodity="' + row.commodity + '" data-toggle="modal" data-target="#myModal" href="#facility" class="LOWAMC">View</a>';
+                    },
                 }
                 // {mData: 'month'}
             ]
@@ -429,10 +477,10 @@
 
                     "bProcessing": true,
                     "order": [[3, "desc"]],
-                    "paging": false,
-                    "ordering": false,
-                    "info": false,
-                    "searching": false,
+                    //  "paging": false,
+                    //"ordering": false,
+                    //"info": false,
+                    //"searching": false,
                     "ajax": {type: 'post', url: "<?= base_url(); ?>manager/orders/getSummaryTable/summary", data: filters},
                     "aoColumns": [
                         {mData: 'commodity'},

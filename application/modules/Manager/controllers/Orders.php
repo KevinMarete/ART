@@ -139,16 +139,14 @@ class Orders extends MX_Controller {
         echo $response['message'];
     }
 
-
-
     public function actionOrder($orderid, $mapid, $action) {
         $this->send_allocation_request();
         $response = $this->Orders_model->actionOrder($orderid, $mapid, $action, $this->session->userdata('id'));
         echo $response['message'];
     }
 
-    public function get_orders($subcounty='') {
-        $response = $this->Orders_model->get_order_data($this->session->userdata('scope'), $this->session->userdata('role'),$subcounty);
+    public function get_orders($subcounty = '') {
+        $response = $this->Orders_model->get_order_data($this->session->userdata('scope'), $this->session->userdata('role'), $subcounty);
         echo json_encode(array('data' => $response['data']));
     }
 
@@ -177,16 +175,21 @@ class Orders extends MX_Controller {
         $response = $this->Orders_model->get_county_reporting_data($scope, $role, date('Y-m-d', strtotime('first day of last month')), date('Y-m-d', strtotime('last day of last month')), $allocation);
         echo json_encode(array('data' => $response['data']));
     }
-    
-    
-     function getLowMos(){
-          $this->Orders_model->getLowMos();  
-      }
-      
-     function getHighMos(){
-          $this->Orders_model->getHighMos();  
-      }
-      
-      
+
+    function getLowMos() {
+        $this->Orders_model->getLowMos();
+    }
+
+    function getHighMos() {
+        $this->Orders_model->getHighMos();
+    }
+
+    function getLowMosFacilities() {
+        $this->Orders_model->getLowMosFacilities();
+    }
+
+    function getFacilitiesMOS() {
+        $this->Orders_model->getFacilitiesMOS();
+    }
 
 }

@@ -1,4 +1,5 @@
 <?php
+
 error_reporting(0);
 
 defined('BASEPATH') OR exit('No direct script access allowed');
@@ -906,7 +907,7 @@ class Orders_model extends CI_Model {
     function getLowMos() {
         $filter = $this->input->post('selectedfilters');
         $date = date('Y');
-        $month = 'May' ;      
+        $month = 'May';
         $qadd = "WHERE data_year='$date' AND data_month='$month' ";
         $params = $this->sanitizeParams();
         if (!empty($filter)) {
@@ -926,11 +927,47 @@ class Orders_model extends CI_Model {
         $result = $this->db->query($query)->result();
         echo json_encode(['data' => $result]);
     }
-    
-       function getHighMos() {
+
+    function getFacilitiesMOS() {
+
+        $filter = $this->input->post('selectedfilters');
+        $drug = $this->input->post('drug');
+        $mos = $this->input->post('mos');
+        $level = $this->input->post('level');
+        $date = date('Y');
+        $month = 'May';
+        $qadd = "WHERE data_year='$date' AND data_month='$month' AND drug='$drug'";
+        $params = $this->sanitizeParams();
+        if (!empty($filter)) {
+            $qadd = '';
+            $qadd .= "WHERE data_year=" . $params["year"] . " AND data_month=" . $params["month"] . "                            
+                  AND drug IN (" . $params["drugs"] . ")";
+        }
+        $query = "SELECT facility
+                            FROM vw_cdrr_list
+                            $qadd                            
+                            $this->_q_addon
+                            AND mos < $mos
+                            AND closing_bal IS NOT NULL
+                            GROUP BY facility
+                            ORDER BY facility ASC";
+        $result = $this->db->query($query)->result();
+        $table = '<table class="table table-bordered table-condensed" id="MosTable">';
+        $table .= '<thead><tr><th>No.</th><th>Facilities With ' . $level . '  MOS</th></tr>';
+        $table .= '<tbody>';
+         $i=1;
+        foreach ($result as $d):
+            $table .= '<tr><td>' . $i. '</td><td>' . ucwords($d->facility) . '</td></tr>';
+         $i++;
+        endforeach;
+        $table .= '</tbody>';
+        echo $table;
+    }
+
+    function getHighMos() {
         $filter = $this->input->post('selectedfilters');
         $date = date('Y');
-        $month = 'May' ;      
+        $month = 'May';
         $qadd = "WHERE data_year='$date' AND data_month='$month' ";
         $params = $this->sanitizeParams();
         if (!empty($filter)) {
