@@ -14,6 +14,8 @@ class Admin extends MX_Controller {
         $response = $this->Admin_model->get_table_data($table);
         if ($response['status']) {
             echo json_encode(array('data' => $response['data']));
+        }else{
+            echo json_encode(array('data' => array()));
         }
     }
 

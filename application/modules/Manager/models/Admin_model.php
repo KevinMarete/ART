@@ -101,7 +101,6 @@ class Admin_model extends CI_Model {
                 $response['message'] = 'Table data was found!';
                 $response['status'] = TRUE;
             } else {
-                $response['data'] = array();
                 $response['message'] = 'Table is empty!';
                 $response['status'] = FALSE;
             }
