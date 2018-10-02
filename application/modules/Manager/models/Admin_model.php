@@ -133,6 +133,7 @@ class Admin_model extends CI_Model {
             $this->db->insert($table . '_scope', $scope_array);
            
         } else {
+            unset($data['id']);
             $this->db->insert($table, $data);
         }
         //echo $this->db->last_query();
