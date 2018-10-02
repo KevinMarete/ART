@@ -10,6 +10,20 @@ class Manager_model extends CI_Model {
         $reporting_data = array();
         $nreporting_data = array();
         $alldata = [];
+        $reports=417;
+         
+        $role =$this->session->userdata('role');
+        $scopename =$this->session->userdata('scope_name');
+        $scope =$this->session->userdata('scope');
+        
+        if($role=='national'){
+            $reports = 417;
+        }else if($role=='county'){
+            $query = $this->db->query("SELECT * FROM tbl_subcounty WHERE county_id='$scope'");
+           $reports = $query->num_rows();
+        }else if($role=='subcounty'){
+            
+        }
 
         $this->db->select("CONCAT_WS('/', data_month, data_year) period, COUNT(DISTINCT facility) total", FALSE);
         $this->db->where("data_date >=", date('Y-01-01'));

@@ -40,7 +40,7 @@
                 <textarea id="opening_description_" name="opening_description"></textarea>
                 <textarea id="aob_" name="aob"></textarea>
             </div>
-           
+
         </div>
     </div>
 </form>
@@ -71,15 +71,15 @@
 
                     prenames = pren.split(',');
                     premails = pree.split(',');
-                    
-                    absnames =  absen.split(',');
+
+                    absnames = absen.split(',');
                     absmails = absee.split(',');
                     for (var p = 0; p < prenames.length; p++) {
                         $('#membersPresent').append('<li style="margin-top:10px;"><input type="text" class="member" value="' + prenames[p] + '" name="present_names[]"/>&nbsp;&nbsp;<input type="email" class="member" value="' + premails[p] + '" name="present_emails[]"/>&nbsp;&nbsp;<i class="fa fa-minus-circle remMemberPresent"></i></li>');
                     }
 
                     for (var a = 0; a < absnames.length; a++) {
-                        $('#membersAbsent').append('<li style="margin-top:10px;"><input type="text" class="member"  value="'+ absnames[a] + '" name="absent_names[]"/>&nbsp;&nbsp;<input type="email" class="member" value="' + absmails[a] + 'l" name="absent_emails[]"/>&nbsp;&nbsp;<i class="fa fa-minus-circle remMemberAbsent"></i></li>');
+                        $('#membersAbsent').append('<li style="margin-top:10px;"><input type="text" class="member"  value="' + absnames[a] + '" name="absent_names[]"/>&nbsp;&nbsp;<input type="email" class="member" value="' + absmails[a] + 'l" name="absent_emails[]"/>&nbsp;&nbsp;<i class="fa fa-minus-circle remMemberAbsent"></i></li>');
                     }
                     tinymce.get('opening_description').setContent(resp[i].opening_description);
                     tinymce.get('aob').setContent(resp[i].aob);
@@ -119,9 +119,35 @@
             $.post("<?= base_url(); ?>Manager/Procurement/save_minutes/x", $('#MINUTES').serialize(), function () {
 
             }).done(function () {
-                alert('Minutes Successfully Saved')
+
+                swal({
+                    title: "Success",
+                    text: "Changes successfully saved",
+                    icon: "success",
+                });
             });
 
+            return false;
+        });
+
+        $('#saveMinuteEmail').click(function () {
+          $(this).prop('disabled','disabled');
+            $.getJSON("<?= base_url(); ?>Manager/Procurement/get_test_email/x", function (resp) {
+                if (resp.status=='success') {
+                    swal({
+                        title: "Success",
+                        text: "Changes successfully saved",
+                        icon: "success",
+                    });
+                } else {
+                    swal({
+                        title: "Emailing Error",
+                        text: "An error occured, Emails could not be sent",
+                        icon: "error",
+                    });
+                }
+
+            })
             return false;
         });
 

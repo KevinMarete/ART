@@ -22,6 +22,96 @@ class Procurement extends MX_Controller {
         echo json_encode($this->db->query($query)->result());
     }
 
+    function menuBuilder() {
+          
+        $newmenu = '<div class="dropdown">
+            <a id="dLabel" role="button" data-toggle="dropdown" class="btn btn-primary" data-target="#" href="/page.html">
+                Dropdown <span class="caret"></span>
+            </a>            
+    <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">';
+        $toplevel = $this->db->get('tbl_county')->result();
+          $newmenu .= '<em>County</em> ';   
+        foreach ($toplevel as $top):
+            $newmenu .= '<li class="dropdown-submenu">              
+                <a tabindex="-1" href="#"><input type="checkbox">' . ucwords($top->name) . '</a> ';                     
+                  $newmenu .= '<ul class="dropdown-menu">';
+            $submenu = $this->getSubLevelMenus($top->id, 'county_id', 'tbl_subcounty');
+            $newmenu .= '<em>Sub Counties</em> ';   
+            foreach ($submenu as $sub):
+                $newmenu .= '<li class="dropdown-submenu">';
+                $newmenu .= '<a href="#"><input type="checkbox">' . ucwords($sub->name) . '</a>';
+                $facilities = $this->getSubLevelMenus($sub->id, 'subcounty_id', 'tbl_facility');
+                $newmenu .= '<ul class="dropdown-menu">';
+                $newmenu .= '<em>Sub County Facilities</em> ';   
+                foreach ($facilities as $facility):
+                    $newmenu .= '<li><a href="#"><input type="checkbox">' . ucwords($facility->name) . '</a></li>';
+                endforeach;
+                $newmenu .= '</ul>';
+                $newmenu .= '</li>';
+            endforeach;
+            $newmenu .= ' </ul>';
+            $newmenu .= '</li>';
+        endforeach;
+        $newmenu .= '</ul>
+        </div>';
+        
+     echo ' <div class="dropdown dropdown-inline">
+            <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">Dropdown <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#">Action</a></li>
+              <li><a href="#">Another action</a></li>
+              <li class="dropdown">
+                <a href="#">Another dropdown <span class="caret"></span></a>
+                <ul class="dropdown-menu dropdownhover-right">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Separated link</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">One more separated link</a></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a href="#">Another dropdown 2 <span class="caret"></span></a>
+                <ul class="dropdown-menu dropdownhover-right">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li class="dropdown">
+                    <a href="#">Another dropdown <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="#">Action</a></li>
+                      <li><a href="#">Another action</a></li>
+                      <li><a href="#">Something else here</a></li>
+                      <li class="divider"></li>
+                      <li><a href="#">Separated link</a></li>
+                      <li class="divider"></li>
+                      <li><a href="#">One more separated link</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Separated link</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">One more separated link</a></li>
+                </ul>
+              </li>
+              <li><a href="#">Something else here</a></li>
+              <li class="divider"></li>
+              <li><a href="#">Separated link</a></li>
+              <li class="divider"></li>
+              <li><a href="#">One more separated link</a></li>
+            </ul>
+          </div>';
+        
+       // echo $newmenu;
+    }
+
+    function getSubLevelMenus($pid, $pcol, $table) {
+        return $this->db->where($pcol, $pid)->order_by('name', 'asc')->get($table)->result();
+    }
+
     function saveMeetingData() {
         $id = $this->input->post('drug_id');
         $did = $this->input->post('decision_id');
@@ -147,7 +237,7 @@ class Procurement extends MX_Controller {
 
         if ($this->checkMinuteSave(date('Y-m')) > 0) {
             echo 'Update';
-            $this->db->like('date',date('Y-m'),'both')->update('tbl_minutes', [
+            $this->db->like('date', date('Y-m'), 'both')->update('tbl_minutes', [
                 'title' => $title,
                 'present_names' => $present_names,
                 'present_emails' => $present_emails,
@@ -195,12 +285,7 @@ class Procurement extends MX_Controller {
         $drug_ids = "SELECT GROUP_CONCAT(id) id FROM `tbl_decision`";
         $table_ids = $this->db->query($drug_ids)->result_array();
         $drugids_ = $table_ids[0]["id"];
-        $sql = "SELECT d.id drug_id ,"
-                . "CONCAT(g.name,' ', d.strength,' - ',f.name) drug "
-                . "FROM tbl_drug d "
-                . "LEFT JOIN tbl_generic g ON d.generic_id = g.id "
-                . "LEFT JOIN tbl_formulation f ON d.formulation_id = f.id "
-                . "WHERE d.id IN ($drugids_) ORDER BY g.name ASC";
+        $sql = "SELECT * FROM vw_drug_list  ORDER BY name ASC";
         $table_data = $this->db->query($sql)->result_array();
 
         $sql2 = "SELECT 
@@ -229,7 +314,7 @@ class Procurement extends MX_Controller {
 
         foreach ($table_data as &$mt) {
             foreach ($items as $it) {
-                if ($it['drug_id'] == $mt['drug_id']) {
+                if ($it['drug_id'] == $mt['id']) {
                     if (!isset($mt['decisions'])) {
                         $mt['decisions'] = [];
                     }
@@ -272,7 +357,7 @@ class Procurement extends MX_Controller {
         foreach ($table_data as $d) {
             $final_string .= '<tr style="border:1px solid black;">';
             if (isset($d['decisions'])) {
-                $final_string .= '<td style="border:1px solid black;">' . $d['drug'] . '</td>';
+                $final_string .= '<td style="border:1px solid black;">' . $d['name'] . '</td>';
             } else {
                 
             }
@@ -296,6 +381,7 @@ class Procurement extends MX_Controller {
 
 
         $this->email_sender->send_email('Procurement', 'Meeting Minutes', $recepients, $names = '', $final_string);
+        echo json_encode(['status'=>'success']);
     }
 
     public function get_commodities() {
@@ -487,7 +573,7 @@ class Procurement extends MX_Controller {
                 <div class="col-sm-11 ">
                     <div class="timeline-panel credits mainContent">
                         <ul class="timeline-panel-ul ">
-                            <li><span class="decAction"><a style="display:none;" href="#edit" data-toggle="modal" data-target="#editModal" class="btn btn-sm btn-primary edit" data-id=' . $e["id"] . '><i class="glyphicon glyphicon-edit"></i> | Edit</span></a>  <a style="display:none;" href="#trash" data-toggle="modal" data-target="#trashModal" class="btn btn-sm btn-danger trash" data-id=' . $e["id"] . '><i class="glyphicon glyphicon-trash"></i> | Trash</span></a></span></li>
+                            <li><span class="decAction"><a style="display:none;" href="#edit" data-toggle="modal" data-target="#editModal" class="btn btn-sm btn-primary edit readonly2" data-id=' . $e["id"] . '><i class="glyphicon glyphicon-edit"></i> | Edit</span></a>  <a style="display:none;" href="#trash" data-toggle="modal" data-target="#trashModal" class="btn btn-sm btn-danger trash readonly2" data-id=' . $e["id"] . '><i class="glyphicon glyphicon-trash"></i> | Trash</span></a></span></li>
                             <li><span class="importo">Discussions</span></li>
                             <li><span class="causale _disc' . $e["id"] . '">' . $e["discussion"] . '</span> </li>
                             <li><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>Last updated by ' . $e["user"] . ' on ' . date('d/m/Y h:i:s a', strtotime($e["created"])) . '</small></p> </li>

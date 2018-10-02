@@ -88,11 +88,9 @@
 
                 </div>
             </form>
-            <?php if (date('m') < 10) { ?>
-                <button id="meetingSave" class="btn btn-lg btn-success" ><i class="fa fa-save"></i> Save Meeting Data</button>
-            <?php } else { ?>
-                <div class="alert alert-warning"><i class="fa fa-warning"></i> You cannot make changes on this page at this time</div>
-            <?php } ?>
+
+            <button id="meetingSave" class="btn btn-lg btn-success" ><i class="fa fa-save"></i> Save Meeting Data</button>
+
 
         </div>
 
@@ -238,6 +236,11 @@
         $('#meetingSave').click(function () {
             $.post("<?= base_url() ?>Manager/Procurement/saveMeetingData", $('#meetingForm').serialize(), function (resp) {
                 $('#commodityHolder').empty();
+                swal({
+                    title: "Success",
+                    text: "Changes successfully saved",
+                    icon: "success",
+                });
                 editor.destroy();
                 category = $("#drugCategory").val();
                 date = $('#lastMinutes').val();

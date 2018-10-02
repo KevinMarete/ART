@@ -21,6 +21,9 @@
                             <div class="form-group">
                                 <select  id="filter_item"  multiple="multiple" data-filter_type="" name="filter_item[]"  class="form-control"></select>
                             </div>
+                             <div class="form-group">
+                                   <div id="MegaMenu"></div>
+                            </div>
                             <div class="form-group">
                                 <div class="filter form-control" id="year-filter">
                                     <input type="hidden" name="filter_year" id="filter_year" value="" />
@@ -253,6 +256,12 @@
         newmonth = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         year = dt.getFullYear(), month = newmonth[dt.getMonth()], drug = 'Dolutegravir (DTG) 50mg Tabs';
         //alert(year + monthname)
+        
+            $.get("<?php echo base_url() . 'Manager/Procurement/menuBuilder/'; ?>", function (res) {
+            //('#MegaMenu').empty();
+            $('#MegaMenu').html(res);
+
+        });
 
         $(document).on('click', '.LOWAMC', function () {
             LoadSpinner('#FacilityLoader');           
@@ -263,7 +272,6 @@
                 $('#FacilityLoader').append(resp);
                 $('#MosTable').DataTable();
             });
-
 
         });
 

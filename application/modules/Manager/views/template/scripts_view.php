@@ -1,6 +1,6 @@
     <script src="<?php echo base_url() . 'public/manager/js/tinymce/tinymce.min.js'; ?>"></script
 <!-- Bootstrap Core JavaScript     -->
-<script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/bootstrap/js/bootstrap.min.js'; ?>"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <!--highcharts-->
 <script src="<?php echo base_url() . 'public/dashboard/lib/highcharts/js/highcharts.js'; ?>"></script>
 <script src="<?php echo base_url() . 'public/dashboard/lib/highcharts/js/exporting.js'; ?>"></script>

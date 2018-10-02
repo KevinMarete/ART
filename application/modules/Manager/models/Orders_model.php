@@ -17,7 +17,7 @@ class Orders_model extends CI_Model {
         $this->_currentMonth = date('Y') . "-" . (sprintf("%02d", date('m') - 1));
         $this->_previousMonth = date('Y') . "-" . (sprintf("%02d", date('m') - 2));
         $this->_name = $this->session->userdata('scope_name'); //county or subcounty name
-        $this->_role = $this->session->userdata('role'); //county or subcounty
+        $this->_role = $this->session->userdata('role'); //county or subcounty id
         if ($this->_role == 'subcounty') {
             $this->_q_addon .= "AND $this->_role ='$this->_name'";
         } else if ($this->_role == 'county') {

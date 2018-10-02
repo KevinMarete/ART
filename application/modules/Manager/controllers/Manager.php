@@ -13,17 +13,21 @@ class Manager extends MX_Controller {
         $this->load_page('user', 'login', 'Login');
     }
 
+  
+
     public function load_page($module = 'user', $page = 'login', $title = 'Login') {
         if ($page == 'register') {
             $this->db->where_not_in('name', 'admin');
             $data['roles'] = $this->db->get('tbl_role')->result_array();
         }
+
         $data['page_title'] = 'ART | ' . $title;
         $this->load->view('pages/' . $module . '/' . $page . '_view', $data);
     }
 
     public function load_template($module = 'dashboard', $page = 'dashboard', $title = 'Dashboard', $is_table = TRUE) {
-        //echo   $this->session->userdata('scope').$this->session->userdata('role');
+
+
         if ($this->session->userdata('id')) {
             $data['page_name'] = $page;
             $data['content_view'] = 'pages/' . $module . '/' . $page . '_view';
@@ -134,6 +138,8 @@ class Manager extends MX_Controller {
                         )
                     )
                 );
+
+
                 $data['columns'] = $columns[$page][$this->session->userdata('role')];
                 $data['county'] = $this->getCountySubcounty();
                 $data['role'] = $this->session->userdata('role');
@@ -149,13 +155,13 @@ class Manager extends MX_Controller {
             redirect("manager/login");
         }
     }
-    
-    function getChart($filter=''){
-       
-          $main_data = $this->manager_model->get_reporting_rates($filters);
-           echo '<pre>';
-          print_r($main_data);
-          echo '</pre>';
+
+    function getChart($filter = '') {
+
+        $main_data = $this->manager_model->get_reporting_rates($filters);
+        echo '<pre>';
+        print_r($main_data);
+        echo '</pre>';
     }
 
     public function get_chart() {

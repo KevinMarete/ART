@@ -1,8 +1,66 @@
 <link href="<?php echo base_url() . 'public/manager/css/procurement.css'; ?>" rel="stylesheet"> 
+<?php 
+if($this->session->userdata('role')=='readonly'){?>
+<style>
+    .readonly2{
+        display:none;
+    }
+</style>
+<?php }?>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jexcel/1.5.7/js/jquery.jexcel.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jexcel/1.5.7/css/jquery.jexcel.bootstrap.min.css" type="text/css" />
+<style>
+    .dropdown-submenu {
+        position: relative;
+    }
 
+    .dropdown-submenu>.dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -6px;
+        margin-left: -1px;
+        -webkit-border-radius: 0 6px 6px 6px;
+        -moz-border-radius: 0 6px 6px;
+        border-radius: 0 6px 6px 6px;
+    }
+
+    .dropdown-submenu:hover>.dropdown-menu {
+        display: block;
+    }
+
+    .dropdown-submenu>a:after {
+        display: block;
+        content: " ";
+        float: right;
+        width: 0;
+        height: 0;
+        border-color: transparent;
+        border-style: solid;
+        border-width: 5px 0 5px 5px;
+        border-left-color: #ccc;
+        margin-top: 5px;
+        margin-right: -10px;
+    }
+
+    .dropdown-submenu:hover>a:after {
+        border-left-color: #fff;
+    }
+
+    .dropdown-submenu.pull-left {
+        float: none;
+    }
+
+    .dropdown-submenu.pull-left>.dropdown-menu {
+        left: -100%;
+        margin-left: 10px;
+        -webkit-border-radius: 6px 0 6px 6px;
+        -moz-border-radius: 6px 0 6px 6px;
+        border-radius: 6px 0 6px 6px;
+    }
+
+</style>
 <div id="page-wrapper">
     <!--row-->
     <div class="row">
@@ -17,13 +75,15 @@
         </div>
     </div><!--end row-->
     <!--row-->
+
+  
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default"><!--panel default-->
                 <div class="panel-heading">
                 </div>
                 <div class="panel-body">
-
+                  
                     <table width="100%" class="table table-striped table-bordered table-hover" id="procurement-listing">
                         <thead>
                             <tr>
@@ -39,7 +99,7 @@
                 </div>
             </div><!--end panel default-->
         </div>
-    </div><!--end row-->
+    </div><!--end row-->   
 </div><!--end page wrapper--->
 <!--modal(s)-->
 <div class="modal fade" id="add_procurement_modal" tabindex="-1" role="dialog">
@@ -52,41 +112,41 @@
             </div><!--/modal-header-->
             <div class="modal-body">
                 <ul class="nav nav-tabs pull-right">
-<!--                    <li class="active"><a data-toggle="tab" href="#drug_decision">All Decisions</a></li>
-                    <li> <a data-toggle="tab" href="#minutes">Minutes</a></li>-->
+                    <!--                    <li class="active"><a data-toggle="tab" href="#drug_decision">All Decisions</a></li>
+                                        <li> <a data-toggle="tab" href="#minutes">Minutes</a></li>-->
                     <li class="active"><a data-toggle="tab" href="#drug_procurement">Procurement</a></li>
                     <li><a data-toggle="tab" href="#drug_transactions">Product Tracker</a></li>
                     <li><a data-toggle="tab" href="#drug_orders">Transactions</a></li>
                     <li><a data-toggle="tab" href="#drug_logs">Logs</a></li>
                 </ul>
                 <div class="tab-content">
-<!--                    <div id="drug_decision" class="tab-pane fade in active">
-                        <h3>All Product Decisions</h3>
-                        <div class="container-fluid">
-
-                            <div id="timeline" style="margin-top: 10px;">
-                                <div class="row timeline-movement timeline-movement-top">
-                                    <div class="timeline-badge timeline-future-movement">
-                                        <a href="#" data-toggle="modal" data-target="#decisionModal">
-                                            <span class="glyphicon glyphicon-plus"></span>
-                                        </a>
-                                    </div>
-                                    <div class="timeline-badge timeline-filter-movement">
-                                        <a href="#">
-                                            <span class="glyphicon glyphicon-time"></span>
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <div id="decision_tbl"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="minutes" class="tab-pane fade">
-                        <h3>Minutes</h3>
-                        <?php $this->load->view('pages/procurement/minutes_view'); ?>
-                    </div>-->
+                    <!--                    <div id="drug_decision" class="tab-pane fade in active">
+                                            <h3>All Product Decisions</h3>
+                                            <div class="container-fluid">
+                    
+                                                <div id="timeline" style="margin-top: 10px;">
+                                                    <div class="row timeline-movement timeline-movement-top">
+                                                        <div class="timeline-badge timeline-future-movement">
+                                                            <a href="#" data-toggle="modal" data-target="#decisionModal">
+                                                                <span class="glyphicon glyphicon-plus"></span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="timeline-badge timeline-filter-movement">
+                                                            <a href="#">
+                                                                <span class="glyphicon glyphicon-time"></span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                    
+                                                    <div id="decision_tbl"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                    
+                                        <div id="minutes" class="tab-pane fade">
+                                            <h3>Minutes</h3>
+                    <?php $this->load->view('pages/procurement/minutes_view'); ?>
+                                        </div>-->
 
 
                     <div id="drug_procurement" class="tab-pane fade in active">
@@ -99,7 +159,7 @@
                         <form action="<?php echo base_url() . 'manager/save_procurement'; ?>" method="POST" class="form-horizontal" role="form">
                             <div class="form-group row">
                                 <div class="row pull-right" style="margin-right: 100px;">
-                                    <button id="addDecision" data-toggle="modal" data-target="#decisionModal" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus"></i> Add Decision</button>
+                                    <button id="addDecision" data-toggle="modal" data-target="#decisionModal" class="btn btn-sm btn-primary readonly2"><i class="glyphicon glyphicon-plus"></i> Add Decision</button>
                                 </div>
                                 <label for="open_kemsa" class="col-sm-3 col-form-label">Commodity Name</label>
                                 <div class="col-sm-9">
@@ -173,8 +233,8 @@
                                                         <select name="supplier[]" class="supplier contracted col-md-12"></select>
                                                     </td>
                                                     <td>
-                                                        <a href="#" class="add"> <i class="fa fa-plus"></i></a>
-                                                        <a href="#" class="remove"> <i class="fa fa-minus"></i></a>
+                                                        <a href="#" class="add"> <i class="fa fa-plus readonly2"></i></a>
+                                                        <a href="#" class="remove"> <i class="fa fa-minus" readonly2></i></a>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -185,8 +245,8 @@
 
                             <div class="form-group row">
                                 <div class="col-sm-12">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-remove"></i> Close</button>
-                                    <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save Order</button>
+                                    <button type="button" class="btn btn-danger readonly2" data-dismiss="modal"><i class="fa fa-remove"></i> Close</button>
+                                    <button type="submit" class="btn btn-primary readonly2"><i class="fa fa-save"></i> Save Order</button>
                                 </div>
                             </div>
 
@@ -195,7 +255,7 @@
                                 <div id="timeline" style="margin-top: 5px;">
                                     <div class="row timeline-movement timeline-movement-top">
                                         <div class="timeline-badge timeline-future-movement">
-                                            <a href="#" data-toggle="modal" data-target="#decisionModal">
+                                            <a href="#" data-toggle="modal" data-target="#decisionModal" class="readonly2">
                                                 <span class="glyphicon glyphicon-plus"></span>
                                             </a>
                                         </div>
@@ -237,7 +297,7 @@
                         </p>
                         <p>
                             <button id="trans_download" class="btn btn-primary btn-md pull-left"><i class="fa fa-download"></i> Download as CSV</button>
-                            <button id="trans_save" class="btn btn-success btn-md pull-right"><i class="fa fa-save"></i> Update Changes</button>
+                            <button id="trans_save" class="btn btn-success btn-md pull-right readonly2"><i class="fa fa-save"></i> Update Changes</button>
                         </p>
 
 
@@ -286,8 +346,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" id='saveDecision' class="btn btn-primary">Submit Decision</button>
+                <button type="button" class="btn btn-secondary readonly2" data-dismiss="modal">Cancel</button>
+                <button type="button" id='saveDecision' class="btn btn-primary readonly2">Submit Decision</button>
             </div>
         </div>
     </div>
@@ -319,8 +379,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" id='editDecision' class="btn btn-primary">Submit Decision Edit</button>
+                <button type="button" class="btn btn-secondary readonly2" data-dismiss="modal">Cancel</button>
+                <button type="button" id='editDecision' class="btn btn-primary readonly2" >Submit Decision Edit</button>
             </div>
         </div>
     </div>
@@ -394,7 +454,18 @@
     var statusURL = '<?= base_url(); ?>API/procurement_status';
     var fundingURL = '<?= base_url(); ?>API/funding_agent';
     var supplierURL = '<?= base_url(); ?>API/supplier';
+
+
     $(document).ready(function () {
+
+
+    
+
+        $(document).on("click", '.dropdown-submenu a.test', function (e) {
+            $(this).next('ul').toggle();
+            e.stopPropagation();
+            e.preventDefault();
+        });
 
         $('#saveDecision').click(function () {
             $(this).text('Please Wait...');
@@ -781,13 +852,13 @@
             }
 
             date = row.find('[name="year"]').val() + '-' + months[m] + '-01';
-            received= row.find('[name="procurement_status_id"] option:selected').text(); 
-           
+            received = row.find('[name="procurement_status_id"] option:selected').text();
+
 
             var now = new Date();
             var end = new Date(date);
-          
-            if (end > now  && received=='Received') {
+
+            if (end > now && received == 'Received') {
                 swal({
                     title: "Invalid!",
                     text: "You cannot receive this order at this time.",
@@ -921,7 +992,7 @@
             $(tableID).jexcel('updateSettings', {
                 table: function (instance, cell, col, row, val, id) {
                     //Make rows readonly
-                     m = "<?= date("n", strtotime("-1 month")); ?>";
+                    m = "<?= date("n", strtotime("-1 month")); ?>";
                     //m = "<?= date("n"); ?>";
 
 
