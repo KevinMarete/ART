@@ -461,7 +461,7 @@ class Orders_model extends CI_Model {
                     INNER JOIN tbl_facility f ON f.id = c.facility_id
                     INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
                     INNER JOIN tbl_county co ON co.id = sc.county_id
-                    WHERE period_end LIKE '%2018-07%' AND c.id = ?  " . $role_cond;
+                    WHERE period_end LIKE '$this->_currentMonth%' AND c.id = ?  " . $role_cond;
             $table_data = $this->db->query($sql, array($cdrr_id))->result_array();
 
             $logs_sql = "SELECT 
