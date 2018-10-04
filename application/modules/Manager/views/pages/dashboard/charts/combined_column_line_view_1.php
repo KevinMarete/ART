@@ -17,10 +17,6 @@
                 reversed: false
             },
 
-            chart: {
-                type: 'line'
-            },
-
             title: {
                 text: '<?php echo $chart_title; ?>'
             },
@@ -37,7 +33,7 @@
                 allowDecimals: false,
                 min: 0,
                 title: {
-                    text: '<?php echo $chart_yaxis_title; ?>',
+                    text: 'MOS <?php echo $chart_yaxis_title; ?>',
                 }
             },
 
@@ -47,23 +43,24 @@
                 // footerFormat: 'Total: <b>{point.total:,.0f}</b>',
                 shared: true
             },
-
             plotOptions: {
                 column: {
                     stacking: 'normal',
                     dataLabels: {
                         enabled: true,
-                        color: 'black'
+                        y: -20,
+                        verticalAlign: 'top',
+                        pointWidth: 10
                     }
                 },
                 line: {
                     dataLabels: {
-                        enabled: true
-                    },
-                    enableMouseTracking: false
+                        enabled: true,
+                        y: -20,
+                        verticalAlign: 'top'
+                    }
                 }
             },
-
             credits: {
                 enabled: false
             },

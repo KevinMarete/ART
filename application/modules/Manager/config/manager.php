@@ -35,8 +35,8 @@ $config['drug_consumption_allocation_trend_chart_filters_default'] = array(
 
 
 $config['stock_status_trend_chart_chartview'] = 'pages/dashboard/charts/combined_column_line_view_1';
-$config['stock_status_trend_chart_title'] = 'Stock On Hand Trend';
-$config['stock_status_trend_yaxis_title'] = 'Stock Levels';
+$config['stock_status_trend_chart_title'] = 'Stock On Hand / Months Of Stock (MOS) Trend';
+$config['stock_status_trend_yaxis_title'] = 'Stock Levels / MOS';
 $config['stock_status_trend_chart_source'] = 'Source: www.commodities.nascop.org';
 $config['stock_status_trend_chart_has_drilldown'] = FALSE;
 $config['stock_status_trend_chart_filters'] = array('county', 'subcounty', 'drug');

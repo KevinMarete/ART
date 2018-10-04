@@ -12,6 +12,12 @@ class Orders extends MX_Controller {
         $this->load->model('Orders_model');
         $this->load->library('email_sender');
     }
+    
+    function showData(){
+        echo '<pre>';
+        print_r( $this->Orders_model->getStockChart());
+        echo '</pre>';
+    }
 
     function pdf() {
         $pdfBuilder = '';
@@ -190,6 +196,7 @@ class Orders extends MX_Controller {
 
     function getFacilitiesMOS() {
         $this->Orders_model->getFacilitiesMOS();
-    }
+    }    
+   
 
 }

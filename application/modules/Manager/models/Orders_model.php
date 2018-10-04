@@ -461,7 +461,7 @@ class Orders_model extends CI_Model {
                     INNER JOIN tbl_facility f ON f.id = c.facility_id
                     INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
                     INNER JOIN tbl_county co ON co.id = sc.county_id
-                    WHERE period_end LIKE '$this->_currentMonth%' AND c.id = ?  " . $role_cond;
+                    WHERE period_end LIKE '%2018-07%' AND c.id = ?  " . $role_cond;
             $table_data = $this->db->query($sql, array($cdrr_id))->result_array();
 
             $logs_sql = "SELECT 
@@ -955,10 +955,10 @@ class Orders_model extends CI_Model {
         $table = '<table class="table table-bordered table-condensed" id="MosTable">';
         $table .= '<thead><tr><th>No.</th><th>Facilities With ' . $level . '  MOS</th></tr>';
         $table .= '<tbody>';
-         $i=1;
+        $i = 1;
         foreach ($result as $d):
-            $table .= '<tr><td>' . $i. '</td><td>' . ucwords($d->facility) . '</td></tr>';
-         $i++;
+            $table .= '<tr><td>' . $i . '</td><td>' . ucwords($d->facility) . '</td></tr>';
+            $i++;
         endforeach;
         $table .= '</tbody>';
         echo $table;
@@ -1015,15 +1015,30 @@ class Orders_model extends CI_Model {
 
         foreach ($results as $result) {
             array_push($columns, $result->name);
-            $tmp_data['StockLevel']['data'][] = $result->y;
+            $tmp_data['Stock On Hand']['data'][] = $result->y;
         }
 
         $counter = 0;
         foreach ($tmp_data as $name => $item) {
+            $reporting_data[$counter]['type'] = 'column';
             $reporting_data[$counter]['name'] = $name;
             $reporting_data[$counter]['data'] = $item['data'];
             $counter++;
         }
+        $stockOnHand = $reporting_data[0]['data'];
+        $mos = array_map(function($x) {
+            return round($x / 3, 0);
+        }, $stockOnHand);
+
+        $max = array_map(function($x) {
+            return round($x / 6, 0);
+        }, $stockOnHand);
+
+
+        $MOS = ['type' => 'area', 'name' => 'Available Minimum MOS', 'data' => $mos];
+        $MAX = ['type' => 'area', 'name' => 'Available Maximum MOS', 'data' => $max];
+        array_push($reporting_data, $MOS);
+        array_push($reporting_data, $MAX);
         return array('main' => $reporting_data, 'columns' => array_values(array_unique($columns)));
     }
 
