@@ -18,11 +18,9 @@
                 <div class="container">
                     <div class="navbar-collapse collapse" id="navbar-filter">
                         <div class="navbar-form" role="search">
+
                             <div class="form-group">
-                                <select  id="filter_item"  multiple="multiple" data-filter_type="" name="filter_item[]"  class="form-control"></select>
-                            </div>
-                             <div class="form-group">
-                                   <div id="MegaMenu"></div>
+                                <a href="#advancedFilter" class="btn btn-warning" data-toggle="modal" data-target="#myModalFilter">Advanced Filter</a>
                             </div>
                             <div class="form-group">
                                 <div class="filter form-control" id="year-filter">
@@ -247,6 +245,46 @@
 
     </div>
 </div>
+
+<div id="myModalFilter" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Advanced Filter</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <select class="form-control" id="DrugFilter" >
+
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <select class="form-control" id="CountyFilter" >
+
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select class="form-control" id="SubCountyFilter" >
+
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select class="form-control" id="SubCountyFacilityFilter" >
+
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" ><i class="fa fa-filter"></i> Filter</button>
+            </div>
+        </div>
+
+    </div>
+</div>
 <script>
     var chartURL = '../Manager/get_chart'
     var drugListURL = '../API/drug/list'
@@ -256,18 +294,55 @@
         newmonth = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         year = dt.getFullYear(), month = newmonth[dt.getMonth()], drug = 'Dolutegravir (DTG) 50mg Tabs';
         //alert(year + monthname)
-        
-            $.get("<?php echo base_url() . 'Manager/Procurement/menuBuilder/'; ?>", function (res) {
-            //('#MegaMenu').empty();
-            $('#MegaMenu').html(res);
+
+        $.getJSON("<?php echo base_url() . 'Manager/Procurement/getCounty/'; ?>", function (res) {
+            county = $('#CountyFilter');
+            county.empty();
+            $.each(res.data, function (i, c) {
+                county.append('<option value="' + c.id + '">' + c.name.toUpperCase() + '</option>');
+            });
 
         });
 
+        $.getJSON(drugListURL, function (res) {
+            drugs = $('#DrugFilter');
+            drugs.empty();
+            $.each(res, function (i, c) {
+                drugs.append('<option value="' + c.name + '">' + c.name.toUpperCase() + '</option>');
+            });
+
+        });
+
+        $('#CountyFilter').change(function () {
+            id = $(this).val();
+
+            $.getJSON("<?php echo base_url() . 'Manager/Procurement/getSubLevelMenus/tbl_subcounty/county_id/' ?>" + id, function (res) {
+                subcounty = $('#SubCountyFilter');
+                subcounty.empty();
+                $.each(res.data, function (i, c) {
+                    subcounty.append('<option value="' + c.id + '">' + c.name.toUpperCase() + '</option>');
+                });
+
+            });
+        });
+
+        $('#SubCountyFilter').change(function () {
+            id = $(this).val();
+            $.getJSON("<?php echo base_url() . 'Manager/Procurement/getSubLevelMenus/tbl_facility/subcounty_id/' ?>" + id, function (res) {
+                subcountyfacility = $('#SubCountyFacilityFilter');
+                subcountyfacility.empty();
+                $.each(res.data, function (i, c) {
+                    subcountyfacility.append('<option value="' + c.id + '">' + c.name.toUpperCase() + '</option>');
+                });
+
+            });
+        });
+
         $(document).on('click', '.LOWAMC', function () {
-            LoadSpinner('#FacilityLoader');           
+            LoadSpinner('#FacilityLoader');
             var drug = $(this).attr('data-commodity');
             $.post("<?= base_url(); ?>Manager/orders/getFacilitiesMOS/", {drug: drug, mos: 3, level: 'Low'}, function (resp) {
-                 $('#FacilityLoader,#FHead').empty();
+                $('#FacilityLoader,#FHead').empty();
                 $('#FHead').html("COMMODITY: " + drug);
                 $('#FacilityLoader').append(resp);
                 $('#MosTable').DataTable();
@@ -276,10 +351,10 @@
         });
 
         $(document).on('click', '.HIGHAMC', function () {
-            LoadSpinner('#FacilityLoader');          
+            LoadSpinner('#FacilityLoader');
             var drug = $(this).attr('data-commodity');
             $.post("<?= base_url(); ?>Manager/orders/getFacilitiesMOS/", {drug: drug, mos: 6, level: 'High'}, function (resp) {
-                 $('#FacilityLoader,#FHead').empty();
+                $('#FacilityLoader,#FHead').empty();
                 $('#FHead').html("COMMODITY: " + drug);
                 $('#FacilityLoader').append(resp);
                 $('#MosTable').DataTable();
@@ -306,7 +381,7 @@
         })
 
 
-        $('#summaryTable').DataTable({
+        $('#summaryTable').DataTable1({
 
             "bProcessing": true,
             "order": [[2, "desc"]],
@@ -328,7 +403,7 @@
             ]
 
         });
-        $('#summaryTable2').DataTable({
+        $('#summaryTable2').DataTable1({
 
             "bProcessing": true,
             "order": [[2, "desc"]],
@@ -353,11 +428,11 @@
         charts = ['stock_status_trend_chart', 'drug_consumption_allocation_trend_chart', 'reporting_rates_chart', 'patients_by_regimen_chart']
 
         //Add filter to chart then load chart
-        setChartFilter('drug_consumption_allocation_trend_chart', drugListURL)
+        // setChartFilter('drug_consumption_allocation_trend_chart', drugListURL)
 
         //Load Charts
         $.each(charts, function (key, chartName) {
-            LoadChart('#' + chartName, chartURL, chartName, {})
+            // LoadChart('#' + chartName, chartURL, chartName, {})
         });
         //Show dashboard sidemenu
         $(".dashboard").closest('ul').addClass("in");

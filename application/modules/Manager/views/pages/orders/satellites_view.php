@@ -27,7 +27,7 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="table-responsive">
-                                        <table class="table table-striped table-bordered table-condensed">
+                                        <table class="table table-striped table-bordered table-condensed" id="MapsData">
                                             <thead>
                                                 <tr>
                                                     <th rowspan="2">Drug Name</th>
@@ -143,6 +143,16 @@
     $(function () {
         var base_url = "<?php echo base_url(); ?>";
         $('#side-menu').remove();
+         $('#MapsData').DataTable({
+            scrollY: "400px",
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+            fixedColumns: true,
+            searching: false,
+            info: false
+        });
+        
     });
 </script>
 

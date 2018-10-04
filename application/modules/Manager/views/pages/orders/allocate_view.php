@@ -4,7 +4,7 @@
 
 </style>
 <div id="container" class="container-fluid">
-   
+
     <div class="col-lg-12">
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
@@ -42,9 +42,9 @@
                                             <td>
                                                 <b>Facility Name: </b>
                                                 <span class="facility_name"> <?= ucwords($columns['cdrrs']['data'][0]['facility_name']); ?></span>
-                                                <?php  $this->session->set_userdata('facility_name',ucwords($columns['cdrrs']['data'][0]['facility_name']));?>
-                                                <?php  $this->session->set_userdata('county_pharm',ucwords($columns['cdrrs']['data'][0]['county']));?>
-                                                 
+                                                <?php $this->session->set_userdata('facility_name', ucwords($columns['cdrrs']['data'][0]['facility_name'])); ?>
+                                                <?php $this->session->set_userdata('county_pharm', ucwords($columns['cdrrs']['data'][0]['county'])); ?>
+
                                             </td>
                                             <td>
                                                 <b>Facility code: </b>
@@ -75,174 +75,205 @@
                             </div>                            
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" >
                         <div class="col-sm-12">
-                            <form name="orderForm" id="orderForm">
-                                <table class="table table-striped table-bordered table-condensed" id="AllocationTable">
-                                    <thead id="THEAD" >
-                                        <tr>
-                                            <th >Drug Name</th>
-                                            <th >Pack Size</th>
-                                            <th>Beginning Balance</th>
-                                            <th>Quantity Received</th>
-                                            <?php if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') { ?> 
-                                                <th>Quantity Issued</th>
-                                            <?php } else { ?>
-                                                <th>Quantity Dispensed</th>
-                                            <?php } ?>
-                                            <th>Losses & Wastage</th>
-                                            <th>Positive Adjustments</th>
-                                            <th>Negative Adjustments</th>
-                                            <th>End Month Stock on Hand</th>
-                                            <?php if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') { ?> 
-                                                <th >Aggregate Consumed</th>
-                                                <th >Aggregate Stock on Hand</th>
-                                            <?php } ?>
-                                            <th colspan="2">Commodities Expiring < 6 Months</th>
-                                            <th>Days out of Stock</th>
-                                            <th>Resupply Quantity</th>
-                                            <th>AMC</th>
-                                            <th>Facility MOS</th>
-                                            <th>AutoCalc Resupply</th>
-                                            <th>Allocated</th>
-                                            <th>Allocated MOS</th>
-                                            <th >Comments</th>
-                                            <th >Decision</th>
-                                        </tr>
-                                        <tr>
-                                            <th>A</th>
-                                            <th>B</th>
-                                            <th>C</th>
-                                            <th>D</th>
-                                            <th>E</th>
-                                            <th>F</th>
-                                            <th>G</th>
-                                            <?php if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') { ?> 
-                                                <th>I</th>
-                                                <th>J</th>
-                                            <?php } ?>
-                                            <th>Quantity</th>
-                                            <th>K</th>
-                                            <th>L</th>
-                                            <th>Expiry Date</th>
-                                            <th>M</th>
-                                            <th>N</th>
-                                            <th>O</th>
-                                            <th>P</th>
-                                            <th>Q</th>
-                                            <th>R</th>
-                                            <th>S</th>
-                                            <th>T</th>
-                                            <th>U</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="TBODY">
+                            <div class="col-sm-9">
+                                <form name="orderForm" id="orderForm">
+                                    <table class="table table-striped table-bordered table-condensed" id="AllocationTable">
+                                        <thead id="THEAD" >
+                                            <tr>
+                                                <th >Drug Name</th>
+                                                <th >Pack Size</th>
+                                                <th> Closing Balance </th>
+                                                <th>Beginning Balance</th>
+                                                <th>Quantity Received</th>
+                                                <?php if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') { ?> 
+                                                    <th>Quantity Issued</th>
+                                                <?php } else { ?>
+                                                    <th>Quantity Dispensed</th>
+                                                <?php } ?>
+                                                <th>Losses & Wastage</th>
+                                                <th>Positive Adjustments</th>
+                                                <th>Negative Adjustments</th>
+                                                <th>End Month Stock on Hand</th>
+                                                <?php if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') { ?> 
+                                                    <th >Aggregate Consumed</th>
+                                                    <th >Aggregate Stock on Hand</th>
+                                                <?php } ?>
+                                                <th colspan="2">Commodities Expiring < 6 Months</th>
+                                                <th>Days out of Stock</th>
+                                                <th>Resupply Quantity</th>
+                                                <th>AMC</th>
+                                                <th>Facility MOS</th>
+                                                <th>AutoCalc Resupply</th>
+                                                <th>Allocated</th>
+                                                <th>Allocated MOS</th>
+                                                <th >Comments</th>
+                                                <th >Decision</th>
+                                            </tr>
+                                            <tr>
+                                                <th>A</th>
+                                                <th></th>
+                                                <th>B</th>
+                                                <th>C</th>
+                                                <th>D</th>
+                                                <th>E</th>
+                                                <th>F</th>
+                                                <th>G</th>
+                                                <?php if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') { ?> 
+                                                    <th>I</th>
+                                                    <th>J</th>
+                                                <?php } ?>
+                                                <th>Quantity</th>
+                                                <th>K</th>
+                                                <th>L</th>
+                                                <th>Expiry Date</th>
+                                                <th>M</th>
+                                                <th>N</th>
+                                                <th>O</th>
+                                                <th>P</th>
+                                                <th>Q</th>
+                                                <th>R</th>
+                                                <th>S</th>
+                                                <th>T</th>
+                                                <th>U</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="TBODY">
 
-                                        <?php
-                                        foreach ($columns['drugs'] as $key => $drug) {
-                                            $drugid = $drug['id'];
+                                            <?php
+                                            foreach ($columns['drugs'] as $key => $drug) {
+                                                $drugid = $drug['id'];
 
 
-                                            if (in_array($drugid, array_keys($columns['cdrrs']['data']['cdrr_item']))) {
-                                                $count = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'];
-                                                $drugamc = $columns['cdrrs']['data']['cdrr_item'][$drugid]['drugamc'];
-                                                $consumed = $columns['cdrrs']['data']['cdrr_item'][$drugid]['dispensed_packs'];
-                                                $new = @$columns['pcdrrs']['data']['cdrr_item'][$drugid]['count'];
-                                                $diff = @(int) $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'] - @(int) $columns['pcdrrs']['data']['cdrr_item'][$drugid]['count'];
-                                                ?>
-                                                <tr>
-                                                    <td class='stickyColumn'><?= $drug['name']; ?></td>
-                                                    <td><?= $drug['pack_size']; ?></td>
-                                                    <td title="Previous: <?= $new; ?>     Difference: <?= $diff; ?>"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'] ?>
-                                                        <?php
-                                                        if (@(int) $columns['pcdrrs']['data']['cdrr_item'][$drugid]['count'] == ' ') {
-                                                            
-                                                        } else if (@(int) $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'] > @(int) $columns['pcdrrs']['data']['cdrr_item'][$drugid]['count']) {
-                                                            echo '<i style="color:red" class="glyphicon glyphicon-triangle-bottom"></i>';
-                                                        } else if (@(int) $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'] < @(int) $columns['pcdrrs']['data']['cdrr_item'][$drugid]['count']) {
-                                                            echo '<i style="color:red" class="glyphicon glyphicon-triangle-top" title="' . $new . '<sup>' . $diff . '</sup>"></i>';
-                                                        } else {
-                                                            
-                                                        }
-                                                        ?>
-
-                                                    </td>
-                                                    <?php
-                                                    $disabled = '';
-                                                    $comment = '';
-                                                    $status = $columns['cdrrs']['data']['cdrr_item'][$drugid]['stock_status'];
-                                                    if ($status == 2) {
-                                                        $disabled = 'disabled';
-                                                        $comment = 'Stocked Out';
-                                                    }
+                                                if (in_array($drugid, array_keys($columns['cdrrs']['data']['cdrr_item']))) {
+                                                    $count = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'];
+                                                    $balance = $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'];
+                                                    $drugamc = $columns['cdrrs']['data']['cdrr_item'][$drugid]['drugamc'];
+                                                    $consumed = $columns['cdrrs']['data']['cdrr_item'][$drugid]['dispensed_packs'];
+                                                    $new = @$columns['pcdrrs']['data']['cdrr_item'][$drugid]['count'];
                                                     ?>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['received']; ?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['dispensed_packs']; ?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['losses']; ?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['adjustments']; ?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['adjustments_neg']; ?></td>
-                                                    <td class="eMOSH"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['count']; ?></td>
-                                                    <?php
-                                                    if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') {
-                                                        $count = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'] + $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand'];
-                                                        ?> 
-                                                        <td class=""><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_consumed']; ?></td>
-                                                        <td class="aggSOH"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand']; ?></td>
-                                                    <?php } ?>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_quant']; ?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_date']; ?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['out_of_stock']; ?></td>
-                                                    <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply']; ?></td>
-                                                    <td class="AMC"><?= $drugamc; ?></td>
-                                                    <td ><?= $mos = ($count > 0 && $drugamc > 0) ? number_format($count / $drugamc) : 0; ?></td>
-                                                    <td><?= (($drugamc * 3) - $count) > 0 ? (($drugamc * 3) - $count) : 0; ?></td>
-
-                                                    <td>
-                                                        <input type="text" class="form-control AMOS Allocated"  data-toggle="tooltip" title="" <?= $disabled; ?> data-drug="<?= $drugid ?>"  name="qty_allocated-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'] > 0) ? $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'] : $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply']; ?>">
-                                                    </td>
-                                                    <td>
+                                                    <tr>
+                                                        <td class='stickyColumn'><?= $drug['name']; ?></td>                                                   
+                                                        <td><?= $drug['pack_size']; ?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'] ?></td>
+                                                        <td>
+                                                            <?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'] ?>
+                                                            <?php
+                                                            if ($count > $balance) {
+                                                                $p = round((($count - $balance) / $count) * 100, 0);
+                                                                echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
+                                                            } else if ($balance > $count) {
+                                                                $p = round((($balance - $count) / $balance) * 100, 0);
+                                                                echo '<sup><span style="background: red; font-size:9px;" class="badge"> +' . $p . '%</span></sup>';
+                                                            }
+                                                            ?>                                                        
+                                                        </td>
                                                         <?php
-                                                        $min_mos = $columns['cdrrs']['data']['cdrr_item'][$drugid]['min_mos'];
-                                                        $max_mos = $columns['cdrrs']['data']['cdrr_item'][$drugid]['max_mos'];
-                                                        ?>
-                                                        <input type="hidden" class="MIN" value="<?= $min_mos; ?>"/>
-                                                        <input type="hidden" class="MAX" value="<?= $max_mos; ?>"/>
-                                                        <input type="text"  class="form-control MOS AllocatedMOS" data-toggle="tooltip" <?= $disabled; ?> title="Max MOS 6months" name="qty_allocated_mos-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'] == '') ? $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'] : $mos ?>">
-                                                    </td>
-
-                                                    <td>
-                                                        <input type="text" class="form-control" <?= $disabled; ?> name="feedback-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['feedback']; ?>">
-                                                    </td>
-
-
-
-                                                    <td>
-                                                        <?php
-                                                        // echo $mos;
-                                                        if ($mos < 3) {
-                                                            echo '<span class="label label-danger">RESUPPLY</span>';
-                                                        } else if ($mos >= 3 && $mos <= 6) {
-                                                            echo '<span class="label label-warning">MONITOR</span>';
-                                                        } else if ($mos > 6) {
-                                                            echo '<span class="label label-success">REDISTRIBUTE</span>';
-                                                        } else {
-                                                            echo '<span class="label label-success"></span>';
+                                                        $disabled = '';
+                                                        $comment = '';
+                                                        $status = $columns['cdrrs']['data']['cdrr_item'][$drugid]['stock_status'];
+                                                        if ($status == 2) {
+                                                            $disabled = 'disabled';
+                                                            $comment = 'Stocked Out';
                                                         }
                                                         ?>
-                                                    </td>
-                                                </tr>
-                                                <?php
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['received']; ?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['dispensed_packs']; ?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['losses']; ?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['adjustments']; ?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['adjustments_neg']; ?></td>
+                                                        <td class="eMOSH"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['count']; ?></td>
+                                                        <?php
+                                                        if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') {
+                                                            $count = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'] + $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand'];
+                                                            ?> 
+                                                            <td class=""><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_consumed']; ?></td>
+                                                            <td class="aggSOH"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand']; ?></td>
+                                                        <?php } ?>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_quant']; ?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_date']; ?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['out_of_stock']; ?></td>
+                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply']; ?></td>
+                                                        <td class="AMC"><?= $drugamc; ?></td>
+                                                        <td ><?= $mos = ($count > 0 && $drugamc > 0) ? number_format($count / $drugamc) : 0; ?></td>
+                                                        <td><?= (($drugamc * 3) - $count) > 0 ? (($drugamc * 3) - $count) : 0; ?></td>
+
+                                                        <td>
+                                                            <input type="text" style="width:80px; text-align: center;" class="form-control AMOS Allocated"  data-toggle="tooltip" title="" <?= $disabled; ?> data-drug="<?= $drugid ?>"  name="qty_allocated-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'] > 0) ? $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'] : $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply']; ?>">
+                                                        </td>
+                                                        <td>
+                                                            <?php
+                                                            $min_mos = $columns['cdrrs']['data']['cdrr_item'][$drugid]['min_mos'];
+                                                            $max_mos = $columns['cdrrs']['data']['cdrr_item'][$drugid]['max_mos'];
+                                                            ?>
+                                                            <input type="hidden" style="width:70px;" class="MIN" value="<?= $min_mos; ?>"/>
+                                                            <input type="hidden" style="width:70px;"class="MAX" value="<?= $max_mos; ?>"/>
+                                                            <input type="text"  style="width:50px; text-align: center;" class="form-control MOS AllocatedMOS" data-toggle="tooltip" <?= $disabled; ?> title="Max MOS 6months" name="qty_allocated_mos-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'] == '') ? $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'] : $mos ?>">
+                                                        </td>
+
+                                                        <td>
+                                                            <textarea type="text" style="width:100px;" class="form-control" <?= $disabled; ?> name="feedback-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" ><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['feedback']; ?></textarea>
+                                                        </td>
+
+
+
+                                                        <td>
+                                                            <?php
+                                                            // echo $mos;
+                                                            if ($mos < 3) {
+                                                                echo '<span class="label label-danger">RESUPPLY</span>';
+                                                            } else if ($mos >= 3 && $mos <= 6) {
+                                                                echo '<span class="label label-warning">MONITOR</span>';
+                                                            } else if ($mos > 6) {
+                                                                echo '<span class="label label-success">REDISTRIBUTE</span>';
+                                                            } else {
+                                                                echo '<span class="label label-success"></span>';
+                                                            }
+                                                            ?>
+                                                        </td>
+                                                    </tr>
+                                                    <?php
+                                                }
                                             }
-                                        }
-                                        ?>
+                                            ?>
 
-                                    </tbody>
+                                        </tbody>
 
-                                </table>
-                            </form>
+                                    </table>
+                                </form>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered table-condensed">
+                                        <thead>
+                                        <th>Code | Regimen</th>
+                                        <th title="Current Active Patient">CAP</th>
+                                        <th title="Previous Active Patient">PAP</th>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($columns['regimens'] as $category => $regimens) { ?>
+                                                <?php foreach ($regimens as $regimen) { ?>
+                                                    <?php if (in_array($regimen['id'], array_keys($columns['maps']['data']))) { ?>
+                                                        <tr>
+                                                            <td><?= $regimen['name']; ?></td>
+                                                            <td><?php echo $columns['maps']['data'][$regimen['id']]; ?></td>
+                                                            <td><?php echo @$columns['previousmaps']['data'][$regimen['id']]; ?></td>
+
+                                                        </tr>
+                                                        <?php
+                                                    }
+                                                }
+                                                ?>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-12" style="margin-top:20px;">
+
+                    <div class="col-sm-9" style="margin-top: 20px;" >
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped table-condensed" id="TimeLog">
                                 <thead>
@@ -288,7 +319,7 @@
 
 
         var table = $('#AllocationTable').DataTable({
-            scrollY: "800px",
+            scrollY: "400px",
             scrollX: true,
             scrollCollapse: true,
             paging: false,
@@ -340,10 +371,44 @@
 
             }
 
-
-
-
         });
+        
+        
+           $('.MOS').focusout(function () {
+            row = $(this).closest('tr');
+            input_val = $(this).val();
+            min_mos = row.find('.MIN').val();
+            max_mos = row.find('.MAX').val();
+            eMOSH = row.find('.eMOSH').text();
+            aggSOH = row.find('.aggSOH').text();
+            AMC = row.find('.AMC').text();
+            cMOS = (parseInt(input_val) * parseInt(AMC))-(parseInt(eMOSH) + parseInt(aggSOH)) ;
+            row.find('.AMOS').val(Math.floor(cMOS));
+            row.find('.AMOS').val();
+           
+            if (input_val < 3) {
+                swal({
+                    title: "Low Allocation MOS",
+                    text: "The lowest that can be allocated for" + ' is ' + 3,
+                    icon: "error",
+                });
+                $(this).val('');
+
+                return false;
+            } else if (input_val > 6) {
+                swal({
+                    title: "Excess Allocation MOS",
+                    text: "The highest that can be allocated is " + 6,
+                    icon: "error",
+                });
+
+                $(this).val('');
+                return false;
+            } else {
+
+            }
+
+         });
 
 
         //$('[data-toggle="tooltip"]').tooltip();

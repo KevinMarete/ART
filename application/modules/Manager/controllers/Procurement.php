@@ -22,94 +22,14 @@ class Procurement extends MX_Controller {
         echo json_encode($this->db->query($query)->result());
     }
 
-    function menuBuilder() {
-          
-        $newmenu = '<div class="dropdown">
-            <a id="dLabel" role="button" data-toggle="dropdown" class="btn btn-primary" data-target="#" href="/page.html">
-                Dropdown <span class="caret"></span>
-            </a>            
-    <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">';
+    function getCounty() {
         $toplevel = $this->db->get('tbl_county')->result();
-          $newmenu .= '<em>County</em> ';   
-        foreach ($toplevel as $top):
-            $newmenu .= '<li class="dropdown-submenu">              
-                <a tabindex="-1" href="#"><input type="checkbox">' . ucwords($top->name) . '</a> ';                     
-                  $newmenu .= '<ul class="dropdown-menu">';
-            $submenu = $this->getSubLevelMenus($top->id, 'county_id', 'tbl_subcounty');
-            $newmenu .= '<em>Sub Counties</em> ';   
-            foreach ($submenu as $sub):
-                $newmenu .= '<li class="dropdown-submenu">';
-                $newmenu .= '<a href="#"><input type="checkbox">' . ucwords($sub->name) . '</a>';
-                $facilities = $this->getSubLevelMenus($sub->id, 'subcounty_id', 'tbl_facility');
-                $newmenu .= '<ul class="dropdown-menu">';
-                $newmenu .= '<em>Sub County Facilities</em> ';   
-                foreach ($facilities as $facility):
-                    $newmenu .= '<li><a href="#"><input type="checkbox">' . ucwords($facility->name) . '</a></li>';
-                endforeach;
-                $newmenu .= '</ul>';
-                $newmenu .= '</li>';
-            endforeach;
-            $newmenu .= ' </ul>';
-            $newmenu .= '</li>';
-        endforeach;
-        $newmenu .= '</ul>
-        </div>';
-        
-     echo ' <div class="dropdown dropdown-inline">
-            <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">Dropdown <span class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li class="dropdown">
-                <a href="#">Another dropdown <span class="caret"></span></a>
-                <ul class="dropdown-menu dropdownhover-right">
-                  <li><a href="#">Action</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li>
-                  <li class="divider"></li>
-                  <li><a href="#">Separated link</a></li>
-                  <li class="divider"></li>
-                  <li><a href="#">One more separated link</a></li>
-                </ul>
-              </li>
-              <li class="dropdown">
-                <a href="#">Another dropdown 2 <span class="caret"></span></a>
-                <ul class="dropdown-menu dropdownhover-right">
-                  <li><a href="#">Action</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li class="dropdown">
-                    <a href="#">Another dropdown <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                      <li><a href="#">Action</a></li>
-                      <li><a href="#">Another action</a></li>
-                      <li><a href="#">Something else here</a></li>
-                      <li class="divider"></li>
-                      <li><a href="#">Separated link</a></li>
-                      <li class="divider"></li>
-                      <li><a href="#">One more separated link</a></li>
-                    </ul>
-                  </li>
-                  <li><a href="#">Something else here</a></li>
-                  <li class="divider"></li>
-                  <li><a href="#">Separated link</a></li>
-                  <li class="divider"></li>
-                  <li><a href="#">One more separated link</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Something else here</a></li>
-              <li class="divider"></li>
-              <li><a href="#">Separated link</a></li>
-              <li class="divider"></li>
-              <li><a href="#">One more separated link</a></li>
-            </ul>
-          </div>';
-        
-       // echo $newmenu;
+        echo json_encode(['data' => $toplevel]);
     }
 
-    function getSubLevelMenus($pid, $pcol, $table) {
-        return $this->db->where($pcol, $pid)->order_by('name', 'asc')->get($table)->result();
+    function getSubLevelMenus($table, $pcol, $id) {
+        $res = $this->db->where($pcol, $id)->order_by('name', 'asc')->get($table)->result();
+        echo json_encode(['data' => $res]);
     }
 
     function saveMeetingData() {
@@ -381,7 +301,7 @@ class Procurement extends MX_Controller {
 
 
         $this->email_sender->send_email('Procurement', 'Meeting Minutes', $recepients, $names = '', $final_string);
-        echo json_encode(['status'=>'success']);
+        echo json_encode(['status' => 'success']);
     }
 
     public function get_commodities() {

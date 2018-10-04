@@ -66,6 +66,7 @@
                                         <tr style="">
                                             <th rowspan="2">Drug Name</th>
                                             <th rowspan="2">Pack Size</th>
+                                             <th>Closing Balance</th>
                                             <th>Beginning Balance</th>
                                             <th>Quantity Received</th>
                                             <?php if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') { ?> 
@@ -86,6 +87,7 @@
                                             <th>Resupply Quantity</th>
                                         </tr>
                                         <tr>
+                                            <th></th>
                                             <th>A</th>
                                             <th>B</th>
                                             <th>C</th>
@@ -107,13 +109,30 @@
                                     <form name="orderForm" id="orderForm">
                                         <?php
                                         foreach ($columns['drugs'] as $key => $drug) {
-                                            $drugid = $drug['id'];
+                                             $drugid = $drug['id'];
+                                            
+                                           
                                             if (in_array($drugid, array_keys($columns['cdrrs']['data']['cdrr_item']))) {
+                                                  $count = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'];
+                                                $balance = $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'];
                                                 ?>
                                                 <tr>
                                                     <td class="drug_name"><?= $drug['name']; ?></td>
                                                     <td><?= $drug['pack_size']; ?></td>
-                                                    <td class="balance"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance']; ?> <sup><i class="glyphicon glyphicon-arrow-up"></i></sup><sub><i class="glyphicon glyphicon-arrow-down"></i></sub></td>
+                                                    <td class="count"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['count']; ?></td>
+                                                    <td class="balance"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance']; ?>
+                                                     <?php
+                                                        if ($count > $balance) {
+                                                            $p = round((($count - $balance) / $count) * 100, 0);
+                                                            echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
+                                                        } else if ($balance > $count) {
+                                                            $p = round((($balance - $count) / $balance) * 100, 0);
+                                                            echo '<sup><span style="background: red; font-size:9px;" class="badge"> +' . $p . '%</span></sup>';
+                                                        }else{
+                                                            
+                                                        }
+                                                        ?>
+                                                    </td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['received']; ?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['dispensed_packs']; ?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['losses']; ?></td>
@@ -196,6 +215,16 @@
 <script type="text/javascript">
     $(function () {
         $('#side-menu').remove();
+        
+        $('#MapsData').DataTable({
+            scrollY: "400px",
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+            fixedColumns: true,
+            searching: false,
+            info: false
+        });
 
         $('.balance').click(function () {
             row = $(this).closest('tr');
