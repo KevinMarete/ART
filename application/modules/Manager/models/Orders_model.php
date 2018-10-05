@@ -1017,6 +1017,41 @@ class Orders_model extends CI_Model {
             array_push($columns, $result->name);
             $tmp_data['Stock On Hand']['data'][] = $result->y;
         }
+        
+         $columns2 = array();
+        $scaleup_data = array(
+            array('type' => 'areaspline', 'name' => 'Allocated', 'data' => array()),
+            array('type' => 'areaspline', 'name' => 'Consumed', 'data' => array())
+        );
+            
+        $this->db->select("CONCAT_WS('/', data_month, data_year) period, SUM(allocated) allocated_total, SUM(consumed) consumed_total", FALSE);
+        $this->db->where("data_date >=", date('Y-01-01'));
+        if (!empty($filters)) {
+            foreach ($filters as $category => $filter) {
+                if ($category == 'data_date') {
+                    $this->db->where("data_date <=", $filter);
+                } else {
+                    $this->db->where_in($category, $filter);
+                }
+            }
+        }
+        $this->db->group_by('period');
+        $this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
+        $query2 = $this->db->get('vw_cdrr_list');
+        $results3= $query2->result_array();
+
+        if ($results3) {
+            foreach ($results3 as $result) {
+                $columns2[] = $result['period'];
+                foreach ($scaleup_data as $index => $scaleup) {
+                    if ($scaleup['name'] == 'Allocated') {
+                        array_push($scaleup_data[$index]['data'], $result['allocated_total']);
+                    } else if ($scaleup['name'] == 'Consumed') {
+                        array_push($scaleup_data[$index]['data'], $result['consumed_total']);
+                    }
+                }
+            }
+        }
 
         $counter = 0;
         foreach ($tmp_data as $name => $item) {
@@ -1026,19 +1061,15 @@ class Orders_model extends CI_Model {
             $counter++;
         }
         $stockOnHand = $reporting_data[0]['data'];
-        $mos = array_map(function($x) {
-            return round($x / 3, 0);
-        }, $stockOnHand);
+        $consumption = $scaleup_data[1]['data'];
+        $mos = array_map(function($x,$y) {
+            return round($x / $y, 0);
+        }, $stockOnHand,$consumption);
 
-        $max = array_map(function($x) {
-            return round($x / 6, 0);
-        }, $stockOnHand);
+      
 
-
-        $MOS = ['type' => 'area', 'name' => 'Available Minimum MOS', 'data' => $mos];
-        $MAX = ['type' => 'area', 'name' => 'Available Maximum MOS', 'data' => $max];
+        $MOS = ['type' => 'area', 'name' => 'Available Months Of Stock (MOS)', 'data' => $mos];
         array_push($reporting_data, $MOS);
-        array_push($reporting_data, $MAX);
         return array('main' => $reporting_data, 'columns' => array_values(array_unique($columns)));
     }
 
