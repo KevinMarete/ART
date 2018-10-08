@@ -988,50 +988,61 @@ class Orders_model extends CI_Model {
         echo json_encode(['data' => $result]);
     }
 
-    function getStockChart($newarr) {
-        $qadd = " ";
-        if (!empty($newarr)) {
-            foreach ($newarr as $category => $filter) {
-                $qadd .= " $category = '$filter' AND ";
+    function getStockChart($filters) {
+        unset($filters['data_month']);
+        unset($filters['data_date']);
+        $cat = '';
+        $fil = '';
+        $columns=array();
+        $tmp_data=array();
+        $reporting_data=array();
+        $role = $this->session->userdata('role');
+        $scopename = $this->session->userdata('scope_name');
+        if ($role == 'subcounty') {
+            $cat = 'subcounty';
+            $fil = $scopename;
+        } else if ($role == 'county') {
+            $cat = 'county';
+            $fil = $scopename;
+        } else {
+            
+        }
+        $this->db->select("CONCAT_WS('/', data_month, data_year) name, SUM(closing_bal) y", FALSE);
+        $this->db->where("data_date >=", date('Y-01-01'));
+        if (!empty($filters)) {
+            foreach ($filters as $category => $filter) {
+                $this->db->where_in($category, $filter);
             }
         }
+        if (!empty($cat)) {
+            $this->db->where_in($cat, $fil);
+        }
+        if (array_key_exists("drug", $filters)) {
+            
+        } else {
+            $this->db->where_in('drug', 'Dolutegravir (DTG) 50mg Tabs');
+        }
+        $this->db->group_by('name');
+        $this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
+        $query = $this->db->get('vw_cdrr_list');
+        $results = $query->result();
 
 
-        $columns = array();
-        $tmp_data = array();
-        $reporting_data = array();
-
-
-        $query = "SELECT  CONCAT(data_month,'/',data_year) name,SUM(closing_bal) y
-                            FROM vw_cdrr_list
-                            WHERE $qadd                             
-                            $this->_q_addon
-                            AND closing_bal IS NOT NULL
-                            GROUP BY data_month
-                 ORDER BY FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )";
-        $newqry = str_replace("WHERE                               
-                            
-                            AND", "WHERE ", $query);
-
-        $results = $this->db->query($newqry)->result();
-
-     
         foreach ($results as $result) {
             array_push($columns, $result->name);
             $tmp_data['Stock On Hand']['data'][] = $result->y;
         }
 
-        $counter = 0;
+          $counter = 0;
         foreach ($tmp_data as $name => $item) {
             $reporting_data[$counter]['type'] = 'column';
             $reporting_data[$counter]['name'] = $name;
             $reporting_data[$counter]['data'] = $item['data'];
             $counter++;
         }
-        
-        return array('main' => $reporting_data, 'columns' => array_values(array_unique($columns)));
-        
-        
+      
+
+       return array('main' => $reporting_data, 'columns' => array_values(array_unique($columns)));
     }
 
     function sanitizeParams() {

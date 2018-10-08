@@ -205,22 +205,22 @@ class Manager extends MX_Controller {
     }
 
     public function get_data($chartname, $filters='') {
+        
         $newarr = [];
-        parse_str($this->input->post('selectedfilters'), $newarr);
-        $new_qrr = array_filter($newarr);
+        parse_str($this->input->post('selectedfilters'), $newarr);       
        
         if ($chartname == 'reporting_rates_chart') {
-            $main_data = $this->manager_model->get_reporting_rates($new_qrr);
+            //$main_data = $this->manager_model->get_reporting_rates($newarr);
         } else if ($chartname == 'patients_by_regimen_chart') {
-            $main_data = $this->manager_model->get_patient_regimen($new_qrr);
+            //$main_data = $this->manager_model->get_patient_regimen($newarr);
         } else if ($chartname == 'drug_consumption_allocation_trend_chart') {
-            $main_data = $this->manager_model->get_drug_consumption_allocation_trend($new_qrr);
+           // $main_data = $this->manager_model->get_drug_consumption_allocation_trend($newarr);
         } else if ($chartname == 'facility_adt_version_distribution_chart') {
-            $main_data = $this->manager_model->get_facility_adt_version_distribution($new_qrr);
+           // $main_data = $this->manager_model->get_facility_adt_version_distribution($newarr);
         } else if ($chartname == 'facility_internet_access_chart') {
-            $main_data = $this->manager_model->get_facility_internet_access($new_qrr);
+           // $main_data = $this->manager_model->get_facility_internet_access($newarr);
         } else if ($chartname == 'stock_status_trend_chart') {
-            $main_data = $this->Orders_model->getStockChart($new_qrr);
+            $main_data = $this->Orders_model->getStockChart($newarr);
         }
         return $main_data;
     }

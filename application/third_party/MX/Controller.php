@@ -102,9 +102,7 @@ class MX_Controller {
 
         return $select;
     }
-    
-    function query(){
-        echo $this->db->last_query();
-    }
+
+   
 
 }
