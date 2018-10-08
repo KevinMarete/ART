@@ -66,7 +66,7 @@
                                         <tr style="">
                                             <th rowspan="2">Drug Name</th>
                                             <th rowspan="2">Pack Size</th>
-                                             <th>Closing Balance</th>
+                                            <th>Closing Balance</th>
                                             <th>Beginning Balance</th>
                                             <th>Quantity Received</th>
                                             <?php if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') { ?> 
@@ -109,11 +109,11 @@
                                     <form name="orderForm" id="orderForm">
                                         <?php
                                         foreach ($columns['drugs'] as $key => $drug) {
-                                             $drugid = $drug['id'];
-                                            
-                                           
+                                            $drugid = $drug['id'];
+
+
                                             if (in_array($drugid, array_keys($columns['cdrrs']['data']['cdrr_item']))) {
-                                                  $count = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'];
+                                                $count = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'];
                                                 $balance = $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'];
                                                 ?>
                                                 <tr>
@@ -121,14 +121,14 @@
                                                     <td><?= $drug['pack_size']; ?></td>
                                                     <td class="count"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['count']; ?></td>
                                                     <td class="balance"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance']; ?>
-                                                     <?php
+                                                        <?php
                                                         if ($count > $balance) {
                                                             $p = round((($count - $balance) / $count) * 100, 0);
                                                             echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
                                                         } else if ($balance > $count) {
                                                             $p = round((($balance - $count) / $balance) * 100, 0);
                                                             echo '<sup><span style="background: red; font-size:9px;" class="badge"> +' . $p . '%</span></sup>';
-                                                        }else{
+                                                        } else {
                                                             
                                                         }
                                                         ?>
@@ -175,7 +175,7 @@
                         </div> <!--end of cdrr-->
                         <div class="col-sm-3">
                             <div class="table-responsive">
-                                <table class="table table-striped table-bordered table-condensed">
+                                <table class="table table-striped table-bordered table-condensed" id="mapsTable" >
                                     <thead>
                                     <th>Code | Regimen</th>
                                     <th title="Current Active Patient">CAP</th>
@@ -187,15 +187,29 @@
                                                 <?php if (in_array($regimen['id'], array_keys($columns['maps']['data']))) { ?>
                                                     <tr>
                                                         <td><?= $regimen['name']; ?></td>
-                                                        <td><?php echo $columns['maps']['data'][$regimen['id']]; ?></td>
-                                                        <td><?php echo @$columns['previousmaps']['data'][$regimen['id']]; ?></td>
+                                                        <td><?php echo $current = $columns['maps']['data'][$regimen['id']]; ?></td>
+                                                        <td><?php
+                                                            echo $previous = $columns['previousmaps']['data'][$regimen['id']];
+
+                                                            if ($current > $current) {
+                                                                $p = round((($current - $previous) / $current) * 100, 0);
+                                                                echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
+                                                            } else if ($previous > $current) {
+                                                                $p = round((($previous - $current) / $previous) * 100, 0);
+                                                                echo '<sup><span style="background: red; font-size:9px;" class="badge"> +' . $p . '%</span></sup>';
+                                                            } else {
+                                                                //echo '<sup><span style="background: green; font-size:9px;" class="badge"> 0%</span></sup>';
+                                                            }
+                                                            ?>
+
+                                                        </td>
 
                                                     </tr>
-                                                <?php
+                                                    <?php
                                                 }
                                             }
                                             ?>
-<?php } ?>
+                                        <?php } ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -215,9 +229,19 @@
 <script type="text/javascript">
     $(function () {
         $('#side-menu').remove();
+
+        $('#MapsData,#mapsTable').DataTable({
+            scrollY: "500px",
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+            fixedColumns: true,
+            searching: false,
+            info: false
+        });
         
-        $('#MapsData').DataTable({
-            scrollY: "400px",
+         $('#mapsTable').DataTable({
+            scrollY: "500px",
             scrollX: true,
             scrollCollapse: true,
             paging: false,

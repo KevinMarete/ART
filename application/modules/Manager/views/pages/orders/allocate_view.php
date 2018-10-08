@@ -245,7 +245,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <div class="table-responsive">
-                                    <table class="table table-striped table-bordered table-condensed">
+                                    <table class="table table-striped table-bordered table-condensed" id="mapsTableReg">
                                         <thead>
                                         <th>Code | Regimen</th>
                                         <th title="Current Active Patient">CAP</th>
@@ -258,7 +258,7 @@
                                                         <tr>
                                                             <td><?= $regimen['name']; ?></td>
                                                             <td><?php echo $columns['maps']['data'][$regimen['id']]; ?></td>
-                                                            <td><?php echo @$columns['previousmaps']['data'][$regimen['id']]; ?></td>
+                                                            <td><?php echo $columns['previousmaps']['data'][$regimen['id']]; ?></td>
 
                                                         </tr>
                                                         <?php
@@ -327,6 +327,17 @@
             searching: false,
             info: false
         });
+        
+          $('#mapsTableReg').DataTable({
+            scrollY: "400px",
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+            fixedColumns: true,
+            searching: false,
+            info: false
+        });
+
 
 
         $('#AllocationTable tr').hover(function () {

@@ -27,6 +27,16 @@ class Procurement extends MX_Controller {
         echo json_encode(['data' => $toplevel]);
     }
 
+    function loadMenuData($column, $criteria='') {
+        $id = $this->input->post('id');
+        if (empty($criteria)) {
+            $res = $this->db->select($column)->group_by($column)->get('vw_csf_list')->result();
+        } else {
+            $res = $this->db->select($column)->where($criteria, $id)->group_by($column)->order_by($column, 'asc')->get('vw_csf_list')->result();
+        }
+        echo json_encode(['data' => $res]);
+    }
+
     function getSubLevelMenus($table, $pcol, $id) {
         $res = $this->db->where($pcol, $id)->order_by('name', 'asc')->get($table)->result();
         echo json_encode(['data' => $res]);

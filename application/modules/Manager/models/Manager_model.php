@@ -5,28 +5,35 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Manager_model extends CI_Model {
 
     public function get_reporting_rates($filters) {
+
         $columns = array();
         $tmp_data = array();
         $reporting_data = array();
         $nreporting_data = array();
         $alldata = [];
-        $reports=417;
-         
-        $role =$this->session->userdata('role');
-        $scopename =$this->session->userdata('scope_name');
-        $scope =$this->session->userdata('scope');
-        
-        if($role=='national'){
+        $reports = 417;
+
+        $role = $this->session->userdata('role');
+        $scopename = $this->session->userdata('scope_name');
+        $scope = $this->session->userdata('scope');
+
+        if ($role == 'national') {
             $reports = 417;
-        }else if($role=='county'){
+        } else if ($role == 'county') {
             $query = $this->db->query("SELECT * FROM tbl_subcounty WHERE county_id='$scope'");
-           $reports = $query->num_rows();
-        }else if($role=='subcounty'){
+            $reports = $query->num_rows();
+        } else if ($role == 'subcounty') {
             
         }
 
+        $filter = $this->input->post('filter');
+        if (empty($filter)) {
+            unset($filters['data_year']);
+            unset($filters['data_month']);
+        }
+
         $this->db->select("CONCAT_WS('/', data_month, data_year) period, COUNT(DISTINCT facility) total", FALSE);
-        $this->db->where("data_date >=", date('Y-01-01'));
+        //$this->db->where("data_date >=", date('Y-01-01'));
         $this->db->where_in("category", array('central', 'standalone'));
         $this->db->where_in("code", array('D-CDRR', 'F-CDRR_packs'));
         if (!empty($filters)) {
@@ -45,15 +52,15 @@ class Manager_model extends CI_Model {
         $newarr = array_map(function($m) {
             return 417 - (int) $m['total'];
         }, $results);
-         
+
         foreach ($results as $result) {
             array_push($columns, $result['period']);
             $tmp_data['Reported']['data'][] = $result['total'];
         }
-       // $tmp_data['NotReported']['data'] = $newarr;
-        
-        $arr1 = ['name'=>'Not Reported','data'=>$newarr];
-       
+        // $tmp_data['NotReported']['data'] = $newarr;
+
+        $arr1 = ['name' => 'Not Reported', 'data' => $newarr];
+
         $counter = 0;
         foreach ($tmp_data as $name => $item) {
             $reporting_data[$counter]['name'] = 'Reported';
@@ -66,6 +73,12 @@ class Manager_model extends CI_Model {
     }
 
     public function get_patient_regimen($filters) {
+        $filter = $this->input->post('filter');
+        if (empty($filter)) {
+            unset($filters['data_year']);
+            unset($filters['data_month']);
+        }
+        unset($filters['drug']);
         $this->db->select("regimen_service name, SUM(total) y, LOWER(REPLACE(regimen_service, ' ', '_')) drilldown", FALSE);
         if (!empty($filters)) {
             foreach ($filters as $category => $filter) {
@@ -151,6 +164,11 @@ class Manager_model extends CI_Model {
     }
 
     public function get_drug_consumption_allocation_trend($filters) {
+        $filter = $this->input->post('filter');
+        if (empty($filter)) {
+            unset($filters['data_year']);
+            unset($filters['data_month']);
+        }
         $columns = array();
         $scaleup_data = array(
             array('type' => 'areaspline', 'name' => 'Allocated', 'data' => array()),

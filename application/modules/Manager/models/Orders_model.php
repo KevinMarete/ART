@@ -19,7 +19,7 @@ class Orders_model extends CI_Model {
         $this->_name = $this->session->userdata('scope_name'); //county or subcounty name
         $this->_role = $this->session->userdata('role'); //county or subcounty id
         if ($this->_role == 'subcounty') {
-            $this->_q_addon .= "AND $this->_role ='$this->_name'";
+            $this->_q_addon .= " $this->_role ='$this->_name'";
         } else if ($this->_role == 'county') {
             $this->_q_addon .= "AND $this->_role ='$this->_name'";
         } else {
@@ -706,7 +706,7 @@ class Orders_model extends CI_Model {
             INNER JOIN tbl_facility f ON f.id = m.facility_id
             INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
             INNER JOIN tbl_county co ON co.id = sc.county_id
-            WHERE period_end LIKE '%$this->_currentMonth%' AND m.id = ? " . $role_cond;
+            WHERE period_begin = '$this->_currentMonth-01' AND period_end = LAST_DAY('$this->_currentMonth-01') AND m.id = ? " . $role_cond;
 
 
 
@@ -758,7 +758,7 @@ class Orders_model extends CI_Model {
             INNER JOIN tbl_facility f ON f.id = m.facility_id
             INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
             INNER JOIN tbl_county co ON co.id = sc.county_id
-            WHERE period_end LIKE '%$this->_previousMonth%' AND m.id = ? " . $role_cond;
+            WHERE period_begin = '$this->_previousMonth-01' AND period_end = LAST_DAY('$this->_previousMonth-01') AND m.id = ? " . $role_cond;
 
 
 
@@ -988,69 +988,37 @@ class Orders_model extends CI_Model {
         echo json_encode(['data' => $result]);
     }
 
-    function getStockChart() {
-        $filter = $this->input->post('selectedfilters');
-        $date = date('Y');
-        $qadd = "WHERE data_year='$date'                          
-                  AND drug IN ('Dolutegravir (DTG) 50mg Tabs')";
-        $params = $this->sanitizeParams();
-        if (!empty($filter)) {
-            $qadd = '';
-            $qadd .= "WHERE data_year=" . $params["year"] . "                          
-                  AND drug IN (" . $params["drugs"] . ")";
+    function getStockChart($newarr) {
+        $qadd = " ";
+        if (!empty($newarr)) {
+            foreach ($newarr as $category => $filter) {
+                $qadd .= " $category = '$filter' AND ";
+            }
         }
+
+
         $columns = array();
         $tmp_data = array();
         $reporting_data = array();
 
+
         $query = "SELECT  CONCAT(data_month,'/',data_year) name,SUM(closing_bal) y
                             FROM vw_cdrr_list
-                            $qadd                             
+                            WHERE $qadd                             
                             $this->_q_addon
                             AND closing_bal IS NOT NULL
                             GROUP BY data_month
                  ORDER BY FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )";
-        $results = $this->db->query($query)->result();
+        $newqry = str_replace("WHERE                               
+                            
+                            AND", "WHERE ", $query);
 
+        $results = $this->db->query($newqry)->result();
 
+     
         foreach ($results as $result) {
             array_push($columns, $result->name);
             $tmp_data['Stock On Hand']['data'][] = $result->y;
-        }
-        
-         $columns2 = array();
-        $scaleup_data = array(
-            array('type' => 'areaspline', 'name' => 'Allocated', 'data' => array()),
-            array('type' => 'areaspline', 'name' => 'Consumed', 'data' => array())
-        );
-            
-        $this->db->select("CONCAT_WS('/', data_month, data_year) period, SUM(allocated) allocated_total, SUM(consumed) consumed_total", FALSE);
-        $this->db->where("data_date >=", date('Y-01-01'));
-        if (!empty($filters)) {
-            foreach ($filters as $category => $filter) {
-                if ($category == 'data_date') {
-                    $this->db->where("data_date <=", $filter);
-                } else {
-                    $this->db->where_in($category, $filter);
-                }
-            }
-        }
-        $this->db->group_by('period');
-        $this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
-        $query2 = $this->db->get('vw_cdrr_list');
-        $results3= $query2->result_array();
-
-        if ($results3) {
-            foreach ($results3 as $result) {
-                $columns2[] = $result['period'];
-                foreach ($scaleup_data as $index => $scaleup) {
-                    if ($scaleup['name'] == 'Allocated') {
-                        array_push($scaleup_data[$index]['data'], $result['allocated_total']);
-                    } else if ($scaleup['name'] == 'Consumed') {
-                        array_push($scaleup_data[$index]['data'], $result['consumed_total']);
-                    }
-                }
-            }
         }
 
         $counter = 0;
@@ -1060,17 +1028,10 @@ class Orders_model extends CI_Model {
             $reporting_data[$counter]['data'] = $item['data'];
             $counter++;
         }
-        $stockOnHand = $reporting_data[0]['data'];
-        $consumption = $scaleup_data[1]['data'];
-        $mos = array_map(function($x,$y) {
-            return round($x / $y, 0);
-        }, $stockOnHand,$consumption);
-
-      
-
-        $MOS = ['type' => 'area', 'name' => 'Available Months Of Stock (MOS)', 'data' => $mos];
-        array_push($reporting_data, $MOS);
+        
         return array('main' => $reporting_data, 'columns' => array_values(array_unique($columns)));
+        
+        
     }
 
     function sanitizeParams() {

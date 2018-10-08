@@ -13,8 +13,6 @@ class Manager extends MX_Controller {
         $this->load_page('user', 'login', 'Login');
     }
 
-  
-
     public function load_page($module = 'user', $page = 'login', $title = 'Login') {
         if ($page == 'register') {
             $this->db->where_not_in('name', 'admin');
@@ -206,19 +204,23 @@ class Manager extends MX_Controller {
         return $filters;
     }
 
-    public function get_data($chartname, $filters) {
+    public function get_data($chartname, $filters='') {
+        $newarr = [];
+        parse_str($this->input->post('selectedfilters'), $newarr);
+        $new_qrr = array_filter($newarr);
+       
         if ($chartname == 'reporting_rates_chart') {
-            $main_data = $this->manager_model->get_reporting_rates($filters);
+            $main_data = $this->manager_model->get_reporting_rates($new_qrr);
         } else if ($chartname == 'patients_by_regimen_chart') {
-            $main_data = $this->manager_model->get_patient_regimen($filters);
+            $main_data = $this->manager_model->get_patient_regimen($new_qrr);
         } else if ($chartname == 'drug_consumption_allocation_trend_chart') {
-            $main_data = $this->manager_model->get_drug_consumption_allocation_trend($filters);
+            $main_data = $this->manager_model->get_drug_consumption_allocation_trend($new_qrr);
         } else if ($chartname == 'facility_adt_version_distribution_chart') {
-            $main_data = $this->manager_model->get_facility_adt_version_distribution($filters);
+            $main_data = $this->manager_model->get_facility_adt_version_distribution($new_qrr);
         } else if ($chartname == 'facility_internet_access_chart') {
-            $main_data = $this->manager_model->get_facility_internet_access($filters);
+            $main_data = $this->manager_model->get_facility_internet_access($new_qrr);
         } else if ($chartname == 'stock_status_trend_chart') {
-            $main_data = $this->Orders_model->getStockChart();
+            $main_data = $this->Orders_model->getStockChart($new_qrr);
         }
         return $main_data;
     }
