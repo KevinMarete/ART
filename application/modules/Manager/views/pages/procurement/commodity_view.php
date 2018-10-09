@@ -5,6 +5,9 @@ if($this->session->userdata('role')=='readonly'){?>
     .readonly2{
         display:none;
     }
+    .tabledit-edit-button,.edit,.trash,.remove,#commodity_frm{
+        display:none !important;
+    }
 </style>
 <?php }?>
 

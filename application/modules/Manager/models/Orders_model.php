@@ -11,9 +11,12 @@ class Orders_model extends CI_Model {
     private $_role = '';
     private $_name = '';
     private $_q_addon = '';
+    private $_amc;
+    private $_date;
 
     public function __construct() {
         parent::__construct();
+        $this->_date = date('Y-m-d');
         $this->_currentMonth = date('Y') . "-" . (sprintf("%02d", date('m') - 1));
         $this->_previousMonth = date('Y') . "-" . (sprintf("%02d", date('m') - 2));
         $this->_name = $this->session->userdata('scope_name'); //county or subcounty name
@@ -904,26 +907,55 @@ class Orders_model extends CI_Model {
         return $response;
     }
 
-    function getLowMos() {
-        $filter = $this->input->post('selectedfilters');
-        $date = date('Y');
-        $month = 'May';
-        $qadd = "WHERE data_year='$date' AND data_month='$month' ";
-        $params = $this->sanitizeParams();
-        if (!empty($filter)) {
-            $qadd = '';
-            $qadd .= "WHERE data_year=" . $params["year"] . " AND data_month=" . $params["month"] . "                            
-                  AND drug IN (" . $params["drugs"] . ")";
+    function getListMos($filters) {
+        //unset($filters['data_month']);
+        unset($filters['data_date']);
+
+        $cat = '';
+        $fil = '';
+        $role = $this->session->userdata('role');
+        $scopename = $this->session->userdata('scope_name');
+        $scope = $this->session->userdata('scope');
+        if ($role == 'subcounty') {
+            $cat = 'subcounty';
+            $fil = $scopename;
+        } else if ($role == 'county') {
+            $cat = 'county';
+            $fil = $scopename;
+        } else {
+            
         }
 
-        $query = "SELECT drug commodity,SUM(allocated) allocated,SUM(closing_bal) balance,mos,data_year year,data_month month 
-                            FROM vw_cdrr_list
-                            $qadd                            
-                            $this->_q_addon
-                            AND mos < 3
-                            AND closing_bal IS NOT NULL
-                            GROUP BY drug
-                            ORDER BY balance DESC";
+        //  $this->_objcount = $this->getFacilityCount($role, $scope);
+
+
+        $this->db->select("SELECT drug commodity,SUM(allocated) allocated,SUM(closing_bal) balance,mos,data_year year,data_month month", FALSE);
+        if (!empty($filters)) {
+            foreach ($filters as $category => $filter) {
+                $this->db->where_in($category, $filter);
+            }
+        }
+        if (!empty($cat)) {
+            $this->db->where_in($cat, $fil);
+        }
+        $this->db->group_by('drug');
+        $this->db->order_by("balanc", "desc");
+        $query = $this->db->get('vw_cdrr_list');
+        $results = $query->result_array();
+    }
+
+    function getCalcMOS($year, $month, $query2) {
+         
+
+        $this->db->select("drug commodity,SUM(allocated) allocated,SUM(closing_bal) balance,mos,data_year year,data_month month", FALSE);
+        $this->db->where('data_year',$year);
+        $this->db->where('data_month',$month);
+        $this->db->where($query2);
+        $this->db->group_by('drug');
+        $query = $this->db->get('vw_cdrr_lis');
+        $results = $query->result();
+
+         
         $result = $this->db->query($query)->result();
         echo json_encode(['data' => $result]);
     }
@@ -952,16 +984,16 @@ class Orders_model extends CI_Model {
                             GROUP BY facility
                             ORDER BY facility ASC";
         $result = $this->db->query($query)->result();
-        $table = '<table class="table table-bordered table-condensed" id="MosTable">';
-        $table .= '<thead><tr><th>No.</th><th>Facilities With ' . $level . '  MOS</th></tr>';
-        $table .= '<tbody>';
-        $i = 1;
-        foreach ($result as $d):
-            $table .= '<tr><td>' . $i . '</td><td>' . ucwords($d->facility) . '</td></tr>';
-            $i++;
-        endforeach;
-        $table .= '</tbody>';
-        echo $table;
+        /*  $table = '<table class="table table-bordered table-condensed" id="MosTable">';
+          $table .= '<thead><tr><th>No.</th><th>Facilities With ' . $level . '  MOS</th></tr>';
+          $table .= '<tbody>';
+          $i = 1;
+          foreach ($result as $d):
+          $table .= '<tr><td>' . $i . '</td><td>' . ucwords($d->facility) . '</td></tr>';
+          $i++;
+          endforeach;
+          $table .= '</tbody>';
+          echo $table; */
     }
 
     function getHighMos() {
@@ -993,9 +1025,9 @@ class Orders_model extends CI_Model {
         unset($filters['data_date']);
         $cat = '';
         $fil = '';
-        $columns=array();
-        $tmp_data=array();
-        $reporting_data=array();
+        $columns = array();
+        $tmp_data = array();
+        $reporting_data = array();
         $role = $this->session->userdata('role');
         $scopename = $this->session->userdata('scope_name');
         if ($role == 'subcounty') {
@@ -1033,16 +1065,51 @@ class Orders_model extends CI_Model {
             $tmp_data['Stock On Hand']['data'][] = $result->y;
         }
 
-          $counter = 0;
+        $counter = 0;
         foreach ($tmp_data as $name => $item) {
-            $reporting_data[$counter]['type'] = 'column';
+            $reporting_data[$counter]['type'] = 'bar';
             $reporting_data[$counter]['name'] = $name;
             $reporting_data[$counter]['data'] = $item['data'];
             $counter++;
         }
-      
+        echo 'Average 3 Months Consumption = ' . $this->_amc = $this->getCommodityAMC($drug = '', $periodmonth = '');
 
-       return array('main' => $reporting_data, 'columns' => array_values(array_unique($columns)));
+        $mos = array_map(function($x) {
+            return round($x / $this->_amc, 0);
+        }, $tmp_data['Stock On Hand']['data']);
+
+        $MOS = ['type' => 'line', 'color' => '#FF0000', 'negativeColor' => '#0088FF', 'name' => 'Months of Stock', 'data' => $mos];
+        array_push($reporting_data, $MOS);
+        return array('main' => $reporting_data, 'columns' => array_values(array_unique($columns)));
+    }
+
+    function getCommodityAMC($drug, $period) {
+        $query = '';
+        $role = $this->session->userdata('role');
+        $scope_name = $this->session->userdata('scope_name');
+
+        if ($role == 'subcounty') {
+            $query .= "AND sc.name='$scope_name'";
+        } else if ($role == 'county') {
+            $query .= "AND co.name='$scope_name'";
+        }
+
+        if (empty($drug)) {
+            $drug = 'Dolutegravir (DTG) 50mg Tabs';
+            $period = date('Y-m') . '-01';
+        }
+        $get_drug_id = $this->db->where('name', $drug)->get('vw_drug_list')->result();
+        $id = $get_drug_id[0]->id;
+
+        $mos = $this->db->query("SELECT FLOOR(SUM(c.total)/3) amc
+                            FROM tbl_consumption c 
+                            LEFT JOIN tbl_facility f ON f.id = c.facility_id
+                            LEFT JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
+                            LEFT JOIN tbl_county co ON co.id = sc.county_id
+                            WHERE STR_TO_DATE(CONCAT_WS('-', c.period_year, c.period_month,'01'),'%Y-%b-%d') >= DATE_SUB('2018-09-01', INTERVAL 3 MONTH)
+                            $query                            
+                            AND c.drug_id='$id';")->result();
+        return $mos[0]->amc;
     }
 
     function sanitizeParams() {

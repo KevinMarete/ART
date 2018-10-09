@@ -12,10 +12,10 @@ class Orders extends MX_Controller {
         $this->load->model('Orders_model');
         $this->load->library('email_sender');
     }
-    
-    function showData(){
+
+    function showData() {
         echo '<pre>';
-        print_r( $this->Orders_model->getStockChart());
+        print_r($this->Orders_model->getStockChart());
         echo '</pre>';
     }
 
@@ -182,8 +182,18 @@ class Orders extends MX_Controller {
         echo json_encode(array('data' => $response['data']));
     }
 
-    function getLowMos() {
-        $this->Orders_model->getLowMos();
+    function getMOS() {
+        $year = $this->input->post('data_year');
+        $month = $this->input->post('data_month');
+        $scope_name = $this->session->userdata('scope_name');
+        $role = $this->session->userdata('role');
+        if ($role == 'subcounty') {
+            $query = "$role = '$scope_name'";
+        } else if ($role == 'county') {
+            $query = "$role = '$scope_name'";
+        }
+
+        $this->Orders_model->getCalcMOS($year,$month,$query);
     }
 
     function getHighMos() {
@@ -196,7 +206,6 @@ class Orders extends MX_Controller {
 
     function getFacilitiesMOS() {
         $this->Orders_model->getFacilitiesMOS();
-    }    
-   
+    }
 
 }

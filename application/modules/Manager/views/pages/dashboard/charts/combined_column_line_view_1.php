@@ -33,7 +33,7 @@
                 allowDecimals: false,
                 min: 0,
                 title: {
-                    text: 'MOS <?php echo $chart_yaxis_title; ?>',
+                    text: 'Stock On Hand / Month(s) Of Stock (MOS)',
                 }
             },
 

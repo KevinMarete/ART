@@ -80,18 +80,17 @@ class Admin_model extends CI_Model {
                 $this->db->join('tbl_role r', 'r.id=u.role_id', 'inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_meeting') {
-               
+
                 $this->db->select('id,meeting_date,meeting_date as action');
                 $this->db->from('tbl_meeting');
-  
+
                 $table_data = $this->db->get()->result_array();
-            }else if ($table == 'tbl_syslogs') {
+            } else if ($table == 'tbl_syslogs') {
                 $table_data = $this->db->query("SELECT sy.id,sy.log_date,sy.action,sy.module,CONCAT_WS(' ',u.firstname,u.lastname) user
                                                                                FROM tbl_syslogs sy LEFT JOIN tbl_user u ON sy.user = u.id
                                                                               ORDER BY sy.id DESC;
                                                                             ")->result_array();
-            
-            }else {
+            } else {
                 $table_data = $this->db->get($table)->result_array();
             }
             if (!empty($table_data)) {
@@ -113,7 +112,9 @@ class Admin_model extends CI_Model {
 
     //function save data to database
     public function save($table, $data) {
+
         if ($table == 'tbl_user') {
+            (int) $role = $this->input->post('role');
             $user_array = [
                 'firstname' => $this->input->post('firstname'),
                 'lastname' => $this->input->post('lastname'),
@@ -122,16 +123,20 @@ class Admin_model extends CI_Model {
                 'role_id' => $this->input->post('role'),
                 'password' => md5($this->input->post('password'))
             ];
-            $this->db->insert($table, $user_array);
+
+             $this->db->insert($table, $user_array);
             $id = $this->db->insert_id();
+
 
             $scope_array = [
                 'scope_id' => $this->input->post('scope_id'),
                 'role_id' => $this->input->post('role'),
                 'user_id' => $id
             ];
-            $this->db->insert($table . '_scope', $scope_array);
-           
+            if ($role == 5 || $role == 1 || $role == 4) {                
+            } else {
+                $this->db->insert($table . '_scope', $scope_array);
+            }
         } else {
             unset($data['id']);
             $this->db->insert($table, $data);
@@ -151,23 +156,24 @@ class Admin_model extends CI_Model {
     //function update db_table
     public function update($table, $where, $data) {
         if ($table == 'tbl_user') {
+            $role = $this->input->post('role');
             $user_array = [
                 'firstname' => $this->input->post('firstname'),
                 'lastname' => $this->input->post('lastname'),
                 'email_address' => $this->input->post('email_address'),
                 'phone_number' => $this->input->post('phone_number'),
                 'role_id' => $this->input->post('role'),
-                    // 'password' => md5($this->input->post('password'))
+                'password' => md5($this->input->post('password'))
             ];
-            $this->db->update($table, $where, $user_array);
-
-
+            $this->db->update($table, $user_array, $where );
             $scope_array = [
                 'scope_id' => $this->input->post('scope_id'),
                 'role_id' => $this->input->post('role'),
             ];
-            //$this->db->insert($table . '_scope', $scope_array);
-            $this->db->update($table . '_scope', $scope_array, ['user_id' => $this->input->post('id')]);
+            if ($role == 5 || $role == 1 || $role == 4) {                
+            } else {
+                $this->db->update($table . '_scope', $scope_array, ['user_id' => $this->input->post('id')]);
+            }
         } else {
             $this->db->update($table, $data, $where);
         }

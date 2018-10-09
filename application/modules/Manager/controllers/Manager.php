@@ -210,7 +210,7 @@ class Manager extends MX_Controller {
         parse_str($this->input->post('selectedfilters'), $newarr);       
        
         if ($chartname == 'reporting_rates_chart') {
-            $main_data = $this->manager_model->get_reporting_rates($newarr);
+           $main_data = $this->manager_model->get_reporting_rates($newarr);
         } else if ($chartname == 'patients_by_regimen_chart') {
             $main_data = $this->manager_model->get_patient_regimen($newarr);
         } else if ($chartname == 'drug_consumption_allocation_trend_chart') {

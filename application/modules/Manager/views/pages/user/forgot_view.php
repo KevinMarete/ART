@@ -57,7 +57,7 @@
                             <hr/>
                             <center>
                                 <b>Remembered your Password?</b> <a href="<?php echo base_url().'manager';?>">Login Here</a> <br/>
-                                <a href="<?php echo base_url().'manager/register_account';?>">Create new Account?</a>
+                                <!--a href="<?php echo base_url().'manager/register_account';?>">Create new Account?</a-->
                             </center>
                         </form>
                     </div>

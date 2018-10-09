@@ -17,6 +17,8 @@ class Procurement extends MX_Controller {
         $this->sendReminder();
     }
 
+  
+
     function getAllDrugs() {
         $query = "SELECT * FROM `vw_drug_list`  ORDER BY name ASC";
         echo json_encode($this->db->query($query)->result());
@@ -27,7 +29,7 @@ class Procurement extends MX_Controller {
         echo json_encode(['data' => $toplevel]);
     }
 
-    function loadMenuData($column, $criteria='') {
+    function loadMenuData($column, $criteria = '') {
         $id = $this->input->post('id');
         if (empty($criteria)) {
             $res = $this->db->select($column)->group_by($column)->get('vw_csf_list')->result();

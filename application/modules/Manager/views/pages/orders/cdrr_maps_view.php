@@ -239,8 +239,8 @@
             searching: false,
             info: false
         });
-        
-         $('#mapsTable').DataTable({
+
+        $('#mapsTable').DataTable({
             scrollY: "500px",
             scrollX: true,
             scrollCollapse: true,
