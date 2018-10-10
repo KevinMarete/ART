@@ -137,7 +137,7 @@ class Procurement extends MX_Controller {
         $i = 0;
         foreach ($table_data as $d) {
             $table .= '<tr>';
-            $table .= '<td><input type="hidden" name=decision_id[] value=' . $d['decision_id'] . '><input type="hidden" name=drug_id[] value=' . $d['id'] . '><strong>' . $d['name'] . '</strong></td><td><textarea class="textarea" name=decision[] >' . $d['discussion'] . '</textarea></td><td><textarea class="textarea" name=recommendation[]>' . $d['recommendation'] . '</textarea></td><td> 
+            $table .= '<td><input type="hidden" name=decision_id[] value=' . $d['decision_id'] . '><input type="hidden" name=drug_id[] value=' . $d['id'] . '><strong>' . strtoupper($d['name']."-".$d['pack_size']). '</strong></td><td><textarea class="textarea" name=decision[] >' . $d['discussion'] . '</textarea></td><td><textarea class="textarea" name=recommendation[]>' . $d['recommendation'] . '</textarea></td><td> 
                            <a class="btn btn-xs btn-primary tracker_drug" data-toggle="modal" data-target="#add_procurement_modal" data-drug_id="' . $d['id'] . '"> 
                             <i class="fa fa-search"></i> View Options
                         </a>
