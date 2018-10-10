@@ -1,10 +1,17 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
+
             <ol class="breadcrumb page-header">
-                <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
-                <li>Admin</li>
-                <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i> <?php echo ucwords(str_replace('_', ' ', $page_name)); ?></li>
+                <?php if ($this->uri->segment(3) == 'meeting') { ?>
+                    <li><a href="<?php echo base_url('manager/procurement/meeting'); ?>">Procurement</a></li>
+                    <li>Meeting</li>
+                    <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i>Meeting Dates</li>
+                <?php } else { ?>
+                    <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
+                    <li>Admin</li>
+                    <li class="active breadcrumb-item"><i class="white-text" aria-hidden="true"></i> <?php echo ucwords(str_replace('_', ' ', $page_name)); ?></li>
+                <?php } ?>
             </ol>
         </div>
         <!-- /.col-lg-12 -->
@@ -177,11 +184,11 @@ if ($page_name != 'backup') {
         });
     });
 
-    
+
 
     //tr.selected on tbody click
     $('#dataTables-listing tbody').on('click', 'tr', function () {
-        selected_id = (table.row(this).data())[0];        
+        selected_id = (table.row(this).data())[0];
         selected_date = (table.row(this).data())[1];
 
         if ($(this).hasClass('selected')) {
@@ -198,9 +205,9 @@ if ($page_name != 'backup') {
         }
 
     });
-    
-    function view(){
-        window.location.href='<?=base_url();?>manager/procurement/minute/ART/'+selected_date;
+
+    function view() {
+        window.location.href = '<?= base_url(); ?>manager/procurement/minute/ART/' + selected_date;
     };
 
     //function add data to db_table
@@ -214,7 +221,7 @@ if ($page_name != 'backup') {
         $('.modal-title').text('Add <?php echo ucwords(str_replace('_', ' ', $page_name)); ?>');
 
         //Get all facilities not installed
-        var facilityinstallURL = '<?=base_url();?>API/facility_install';
+        var facilityinstallURL = '<?= base_url(); ?>API/facility_install';
         $("#facility").empty();
         $.getJSON(facilityinstallURL, function (facilities) {
             $("#facility").append($("<option value=''>Select Facility</option>"));
@@ -227,7 +234,7 @@ if ($page_name != 'backup') {
         $('.regimen_drug_edit').hide(true);
         $('.regimen_drug_add').show(true);
 
-        var regimenURL = '<?=base_url();?>API/regimen_regimen_drug';
+        var regimenURL = '<?= base_url(); ?>API/regimen_regimen_drug';
         $("#regimen_add").empty()
         $.getJSON(regimenURL, function (regimens) {
             $("#regimen_add").append($("<option value=''>Select Regimen</option>"));
@@ -252,7 +259,7 @@ if ($page_name != 'backup') {
         $('.help-block').empty();
 
         //Get all facilities
-        var facilityURL = '<?=base_url();?>API/facility';
+        var facilityURL = '<?= base_url(); ?>API/facility';
         $.getJSON(facilityURL, function (facilities) {
             $.each(facilities, function (index, facility) {
                 $("#facility").append($("<option value='" + facility.id + "'>" + facility.name.toUpperCase() + "</option>"));
@@ -263,7 +270,7 @@ if ($page_name != 'backup') {
         $('.regimen_drug_add').hide(true);
         $('.regimen_drug_edit').show(true);
 
-        var regimenURL = '<?=base_url();?>API/regimen';
+        var regimenURL = '<?= base_url(); ?>API/regimen';
         $("#regimen_edit").empty()
         $.getJSON(regimenURL, function (regimens) {
             $("#regimen_edit").append($("<option value=''>Select Regimen</option>"));
@@ -365,7 +372,7 @@ if ($page_name != 'backup') {
                 $(".select2").select2({
                     width: '100%',
                     allowClear: true,
-                   // dropdownParent: $("#modal_form")
+                    // dropdownParent: $("#modal_form")
                 }).trigger('change');
 
                 $('.modal-title').text('Edit <?php echo ucwords(str_replace('_', ' ', $page_name)); ?>');

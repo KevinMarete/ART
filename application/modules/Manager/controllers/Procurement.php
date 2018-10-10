@@ -17,8 +17,6 @@ class Procurement extends MX_Controller {
         $this->sendReminder();
     }
 
-  
-
     function getAllDrugs() {
         $query = "SELECT * FROM `vw_drug_list`  ORDER BY name ASC";
         echo json_encode($this->db->query($query)->result());
@@ -101,7 +99,8 @@ class Procurement extends MX_Controller {
     }
 
     function loadLastMinutes() {
-        echo json_encode($this->db->order_by('id', 'desc')->get('tbl_meeting')->result());
+        $query = $this->db->query("SELECT *,DATE_FORMAT(meeting_date,'%W %D %b, %Y') minute_date FROM tbl_meeting ORDER BY id DESC ")->result();
+        echo json_encode($query);
     }
 
     function loadLastMinutesHF() {
@@ -112,15 +111,16 @@ class Procurement extends MX_Controller {
         echo json_encode($this->db->where('id', $id)->get('tbl_minutes')->result());
     }
 
-    public function getMinutesData($cat, $date) {
-        //$mindate = substr($date, 0, -3);
-
+    public function getMinutesData() {
+        $cat = $this->input->post('category');
+        $date = $this->input->post('date');
+        $url = 'manager/procurement/minute/' . $cat . '/' . $date;
+        $this->session->set_userdata('minute', $url);
         $sql = "SELECT d.*, de.discussion,de.recommendation,de.decision_date,de.id decision_id
                         FROM `vw_drug_list` d
                         LEFT JOIN tbl_decision de ON d.id = de.drug_id
                         WHERE de.decision_date = '$date'
-                        AND d.drug_category='$cat' 
-                       
+                        AND d.drug_category='$cat'          
 
                         UNION ALL 
 
@@ -178,7 +178,7 @@ class Procurement extends MX_Controller {
                 'opening_description' => $opening_description,
                 'aob' => $aob,
             ]);
-            echo $this->db->last_query();
+            // echo $this->db->last_query();
             $this->updateSysLogs('Updated  (tbl_minutes - Meeting Minute  > Minute Agenda & A.O.Bs)');
         } else {
             echo 'Inserted';
@@ -374,6 +374,7 @@ class Procurement extends MX_Controller {
         $status = $this->input->post('status');
         $funding_agent = $this->input->post('funding_agent');
         $supplier = $this->input->post('supplier');
+        $this->db->query("SET foreign_key_checks = 0");
         foreach ($receipts as $key => $qty) {
             $query = $this->db->query("CALL proc_save_tracker(?, ?, ? ,?, ?, ?, ?, ?)", array(
                 date('Y', strtotime($transaction_date[$key])), date('M', strtotime($transaction_date[$key])), $drug_id, $qty, $funding_agent[$key], $supplier[$key], $status[$key], $this->session->userdata('id')
@@ -386,7 +387,11 @@ class Procurement extends MX_Controller {
 						<strong>Success!</strong> Procurement was Added</div>';
         $this->updateSysLogs('Updated  (Tracker data updated)');
         $this->session->set_flashdata('tracker_msg', $message);
-        // redirect('manager/procurement/commodity');
+        if ($this->session->userdata('minute') == 'minute') {
+            redirect($this->session->userdata('minute'));
+        } else {
+            redirect('manager/procurement/commodity');
+        }
     }
 
     function save_decision() {

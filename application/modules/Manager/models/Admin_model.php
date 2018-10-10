@@ -80,11 +80,8 @@ class Admin_model extends CI_Model {
                 $this->db->join('tbl_role r', 'r.id=u.role_id', 'inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_meeting') {
-
-                $this->db->select('id,meeting_date,meeting_date as action');
-                $this->db->from('tbl_meeting');
-
-                $table_data = $this->db->get()->result_array();
+                // DATE_FORMAT(meeting_date,'%W %D %b, %Y') meeting_date
+                $table_data = $this->db->query("SELECT id,meeting_date FROM tbl_meeting ORDER BY id DESC ")->result_array();                
             } else if ($table == 'tbl_syslogs') {
                 $table_data = $this->db->query("SELECT sy.id,sy.log_date,sy.action,sy.module,CONCAT_WS(' ',u.firstname,u.lastname) user
                                                                                FROM tbl_syslogs sy LEFT JOIN tbl_user u ON sy.user = u.id
@@ -124,7 +121,7 @@ class Admin_model extends CI_Model {
                 'password' => md5($this->input->post('password'))
             ];
 
-             $this->db->insert($table, $user_array);
+            $this->db->insert($table, $user_array);
             $id = $this->db->insert_id();
 
 
@@ -133,7 +130,8 @@ class Admin_model extends CI_Model {
                 'role_id' => $this->input->post('role'),
                 'user_id' => $id
             ];
-            if ($role == 5 || $role == 1 || $role == 4) {                
+            if ($role == 5 || $role == 1 || $role == 4) {
+                
             } else {
                 $this->db->insert($table . '_scope', $scope_array);
             }
@@ -165,12 +163,13 @@ class Admin_model extends CI_Model {
                 'role_id' => $this->input->post('role'),
                 'password' => md5($this->input->post('password'))
             ];
-            $this->db->update($table, $user_array, $where );
+            $this->db->update($table, $user_array, $where);
             $scope_array = [
                 'scope_id' => $this->input->post('scope_id'),
                 'role_id' => $this->input->post('role'),
             ];
-            if ($role == 5 || $role == 1 || $role == 4) {                
+            if ($role == 5 || $role == 1 || $role == 4) {
+                
             } else {
                 $this->db->update($table . '_scope', $scope_array, ['user_id' => $this->input->post('id')]);
             }
