@@ -131,7 +131,7 @@ class Procurement extends MX_Controller {
                          AND d.drug_category='$cat' ";
         $table_data = $this->db->query($sql)->result_array();
 
-        $table = '<table   width="100%" class="table "  id="minutesTable">';
+        $table = '<table   width="100%" class="table table-bordered table-hover"  id="minutesTable">';
         $table .= '<thead><tr><th>COMMODITY </th><th>PACK-SIZE</th><th>DISCUSSION</th><th>RECOMMENDATION</th><th>TRACKER</th></tr></thead>';
         $table .= '<tbody>';
         $i = 0;
