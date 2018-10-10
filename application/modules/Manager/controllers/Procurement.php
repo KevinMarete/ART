@@ -804,6 +804,7 @@ class Procurement extends MX_Controller {
     }
 
     public function get_order_items() {
+
         $response = array();
         $item_urls = array(
             'status' => base_url() . 'API/procurement_status',
@@ -819,6 +820,10 @@ class Procurement extends MX_Controller {
             }
         }
         echo json_encode($response);
+    }
+
+    function getContents() {
+        
     }
 
 }
