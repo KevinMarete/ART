@@ -249,6 +249,7 @@ ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'A
                     LEFT JOIN tbl_funding_agent fa ON fa.id = pi.funding_agent_id
                     LEFT JOIN tbl_supplier s ON s.id = pi.supplier_id
                     WHERE p.drug_id = ?
+                    AND transaction_year='2018'
                     GROUP BY pi.id
                     ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ) DESC LIMIT 5";
             $table_data = $this->db->query($sql, array($drug_id))->result_array();
