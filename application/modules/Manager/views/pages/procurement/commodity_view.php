@@ -1049,7 +1049,7 @@ if($this->session->userdata('role')=='readonly'){?>
                             [3, 'quantity'],
                             [4, 'procurement_status_id','{"2":"Contracted","1":"Proposed","3":"Received"}'],
                             [5, 'funding_agent_id', '{"0":"Select one","3":"CPF","2":"GF","1":"USAID"}'],
-                            [6, 'supplier_id', '{"0":"Select one","3":"Abbott Laboratories S.A. (Pty) Limited","1":"Aurobindo Pharma Limited","5":"Cipla Limited","4":"Dawa Limited","2":"Laboratory & Allied Limited"}}']]
+                            [6, 'supplier_id', '{"0":"Select one","3":"Abbott Laboratories S.A. (Pty) Limited","1":"Aurobindo Pharma Limited","5":"Cipla Limited","4":"Dawa Limited","2":"Laboratory & Allied Limited"}']]
                     },
                     buttons: {
                         edit: {
