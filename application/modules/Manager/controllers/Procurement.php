@@ -132,12 +132,12 @@ class Procurement extends MX_Controller {
         $table_data = $this->db->query($sql)->result_array();
 
         $table = '<table   width="100%" class="table "  id="minutesTable">';
-        $table .= '<thead><tr><th><br>COMMODITY </th><th>DISCUSSION</th><th>RECCOMMENDATION</th><th>TRACKER</th></tr></thead>';
+        $table .= '<thead><tr><th>COMMODITY </th><th>PACK-SIZE</th><th>DISCUSSION</th><th>RECOMMENDATION</th><th>TRACKER</th></tr></thead>';
         $table .= '<tbody>';
         $i = 0;
         foreach ($table_data as $d) {
             $table .= '<tr>';
-            $table .= '<td><input type="hidden" name=decision_id[] value=' . $d['decision_id'] . '><input type="hidden" name=drug_id[] value=' . $d['id'] . '><strong>' . strtoupper($d['name']."-".$d['pack_size']). '</strong></td><td><textarea class="textarea" name=decision[] >' . $d['discussion'] . '</textarea></td><td><textarea class="textarea" name=recommendation[]>' . $d['recommendation'] . '</textarea></td><td> 
+            $table .= '<td><input type="hidden" name=decision_id[] value=' . $d['decision_id'] . '><input type="hidden" name=drug_id[] value=' . $d['id'] . '><strong>' . strtoupper($d['name']). '</strong></td><td>' . $d['pack_size'] . '</td><td><textarea class="textarea" name=decision[] >' . $d['discussion'] . '</textarea></td><td><textarea class="textarea" name=recommendation[]>' . $d['recommendation'] . '</textarea></td><td> 
                            <a class="btn btn-xs btn-primary tracker_drug" data-toggle="modal" data-target="#add_procurement_modal" data-drug_id="' . $d['id'] . '"> 
                             <i class="fa fa-search"></i> View Options
                         </a>
