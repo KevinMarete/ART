@@ -101,13 +101,13 @@
     $(function () {
         var editor;
         var selected_category = '';
-        var date = "<?= $this->uri->segment(5) ?>";
+         date = "<?= $this->uri->segment(5) ?>";
         newdate = "<?= substr($this->uri->segment(5), 0, -3) ?>";
 
 
 
 
-        loadTable('ART', date);
+        loadTable('ARV&OI', date);
 
 
 
@@ -133,8 +133,9 @@
         $('#lastMinutes').append("<option value='<?= date('Y-m-d'); ?>'></option>")
         $.getJSON(lastURL, function (d) {
             $.each(d, function (index, cat) {
-                $("#lastMinutes").append($("<option value='" + cat.meeting_date + "'>" + cat.meeting_date.toUpperCase() + "</option>"));
+                $("#lastMinutes").append($("<option value='" + cat.meeting_date + "'><strong>" + cat.minute_date + "</strong></option>"));
             });
+            $('#lastMinutes').val(date);
         });
 
         $("#drugCategory option:selected").val(selected_category);
@@ -153,7 +154,7 @@
 
 
         function loadTable(category, date) {
-            $.get("<?= base_url(); ?>Manager/Procurement/getMinutesData/" + category + '/' + date, function (data) {
+            $.post("<?= base_url(); ?>Manager/Procurement/getMinutesData/", {category: category, date: date}, function (data) {
                 $('#commodityHolder').html(data);
 
                 ContentTools.StylePalette.add([
@@ -234,6 +235,7 @@
             });
         }
         $('#meetingSave').click(function () {
+            $('#meetingSave').prop('disabled', true);
             $.post("<?= base_url() ?>Manager/Procurement/saveMeetingData", $('#meetingForm').serialize(), function (resp) {
                 $('#commodityHolder').empty();
                 swal({
@@ -245,6 +247,7 @@
                 category = $("#drugCategory").val();
                 date = $('#lastMinutes').val();
                 loadTable(category, date);
+                $('#meetingSave').prop('disabled', false);
             })
         });
 
