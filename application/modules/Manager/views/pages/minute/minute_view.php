@@ -101,7 +101,7 @@
     $(function () {
         var editor;
         var selected_category = '';
-         date = "<?= $this->uri->segment(5) ?>";
+        date = "<?= $this->uri->segment(5) ?>";
         newdate = "<?= substr($this->uri->segment(5), 0, -3) ?>";
 
 
@@ -520,8 +520,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" style="margin-top: 20px;">Close</button>
-                <input type="button" id="saveMinute" class="btn btn-primary" style="margin-top: 20px; width: 100px;" value="Save Minute"/>
-                <input type="button" id="saveMinuteEmail" class="btn btn-warning" style="margin-top: 20px;  width: 250px;" value="Save Minute & Dispatch Emails"/>
+                <input type="button" id="saveMinute"  style="margin-top: 20px; width: 100px;" value="Save Minute"/>
+                <input type="button" id="saveMinuteEmail"  style="margin-top: 20px;  width: 250px;" value="Save Minute & Dispatch Emails"/>
 
             </div>
         </div>
@@ -1236,13 +1236,13 @@
                             [2, 'month', '{"Jan": "Jan", "Feb": "Feb", "Mar": "Mar", "Apr": "Apr", "May": "May", "Jun": "Jun", "Jul": "Jul", "Aug": "Aug", "Sep": "Sep", "Oct": "Oct", "Nov": "Nov", "Dec": "Dec"}'],
                             // [3, 'date_added', JSON.stringify(jsondata.date_added)],
                             [3, 'quantity'],
-                            [4, 'procurement_status_id','{"2":"Contracted","1":"Proposed","3":"Received"}'],
+                            [4, 'procurement_status_id', '{"2":"Contracted","1":"Proposed","3":"Received","4":"Cancelled"}'],
                             [5, 'funding_agent_id', '{"0":"Select one","3":"CPF","2":"GF","1":"USAID"}'],
                             [6, 'supplier_id', '{"0":"Select one","3":"Abbott Laboratories S.A. (Pty) Limited","1":"Aurobindo Pharma Limited","5":"Cipla Limited","4":"Dawa Limited","2":"Laboratory & Allied Limited"}']]
-                    
-                           // [4, 'procurement_status_id', JSON.stringify(jsondata.status)],
-                           // [5, 'funding_agent_id', JSON.stringify(jsondata.funding)],
-                           // [6, 'supplier_id', JSON.stringify(jsondata.supplier)]]
+
+                                // [4, 'procurement_status_id', JSON.stringify(jsondata.status)],
+                                // [5, 'funding_agent_id', JSON.stringify(jsondata.funding)],
+                                // [6, 'supplier_id', JSON.stringify(jsondata.supplier)]]
                     },
                     buttons: {
                         edit: {
@@ -1289,9 +1289,9 @@
                             [2, 'month', '{"Jan": "Jan", "Feb": "Feb", "Mar": "Mar", "Apr": "Apr", "May": "May", "Jun": "Jun", "Jul": "Jul", "Aug": "Aug", "Sep": "Sep", "Oct": "Oct", "Nov": "Nov", "Dec": "Dec"}'],
                             //[3, 'transaction_date'],
                             [4, 'quantity'],
-                            [5, 'procurement_status_id', JSON.stringify(jsondata.status)],
-                            [6, 'funding_agent_id', JSON.stringify(jsondata.funding)],
-                            [7, 'supplier_id', JSON.stringify(jsondata.supplier)]
+                            [4, 'procurement_status_id', '{"2":"Contracted","1":"Proposed","3":"Received","4":"Cancelled"}'],
+                            [5, 'funding_agent_id', '{"0":"Select one","3":"CPF","2":"GF","1":"USAID"}'],
+                            [6, 'supplier_id', '{"0":"Select one","3":"Abbott Laboratories S.A. (Pty) Limited","1":"Aurobindo Pharma Limited","5":"Cipla Limited","4":"Dawa Limited","2":"Laboratory & Allied Limited"}']
                         ]
 
                     },

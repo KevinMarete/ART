@@ -209,16 +209,16 @@ class Procurement extends MX_Controller {
 
     public function get_test_email() {
 
-        $date = date('Y') . "-" . sprintf("%02d", date('m') - 0);
+         $date = date('Y') . "-" . sprintf("%02d", date('m') - 0);    
         $minutes = $this->db->query("SELECT * FROM tbl_minutes WHERE date LIKE '%$date%'")->result();
         $recepients = $minutes[0]->present_emails . ',' . $minutes[0]->absent_emails;
 
-        $date = date('Y') . "-" . sprintf("%02d", date('m') - 1);
+        //$date = date('Y') . "-" . sprintf("%02d", date('m') - 1);
         $drug_ids = "SELECT GROUP_CONCAT(id) id FROM `tbl_decision`";
         $table_ids = $this->db->query($drug_ids)->result_array();
         $drugids_ = $table_ids[0]["id"];
         $sql = "SELECT * FROM vw_drug_list  ORDER BY name ASC";
-        $table_data = $this->db->query($sql)->result_array();
+        $table_data = $this->db->query($sql)->result_array();        
 
         $sql2 = "SELECT 
                         d.id,
@@ -309,9 +309,6 @@ class Procurement extends MX_Controller {
             <div class="row" style="margin-top:10px;">
                 <p>' . $minutes[0]->aob . '</p>
             </div> ';
-
-
-
         $this->email_sender->send_email('Procurement', 'Meeting Minutes', $recepients, $names = '', $final_string);
         echo json_encode(['status' => 'success']);
     }
