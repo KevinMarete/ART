@@ -233,7 +233,7 @@ ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'A
     }
 
     public function get_history_data($drug_id) {
-         $year=('Y');
+         $year=date('Y');
         $response = array('data' => array());
         try {
             $sql = "SELECT

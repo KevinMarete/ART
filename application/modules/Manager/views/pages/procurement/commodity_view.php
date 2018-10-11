@@ -1,14 +1,15 @@
 <link href="<?php echo base_url() . 'public/manager/css/procurement.css'; ?>" rel="stylesheet"> 
-<?php if ($this->session->userdata('role') == 'readonly') { ?>
-    <style>
-        .readonly2{
-            display:none;
-        }
-        .tabledit-edit-button,.edit,.trash,.remove,#commodity_frm{
-            display:none !important;
-        }
-    </style>
-<?php } ?>
+<?php 
+if($this->session->userdata('role')=='readonly'){?>
+<style>
+    .readonly2{
+        display:none;
+    }
+    .tabledit-edit-button,.edit,.trash,.remove,#commodity_frm{
+        display:none !important;
+    }
+</style>
+<?php }?>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jexcel/1.5.7/js/jquery.jexcel.js"></script>
@@ -78,14 +79,14 @@
     </div><!--end row-->
     <!--row-->
 
-
+  
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default"><!--panel default-->
                 <div class="panel-heading">
                 </div>
                 <div class="panel-body">
-
+                  
                     <table width="100%" class="table table-striped table-bordered table-hover" id="procurement-listing">
                         <thead>
                             <tr>
@@ -461,7 +462,7 @@
     $(document).ready(function () {
 
 
-
+    
 
         $(document).on("click", '.dropdown-submenu a.test', function (e) {
             $(this).next('ul').toggle();
@@ -1046,9 +1047,9 @@
                             [2, 'month', '{"Jan": "Jan", "Feb": "Feb", "Mar": "Mar", "Apr": "Apr", "May": "May", "Jun": "Jun", "Jul": "Jul", "Aug": "Aug", "Sep": "Sep", "Oct": "Oct", "Nov": "Nov", "Dec": "Dec"}'],
                             // [3, 'date_added', JSON.stringify(jsondata.date_added)],
                             [3, 'quantity'],
-                            [4, 'procurement_status_id', '{"2":"Contracted","1":"Proposed","3":"Received","4":"Cancelled"}'],
-                            [5, 'funding_agent_id', '{"0":"Select one","3":"CPF","2":"GF","1":"USAID"}'],
-                            [6, 'supplier_id', '{"0":"Select one","3":"Abbott Laboratories S.A. (Pty) Limited","1":"Aurobindo Pharma Limited","5":"Cipla Limited","4":"Dawa Limited","2":"Laboratory & Allied Limited"}']]
+                            [4, 'procurement_status_id', JSON.stringify(jsondata.status)],
+                            [5, 'funding_agent_id', JSON.stringify(jsondata.funding)],
+                            [6, 'supplier_id', JSON.stringify(jsondata.supplier)]]
                     },
                     buttons: {
                         edit: {
@@ -1095,9 +1096,9 @@
                             [2, 'month', '{"Jan": "Jan", "Feb": "Feb", "Mar": "Mar", "Apr": "Apr", "May": "May", "Jun": "Jun", "Jul": "Jul", "Aug": "Aug", "Sep": "Sep", "Oct": "Oct", "Nov": "Nov", "Dec": "Dec"}'],
                             //[3, 'transaction_date'],
                             [4, 'quantity'],
-                            [5, 'procurement_status_id', '{"2":"Contracted","1":"Proposed","3":"Received","4":"Cancelled"}'],
-                            [6, 'funding_agent_id', '{"0":"Select one","3":"CPF","2":"GF","1":"USAID"}'],
-                            [7, 'supplier_id', '{"0":"Select one","3":"Abbott Laboratories S.A. (Pty) Limited","1":"Aurobindo Pharma Limited","5":"Cipla Limited","4":"Dawa Limited","2":"Laboratory & Allied Limited"}']
+                            [5, 'procurement_status_id', JSON.stringify(jsondata.status)],
+                            [6, 'funding_agent_id', JSON.stringify(jsondata.funding)],
+                            [7, 'supplier_id', JSON.stringify(jsondata.supplier)]
                         ]
 
                     },
