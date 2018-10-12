@@ -132,13 +132,13 @@ class Procurement extends MX_Controller {
                          AND d.drug_category='$cat' ";
         $table_data = $this->db->query($sql)->result_array();
 
-        $table = '<table   width="100%" class="table "  id="minutesTable">';
-        $table .= '<thead><tr><th><br>COMMODITY </th><th>DISCUSSION</th><th>RECCOMMENDATION</th><th>TRACKER</th></tr></thead>';
+        $table = '<table   width="100%" class="table table-bordered table-hover"  id="minutesTable">';
+        $table .= '<thead><tr><th>COMMODITY </th><th>PACK-SIZE</th><th>DISCUSSION</th><th>RECOMMENDATION</th><th>TRACKER</th></tr></thead>';
         $table .= '<tbody>';
         $i = 0;
         foreach ($table_data as $d) {
             $table .= '<tr>';
-            $table .= '<td><input type="hidden" name=decision_id[] value=' . $d['decision_id'] . '><input type="hidden" name=drug_id[] value=' . $d['id'] . '><strong>' . $d['name'] . '</strong></td><td><textarea class="textarea" name=decision[] >' . $d['discussion'] . '</textarea></td><td><textarea class="textarea" name=recommendation[]>' . $d['recommendation'] . '</textarea></td><td> 
+            $table .= '<td><input type="hidden" name=decision_id[] value=' . $d['decision_id'] . '><input type="hidden" name=drug_id[] value=' . $d['id'] . '><strong>' . strtoupper($d['name']). '</strong></td><td>' . $d['pack_size'] . '</td><td><textarea class="textarea" name=decision[] >' . $d['discussion'] . '</textarea></td><td><textarea class="textarea" name=recommendation[]>' . $d['recommendation'] . '</textarea></td><td> 
                            <a class="btn btn-xs btn-primary tracker_drug" data-toggle="modal" data-target="#add_procurement_modal" data-drug_id="' . $d['id'] . '"> 
                             <i class="fa fa-search"></i> View Options
                         </a>
@@ -212,16 +212,16 @@ class Procurement extends MX_Controller {
 
     public function get_test_email() {
 
-        $date = date('Y') . "-" . sprintf("%02d", date('m') - 0);
+         $date = date('Y') . "-" . sprintf("%02d", date('m') - 0);    
         $minutes = $this->db->query("SELECT * FROM tbl_minutes WHERE date LIKE '%$date%'")->result();
         $recepients = $minutes[0]->present_emails . ',' . $minutes[0]->absent_emails;
 
-        $date = date('Y') . "-" . sprintf("%02d", date('m') - 1);
+        //$date = date('Y') . "-" . sprintf("%02d", date('m') - 1);
         $drug_ids = "SELECT GROUP_CONCAT(id) id FROM `tbl_decision`";
         $table_ids = $this->db->query($drug_ids)->result_array();
         $drugids_ = $table_ids[0]["id"];
         $sql = "SELECT * FROM vw_drug_list  ORDER BY name ASC";
-        $table_data = $this->db->query($sql)->result_array();
+        $table_data = $this->db->query($sql)->result_array();        
 
         $sql2 = "SELECT 
                         d.id,
@@ -312,9 +312,6 @@ class Procurement extends MX_Controller {
             <div class="row" style="margin-top:10px;">
                 <p>' . $minutes[0]->aob . '</p>
             </div> ';
-
-
-
         $this->email_sender->send_email('Procurement', 'Meeting Minutes', $recepients, $names = '', $final_string);
         echo json_encode(['status' => 'success']);
     }
@@ -807,6 +804,7 @@ class Procurement extends MX_Controller {
     }
 
     public function get_order_items() {
+
         $response = array();
         $item_urls = array(
             'status' => base_url() . 'API/procurement_status',
@@ -824,5 +822,9 @@ class Procurement extends MX_Controller {
         echo json_encode($item_urls );
     }
     
+
+    function getContents() {
+        
+    }
 
 }
