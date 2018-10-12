@@ -104,7 +104,8 @@ class Procurement extends MX_Controller {
     }
 
     function loadLastMinutesHF() {
-        echo json_encode($this->db->order_by('id', 'desc')->get('tbl_minutes')->result());
+        $query = $this->db->query("SELECT *,DATE_FORMAT(date,'%W %D %b, %Y') minute_date FROM tbl_minutes ORDER BY id DESC ")->result();
+        echo json_encode($query);
     }
 
     function loadLastMinutesBody($id) {
@@ -168,6 +169,7 @@ class Procurement extends MX_Controller {
         $aob = $this->input->post('aob');
 
         if ($this->checkMinuteSave(date('Y-m')) > 0) {
+              $this->db->query("SET foreign_key_checks = 0");
             echo 'Update';
             $this->db->like('date', date('Y-m'), 'both')->update('tbl_minutes', [
                 'title' => $title,
@@ -181,6 +183,7 @@ class Procurement extends MX_Controller {
             // echo $this->db->last_query();
             $this->updateSysLogs('Updated  (tbl_minutes - Meeting Minute  > Minute Agenda & A.O.Bs)');
         } else {
+          $this->db->query("SET foreign_key_checks = 0");
             echo 'Inserted';
             $this->db->insert('tbl_minutes', [
                 'title' => $title,
@@ -814,11 +817,12 @@ class Procurement extends MX_Controller {
             if ($key != 'status') {
                 $response[$key][0] = 'Select one';
             }
-            foreach (json_decode(file_get_contents($item_url), TRUE) as $values) {
-                $response[$key][$values['id']] = $values['name'];
+           foreach (json_decode(file_get_contents($item_url), TRUE) as $values) {
+               $response[$key][$values['id']] = $values['name'];
             }
         }
-        echo json_encode($response);
+        echo json_encode($item_urls );
     }
+    
 
 }
