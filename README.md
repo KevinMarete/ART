@@ -22,25 +22,4 @@ Request:
 
 Response:
 ---------
-`{  
-   "period_begin":"2013-10-01",
-   "facility":"kibabii university clinic",
-   "mflcode":"21114",
-   "code":"D-CDRR",
-   "0":{  
-      "drug":"Abacavir (300mg) 60 Tabs",
-      "qty_allocated":23
-   },
-   "1":{  
-      "drug":"Abacavir/Lamivudine (60/30mg) 60 FDC Tabs",
-      "qty_allocated":21
-   },
-   "2":{  
-      "drug":"Abacavir/Lamivudine (600/300mg) 60 FDC Tabs",
-      "qty_allocated":5
-   },
-   "3":{  
-      "drug":"Abacavir/Lamivudine (120/60mg) 60 FDC Tabs",
-      "qty_allocated":13
-   }
-}`
+`{"info":{"period_begin":"2018-06-01","facility":"st mulumba mission hospital","mflcode":"10765","code":"F-CDRR"},"allocation":{"drug":[{"drug":"Abacavir (ABC) 300mg Tabs","qty_allocated":"74"},{"drug":"Atazanavir\/Ritonavir (ATV\/r) 300\/100mg Tabs","qty_allocated":"76"},{"drug":"Dolutegravir (DTG) 50mg Tabs","qty_allocated":"92"},{"drug":"Lamivudine (3TC) 150mg Tabs","qty_allocated":"40"},{"drug":"Lopinavir\/Ritonavir (LPV\/r) 200\/50mg Tabs","qty_allocated":"55"},{"drug":"Nevirapine (NVP) 200mg Tabs","qty_allocated":"30"},{"drug":"Tenofovir\/Lamivudine (TDF\/3TC) 300\/300mg FDC Tabs","qty_allocated":"142"},{"drug":"Tenofovir\/Lamivudine\/Efavirenz (TDF\/3TC\/EFV) 300\/300\/600mg FDC Tabs","qty_allocated":"500"},{"drug":"Zidovudine\/Lamivudine (AZT\/3TC) 300\/150mg FDC Tabs","qty_allocated":"35"}]}}`
