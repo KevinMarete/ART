@@ -137,7 +137,7 @@ class Procurement extends MX_Controller {
         $i = 0;
         foreach ($table_data as $d) {
             $table .= '<tr>';
-            $table .= '<td><input type="hidden" name=decision_id[] value=' . $d['decision_id'] . '><input type="hidden" name=drug_id[] value=' . $d['id'] . '><strong>' . strtoupper($d['name']). '</strong></td><td>' . $d['pack_size'] . '</td><td><textarea class="textarea" name=decision[] >' . $d['discussion'] . '</textarea></td><td><textarea class="textarea" name=recommendation[]>' . $d['recommendation'] . '</textarea></td><td> 
+            $table .= '<td><input type="hidden" name=decision_id[] value=' . $d['decision_id'] . '><input type="hidden" name=drug_id[] value=' . $d['id'] . '><strong>' . strtoupper($d['name']) . '</strong></td><td>' . $d['pack_size'] . '</td><td><textarea class="textarea" name=decision[] >' . $d['discussion'] . '</textarea></td><td><textarea class="textarea" name=recommendation[]>' . $d['recommendation'] . '</textarea></td><td> 
                            <a class="btn btn-xs btn-primary tracker_drug" data-toggle="modal" data-target="#add_procurement_modal" data-drug_id="' . $d['id'] . '"> 
                             <i class="fa fa-search"></i> View Options
                         </a>
@@ -209,7 +209,7 @@ class Procurement extends MX_Controller {
 
     public function get_test_email() {
 
-         $date = date('Y') . "-" . sprintf("%02d", date('m') - 0);    
+        $date = date('Y') . "-" . sprintf("%02d", date('m') - 0);
         $minutes = $this->db->query("SELECT * FROM tbl_minutes WHERE date LIKE '%$date%'")->result();
         $recepients = $minutes[0]->present_emails . ',' . $minutes[0]->absent_emails;
 
@@ -218,7 +218,7 @@ class Procurement extends MX_Controller {
         $table_ids = $this->db->query($drug_ids)->result_array();
         $drugids_ = $table_ids[0]["id"];
         $sql = "SELECT * FROM vw_drug_list  ORDER BY name ASC";
-        $table_data = $this->db->query($sql)->result_array();        
+        $table_data = $this->db->query($sql)->result_array();
 
         $sql2 = "SELECT 
                         d.id,
@@ -800,27 +800,37 @@ class Procurement extends MX_Controller {
         echo json_encode($input);
     }
 
-    public function get_order_items() {
-
+    function get_order_items() {
+        $base_url = 'http://localhost/ART/';
         $response = array();
         $item_urls = array(
-            'status' => base_url() . 'API/procurement_status',
-            'funding' => base_url() . 'API/funding_agent',
-            'supplier' => base_url() . 'API/supplier'
+            'status' => $base_url . 'API/procurement_status',
+            'funding' => $base_url . 'API/funding_agent',
+            'supplier' => $base_url . 'API/supplier'
         );
         foreach ($item_urls as $key => $item_url) {
             if ($key != 'status') {
                 $response[$key][0] = 'Select one';
             }
-            foreach (json_decode(file_get_contents($item_url), TRUE) as $values) {
+            foreach (json_decode($this->file_get_contents_curl($item_url), TRUE) as $values) {
                 $response[$key][$values['id']] = $values['name'];
             }
         }
-        echo json_encode($response);
+
+        echo json_encode($response, JSON_PRETTY_PRINT);
     }
 
-    function getContents() {
-        
+    function file_get_contents_curl($url) {
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser.
+        curl_setopt($ch, CURLOPT_URL, $url);
+
+        $data = curl_exec($ch);
+        curl_close($ch);
+
+        return $data;
     }
 
 }

@@ -44,7 +44,7 @@
             tooltip: {
                 headerFormat: '<b>{point.x}</b><br/>',
                 pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
-                footerFormat: 'Total: <b>{point.total:,.0f}</b>',
+                //footerFormat: 'Total: <b>{point.total:,.0f}</b>',
                 shared: true
             },
 

@@ -26,6 +26,7 @@ class Allocation extends \API\Libraries\REST_Controller  {
         // counties from a data store e.g. database
         $mflcode = $this->get('mfl');
         $period = (!empty($_GET['period'])) ? substr($this->get('period'), 0,4).'-'.substr($this->get('period'), 4).'-01': NULL;
+  
 
         if (empty($_GET['mfl']))
         {   

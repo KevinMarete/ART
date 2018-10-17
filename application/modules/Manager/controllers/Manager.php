@@ -9,7 +9,7 @@ class Manager extends MX_Controller {
         $this->load->model('Orders_model');
     }
 
-    public function index() {
+    public function index() {  
         $this->load_page('user', 'login', 'Login');
     }
 
@@ -210,9 +210,9 @@ class Manager extends MX_Controller {
         parse_str($this->input->post('selectedfilters'), $newarr);
 
         if ($chartname == 'reporting_rates_chart') {
-            $main_data = $this->manager_model->get_reporting_rates($newarr);
+           $main_data = $this->manager_model->get_reporting_rates($newarr);
         } else if ($chartname == 'patients_by_regimen_chart') {
-            $main_data = $this->manager_model->get_patient_regimen($newarr);
+           $main_data = $this->manager_model->get_patient_regimen($newarr);
         } else if ($chartname == 'drug_consumption_allocation_trend_chart') {
             $main_data = $this->manager_model->get_drug_consumption_allocation_trend($newarr);
         } else if ($chartname == 'facility_adt_version_distribution_chart') {
@@ -220,7 +220,7 @@ class Manager extends MX_Controller {
         } else if ($chartname == 'facility_internet_access_chart') {
             // $main_data = $this->manager_model->get_facility_internet_access($newarr);
         } else if ($chartname == 'stock_status_trend_chart') {
-            $main_data = $this->Orders_model->getStockChart($newarr);
+           $main_data = $this->Orders_model->getStockChart($newarr);
         }
         return $main_data;
     }

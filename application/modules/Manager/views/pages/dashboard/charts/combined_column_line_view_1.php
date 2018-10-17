@@ -65,7 +65,7 @@
                 enabled: false
             },
 
-            series: <?php echo $chart_series_data; ?>,
+            series: <?php echo $chart_series_data; ?>
         });
     })
 </script>

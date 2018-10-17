@@ -929,7 +929,7 @@ class Orders_model extends CI_Model {
         //  $this->_objcount = $this->getFacilityCount($role, $scope);
 
 
-        $this->db->select("SELECT drug commodity,SUM(allocated) allocated,SUM(closing_bal) balance,mos,data_year year,data_month month", FALSE);
+        $this->db->select("SELECT drug commodity,SUM(allocated) allocated,SUM(closing_bal) balance,mos,data_year year,data_month month");
         if (!empty($filters)) {
             foreach ($filters as $category => $filter) {
                 $this->db->where_in($category, $filter);
@@ -945,19 +945,16 @@ class Orders_model extends CI_Model {
     }
 
     function getCalcMOS($year, $month, $query2) {
-         
-
-        $this->db->select("drug commodity,SUM(allocated) allocated,SUM(closing_bal) balance,mos,data_year year,data_month month", FALSE);
-        $this->db->where('data_year',$year);
-        $this->db->where('data_month',$month);
-        $this->db->where($query2);
+        $role = $this->session->userdata('role');
+        $this->db->select("drug commodity,SUM(allocated) allocated,SUM(closing_bal) balance,mos,data_year year,data_month month,drug_id,data_date");
+        $this->db->where('data_year', $year);
+        $this->db->where('data_month', $month);
+        if ($role == 'subcounty' || $role == 'county') {
+            $this->db->where($query2);
+        }
         $this->db->group_by('drug');
-        $query = $this->db->get('vw_cdrr_lis');
-        $results = $query->result();
-
-         
-        $result = $this->db->query($query)->result();
-        echo json_encode(['data' => $result]);
+        $query = $this->db->get('vw_cdrr_list')->result_array();
+        return $query;
     }
 
     function getFacilitiesMOS() {
@@ -1023,8 +1020,19 @@ class Orders_model extends CI_Model {
     function getStockChart($filters) {
         unset($filters['data_month']);
         unset($filters['data_date']);
+        if ($filters['facility'][0] == '') {
+            unset($filters['facility']);
+        }
+        if ($filters['subcounty'][0] == '') {
+            unset($filters['subcounty']);
+        }
+        if ($filters['county'][0] == '') {
+            unset($filters['county']);
+        }
         $cat = '';
         $fil = '';
+        $amc = '';
+        $amcfunction = 'fn_get_national_dyn_amc';
         $columns = array();
         $tmp_data = array();
         $reporting_data = array();
@@ -1033,14 +1041,18 @@ class Orders_model extends CI_Model {
         if ($role == 'subcounty') {
             $cat = 'subcounty';
             $fil = $scopename;
+            $amc = "," . "'$scopename'";
+            $amcfunction = 'fn_get_subcounty_amc';
         } else if ($role == 'county') {
             $cat = 'county';
             $fil = $scopename;
+            $amc = "," . "'$scopename'";
+            $amcfunction = 'fn_get_county_amc';
         } else {
             
         }
-        $this->db->select("CONCAT_WS('/', data_month, data_year) name, SUM(closing_bal) y", FALSE);
-        $this->db->where("data_date >=", date('Y-01-01'));
+        $this->db->select("CONCAT_WS('/', data_month, data_year) name, str_to_date(concat_ws('-',`data_year`,`data_month`,'01'),'%Y-%b-%e') begin_date,drug_id,SUM(closing_bal) y", FALSE);
+        $this->db->where("data_date >=", $filters['data_year'][0] . '-01-01');
         if (!empty($filters)) {
             foreach ($filters as $category => $filter) {
                 $this->db->where_in($category, $filter);
@@ -1052,12 +1064,24 @@ class Orders_model extends CI_Model {
         if (array_key_exists("drug", $filters)) {
             
         } else {
-            $this->db->where_in('drug', 'Dolutegravir (DTG) 50mg Tabs');
+            $this->db->where_in('drug', 'Abacavir (ABC) 300mg Tabs');
         }
         $this->db->group_by('name');
         $this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
         $query = $this->db->get('vw_cdrr_list');
+
         $results = $query->result();
+        $res_array = array();
+
+        foreach ($results as $res) {
+            $date = $res->begin_date;
+            $drug_id = $res->drug_id;
+            $no_of_mos = 3;
+            $query2 = $this->db->query("SELECT  $amcfunction($drug_id,$no_of_mos,'$date'$amc) amc")->result();
+
+            array_push($res_array, $query2[0]->amc);
+        }
+
 
 
         foreach ($results as $result) {
@@ -1067,19 +1091,22 @@ class Orders_model extends CI_Model {
 
         $counter = 0;
         foreach ($tmp_data as $name => $item) {
-            $reporting_data[$counter]['type'] = 'bar';
+            $reporting_data[$counter]['type'] = 'column';
             $reporting_data[$counter]['name'] = $name;
             $reporting_data[$counter]['data'] = $item['data'];
             $counter++;
         }
-        echo 'Average 3 Months Consumption = ' . $this->_amc = $this->getCommodityAMC($drug = '', $periodmonth = '');
 
-        $mos = array_map(function($x) {
-            return round($x / $this->_amc, 0);
-        }, $tmp_data['Stock On Hand']['data']);
+        $mos = array_map(function($x, $y) {
+            return round($x / $y, 0);
+        }, $tmp_data['Stock On Hand']['data'], $res_array);
 
+        $AMC = ['type' => 'spline', 'color' => '#9400D3', 'positiveColor' => '#9400D3', 'name' => 'Average Monthly Consumption (AMC)', 'data' => $res_array];
         $MOS = ['type' => 'line', 'color' => '#FF0000', 'negativeColor' => '#0088FF', 'name' => 'Months of Stock', 'data' => $mos];
+
+        array_push($reporting_data, $AMC);
         array_push($reporting_data, $MOS);
+
         return array('main' => $reporting_data, 'columns' => array_values(array_unique($columns)));
     }
 
@@ -1095,7 +1122,7 @@ class Orders_model extends CI_Model {
         }
 
         if (empty($drug)) {
-            $drug = 'Dolutegravir (DTG) 50mg Tabs';
+            $drug = 'Abacavir (ABC) 300mg Tabs';
             $period = date('Y-m') . '-01';
         }
         $get_drug_id = $this->db->where('name', $drug)->get('vw_drug_list')->result();

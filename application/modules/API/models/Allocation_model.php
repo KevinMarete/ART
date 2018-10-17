@@ -11,11 +11,11 @@ class Allocation_model extends CI_Model {
                     c.period_begin,c.code,f.mflcode,f.name as facility,
                     concat (g.name,' (',d.strength,') ',  d.packsize,' ',fm.name) as drug, ci.qty_allocated
                 from tbl_cdrr c
-                inner join tbl_cdrr_item ci on ci.cdrr_id = c.id 
-                inner join tbl_drug d on ci.drug_id = d.id 
-                inner join tbl_generic g on g.id = d.generic_id
-                inner join tbl_facility f on c.facility_id = f.id 
-                inner join tbl_formulation fm on d.formulation_id = fm.id
+                LEFT join tbl_cdrr_item ci on ci.cdrr_id = c.id 
+                LEFT join tbl_drug d on ci.drug_id = d.id 
+                LEFT join tbl_generic g on g.id = d.generic_id
+                LEFT join tbl_facility f on c.facility_id = f.id 
+                LEFT join tbl_formulatio fm on d.formulation_id = fm.id
                 where status = 'reviewed' 
                 AND f.mflcode = ?
                 AND ci.qty_allocated > 0
