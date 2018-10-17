@@ -1,6 +1,5 @@
-<link href="<?php echo base_url() . 'public/manager/css/procurement.css'; ?>" rel="stylesheet"> 
 <?php 
-if($this->session->userdata('role')=='readonly'){?>
+if($this->session->userdata('role')=='kemsa'){?>
 <style>
     .readonly2{
         display:none;

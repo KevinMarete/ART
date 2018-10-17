@@ -6,7 +6,7 @@
 </style>
 <form id="MINUTES">
     <div class="panel panel-default">
-        <div class="panel-heading">Minutes - <?= date('d/m/Y') ?>  || <i class="fa fa-plus-circle loadUsers"> Template <select id='template'></select></i></div>
+        <div class="panel-heading">Minutes - <?= date('d/m/Y') ?>  || <i class="fa fa-plus-circle loadUsers">Load Template <select id='template'></select></i></div>
         <div class="panel-body" style="padding:20px;">
             <div class="row">
                 <p><strong><input type="text" class="form-control" name="title" value="MINUTES OF PROCUREMENT PLANNING MEETING HELD AT NASCOP ON <?= date('d/m/Y'); ?> FROM 9.00 AM-2.00 PM" style="width:100%;"/></strong></p>
@@ -53,7 +53,7 @@
         $('#template').append("<option value='<?= date('Y-m-d'); ?>'></option>")
         $.getJSON(lastURL, function (d) {
             $.each(d, function (index, cat) {
-                $("#template").append($("<option value='" + cat.id + "'>" + cat.date.toUpperCase() + "</option>"));
+                $("#template").append($("<option value='" + cat.id + "'>" + cat.minute_date+ "</option>"));
             });
         });
 
