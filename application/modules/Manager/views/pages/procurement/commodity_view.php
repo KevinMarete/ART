@@ -1,18 +1,4 @@
-<?php 
-if($this->session->userdata('role')=='kemsa'){?>
-<style>
-    .readonly2{
-        display:none;
-    }
-    .tabledit-edit-button,.edit,.trash,.remove,#commodity_frm{
-        display:none !important;
-    }
-</style>
-<?php }?>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jexcel/1.5.7/js/jquery.jexcel.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jexcel/1.5.7/css/jquery.jexcel.bootstrap.min.css" type="text/css" />
+<link href="<?php echo base_url() . 'public/manager/css/procurement.css'; ?>" rel="stylesheet">
 <style>
     .dropdown-submenu {
         position: relative;
@@ -154,7 +140,7 @@ if($this->session->userdata('role')=='kemsa'){?>
                     <div id="drug_procurement" class="tab-pane fade in active">
 
                         <h3>Procurement Form</h3>
-                        <p>Switch Drug:<select class="form-control select2" id="DrugList"></select></p>
+                        <!--p>Switch Drug:<select class="form-control select2" id="DrugList"></select></p-->
                         <p><span style="font-size: 16px;" class="label label-info " id="productTitle1">Product - Month</span></p>
 
 
