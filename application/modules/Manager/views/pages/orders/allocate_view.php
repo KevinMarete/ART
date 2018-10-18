@@ -161,11 +161,13 @@
                                                             <?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'] ?>
                                                             <?php
                                                             if ($count > $balance) {
-                                                                $p = round((($count - $balance) / $count) * 100, 0);
-                                                                echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
+                                                               // $p = round((($count - $balance) / $count) * 100, 0);
+                                                                $p = round($count - $balance, 0);
+                                                                echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '</span></sup>';
                                                             } else if ($balance > $count) {
-                                                                $p = round((($balance - $count) / $balance) * 100, 0);
-                                                                echo '<sup><span style="background: red; font-size:9px;" class="badge"> +' . $p . '%</span></sup>';
+                                                               // $p = round((($balance - $count) / $balance) * 100, 0);
+                                                                $p = round($balance - $count , 0);
+                                                                echo '<sup><span style="background: red; font-size:9px;" class="badge"> +' . $p . '</span></sup>';
                                                             }
                                                             ?>                                                        
                                                         </td>

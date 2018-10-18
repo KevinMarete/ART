@@ -5,7 +5,7 @@
 <!--highcharts_configuration-->
 <script type="text/javascript">
     $(function () {
-        var chartDIV = '<?php echo $chart_name."_container"; ?>';
+        var chartDIV = '<?php echo $chart_name . "_container"; ?>';
 
         Highcharts.chart(chartDIV, {
             legend: {
@@ -45,11 +45,18 @@
             },
 
             plotOptions: {
-                column: {
-                    stacking: 'percent',
+                series: {
+                    stacking: 'normal',
+                    pointWidth: 20,
                     dataLabels: {
-                        enabled: true
-                    }
+                        enabled: true,
+                        verticalAlign: 'bottom',
+                        style: {
+                            color: 'black'
+                        }
+                    },
+                    enableMouseTracking: true,
+                    borderWidth: 0
                 }
             },
 
@@ -57,7 +64,7 @@
                 enabled: false
             },
 
-            series: <?php echo $chart_series_data; ?>,
+            series: <?php echo $chart_series_data; ?>
         });
     })
 </script>

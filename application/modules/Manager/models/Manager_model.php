@@ -9,6 +9,10 @@ class Manager_model extends CI_Model {
     public function get_reporting_rates($filters) {
         unset($filters['data_month']);
         unset($filters['data_date']);
+        unset($filters['county']);
+
+        //  print_r($filters);
+        // die;
         $columns = array();
         $tmp_data = array();
         $reporting_data = array();
@@ -46,31 +50,36 @@ class Manager_model extends CI_Model {
         $this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
         $query = $this->db->get('vw_cdrr_list');
         $results = $query->result_array();
-        $newarr = array_map(function($m) {
-            return (int) $this->_objcount - (int) $m['total'];
+        $reported = array_map(function($m) {
+            $perc = ((int) $m['total'] / (int) $this->_objcount ) * 100;
+            return round($perc, 2);
         }, $results);
+
+        $unreported = array_map(function($m) {
+            $perc = 100 - $m;
+            return round($perc, 2);
+        }, $reported);
 
         foreach ($results as $result) {
             array_push($columns, $result['period']);
-            $tmp_data['Reported']['data'][] = $result['total'];
         }
-        // $tmp_data['NotReported']['data'] = $newarr;
 
-        $arr1 = ['name' => 'Not Reported', 'data' => $newarr];
+        $rep = ['name' => 'Reported', 'color' => 'green', 'dataLabels' => ['align' => 'right', 'format' => '{point.y} %'], 'data' => $reported];
+        $unrep = ['name' => 'Not Reported', 'color' => 'grey', 'dataLabels' => ['enabled' => false], 'data' => $unreported];
+        array_push($reporting_data, $unrep);
+        array_push($reporting_data, $rep);
 
-        $counter = 0;
-        foreach ($tmp_data as $name => $item) {
-            $reporting_data[$counter]['name'] = 'Reported';
-            $reporting_data[$counter]['data'] = $item['data'];
-            $counter++;
-        }
-        array_push($reporting_data, $arr1);
 
+
+        //echo '<pre>';
         return array('main' => $reporting_data, 'columns' => array_values(array_unique($columns)));
+        // echo '</pre>';
     }
 
     public function get_patient_regimen($filters) {
         unset($filters['data_date']);
+        unset($filters['county']);
+
         $cat = '';
         $fil = '';
         $role = $this->session->userdata('role');
@@ -98,10 +107,14 @@ class Manager_model extends CI_Model {
         $this->db->group_by('name');
         $this->db->order_by('y', 'DESC');
         $query = $this->db->get('vw_maps_list');
+        // echo $this->db->last_query();
+
         return $this->get_patient_regimen_drilldown_level1(array('main' => $query->result_array()), $filters);
     }
 
     public function get_patient_regimen_drilldown_level1($main_data, $filters) {
+        unset($filters['county']);
+
         $cat = '';
         $fil = '';
         $role = $this->session->userdata('role');
@@ -152,6 +165,7 @@ class Manager_model extends CI_Model {
     }
 
     public function get_patient_regimen_drilldown_level2($drilldown_data, $filters) {
+        unset($filters['county']);
         $cat = '';
         $fil = '';
         $role = $this->session->userdata('role');
@@ -207,6 +221,19 @@ class Manager_model extends CI_Model {
     public function get_drug_consumption_allocation_trend($filters) {
         unset($filters['data_month']);
         unset($filters['data_date']);
+        if ($filters['facility'][0] == '') {
+            unset($filters['facility']);
+        }
+        if ($filters['facility'][0] == '') {
+            unset($filters['facility']);
+        }
+        if ($filters['subcounty'][0] == '') {
+            unset($filters['subcounty']);
+        }
+        if ($filters['county'][0] == '') {
+            unset($filters['county']);
+        }
+
         $cat = '';
         $fil = '';
         $role = $this->session->userdata('role');
@@ -227,7 +254,7 @@ class Manager_model extends CI_Model {
         );
 
         $this->db->select("CONCAT_WS('/', data_month, data_year) period, SUM(allocated) allocated_total, SUM(consumed) consumed_total", FALSE);
-        $this->db->where("data_date >=", date('Y-01-01'));
+        $this->db->where("data_date >=", $filters['data_year'][0] . '-01-01');
         if (!empty($filters)) {
             foreach ($filters as $category => $filter) {
                 $this->db->where_in($category, $filter);
@@ -237,9 +264,9 @@ class Manager_model extends CI_Model {
             $this->db->where_in($cat, $fil);
         }
         if (array_key_exists("drug", $filters)) {
-           
+            
         } else {
-           $this->db->where_in('drug', 'Dolutegravir (DTG) 50mg Tabs');
+            $this->db->where_in('drug', 'Abacavir (ABC) 300mg Tabs');
         }
         $this->db->group_by('period');
         $this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
@@ -258,6 +285,7 @@ class Manager_model extends CI_Model {
                 }
             }
         }
+        //  echo $this->db->last_query();
         return array('main' => $scaleup_data, 'columns' => $columns);
     }
 

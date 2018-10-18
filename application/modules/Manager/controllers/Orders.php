@@ -183,17 +183,68 @@ class Orders extends MX_Controller {
     }
 
     function getMOS() {
+        $amc_array = array();
+        $cat = '';
+        $fil = '';
+        $amc = '';
+        $amcfunction = 'fn_get_national_dyn_amc';
         $year = $this->input->post('data_year');
         $month = $this->input->post('data_month');
         $scope_name = $this->session->userdata('scope_name');
         $role = $this->session->userdata('role');
         if ($role == 'subcounty') {
             $query = "$role = '$scope_name'";
+            $fil = $scope_name;
+            $amc = "," . "'$scope_name'";
+            $amcfunction = 'fn_get_subcounty_amc';
         } else if ($role == 'county') {
             $query = "$role = '$scope_name'";
+            $fil = $scope_name;
+            $amc = "," . "'$scope_name'";
+            $amcfunction = 'fn_get_county_amc';
+        }
+        $sub_res = $this->Orders_model->getCalcMOS($year, $month, $query);
+
+        foreach ($sub_res as $key => $res) {
+            $date = $res['data_date'];
+            $drug_id = $res['drug_id'];
+            $no_of_mos = 3;
+            $query2 = $this->db->query("SELECT  $amcfunction($drug_id,$no_of_mos,'$date'$amc) amc")->result_array();
+            array_push($amc_array, $query2[0]['amc']);
         }
 
-        $this->Orders_model->getCalcMOS($year,$month,$query);
+        $newarr = array_map(function($drugs, $amc) {
+            $mapped_val = 0;
+            $res = round($drugs['balance'] / $amc, 0);
+            if (is_nan($res)) {
+                $mapped_val = 0;
+            } else if (is_infinite($res)) {
+                $mapped_val = 0;
+            } else {
+                $mapped_val = (int) $res;
+            }
+            return $mapped_val;
+        }, $sub_res, $amc_array);
+
+        foreach ($sub_res as $key => $res) {
+            $sub_res[$key] = array_merge($res, ['dmos' => $newarr[$key]]);
+        }
+
+        $high = $sub_res;
+        $low = $sub_res;
+        foreach ($high as $i => $v) {
+            if ($v['dmos'] < 6) {
+                unset($high[$i]);
+            }
+        }
+
+        foreach ($low as $i => $v) {
+            if ($v['dmos'] > 2) {
+                unset($low[$i]);
+            }
+        }
+        // print_r($sub_res);
+        echo json_encode(['high' => array_values($high),'low' => array_values($low)]);
     }
 
     function getHighMos() {

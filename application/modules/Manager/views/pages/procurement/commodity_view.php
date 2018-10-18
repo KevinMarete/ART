@@ -1,4 +1,4 @@
-<link href="<?php echo base_url() . 'public/manager/css/procurement.css'; ?>" rel="stylesheet"> 
+<link href="<?php echo base_url() . 'public/manager/css/procurement.css'; ?>" rel="stylesheet">
 
 <style>
     .dropdown-submenu {
@@ -141,7 +141,7 @@
                     <div id="drug_procurement" class="tab-pane fade in active">
 
                         <h3>Procurement Form</h3>
-                        <p>Switch Drug:<select class="form-control select2" id="DrugList"></select></p>
+                        <!--p>Switch Drug:<select class="form-control select2" id="DrugList"></select></p-->
                         <p><span style="font-size: 16px;" class="label label-info " id="productTitle1">Product - Month</span></p>
 
 

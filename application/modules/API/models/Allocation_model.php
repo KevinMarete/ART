@@ -1,5 +1,4 @@
 <?php
-
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Allocation_model extends CI_Model {
@@ -45,3 +44,4 @@ class Allocation_model extends CI_Model {
     }
 
 }
+
