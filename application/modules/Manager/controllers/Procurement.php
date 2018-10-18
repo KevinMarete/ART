@@ -169,7 +169,7 @@ class Procurement extends MX_Controller {
         $aob = $this->input->post('aob');
 
         if ($this->checkMinuteSave(date('Y-m')) > 0) {
-              $this->db->query("SET foreign_key_checks = 0");
+            $this->db->query("SET foreign_key_checks = 0");
             echo 'Update';
             $this->db->like('date', date('Y-m'), 'both')->update('tbl_minutes', [
                 'title' => $title,
@@ -183,7 +183,7 @@ class Procurement extends MX_Controller {
             // echo $this->db->last_query();
             $this->updateSysLogs('Updated  (tbl_minutes - Meeting Minute  > Minute Agenda & A.O.Bs)');
         } else {
-          $this->db->query("SET foreign_key_checks = 0");
+            $this->db->query("SET foreign_key_checks = 0");
             echo 'Inserted';
             $this->db->insert('tbl_minutes', [
                 'title' => $title,
@@ -804,38 +804,28 @@ class Procurement extends MX_Controller {
     }
 
     function get_order_items() {
-        $base_url = 'http://commodities.nascop.org/art';
+        header("Content-Type: application/json; charset=UTF-8");
         $response = array();
         $item_urls = array(
-            'status' => $base_url . 'API/procurement_status',
-            'funding' => $base_url . 'API/funding_agent',
-            'supplier' => $base_url . 'API/supplier'
+            'status' => $this->getStatuses('procurement_status'),
+            'funding' => $this->getStatuses('funding_agent'),
+            'supplier' => $this->getStatuses('supplier')
         );
+
         foreach ($item_urls as $key => $item_url) {
             if ($key != 'status') {
                 $response[$key][0] = 'Select one';
             }
-
-            foreach (json_decode($this->file_get_contents_curl($item_url), TRUE) as $values) {
+            foreach (json_decode(json_encode($item_url), TRUE) as $values) {
                 $response[$key][$values['id']] = $values['name'];
             }
         }
-
-        echo json_encode($response, JSON_PRETTY_PRINT);
-    }
-    
-
-    function file_get_contents_curl($url) {
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser.
-        curl_setopt($ch, CURLOPT_URL, $url);
-
-        $data = curl_exec($ch);
-        curl_close($ch);
-
-        return $data;
+        echo json_encode($response);
     }
 
+    function getStatuses($table) {
+        // header("Content-Type: application/json; charset=UTF-8");
+        $resp = $this->db->get('tbl_' . $table)->result();
+        return $resp;
+    }
 }
