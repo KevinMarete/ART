@@ -65,14 +65,14 @@
     </div><!--end row-->
     <!--row-->
 
-  
+
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default"><!--panel default-->
                 <div class="panel-heading">
                 </div>
                 <div class="panel-body">
-                  
+
                     <table width="100%" class="table table-striped table-bordered table-hover" id="procurement-listing">
                         <thead>
                             <tr>
@@ -95,6 +95,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                <p><span style="font-size: 16px;" class="label label-info productTitle" id="productTitle2">Product - Month</span></p>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -105,55 +106,25 @@
                                         <li> <a data-toggle="tab" href="#minutes">Minutes</a></li>-->
                     <li class="active"><a data-toggle="tab" href="#drug_procurement">Procurement</a></li>
                     <li><a data-toggle="tab" href="#drug_transactions">Product Tracker</a></li>
-                    <li><a data-toggle="tab" href="#drug_orders">Transactions</a></li>
-                    <li><a data-toggle="tab" href="#drug_logs">Logs</a></li>
+                    <li><a data-toggle="tab" href="#decisions">Decisions</a></li>
                 </ul>
                 <div class="tab-content">
-                    <!--                    <div id="drug_decision" class="tab-pane fade in active">
-                                            <h3>All Product Decisions</h3>
-                                            <div class="container-fluid">
-                    
-                                                <div id="timeline" style="margin-top: 10px;">
-                                                    <div class="row timeline-movement timeline-movement-top">
-                                                        <div class="timeline-badge timeline-future-movement">
-                                                            <a href="#" data-toggle="modal" data-target="#decisionModal">
-                                                                <span class="glyphicon glyphicon-plus"></span>
-                                                            </a>
-                                                        </div>
-                                                        <div class="timeline-badge timeline-filter-movement">
-                                                            <a href="#">
-                                                                <span class="glyphicon glyphicon-time"></span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                    
-                                                    <div id="decision_tbl"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                    
-                                        <div id="minutes" class="tab-pane fade">
-                                            <h3>Minutes</h3>
-                    <?php $this->load->view('pages/procurement/minutes_view'); ?>
-                                        </div>-->
-
-
-                    <div id="drug_procurement" class="tab-pane fade in active">
+                      <div id="drug_procurement" class="tab-pane fade in active">
 
                         <h3>Procurement Form</h3>
-                        <!--p>Switch Drug:<select class="form-control select2" id="DrugList"></select></p-->
-                        <p><span style="font-size: 16px;" class="label label-info " id="productTitle1">Product - Month</span></p>
+                        <!--p>Switch Drug:<select class="form-control select2" id="DrugList"></select></p>
+                        <p><span style="font-size: 16px;" class="label label-info " id="productTitle1">Product - Month</span></p-->
 
 
                         <form action="<?php echo base_url() . 'manager/save_procurement'; ?>" method="POST" class="form-horizontal" role="form">
                             <div class="form-group row">
-                                <div class="row pull-right" style="margin-right: 100px;">
+                                <!--div class="row pull-right" style="margin-right: 100px;">
                                     <button id="addDecision" data-toggle="modal" data-target="#decisionModal" class="btn btn-sm btn-primary readonly2"><i class="glyphicon glyphicon-plus"></i> Add Decision</button>
                                 </div>
-                                <label for="open_kemsa" class="col-sm-3 col-form-label">Commodity Name</label>
+                                <label for="open_kemsa" class="col-sm-3 col-form-label">Commodity Name</label-->
                                 <div class="col-sm-9">
                                     <input type="hidden" readonly class="form-control" id="drug_id" name="drug_id">
-                                    <input type="text" readonly class="form-control" id="commodity_name">
+                                    <!--input type="text" readonly class="form-control" id="commodity_name"-->
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -204,16 +175,16 @@
                                             <tbody>
                                                 <tr>
                                                     <td>
-                                                        <input type="number" name="receipt_qty[]" required="" class="receipt_qty col-md-12">
+                                                        <input type="number" name="receipt_qty[]"  class="receipt_qty col-md-12">
                                                     </td>
                                                     <td>
-                                                        <input type="number" name="receipt_qty_percentage[]" required="" class="receipt_qty_percentage col-md-12">
+                                                        <input type="number" name="receipt_qty_percentage[]"  class="receipt_qty_percentage col-md-12">
                                                     </td>
                                                     <td>
-                                                        <input type="text" name="transaction_date[]" required="" class="transaction_date col-md-12">
+                                                        <input type="text" name="transaction_date[]" class="transaction_date col-md-12">
                                                     </td>
                                                     <td>
-                                                        <select name="status[]" required="" class="procurement_status"></select>
+                                                        <select name="status[]"  class="procurement_status"></select>
                                                     </td>
                                                     <td>
                                                         <select name="funding_agent[]" class="funding_agent "></select>
@@ -238,36 +209,11 @@
                                     <button type="submit" class="btn btn-primary readonly2"><i class="fa fa-save"></i> Save Order</button>
                                 </div>
                             </div>
-
-                            <div class="form-group row col-md-11 col-md-offset-0">
-                                <label for="receipts_usaid" class="col-sm-3 col-form-label"><h4>Product Decisions</h4></label>
-                                <div id="timeline" style="margin-top: 5px;">
-                                    <div class="row timeline-movement timeline-movement-top">
-                                        <div class="timeline-badge timeline-future-movement">
-                                            <a href="#" data-toggle="modal" data-target="#decisionModal" class="readonly2">
-                                                <span class="glyphicon glyphicon-plus"></span>
-                                            </a>
-                                        </div>
-                                        <div class="timeline-badge timeline-filter-movement">
-                                            <a href="#">
-                                                <span class="glyphicon glyphicon-time"></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12" id='decision_tbl_procurement'>
-                                    </div>
-                                </div>
-                            </div>
-
-
-
                         </form>
                         </p>
                     </div>
                     <div id="drug_transactions" class="tab-pane fade">
                         <h3>Transactions</h3>
-                        <p><span style="font-size: 16px;" class="label label-info " id="productTitle1">Product - Month</span></p>
-
                         <p>
                         <div class="form-control" id="year-filter">
                             <input type="hidden" name="filter_year" id="filter_year" value="" />
@@ -291,18 +237,32 @@
 
 
                     </div>
-                    <div id="drug_orders" class="tab-pane fade">
-                        <h3>Orders</h3>
-                        <p><span style="font-size: 16px;" class="label label-info productTitle" id="productTitle2">Product - Month</span></p>
+                    <div id="decisions" class="tab-pane fade">
+                        <h3>Decisions</h3>
+                        <div id="orders_tbl" class="table-responsive">
 
-                        <div id="orders_tbl" class="table-responsive"></div>
-                    </div>
-                    <div id="drug_logs" class="tab-pane fade">
-                        <h3>Logs</h3>
-                        <p><span style="font-size: 16px;" class="label label-info productTitle" id="productTitle3">Product - Month</span></p>
+                            <div class="form-group row col-md-12">
+                                <div id="timeline" style="margin-top: 1px;">
+                                    <div class="row timeline-movement timeline-movement-top">
+                                        <div class="timeline-badge timeline-future-movement">
+                                            <a href="#" data-toggle="modal" data-target="#decisionModal" class="readonly2">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </a>
+                                        </div>
+                                        <div class="timeline-badge timeline-filter-movement">
+                                            <a href="#">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12" id='decision_tbl_procurement'>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <div id="logs_tbl"></div>
+                        </div>
                     </div>
+                   
                 </div>
             </div><!--/modal-body-->
             <div class="modal-footer">
@@ -448,7 +408,7 @@
     $(document).ready(function () {
 
 
-    
+
 
         $(document).on("click", '.dropdown-submenu a.test', function (e) {
             $(this).next('ul').toggle();
@@ -552,9 +512,9 @@
             $('.productTitle').empty();
             getDecisions(id, "#decision_tbl_procurement");
             getTransactionsTable(id, currentYear, "#transaction_tbl");
-            getDrugOrders(id, "#orders_tbl")
+            //getDrugOrders(id, "#orders_tbl")
             getDrugOrdersHistory(id, '#procurement_history');
-            getDrugLogs(id, "#logs_tbl");
+            //getDrugLogs(id, "#logs_tbl");
         })
 
 
@@ -619,9 +579,9 @@
             getDecisionsTimeline(drugID, "#decision_tbl");
             getDecisions(drugID, "#decision_tbl_procurement");
             getTransactionsTable(drugID, currentYear, "#transaction_tbl");
-            getDrugOrders(drugID, "#orders_tbl")
+            //getDrugOrders(drugID, "#orders_tbl")
             getDrugOrdersHistory(drugID, '#procurement_history');
-            getDrugLogs(drugID, "#logs_tbl");
+            //getDrugLogs(drugID, "#logs_tbl");
 
         });
         //Clean up fields when modal is closed
