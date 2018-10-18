@@ -1057,7 +1057,9 @@ class Orders_model extends CI_Model {
         $this->db->group_by('name');
         $this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
         $query = $this->db->get('vw_cdrr_list');
-        $results = $query->result();
+         echo $this->db->last_query();       
+        die;
+         $results = $query->result();
 
 
         foreach ($results as $result) {

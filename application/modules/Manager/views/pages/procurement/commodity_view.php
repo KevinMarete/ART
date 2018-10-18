@@ -1,18 +1,5 @@
-<?php 
-if($this->session->userdata('role')=='kemsa'){?>
-<style>
-    .readonly2{
-        display:none;
-    }
-    .tabledit-edit-button,.edit,.trash,.remove,#commodity_frm{
-        display:none !important;
-    }
-</style>
-<?php }?>
+<link href="<?php echo base_url() . 'public/manager/css/procurement.css'; ?>" rel="stylesheet"> 
 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jexcel/1.5.7/js/jquery.jexcel.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jexcel/1.5.7/css/jquery.jexcel.bootstrap.min.css" type="text/css" />
 <style>
     .dropdown-submenu {
         position: relative;
