@@ -1,6 +1,6 @@
-    <script src="<?php echo base_url() . 'public/manager/js/tinymce/tinymce.min.js'; ?>"></script
+<script src="<?php echo base_url() . 'public/manager/js/tinymce/tinymce.min.js'; ?>"></script
 <!-- Bootstrap Core JavaScript     -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <!--highcharts-->
 <script src="<?php echo base_url() . 'public/dashboard/lib/highcharts/js/highcharts.js'; ?>"></script>
 <script src="<?php echo base_url() . 'public/dashboard/lib/highcharts/js/exporting.js'; ?>"></script>
@@ -46,6 +46,9 @@
 <script type="text/javascript" src="<?php echo base_url() . 'public/manager/lib/jexcel/js/jquery.jexcel.js'; ?>"></script>
 <script type="text/javascript" src="<?php echo base_url() . 'public/dashboard/js/jquery.tabletojson.js'; ?>"></script>
 <script type="text/javascript" src="<?php echo base_url() . 'public/manager/js/gridviewscroll.js'; ?>"></script>
+<script type="text/javascript" src="<?php echo base_url() . 'public/manager/js/jquery.smartWizard.js'; ?>"></script>
+<script type="text/javascript" src="<?php echo base_url() . 'public/manager/js/jquery.easy-autocomplete.min.js'; ?>"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 <!-- Custom Theme JavaScript -->
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/dist/js/sb-admin-2.js'; ?>"></script>
 <script src="<?php echo base_url() . 'public/manager/getcontenttools/content-tools.js'; ?>"></script>
@@ -57,7 +60,7 @@
 
             $.get("<?= base_url() ?>Manager/procurement/reminder/q", function () {
             });
-            
-            
+
+
         });
     </script>

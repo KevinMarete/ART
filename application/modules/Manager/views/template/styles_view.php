@@ -29,7 +29,7 @@
 <!--bootstrap-sweetalert-->
 <link href="<?php echo base_url() . 'public/manager/lib/bootstrap-sweetalert/css/sweetalert.min.css'; ?>" rel="stylesheet">
 <!--jexcel-->
- <link href="<?php echo base_url() . 'public/manager/lib/jexcel/css/jquery.jexcel.css'; ?>" rel="stylesheet">
+<link href="<?php echo base_url() . 'public/manager/lib/jexcel/css/jquery.jexcel.css'; ?>" rel="stylesheet">
 <!-- Manager -->
 <link href="<?php echo base_url() . 'public/manager/css/manager.css'; ?>" rel="stylesheet">
 <!--favicon-->
@@ -40,3 +40,13 @@
 
 <!-- jQuery js-->
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables/js/jquery-1.12.4.js'; ?>"></script>
+
+<!-- Include SmartWizard CSS -->
+<link href="<?php echo base_url() . 'public/manager/css/smart_wizard.css'; ?>" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+<!-- Optional SmartWizard theme -->
+<link href="<?php echo base_url() . 'public/manager/css/smart_wizard_theme_circles.css' ?>" rel="stylesheet" type="text/css" />
+<link href="<?php echo base_url() . 'public/manager/css/smart_wizard_theme_arrows.css' ?>" rel="stylesheet" type="text/css" />
+<link href="<?php echo base_url() . 'public/manager/css/smart_wizard_theme_dots.css' ?>" rel="stylesheet" type="text/css" />
+<link href="<?php echo base_url() . 'public/manager/css/easy-autocomplete.css' ?>" rel="stylesheet" type="text/css" />
+<link href="<?php echo base_url() . 'public/manager/css/easy-autocomplete.themes.css' ?>" rel="stylesheet" type="text/css" />

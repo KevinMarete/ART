@@ -56,6 +56,7 @@ $route['ftp'] = 'Ftp';
 $route['admin'] = 'Admin';
 $route['manager'] = 'Manager';
 $route['manager/login'] = 'Manager/load_page/user/login/Login';
+
 $route['manager/forgot_pass'] = 'Manager/load_page/user/forgot/Forgot Password';
 $route['manager/register_account'] = 'Manager/load_page/user/register/New Account';
 
@@ -82,11 +83,15 @@ $route['manager/orders/view_satellites/(:any)/(:any)'] = 'Manager/load_template/
 $route['manager/procurement/minute/(:any)/(:any)'] = 'Manager/load_template/minute/minute/Minute/0/$1/$2';
 
 $route['manager/procurement/commodity'] = 'Manager/load_template/procurement/commodity/Procurement Commodities/0';
+$route['manager/procurement/meeting'] = 'Manager/load_template/procurement/meeting/Procurement Meeting/0';
+$route['manager/procurement/meeting/(:any)'] = 'Manager/load_template/procurement/minute/Procurement Meeting Minute/0';
 $route['manager/procurement/tracker'] = 'Manager/load_template/procurement/tracker/Procurement Tracker/0';
 $route['manager/save_procurement'] = 'Manager/procurement/save_tracker';
 
 $route['manager/update_profile'] = 'Manager/user/update_profile';
 $route['manager/update_password'] = 'Manager/user/update_password';
+
+$route['manager/public/minute'] = 'Manager/load_page/public/minute/Minute';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

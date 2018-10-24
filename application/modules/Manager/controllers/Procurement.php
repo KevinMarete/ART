@@ -22,6 +22,13 @@ class Procurement extends MX_Controller {
         echo json_encode($this->db->query($query)->result());
     }
 
+    function getDrugsByName() {
+        $drug_name = $this->input->post('phrase');
+        $drug_cat = $this->input->post('category');
+        $query = "SELECT * FROM `vw_drug_list` WHERE name LIKE '%$drug_name%'  ORDER BY name ASC";
+        echo json_encode($this->db->query($query)->result());
+    }
+
     function getCounty() {
         $toplevel = $this->db->get('tbl_county')->result();
         echo json_encode(['data' => $toplevel]);
@@ -828,4 +835,5 @@ class Procurement extends MX_Controller {
         $resp = $this->db->get('tbl_' . $table)->result();
         return $resp;
     }
+
 }
