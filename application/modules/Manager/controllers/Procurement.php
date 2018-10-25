@@ -23,10 +23,14 @@ class Procurement extends MX_Controller {
     }
 
     function getDrugsByName() {
-        $drug_name = $this->input->post('phrase');
-        $drug_cat = $this->input->post('category');
+        $drug_name = $this->input->post('phrase');       
         $query = "SELECT * FROM `vw_drug_list` WHERE name LIKE '%$drug_name%'  ORDER BY name ASC";
         echo json_encode($this->db->query($query)->result());
+    }
+    
+    function getDecision($id){
+       $query = $this->db->query("SELECT id,discussion,recommendation,DATE_FORMAT(decision_date,'%W %D %b, %Y') decision_date FROM `tbl_decision` WHERE id='$id' ORDER BY id DESC LIMIT 1")->result();
+       $this->response($query);
     }
 
     function getCounty() {
@@ -335,15 +339,18 @@ class Procurement extends MX_Controller {
 
     function get_transaction_data() {
         $drug_id = $this->input->post('drug_id');
-        $year = date('Y');
         $data = $this->input->post('data');
-        $new_month = [];
+        $reporting_months = [];
 
-        foreach ($data[0] as $str) {
-            $str = preg_replace('/[0-9]+/', '', $str);
-            array_push($new_month, $str);
+        foreach ($data[0] as $index => $str) {
+            if ($index > 1) {
+                $str_arr = explode(' ', $str);
+                $year = $str_arr[1];
+                $month = $str_arr[0];
+                array_push($reporting_months, $month);
+            }
         }
-        $reporting_months = $new_month;
+
         $open_kemsa = $data[1];
         $receipts_kemsa = $data[2];
         $issues_kemsa = $data[3];
@@ -351,12 +358,16 @@ class Procurement extends MX_Controller {
         $monthly_consumption = $data[5];
 
         for ($i = 0; $i < count($reporting_months); $i++) {
+
+            $inner_count = 2;
+            $j = $i + $inner_count;
+
             $update_data = [
-                'open_kemsa' => $open_kemsa[$i],
-                'receipts_kemsa' => $receipts_kemsa[$i],
-                'issues_kemsa' => $issues_kemsa[$i],
-                'close_kemsa' => $close_kemsa[$i],
-                'monthly_consumption' => $monthly_consumption[$i],
+                'open_kemsa' => $open_kemsa[$j],
+                'receipts_kemsa' => $receipts_kemsa[$j],
+                'issues_kemsa' => $issues_kemsa[$j],
+                'close_kemsa' => $close_kemsa[$j],
+                'monthly_consumption' => $monthly_consumption[$j],
             ];
             $this->db
                     ->where('transaction_year', $year)
@@ -834,6 +845,57 @@ class Procurement extends MX_Controller {
         // header("Content-Type: application/json; charset=UTF-8");
         $resp = $this->db->get('tbl_' . $table)->result();
         return $resp;
+    }
+
+    function memberUpdates() {
+        $present = $this->input->post('present');
+        $absent = $this->input->post('absent');
+        for ($i = 0; $i < count($present); $i++) {
+            $this->db->where('email', $present[$i])->update('tbl_mailing_list', ['present' => 0]);
+        }
+        for ($j = 0; $j < count($absent); $i++) {
+            $this->db->where('email', $absent[$i])->update('tbl_mailing_list', ['present' => 1]);
+        }
+        $success = ['success' => 1];
+        $this->response($success);
+    }
+
+    function membersListAdd() {
+        $resp['response'] = '';
+        $name = $this->input->post('name');
+        $email = $this->input->post('email');
+        if ($this->checkEmail($email) > 0) {
+            $resp['response'] = 0;
+        } else {
+            $this->db->insert('tbl_mailing_list', [
+                'name' => $name,
+                'email' => $email,
+                'email_type' => 1,
+                'sent_date' => date('Y-m-d H:i:s'),
+                'status' => 1,
+                'present' => 0,
+            ]);
+            $resp['response'] = 1;
+        }
+        $this->response($resp['response']);
+    }
+
+    function checkEmail($param) {
+        $email = $this->db->where('email', $param)->get('tbl_mailing_list')->result();
+        return count($email);
+    }
+
+    function getEmails() {
+
+        $present = $this->db->where('present', '0')->get('tbl_mailing_list')->result();
+        $absent = $this->db->where('present', '1')->get('tbl_mailing_list')->result();
+        $result = ['present' => $present, 'absent' => $absent];
+        $this->response($result);
+    }
+
+    function response($result) {
+        header("Content-Type: application/json; charset=UTF-8");
+        echo json_encode($result);
     }
 
 }

@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id='saveSchedule' class="btn btn-primary" >Save</button>
+                    <button type="button" id='saveSchedule' class="btn btn-primary" >Save & Start Meeting</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>

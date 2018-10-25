@@ -33,6 +33,15 @@
 
     .card {
         margin-top: 1em;
+
+    }
+
+    .cardre {
+
+        background: #4FC3F7;
+        padding: 1px; 
+        border-radius: 3px; 
+        border: 1px solid #1A237E;
     }
 
     /* IMG displaying */
@@ -40,8 +49,11 @@
 
 
     }
-    .person-card .card-title{
+    .card-title{
         text-align: center;
+        background: #8BC34A; 
+        border: 1px solid white; 
+        font-weight: bold;
     }
     .person-card .person-img{
         width: 10em;
@@ -82,6 +94,10 @@
             margin-bottom: 5px;
         }
     }
+    .badge-info{
+        font-size: 14px;
+        font-weight: bold;
+    }
 </style>
 <div id="page-wrapper">
     <!--row-->
@@ -101,7 +117,7 @@
         <div class="col-lg-12">
 
             <div class="row d-flex align-items-center p-3 my-3 text-white-50">
-                <div class="col-12 col-lg-6 col-sm-12">                    
+                <div class="col-12 col-lg-6 col-sm-12 hidden" >                    
                     <select id="theme_selector" class="custom-select col-lg-6 col-sm-12">
                         <option value="arrows">Theme</option>
                         <option value="default">Default</option>
@@ -140,21 +156,8 @@
                             <div class="subject-info-box-1">
                                 <h5>Members Present</h5>
                                 <select multiple="multiple" id='lstBox1' class="form-control" style="height:300px;">
-                                    <option>Carol Asin-NASCOP-Chairperson</option>
-                                    <option>Dr Peter Mwangi- KEMSA</option>
-                                    <option>Charles Lwanga-USAID</option>
-                                    <option>Douglas Onyancha- KEMSA</option>
-                                    <option>Alex Kinoti- USAID</option>
-                                    <option>Evelyn Wachuka- KEMSA</option>
-                                    <option>Regina Mucuha-NASCOP</li>
-                                    <option>Christine Malati- USAID/WASHINGTON</option>
-                                    <option>John Kabuchi-KEMSA</option>
-                                    <option>James Batuka- USAID</option>
-                                    <option>Edward Musau- NASCOP</option>
-                                    <option>Alphonse Ochieng- CHAI</option>
-                                    <option>Kevin Marete- CHAI</option>
-                                    <option>Nelius Mwangi- NASCOP</option>
-                                    <option>Laura Oyiengo- NASCOP</option>
+                                    <option>Loading Present Members...</option>
+
                                 </select>
 
                             </div>
@@ -167,9 +170,7 @@
                             <div class="subject-info-box-2">
                                 <h5>Members Absent With Apology</h5>
                                 <select multiple="multiple" id='lstBox2' class="form-control" style="height:300px;">
-                                    <option>Dr Evans Imbuki.</option>
-                                    <option>Claire Obonyo-TNT</option>
-                                    <option>Margaret Ndubi-TNT</option>
+                                    <option>Loading Absent Members...</option>
                                 </select>
                             </div>
 
@@ -186,54 +187,52 @@
                     <div id="step-3" class="">
                         <h3 class="border-bottom border-gray pb-2">Step 3 Item Discussions & Recommendations</h3>
                         <div class="container2" style="margin-top: 1em;">
-                            <!-- Sign up form -->
-                            <form>
-                                <!-- Sign up card -->
-                                <div class="card person-card">
-                                    <div class="card-body">
 
-                                        <div class="row">
-                                            <!--div class="form-group col-md-2">
-                                                <select id="input_sex" class="form-control">
-                                                    <option value="">-Category-</option>
-                                                    <option value="ARV & OI">ARV & OI</option>
-                                                    <option value="CONDOM">CONDOM</option>
-                                                </select>
-                                            </div-->
-                                            <div class="form-group col-md-12">
-                                                <input id="commodityName" style="height: 50px; font-size: 14px; width: 98%;" type="text" class="form-control" placeholder="Type name of Commodity...e.g Abacavir (ABC) 300mg Tabs" >
-                                                <div id="first_name_feedback" class="invalid-feedback">
+                            <div class="card person-card ">
+                                <div class="card-body">
 
-                                                </div>
+                                    <div class="row">
+
+                                        <div class="form-group col-md-12">
+                                            <input id="commodityName" style="height: 50px; font-size: 14px; width: 98%;" type="text" class="form-control" placeholder="Type name of Commodity...e.g Abacavir (ABC) 300mg Tabs" >
+                                            <div id="first_name_feedback" class="invalid-feedback">
+
                                             </div>
-
+                                            <div class="row SPINNER" style="display:none;">
+                                                <img src="<?php echo base_url(); ?>public/spinner.gif" alt="Loading Please Wait, Please wait ..."> Loading Data...
+                                            </div>
                                         </div>
+
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <a href="#tracker" id='tracker' data-id='' class="btn btn-primary btn-sm pull-right" style="margin-right:20px; display:none; ">View Tracker</a>
+                            </div>
+                            <div class="row">
+                                <span class="badge badge-info" style="margin-left:20px;"></span>                             
+                                <span class="badge badge-info drugspan" style="margin-left:5px;"></span>  
+                                <a style="margin-right:20px; display:none;" href="#tracker" class="btn btn-xs btn-primary tracker_drug pull-right" data-toggle="modal" id="tracker" data-target="#add_procurement_modal" data-drug_id=""> 
+                                    <i class="fa fa-search" ></i> View Tracker
+                                </a>
 
-                                </div>
+                            </div>
+                            <div class="diskrec" style="display:none;">
                                 <div class="row">
-                                    <div class="col-md-6" style="padding:0.5em">
-                                        <div class="card">
+                                    <div class="col-md-6">
+                                        <div class="card cardre" style="">
                                             <div class="card-body">
-                                                <h5 class="card-title">Previous Discussion</h5>
-                                                <div class="form-group" style="font-size:12px;">
-                                                    The product is at less than 1MOS. Projected to deplete with the September 2018 issues.
-                                                    To withhold issuance of FDC and encourage redistribution of the single formulations.
-
+                                                <h5 class="card-title" style="">Previous Discussion</h5>
+                                                <div class="form-group DISCUSSION" style="font-size:12px;">
+                                                    Loading...
                                                 </div>                       
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
-                                        <div class="card"> 
+                                        <div class="card cardre"> 
                                             <div class="card-body">
-                                                <h5 class="card-title">Previous Reccommendation</h5>
-                                                <div class="form-group" style="font-size:12px;">
-                                                    FDC (ABC/3TC) 600/300mg stocks available at KEMSA and distribution projected to begin from November 2018, with review.
+                                                <h5 class="card-title">Previous Recommendation</h5>
+                                                <div class="form-group RECOMMENDATION" style="font-size:12px;">
+                                                    Loading...
                                                 </div>                      
                                             </div>
                                         </div>
@@ -241,7 +240,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-md-6" style="padding:0.5em;">
+                                    <div class="col-md-6" >
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="form-group">
@@ -261,9 +260,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-
-                            </form>
+                                </div>  
+                            </div>
                         </div>
                     </div>
                     <div id="step-4" class="">
@@ -1149,14 +1147,14 @@
         </div>
     </div>
 
-
+    <?php $this->load->view('pages/procurement/commodity_meeting_view'); ?>
 
 </div><!--end page wrapper--->
 
 <script type="text/javascript">
 
     $(document).ready(function () {
-
+        loadMembers();
 
         tinymce.init({
             selector: 'textarea',
@@ -1170,12 +1168,28 @@
 
         $('#addMember').click(function () {
             list = $('#lstBox1');
-            name = $('#memberName').val();
-            email = $('#memberEmail').val();
-            full = name + " : " + email;
-            list.append('<option value="' + full + '">' + full + '</option>');
-            name.val('');
-            email.val('');
+            nameval = $('#memberName').val();
+            emailval = $('#memberEmail').val();
+
+            $.post('<?php echo base_url(); ?>Manager/Procurement/membersListAdd', {name: nameval, email: emailval}, function (resp) {
+
+                $('#memberName').val('');
+                $('#memberEmail').val('');
+            }, 'json');
+
+            var present = $('#lstBox1 option');
+            var absent = $('#lstBox2 option');
+
+            var pvalues = $.map(present, function (option) {
+                return option.value;
+            });
+            var avalues = $.map(absent, function (option) {
+                return option.value;
+            });
+            $.post('<?php echo base_url(); ?>Manager/Procurement/memberUpdates', {present: pvalues, absent: avalues}, function (resp) {
+
+            });
+
         });
 
         $("#lstBox1").dblclick(function () {
@@ -1187,6 +1201,25 @@
 
 
     });
+
+
+    function loadMembers() {
+        $.getJSON('<?php echo base_url(); ?>manager/procurement/getEmails/x', function (resp) {
+            present = $('#lstBox1');
+            absent = $('#lstBox2');
+            present.empty();
+            absent.empty();
+
+            $.each(resp.present, function (i, j) {
+                present.append('<option value="' + j.email + '">' + j.name + '</option>');
+            });
+            $.each(resp.absent, function (i, j) {
+                absent.append('<option value="' + j.email + '">' + j.name + '</option>');
+            });
+
+        });
+    }
+
     (function () {
         $('#btnRight').click(function (e) {
             var selectedOpts = $('#lstBox1 option:selected');
@@ -1241,7 +1274,7 @@
                 return "<?php echo base_url() . 'Manager/Procurement/getDrugsByName'; ?>";
             },
             getValue: function (element) {
-                return element.name;
+                return element.name + ' - ' + element.drug_category;
             },
             ajaxSettings: {
                 dataType: "json",
@@ -1252,10 +1285,22 @@
             },
             list: {
                 onChooseEvent: function () {
-                    var selectedItemValue = $("#commodityName").getSelectedItemData().id;
-                    $('#tracker').attr('data-id', selectedItemValue);
-                    $('#tracker').show();
-                    console.log(selectedItemValue)
+                    var selectedItemId = $("#commodityName").getSelectedItemData().id;
+                    var selectedItemValue = $("#commodityName").getSelectedItemData().name;
+                    $('#tracker').attr('data-drug_id', selectedItemId);
+
+                    $('.SPINNER').show();
+                    $.getJSON("<?php echo base_url() . 'Manager/Procurement/getDecision/'; ?>" + selectedItemId, function (resp) {
+
+                        $('.diskrec').show('slow');
+                        $('.DISCUSSION').html(resp[0].discussion);
+                        $('.RECOMMENDATION').html(resp[0].recommendation);
+                        $('.badge-info').html('Previous Meeting Date: ' + resp[0].decision_date);
+                        $('.drugspan').html('Drug: ' +selectedItemValue);
+                        $('.SPINNER').hide();
+                        $('#tracker').show();
+
+                    });
                 },
                 onHideListEvent: function () {
 
@@ -1338,3 +1383,4 @@
         $("#theme_selector").change();
     });
 </script>
+
