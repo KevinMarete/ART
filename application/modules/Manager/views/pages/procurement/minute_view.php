@@ -625,7 +625,7 @@
                     $(".FinNish").removeClass('disabled');
                     $('#MeetingStart').html(tinymce.get('Meeting_start').getContent());
                     $('#AOB').html(tinymce.get('Aob').getContent());
-                    $.get('<?php echo base_url(); ?>manager/procurement/loadMinutes/' + meeting_id, function (resp) {
+                    $.get('<?php echo base_url(); ?>Manager/Procurement/loadMinutes/' + meeting_id, function (resp) {
                         $('#MINUTEBODY').empty();
                         $('#MINUTEBODY').append(resp);
                     });
