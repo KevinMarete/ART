@@ -51,8 +51,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 <!-- Custom Theme JavaScript -->
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/dist/js/sb-admin-2.js'; ?>"></script>
-<script src="<?php echo base_url() . 'public/manager/getcontenttools/content-tools.js'; ?>"></script>
-<script src="<?php echo base_url() . 'public/manager/getcontenttools/editor.js'; ?>"></script>
+<script src="<?php echo base_url() . 'public/manager/js/loadingOverlay.js'; ?>"></script>
 
     <script type="text/javascript">
         $(function () {

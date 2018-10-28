@@ -1,6 +1,9 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require APPPATH . 'libraries/dompdf/autoload.inc.php';
+
+use Dompdf\Dompdf;
 
 class Manager extends MX_Controller {
 
@@ -19,6 +22,9 @@ class Manager extends MX_Controller {
             $data['roles'] = $this->db->get('tbl_role')->result_array();
         }
 
+        if ($page == 'minute') {
+            $data['minutes'] = $this->db->where('meeting_id', $this->uri->segment(4))->get('tbl_minutes')->result();
+        }
         $data['page_title'] = 'ART | ' . $title;
         $this->load->view('pages/' . $module . '/' . $page . '_view', $data);
     }
@@ -202,6 +208,23 @@ class Manager extends MX_Controller {
             }
         }
         return $filters;
+    }
+
+    function generateMinute() {
+        $data['minutes'] = $this->db->where('meeting_id', $this->uri->segment(4))->get('tbl_minutes')->result();
+        $page_builder = $this->load->view('pages/public/pdf_view', $data, true);
+        $dompdf = new Dompdf;
+        // Load HTML content
+        $dompdf->loadHtml($page_builder);
+        $dompdf->set_option('isHtml5ParserEnabled', true);
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'landscape');
+        // Render the HTML as PDF
+        $dompdf->render();
+        // Output the generated PDF to Browser
+        $output = $dompdf->output();
+        unlink('public/minutes_pdf/minutes.pdf');
+        file_put_contents('public/minutes_pdf/minutes.pdf', $output);
     }
 
     public function get_data($chartname, $filters = '') {

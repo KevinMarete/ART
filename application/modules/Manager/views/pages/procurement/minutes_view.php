@@ -53,7 +53,7 @@
         $('#template').append("<option value='<?= date('Y-m-d'); ?>'></option>")
         $.getJSON(lastURL, function (d) {
             $.each(d, function (index, cat) {
-                $("#template").append($("<option value='" + cat.id + "'>" + cat.minute_date+ "</option>"));
+                $("#template").append($("<option value='" + cat.id + "'>" + cat.minute_date + "</option>"));
             });
         });
 
@@ -114,7 +114,7 @@
         $('#saveMinute').click(function () {
 
             $('#opening_description_').val(tinymce.get('opening_description').getContent());
-            $('#aob_').val(tinymce.get('aob').getContent());
+            $('#AOB').val(tinymce.get('aob').getContent());
 
             $.post("<?= base_url(); ?>Manager/Procurement/save_minutes/x", $('#MINUTES').serialize(), function () {
 
@@ -131,9 +131,9 @@
         });
 
         $('#saveMinuteEmail').click(function () {
-          $(this).prop('disabled','disabled');
+            $(this).prop('disabled', 'disabled');
             $.getJSON("<?= base_url(); ?>Manager/Procurement/get_test_email/x", function (resp) {
-                if (resp.status=='success') {
+                if (resp.status == 'success') {
                     swal({
                         title: "Success",
                         text: "Changes successfully saved",

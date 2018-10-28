@@ -7,10 +7,12 @@ use Dompdf\Dompdf;
 
 class Procurement extends MX_Controller {
 
+    public $email;
+
     public function __construct() {
         parent::__construct();
         $this->load->model('Procurement_model');
-        $this->load->library('Email_sender');
+        $this->email = new Email_sender;
     }
 
     function Reminder() {
@@ -23,19 +25,204 @@ class Procurement extends MX_Controller {
     }
 
     function getDrugsByName() {
-        $drug_name = $this->input->post('phrase');       
+        $drug_name = $this->input->post('phrase');
         $query = "SELECT * FROM `vw_drug_list` WHERE name LIKE '%$drug_name%'  ORDER BY name ASC";
         echo json_encode($this->db->query($query)->result());
     }
-    
-    function getDecision($id){
-       $query = $this->db->query("SELECT id,discussion,recommendation,DATE_FORMAT(decision_date,'%W %D %b, %Y') decision_date FROM `tbl_decision` WHERE id='$id' ORDER BY id DESC LIMIT 1")->result();
-       $this->response($query);
+
+    function getDecision($id) {
+        $query = $this->db->query("SELECT id,discussion,recommendation,DATE_FORMAT(decision_date,'%W %D %b, %Y') decision_date FROM `tbl_decision`  WHERE drug_id ='$id' ORDER BY id DESC LIMIT 1")->result();
+        $this->response($query);
+    }
+
+    function saveEvent() {
+        $title = $this->input->post('title');
+        $venue = $this->input->post('venue');
+        $start = $this->input->post('start');
+        $end = $this->input->post('end');
+        $this->db->insert('tbl_meetings', [
+            'title' => $title,
+            'start_event' => $start,
+            'end_event' => $end,
+            'venue' => $venue
+        ]);
+    }
+
+    function postDiscussions() {
+        $meeting_id = $this->input->post('mid');
+        $discussion = $this->input->post('disc');
+        $recommendation = $this->input->post('rec');
+        $meeting_date = $this->input->post('mdt');
+        $new_date = explode("/", $meeting_date);
+        $drug_id = $this->input->post('drug_id');
+
+        $resp['response'] = '';
+        if ($this->checkPostData($drug_id, $meeting_id) > 0) {
+            $dis_id = $this->db->where('drug_id', $drug_id)->where('meeting_id', $meeting_id)->get('tbl_decision')->result();
+            $this->db->where('drug_id', $drug_id)->where('meeting_id', $meeting_id)->update('tbl_decision', [
+                'discussion' => $discussion,
+                'recommendation' => $recommendation
+            ]);
+
+            $this->db->insert('tbl_decision_log', [
+                'description' => 'Updated',
+                'created' => date('Y-m-d H:i:s'),
+                'user_id' => $this->session->userdata('id'),
+                'decision_id' => $dis_id[0]->id,
+            ]);
+            $resp['response'] = 0;
+        } else {
+            $this->db->insert('tbl_decision', [
+                'meeting_id' => $meeting_id,
+                'discussion' => $discussion,
+                'recommendation' => $recommendation,
+                'decision_date' => $new_date[2] . '-' . $new_date[1] . '-' . $new_date[0],
+                'drug_id' => $drug_id,
+            ]);
+            $last_id = $this->db->insert_id();
+
+            $this->db->insert('tbl_decision_log', [
+                'description' => 'Created',
+                'created' => date('Y-m-d H:i:s'),
+                'user_id' => $this->session->userdata('id'),
+                'decision_id' => $last_id,
+            ]);
+            $resp['response'] = 1;
+        }
+        $this->response($resp['response']);
+    }
+
+    function checkPostData($did, $mid) {
+        $email = $this->db->where('meeting_id', $mid)->where('drug_id', $did)->get('tbl_decision')->result();
+        return count($email);
+    }
+
+    function loadEvents() {
+        $load = $this->db->get('tbl_meetings')->result();
+        foreach ($load as $row) {
+            $data[] = array(
+                'id' => $row->id,
+                'title' => $row->title,
+                'start' => $row->start_event,
+                'end' => $row->end_event,
+                'venue' => $row->venue
+            );
+        }
+        $this->response($data);
+    }
+
+    function updateEvent($id) {
+        $this->db->where('id', $id)->update('tbl_meetings', ['venue' => $this->input->post('venue')]);
+    }
+
+    function minuteAdd($id) {
+        $resp['response'] = '';
+        if ($this->checkMinute($id) > 0) {
+            $resp['response'] = 0;
+        } else {
+            $this->db->insert('tbl_minutes', [
+                'meeting_id' => $id
+            ]);
+            $resp['response'] = 1;
+        }
+        $this->response($resp['response']);
+    }
+
+    function checkMinute($param) {
+        $email = $this->db->where('meeting_id', $param)->get('tbl_minutes')->result();
+        return count($email);
+    }
+
+    function lookForMeeting($id) {
+        $resp = $this->db->where('meeting_id', $id)->get('tbl_minutes')->result();
+        $count = ['count' => count($resp)];
+        $this->response($count);
+    }
+
+    function loadMeetingDate($id) {
+        $date = $this->db->query("SELECT DATE_FORMAT(start_event,'%d/%m/%Y') meeting_date FROM tbl_meetings WHERE id='$id'")->result();
+        $this->response($date);
+    }
+
+    function updateMinutes($id) {
+        header("Cache-Control: no-cache,no-store");
+        $minute = htmlentities($this->input->post('minute'));
+        $this->db->where('meeting_id', $id)->update('tbl_minutes', ['minute' => trim($minute)]);
+        $this->response(['status' => 'success']);
     }
 
     function getCounty() {
         $toplevel = $this->db->get('tbl_county')->result();
         echo json_encode(['data' => $toplevel]);
+    }
+
+    function generateMinute($id) {
+        $data['minutes'] = $this->db->where('meeting_id', $id)->get('tbl_minutes')->result();
+        $page_builder = $this->load->view('pages/public/pdf_view', $data, true);
+        $dompdf = new Dompdf;
+        // Load HTML content
+        $dompdf->loadHtml($page_builder);
+        $dompdf->set_option('isHtml5ParserEnabled', true);
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'landscape');
+        // Render the HTML as PDF
+        $dompdf->render();
+        // Output the generated PDF to Browser
+        $output = $dompdf->output();
+        unlink('public/minutes_pdf/minutes.pdf');
+        file_put_contents('public/minutes_pdf/minutes.pdf', $output);
+        $this->sendPlanningEmail();
+    }
+
+    function sendPlanningEmail() {
+
+        $list = '';
+        $mailing_list = $this->db->where('email_type', '1')->get('tbl_mailing_list')->result();
+        foreach ($mailing_list as $m) {
+            $list .= $m->email . ',';
+        }
+        $mailinglist = rtrim($list, ",");
+        $this->email->sendProcurementEmail($mailinglist);
+    }
+
+    function loadMinutes($id) {
+        $tr = '<tr>
+                    <td width="193">
+                        <p><strong>Product</strong></p>
+                    </td>
+                    <td width="358">
+                        <p><strong>Discussion</strong></p>
+                    </td>
+                    <td width="350">
+                        <p><strong>Recommendations</strong></p>
+                    </td>
+               </tr>';
+        $categories = $this->db->query("SELECT dl.drug_category FROM tbl_decision d
+                                        LEFT JOIN vw_drug_list dl ON dl.id = d.drug_id
+                                        WHERE d.meeting_id='$id' GROUP BY dl.drug_category")->result();
+
+        foreach ($categories as $cat):
+            $category = $cat->drug_category;
+            $tr .= '<tr  style="background:#fbd4b4;"><td colspan="3" width="901"><p><strong>' . $category . '</strong></p></td></tr>';
+            $minutes = $this->db->query("SELECT d.*,dl.drug_category,dl.name drug FROM tbl_decision d
+                                LEFT JOIN vw_drug_list dl ON dl.id = d.drug_id
+                                WHERE d.meeting_id='$id' 
+                                AND dl.drug_category='$category'")->result();
+            foreach ($minutes as $min):
+                $tr .= '<tr>
+                    <td width="193">
+                        <p>' . $min->drug . '</p>
+                    </td>
+                    <td width="358">'
+                        . $min->discussion .
+                        '</td>
+                    <td width="350">'
+                        . $min->recommendation .
+                        '</td>
+                </tr>';
+            endforeach;
+        endforeach;
+        echo $tr;
     }
 
     function loadMenuData($column, $criteria = '') {
@@ -850,11 +1037,13 @@ class Procurement extends MX_Controller {
     function memberUpdates() {
         $present = $this->input->post('present');
         $absent = $this->input->post('absent');
+
         for ($i = 0; $i < count($present); $i++) {
+
             $this->db->where('email', $present[$i])->update('tbl_mailing_list', ['present' => 0]);
         }
-        for ($j = 0; $j < count($absent); $i++) {
-            $this->db->where('email', $absent[$i])->update('tbl_mailing_list', ['present' => 1]);
+        for ($j = 0; $j < count($absent); $j++) {
+            $this->db->where('email', $absent[$j])->update('tbl_mailing_list', ['present' => 1]);
         }
         $success = ['success' => 1];
         $this->response($success);

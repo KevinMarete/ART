@@ -333,7 +333,7 @@
                 });
 
                 if (json.data.length < 1) {
-                    $('#productTitle1,#productTitle2,#productTitle3,#productTitle4').text("No tracker data found for this product, please add");
+                    $('#productTitle1,#productTitle2,#productTitle3,#productTitle4').text("No data found for this product.");
                     $('#decisionModalTitle').text('Add Decisions and Reccomendations for this product');
                 } else {
                     $('#productTitle1,#productTitle2,#productTitle3,#productTitle4').text(json.data.commodity_name + " | " + lastMonth + "-" + currentYear + " Tracker");
@@ -399,7 +399,7 @@
                 });
 
                 if (json.data.length < 1) {
-                    $('#productTitle1,#productTitle2,#productTitle3,#productTitle4').text("No tracker data found for this product, please add");
+                    $('#productTitle1,#productTitle2,#productTitle3,#productTitle4').text("No data found for this product");
                     $('#decisionModalTitle').text('Add Decisions and Reccomendations for this product');
                 } else {
                     $('#productTitle1,#productTitle2,#productTitle3,#productTitle4').text(json.data.commodity_name + " | " + lastMonth + "-" + currentYear + " Tracker");
