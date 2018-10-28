@@ -453,7 +453,7 @@
 
 
         function loadMembers() {
-            $.getJSON('<?php echo base_url(); ?>manager/procurement/getEmails/x', function (resp) {
+            $.getJSON('<?php echo base_url(); ?>Manager/Procurement/getEmails/x', function (resp) {
                 present = $('#lstBox1');
                 absent = $('#lstBox2');
                 present.empty();
