@@ -85,7 +85,7 @@ class Email_sender extends MX_Controller {
         $this->email->from('webartmanager2018@gmail.com', 'Procurement Manager');
         $this->email->to('webartmanager2018@gmail.com');
         $this->email->cc($contacts);
-        $this->email->subject('Procurement Planning Manager for ' . date('F') . '-' . date('Y'));
+        $this->email->subject('Procurement Planning Manager');
         $this->email->message('Hello, Please find attached minutes from the NASCOP Procurement Planning Meeting');
         $this->email->attach('public/minutes_pdf/minutes.pdf');
         if ($this->email->send()) {
