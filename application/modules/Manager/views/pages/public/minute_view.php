@@ -25,6 +25,8 @@
 
         <!--favicon-->
         <link href="<?php echo base_url() . 'public/dashboard/img/favicon.ico'; ?>" rel="shortcut icon" type="text/css" >
+        <link href="<?php echo base_url() . 'public/manager/lib/bootstrap-sweetalert/css/sweetalert.min.css'; ?>" rel="stylesheet">
+
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -35,7 +37,7 @@
 
     </head>
 
-    <body oncontextmenu="return false" onkeydown="return false;" onmousedown="return false;">
+    <body >
         <style>
             #panel-header{
                 -webkit-filter: blur(10px); /* Chrome, Opera, etc. */
@@ -55,7 +57,9 @@
                         </div>
                         <div class="panel-body" id="panel-head" >
                             <div id="step-5" class="">
-                                  <?php echo html_entity_decode($minutes[0]->minute);?>
+                                <a href="#dispatch" class="btn btn-primary btn-sm pull-right DISPATCH">Dispatch Emails</a> 
+                                <?php echo html_entity_decode($minutes[0]->minute); ?>
+                                <a href="#dispatch" class="btn btn-primary btn-sm pull-right DISPATCH">Dispatch Emails</a>
                             </div>
                         </div>
                     </div>
@@ -74,73 +78,30 @@
 
         <!-- Custom Theme JavaScript -->
         <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/dist/js/sb-admin-2.js'; ?>"></script>
-
+        <script src="<?php echo base_url() . 'public/manager/lib/bootstrap-sweetalert/js/sweetalert.min.js'; ?>"></script>
+        <script src="<?php echo base_url() . 'public/manager/js/loadingOverlay.js'; ?>"></script>
     </body>
     <script>
         $(function () {
+            var id = "<?php echo $this->uri->segment(4); ?>";
 
-            var currentHtmlContent;
+            $('.DISPATCH').click(function () {
+                var spinHandle = loadingOverlay.activate();
+                $.getJSON('<?php echo base_url(); ?>Manager/Procurement/generateMinute/' + id, function (resp) {
+                    if (resp.status == 'success') {
+                        loadingOverlay.cancel(spinHandle);
+                        swal("Meeting Minutes Saved and emails dispatched to all members", {
+                            icon: "success",
+                        });
+                    } else {
 
-            var element = new Image();
+                    }
 
-            var elementWithHiddenContent = document.querySelector("#panel-header");
-
-            var innerHtml = elementWithHiddenContent.innerHTML;
-
-
-
-            element.__defineGetter__("id", function () {
-
-                currentHtmlContent = "";
-
+                });
             });
 
 
-
-            setInterval(function () {
-
-                currentHtmlContent = innerHtml;
-
-                console.log(element);
-
-                console.clear();
-
-                elementWithHiddenContent.innerHTML = currentHtmlContent;
-
-            }, 1000);
-
-
-//            var person = prompt("Please enter your token");
-//
-//            if (person !== 'x12345') {
-//                alert('ERROR: Invalid token');
-//            } else {
-//                $('.panel-body').attr('id', 'noheader');
-//            }
-
-
-            var opened = false;
-
-            setInterval(function () {
-
-                var devtools = /./;
-
-                devtools.toString = function () {
-
-                    opened = true;
-
-                }
-
-                console.log('%c', devtools);
-
-                if (opened) {
-
-                    /*here you know it is opened so you can redirect him or send a message */
-
-                }
-
-            }, 1000);
-        })
+        });
     </script>
 
 </html>
