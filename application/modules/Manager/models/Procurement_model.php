@@ -233,7 +233,7 @@ ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'A
     }
 
     public function get_history_data($drug_id) {
-         $year=date('Y');
+       // AND ps.name !='Received'
         $response = array('data' => array());
         try {
             $sql = "SELECT
@@ -249,8 +249,8 @@ ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'A
                     LEFT JOIN tbl_procurement_status ps ON ps.id = pi.procurement_status_id
                     LEFT JOIN tbl_funding_agent fa ON fa.id = pi.funding_agent_id
                     LEFT JOIN tbl_supplier s ON s.id = pi.supplier_id
-                    WHERE p.drug_id = ?
-                    AND transaction_year='$year'
+                    WHERE p.drug_id = ?  
+                   
                     GROUP BY pi.id
                     ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ) DESC LIMIT 5";
             $table_data = $this->db->query($sql, array($drug_id))->result_array();

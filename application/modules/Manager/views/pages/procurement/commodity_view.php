@@ -48,8 +48,9 @@
         -moz-border-radius: 6px 0 6px 6px;
         border-radius: 6px 0 6px 6px;
     }
-    
+
     .edit,trash{display:none !important}
+    .tabledit-edit-button{display:none !important}
 
 </style>
 <div id="page-wrapper">
@@ -135,7 +136,7 @@
                                 <div class="col-sm-3">
                                     <input type="text" readonly class="form-control" id="expected_qty">
                                 </div>
-                               
+
                             </div>
                             <div id="procurement_loader"></div>
                             <div class="row procurement_history">
@@ -143,7 +144,10 @@
                                     <div class="table-responsive">
                                         <strong><em>Product's Last Procurement History</em></strong>
                                         <p><strong>Expected Delivery</strong></p>
-                                        <div id="procurement_history"></div>
+                                        <div id="procurement_history">
+                                            <img src="<?php echo base_url(); ?>public/spinner.gif" alt="Loading Please Wait, Please wait ..."> Loading History Data...
+
+                                        </div>
                                     </div>
                                 </div>                              
                             </div>
@@ -280,19 +284,19 @@
         });
 
 
-      /*  $(document).on('mouseenter', '.mainContent', function () {
-            clearTimeout($(this).data('timeoutId'));
-            $(this).find(".edit").show();
-            $(this).find(".trash").show();
-        }).mouseleave(function () {
-            var someElement = $(this),
-                    timeoutId = setTimeout(function () {
-                        someElement.find(".edit").hide();
-                        $(this).find(".trash").hide();
-                    }, 650);
-            //set the timeoutId, allowing us to clear this trigger if the mouse comes back over
-            someElement.data('timeoutId', timeoutId);
-        });*/
+        /*  $(document).on('mouseenter', '.mainContent', function () {
+         clearTimeout($(this).data('timeoutId'));
+         $(this).find(".edit").show();
+         $(this).find(".trash").show();
+         }).mouseleave(function () {
+         var someElement = $(this),
+         timeoutId = setTimeout(function () {
+         someElement.find(".edit").hide();
+         $(this).find(".trash").hide();
+         }, 650);
+         //set the timeoutId, allowing us to clear this trigger if the mouse comes back over
+         someElement.data('timeoutId', timeoutId);
+         });*/
 
         $(document).on('click', '.edit', function () {
             $('#Disc_ID ').val('');

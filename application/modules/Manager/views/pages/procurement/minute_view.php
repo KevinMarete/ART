@@ -229,12 +229,20 @@
                     <div id="step-1" class="">
 
                         <h3 class="border-bottom border-gray pb-2">Step 1 Members</h3>
-                        <input type="text" class="form-control input-sm" id="memberName" placeholder="Name - Role" style="width:250px;"/>
-                        <input type="email" class="form-control input-sm" id="memberEmail" placeholder="Email" style="width:250px;"/>
-                        <input type="button" value="Add" id="addMember"/>
+                        <div class="row col-md-12">
+                            <div class="col-md-3">
+                                <input type="text" class="form-control input-sm" id="memberName" placeholder="Name - Role" />
+                            </div>
+                            <div class="col-md-3">
+                                <input type="email" class="form-control input-sm" id="memberEmail" placeholder="Email" />
+                            </div>
+                            <div class="col-md-2">
+                                <input type="button" class="btn btn-success" value="Add" id="addMember"/>
+                            </div>
+                        </div>
                         <div class="row" style="padding: 10px;">
                             <div class="subject-info-box-1">
-                                <h5>Members Present</h5>
+                                <h3>Members Present</h3>
                                 <select multiple="multiple" id='lstBox1' class="form-control" style="height:300px;">
                                     <option>Loading Present Members...</option>
 
@@ -248,7 +256,7 @@
                             </div>
 
                             <div class="subject-info-box-2">
-                                <h5>Members Absent With Apology</h5>
+                                <h3>Members Absent With Apology</h3>
                                 <select multiple="multiple" id='lstBox2' class="form-control" style="height:300px;">
                                     <option>Loading Absent Members...</option>
                                 </select>
@@ -542,6 +550,7 @@
                 },
                 list: {
                     onChooseEvent: function () {
+                        $('#tracker').attr('data-drug_id', '');
                         var selectedItemId = $("#commodityName").getSelectedItemData().id;
                         var selectedItemValue = $("#commodityName").getSelectedItemData().name;
                         drug_id = selectedItemId;
@@ -616,9 +625,9 @@
                     var avalues = $.map(absent, function (option) {
                         return option.value;
                     });
-                     $.post('<?php echo base_url(); ?>Manager/Procurement/memberUpdates', {present: pvalues, absent: avalues}, function (resp) {
+                    $.post('<?php echo base_url(); ?>Manager/Procurement/memberUpdates', {present: pvalues, absent: avalues}, function (resp) {
 
-                     }, 'json');
+                    }, 'json');
                 }
 
                 if (stepNumber === 4) {
@@ -735,7 +744,12 @@
                     icon: "success",
                 });
                 // $('.alert-success').show('slow');
-                $('.diskrec').show('slow');
+                $('#commodityName').val('');
+                $('.diskrec').hide('slow');
+                $('.badge-info').html('');
+                $('.drugspan').html('');
+                tinymce.get('mdiscussion').setContent('');
+                tinymce.get('mrecommendations').setContent('');
             }, 'json');
         };
 

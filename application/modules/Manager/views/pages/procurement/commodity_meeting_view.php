@@ -110,7 +110,9 @@
                                     <div class="table-responsive">
                                         <strong><em>Product's Last Procurement History</em></strong>
                                         <p><strong>Expected Delivery</strong></p>
-                                        <div id="procurement_history"></div>
+                                        <div id="procurement_history">
+                                            <img src="<?php echo base_url(); ?>public/spinner.gif" alt="Loading Please Wait, Please wait ..."> Loading History Data...
+                                        </div>
                                     </div>
                                 </div>                              
                             </div>
@@ -357,7 +359,7 @@
             //Load Spinner
             LoadSpinner("#procurement_loader")
 
-            drugID = $(e.relatedTarget).data('drug_id');
+            drugID = $('#tracker').attr('data-drug_id');
             $('#Drug_ID').val(drugID);
             $('.productTitle').empty();
             //Load TrackerInfo
