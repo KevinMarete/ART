@@ -27,7 +27,7 @@
                             <?php if ($role == 'county' && date('d') <= 20 && $columns['cdrrs']['data'][0]['status'] == 'allocated') { ?>
                                 <button type="submit" class="btn btn-success" id="approveOrder">Approve Order</button>
                                 <button type="submit" class="btn btn-danger" id="rejectOrder">Reject Order</button>
-                            <?php } else if ($role == 'national' && date('d') <= 20 && $columns['cdrrs']['data'][0]['status'] == 'approved') { ?>
+                            <?php } else if ($role == 'nascop' && date('d') <= 20 && $columns['cdrrs']['data'][0]['status'] == 'approved') { ?>
                                 <button type="submit" class="btn btn-success" id="reviewOrder">Review Order</button>
                             <?php } ?>
                         </div>
@@ -368,7 +368,7 @@
                 });
             });
             //Disable input fields
-<?php if (in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed')) || in_array($columns['cdrrs']['data'][0]['status'], array('pending', 'reviewed', 'rejected')) && in_array($this->session->userdata('role'), array('county', 'national'))) { ?>
+<?php if (in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed')) || in_array($columns['cdrrs']['data'][0]['status'], array('pending', 'reviewed', 'rejected')) && in_array($this->session->userdata('role'), array('county', 'nascop'))) { ?>
                 $('input').attr('disabled', true);
 <?php } ?>
         });

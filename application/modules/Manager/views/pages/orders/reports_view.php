@@ -57,7 +57,7 @@
 
 
         var filters = {
-            'national': [0, 1, 2],
+            'nascop': [0, 1, 2],
             'county': [0, 1],
             'subcounty': [0, 1]
         }

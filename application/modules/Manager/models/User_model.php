@@ -13,7 +13,7 @@ class User_model extends CI_Model {
 				$response['message'] = 'Welcome, <b>'.$user_data['firstname'].'</b> to the Commodity Manager!';
 				unset($user_data['password']);
 				$response['data'] = $user_data;
-				$response['data']['scope_name'] = 'NASCOP';
+				$response['data']['scope_name'] = 'National';
 				//Get menu data
 				$this->db->select('m.name module,m.icon, sm.name submodule, r.name role, IF(us.scope_id IS NULL, " ", us.scope_id) scope', FALSE);
 				$this->db->from('tbl_role_submodule rsm');

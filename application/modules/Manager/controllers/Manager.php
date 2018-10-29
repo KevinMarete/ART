@@ -48,12 +48,12 @@ class Manager extends MX_Controller {
                     'reports' => array(
                         'subcounty' => array('Facility Name', 'Period Beginning', 'Description', 'Status', 'Actions'),
                         'county' => array('Facility Name', 'Period Beginning', 'Description', 'Subcounty', 'Status', 'Actions'),
-                        'national' => array('Facility Name', 'Period Beginning', 'Description', 'County', 'Subcounty', 'Status', 'Actions')
+                        'nascop' => array('Facility Name', 'Period Beginning', 'Description', 'County', 'Subcounty', 'Status', 'Actions')
                     ),
                     'reporting_rates' => array(
                         'subcounty' => array('MFL Code', 'Facility Name', 'Status', 'Description', 'Period', 'Actions'),
                         'county' => array('Subcounty', 'Submitted', 'Progress'),
-                        'national' => array('County', 'Submitted', 'Progress')
+                        'nascop' => array('County', 'Submitted', 'Progress')
                     ),
                     'cdrr_maps' => array(
                         'subcounty' => array(
@@ -70,7 +70,7 @@ class Manager extends MX_Controller {
                             'maps' => $this->Orders_model->get_maps_data($this->uri->segment('5'), $this->session->userdata('scope'), $this->session->userdata('role')),
                             'previousmaps' => $this->Orders_model->get_previous_maps_data($this->uri->segment('5'), $this->session->userdata('scope'), $this->session->userdata('role'))
                         ),
-                        'national' => array(
+                        'nascop' => array(
                             'drugs' => $this->Orders_model->get_drugs(),
                             'regimens' => $this->Orders_model->get_regimens(),
                             'cdrrs' => $this->Orders_model->get_cdrr_data($this->uri->segment('4'), $this->session->userdata('scope'), $this->session->userdata('role')),
@@ -81,7 +81,7 @@ class Manager extends MX_Controller {
                     'allocation' => array(
                         'subcounty' => array('MFL Code', 'Facility Name', 'Period', 'Description', 'Status', 'Actions'),
                         'county' => array('Period', 'Approved', 'Status', 'Actions'),
-                        'national' => array('Period', 'Reviewed', 'Status', 'Actions')
+                        'nascop' => array('Period', 'Reviewed', 'Status', 'Actions')
                     ),
                     'allocate' => array(
                         'subcounty' => array(
@@ -98,7 +98,7 @@ class Manager extends MX_Controller {
                             'pcdrrs' => $this->Orders_model->get_cdrr_data_previous($this->uri->segment('4'), $this->session->userdata('scope'), $this->session->userdata('role')),
                             'maps' => $this->Orders_model->get_maps_data($this->uri->segment('5'), $this->session->userdata('scope'), $this->session->userdata('role'))
                         ),
-                        'national' => array(
+                        'nascop' => array(
                             'drugs' => $this->Orders_model->get_drugs(),
                             'regimens' => $this->Orders_model->get_regimens(),
                             'cdrrs' => $this->Orders_model->get_cdrr_data($this->uri->segment('4'), $this->session->userdata('scope'), $this->session->userdata('role')),
@@ -109,17 +109,17 @@ class Manager extends MX_Controller {
                     'edit_allocation' => array(
                         'subcounty' => array(),
                         'county' => array('Subcounty', 'Report Count', 'Status', 'Approval', 'Actions'),
-                        'national' => array('County', 'Report Count', 'Status', 'Approval', 'Actions')
+                        'nascop' => array('County', 'Report Count', 'Status', 'Approval', 'Actions')
                     ),
                     'subcounty_reports' => array(
                         'subcounty' => array(),
                         'county' => array('MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions', 'Download'),
-                        'national' => array()
+                        'nascop' => array()
                     ),
                     'county_reports' => array(
                         'subcounty' => array(),
                         'county' => array(),
-                        'national' => array('SubCounty', 'MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions', 'Download')
+                        'nascop' => array('SubCounty', 'MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions', 'Download')
                     ),
                     'satellites' => array(
                         'subcounty' => array(
@@ -134,7 +134,7 @@ class Manager extends MX_Controller {
                             'cdrrs' => $this->Orders_model->get_satellite_cdrr($this->uri->segment('4')),
                             'maps' => $this->Orders_model->get_satellite_maps($this->uri->segment('5'))
                         ),
-                        'national' => array(
+                        'nascop' => array(
                             'drugs' => $this->Orders_model->get_drugs(),
                             'regimens' => $this->Orders_model->get_regimens(),
                             'cdrrs' => $this->Orders_model->get_satellite_cdrr($this->uri->segment('4')),
@@ -173,7 +173,7 @@ class Manager extends MX_Controller {
         $selectedfilters = $this->get_filter($chartname, $this->input->post('selectedfilters'));
         //Set filters based on role and scope
         $role = $this->session->userdata('role');
-        if (!in_array($role, array('admin', 'national'))) {
+        if (!in_array($role, array('admin', 'nascop'))) {
             $selectedfilters[$role] = $this->session->userdata('scope_name');
         }
         //Get chart configuration

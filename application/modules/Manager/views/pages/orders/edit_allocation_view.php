@@ -40,7 +40,7 @@
 <script>
     $(document).ready(function () {
         var role = "<?php echo $this->session->userdata('role'); ?>"
-        if (role == 'national') {
+        if (role == 'nascop') {
             $('#dataTables-listing').DataTable({
                 responsive: true,
                 order: [[1, "desc"]],

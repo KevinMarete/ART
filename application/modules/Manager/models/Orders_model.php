@@ -113,7 +113,7 @@ class Orders_model extends CI_Model {
                 $filter = "AND sc.county_id = '" . $scope . "'";
             } else if ($role == 'subcounty') {
                 $filter = "AND f.subcounty_id = '" . $scope . "'";
-            } else if ($role == 'national') {
+            } else if ($role == 'nascop') {
                 $column = "UCASE(co.name) county, UCASE(sc.name) subcounty,";
                 $join = "INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id INNER JOIN tbl_county co ON sc.county_id = co.id  " . $sql;
             }
@@ -159,7 +159,7 @@ class Orders_model extends CI_Model {
         try {
             $month_name = date('F Y', strtotime($period_begin));
 
-            if ($role == 'national') {
+            if ($role == 'nascop') {
                 $sql = "SELECT 
                             UCASE(co.name) county,
                             CONCAT_WS('/', COUNT(DISTINCT t.facility_id), COUNT(DISTINCT f.id)) submitted,
@@ -269,7 +269,7 @@ class Orders_model extends CI_Model {
     public function get_allocation_data($scope, $role, $period_begin, $period_end) {
         $response = array('data' => array());
         try {
-            if ($role == 'national') {
+            if ($role == 'nascop') {
                 $sql = "SELECT 
                             DATE_FORMAT(c.period_begin, '%M-%Y') period,
                             CONCAT_WS('/', SUM(IF(c.status = 'reviewed', 1, 0)) , sb.total) reviewed,
@@ -356,7 +356,7 @@ class Orders_model extends CI_Model {
         $response = array('data' => array());
         $currmonth = date('Y-m-d', strtotime('first day of last month'));
         try {
-            if ($role == 'national') {
+            if ($role == 'nascop') {
                 $sql = "SELECT 
                             UCASE(co.name) county,
                             CONCAT_WS('/', COUNT(DISTINCT t.facility_id), COUNT(DISTINCT f.id)) submitted,

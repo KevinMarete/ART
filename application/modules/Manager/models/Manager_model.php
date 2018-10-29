@@ -388,7 +388,7 @@ class Manager_model extends CI_Model {
                 $counter += $q->submitted;
             }
             return $counter;
-        } else if ($role == 'national') {
+        } else if ($role == 'nascop') {
 
             return 417;
         }

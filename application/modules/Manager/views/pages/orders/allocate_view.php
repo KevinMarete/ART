@@ -28,7 +28,7 @@
                             <?php if ($role == 'county' && date('d') <= 20 && $columns['cdrrs']['data'][0]['status'] == 'allocated') { ?>
                                 <button type="submit" class="btn btn-success" id="approveOrder">Approve Order</button>
                                 <button type="submit" class="btn btn-danger" id="rejectOrder">Reject Order</button>
-                            <?php } else if ($role == 'national' && date('d') <= 20 && $columns['cdrrs']['data'][0]['status'] == 'approved') { ?>
+                            <?php } else if ($role == 'nascop' && date('d') <= 20 && $columns['cdrrs']['data'][0]['status'] == 'approved') { ?>
                                 <button type="submit" class="btn btn-success" id="reviewOrder">Review Order</button>
                             <?php } ?>
                         </div>
@@ -161,12 +161,12 @@
                                                             <?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'] ?>
                                                             <?php
                                                             if ($count > $balance) {
-                                                               // $p = round((($count - $balance) / $count) * 100, 0);
+                                                                // $p = round((($count - $balance) / $count) * 100, 0);
                                                                 $p = round($count - $balance, 0);
                                                                 echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '</span></sup>';
                                                             } else if ($balance > $count) {
-                                                               // $p = round((($balance - $count) / $balance) * 100, 0);
-                                                                $p = round($balance - $count , 0);
+                                                                // $p = round((($balance - $count) / $balance) * 100, 0);
+                                                                $p = round($balance - $count, 0);
                                                                 echo '<sup><span style="background: red; font-size:9px;" class="badge"> +' . $p . '</span></sup>';
                                                             }
                                                             ?>                                                        
@@ -329,8 +329,8 @@
             searching: false,
             info: false
         });
-        
-          $('#mapsTableReg').DataTable({
+
+        $('#mapsTableReg').DataTable({
             scrollY: "400px",
             scrollX: true,
             scrollCollapse: true,
@@ -357,7 +357,11 @@
             max_mos = row.find('.MAX').val();
             eMOSH = row.find('.eMOSH').text();
             aggSOH = row.find('.aggSOH').text();
+            if (isNaN(aggSOH)) {
+                aggSOH = 0;
+            }
             AMC = row.find('.AMC').text();
+            alert(AMC)
             cMOS = (parseInt(eMOSH) + parseInt(aggSOH) + parseInt(input_val)) / parseInt(AMC);
             row.find('.AllocatedMOS').val(Math.floor(cMOS));
             AllMOS = row.find('.AllocatedMOS').val();
@@ -385,9 +389,9 @@
             }
 
         });
-        
-        
-           $('.MOS').focusout(function () {
+
+
+        $('.MOS').focusout(function () {
             row = $(this).closest('tr');
             input_val = $(this).val();
             min_mos = row.find('.MIN').val();
@@ -395,10 +399,10 @@
             eMOSH = row.find('.eMOSH').text();
             aggSOH = row.find('.aggSOH').text();
             AMC = row.find('.AMC').text();
-            cMOS = (parseInt(input_val) * parseInt(AMC))-(parseInt(eMOSH) + parseInt(aggSOH)) ;
+            cMOS = (parseInt(input_val) * parseInt(AMC)) - (parseInt(eMOSH) + parseInt(aggSOH));
             row.find('.AMOS').val(Math.floor(cMOS));
             row.find('.AMOS').val();
-           
+
             if (input_val < 3) {
                 swal({
                     title: "Low Allocation MOS",
@@ -421,7 +425,7 @@
 
             }
 
-         });
+        });
 
 
         //$('[data-toggle="tooltip"]').tooltip();
@@ -497,7 +501,7 @@
             });
         });
         //Disable input fields
-<?php if (in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed')) || in_array($columns['cdrrs']['data'][0]['status'], array('pending', 'reviewed', 'rejected')) && in_array($this->session->userdata('role'), array('county', 'national'))) { ?>
+<?php if (in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed')) || in_array($columns['cdrrs']['data'][0]['status'], array('pending', 'reviewed', 'rejected')) && in_array($this->session->userdata('role'), array('county', 'nascop'))) { ?>
             $('input').attr('disabled', true);
 <?php } ?>
     });

@@ -14,7 +14,7 @@
     <ul class="nav navbar-top-links navbar-right">
         <li>
             <small>
-                <b><?php echo ucwords($this->session->userdata('role')); ?>: </b> <?php echo ucwords($this->session->userdata('scope_name')); ?>
+                <b><?php echo strtoupper($this->session->userdata('role')); ?>: </b> <?php echo ucwords($this->session->userdata('scope_name')); ?>
             </small> 
         </li>
 

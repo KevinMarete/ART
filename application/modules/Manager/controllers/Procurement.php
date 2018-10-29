@@ -935,7 +935,7 @@ class Procurement extends MX_Controller {
         $selectedfilters = $this->get_filter($chartname, $this->input->post('selectedfilters'));
         //Set filters based on role and scope
         $role = $this->session->userdata('role');
-        if (!in_array($role, array('admin', 'national'))) {
+        if (!in_array($role, array('admin', 'nascop'))) {
             $selectedfilters[$role] = $this->session->userdata('scope_name');
         }
         //Get chart configuration
