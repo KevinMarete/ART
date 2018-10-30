@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Allocation_model extends CI_Model {
@@ -26,22 +27,23 @@ class Allocation_model extends CI_Model {
 
         if (count($query->result_array()) > 0) {
             foreach ($query->result() as $key => $value) {
-                array_push($drugs, array('drug' => $value->drug, 'qty_allocated' => $value->qty_allocated));
+                array_push($drugs, array('kemsa_code' => 'PM01STR00' . $key, 'drug' => $value->drug, 'qty_allocated' => $value->qty_allocated));
             }
-            $facility_info['info'] = [
-                'period_begin' => $query->result()[0]->period_begin,
+            $qu = $query->result()[0]->period_begin;
+            $dat = explode("-", $qu);
+            $facility_info = [
                 'facility' => $query->result()[0]->facility,
                 'mflcode' => $query->result()[0]->mflcode,
-                'code' => $query->result()[0]->code,
-            ];
-            $facility_info['allocation'] = [
-                'drug' => $drugs
+                'report_code' => $query->result()[0]->code,
+                'report_year' => $dat[0],
+                'report_month' => $dat[1],
+                'commodities' => $drugs
             ];
         } else {
-            $facility_info = false;
+            $resp = ['message' => 'No data found'];
+            $facility_info = $resp;
         }
         return $facility_info;
     }
 
 }
-

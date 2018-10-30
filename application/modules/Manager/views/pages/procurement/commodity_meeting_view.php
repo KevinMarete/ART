@@ -139,7 +139,7 @@
                         </p>
                         <p>
                             <button id="trans_download" class="btn btn-primary btn-md pull-left"><i class="fa fa-download"></i> Download as CSV</button>
-                            <button id="trans_save" class="btn btn-success btn-md pull-right readonly2"><i class="fa fa-save"></i> Update Changes</button>
+                            <!--button id="trans_save" class="btn btn-success btn-md pull-right readonly2"><i class="fa fa-save"></i> Update Changes</button-->
                         </p>
 
 
@@ -737,7 +737,7 @@
         //Load tableData
         var transactionURL = "<?php echo base_url() . 'Manager/Procurement/get_transaction_table/'; ?>" + drugID + '/' + periodYear
         $.get(transactionURL, function (tableData) {
-            var readonlyRows = ['0', '1', '3', '5', '6', '7']
+            var readonlyRows = ['0', '1', '2', '3', '5', '6', '7', '8', '9', '10', '11'];
             months = ['Sep 2018'];
             //Create table
             $(tableID).jexcel($.parseJSON(tableData));
@@ -746,17 +746,22 @@
                 table: function (instance, cell, col, row, val, id) {
                     //Make rows readonly
                     m = "<?= date("n", strtotime("-1 month")); ?>";
-                    //m = "<?= date("n"); ?>";
+                    mcol = parseInt(m);
 
 
+                    if (row == 4 && col > mcol) {
+                        $(cell).css('background-color', '#ffe0b2');
+                    }
 
                     if ($.inArray(row, readonlyRows) != -1) {
                         $(cell).addClass('readonly');
                     }
 
 
+
+
                     //Add colors to mos row
-                    if (row == 7 && col > 0) {
+                    if (row == 10 && col > 0 || row == 11 && col > 0) {
                         if (val >= 6 && val <= 9) {
                             $(cell).css('background-color', '#32CD32');
                         } else if (val >= 4 && val <= 5) {
@@ -769,7 +774,7 @@
                         $(cell).css('color', '#000');
                     }
 
-                    $('.c' + m).css('background-color', '#e67e22');
+                    $('.c' + mcol).css('background-color', '#e67e22');
                 }
             });
         });

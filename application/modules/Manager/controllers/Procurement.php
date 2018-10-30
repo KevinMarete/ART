@@ -810,13 +810,17 @@ class Procurement extends MX_Controller {
         //Initial sidebar labels
         $responses = array(
             'open_kemsa' => array('Open Balance'),
-            'receipts_kemsa' => array('Receipts from Suppliers'),
+            'proposed' => array('Proposed'),
+            'contracted' => array('Contracted'),
+            'received' => array('Received'),
             'issues_kemsa' => array('Issues to Facility'),
             'close_kemsa' => array('Closing Balance'),
             'monthly_consumption' => array('Monthly Consumption'),
+            'adjustments_loss' => array('Adjustment/Loss'),
             'avg_issues' => array('Average Issues'),
             'avg_consumption' => array('Average Consumption'),
-            'mos' => array('Months of Stock')
+            'mos' => array('Months of Stock'),
+            'mosbc' => array('MOS on Consumption')
         );
         $headers[] = 'Description';
         $widths[] = '160';
@@ -834,13 +838,17 @@ class Procurement extends MX_Controller {
             } else {
                 $responses['open_kemsa'][] = '=' . $column_indices[$key - 1] . '4';
             }
-            $responses['receipts_kemsa'][] = $value['receipts_kemsa'];
+            $responses['proposed'][] = $value['receipts_kemsa'];
+            $responses['contracted'][] = $value['receipts_kemsa'];
+            $responses['received'][] = $value['receipts_kemsa'];
             $responses['issues_kemsa'][] = $value['issues_kemsa'];
             $responses['close_kemsa'][] = '=' . $column_indices[$key] . '1+' . $column_indices[$key] . '2-' . $column_indices[$key] . '3';
             $responses['monthly_consumption'][] = $value['monthly_consumption'];
+            $responses['adjustments_loss'][] = $value['monthly_consumption'];
             $responses['avg_issues'][] = $value['avg_issues'];
             $responses['avg_consumption'][] = $value['avg_consumption'];
             $responses['mos'][] = $value['mos'];
+            $responses['mosbc'][] = $value['mos'];
         }
         echo json_encode(array(
             'data' => array_values($responses),
