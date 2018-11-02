@@ -78,16 +78,16 @@ class Email_sender extends MX_Controller {
         // print_r($data);
     }
 
-    function sendProcurementEmail($contacts) {
+    function sendProcurementEmail($contacts, $filename, $mail_title) {
 
         $this->load->library('email', $this->_config);
         $this->email->set_newline("\r\n");
         $this->email->from('webartmanager2018@gmail.com', 'Procurement Manager');
         $this->email->to('webartmanager2018@gmail.com');
         $this->email->cc($contacts);
-        $this->email->subject('Procurement Planning Manager');
-        $this->email->message('Hello, Please find attached minutes from the NASCOP Procurement Planning Meeting');
-        $this->email->attach('public/minutes_pdf/minutes.pdf');
+        $this->email->subject('Procurement Planning Manager | ' . $mail_title);
+        $this->email->message('Hello, Please find attached previous Procurement Planning minutes held at NASCOP in '.$mail_title);
+        $this->email->attach('public/minutes_pdf/' . $filename);
         if ($this->email->send()) {
             $this->email->clear(TRUE);
             echo json_encode(['status' => 'success']);

@@ -52,6 +52,11 @@
     .edit,trash{display:none !important}
     .tabledit-edit-button{display:none !important}
 
+    .tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc; width: 100%;border-radius: 10px;}
+    .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}
+    .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}
+    .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:middle}
+
 </style>
 <div id="page-wrapper">
     <!--row-->
@@ -172,11 +177,6 @@
                         </p>
                         <p>
                         <div id="transaction_tbl" class="table-responsive"></div>
-                        </p>
-                        <p>
-                            <button id="trans_download" class="btn btn-primary btn-md pull-left"><i class="fa fa-download"></i> Download as CSV</button>
-                        </p>
-
 
                     </div>
                     <div id="decisions" class="tab-pane fade">
@@ -769,57 +769,67 @@
         var column_num = parseInt($(this).index()) + 1;
         var row_num = parseInt($(this).parent().index()) + 1;
 
-       // alert("Row_num =" + row_num + "  ,  Rolumn_num =" + column_num);
+        // alert("Row_num =" + row_num + "  ,  Rolumn_num =" + column_num);
     });
 
     function getTransactionsTable(drugID, periodYear, tableID) {
         //Load Spinner
         LoadSpinner(tableID)
         //Load tableData
-        var transactionURL = "<?php echo base_url() . 'Manager/Procurement/get_transaction_table/'; ?>" + drugID + '/' + periodYear
+        var transactionURL = "<?php echo base_url() . 'Manager/Procurement/get_transaction_table2/'; ?>" + drugID + '/' + periodYear
         $.get(transactionURL, function (tableData) {
-            var readonlyRows = ['0', '1', '2','3' ,'5', '6', '7','8','9','10','11'];
-            months = ['Sep 2018'];
-            //Create table
-            $(tableID).jexcel($.parseJSON(tableData));
-            //Settings for table
-            $(tableID).jexcel('updateSettings', {
-                table: function (instance, cell, col, row, val, id) {
-                    //Make rows readonly
-                    m = "<?= date("n", strtotime("-1 month")); ?>";
-                    mcol = parseInt(m);
-
-
-                    if (row == 4 && col > mcol) {
-                        $(cell).css('background-color', '#ffe0b2');
-                    }
-
-                    if ($.inArray(row, readonlyRows) != -1) {
-                        $(cell).addClass('readonly');
-                    }
-
-
-
-
-                    //Add colors to mos row
-                    if (row ==10 &&  col > 0 || row ==11 &&  col > 0 ) {
-                        if (val >= 6 && val <= 9) {
-                            $(cell).css('background-color', '#32CD32');
-                        } else if (val >= 4 && val <= 5) {
-                            $(cell).css('background-color', '#CCCC00');
-                        } else if (val <= 3) {
-                            $(cell).css('background-color', '#DC143C');
-                        } else {
-                            $(cell).css('background-color', '#87CEFA');
-                        }
-                        $(cell).css('color', '#000');
-                    }
-
-                    $('.c' + mcol).css('background-color', '#e67e22');
-                }
-            });
+            $('#transaction_tbl').empty();
+            $('#transaction_tbl').append(tableData);
         });
     }
+    /*function getTransactionsTable(drugID, periodYear, tableID) {
+     //Load Spinner
+     LoadSpinner(tableID)
+     //Load tableData
+     var transactionURL = "<?php echo base_url() . 'Manager/Procurement/get_transaction_table/'; ?>" + drugID + '/' + periodYear
+     $.get(transactionURL, function (tableData) {
+     var readonlyRows = ['0', '1', '2','3' ,'5', '6', '7','8','9','10','11'];
+     months = ['Sep 2018'];
+     //Create table
+     $(tableID).jexcel($.parseJSON(tableData));
+     //Settings for table
+     $(tableID).jexcel('updateSettings', {
+     table: function (instance, cell, col, row, val, id) {
+     //Make rows readonly
+     m = "<?= date("n", strtotime("-1 month")); ?>";
+     mcol = parseInt(m);
+     
+     
+     if (row == 4 && col > mcol) {
+     $(cell).css('background-color', '#ffe0b2');
+     }
+     
+     if ($.inArray(row, readonlyRows) != -1) {
+     $(cell).addClass('readonly');
+     }
+     
+     
+     
+     
+     //Add colors to mos row
+     if (row ==10 &&  col > 0 || row ==11 &&  col > 0 ) {
+     if (val >= 6 && val <= 9) {
+     $(cell).css('background-color', '#32CD32');
+     } else if (val >= 4 && val <= 5) {
+     $(cell).css('background-color', '#CCCC00');
+     } else if (val <= 3) {
+     $(cell).css('background-color', '#DC143C');
+     } else {
+     $(cell).css('background-color', '#87CEFA');
+     }
+     $(cell).css('color', '#000');
+     }
+     
+     $('.c' + mcol).css('background-color', '#e67e22');
+     }
+     });
+     });
+     }*/
 
     function getDrugOrders(drugID, tableID) {
         //Load Spinner

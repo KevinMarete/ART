@@ -14,10 +14,11 @@ class Allocation_model extends CI_Model {
                 left join tbl_cdrr_item ci on ci.cdrr_id = c.id 
                 left join tbl_facility f on c.facility_id = f.id
                 left join vw_drug_list d on ci.drug_id = d.id               
-                where c.status = 'reviewed' 
+                
                 AND f.mflcode = ?
                 AND ci.qty_allocated > 0
-                AND period_begin = ?";
+                AND period_begin = ? LIMIT 2";
+        //where c.status = 'reviewed' 
 
         $drugs = array();
         $facility_info = array();

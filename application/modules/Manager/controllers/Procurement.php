@@ -158,6 +158,11 @@ class Procurement extends MX_Controller {
 
     function generateMinute($id) {
         $data['minutes'] = $this->db->where('meeting_id', $id)->get('tbl_minutes')->result();
+        $minutes = $this->db->where('id', $id)->get('tbl_meetings')->result();
+        $file_date = date('dS_M_Y', strtotime($minutes[0]->start_event));
+        $mail_title = date('F-Y', strtotime($minutes[0]->start_event));
+        $filename = 'MINUTES_OF_PROCUREMENT_PLANNING_MEETING-' . strtoupper($file_date) . '.pdf';
+
         $page_builder = $this->load->view('pages/public/pdf_view', $data, true);
         $dompdf = new Dompdf;
         // Load HTML content
@@ -168,13 +173,14 @@ class Procurement extends MX_Controller {
         // Render the HTML as PDF
         $dompdf->render();
         // Output the generated PDF to Browser
+        // $dompdf->stream();
         $output = $dompdf->output();
-        unlink('public/minutes_pdf/minutes.pdf');
-        file_put_contents('public/minutes_pdf/minutes.pdf', $output);
-        $this->sendPlanningEmail();
+        unlink('public/minutes_pdf/' . $filename);
+        file_put_contents('public/minutes_pdf/' . $filename, $output);
+        $this->sendPlanningEmail($filename, $mail_title);
     }
 
-    function sendPlanningEmail() {
+    function sendPlanningEmail($filename, $mail_title) {
 
         $list = '';
         $mailing_list = $this->db->where('email_type', '1')->get('tbl_mailing_list')->result();
@@ -182,7 +188,7 @@ class Procurement extends MX_Controller {
             $list .= $m->email . ',';
         }
         $mailinglist = rtrim($list, ",");
-        $this->email->sendProcurementEmail($mailinglist);
+        $this->email->sendProcurementEmail($mailinglist, $filename, $mail_title);
     }
 
     function loadMinutes($id) {
@@ -796,6 +802,292 @@ class Procurement extends MX_Controller {
 
     public function get_decisions_byID($drug_id) {
         echo json_encode($this->Procurement_model->get_decision_data_by_id($drug_id));
+    }
+
+    public function get_transaction_table2($drug_id, $period_year) {
+        $transaction_table = '
+<table class="tg">
+  <tr style="font-weight:bold !important;">
+    <th class="tg-0pky" colspan="2"><strong>Description</th>
+    <th class="tg-0pky"><strong>Jan-18</strong></th>
+    <th class="tg-0pky"><strong>Feb-18</strong></th>
+    <th class="tg-0pky"><strong>Mar-18</strong></th>
+    <th class="tg-0pky"><strong>Apr-18</strong></th>
+    <th class="tg-0pky"><strong>May-18</strong></th>
+    <th class="tg-0pky"><strong>Jun-18</strong></th>
+    <th class="tg-0pky"><strong>Jul-18</strong></th>
+    <th class="tg-0pky"><strong>Aug-18</strong></th>
+    <th class="tg-0pky"><strong>Sep-18</strong></th>
+    <th class="tg-0pky"><strong>Oct-18</strong></th>
+    <th class="tg-0pky"><strong>Nov-18</strong></th>
+    <th class="tg-0pky"><strong>Dec-18</strong></th>
+  </tr>
+  <tr>
+    <td class="tg-0pky" colspan="2"><strong>Opening Balance	</strong></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+  </tr>
+  <tr>
+    <td class="tg-0pky" rowspan="3" vertical-align="middle"><strong>Receipts from Suppliers</strong></td>
+    <td class="tg-0pky"><strong>Proposed</strong></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+  </tr>
+  <tr>
+    <td class="tg-0pky"><strong>Contracted</strong></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+  </tr>
+  <tr>
+    <td class="tg-0pky"><strong>Received</strong></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+  </tr>
+  <tr>
+    <td class="tg-0pky" colspan="2"><strong>Issues to Facility</strong></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+  </tr>
+  <tr>
+    <td class="tg-0pky" colspan="2"><strong>Adjustments/Losses (+/-)</strong></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+  </tr>
+  <tr>
+    <td class="tg-0pky" colspan="2"><strong>Closing Balance</strong></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+  </tr>
+  <tr>
+    <td class="tg-0pky" colspan="2"><strong>Monthly Consumption</strong></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+  </tr>
+  <tr>
+    <td class="tg-0pky" colspan="2"><strong>Average Issues</strong></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+  </tr>
+  <tr>
+    <td class="tg-0pky" colspan="2"><strong>Average Consumption</strong></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+  </tr>
+  <tr>
+    <td class="tg-0pky" colspan="2"><strong>MOS (Issues Based)</strong></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+  </tr>
+  <tr>
+    <td class="tg-0pky" colspan="2"><strong>MOS (Consumption Based)</strong></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+  </tr>
+
+</table>';
+        echo $transaction_table;
+    }
+
+    function testMonthsData() {
+        $rmonths = $this->trackeMonths();
+        $rmonths2 = $this->trackerMonthsOpen();
+
+
+        $query2 = $this->db->query("SELECT                         
+                           data_month,                           
+                            open_kemsa,
+                            receipts_kemsa,
+                            issues issues_kemsa,
+                            close_kemsa,
+                            consumption monthly_consumption,
+                            avg_issues,
+                            avg_consumption,
+                        ROUND(close_kemsa/avg_issues) mos
+                        FROM vw_procurement_list p
+                        WHERE p.drug_id = 1
+                        AND p.data_year = '2018'
+                        GROUP BY data_month
+                        ORDER BY data_year ASC, 
+                        FIELD(data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )")->result_array();
+
+
+        foreach ($query2 as $q) {
+            unset($rmonths2[$q['data_month']]);
+        }
+        $arr = [];
+        for ($i = 0; $i < count($rmonths2); $i++) {
+            array_push($arr, $i);
+        }
+        $new_arr = $this->rename_keys($rmonths2, $arr);
+        $final_arr = array_merge($new_arr, $query2);
+        usort($final_arr, function ($a, $b) {
+            $t1 = strtotime($a['data_month']);
+            $t2 = strtotime($b['data_month']);
+            return $t1 - $t2;
+        });
+        echo '<pre>';
+        print_r($final_arr);
+    }
+
+    function getTransactionTypesData() {
+        $rmonths = $this->trackeMonths();
+        $new_arr = [];
+        $transaction_status = $this->db->get("tbl_procurement_status")->result();
+        foreach ($transaction_status as $stat):
+            $status = strtolower($stat->name);
+            $query[$status] = $this->db->query("SELECT                 
+                    transaction_month data_month,                   
+                    quantity quantity                     
+                    FROM tbl_procurement_item pi
+                    INNER JOIN tbl_procurement p ON p.id = pi.procurement_id
+                    LEFT JOIN tbl_procurement_status ps ON ps.id = pi.procurement_status_id
+                    LEFT JOIN tbl_funding_agent fa ON fa.id = pi.funding_agent_id
+                    LEFT JOIN tbl_supplier s ON s.id = pi.supplier_id
+                    WHERE p.drug_id = 4
+                    AND transaction_year='2018'
+                    AND ps.name='$stat->name'
+                    GROUP BY pi.id
+                    ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )")->result_array();
+        endforeach;
+
+        foreach ($query as $k => $q):
+            foreach ($query[$k] as $k) {
+                unset($rmonths[$k['data_month']]);
+            }
+            array_push($new_arr, $rmonths);
+            $arr = [];
+            for ($i = 0; $i < count($rmonths2); $i++) {
+                array_push($arr, $i);
+            }
+            $new_arr = $this->rename_keys($rmonths2, $arr);
+        endforeach;
+
+        echo '<pre>';
+        print_r($new_arr1);
+    }
+
+    function rename_keys($array, $replacement_keys) {
+        return array_combine($replacement_keys, array_values($array));
     }
 
     public function get_transaction_table($drug_id, $period_year) {
