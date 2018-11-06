@@ -118,11 +118,41 @@ class Orders extends MX_Controller {
         $dompdf->stream();
     }
 
+    function sendMail($message, $action) {
+        $act = ucfirst($action);
+        $role = $this->session->userdata('role');
+        $requester = $this->session->userdata('email_address');
+        $facility = $this->session->userdata('facility_name');
+        $county = $this->session->userdata('county_pharm');
+        if ($role == 'subcounty') {
+            $get_pharmacist = $this->db->where('scope', $county)->get('vw_county_pharmacists')->result();
+            $pharmacist = $get_pharmacist[0]->pharmacist;
+            $approver = $get_pharmacist[0]->email_address;
+            $final_string = '<p>Hello ' . $pharmacist . ',<br>' . $message . ' <strong>' . $facility . '</strong> | <a href="http://commodities.nascop.org/manager" target="_blank">Login Here</a></p>';
+            $this->email_sender->sendEmail('ART Allocation Order ' . $act . ' - ' . $facility, 'Allocation Order', $requester, $approver, $final_string);
+        } else if ($role == 'county') {
+            $cdrr_id = $this->uri->segment(4);
+            $get_pharmacist_user = $this->db->query("SELECT user_id FROM tbl_cdrr_log WHERE description='allocated' AND cdrr_id='$cdrr_id';")->result();
+            $user_id = $get_pharmacist_user[0]->user_id;
+            $get_pharm_details = $this->db->query("SELECT CONCAT_WS(' ',firstname,lastname) pharmacist,email_address FROM tbl_user WHERE id='$user_id';")->result();
+            $pharmacist = $get_pharm_details[0]->pharmacist;
+            $approver = $get_pharm_details[0]->email_address;
+            $final_string = '<p>Hello ' . $pharmacist . ',<br>' . $message . ' | <a href="http://commodities.nascop.org/manager" target="_blank">Login Here</a></p>';
+            $this->email_sender->sendEmail('ART Allocation Order ' . $act . ' - ' . $facility, 'Allocation Order', $requester, $approver, $final_string);
+        } elseif ($role == 'nascop') {
+            $cdrr_id = $this->uri->segment(4);
+            $get_pharmacist_user = $this->db->query("SELECT CONCAT_WS(' ',firstname,lastname) pharmacist,email_address FROM tbl_user WHERE id IN(SELECT user_id FROM tbl_cdrr_log WHERE description IN('allocated','approved') AND cdrr_id='$cdrr_id')")->result();
+            $approver = $get_pharmacist_user[0]->email_address . ',' . $get_pharmacist_user[1]->email_address;
+            $final_string = '<p>Hello All ,<br>' . $message . ' | <a href="http://commodities.nascop.org/manager" target="_blank">Login Here</a></p>';
+            $this->email_sender->sendEmail('ART Allocation Order ' . $act . ' - ' . $facility, 'Allocation Order', $requester, $approver, $final_string);
+        }
+    }
+
     function send_allocation_request() {
         $requester = $this->session->userdata('email_address');
         $approver = $this->config->item($this->session->userdata('county_pharm'));
         $facility = $this->session->userdata('facility_name');
-        $final_string = '<p>Hello Sir/Madam,<br>You have a new allocation request order from "' . $facility . '"</p>';
+        $final_string = '<p>Hello Sir/Madam,<br>You have a new allocation request order from <strong>' . $facility . '<strong></p>';
         $this->email_sender->send_allocation_request('ART Orders', 'Allocation', $requester, $approver, $final_string);
     }
 
@@ -146,8 +176,16 @@ class Orders extends MX_Controller {
     }
 
     public function actionOrder($orderid, $mapid, $action) {
-        $this->send_allocation_request();
+        $message = 'You have a new allocation order request from';
+        if ($action == 'rejected') {
+            $message = 'Allocation order request has been rejected, kindly contact the county pharmacist for rejection details';
+        } elseif ($action == 'approved') {
+            $message = 'Allocation order has been approved and forwarded to Order Review Management Team at NASCOP';
+        } elseif ($action == 'reviewed') {
+            $message = 'Allocation order has been reviewed. Preparation for order fulfillment is underway.';
+        }
         $response = $this->Orders_model->actionOrder($orderid, $mapid, $action, $this->session->userdata('id'));
+        $this->sendMail($message, $action);
         echo $response['message'];
     }
 
@@ -244,7 +282,7 @@ class Orders extends MX_Controller {
             }
         }
         // print_r($sub_res);
-        echo json_encode(['high' => array_values($high),'low' => array_values($low)]);
+        echo json_encode(['high' => array_values($high), 'low' => array_values($low)]);
     }
 
     function getHighMos() {

@@ -25,13 +25,13 @@ class Allocation extends \API\Libraries\REST_Controller {
         $mflcode = $this->get('mfl');
         $user = $this->get('user');
         $token = $this->get('token');
-        $period = (!empty($_GET['period'])) ? substr($this->get('period'), 0, 4) . '-' . substr($this->get('period'), 4) . '-01' : NULL;
+        $period = $_GET['period'];
 
-        if (empty($_GET['mfl'])) {
+        if (empty($_GET['period'])) {
             // Set the response and exit
             $this->set_response([
                 'status' => FALSE,
-                'message' => 'MFL Code not specified'
+                'message' => 'Period not specified'
                     ], \API\Libraries\REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
 
             die;
@@ -47,7 +47,7 @@ class Allocation extends \API\Libraries\REST_Controller {
 
                 die;
             } else {
-                $counties = $this->allocation_model->read($mflcode, $period);
+                $counties = $this->allocation_model->read( $period,$mflcode);
             }
 
             if (!empty($counties)) {
@@ -62,4 +62,3 @@ class Allocation extends \API\Libraries\REST_Controller {
     }
 
 }
-

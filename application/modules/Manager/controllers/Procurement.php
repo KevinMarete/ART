@@ -1053,6 +1053,7 @@ class Procurement extends MX_Controller {
         $rmonths = $this->trackeMonths();
         $new_arr = [];
         $transaction_status = $this->db->get("tbl_procurement_status")->result();
+        $transaction = $this->db->get("tbl_procurement_status")->result_array();
         foreach ($transaction_status as $stat):
             $status = strtolower($stat->name);
             $query[$status] = $this->db->query("SELECT                 
@@ -1070,20 +1071,42 @@ class Procurement extends MX_Controller {
                     ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )")->result_array();
         endforeach;
 
+        //checking and removing months that already exist from the query
         foreach ($query as $k => $q):
             foreach ($query[$k] as $k) {
                 unset($rmonths[$k['data_month']]);
             }
             array_push($new_arr, $rmonths);
-            $arr = [];
-            for ($i = 0; $i < count($rmonths2); $i++) {
-                array_push($arr, $i);
-            }
-            $new_arr = $this->rename_keys($rmonths2, $arr);
         endforeach;
 
+        //Getting number of array element so as to get keys for replacements in the resultant array above from name to index
+        $renamed_arrays = [];
+        foreach ($new_arr as $ki => $v):
+            $arr[$ki] = [];
+            for ($i = 0; $i < count($new_arr[$ki]); $i++) {
+                array_push($arr[$ki], $i);
+            }
+            $new_arr1 = $this->rename_keys($new_arr[$ki], $arr[$ki]);
+            array_push($renamed_arrays, $new_arr1);
+        endforeach;
+
+        //merging and sorting the resultant array by month
+        $new_final_array=[];
+        foreach ($transaction_status as $key => $stat):
+            $status = strtolower($stat->name);
+            $merged = array_merge($query[$status], $renamed_arrays[$key]);
+            usort($merged, function ($a, $b) {
+                $t1 = strtotime($a['data_month']);
+                $t2 = strtotime($b['data_month']);
+                return $t1 - $t2;
+            });
+            array_push($new_final_array, $merged);
+        endforeach;
+        //assigning the final array the procurement statuses as opposed to the array indexes for easier dynamic referencing``
+       
+
         echo '<pre>';
-        print_r($new_arr1);
+        print_r($new_final_array);
     }
 
     function rename_keys($array, $replacement_keys) {

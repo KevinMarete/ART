@@ -24,7 +24,7 @@
                 <!-- /.panel-heading -->
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12">                           
                             <?php if ($role == 'county' && date('d') <= 20 && $columns['cdrrs']['data'][0]['status'] == 'allocated') { ?>
                                 <button type="submit" class="btn btn-success" id="approveOrder">Approve Order</button>
                                 <button type="submit" class="btn btn-danger" id="rejectOrder">Reject Order</button>
@@ -301,9 +301,13 @@
                         <?php if ($role == 'subcounty' && date('d') <= 20 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
                             <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
                             <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
-                        <?php } else { ?>
+                        <?php } else if ($role == 'subcounty' && date('d') > 20 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
                             <p><div class="alert alert-warning"><strong>NB: Allocation period has ended. No more allocations allowed beyond the 20<sup>th</sup> of each month. </strong></div></p>
-                        <?php } ?>
+                        <?php
+                        } else {?>
+                            <p><div class = "alert alert-warning"><strong>NB: Allocation Complete. </strong></div></p>
+                        <?php }?>
+                        
                     </div> <!--end of cdrr-->
                 </div>
                 <!-- /.panel-body -->
@@ -352,16 +356,21 @@
 
         $('.AMOS').focusout(function () {
             row = $(this).closest('tr');
-            input_val = $(this).val();
+            input_val = row.find('.AMOS').val();
             min_mos = row.find('.MIN').val();
             max_mos = row.find('.MAX').val();
             eMOSH = row.find('.eMOSH').text();
+            if (isNaN(eMOSH) || eMOSH == '') {
+                eMOSH = 0;
+            }
             aggSOH = row.find('.aggSOH').text();
-            if (isNaN(aggSOH)) {
+            if (isNaN(aggSOH) || aggSOH == '') {
                 aggSOH = 0;
             }
             AMC = row.find('.AMC').text();
-            alert(AMC)
+
+
+            console.log(input_val + ' | ' + AMC + ' | ' + eMOSH + ' | ' + aggSOH)
             cMOS = (parseInt(eMOSH) + parseInt(aggSOH) + parseInt(input_val)) / parseInt(AMC);
             row.find('.AllocatedMOS').val(Math.floor(cMOS));
             AllMOS = row.find('.AllocatedMOS').val();
@@ -397,7 +406,13 @@
             min_mos = row.find('.MIN').val();
             max_mos = row.find('.MAX').val();
             eMOSH = row.find('.eMOSH').text();
+            if (isNaN(eMOSH) || eMOSH == '') {
+                eMOSH = 0;
+            }
             aggSOH = row.find('.aggSOH').text();
+            if (isNaN(aggSOH) || aggSOH == '') {
+                aggSOH = 0;
+            }
             AMC = row.find('.AMC').text();
             cMOS = (parseInt(input_val) * parseInt(AMC)) - (parseInt(eMOSH) + parseInt(aggSOH));
             row.find('.AMOS').val(Math.floor(cMOS));
@@ -458,31 +473,31 @@
         }, 5000);
         $('#side-menu').remove();
         $('#reviewOrder').click(function (e) {
-            $(this).prop('disabled', true);
+           // $(this).prop('disabled', true);
             $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/reviewed", function (data) {
                 alert(data);
                 window.location.href = "";
             });
         });
         $('#approveOrder').click(function (e) {
-            $(this).prop('disabled', true);
+           // $(this).prop('disabled', true);
             $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/approved", function (data) {
                 alert(data);
                 window.location.href = "";
             });
         });
         $('#rejectOrder').click(function (e) {
-            $(this).prop('disabled', true);
+           // $(this).prop('disabled', true);
             $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/rejected", function (data) {
                 alert(data);
                 window.location.href = "";
             });
         });
         $('#complete_allocation').click(function (e) {
-            $(this).prop('disabled', true);
+            // $(this).prop('disabled', true);
             $.get(base_url + "manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/allocated", function (data) {
                 alert(data);
-                window.location.href = "";
+                //  window.location.href = "";
             });
         });
         $('#save_allocation').click(function (e) {
