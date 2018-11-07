@@ -1,5 +1,18 @@
 <link href="<?php echo base_url() . 'public/manager/css/procurement.css'; ?>" rel="stylesheet">
-<!--modal(s)-->
+<style>
+    .tdata{text-align: right !important;}
+    .tdata:hover{background: yellow}  
+    .class1{background:#32CD32}
+    .class2{background:#CCCC00}
+    .class3{background:#DC143C}
+    .class4{background:#87CEFA}
+    .TRACKER th{text-align: center;}
+    .col-<?php echo date('m') - 1 ?>{
+        background:#FFDEAD;
+    }
+
+    #transaction_tbl tr:gt(5){background:red};
+</style>
 <div class="modal fade" id="add_procurement_modal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
@@ -138,7 +151,7 @@
                         <div id="transaction_tbl" class="table-responsive"></div>
                         </p>
                         <p>
-                            <button id="trans_download" class="btn btn-primary btn-md pull-left"><i class="fa fa-download"></i> Download as CSV</button>
+                            <!--button id="trans_download" class="btn btn-primary btn-md pull-left"><i class="fa fa-download"></i> Download as CSV</button-->
                             <!--button id="trans_save" class="btn btn-success btn-md pull-right readonly2"><i class="fa fa-save"></i> Update Changes</button-->
                         </p>
 
@@ -735,50 +748,61 @@
         //Load Spinner
         LoadSpinner(tableID)
         //Load tableData
-        var transactionURL = "<?php echo base_url() . 'Manager/Procurement/get_transaction_table/'; ?>" + drugID + '/' + periodYear
+        var transactionURL = "<?php echo base_url() . 'Manager/Procurement/get_transaction_table2/'; ?>" + drugID + '/' + periodYear
         $.get(transactionURL, function (tableData) {
-            var readonlyRows = ['0', '1', '2', '3', '5', '6', '7', '8', '9', '10', '11'];
-            months = ['Sep 2018'];
-            //Create table
-            $(tableID).jexcel($.parseJSON(tableData));
-            //Settings for table
-            $(tableID).jexcel('updateSettings', {
-                table: function (instance, cell, col, row, val, id) {
-                    //Make rows readonly
-                    m = "<?= date("n", strtotime("-1 month")); ?>";
-                    mcol = parseInt(m);
-
-
-                    if (row == 4 && col > mcol) {
-                        $(cell).css('background-color', '#ffe0b2');
-                    }
-
-                    if ($.inArray(row, readonlyRows) != -1) {
-                        $(cell).addClass('readonly');
-                    }
-
-
-
-
-                    //Add colors to mos row
-                    if (row == 10 && col > 0 || row == 11 && col > 0) {
-                        if (val >= 6 && val <= 9) {
-                            $(cell).css('background-color', '#32CD32');
-                        } else if (val >= 4 && val <= 5) {
-                            $(cell).css('background-color', '#CCCC00');
-                        } else if (val <= 3) {
-                            $(cell).css('background-color', '#DC143C');
-                        } else {
-                            $(cell).css('background-color', '#87CEFA');
-                        }
-                        $(cell).css('color', '#000');
-                    }
-
-                    $('.c' + mcol).css('background-color', '#e67e22');
-                }
-            });
+            $('#transaction_tbl').empty();
+            $('#transaction_tbl').append(tableData);
         });
     }
+
+    /* function getTransactionsTable(drugID, periodYear, tableID) {
+     //Load Spinner
+     LoadSpinner(tableID)
+     //Load tableData
+     var transactionURL = "<?php echo base_url() . 'Manager/Procurement/get_transaction_table/'; ?>" + drugID + '/' + periodYear
+     $.get(transactionURL, function (tableData) {
+     var readonlyRows = ['0', '1', '2', '3', '5', '6', '7', '8', '9', '10', '11'];
+     months = ['Sep 2018'];
+     //Create table
+     $(tableID).jexcel($.parseJSON(tableData));
+     //Settings for table
+     $(tableID).jexcel('updateSettings', {
+     table: function (instance, cell, col, row, val, id) {
+     //Make rows readonly
+     m = "<?= date("n", strtotime("-1 month")); ?>";
+     mcol = parseInt(m);
+     
+     
+     if (row == 4 && col > mcol) {
+     $(cell).css('background-color', '#ffe0b2');
+     }
+     
+     if ($.inArray(row, readonlyRows) != -1) {
+     $(cell).addClass('readonly');
+     }
+     
+     
+     
+     
+     //Add colors to mos row
+     if (row == 10 && col > 0 || row == 11 && col > 0) {
+     if (val >= 6 && val <= 9) {
+     $(cell).css('background-color', '#32CD32');
+     } else if (val >= 4 && val <= 5) {
+     $(cell).css('background-color', '#CCCC00');
+     } else if (val <= 3) {
+     $(cell).css('background-color', '#DC143C');
+     } else {
+     $(cell).css('background-color', '#87CEFA');
+     }
+     $(cell).css('color', '#000');
+     }
+     
+     $('.c' + mcol).css('background-color', '#e67e22');
+     }
+     });
+     });
+     }*/
 
     function getDrugOrders(drugID, tableID) {
         //Load Spinner

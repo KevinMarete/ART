@@ -51,11 +51,20 @@
 
     .edit,trash{display:none !important}
     .tabledit-edit-button{display:none !important}
+    .tdata{text-align: right !important;}
+    .tdata:hover{background: yellow}  
+    .class1{background:#32CD32}
+    .class2{background:#CCCC00}
+    .class3{background:#DC143C}
+    .class4{background:#87CEFA}
+    .TRACKER th{text-align: center;}
+    .col-<?php echo date('m') - 1 ?>{
+        background:#FFDEAD;
+    }
 
-    .tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc; width: 100%;border-radius: 10px;}
-    .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}
-    .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}
-    .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:middle}
+    #transaction_tbl tr:gt(5){background:red};
+
+
 
 </style>
 <div id="page-wrapper">
@@ -244,8 +253,7 @@
 
     $(document).ready(function () {
 
-
-
+      
 
         $(document).on("click", '.dropdown-submenu a.test', function (e) {
             $(this).next('ul').toggle();
@@ -311,13 +319,11 @@
                 $('#decisionsEdit').val(res.data[0].discussion);
                 $('#reccomendationsEdit').val(res.data[0].recommendation);
             }, 'json');
-
-
-
             //console.log('its me' +disc_id)
 
             //console.log(disc)
         });
+
 
         $.getJSON("<?php echo base_url() . 'Manager/Procurement/getAllDrugs/'; ?>", function (res) {
             drug_list = $('#DrugList');
@@ -704,9 +710,9 @@
                 $('#trans_save').prop('disabled', false);
                 $('#trans_save').prop('value', 'Update Changes');
             });
-
         });
-    });
+    }
+    );
 
     $("#actual_qty").keypress(function (e) {
         //if the letter is not digit then display error and don't type anything
@@ -764,13 +770,16 @@
         });
     }
 
-    $(document).on('click', "#transaction_tbl td", function () {
+    $(document).on('mouseover', "#transaction_tbl td", function () {
 
         var column_num = parseInt($(this).index()) + 1;
         var row_num = parseInt($(this).parent().index()) + 1;
 
+        $("#transaction_tbl td:lt(6):gt(3)", this).css('background', 'black');
         // alert("Row_num =" + row_num + "  ,  Rolumn_num =" + column_num);
     });
+
+    
 
     function getTransactionsTable(drugID, periodYear, tableID) {
         //Load Spinner
