@@ -91,7 +91,15 @@ class MX_Controller {
 
     function getCountySubcounty() {
         $select = '';
-        $county = $this->db->order_by('id', 'asc')->get('tbl_county')->result();
+        $scope = $this->session->userdata('scope');
+        $role = $this->session->userdata('role');      
+        if ($role == 'county') {
+            $county = $this->db->where('id', $scope)->order_by('id', 'asc')->get('tbl_county')->result();
+        } else if ($role == 'nascop') {
+            $county = $this->db->order_by('id', 'asc')->get('tbl_county')->result();
+        } else {
+            
+        }
         foreach ($county as $c):
             $select .= '<optgroup data-id="' . $c->id . '" label="' . ucfirst($c->name) . '"></optgroup>';
             $subcounty = $this->db->where('county_id', $c->id)->order_by('id', 'asc')->get('tbl_subcounty')->result();

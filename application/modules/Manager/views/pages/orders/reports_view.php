@@ -19,11 +19,18 @@
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <div class="row" style="margin: 20px;">
-                        <select id="COUNTY" name="" class="form-control">
-                            <?= $county; ?>
-                        </select>
-                    </div>
+                    <?php
+                    $role = $this->session->userdata('role');
+                    if ($role == 'subcounty') {
+                        
+                    } else {
+                        ?>
+                        <div class="row" style="margin: 20px;">
+                            <select id="COUNTY" name="" class="form-control">
+                                <?= $county; ?>
+                            </select>
+                        </div>
+                    <?php } ?>
                     <table width="100%" class="table table-striped table-bordered table-hover table-condensed display compact nowrap" id="dataTables-listing">
                         <thead>
                             <tr>
@@ -94,7 +101,7 @@
             val = $(this).val();
             $('#dataTables-listing').DataTable().destroy();
             $('#dataTables-listing > tbody').empty();
-              $('#dataTables-listing select').remove();
+            $('#dataTables-listing select').remove();
 
             $('#dataTables-listing').DataTable({
                 responsive: true,
