@@ -15,15 +15,17 @@ class Allocation_model extends CI_Model {
 
         $sql = "SELECT 
                     c.period_begin,c.code,f.mflcode,f.name as facility,
-                    d.name drug, ci.qty_allocated
+                    d.name drug,d.kemsa_code, ci.qty_allocated,ci.balance,ci.balance,ci.received,
+                    ci.dispensed_packs,ci.losses,ci.adjustments,
+                    ci.adjustments_neg,ci.count,ci.aggr_consumed,ci.aggr_on_hand,ci.expiry_date
                 from tbl_cdrr c
                 left join tbl_cdrr_item ci on ci.cdrr_id = c.id 
                 left join tbl_facility f on c.facility_id = f.id
                 left join vw_drug_list d on ci.drug_id = d.id            
-                
+                where c.status = 'reviewed'
                 $mfl
                 AND ci.qty_allocated > 0
-                AND period_begin = '$period' LIMI 5";
+                AND period_begin = '$period'";
         //where c.status = 'reviewed' 
 
         $drugs = array();
@@ -34,18 +36,35 @@ class Allocation_model extends CI_Model {
 
         if (count($query->result_array()) > 0) {
             foreach ($query->result() as $key => $value) {
-                array_push($drugs, array('kemsa_code' => 'PM01STR00' . $key, 'drug' => $value->drug, 'qty_allocated' => $value->qty_allocated));
+                array_push($drugs, [
+                    'kemsa_code' => $value->kemsa_code,
+                    'drug' => $value->drug,
+                    'qty_allocated' => $value->qty_allocated,
+                    "opening_bal" => $value->balance,
+                    "receipts" => $value->received,
+                    "dispensed" => $value->dispensed_packs,
+                    "losses" => $value->losses,
+                    "positive_adj" => $value->adjustments,
+                    "negative_adj" => $value->adjustments_neg,
+                    "closing" => $value->count,
+                    "aggr_dispensed" => $value->aggr_consumed, // for central sites only
+                    "aggr_closing" => $value->aggr_on_hand, // for central sites only
+                    "short_expiry" => $value->expiry_date,
+                    "expiry_date" => $value->expiry_date,
+                    "months_stocked_out" => "0"
+                ]);
+
+                $qu = $query->result()[$key]->period_begin;
+                $dat = explode("-", $qu);
+                $facility_info = [
+                    'facility' => $query->result()[$key]->facility,
+                    'mflcode' => $query->result()[$key]->mflcode,
+                    'report_code' => $query->result()[$key]->code,
+                    'report_year' => $dat[0],
+                    'report_month' => $dat[1],
+                    'commodities' => $drugs
+                ];
             }
-            $qu = $query->result()[0]->period_begin;
-            $dat = explode("-", $qu);
-            $facility_info = [
-                'facility' => $query->result()[0]->facility,
-                'mflcode' => $query->result()[0]->mflcode,
-                'report_code' => $query->result()[0]->code,
-                'report_year' => $dat[0],
-                'report_month' => $dat[1],
-                'commodities' => $drugs
-            ];
         } else {
             $resp = ['message' => 'No data found'];
             $facility_info = $resp;
