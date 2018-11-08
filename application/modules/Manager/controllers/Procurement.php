@@ -928,18 +928,18 @@ class Procurement extends MX_Controller {
   </tr>
   <tr>
     <td class="tg-0pky" colspan="2"><strong>Adjustments/Losses (+/-)</strong></td>
-    <td class="tdata tg-0pky col-1"></td>
-    <td class="tdata tg-0pky col-2"></td>
-    <td class="tdata tg-0pky col-3"></td>
-    <td class="tdata tg-0pky col-4"></td>
-    <td class="tdata tg-0pky col-5"></td>
-    <td class="tdata tg-0pky col-6"></td>
-    <td class="tdata tg-0pky col-7"></td>
-    <td class="tdata tg-0pky col-8"></td>
-    <td class="tdata tg-0pky col-9"></td>
-    <td class="tdata tg-0pky col-10"></td>
-    <td class="tdata tg-0pky col-11"></td>
-    <td class="tdata tg-0pky col-12"></td>
+    <td class="tdata tg-0pky col-1">' . $this->rv($column['tracker'][0]['adj_losses']) . '</td>
+    <td class="tdata tg-0pky col-2">' . $this->rv($column['tracker'][1]['adj_losses']) . '</td>
+    <td class="tdata tg-0pky col-3">' . $this->rv($column['tracker'][2]['adj_losses']) . '</td>
+    <td class="tdata tg-0pky col-4">' . $this->rv($column['tracker'][3]['adj_losses']) . '</td>
+    <td class="tdata tg-0pky col-5">' . $this->rv($column['tracker'][4]['adj_losses']) . '</td>
+    <td class="tdata tg-0pky col-6">' . $this->rv($column['tracker'][5]['adj_losses']) . '</td>
+    <td class="tdata tg-0pky col-7">' . $this->rv($column['tracker'][6]['adj_losses']) . '</td>
+    <td class="tdata tg-0pky col-8">' . $this->rv($column['tracker'][7]['adj_losses']) . '</td>
+    <td class="tdata tg-0pky col-9">' . $this->rv($column['tracker'][8]['adj_losses']) . '</td>
+    <td class="tdata tg-0pky col-10">' . $this->rv($column['tracker'][9]['adj_losses']) . '</td>
+    <td class="tdata tg-0pky col-11">' . $this->rv($column['tracker'][10]['adj_losses']) . '</td>
+    <td class="tdata tg-0pky col-12">' . $this->rv($column['tracker'][11]['adj_losses']) . '</td>
   </tr>
   <tr>
     <td class="tg-0pky" colspan="2"><strong>Closing Balance</strong></td>
@@ -1047,6 +1047,7 @@ class Procurement extends MX_Controller {
                             consumption monthly_consumption,
                             avg_issues,
                             avg_consumption,
+                            adj_losses,
                         ROUND(close_kemsa/avg_issues) mos,
                         ROUND(close_kemsa/avg_consumption) cmos
                         FROM vw_procurement_list p
