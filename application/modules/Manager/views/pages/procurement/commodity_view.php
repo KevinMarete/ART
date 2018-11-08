@@ -253,7 +253,7 @@
 
     $(document).ready(function () {
 
-      
+
 
         $(document).on("click", '.dropdown-submenu a.test', function (e) {
             $(this).next('ul').toggle();
@@ -779,9 +779,10 @@
         // alert("Row_num =" + row_num + "  ,  Rolumn_num =" + column_num);
     });
 
-    
+
 
     function getTransactionsTable(drugID, periodYear, tableID) {
+        month = "<?php echo date('m') - 1; ?>";
         //Load Spinner
         LoadSpinner(tableID)
         //Load tableData
@@ -789,6 +790,8 @@
         $.get(transactionURL, function (tableData) {
             $('#transaction_tbl').empty();
             $('#transaction_tbl').append(tableData);
+            $("#transaction_tbl tr:eq(5)").find('td:gt(' + month + ')').css('background', '#c6ff00');
+            $("#transaction_tbl tr:eq(5)").find('td:lt(' + month + '):gt(0)').css('background', '#fff176');
         });
     }
     /*function getTransactionsTable(drugID, periodYear, tableID) {

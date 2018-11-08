@@ -837,18 +837,18 @@ class Procurement extends MX_Controller {
 <table class="table table-hover table-condensed table-bordered TRACKER">
   <tr style="font-weight:bold !important;">
     <th class="tg-0pky" colspan="2"><strong>Description</th>
-    <th class="tg-0pky"><strong>Jan-18</strong></th>
-    <th class="tg-0pky"><strong>Feb-18</strong></th>
-    <th class="tg-0pky"><strong>Mar-18</strong></th>
-    <th class="tg-0pky"><strong>Apr-18</strong></th>
-    <th class="tg-0pky"><strong>May-18</strong></th>
-    <th class="tg-0pky"><strong>Jun-18</strong></th>
-    <th class="tg-0pky"><strong>Jul-18</strong></th>
-    <th class="tg-0pky"><strong>Aug-18</strong></th>
-    <th class="tg-0pky"><strong>Sep-18</strong></th>
-    <th class="tg-0pky"><strong>Oct-18</strong></th>
-    <th class="tg-0pky"><strong>Nov-18</strong></th>
-    <th class="tg-0pky"><strong>Dec-18</strong></th>
+    <th class="tg-0pky"><strong>Jan-' . $period_year . '</strong></th>
+    <th class="tg-0pky"><strong>Feb-' . $period_year . '</strong></th>
+    <th class="tg-0pky"><strong>Mar-' . $period_year . '</strong></th>
+    <th class="tg-0pky"><strong>Apr-' . $period_year . '</strong></th>
+    <th class="tg-0pky"><strong>May-' . $period_year . '</strong></th>
+    <th class="tg-0pky"><strong>Jun-' . $period_year . '</strong></th>
+    <th class="tg-0pky"><strong>Jul-' . $period_year . '</strong></th>
+    <th class="tg-0pky"><strong>Aug-' . $period_year . '</strong></th>
+    <th class="tg-0pky"><strong>Sep-' . $period_year . '</strong></th>
+    <th class="tg-0pky"><strong>Oct-' . $period_year . '</strong></th>
+    <th class="tg-0pky"><strong>Nov-' . $period_year . '</strong></th>
+    <th class="tg-0pky"><strong>Dec-' . $period_year . '</strong></th>
   </tr>
   <tr>
     <td class="tg-0pky" colspan="2"><strong>Opening Balance</strong></td>
