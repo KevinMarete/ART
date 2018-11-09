@@ -131,18 +131,18 @@ class MX_Controller {
 
     function trackerMonthsOpen() {
         $months = [
-            'Jan' => ['data_month' => 'Jan', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0],
-            'Feb' => ['data_month' => 'Feb', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0],
-            'Mar' => ['data_month' => 'Mar', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0],
-            'Apr' => ['data_month' => 'Apr', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0],
-            'May' => ['data_month' => 'May', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0],
-            'Jun' => ['data_month' => 'Jun', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0],
-            'Jul' => ['data_month' => 'Jul', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0],
-            'Aug' => ['data_month' => 'Aug', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0],
-            'Sep' => ['data_month' => 'Sep', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0],
-            'Oct' => ['data_month' => 'Oct', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0],
-            'Nov' => ['data_month' => 'Nov', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0],
-            'Dec' => ['data_month' => 'Dec', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0]
+            'Jan' => ['data_month' => 'Jan', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0,'cmos'=>0,'adj_losses'=>0],
+            'Feb' => ['data_month' => 'Feb', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0,'cmos'=>0,'adj_losses'=>0],
+            'Mar' => ['data_month' => 'Mar', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0,'cmos'=>0,'adj_losses'=>0],
+            'Apr' => ['data_month' => 'Apr', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0,'cmos'=>0,'adj_losses'=>0],
+            'May' => ['data_month' => 'May', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0,'cmos'=>0,'adj_losses'=>0],
+            'Jun' => ['data_month' => 'Jun', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0,'cmos'=>0,'adj_losses'=>0],
+            'Jul' => ['data_month' => 'Jul', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0,'cmos'=>0,'adj_losses'=>0],
+            'Aug' => ['data_month' => 'Aug', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0,'cmos'=>0,'adj_losses'=>0],
+            'Sep' => ['data_month' => 'Sep', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0,'cmos'=>0,'adj_losses'=>0],
+            'Oct' => ['data_month' => 'Oct', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0,'cmos'=>0,'adj_losses'=>0],
+            'Nov' => ['data_month' => 'Nov', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0,'cmos'=>0,'adj_losses'=>0],
+            'Dec' => ['data_month' => 'Dec', 'open_kemsa' => 0, 'receipts_kemsa' => 0, 'issues_kemsa' => 0, 'close_kemsa' => 0, 'monthly_consumption' => 0, 'avg_issues' => 0, 'avg_consumption' => 0, 'mos' => 0,'cmos'=>0,'adj_losses'=>0]
         ];
         return $months;
     }
