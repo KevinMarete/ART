@@ -259,8 +259,22 @@
                                                     <?php if (in_array($regimen['id'], array_keys($columns['maps']['data']))) { ?>
                                                         <tr>
                                                             <td><?= $regimen['name']; ?></td>
-                                                            <td><?php echo $columns['maps']['data'][$regimen['id']]; ?></td>
-                                                            <td><?php echo $columns['previousmaps']['data'][$regimen['id']]; ?></td>
+                                                            <td><?php echo $current = $columns['maps']['data'][$regimen['id']]; ?></td>
+                                                            <td><?php
+                                                                echo $previous = $columns['previousmaps']['data'][$regimen['id']];
+
+                                                                if ($current > $previous) {
+                                                                    $p = round((($current - $previous) / $current) * 100, 0);
+                                                                    echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
+                                                                } else if ($previous > $current) {
+                                                                    $p = round((($previous - $current) / $previous) * 100, 0);
+                                                                    echo '<sup><span style="background: green; font-size:9px;" class="badge"> +' . $p . '%</span></sup>';
+                                                                } else {
+                                                                    //echo '<sup><span style="background: green; font-size:9px;" class="badge"> 0%</span></sup>';
+                                                                }
+                                                                ?>
+
+                                                            </td>
 
                                                         </tr>
                                                         <?php
@@ -303,11 +317,11 @@
                             <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
                         <?php } else if ($role == 'subcounty' && date('d') > 20 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
                             <p><div class="alert alert-warning"><strong>NB: Allocation period has ended. No more allocations allowed beyond the 20<sup>th</sup> of each month. </strong></div></p>
-                        <?php
-                        } else {?>
+                            <?php } else {
+                            ?>
                             <p><div class = "alert alert-warning"><strong>NB: Allocation Complete. </strong></div></p>
-                        <?php }?>
-                        
+                        <?php } ?>
+
                     </div> <!--end of cdrr-->
                 </div>
                 <!-- /.panel-body -->
@@ -473,21 +487,21 @@
         }, 5000);
         $('#side-menu').remove();
         $('#reviewOrder').click(function (e) {
-           // $(this).prop('disabled', true);
+            // $(this).prop('disabled', true);
             $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/reviewed", function (data) {
                 alert(data);
                 window.location.href = "";
             });
         });
         $('#approveOrder').click(function (e) {
-           // $(this).prop('disabled', true);
+            // $(this).prop('disabled', true);
             $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/approved", function (data) {
                 alert(data);
                 window.location.href = "";
             });
         });
         $('#rejectOrder').click(function (e) {
-           // $(this).prop('disabled', true);
+            // $(this).prop('disabled', true);
             $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/rejected", function (data) {
                 alert(data);
                 window.location.href = "";
