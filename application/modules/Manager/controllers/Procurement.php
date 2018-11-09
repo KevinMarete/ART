@@ -20,8 +20,8 @@ class Procurement extends MX_Controller {
     }
 
     function getAllDrugs() {
-        $query = "SELECT * FROM `vw_drug_list` WHERE drug_category='ARV&OI'  ORDER BY name ASC";
-        $this->response($this->db->query($query)->result());
+        $query = "SELECT * FROM `vw_drug_list`  ORDER BY name ASC";
+        echo json_encode($this->db->query($query)->result());
     }
 
     function getDrugsByName() {
