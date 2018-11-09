@@ -845,7 +845,7 @@ class Orders_model extends CI_Model {
     public function get_satellite_cdrr($cdrr_id) {
         $response = array('data' => array());
         try {
-            $sql = "SELECT CONCAT_WS('<br/>[', f.name, CONCAT(f.mflcode, ']')) facility, ci.drug_id,  IF(ci.dispensed_packs IS NOT NULL, ci.dispensed_packs, 0) consumed, IF(ci.count IS NOT NULL, ci.count, 0) stock_on_hand
+            $sql = "SELECT CONCAT_WS('-', f.name, CONCAT(f.mflcode)) facility, ci.drug_id,  IF(ci.dispensed_packs IS NOT NULL, ci.dispensed_packs, 0) consumed, IF(ci.count IS NOT NULL, ci.count, 0) stock_on_hand
                     FROM tbl_cdrr c
                     INNER JOIN tbl_facility f ON f.id = c.facility_id
                     INNER JOIN tbl_cdrr_item ci ON ci.cdrr_id = c.id
@@ -878,7 +878,7 @@ class Orders_model extends CI_Model {
     public function get_satellite_maps($maps_id) {
         $response = array('data' => array());
         try {
-            $sql = "SELECT CONCAT_WS('<br/>[', f.name, CONCAT(f.mflcode, ']')) facility, mi.regimen_id, IF(mi.total IS NOT NULL, mi.total, 0) patients
+            $sql = "SELECT CONCAT_WS('-', f.name, CONCAT(f.mflcode)) facility, mi.regimen_id, IF(mi.total IS NOT NULL, mi.total, 0) patients
                     FROM tbl_maps m
                     INNER JOIN tbl_facility f ON f.id = m.facility_id
                     INNER JOIN tbl_maps_item mi ON mi.maps_id = m.id

@@ -60,7 +60,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-9">
-                            <div class="table-responsive">
+                            <div class="table-responsive-removed">
                                 <table class="table table-striped table-bordered table-condensed" id="MapsData">
                                     <thead >
                                         <tr style="">
@@ -156,7 +156,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="table-responsive">
+                            <div class="table-responsive-removed">
                                 <table class="table table-bordered table-striped table-condensed">
                                     <thead>
                                     <th>Status</th>
