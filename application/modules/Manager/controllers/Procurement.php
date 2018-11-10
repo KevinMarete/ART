@@ -833,7 +833,10 @@ class Procurement extends MX_Controller {
 
     public function get_transaction_table2($drug_id, $period_year) {       
         $column = $this->getTransactionStatus($drug_id, $period_year);
-         $this->response($column);
+        echo '<pre>';
+        print_r($column);
+        die;
+        // $this->response($column);
         $transaction_table = '
 <table class="table table-hover table-condensed table-bordered TRACKER">
   <tr style="font-weight:bold !important;">
