@@ -195,13 +195,11 @@
 
                                                             if ($current > $previous) {
                                                                 $p = round((($current - $previous) / $current) * 100, 0);
-                                                                echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
+                                                                echo '<sup><span style="background: green; font-size:9px;" class="badge"> +' . $p . '%</span></sup>';
                                                             } else if ($previous > $current) {
                                                                 $p = round((($previous - $current) / $previous) * 100, 0);
-                                                                echo '<sup><span style="background: green; font-size:9px;" class="badge"> +' . $p . '%</span></sup>';
-                                                            } else {
-                                                                //echo '<sup><span style="background: green; font-size:9px;" class="badge"> 0%</span></sup>';
-                                                            }
+                                                                echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
+                                                            } 
                                                             ?>
 
                                                         </td>
