@@ -1135,8 +1135,8 @@ class Procurement extends MX_Controller {
             'tracker' => $tracker,
             'status' => $new_final_array
         ];
-        $this->response($tracker_data);
-       // return $tracker_data;
+       // $this->response($tracker_data);
+        return $tracker_data;
     }
 
     function rename_keys($array, $replacement_keys) {
