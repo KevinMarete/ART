@@ -898,18 +898,18 @@ class Procurement extends MX_Controller {
   </tr>
   <tr>
     <td class="tg-0pky"><strong>Received</strong></td>
-    <td class="tdata tg-0pky col-1">' . $this->rv($column['status'][2][0]['quantity']) . ' </td>
-    <td class="tdata tg-0pky col-2">' . $this->rv($column['status'][2][1]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-3">' . $this->rv($column['status'][2][2]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-4">' . $this->rv($column['status'][2][3]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-5">' . $this->rv($column['status'][2][4]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-6">' . $this->rv($column['status'][2][5]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-7">' . $this->rv($column['status'][2][6]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-8">' . $this->rv($column['status'][2][7]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-9">' . $this->rv($column['status'][2][8]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-10">' . $this->rv($column['status'][2][9]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-11">' . $this->rv($column['status'][2][10]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-12">' . $this->rv($column['status'][2][11]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-1">' . $column['status'][2][0]['quantity'] . ' </td>
+    <td class="tdata tg-0pky col-2">' . $column['status'][2][1]['quantity'] . '</td>
+    <td class="tdata tg-0pky col-3">' . $column['status'][2][2]['quantity'] . '</td>
+    <td class="tdata tg-0pky col-4">' . $column['status'][2][3]['quantity'] . '</td>
+    <td class="tdata tg-0pky col-5">' . $column['status'][2][4]['quantity'] . '</td>
+    <td class="tdata tg-0pky col-6">' . $column['status'][2][5]['quantity'] . '</td>
+    <td class="tdata tg-0pky col-7">' . $column['status'][2][6]['quantity'] . '</td>
+    <td class="tdata tg-0pky col-8">' . $column['status'][2][7]['quantity'] . '</td>
+    <td class="tdata tg-0pky col-9">' . $column['status'][2][8]['quantity'] . '</td>
+    <td class="tdata tg-0pky col-10">' . $column['status'][2][9]['quantity'] . '</td>
+    <td class="tdata tg-0pky col-11">' . $column['status'][2][10]['quantity'] . '</td>
+    <td class="tdata tg-0pky col-12">' . $column['status'][2][11]['quantity'] . '</td>
   </tr>
   <tr>
     <td class="tg-0pky" colspan="2"><strong>Issues to Facility</strong></td>
