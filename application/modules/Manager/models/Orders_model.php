@@ -464,7 +464,7 @@ class Orders_model extends CI_Model {
                     INNER JOIN tbl_facility f ON f.id = c.facility_id
                     INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
                     INNER JOIN tbl_county co ON co.id = sc.county_id
-                    WHERE period_end LIKE '$this->_currentMonth%' AND c.id = ?  " . $role_cond;
+                    WHERE c.id = ?  " . $role_cond;
             $table_data = $this->db->query($sql, array($cdrr_id))->result_array();
 
             $logs_sql = "SELECT 
@@ -560,6 +560,9 @@ class Orders_model extends CI_Model {
         }
 
         try {
+            $previous = $this->db->select('period_begin, facility_id, code')->get_where('tbl_cdrr', array('id' => $cdrr_id))->row_array();
+            $previous_period_begin = date('Y-m-d', strtotime($previous['period_begin']." -1 month"));
+
             $sql = "SELECT 
                         *, d.name AS drug_name, f.name AS facility_name, co.name AS county, sc.name AS subcounty, ci.id AS cdrr_item_id
                     FROM tbl_cdrr c 
@@ -568,18 +571,9 @@ class Orders_model extends CI_Model {
                     INNER JOIN tbl_facility f ON f.id = c.facility_id
                     INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
                     INNER JOIN tbl_county co ON co.id = sc.county_id
-                    WHERE period_end LIKE '%$this->_previousMonth%' AND c.id = ?  " . $role_cond;
-            $table_data = $this->db->query($sql, array($cdrr_id))->result_array();
-
-            $logs_sql = "SELECT 
-                            cl.description, cl.created, u.firstname, u.lastname, r.name AS role
-                        FROM tbl_cdrr_log cl
-                        INNER JOIN tbl_user u ON cl.user_id = u.id
-                        INNER JOIN tbl_role r ON u.role_id = r.id
-                        WHERE cdrr_id = ? 
-                        ORDER BY cl.id ASC";
-            $logs_table_data = $this->db->query($logs_sql, array($cdrr_id))->result_array();
-
+                    WHERE c.period_begin = ? AND c.facility_id = ? AND c.code = ?" . $role_cond;
+            $table_data = $this->db->query($sql, array($previous_period_begin, $previous['facility_id'], $previous['code']))->result_array();
+            
             if (!empty($table_data)) {
                 foreach ($table_data as $result) {
                     $response['data'][] = array(
@@ -628,8 +622,6 @@ class Orders_model extends CI_Model {
                         'qty_allocated_mos' => $result['qty_allocated_mos'],
                         'feedback' => $result['feedback']
                     );
-
-                    $response['data']['cdrr_logs'] = $logs_table_data;
                 }
                 $response['message'] = 'Table data was found!';
                 $response['status'] = TRUE;
@@ -705,11 +697,10 @@ class Orders_model extends CI_Model {
             $sql = "SELECT mi.total, mi.regimen_id
             FROM tbl_maps m 
             INNER JOIN tbl_maps_item mi ON mi.maps_id = m.id
-            INNER JOIN vw_regimen_list r ON r.id = mi.regimen_id
             INNER JOIN tbl_facility f ON f.id = m.facility_id
             INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
             INNER JOIN tbl_county co ON co.id = sc.county_id
-            WHERE period_begin = '$this->_currentMonth-01' AND period_end = LAST_DAY('$this->_currentMonth-01') AND m.id = ? " . $role_cond;
+            WHERE m.id = ? " . $role_cond;
 
 
 
@@ -741,7 +732,6 @@ class Orders_model extends CI_Model {
         );
 
         $role_cond = $conditions[$role];
-        //print_r($role_cond);
 
         $response = array();
 
@@ -749,22 +739,20 @@ class Orders_model extends CI_Model {
         if (!$maps_id) {
             return $response;
         }
-        //echo $role_cond;
 
         try {
-            $previous = date('Y') . "-" . (sprintf("%02d", date('m') - 2));
-            $facility_id = $this->db->select('facility_id')->get_where('tbl_maps', array('id' => $maps_id))->row_array()['facility_id'];
+            $previous = $this->db->select('period_begin, facility_id, code')->get_where('tbl_maps', array('id' => $maps_id))->row_array();
+            $previous_period_begin = date('Y-m-d', strtotime($previous['period_begin']." -1 month"));
 
             $sql = "SELECT mi.total, mi.regimen_id
             FROM tbl_maps m 
             INNER JOIN tbl_maps_item mi ON mi.maps_id = m.id
-            INNER JOIN vw_regimen_list r ON r.id = mi.regimen_id
             INNER JOIN tbl_facility f ON f.id = m.facility_id
             INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
             INNER JOIN tbl_county co ON co.id = sc.county_id
-            WHERE period_begin = '$this->_previousMonth-01' AND period_end = LAST_DAY('$this->_previousMonth-01') AND m.facility_id = ? " . $role_cond;
+            WHERE period_begin = ? AND m.facility_id = ? AND m.code = ?" . $role_cond;
 
-            $table_data = $this->db->query($sql, array($facility_id))->result_array();
+            $table_data = $this->db->query($sql, array($previous_period_begin, $previous['facility_id'], $previous['code']))->result_array();
             if (!empty($table_data)) {
                 foreach ($table_data as $result) {
                     $response['data'][$result['regimen_id']] = $result['total'];

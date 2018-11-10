@@ -60,6 +60,7 @@ class Manager extends MX_Controller {
                             'drugs' => $this->Orders_model->get_drugs(),
                             'regimens' => $this->Orders_model->get_regimens(),
                             'cdrrs' => $this->Orders_model->get_cdrr_data($this->uri->segment('4'), $this->session->userdata('scope'), $this->session->userdata('role')),
+                            'pcdrrs' => $this->Orders_model->get_cdrr_data_previous($this->uri->segment('4'), $this->session->userdata('scope'), $this->session->userdata('role')),
                             'maps' => $this->Orders_model->get_maps_data($this->uri->segment('5'), $this->session->userdata('scope'), $this->session->userdata('role')),
                             'previousmaps' => $this->Orders_model->get_previous_maps_data($this->uri->segment('5'), $this->session->userdata('scope'), $this->session->userdata('role'))
                         ),
@@ -67,6 +68,7 @@ class Manager extends MX_Controller {
                             'drugs' => $this->Orders_model->get_drugs(),
                             'regimens' => $this->Orders_model->get_regimens(),
                             'cdrrs' => $this->Orders_model->get_cdrr_data($this->uri->segment('4'), $this->session->userdata('scope'), $this->session->userdata('role')),
+                            'pcdrrs' => $this->Orders_model->get_cdrr_data_previous($this->uri->segment('4'), $this->session->userdata('scope'), $this->session->userdata('role')),
                             'maps' => $this->Orders_model->get_maps_data($this->uri->segment('5'), $this->session->userdata('scope'), $this->session->userdata('role')),
                             'previousmaps' => $this->Orders_model->get_previous_maps_data($this->uri->segment('5'), $this->session->userdata('scope'), $this->session->userdata('role'))
                         ),
@@ -74,6 +76,7 @@ class Manager extends MX_Controller {
                             'drugs' => $this->Orders_model->get_drugs(),
                             'regimens' => $this->Orders_model->get_regimens(),
                             'cdrrs' => $this->Orders_model->get_cdrr_data($this->uri->segment('4'), $this->session->userdata('scope'), $this->session->userdata('role')),
+                            'pcdrrs' => $this->Orders_model->get_cdrr_data_previous($this->uri->segment('4'), $this->session->userdata('scope'), $this->session->userdata('role')),
                             'maps' => $this->Orders_model->get_maps_data($this->uri->segment('5'), $this->session->userdata('scope'), $this->session->userdata('role')),
                             'previousmaps' => $this->Orders_model->get_previous_maps_data($this->uri->segment('5'), $this->session->userdata('scope'), $this->session->userdata('role'))
                         )

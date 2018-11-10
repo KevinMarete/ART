@@ -66,7 +66,7 @@
                                         <tr style="">
                                             <th rowspan="2">Drug Name</th>
                                             <th rowspan="2">Pack Size</th>
-                                            <th>Closing Balance</th>
+                                            <th>Previous Closing Balance</th>
                                             <th>Beginning Balance</th>
                                             <th>Quantity Received</th>
                                             <?php if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') { ?> 
@@ -113,13 +113,13 @@
 
 
                                             if (in_array($drugid, array_keys($columns['cdrrs']['data']['cdrr_item']))) {
-                                                $count = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'];
+                                                $count = $columns['pcdrrs']['data']['cdrr_item'][$drugid]['count'];
                                                 $balance = $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'];
                                                 ?>
                                                 <tr>
                                                     <td class="drug_name"><?= $drug['name']; ?></td>
                                                     <td><?= $drug['pack_size']; ?></td>
-                                                    <td class="count"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['count']; ?></td>
+                                                    <td class="count"><?= $count; ?></td>
                                                     <td class="balance"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance']; ?>
                                                         <?php
                                                         if ($count > $balance) {
