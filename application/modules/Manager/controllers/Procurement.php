@@ -831,8 +831,9 @@ class Procurement extends MX_Controller {
         return $class;
     }
 
-    public function get_transaction_table2($drug_id, $period_year) {
+    public function get_transaction_table2($drug_id, $period_year) {       
         $column = $this->getTransactionStatus($drug_id, $period_year);
+         $this->response($column);
         $transaction_table = '
 <table class="table table-hover table-condensed table-bordered TRACKER">
   <tr style="font-weight:bold !important;">
