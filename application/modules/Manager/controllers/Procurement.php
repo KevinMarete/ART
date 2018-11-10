@@ -868,48 +868,48 @@ class Procurement extends MX_Controller {
   <tr>
     <td class="tg-0pky" rowspan="3" vertical-align="middle"><strong>Receipts from Suppliers</strong></td>
     <td class="tg-0pky"><strong>Proposed</strong></td>
-    <td class="tdata tg-0pky col-1">' . $this->rv($column['status'][0][0]['quantity']) . ' </td>
-    <td class="tdata tg-0pky col-2">' . $this->rv($column['status'][0][1]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-3">' . $this->rv($column['status'][0][2]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-4">' . $this->rv($column['status'][0][3]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-5">' . $this->rv($column['status'][0][4]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-6">' . $this->rv($column['status'][0][5]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-7">' . $this->rv($column['status'][0][6]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-8">' . $this->rv($column['status'][0][7]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-9">' . $this->rv($column['status'][0][8]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-10">' . $this->rv($column['status'][0][9]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-11">' . $this->rv($column['status'][0][10]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-12">' . $this->rv($column['status'][0][11]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-1">' . @$this->rv($column['status'][0][0]['quantity']) . ' </td>
+    <td class="tdata tg-0pky col-2">' . @$this->rv($column['status'][0][1]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-3">' . @$this->rv($column['status'][0][2]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-4">' . @$this->rv($column['status'][0][3]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-5">' . @$this->rv($column['status'][0][4]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-6">' . @$this->rv($column['status'][0][5]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-7">' . @$this->rv($column['status'][0][6]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-8">' . @$this->rv($column['status'][0][7]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-9">' . @$this->rv($column['status'][0][8]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-10">' . @$this->rv($column['status'][0][9]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-11">' . @$this->rv($column['status'][0][10]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-12">' . @$this->rv($column['status'][0][11]['quantity']) . '</td>
   </tr>
   <tr>
     <td class="tg-0pky"><strong>Contracted</strong></td>
-    <td class="tdata tg-0pky col-1">' . $this->rv($column['status'][1][0]['quantity']) . ' </td>
-    <td class="tdata tg-0pky col-2">' . $this->rv($column['status'][1][1]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-3">' . $this->rv($column['status'][1][2]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-4">' . $this->rv($column['status'][1][3]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-5">' . $this->rv($column['status'][1][4]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-6">' . $this->rv($column['status'][1][5]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-7">' . $this->rv($column['status'][1][6]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-8">' . $this->rv($column['status'][1][7]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-9">' . $this->rv($column['status'][1][8]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-10">' . $this->rv($column['status'][1][9]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-11">' . $this->rv($column['status'][1][10]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-12">' . $this->rv($column['status'][1][11]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-1">' . @$this->rv($column['status'][1][0]['quantity']) . ' </td>
+    <td class="tdata tg-0pky col-2">' . @$this->rv($column['status'][1][1]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-3">' . @$this->rv($column['status'][1][2]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-4">' . @$this->rv($column['status'][1][3]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-5">' . @$this->rv($column['status'][1][4]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-6">' . @$this->rv($column['status'][1][5]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-7">' . @$this->rv($column['status'][1][6]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-8">' . @$this->rv($column['status'][1][7]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-9">' . @$this->rv($column['status'][1][8]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-10">' . @$this->rv($column['status'][1][9]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-11">' . @$this->rv($column['status'][1][10]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-12">' . @$this->rv($column['status'][1][11]['quantity']) . '</td>
   </tr>
   <tr>
     <td class="tg-0pky"><strong>Received</strong></td>
-    <td class="tdata tg-0pky col-1">' . $column['status'][2][0]['quantity'] . ' </td>
-    <td class="tdata tg-0pky col-2">' . $column['status'][2][1]['quantity'] . '</td>
-    <td class="tdata tg-0pky col-3">' . $column['status'][2][2]['quantity'] . '</td>
-    <td class="tdata tg-0pky col-4">' . $column['status'][2][3]['quantity'] . '</td>
-    <td class="tdata tg-0pky col-5">' . $column['status'][2][4]['quantity'] . '</td>
-    <td class="tdata tg-0pky col-6">' . $column['status'][2][5]['quantity'] . '</td>
-    <td class="tdata tg-0pky col-7">' . $column['status'][2][6]['quantity'] . '</td>
-    <td class="tdata tg-0pky col-8">' . $column['status'][2][7]['quantity'] . '</td>
-    <td class="tdata tg-0pky col-9">' . $column['status'][2][8]['quantity'] . '</td>
-    <td class="tdata tg-0pky col-10">' . $column['status'][2][9]['quantity'] . '</td>
-    <td class="tdata tg-0pky col-11">' . $column['status'][2][10]['quantity'] . '</td>
-    <td class="tdata tg-0pky col-12">' . $column['status'][2][11]['quantity'] . '</td>
+    <td class="tdata tg-0pky col-1">' . @$this->rv($column['status'][2][0]['quantity']) . ' </td>
+    <td class="tdata tg-0pky col-2">' . @$this->rv($column['status'][2][1]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-3">' . @$this->rv($column['status'][2][2]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-4">' . @$this->rv($column['status'][2][3]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-5">' . @$this->rv($column['status'][2][4]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-6">' . @$this->rv($column['status'][2][5]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-7">' . @$this->rv($column['status'][2][6]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-8">' . @$this->rv($column['status'][2][7]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-9">' . @$this->rv($column['status'][2][8]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-10">' . @$this->rv($column['status'][2][9]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-11">' . @$this->rv($column['status'][2][10]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-12">' . @$this->rv($column['status'][2][11]['quantity']) . '</td>
   </tr>
   <tr>
     <td class="tg-0pky" colspan="2"><strong>Issues to Facility</strong></td>
@@ -1135,8 +1135,8 @@ class Procurement extends MX_Controller {
             'tracker' => $tracker,
             'status' => $new_final_array
         ];
-       // $this->response($tracker_data);
-        return $tracker_data;
+        $this->response($tracker_data);
+        //return $tracker_data;
     }
 
     function rename_keys($array, $replacement_keys) {
