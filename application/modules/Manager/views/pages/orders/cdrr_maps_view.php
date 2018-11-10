@@ -180,8 +180,8 @@
                                 <table class="table table-striped table-bordered table-condensed" id="mapsTable" >
                                     <thead>
                                     <th>Code | Regimen</th>
-                                    <th title="Current Active Patient">CAP</th>
-                                    <th title="Previous Active Patient">PAP</th>
+                                    <th title="Current Active Patient">No. of Patients</th>
+                                    <th title="Previous Active Patient">(% Change)</th>
                                     </thead>
                                     <tbody>
                                         <?php foreach ($columns['regimens'] as $category => $regimens) { ?>

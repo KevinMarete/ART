@@ -753,6 +753,7 @@ class Orders_model extends CI_Model {
 
         try {
             $previous = date('Y') . "-" . (sprintf("%02d", date('m') - 2));
+            $facility_id = $this->db->select('facility_id')->get_where('tbl_maps', array('id' => $maps_id))->row_array()['facility_id'];
 
             $sql = "SELECT mi.total, mi.regimen_id
             FROM tbl_maps m 
@@ -761,12 +762,9 @@ class Orders_model extends CI_Model {
             INNER JOIN tbl_facility f ON f.id = m.facility_id
             INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
             INNER JOIN tbl_county co ON co.id = sc.county_id
-            WHERE period_begin = '$this->_previousMonth-01' AND period_end = LAST_DAY('$this->_previousMonth-01') AND m.id = ? " . $role_cond;
+            WHERE period_begin = '$this->_previousMonth-01' AND period_end = LAST_DAY('$this->_previousMonth-01') AND m.facility_id = ? " . $role_cond;
 
-
-
-
-            $table_data = $this->db->query($sql, array($maps_id))->result_array();
+            $table_data = $this->db->query($sql, array($facility_id))->result_array();
             if (!empty($table_data)) {
                 foreach ($table_data as $result) {
                     $response['data'][$result['regimen_id']] = $result['total'];
