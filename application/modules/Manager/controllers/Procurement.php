@@ -1132,11 +1132,11 @@ class Procurement extends MX_Controller {
         //assigning the final array the procurement statuses as opposed to the array indexes for easier dynamic referencing``
 
         $tracker_data = [
-            'tracker' => $tracker,
+            //'tracker' => $tracker,
             'status' => $new_final_array
         ];
-        //$this->response($tracker_data);
-        return $tracker_data;
+        $this->response($tracker_data);
+       // return $tracker_data;
     }
 
     function rename_keys($array, $replacement_keys) {
