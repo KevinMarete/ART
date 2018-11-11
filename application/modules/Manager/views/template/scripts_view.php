@@ -48,18 +48,14 @@
 <script type="text/javascript" src="<?php echo base_url() . 'public/manager/js/gridviewscroll.js'; ?>"></script>
 <script type="text/javascript" src="<?php echo base_url() . 'public/manager/js/jquery.smartWizard.js'; ?>"></script>
 <script type="text/javascript" src="<?php echo base_url() . 'public/manager/js/jquery.easy-autocomplete.min.js'; ?>"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url() . 'public/manager/lib/timepicker/js/jquery.timepicker.min.js'; ?>"></script>
 <!-- Custom Theme JavaScript -->
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/dist/js/sb-admin-2.js'; ?>"></script>
 <script src="<?php echo base_url() . 'public/manager/js/loadingOverlay.js'; ?>"></script>
 
-    <script type="text/javascript">
-        $(function () {
-            $('.<?= $page_name; ?>').addClass("active-page");
-
-            $.get("<?= base_url() ?>Manager/procurement/reminder/q", function () {
-            });
-
-
-        });
-    </script>
+<script type="text/javascript">
+    $(function () {
+        $('.<?= $page_name; ?>').addClass("active-page");
+        $.get("<?= base_url() ?>Manager/procurement/reminder/q");
+    });
+</script>

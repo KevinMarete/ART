@@ -43,7 +43,7 @@
 
 <!-- Include SmartWizard CSS -->
 <link href="<?php echo base_url() . 'public/manager/css/smart_wizard.css'; ?>" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+<link href="<?php echo base_url() . 'public/manager/lib/timepicker/css/jquery.timepicker.min.css'; ?>" rel="stylesheet" type="text/css" />
 <!-- Optional SmartWizard theme -->
 <link href="<?php echo base_url() . 'public/manager/css/smart_wizard_theme_circles.css' ?>" rel="stylesheet" type="text/css" />
 <link href="<?php echo base_url() . 'public/manager/css/smart_wizard_theme_arrows.css' ?>" rel="stylesheet" type="text/css" />
