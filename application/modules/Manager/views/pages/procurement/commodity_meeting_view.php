@@ -35,7 +35,7 @@
 
 
 
-                        <form action="<?php echo base_url() . 'manager/save_procurement'; ?>" method="POST" class="form-horizontal" role="form">
+                        <form  id="PROC_FORM" class="form-horizontal" role="form">
                             <div class="form-group row">
 
                                 <div class="col-sm-9">
@@ -112,7 +112,7 @@
                             <div class="form-group row">
                                 <div class="col-sm-12">
                                     <button type="button" class="btn btn-danger readonly2" data-dismiss="modal"><i class="fa fa-remove"></i> Close</button>
-                                    <button type="submit" class="btn btn-primary readonly2"><i class="fa fa-save"></i> Save Order</button>
+                                    <button type="button" class="btn btn-primary readonly2 " id="SAVE_ORDER"><i class="fa fa-save"></i> Save Order</button>
                                 </div>
                             </div>
 
@@ -196,6 +196,7 @@
 
 
     now = new Date();
+    id = '';
     currentYear = (new Date).getFullYear();
     currentMonth = GetMonthName((new Date).getMonth());
     newdate = new Date(now.setMonth(now.getMonth() - 1));
@@ -204,6 +205,7 @@
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         return months[monthNumber];
     }
+
 
 
     var totalPercentage = 0;
@@ -308,7 +310,7 @@
         }, 'json');
 
         $('#DrugList').on('change', function () {
-            var id = $(this).val();
+            id = $(this).val();
             LoadSpinner("#procurement_loader");
             var trackerURL = "<?php echo base_url() . 'Manager/Procurement/get_tracker/'; ?>" + id;
             $.getJSON(trackerURL, function (json) {
@@ -695,6 +697,25 @@
 
             return false;
         }
+    });
+
+    $('#SAVE_ORDER').click(function () {
+        $('#SAVE_ORDER').prop('disabled', 'disabled');
+        var drug_id = $('#tracker').attr('data-drug_id');
+        $.post("<?php echo base_url() . 'manager/save_procurement'; ?>", $('#PROC_FORM').serialize(), function (resp) {
+            if (resp.status == 'success') {
+                getTransactionsTable(drug_id, currentYear, "#transaction_tbl");
+                //getDrugOrders(id, "#orders_tbl")
+                getDrugOrdersHistory(drug_id, '#procurement_history');
+            } else {
+                swal({
+                    title: "Save Error",
+                    text: "We could not save at the moment, please try again later",
+                    icon: "error",
+                });
+            }
+        }, 'json');
+        return false;
     });
 
 

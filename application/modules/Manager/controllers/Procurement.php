@@ -598,11 +598,7 @@ class Procurement extends MX_Controller {
 						<strong>Success!</strong> Procurement was Added</div>';
         $this->updateSysLogs('Updated  (Tracker data updated)');
         $this->session->set_flashdata('tracker_msg', $message);
-        if ($this->session->userdata('minute') == 'minute') {
-            redirect($this->session->userdata('minute'));
-        } else {
-            redirect('manager/procurement/commodity');
-        }
+        $this->response(['status'=>'success']);
     }
 
     function save_decision() {
