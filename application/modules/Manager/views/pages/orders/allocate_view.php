@@ -82,9 +82,9 @@
                                     <table class="table table-striped table-bordered table-condensed" id="AllocationTable">
                                         <thead id="THEAD" >
                                             <tr>
-                                                <th >Drug Name</th>
-                                                <th >Pack Size</th>
-                                                <th> Closing Balance </th>
+                                                <th>Drug Name</th>
+                                                <th>Pack Size</th>
+                                                <th>Previous Closing Balance</th>
                                                 <th>Beginning Balance</th>
                                                 <th>Quantity Received</th>
                                                 <?php if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') { ?> 
@@ -147,26 +147,24 @@
 
 
                                                 if (in_array($drugid, array_keys($columns['cdrrs']['data']['cdrr_item']))) {
-                                                    $count = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'];
+                                                    $pcount = $columns['pcdrrs']['data']['cdrr_item'][$drugid]['count'];
                                                     $balance = $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'];
                                                     $drugamc = $columns['cdrrs']['data']['cdrr_item'][$drugid]['drugamc'];
                                                     $consumed = $columns['cdrrs']['data']['cdrr_item'][$drugid]['dispensed_packs'];
-                                                    $new = @$columns['pcdrrs']['data']['cdrr_item'][$drugid]['count'];
+                                                    $count = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'];
                                                     ?>
                                                     <tr>
-                                                        <td class='stickyColumn'><?= $drug['name']; ?></td>                                                   
+                                                        <td class='stickyColumn'><?= $drug['name']; ?></td>                                              
                                                         <td><?= $drug['pack_size']; ?></td>
-                                                        <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'] ?></td>
+                                                        <td><?= $pcount; ?></td>
                                                         <td>
-                                                            <?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'] ?>
+                                                            <?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance']; ?>
                                                             <?php
-                                                            if ($count > $balance) {
-                                                                // $p = round((($count - $balance) / $count) * 100, 0);
-                                                                $p = round($count - $balance, 0);
+                                                            if ($pcount > $balance) {
+                                                                $p = round($pcount - $balance, 0);
                                                                 echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '</span></sup>';
-                                                            } else if ($balance > $count) {
-                                                                // $p = round((($balance - $count) / $balance) * 100, 0);
-                                                                $p = round($balance - $count, 0);
+                                                            } else if ($balance > $pcount) {
+                                                                $p = round($balance - $pcount, 0);
                                                                 echo '<sup><span style="background: red; font-size:9px;" class="badge"> +' . $p . '</span></sup>';
                                                             }
                                                             ?>                                                        
@@ -246,12 +244,12 @@
                                 </form>
                             </div>
                             <div class="col-sm-3">
-                                <div class="table-responsive">
+                                <div class="table-responsive-removed">
                                     <table class="table table-striped table-bordered table-condensed" id="mapsTableReg">
                                         <thead>
                                         <th>Code | Regimen</th>
-                                        <th title="Current Active Patient">CAP</th>
-                                        <th title="Previous Active Patient">PAP</th>
+                                        <th title="Current Active Patient">No. of Patients</th>
+                                        <th title="Previous Active Patient">(% Change)</th>
                                         </thead>
                                         <tbody>
                                             <?php foreach ($columns['regimens'] as $category => $regimens) { ?>
@@ -265,10 +263,10 @@
 
                                                                 if ($current > $previous) {
                                                                     $p = round((($current - $previous) / $current) * 100, 0);
-                                                                    echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
+                                                                    echo '<sup><span style="background: green; font-size:9px;" class="badge"> +' . $p . '%</span></sup>';
                                                                 } else if ($previous > $current) {
                                                                     $p = round((($previous - $current) / $previous) * 100, 0);
-                                                                    echo '<sup><span style="background: green; font-size:9px;" class="badge"> +' . $p . '%</span></sup>';
+                                                                    echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
                                                                 } else {
                                                                     //echo '<sup><span style="background: green; font-size:9px;" class="badge"> 0%</span></sup>';
                                                                 }
