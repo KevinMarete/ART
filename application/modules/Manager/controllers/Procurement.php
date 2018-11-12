@@ -864,6 +864,21 @@ class Procurement extends MX_Controller {
   <tr>
     <td class="tg-0pky" rowspan="3" vertical-align="middle"><strong>Receipts from Suppliers</strong></td>
     <td class="tg-0pky"><strong>Proposed</strong></td>
+    <td class="tdata tg-0pky col-1">' . @$this->rv($column['status'][0][0]['quantity']) . ' </td>
+    <td class="tdata tg-0pky col-2">' . @$this->rv($column['status'][0][1]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-3">' . @$this->rv($column['status'][0][2]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-4">' . @$this->rv($column['status'][0][3]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-5">' . @$this->rv($column['status'][0][4]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-6">' . @$this->rv($column['status'][0][5]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-7">' . @$this->rv($column['status'][0][6]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-8">' . @$this->rv($column['status'][0][7]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-9">' . @$this->rv($column['status'][0][8]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-10">' . @$this->rv($column['status'][0][9]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-11">' . @$this->rv($column['status'][0][10]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-12">' . @$this->rv($column['status'][0][11]['quantity']) . '</td>
+  </tr>
+  <tr>
+    <td class="tg-0pky"><strong>Contracted</strong></td>
     <td class="tdata tg-0pky col-1">' . @$this->rv($column['status'][1][0]['quantity']) . ' </td>
     <td class="tdata tg-0pky col-2">' . @$this->rv($column['status'][1][1]['quantity']) . '</td>
     <td class="tdata tg-0pky col-3">' . @$this->rv($column['status'][1][2]['quantity']) . '</td>
@@ -878,7 +893,7 @@ class Procurement extends MX_Controller {
     <td class="tdata tg-0pky col-12">' . @$this->rv($column['status'][1][11]['quantity']) . '</td>
   </tr>
   <tr>
-    <td class="tg-0pky"><strong>Contracted</strong></td>
+    <td class="tg-0pky"><strong>Received</strong></td>
     <td class="tdata tg-0pky col-1">' . @$this->rv($column['status'][2][0]['quantity']) . ' </td>
     <td class="tdata tg-0pky col-2">' . @$this->rv($column['status'][2][1]['quantity']) . '</td>
     <td class="tdata tg-0pky col-3">' . @$this->rv($column['status'][2][2]['quantity']) . '</td>
@@ -891,21 +906,6 @@ class Procurement extends MX_Controller {
     <td class="tdata tg-0pky col-10">' . @$this->rv($column['status'][2][9]['quantity']) . '</td>
     <td class="tdata tg-0pky col-11">' . @$this->rv($column['status'][2][10]['quantity']) . '</td>
     <td class="tdata tg-0pky col-12">' . @$this->rv($column['status'][2][11]['quantity']) . '</td>
-  </tr>
-  <tr>
-    <td class="tg-0pky"><strong>Received</strong></td>
-    <td class="tdata tg-0pky col-1">' . @$this->rv($column['status'][3][0]['quantity']) . ' </td>
-    <td class="tdata tg-0pky col-2">' . @$this->rv($column['status'][3][1]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-3">' . @$this->rv($column['status'][3][2]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-4">' . @$this->rv($column['status'][3][3]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-5">' . @$this->rv($column['status'][3][4]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-6">' . @$this->rv($column['status'][3][5]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-7">' . @$this->rv($column['status'][3][6]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-8">' . @$this->rv($column['status'][3][7]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-9">' . @$this->rv($column['status'][3][8]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-10">' . @$this->rv($column['status'][3][9]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-11">' . @$this->rv($column['status'][3][10]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-12">' . @$this->rv($column['status'][3][11]['quantity']) . '</td>
   </tr>
   <tr>
     <td class="tg-0pky" colspan="2"><strong>Issues to Facility</strong></td>
@@ -1076,7 +1076,7 @@ class Procurement extends MX_Controller {
         $rmonths = $this->trackeMonths();
         $tracker = $this->getTrackerData($drugid, $year);
         $new_arr = [];
-        $transaction_status = $this->db->get("tbl_procurement_status")->result();
+        $transaction_status = $this->db->select('name')->from("tbl_procurement_status")->not_like('name', 'cancelled')->order_by('id', 'asc')->get()->result();
         foreach ($transaction_status as $stat):
             $status = strtolower($stat->name);
             $query[$status] = $this->db->query("SELECT                 
@@ -1084,12 +1084,12 @@ class Procurement extends MX_Controller {
                     quantity quantity                     
                     FROM tbl_procurement_item pi
                     INNER JOIN tbl_procurement p ON p.id = pi.procurement_id
-                    LEFT JOIN tbl_procurement_status ps ON ps.id = pi.procurement_status_id
+                    INNER JOIN tbl_procurement_status ps ON ps.id = pi.procurement_status_id
                     LEFT JOIN tbl_funding_agent fa ON fa.id = pi.funding_agent_id
                     LEFT JOIN tbl_supplier s ON s.id = pi.supplier_id
                     WHERE p.drug_id = '$drugid'
                     AND transaction_year='$year'
-                    AND ps.name='$stat->name'
+                    AND ps.name LIKE '%$status%'
                     GROUP BY pi.id
                     ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )")->result_array();
         endforeach;
@@ -1125,14 +1125,13 @@ class Procurement extends MX_Controller {
             });
             array_push($new_final_array, $merged);
         endforeach;
-        //assigning the final array the procurement statuses as opposed to the array indexes for easier dynamic referencing``
 
+        //assigning the final array the procurement statuses as opposed to the array indexes for easier dynamic referencing``
         $tracker_data = [
             'tracker' => $tracker,
             'status' => $new_final_array
         ];
-        //$this->response($tracker_data);
-       
+
         return $tracker_data;
     }
 
