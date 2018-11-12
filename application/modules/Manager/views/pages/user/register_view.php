@@ -141,7 +141,7 @@
             $('#inputrole').on('change', function(){
                 var role = $('#inputrole :selected').text()
                 $('#scope_section').empty();
-                $.getJSON('User/get_role_scope/'+role, function(data){
+                $.getJSON('<?php echo base_url();?>Manager/User/get_role_scope/'+role, function(data){
                     if(data.length > 0){
                         $('#scope_section').html('<div class="form-group"><label for="inputscope" class="col-sm-2 control-label">Scope</label><div class="col-sm-10"><select class="form-control" id="inputscope" name="scope_id" required><option value=" ">Select Scope</option></select></div></div>');
                         $.each(data, function(i, v){
