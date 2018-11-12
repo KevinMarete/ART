@@ -73,7 +73,7 @@
                                 <div class="form-group">
                                     <label for="inputrole" class="col-sm-2 control-label">Role</label>
                                     <div class="col-sm-10">
-                                       
+
                                         <select class="form-control" id="inputrole" name="role_id" required> 
                                             <option value=''>Select Role</option>
                                             <?php
@@ -133,6 +133,7 @@
                 $("#inputpassword").on("change", validatePassword);
                 $("#inputcpassword").on("change", validatePassword);
                 $("#inputrole option[value='4']").remove();
+                $("#inputrole option[value='5']").remove();
 
                 function validatePassword() {
                     var password = $("#inputpassword").val()
