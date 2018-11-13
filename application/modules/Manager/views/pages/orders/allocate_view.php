@@ -507,7 +507,7 @@
         });
         $('#complete_allocation').click(function (e) {
             // $(this).prop('disabled', true);
-            $.get(base_url + "manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/allocated", function (data) {
+            $.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/allocated", function (data) {
                 alert(data);
                 //  window.location.href = "";
             });
