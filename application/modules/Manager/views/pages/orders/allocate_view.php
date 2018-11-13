@@ -493,21 +493,21 @@
         });
         $('#approveOrder').click(function (e) {
             // $(this).prop('disabled', true);
-            $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/approved", function (data) {
+            $.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/approved", function (data) {
                 alert(data);
                 window.location.href = "";
             });
         });
         $('#rejectOrder').click(function (e) {
             // $(this).prop('disabled', true);
-            $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/rejected", function (data) {
+            $.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/rejected", function (data) {
                 alert(data);
                 window.location.href = "";
             });
         });
         $('#complete_allocation').click(function (e) {
             // $(this).prop('disabled', true);
-            $.get(base_url + "manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/allocated", function (data) {
+            $.get(base_url + "manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/allocated", function (data) {
                 alert(data);
                 //  window.location.href = "";
             });
@@ -515,7 +515,7 @@
         $('#save_allocation').click(function (e) {
             $(this).prop('disabled', true);
             var form = $('#orderForm');
-            var url = base_url + "Manager/orders/updateOrder/<?= $cdrr_id . '/' . $map_id; ?>";
+            var url = base_url + "Manager/Orders/updateOrder/<?= $cdrr_id . '/' . $map_id; ?>";
             $.ajax({
                 type: "POST",
                 url: url,
