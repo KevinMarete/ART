@@ -32,6 +32,7 @@ class Orders_model extends CI_Model {
 
     public function actionOrder($orderid, $mapid, $action, $user) {
         $response = array();
+       
         try {
             $this->db->set('updated', date('Y-m-d H:i:s'));
             $this->db->set('status', $action);
@@ -41,6 +42,10 @@ class Orders_model extends CI_Model {
                 $log_action = $action;
                 if ($action == 'pending') {
                     $log_action = 'updated';
+                }
+
+                if(!\is_null($this->input->post('reason'))){
+                    $log_action = $log_action."-".$this->input->post('reason');
                 }
                 $array = array(
                     'description' => $log_action,
@@ -561,7 +566,7 @@ class Orders_model extends CI_Model {
 
         try {
             $previous = $this->db->select('period_begin, facility_id, code')->get_where('tbl_cdrr', array('id' => $cdrr_id))->row_array();
-            $previous_period_begin = date('Y-m-d', strtotime($previous['period_begin']." -1 month"));
+            $previous_period_begin = date('Y-m-d', strtotime($previous['period_begin'] . " -1 month"));
 
             $sql = "SELECT 
                         *, d.name AS drug_name, f.name AS facility_name, co.name AS county, sc.name AS subcounty, ci.id AS cdrr_item_id
@@ -573,7 +578,7 @@ class Orders_model extends CI_Model {
                     INNER JOIN tbl_county co ON co.id = sc.county_id
                     WHERE c.period_begin = ? AND c.facility_id = ? AND c.code = ?" . $role_cond;
             $table_data = $this->db->query($sql, array($previous_period_begin, $previous['facility_id'], $previous['code']))->result_array();
-            
+
             if (!empty($table_data)) {
                 foreach ($table_data as $result) {
                     $response['data'][] = array(
@@ -742,7 +747,7 @@ class Orders_model extends CI_Model {
 
         try {
             $previous = $this->db->select('period_begin, facility_id, code')->get_where('tbl_maps', array('id' => $maps_id))->row_array();
-            $previous_period_begin = date('Y-m-d', strtotime($previous['period_begin']." -1 month"));
+            $previous_period_begin = date('Y-m-d', strtotime($previous['period_begin'] . " -1 month"));
 
             $sql = "SELECT mi.total, mi.regimen_id
             FROM tbl_maps m 

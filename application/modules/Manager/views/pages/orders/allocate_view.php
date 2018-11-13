@@ -170,7 +170,7 @@
                                                             }
                                                             ?>                                                        
                                                         </td>
-                                                        <?php
+                                                        <?php                                                     
                                                         $disabled = '';
                                                         $comment = '';
                                                         $status = $columns['cdrrs']['data']['cdrr_item'][$drugid]['stock_status'];
