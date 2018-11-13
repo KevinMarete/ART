@@ -212,7 +212,7 @@
                                                         </td>
 
                                                         <td>
-                                                            <textarea type="text" style="width:100px;" class="form-control" <?= $disabled; ?> name="feedback-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" ><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['feedback']; ?></textarea>
+                                                            <textarea type="text" style="width:100px;" class="form-control comment" <?= $disabled; ?> name="feedback-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" ><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['feedback']; ?></textarea>
                                                         </td>
 
 
@@ -362,7 +362,7 @@
             input_val = row.find('.AMOS').val();
             min_mos = parseInt(row.find('.MIN').val());
             max_mos = parseInt(row.find('.MAX').val());
-            AMC = row.find('.AMC').text();
+            AMC = parseInt(row.find('.AMC').text());
             eMOSH = row.find('.eMOSH').text();
             aggSOH = row.find('.aggSOH').text();
 
@@ -373,8 +373,11 @@
                 aggSOH = 0;
             }
 
-            cMOS = (parseInt(input_val) / parseInt(AMC));
-            row.find('.AllocatedMOS').val((cMOS).toFixed(2));
+            cMOS = (parseInt(input_val) / AMC).toFixed(2);
+            if (AMC == 0) {
+                cMOS = 0;
+            }
+            row.find('.AllocatedMOS').val(cMOS);
             AllMOS = row.find('.AllocatedMOS').val();
             if (AllMOS < min_mos) {
                 swal({
@@ -384,10 +387,27 @@
                 });
                 return false;
             } else if (AllMOS > max_mos) {
-                swal({
+                swal("Write Reason Here:", {
                     title: "Excess Allocation MOS",
-                    text: "The highest that can be allocated is " + max_mos,
+                    text: "The highest that can be allocated is " + max_mos + " MOS",
+                    content: "input",
                     icon: "error",
+                    content: {
+                        element: "input",
+                        attributes: {
+                            placeholder: "Write the reason for exceeding maximum mos!",
+                            type: "text",
+                        },
+                    },
+                    buttons: true,
+                })
+                .then((value) => {
+                    if(value == null){
+                        $(this).val(6);
+                        $(this).trigger('change');
+                    }else{
+                        row.find('.comment').val(value);
+                    }
                 });
                 return false;
             }
@@ -398,7 +418,7 @@
             input_val = $(this).val();
             min_mos = row.find('.MIN').val();
             max_mos = row.find('.MAX').val();
-            AMC = row.find('.AMC').text();
+            AMC = parseInt(row.find('.AMC').text());
             eMOSH = row.find('.eMOSH').text();
             aggSOH = row.find('.aggSOH').text();
 
@@ -409,21 +429,41 @@
                 aggSOH = 0;
             }
             
-            cMOS = (parseInt(input_val) * parseInt(AMC));
+            cMOS = (parseInt(input_val) * AMC);
+            if (AMC == 0) {
+                cMOS = 0;
+            }
             row.find('.AMOS').val(cMOS);
 
             if (input_val < min_mos) {
                 swal({
                     title: "Low Allocation MOS",
-                    text: "The lowest that can be allocated for" + ' is ' + min_mos,
+                    text: "The lowest that can be allocated for" + " is " + min_mos + " MOS" ,
                     icon: "error",
                 });
                 return false;
             } else if (input_val > max_mos) {
-                swal({
+                swal("Write Reason Here:", {
                     title: "Excess Allocation MOS",
-                    text: "The highest that can be allocated is " + max_mos,
+                    text: "The highest that can be allocated is " + max_mos + " MOS",
+                    content: "input",
                     icon: "error",
+                    content: {
+                        element: "input",
+                        attributes: {
+                            placeholder: "Write the reason for exceeding maximum mos!",
+                            type: "text",
+                        },
+                    },
+                    buttons: true,
+                })
+                .then((value) => {
+                    if(value == null){
+                        $(this).val(6);
+                        $(this).trigger('change');
+                    }else{
+                        row.find('.comment').val(value);
+                    }
                 });
                 return false;
             }
