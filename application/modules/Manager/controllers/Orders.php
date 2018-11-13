@@ -178,7 +178,15 @@ class Orders extends MX_Controller {
     public function actionOrder($orderid, $mapid, $action) {
         $message = 'You have a new allocation order request from';
         if ($action == 'rejected') {
-            $message = 'Allocation order request has been rejected, reason being that '.$this->input->post('reason');
+            $rejection_reason = $this->input->post('reason');
+            $message = 'Allocation order request has been rejected, reason being that '.$rejection_reason;
+            //Get old comments
+            $comments = $this->db->select('comments')->get_where('tbl_cdrr', array('id' => $orderid))->row_array()['comments'];
+            $comments .= "<br/>".$rejection_reason;
+            //Update old comments and new comments
+            $this->db->set('comments', $comments);
+            $this->db->where('id', $orderid);
+            $this->db->update('tbl_cdrr');
         } elseif ($action == 'approved') {
             $message = 'Allocation order has been approved and forwarded to Order Review Management Team at NASCOP';
         } elseif ($action == 'reviewed') {
