@@ -108,8 +108,8 @@
                                                 <th>AutoCalc Resupply</th>
                                                 <th>Allocated</th>
                                                 <th>Allocated MOS</th>
-                                                <th >Comments</th>
-                                                <th >Decision</th>
+                                                <th>Comments</th>
+                                                <th>Decision</th>
                                             </tr>
                                             <tr>
                                                 <th>A</th>
@@ -144,21 +144,21 @@
                                             <?php
                                             foreach ($columns['drugs'] as $key => $drug) {
                                                 $drugid = $drug['id'];
-
-
                                                 if (in_array($drugid, array_keys($columns['cdrrs']['data']['cdrr_item']))) {
                                                     $pcount = $columns['pcdrrs']['data']['cdrr_item'][$drugid]['count'];
                                                     $balance = $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'];
                                                     $drugamc = $columns['cdrrs']['data']['cdrr_item'][$drugid]['drugamc'];
                                                     $consumed = $columns['cdrrs']['data']['cdrr_item'][$drugid]['dispensed_packs'];
                                                     $count = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'];
+                                                    empty($pcount)? $pcount = 0 : $pcount = $pcount;
+                                                    empty($balance)? $balance = 0 : $balance = $balance;
                                                     ?>
                                                     <tr>
                                                         <td class='stickyColumn'><?= $drug['name']; ?></td>                                              
                                                         <td><?= $drug['pack_size']; ?></td>
                                                         <td><?= $pcount; ?></td>
                                                         <td>
-                                                            <?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance']; ?>
+                                                            <?= $balance; ?>
                                                             <?php
                                                             if ($pcount > $balance) {
                                                                 $p = round($pcount - $balance, 0);
@@ -186,7 +186,7 @@
                                                         <td class="eMOSH"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['count']; ?></td>
                                                         <?php
                                                         if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') {
-                                                            $count = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'] + $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand'];
+                                                            $count = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'];
                                                             ?> 
                                                             <td class=""><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_consumed']; ?></td>
                                                             <td class="aggSOH"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand']; ?></td>
@@ -196,9 +196,8 @@
                                                         <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['out_of_stock']; ?></td>
                                                         <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply']; ?></td>
                                                         <td class="AMC"><?= $drugamc; ?></td>
-                                                        <td ><?= $mos = ($count > 0 && $drugamc > 0) ? number_format($count / $drugamc) : 0; ?></td>
+                                                        <td ><?= $mos = ($count > 0 && $drugamc > 0) ? number_format($count / $drugamc, 2) : 0; ?></td>
                                                         <td><?= (($drugamc * 3) - $count) > 0 ? (($drugamc * 3) - $count) : 0; ?></td>
-
                                                         <td>
                                                             <input type="text" style="width:80px; text-align: center;" class="form-control AMOS Allocated"  data-toggle="tooltip" title="" <?= $disabled; ?> data-drug="<?= $drugid ?>"  name="qty_allocated-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'] > 0) ? $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'] : $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply']; ?>">
                                                         </td>
@@ -260,15 +259,12 @@
                                                             <td><?php echo $current = $columns['maps']['data'][$regimen['id']]; ?></td>
                                                             <td><?php
                                                                 echo $previous = $columns['previousmaps']['data'][$regimen['id']];
-
                                                                 if ($current > $previous) {
                                                                     $p = round((($current - $previous) / $current) * 100, 0);
                                                                     echo '<sup><span style="background: green; font-size:9px;" class="badge"> +' . $p . '%</span></sup>';
                                                                 } else if ($previous > $current) {
                                                                     $p = round((($previous - $current) / $previous) * 100, 0);
                                                                     echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
-                                                                } else {
-                                                                    //echo '<sup><span style="background: green; font-size:9px;" class="badge"> 0%</span></sup>';
                                                                 }
                                                                 ?>
 
@@ -356,116 +352,90 @@
             info: false
         });
 
-
-
         $('#AllocationTable tr').hover(function () {
             row = $(this).closest('tr');
             drugname = row.find('.stickyColumn').text();
-            //console.log(drugname)
         });
 
-
-
-        $('.AMOS').focusout(function () {
+        $('.AMOS').change(function () {
             row = $(this).closest('tr');
             input_val = row.find('.AMOS').val();
-            min_mos = row.find('.MIN').val();
-            max_mos = row.find('.MAX').val();
+            min_mos = parseInt(row.find('.MIN').val());
+            max_mos = parseInt(row.find('.MAX').val());
+            AMC = row.find('.AMC').text();
             eMOSH = row.find('.eMOSH').text();
+            aggSOH = row.find('.aggSOH').text();
+
             if (isNaN(eMOSH) || eMOSH == '') {
                 eMOSH = 0;
             }
-            aggSOH = row.find('.aggSOH').text();
             if (isNaN(aggSOH) || aggSOH == '') {
                 aggSOH = 0;
             }
-            AMC = row.find('.AMC').text();
 
-
-            console.log(input_val + ' | ' + AMC + ' | ' + eMOSH + ' | ' + aggSOH)
-            cMOS = (parseInt(eMOSH) + parseInt(aggSOH) + parseInt(input_val)) / parseInt(AMC);
-            row.find('.AllocatedMOS').val(Math.floor(cMOS));
+            cMOS = (parseInt(input_val) / parseInt(AMC));
+            row.find('.AllocatedMOS').val((cMOS).toFixed(2));
             AllMOS = row.find('.AllocatedMOS').val();
-            console.log(AllMOS);
-            if (AllMOS < 3) {
+            if (AllMOS < min_mos) {
                 swal({
                     title: "Low Allocation MOS",
-                    text: "The lowest that can be allocated for" + ' is ' + 3,
+                    text: "The lowest that can be allocated for" + ' is ' + min_mos,
                     icon: "error",
                 });
-                $(this).val('');
-
                 return false;
-            } else if (AllMOS > 6) {
+            } else if (AllMOS > max_mos) {
                 swal({
                     title: "Excess Allocation MOS",
-                    text: "The highest that can be allocated is " + 6,
+                    text: "The highest that can be allocated is " + max_mos,
                     icon: "error",
                 });
-
-                $(this).val('');
                 return false;
-            } else {
-
             }
-
         });
 
-
-        $('.MOS').focusout(function () {
+        $('.MOS').change(function () {
             row = $(this).closest('tr');
             input_val = $(this).val();
             min_mos = row.find('.MIN').val();
             max_mos = row.find('.MAX').val();
+            AMC = row.find('.AMC').text();
             eMOSH = row.find('.eMOSH').text();
+            aggSOH = row.find('.aggSOH').text();
+
             if (isNaN(eMOSH) || eMOSH == '') {
                 eMOSH = 0;
             }
-            aggSOH = row.find('.aggSOH').text();
             if (isNaN(aggSOH) || aggSOH == '') {
                 aggSOH = 0;
             }
-            AMC = row.find('.AMC').text();
-            cMOS = (parseInt(input_val) * parseInt(AMC)) - (parseInt(eMOSH) + parseInt(aggSOH));
-            row.find('.AMOS').val(Math.floor(cMOS));
-            row.find('.AMOS').val();
+            
+            cMOS = (parseInt(input_val) * parseInt(AMC));
+            row.find('.AMOS').val(cMOS);
 
-            if (input_val < 3) {
+            if (input_val < min_mos) {
                 swal({
                     title: "Low Allocation MOS",
-                    text: "The lowest that can be allocated for" + ' is ' + 3,
+                    text: "The lowest that can be allocated for" + ' is ' + min_mos,
                     icon: "error",
                 });
-                $(this).val('');
-
                 return false;
-            } else if (input_val > 6) {
+            } else if (input_val > max_mos) {
                 swal({
                     title: "Excess Allocation MOS",
-                    text: "The highest that can be allocated is " + 6,
+                    text: "The highest that can be allocated is " + max_mos,
                     icon: "error",
                 });
-
-                $(this).val('');
                 return false;
-            } else {
-
             }
-
         });
 
-
-        //$('[data-toggle="tooltip"]').tooltip();
         row = 1;
-        $('#TimeLog  tr').each(function (i, j) {
-
+        $('#TimeLog tr').each(function (i, j) {
             var start_date = $("#TimeLog tr:nth-child(" + row + ") td:nth-child(4)").text();
             $("#TimeLog tr:nth-child(" + i + ") td:nth-child(4)").find('.end_date').val(start_date);
             row++;
-            //console.log(diffDays);
         });
         setTimeout(function () {
-
             datediff = '';
             $('#TimeLog  tr').each(function (i, j) {
 

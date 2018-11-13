@@ -110,17 +110,17 @@
                                         <?php
                                         foreach ($columns['drugs'] as $key => $drug) {
                                             $drugid = $drug['id'];
-
-
                                             if (in_array($drugid, array_keys($columns['cdrrs']['data']['cdrr_item']))) {
                                                 $count = $columns['pcdrrs']['data']['cdrr_item'][$drugid]['count'];
                                                 $balance = $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'];
+                                                empty($count)? $count = 0 : $count = $count;
+                                                empty($balance)? $balance = 0 : $balance = $balance;
                                                 ?>
                                                 <tr>
                                                     <td class="drug_name"><?= $drug['name']; ?></td>
                                                     <td><?= $drug['pack_size']; ?></td>
                                                     <td class="count"><?= $count; ?></td>
-                                                    <td class="balance"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance']; ?>
+                                                    <td class="balance"><?= $balance; ?>
                                                         <?php
                                                         if ($count > $balance) {
                                                           //  $p = round((($count - $balance) / $count) * 100, 0);
@@ -130,8 +130,6 @@
                                                             //$p = round((($balance - $count) / $balance) * 100, 0);
                                                             $p = round($balance - $count, 0);
                                                             echo '<sup><span style="background: red; font-size:9px;" class="badge"> +' . $p . '</span></sup>';
-                                                        } else {
-                                                            
                                                         }
                                                         ?>
                                                     </td>
