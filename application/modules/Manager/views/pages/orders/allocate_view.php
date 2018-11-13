@@ -24,7 +24,10 @@
                 <!-- /.panel-heading -->
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-md-12">      
+                        <div class="col-md-12">     
+                            
+                             <button type="submit" class="btn btn-success" id="approveOrder">Approve Order</button>
+                                <button type="submit" class="btn btn-danger" id="rejectOrder">Reject Order</button>
                             <?php if ($role == 'county' && date('d') <= 20 && $columns['cdrrs']['data'][0]['status'] == 'allocated') { ?>
                                 <button type="submit" class="btn btn-success" id="approveOrder">Approve Order</button>
                                 <button type="submit" class="btn btn-danger" id="rejectOrder">Reject Order</button>
@@ -315,6 +318,9 @@
                             ?>
                             <p><div class = "alert alert-warning"><strong>NB: Allocation Complete. </strong></div></p>
                         <?php } ?>
+                    
+                     <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
+                            <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
                     </div> <!--end of cdrr-->
                 </div>
                 <!-- /.panel-body -->

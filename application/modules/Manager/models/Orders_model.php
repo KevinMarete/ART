@@ -49,7 +49,7 @@ class Orders_model extends CI_Model {
                     'created' => date('Y-m-d H:i:s')
                 );
                 $this->db->set($array);
-                $this->db->insert('tbl_cdrr_log');
+                $this->db->replace('tbl_cdrr_log');
 
                 //Update maps
                 $this->db->set('updated', date('Y-m-d H:i:s'));
@@ -62,7 +62,7 @@ class Orders_model extends CI_Model {
                         'maps_id' => $mapid,
                         'created' => date('Y-m-d H:i:s')
                     );
-                    $this->db->insert('tbl_maps_log', $maps_log);
+                    $this->db->replace('tbl_maps_log', $maps_log);
                 }
                 $response['message'] = 'Order status was updated!';
                 $response['status'] = TRUE;
