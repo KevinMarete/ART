@@ -47,7 +47,7 @@
                             <?php echo $this->session->flashdata('user_msg'); ?>
                         </div>
                         <div class="panel-body">
-                            <form class="form-horizontal" action="<?php echo base_url() . 'user/create_account'; ?>" method="POST">
+                            <form class="form-horizontal" id="registerForm" method="POST">
                                 <div class="form-group">
                                     <label for="inputfirstname" class="col-sm-2 control-label">Firstname</label>
                                     <div class="col-sm-4">
@@ -102,7 +102,7 @@
 
                                 <div class="form-group">
                                     <div class="col-sm-12">
-                                        <button type="submit" class="btn btn-md btn-warning btn-block"> <i class="fa fa-save"></i> Create</button>
+                                        <button type="button" class="btn btn-md btn-warning btn-block" id="SAVEUSER"> <i class="fa fa-save"></i> Create</button>
                                     </div>
                                 </div>
                                 <hr/>
@@ -130,6 +130,13 @@
 
         <script type="text/javascript">
             $(function () {
+                var link = "<?php echo base_url() . 'user/create_account'; ?>";
+
+                $('#SAVEUSER').click(function () {
+                    $.post(link, $('#registerForm').serialize(), function (resp) {
+                       
+                    }, '');
+                });
                 $("#inputpassword").on("change", validatePassword);
                 $("#inputcpassword").on("change", validatePassword);
                 $("#inputrole option[value='4']").remove();
@@ -140,6 +147,18 @@
                     var confirm_password = $("#inputcpassword").val()
                     if (password != confirm_password && confirm_password !== '') {
                         alert("Passwords Don't Match");
+                    }
+                }
+
+                function checkScope() {
+                    var inputscope = $('#inputscope').val();
+                    if (inputscope.length > 0) {
+                        if (inputscope.val() == '') {
+                            alert('Scope Cannot be left blank');
+                            return false;
+                        } else {
+                            return false;
+                        }
                     }
                 }
 
@@ -156,7 +175,8 @@
                         }
                     });
                 });
-            });
+            }
+            );
         </script>
 
     </body>
