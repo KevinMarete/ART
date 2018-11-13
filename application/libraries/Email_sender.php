@@ -52,7 +52,7 @@ class Email_sender extends MX_Controller {
         $this->email->set_newline("\r\n");
         $this->email->from('webartmanager2018@gmail.com', 'Commodity Manager | ' . $title);
         $this->email->to($approver);
-        $this->email->cc($requester);
+        //$this->email->cc($requester);
         $this->email->subject($title);
         //$this->email->set_mailtype('html');
         $data['email_content'] = $message;

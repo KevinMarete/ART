@@ -24,7 +24,7 @@
                 <!-- /.panel-heading -->
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-md-12">                           
+                        <div class="col-md-12">      
                             <?php if ($role == 'county' && date('d') <= 20 && $columns['cdrrs']['data'][0]['status'] == 'allocated') { ?>
                                 <button type="submit" class="btn btn-success" id="approveOrder">Approve Order</button>
                                 <button type="submit" class="btn btn-danger" id="rejectOrder">Reject Order</button>
@@ -150,8 +150,8 @@
                                                     $drugamc = $columns['cdrrs']['data']['cdrr_item'][$drugid]['drugamc'];
                                                     $consumed = $columns['cdrrs']['data']['cdrr_item'][$drugid]['dispensed_packs'];
                                                     $count = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'];
-                                                    empty($pcount)? $pcount = 0 : $pcount = $pcount;
-                                                    empty($balance)? $balance = 0 : $balance = $balance;
+                                                    empty($pcount) ? $pcount = 0 : $pcount = $pcount;
+                                                    empty($balance) ? $balance = 0 : $balance = $balance;
                                                     ?>
                                                     <tr>
                                                         <td class='stickyColumn'><?= $drug['name']; ?></td>                                              
@@ -311,11 +311,10 @@
                             <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
                         <?php } else if ($role == 'subcounty' && date('d') > 20 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
                             <p><div class="alert alert-warning"><strong>NB: Allocation period has ended. No more allocations allowed beyond the 20<sup>th</sup> of each month. </strong></div></p>
-                            <?php } else {
+                        <?php } else {
                             ?>
                             <p><div class = "alert alert-warning"><strong>NB: Allocation Complete. </strong></div></p>
                         <?php } ?>
-
                     </div> <!--end of cdrr-->
                 </div>
                 <!-- /.panel-body -->
@@ -408,7 +407,7 @@
             if (isNaN(aggSOH) || aggSOH == '') {
                 aggSOH = 0;
             }
-            
+
             cMOS = (parseInt(input_val) * parseInt(AMC));
             row.find('.AMOS').val(cMOS);
 
@@ -455,31 +454,53 @@
         }, 5000);
         $('#side-menu').remove();
         $('#reviewOrder').click(function (e) {
-            // $(this).prop('disabled', true);
+            $(this).prop('disabled', true);
             $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/reviewed", function (data) {
-                alert(data);
-                window.location.href = "";
+                swal('Order Reviewed');
+                window.location.href = base_url + "manager/orders/view_allocation/<?= $cdrr_id . '/' . $map_id; ?>";
             });
         });
         $('#approveOrder').click(function (e) {
-            // $(this).prop('disabled', true);
+            $(this).prop('disabled', true);
             $.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/approved", function (data) {
-                alert(data);
-                window.location.href = "";
+                swal('Order Approved');
+                window.location.href = base_url + "manager/orders/view_allocation/<?= $cdrr_id . '/' . $map_id; ?>";
+
             });
         });
         $('#rejectOrder').click(function (e) {
-            // $(this).prop('disabled', true);
-            $.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/rejected", function (data) {
-                alert(data);
-                window.location.href = "";
+            swal("Write something here:", {
+                title: "Are you sure?",
+                text: "Please enter your reason behind this order rejection",
+                icon: "warning",
+                buttons: ["Cancel", "Reject Order"],
+                dangerMode: true,
+                content: "input",
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                allowOutsideClick: false
+            }).then((value) => {
+                if (value) {
+                    val = $('.swal-content__input').val();
+                    $.post(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/rejected", {reason: val}, function (data) {
+                        swal('Order Allocated Successfully');
+                        window.location.href = base_url + "manager/orders/view_allocation/<?= $cdrr_id . '/' . $map_id; ?>";
+                    });
+                } else {
+
+                }
             });
+
+
+            //$(this).prop('disabled', true);
+
         });
         $('#complete_allocation').click(function (e) {
-            // $(this).prop('disabled', true);
+            $(this).prop('disabled', true);
+            $('#save_allocation').prop('disabled', true);
             $.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/allocated", function (data) {
-                alert(data);
-                //  window.location.href = "";
+                swal('Allocation order submitted to county');
+                window.location.href = base_url + "manager/orders/view_allocation/<?= $cdrr_id . '/' . $map_id; ?>";
             });
         });
         $('#save_allocation').click(function (e) {
@@ -491,8 +512,8 @@
                 url: url,
                 data: form.serialize(),
                 success: function (response) {
-                    alert('Allocation Saved')
-                    $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/pending");
+                    swal('Allocation data saved');
+                    $.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/pending");
                     window.location.href = "";
                 }
             });
