@@ -20,7 +20,6 @@
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables/js/dataTables.select.min.js'; ?>"></script>
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables-plugins/average().js'; ?>"></script>
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables-plugins/sum().js'; ?>"></script>
-
 <!--select2 js-->
 <script src="<?php echo base_url() . 'public/manager/lib/select2/js/select2.js'; ?>"></script>
 <!--bootstrap-sweetalert--->
@@ -37,6 +36,8 @@
 <script type="text/javascript" src="<?php echo base_url() . 'public/dashboard/js/spin.min.js'; ?>"></script>
 <!--bootbox-->
 <script type="text/javascript" src="<?php echo base_url() . 'public/manager/lib/bootbox/js/bootbox.min.js'; ?>"></script>
+<!--blockUI-->
+<script type="text/javascript" src="<?php echo base_url() . 'public/manager/lib/blockUI/js/jquery.blockUI.js'; ?>"></script>
 <!--sweetalert-->
 <script type="text/javascript" src="<?php echo base_url() . 'public/manager/js/sweetalert.min.js'; ?>"></script>
 <!--tabledit-->

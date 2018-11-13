@@ -30,6 +30,7 @@
                                 <button type="submit" class="btn btn-danger" id="rejectOrder">Reject Order</button>
                             <?php } else if ($role == 'nascop' && date('d') <= 20 && $columns['cdrrs']['data'][0]['status'] == 'approved') { ?>
                                 <button type="submit" class="btn btn-success" id="reviewOrder">Review Order</button>
+                                <button type="submit" class="btn btn-danger" id="rejectOrder">Reject Order</button>
                             <?php } ?>
                         </div>
                     </div>
@@ -500,6 +501,8 @@
         $('#side-menu').remove();
         $('#reviewOrder').click(function (e) {
             $(this).prop('disabled', true);
+            //Show spinner
+            $.blockUI({ message: '<h1><img src="'+base_url+'public/spinner.gif" /> Working...</h1>' });
             $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/reviewed", function (data) {
                 swal('Order Reviewed');
                 window.location.href = base_url + "manager/orders/view_allocation/<?= $cdrr_id . '/' . $map_id; ?>";
@@ -507,6 +510,8 @@
         });
         $('#approveOrder').click(function (e) {
             $(this).prop('disabled', true);
+            //Show spinner
+            $.blockUI({ message: '<h1><img src="'+base_url+'public/spinner.gif" /> Working...</h1>' });
             $.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/approved", function (data) {
                 swal('Order Approved');
                 window.location.href = base_url + "manager/orders/view_allocation/<?= $cdrr_id . '/' . $map_id; ?>";
@@ -527,21 +532,19 @@
             }).then((value) => {
                 if (value) {
                     val = $('.swal-content__input').val();
+                    //Show spinner
+                    $.blockUI({ message: '<h1><img src="'+base_url+'public/spinner.gif" /> Working...</h1>' });
                     $.post(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/rejected", {reason: val}, function (data) {
-                        swal('Order Allocated Successfully');
+                        swal('Order Rejected Successfully!');
                         window.location.href = base_url + "manager/orders/view_allocation/<?= $cdrr_id . '/' . $map_id; ?>";
                     });
-                } else {
-
-                }
+                } 
             });
-
-
-            //$(this).prop('disabled', true);
-
         });
         $('#complete_allocation').click(function (e) {
             $(this).prop('disabled', true);
+            //Show spinner
+            $.blockUI({ message: '<h1><img src="'+base_url+'public/spinner.gif" /> Working...</h1>' });
             $('#save_allocation').prop('disabled', true);
             $.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/allocated", function (data) {
                 swal('Allocation order submitted to county');
@@ -550,6 +553,8 @@
         });
         $('#save_allocation').click(function (e) {
             $(this).prop('disabled', true);
+            //Show spinner
+            $.blockUI({ message: '<h1><img src="'+base_url+'public/spinner.gif" /> Working...</h1>' });
             var form = $('#orderForm');
             var url = base_url + "Manager/Orders/updateOrder/<?= $cdrr_id . '/' . $map_id; ?>";
             $.ajax({

@@ -43,6 +43,10 @@ class Orders_model extends CI_Model {
                 if ($action == 'pending') {
                     $log_action = 'updated';
                 }
+
+                if(!\is_null($this->input->post('reason'))){
+                    $log_action = $log_action."-".$this->input->post('reason');
+                }
                 $array = array(
                     'description' => $log_action,
                     'user_id' => $user,
