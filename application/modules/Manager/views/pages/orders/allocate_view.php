@@ -170,7 +170,7 @@
                                                             }
                                                             ?>                                                        
                                                         </td>
-                                                        <?php                                                     
+                                                        <?php
                                                         $disabled = '';
                                                         $comment = '';
                                                         $status = $columns['cdrrs']['data']['cdrr_item'][$drugid]['stock_status'];
@@ -200,7 +200,14 @@
                                                         <td ><?= $mos = ($count > 0 && $drugamc > 0) ? number_format($count / $drugamc, 2) : 0; ?></td>
                                                         <td><?= (($drugamc * 3) - $count) > 0 ? (($drugamc * 3) - $count) : 0; ?></td>
                                                         <td>
-                                                            <input type="text" style="width:80px; text-align: center;" class="form-control AMOS Allocated"  data-toggle="tooltip" title="" <?= $disabled; ?> data-drug="<?= $drugid ?>"  name="qty_allocated-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'] > 0) ? $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'] : $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply']; ?>">
+                                                            <?php
+                                                            $allocated = '';
+                                                            if ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'] > 0) {
+                                                                $allocated = $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'];
+                                                            } else {
+                                                                $allocated = $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply'];
+                                                            }?>
+                                                            <input type="text" style="width:80px; text-align: center;" class="form-control AMOS Allocated"  data-toggle="tooltip" title="" <?= $disabled; ?> data-drug="<?= $drugid ?>"  name="qty_allocated-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= $allocated ?>">
                                                         </td>
                                                         <td>
                                                             <?php
@@ -254,7 +261,7 @@
                                         <tbody>
                                             <?php foreach ($columns['regimens'] as $category => $regimens) { ?>
                                                 <?php foreach ($regimens as $regimen) { ?>
-                                                    <?php if (in_array($regimen['id'], array_keys($columns['maps']['data']))) { ?>
+        <?php if (in_array($regimen['id'], array_keys($columns['maps']['data']))) { ?>
                                                         <tr>
                                                             <td><?= $regimen['name']; ?></td>
                                                             <td><?php echo $current = $columns['maps']['data'][$regimen['id']]; ?></td>
@@ -276,7 +283,7 @@
                                                     }
                                                 }
                                                 ?>
-                                            <?php } ?>
+<?php } ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -295,7 +302,7 @@
                                 <th>Time Taken</th>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($columns['cdrrs']['data']['cdrr_logs'] as $key => $log) { ?>
+<?php foreach ($columns['cdrrs']['data']['cdrr_logs'] as $key => $log) { ?>
                                         <tr>
                                             <td><?= ucwords($log['description']); ?>  </td>
                                             <td><?= ucwords($log['firstname'] . ' ' . $log['lastname']); ?> </td>
@@ -303,11 +310,11 @@
                                             <td class="start_date"><?= $log['created']; ?><input type="hidden" class="end_date"/></td>
                                             <td>0 Day(s)</td>
                                         </tr>
-                                    <?php } ?>
+<?php } ?>
                                 </tbody>
                             </table>
                         </div>
-                        <?php if ($role == 'subcounty' && date('d') <= 20 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
+<?php if ($role == 'subcounty' && date('d') <= 20 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
                             <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
                             <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
                         <?php } else if ($role == 'subcounty' && date('d') > 20 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
@@ -315,7 +322,7 @@
                         <?php } else {
                             ?>
                             <p><div class = "alert alert-warning"><strong>NB: Allocation Complete. </strong></div></p>
-                        <?php } ?>
+<?php } ?>
                     </div> <!--end of cdrr-->
                 </div>
                 <!-- /.panel-body -->
@@ -401,14 +408,14 @@
                     },
                     buttons: true,
                 })
-                .then((value) => {
-                    if(value == null){
-                        $(this).val(6);
-                        $(this).trigger('change');
-                    }else{
-                        row.find('.comment').val(value);
-                    }
-                });
+                        .then((value) => {
+                            if (value == null) {
+                                $(this).val(6);
+                                $(this).trigger('change');
+                            } else {
+                                row.find('.comment').val(value);
+                            }
+                        });
                 return false;
             }
         });
@@ -432,7 +439,7 @@
 
             cMOS = (parseInt(input_val) * parseInt(AMC));
 
-            
+
             cMOS = (parseInt(input_val) * AMC);
             if (AMC == 0) {
                 cMOS = 0;
@@ -443,7 +450,7 @@
             if (input_val < min_mos) {
                 swal({
                     title: "Low Allocation MOS",
-                    text: "The lowest that can be allocated for" + " is " + min_mos + " MOS" ,
+                    text: "The lowest that can be allocated for" + " is " + min_mos + " MOS",
                     icon: "error",
                 });
                 return false;
@@ -462,14 +469,14 @@
                     },
                     buttons: true,
                 })
-                .then((value) => {
-                    if(value == null){
-                        $(this).val(6);
-                        $(this).trigger('change');
-                    }else{
-                        row.find('.comment').val(value);
-                    }
-                });
+                        .then((value) => {
+                            if (value == null) {
+                                $(this).val(6);
+                                $(this).trigger('change');
+                            } else {
+                                row.find('.comment').val(value);
+                            }
+                        });
                 return false;
             }
         });
@@ -502,7 +509,7 @@
         $('#reviewOrder').click(function (e) {
             $(this).prop('disabled', true);
             //Show spinner
-            $.blockUI({ message: '<h1><img src="'+base_url+'public/spinner.gif" /> Working...</h1>' });
+            $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
             $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/reviewed", function (data) {
                 swal('Order Reviewed');
                 window.location.href = base_url + "manager/orders/view_allocation/<?= $cdrr_id . '/' . $map_id; ?>";
@@ -511,7 +518,7 @@
         $('#approveOrder').click(function (e) {
             $(this).prop('disabled', true);
             //Show spinner
-            $.blockUI({ message: '<h1><img src="'+base_url+'public/spinner.gif" /> Working...</h1>' });
+            $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
             $.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/approved", function (data) {
                 swal('Order Approved');
                 window.location.href = base_url + "manager/orders/view_allocation/<?= $cdrr_id . '/' . $map_id; ?>";
@@ -533,18 +540,18 @@
                 if (value) {
                     val = $('.swal-content__input').val();
                     //Show spinner
-                    $.blockUI({ message: '<h1><img src="'+base_url+'public/spinner.gif" /> Working...</h1>' });
+                    $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
                     $.post(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/rejected", {reason: val}, function (data) {
                         swal('Order Rejected Successfully!');
                         window.location.href = base_url + "manager/orders/view_allocation/<?= $cdrr_id . '/' . $map_id; ?>";
                     });
-                } 
+                }
             });
         });
         $('#complete_allocation').click(function (e) {
             $(this).prop('disabled', true);
             //Show spinner
-            $.blockUI({ message: '<h1><img src="'+base_url+'public/spinner.gif" /> Working...</h1>' });
+            $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
             $('#save_allocation').prop('disabled', true);
             $.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/allocated", function (data) {
                 swal('Allocation order submitted to county');
@@ -554,7 +561,7 @@
         $('#save_allocation').click(function (e) {
             $(this).prop('disabled', true);
             //Show spinner
-            $.blockUI({ message: '<h1><img src="'+base_url+'public/spinner.gif" /> Working...</h1>' });
+            //$.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
             var form = $('#orderForm');
             var url = base_url + "Manager/Orders/updateOrder/<?= $cdrr_id . '/' . $map_id; ?>";
             $.ajax({
@@ -564,7 +571,7 @@
                 success: function (response) {
                     swal('Allocation data saved');
                     $.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/pending");
-                    window.location.href = "";
+                   //window.location.href = "";
                 }
             });
         });
