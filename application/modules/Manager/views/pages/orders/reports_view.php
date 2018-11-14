@@ -68,11 +68,16 @@
             'county': [0, 1],
             'subcounty': [0, 1]
         }
+        val = $("#COUNTY option:selected").text();
         $('#dataTables-listing').DataTable({
             responsive: true,
             order: [[1, "desc"]],
             pagingType: "full_numbers",
-            ajax: "<?php echo base_url() . 'Manager/Orders/get_orders'; ?>",
+            "ajax": {
+                "url": "<?php echo base_url() . 'Manager/Orders/get_orders'; ?>",
+                "type": "POST",
+                "data": {subcounty: val}
+            },
             "columnDefs": [
                 {"width": "5%", "targets": 0}
             ],
@@ -96,18 +101,20 @@
                 });
             }
         });
-
         $('#COUNTY').change(function () {
-            val = $(this).val();
+            val = $("#COUNTY option:selected").text();
             $('#dataTables-listing').DataTable().destroy();
             $('#dataTables-listing > tbody').empty();
             $('#dataTables-listing select').remove();
-
             $('#dataTables-listing').DataTable({
                 responsive: true,
                 order: [[1, "desc"]],
                 pagingType: "full_numbers",
-                ajax: "<?php echo base_url() . 'Manager/Orders/get_orders'; ?>/" + val,
+                "ajax": {
+                    "url": "<?php echo base_url() . 'Manager/Orders/get_orders'; ?>",
+                    "type": "POST",
+                    "data": {subcounty: val}
+                },
                 "columnDefs": [
                     {"width": "5%", "targets": 0}
                 ],
@@ -131,8 +138,8 @@
                     });
                 }
             });
-
-        });
+        }
+        );
 
         //Show reports sidemenu
         $(".reports ").closest('ul').addClass("in");

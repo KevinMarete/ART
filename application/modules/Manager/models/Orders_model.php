@@ -32,7 +32,7 @@ class Orders_model extends CI_Model {
 
     public function actionOrder($orderid, $mapid, $action, $user) {
         $response = array();
-       
+
         try {
             $this->db->set('updated', date('Y-m-d H:i:s'));
             $this->db->set('status', $action);
@@ -44,8 +44,8 @@ class Orders_model extends CI_Model {
                     $log_action = 'updated';
                 }
 
-                if(!\is_null($this->input->post('reason'))){
-                    $log_action = $log_action."-".$this->input->post('reason');
+                if (!\is_null($this->input->post('reason'))) {
+                    $log_action = $log_action . "-" . $this->input->post('reason');
                 }
                 $array = array(
                     'description' => $log_action,
@@ -100,15 +100,19 @@ class Orders_model extends CI_Model {
     }
 
     public function get_order_data($scope, $role, $subcounty) {
+        $post = $this->input->post('subcounty');      
+        
         $response = array('data' => array());
         $column = "";
         $join = "";
         $filter = "";
         $sql = '';
-        if (!empty($subcounty)) {
-            $sql .= " AND f.subcounty_id='$subcounty'";
+        $sql2 ='';
+        if (!empty($post)) {
+            $sql2 .= " AND sc.name='$post'";
         } else {
-            $sql .= " AND f.subcounty_id='139'";
+            $subco2 = $this->session->userdata('scope_name');
+            $sql2 .= " ";
         }
         try {
             //Set conditions
@@ -139,6 +143,7 @@ class Orders_model extends CI_Model {
                     AND c.period_end = m.period_end
                     AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1)
                     $filter
+                     $sql2
                     GROUP BY c.id 
                     ORDER BY c.period_begin DESC";
             $table_data = $this->db->query($sql)->result_array();
