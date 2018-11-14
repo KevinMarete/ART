@@ -60,7 +60,7 @@
                             <hr/>
                             <center>
 					            <a href="<?php echo base_url().'manager/forgot_pass';?>">Forgot your Password?</a> <br/>
-                                <a href="<?php echo base_url().'manager/register_account';?>">Create an Account?</a>
+<!--                                <a href="<?php echo base_url().'manager/register_account';?>">Create an Account?</a>-->
                             </center>                                <!--a href="<?php echo base_url().'manager/register_account';?>">Create an Account?</a-->
 
                         </form>

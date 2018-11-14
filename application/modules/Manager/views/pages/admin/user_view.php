@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body form">
                 <form action="#" id="form" class="form-horizontal">
-                          <input type="hidden" value="" name="id"/> 
+                    <input type="hidden" value="" name="id"/> 
                     <div class="form-group">
                         <label for="inputfirstname" class="col-sm-2 control-label">Firstname</label>
                         <div class="col-sm-4">
@@ -70,7 +70,7 @@
 
 <script type="text/javascript">
     $(function () {
-     //   $('#btnSave').prop('disabled','disabled');
+        //   $('#btnSave').prop('disabled','disabled');
 
         var roleURL = '../../API/Role';
         $("#role").empty();
@@ -79,55 +79,76 @@
             $.each(role, function (index, role) {
                 $("#role").append($("<option value='" + role.id + "'>" + role.name.toUpperCase() + "</option>"));
             });
-        });  
+        });
 
         $("#inputemail").keyup("click", validate);
-        $("#inputcpassword").on("keyup", validatePassword);      
+        $("#inputcpassword").on("keyup", validatePassword);
+
+        $('#inputemail').focusout(function () {
+            check('email_address', $('#inputemail').val());
+        });
+        $('#inputphonenumber').focusout(function () {
+            check('phone_number', $('#inputphonenumber').val());
+        });
+
+
+
+        function check(c, d) {
+            $.post('<?php echo base_url(); ?>Manager/User/checkDuplicateEmail/', {c: c, d: d}, function (resp) {
+                if (resp == '1') {
+                    alert('Record already Exists')
+                    $('#inputemail').val('');
+                    $('#inputphonenumber').val('')
+                } else {
+
+                }
+            });
+        }
 
         //Add scopes after role is choosen
         $('#role').on('change', function () {
             var role = $('#role :selected').text()
             $('#scope_section').empty();
-            $.getJSON("<?=base_url();?>Manager/User/get_role_scope/" + role, function (data) {
+            $.getJSON("<?= base_url(); ?>Manager/User/get_role_scope/" + role, function (data) {
                 if (data.length > 0) {
                     $('#scope_section').html('<div class="form-group"><label for="inputscope" class="col-sm-2 control-label">Scope</label><div class="col-sm-10"><select class="form-control" id="inputscope" name="scope_id" required><option value=" ">Select Scope</option></select></div></div>');
                     $.each(data, function (i, v) {
-                        $('#inputscope').append($("<option value='" + v.id + "'>" + v.name.toUpperCase()  + "</option>"));
+                        $('#inputscope').append($("<option value='" + v.id + "'>" + v.name.toUpperCase() + "</option>"));
                     });
                 }
             });
         });
     });
-    
-      function validatePassword() {
-            var password = $("#inputpassword").val()
-            var confirm_password = $("#inputcpassword").val()
-            if (password != confirm_password && confirm_password !== '') {
-                $('.passerror').show();
-              //  $('#btnSave').prop('disabled',false);
-            } else {
-                $('.passerror').hide();
-               // $('#btnSave').prop('disabled','disabled');
-            }
-        }
-    
-         function validateEmail(email) {
-            var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return re.test(email);
-        }
 
-        function validate() {
-            var email = $("#inputemail").val();
-
-            if (validateEmail(email)) {
-              // $('#btnSave').prop('disabled','disabled');
-                $('.emailerror').hide();
-            } else {
-                // $('#btnSave').prop('disabled',false);                
-                $('.emailerror').show();
-            }
-            return false;
+    function validatePassword() {
+        var password = $("#inputpassword").val()
+        var confirm_password = $("#inputcpassword").val()
+        if (password != confirm_password && confirm_password !== '') {
+            $('.passerror').show();
+            //  $('#btnSave').prop('disabled',false);
+        } else {
+            $('.passerror').hide();
+            // $('#btnSave').prop('disabled','disabled');
         }
+    }
+
+    function validateEmail(email) {
+        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    }
+
+    function validate() {
+        var email = $("#inputemail").val();
+
+        if (validateEmail(email)) {
+            // $('#btnSave').prop('disabled','disabled');
+            $('.emailerror').hide();
+        } else {
+            // $('#btnSave').prop('disabled',false);                
+            $('.emailerror').show();
+        }
+        return false;
+    }
 </script>
 
 </body>

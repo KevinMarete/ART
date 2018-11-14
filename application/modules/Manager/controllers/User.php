@@ -9,6 +9,22 @@ class User extends MX_Controller {
         $this->load->model('User_model');
     }
 
+    public function checkDuplicateEmail() {
+
+        $this->db->where($this->input->post('c'), $this->input->post('d'));
+
+        $query = $this->db->get('tbl_user');
+
+        $count_row = $query->num_rows();
+
+        if ($count_row > 0) {
+            echo '1';
+        } else {
+            // doesn't return any row means database doesn't have this email
+            echo '0';
+        }
+    }
+
     public function authenticate() {
         $response = $this->User_model->check_user($this->input->post());
         if ($response['status']) {
@@ -35,8 +51,8 @@ class User extends MX_Controller {
 
     public function get_role_scope($role) {
         error_reporting(0);
-        $response = array();      
-        if ($role != 'admin' ||  $role != 'nascop') {
+        $response = array();
+        if ($role != 'admin' || $role != 'nascop') {
             $response = $this->db->order_by('name', 'ASC')->get('tbl_' . strtolower($role))->result_array();
             echo json_encode($response);
         } else {
