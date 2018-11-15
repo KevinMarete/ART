@@ -24,8 +24,8 @@ class Allocation_model extends CI_Model {
                 left join vw_drug_list d on ci.drug_id = d.id            
                 where c.status = 'reviewed'
                 $mfl
-                AND ci.qty_allocated > 0
                 AND period_begin = '$period'";
+        //AND ci.qty_allocated > 0
         //where c.status = 'reviewed' 
 
         $drugs = array();
