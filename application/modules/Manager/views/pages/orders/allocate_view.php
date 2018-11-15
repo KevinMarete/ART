@@ -561,7 +561,7 @@
         $('#save_allocation').click(function (e) {
             $(this).prop('disabled', true);
             //Show spinner
-            //$.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
+            $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
             var form = $('#orderForm');
             var url = base_url + "Manager/Orders/updateOrder/<?= $cdrr_id . '/' . $map_id; ?>";
             $.ajax({
@@ -571,7 +571,7 @@
                 success: function (response) {
                     swal('Allocation data saved');
                     $.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/pending");
-                   //window.location.href = "";
+                   window.location.href = base_url + "manager/orders/allocate/<?= $cdrr_id . '/' . $map_id; ?>";
                 }
             });
         });
