@@ -202,7 +202,7 @@
                                                         <td>
                                                             <?php
                                                             $allocated = '';
-                                                            if ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'] > 0) {
+                                                            if ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'] >= 0) {
                                                                 $allocated = $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'];
                                                             } else {
                                                                 $allocated = $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply'];
