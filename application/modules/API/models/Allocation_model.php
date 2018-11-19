@@ -15,15 +15,9 @@ class Allocation_model extends CI_Model {
         if(!empty($level)){
             if($level == 'central'){
                 $code = "AND c.code = 'D-CDRR'";
-                if (!empty($mflcode)) {
-                    $mfl .= "AND f.category = 'central'";
-                }
             }else if($level == 'satellite'){
-                $status = "AND c.status = 'prepared'";
+                $status = "";
                 $code = "AND c.code = 'F-CDRR'";
-                if (!empty($mflcode)) {
-                    $mfl .= "AND f.category = 'satellite'";
-                }
             }
         }
         $period = substr($period_begin, 0, 4) . '-' . substr($period_begin, -2) . '-01';
@@ -44,7 +38,8 @@ class Allocation_model extends CI_Model {
                     ci.count,
                     ci.aggr_consumed,
                     ci.aggr_on_hand,
-                    ci.expiry_date
+                    ci.expiry_date,
+                    ci.out_of_stock
                 FROM tbl_cdrr c
                 INNER JOIN tbl_cdrr_item ci on ci.cdrr_id = c.id 
                 INNER JOIN tbl_facility f on c.facility_id = f.id
@@ -78,7 +73,7 @@ class Allocation_model extends CI_Model {
 
                 $qu = $query->result()[$key]->period_begin;
                 $dat = explode("-", $qu);
-                $facility_info = [
+                $facility_info[$key] = [
                     'facility' => $query->result()[$key]->facility,
                     'mflcode' => $query->result()[$key]->mflcode,
                     'report_code' => $query->result()[$key]->code,
