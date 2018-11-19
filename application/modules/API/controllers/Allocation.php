@@ -21,37 +21,30 @@ class Allocation extends \API\Libraries\REST_Controller {
     }
 
     public function index_get() {
-        // counties from a data store e.g. database
         $mflcode = $this->get('mfl');
         $user = $this->get('user');
         $token = $this->get('token');
-        $period = $_GET['period'];
+        $period = $this->get('period');
+        $level = $this->get('level');
 
-        if (empty($_GET['period'])) {
+        if (empty($period)) {
             // Set the response and exit
             $this->set_response([
                 'status' => FALSE,
                 'message' => 'Period not specified'
                     ], \API\Libraries\REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
-
-            die;
-        }
-        // Find and return a single record for a particular county.
-        else {
-
+        }else {
             if ($user != 'kemsa' && $token !== 'a2Vtc2E6S1MybHgwcQ==0') {
                 $this->set_response([
                     'status' => FALSE,
                     'message' => 'Error authentication code'
                         ], \API\Libraries\REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
-
-                die;
             } else {
-                $counties = $this->allocation_model->read( $period,$mflcode);
+                $allocations = $this->allocation_model->read($period, $mflcode, $level);
             }
 
-            if (!empty($counties)) {
-                $this->set_response($counties, \API\Libraries\REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+            if (!empty($allocations)) {
+                $this->set_response($allocations, \API\Libraries\REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
             } else {
                 $this->set_response([
                     'status' => FALSE,
