@@ -53,7 +53,7 @@ class Allocation_model extends CI_Model {
         $query = $this->db->query($sql);
         if (count($query->result_array()) > 0) {
             foreach ($query->result() as $key => $value) {
-                $drugs[$query->result()[$key]->mflcode] = [
+                $drugs[$query->result()[$key]->mflcode][] = [
                     'kemsa_code' => $value->kemsa_code,
                     'drug' => $value->drug,
                     'qty_allocated' => $value->qty_allocated,
