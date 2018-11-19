@@ -6,6 +6,7 @@ class Allocation_model extends CI_Model {
 
     //function list facilities that are not yet installed
     public function read($period_begin, $mflcode = '', $level = '') {
+        $status = "AND c.status = 'reviewed'";
         $mfl = '';
         if (!empty($mflcode)) {
             $mfl = "AND f.mflcode = '$mflcode'";
@@ -18,6 +19,7 @@ class Allocation_model extends CI_Model {
                     $mfl .= "AND f.category = 'central'";
                 }
             }else if($level == 'satellite'){
+                $status = "AND c.status = 'prepared'";
                 $code = "AND c.code = 'F-CDRR'";
                 if (!empty($mflcode)) {
                     $mfl .= "AND f.category = 'satellite'";
@@ -47,10 +49,10 @@ class Allocation_model extends CI_Model {
                 INNER JOIN tbl_cdrr_item ci on ci.cdrr_id = c.id 
                 INNER JOIN tbl_facility f on c.facility_id = f.id
                 INNER JOIN vw_drug_list d on ci.drug_id = d.id            
-                WHERE c.status = 'reviewed'
+                WHERE period_begin = '$period'
                 $mfl
                 $code
-                AND period_begin = '$period'
+                $status
                 AND d.stock_status != '2'";
         $drugs = array();
         $facility_info = array();
