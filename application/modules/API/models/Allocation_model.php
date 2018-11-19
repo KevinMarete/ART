@@ -53,7 +53,7 @@ class Allocation_model extends CI_Model {
         $query = $this->db->query($sql);
         if (count($query->result_array()) > 0) {
             foreach ($query->result() as $key => $value) {
-                array_push($drugs, [
+                $drugs[$query->result()[$key]->mflcode] = [
                     'kemsa_code' => $value->kemsa_code,
                     'drug' => $value->drug,
                     'qty_allocated' => $value->qty_allocated,
@@ -69,19 +69,20 @@ class Allocation_model extends CI_Model {
                     "short_expiry" => $value->expiry_date,
                     "expiry_date" => $value->expiry_date,
                     "months_stocked_out" => $value->out_of_stock
-                ]);
+                ];
 
                 $qu = $query->result()[$key]->period_begin;
                 $dat = explode("-", $qu);
-                $facility_info[$key] = [
+                $facility_info[$query->result()[$key]->mflcode] = [
                     'facility' => $query->result()[$key]->facility,
                     'mflcode' => $query->result()[$key]->mflcode,
                     'report_code' => $query->result()[$key]->code,
                     'report_year' => $dat[0],
                     'report_month' => $dat[1],
-                    'commodities' => $drugs
+                    'commodities' => $drugs[$query->result()[$key]->mflcode]
                 ];
             }
+            $facility_info = array_values($facility_info);
         } else {
             $resp = ['message' => 'No data found'];
             $facility_info = $resp;
