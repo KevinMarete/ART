@@ -34,7 +34,7 @@ class Allocation_model extends CI_Model {
                     f.name as facility,
                     d.name drug,
                     d.kemsa_code, 
-                    ci.qty_allocated,
+                    IF (d.stock_status != '2', ci.qty_allocated, 0) qty_allocated,
                     ci.balance,
                     ci.received,
                     ci.dispensed_packs,
@@ -52,8 +52,7 @@ class Allocation_model extends CI_Model {
                 WHERE period_begin = '$period'
                 $mfl
                 $code
-                $status
-                AND d.stock_status != '2'";
+                $status";
         $drugs = array();
         $facility_info = array();
         $query = $this->db->query($sql);
