@@ -14,8 +14,14 @@ class Allocation_model extends CI_Model {
         if(!empty($level)){
             if($level == 'central'){
                 $code = "AND c.code = 'D-CDRR'";
+                if (!empty($mflcode)) {
+                    $mfl .= "AND f.category = 'central'";
+                }
             }else if($level == 'satellite'){
                 $code = "AND c.code = 'F-CDRR'";
+                if (!empty($mflcode)) {
+                    $mfl .= "AND f.category = 'satellite'";
+                }
             }
         }
         $period = substr($period_begin, 0, 4) . '-' . substr($period_begin, -2) . '-01';
