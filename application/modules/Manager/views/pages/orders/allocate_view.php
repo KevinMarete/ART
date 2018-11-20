@@ -408,14 +408,14 @@
                     },
                     buttons: true,
                 })
-                        .then((value) => {
-                            if (value == null) {
-                                $(this).val(6);
-                                $(this).trigger('change');
-                            } else {
-                                row.find('.comment').val(value);
-                            }
-                        });
+                .then((value) => {
+                    if (value == null) {
+                        $(this).val((max_mos * AMC));
+                        $(this).trigger('change');
+                    } else {
+                        row.find('.comment').val(value);
+                    }
+                });
                 return false;
             }
         });
@@ -469,14 +469,14 @@
                     },
                     buttons: true,
                 })
-                        .then((value) => {
-                            if (value == null) {
-                                $(this).val(6);
-                                $(this).trigger('change');
-                            } else {
-                                row.find('.comment').val(value);
-                            }
-                        });
+                .then((value) => {
+                    if (value == null) {
+                        $(this).val(max_mos);
+                        $(this).trigger('change');
+                    } else {
+                        row.find('.comment').val(value);
+                    }
+                });
                 return false;
             }
         });

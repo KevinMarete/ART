@@ -15,8 +15,10 @@ class Allocation_model extends CI_Model {
         if(!empty($level)){
             if($level == 'central'){
                 $code = "AND c.code = 'D-CDRR'";
+            }else if($level == 'standalone'){
+                $code = "AND c.code = 'F-CDRR'";
             }else if($level == 'satellite'){
-                $status = "";
+                $status = "AND c.status = 'pending'";
                 $code = "AND c.code = 'F-CDRR'";
             }
         }
