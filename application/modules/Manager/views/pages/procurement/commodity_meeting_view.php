@@ -774,8 +774,8 @@
         $.get(transactionURL, function (tableData) {
             $('#transaction_tbl').empty();
             $('#transaction_tbl').append(tableData);
-            $("#transaction_tbl tr:eq(5)").find('td:gt(' + month + ')').css('background', '#c6ff00');
-            $("#transaction_tbl tr:eq(5)").find('td:lt(' + month + '):gt(0)').css('background', '#fff176');
+            $("#transaction_tbl tr:eq(6)").find('td:gt(' + month + ')').css('background', '#c6ff00');
+            $("#transaction_tbl tr:eq(6)").find('td:lt(' + month + '):gt(0)').css('background', '#fff176');
         });
     }
 

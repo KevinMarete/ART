@@ -3,10 +3,7 @@
     <head>
         <style>
             table {table-layout: fixed;width:1000px; padding:10px;}
-            table ,th, td{border:1px solid black; max-width:300px; border-collapse: collapse;}
             th {text-align: left; background-color: #4CAF50;color: white; height: 50px;}
-            tr,td{height:20px; padding: 3px;}
-            tr:nth-child(even) {background-color: #f2f2f2;}
         </style>
     </head>
     <body>

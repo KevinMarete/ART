@@ -598,7 +598,7 @@ class Procurement extends MX_Controller {
 						<strong>Success!</strong> Procurement was Added</div>';
         $this->updateSysLogs('Updated  (Tracker data updated)');
         $this->session->set_flashdata('tracker_msg', $message);
-        $this->response(['status'=>'success']);
+        $this->response(['status' => 'success']);
     }
 
     function save_decision() {
@@ -827,8 +827,8 @@ class Procurement extends MX_Controller {
         return $class;
     }
 
-    public function get_transaction_table2($drug_id, $period_year) {       
-        $column = $this->getTransactionStatus($drug_id, $period_year);      
+    public function get_transaction_table2($drug_id, $period_year) {
+        $column = $this->getTransactionStatus($drug_id, $period_year);
         $transaction_table = '
 <table class="table table-hover table-condensed table-bordered TRACKER">
   <tr style="font-weight:bold !important;">
@@ -862,7 +862,7 @@ class Procurement extends MX_Controller {
     <td class="tdata tg-0pky col-12">' . @$this->rv($column['tracker'][11]['open_kemsa']) . '</td>
   </tr>
   <tr>
-    <td class="tg-0pky" rowspan="3" vertical-align="middle"><strong>Receipts from Suppliers</strong></td>
+    <td class="tg-0pky" rowspan="4" vertical-align="middle"><strong>Receipts from Suppliers</strong></td>
     <td class="tg-0pky"><strong>Proposed</strong></td>
     <td class="tdata tg-0pky col-1">' . @$this->rv($column['status'][0][0]['quantity']) . ' </td>
     <td class="tdata tg-0pky col-2">' . @$this->rv($column['status'][0][1]['quantity']) . '</td>
@@ -906,6 +906,21 @@ class Procurement extends MX_Controller {
     <td class="tdata tg-0pky col-10">' . @$this->rv($column['status'][2][9]['quantity']) . '</td>
     <td class="tdata tg-0pky col-11">' . @$this->rv($column['status'][2][10]['quantity']) . '</td>
     <td class="tdata tg-0pky col-12">' . @$this->rv($column['status'][2][11]['quantity']) . '</td>
+  </tr>
+    <tr>
+    <td class="tg-0pky"><strong>Expected</strong></td>
+    <td class="tdata tg-0pky col-1">' . @$this->rv($column['expected'][0]['quantity']) . ' </td>
+    <td class="tdata tg-0pky col-2">' . @$this->rv($column['expected'][1]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-3">' . @$this->rv($column['expected'][2]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-4">' . @$this->rv($column['expected'][3]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-5">' . @$this->rv($column['expected'][4]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-6">' . @$this->rv($column['expected'][5]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-7">' . @$this->rv($column['expected'][6]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-8">' . @$this->rv($column['expected'][7]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-9">' . @$this->rv($column['expected'][8]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-10">' . @$this->rv($column['expected'][9]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-11">' . @$this->rv($column['expected'][10]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-12">' . @$this->rv($column['expected'][11]['quantity']) . '</td>
   </tr>
   <tr>
     <td class="tg-0pky" colspan="2"><strong>Issues to Facility</strong></td>
@@ -1094,6 +1109,7 @@ class Procurement extends MX_Controller {
                     ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )")->result_array();
         endforeach;
 
+
         //checking and removing months that already exist from the query
         foreach ($query as $k => $q):
             foreach ($query[$k] as $k) {
@@ -1101,6 +1117,7 @@ class Procurement extends MX_Controller {
             }
             array_push($new_arr, $rmonths);
         endforeach;
+
 
         //Getting number of array element so as to get keys for replacements in the resultant array above from name to index
         $renamed_arrays = [];
@@ -1112,6 +1129,8 @@ class Procurement extends MX_Controller {
             $new_arr1 = $this->rename_keys($new_arr[$ki], $arr[$ki]);
             array_push($renamed_arrays, $new_arr1);
         endforeach;
+
+
 
         //merging and sorting the resultant array by month
         $new_final_array = [];
@@ -1129,10 +1148,51 @@ class Procurement extends MX_Controller {
         //assigning the final array the procurement statuses as opposed to the array indexes for easier dynamic referencing``
         $tracker_data = [
             'tracker' => $tracker,
-            'status' => $new_final_array
+            'status' => $new_final_array,
+            'expected' => $this->expected($drugid, $year)
         ];
+        //$this->response($tracker_data);
+        //
 
         return $tracker_data;
+    }
+
+    function expected($drug, $year) {
+        $rmonths = $this->trackeMonths();
+        $query = $this->db->query("SELECT                 
+                    transaction_month data_month,                   
+                    quantity quantity                     
+                    FROM tbl_procurement_item pi
+                    INNER JOIN tbl_procurement p ON p.id = pi.procurement_id
+                    INNER JOIN tbl_procurement_status ps ON ps.id = pi.procurement_status_id
+                    LEFT JOIN tbl_funding_agent fa ON fa.id = pi.funding_agent_id
+                    LEFT JOIN tbl_supplier s ON s.id = pi.supplier_id
+                    WHERE p.drug_id = '$drug'
+                    AND transaction_year='$year'
+                    AND ps.name LIKE '%Expected%'
+                    GROUP BY transaction_month
+                    ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )")->result_array();
+
+
+        foreach ($query as $k) {
+            unset($rmonths[$k['data_month']]);
+        }
+        $renamed_arrays = [];
+        $arr = [];
+        for ($i = 0; $i < count($rmonths); $i++) {
+            array_push($arr, $i);
+        }
+        $new_arr1 = $this->rename_keys($rmonths, $arr);
+        array_push($renamed_arrays, $new_arr1);
+
+        $merged = array_merge($query, $renamed_arrays[0]);
+        usort($merged, function ($a, $b) {
+            $t1 = strtotime($a['data_month']);
+            $t2 = strtotime($b['data_month']);
+            return $t1 - $t2;
+        });
+
+        return $merged;
     }
 
     function rename_keys($array, $replacement_keys) {
