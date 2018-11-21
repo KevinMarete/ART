@@ -25,10 +25,10 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-12">      
-                            <?php if ($role == 'county' && date('d') <= 20 && $columns['cdrrs']['data'][0]['status'] == 'allocated') { ?>
+                            <?php if ($role == 'county' && date('d') <= 30 && $columns['cdrrs']['data'][0]['status'] == 'allocated') { ?>
                                 <button type="submit" class="btn btn-success" id="approveOrder">Approve Order</button>
                                 <button type="submit" class="btn btn-danger" id="rejectOrder">Reject Order</button>
-                            <?php } else if ($role == 'nascop' && date('d') <= 20 && $columns['cdrrs']['data'][0]['status'] == 'approved') { ?>
+                            <?php } else if ($role == 'nascop' && date('d') <= 30 && $columns['cdrrs']['data'][0]['status'] == 'approved') { ?>
                                 <button type="submit" class="btn btn-success" id="reviewOrder">Review Order</button>
                                 <button type="submit" class="btn btn-danger" id="rejectOrder">Reject Order</button>
                             <?php } ?>
@@ -302,7 +302,7 @@
                                 <th>Time Taken</th>
                                 </thead>
                                 <tbody>
-<?php foreach ($columns['cdrrs']['data']['cdrr_logs'] as $key => $log) { ?>
+                                    <?php foreach ($columns['cdrrs']['data']['cdrr_logs'] as $key => $log) { ?>
                                         <tr>
                                             <td><?= ucwords($log['description']); ?>  </td>
                                             <td><?= ucwords($log['firstname'] . ' ' . $log['lastname']); ?> </td>
@@ -310,14 +310,14 @@
                                             <td class="start_date"><?= $log['created']; ?><input type="hidden" class="end_date"/></td>
                                             <td>0 Day(s)</td>
                                         </tr>
-<?php } ?>
+                                    <?php } ?>
                                 </tbody>
                             </table>
                         </div>
-<?php if ($role == 'subcounty' && date('d') <= 20 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
+<?php if ($role == 'subcounty' && date('d') <= 30 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
                             <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
                             <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
-                        <?php } else if ($role == 'subcounty' && date('d') > 20 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
+                        <?php } else if ($role == 'subcounty' && date('d') > 30 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
                             <p><div class="alert alert-warning"><strong>NB: Allocation period has ended. No more allocations allowed beyond the 20<sup>th</sup> of each month. </strong></div></p>
                         <?php } else {
                             ?>
