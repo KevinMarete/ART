@@ -18,6 +18,27 @@
 		</div>
 		<div class="row">
 		  	<div class="col-sm-12">
+			  	<!--facility_commodity_soh_chart-->
+		    	<div class="chart-wrapper">
+					<div class="chart-title">
+						<strong>FACILITY COMMODITY STOCK ON HAND TREND</strong>
+						<div class="nav navbar-right">
+							<button data-toggle="modal" data-target="#facility_commodity_soh_chart_filter_modal" class="btn btn-warning btn-xs">
+								<span class="glyphicon glyphicon-filter"></span>
+							</button>
+						</div>
+					</div>
+					<div class="chart-stage">
+						<div id="facility_commodity_soh_chart"></div>
+					</div>
+					<div class="chart-notes">
+						<span class="facility_commodity_soh_chart_heading heading"></span>
+					</div>
+				</div>
+		 	</div>
+		</div>
+		<div class="row">
+		  	<div class="col-sm-12">
 		  		<!--facility_patient_distribution_table-->
 		    	<div class="chart-wrapper">
 					<div class="chart-title">

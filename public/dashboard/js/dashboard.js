@@ -40,9 +40,9 @@ var tabFiltersURLs = {
 var charts = {
     'summary': ['patient_scaleup_chart', 'patient_services_chart', 'national_mos_chart'],
     'trend': ['commodity_consumption_chart', 'patients_regimen_chart', 'commodity_month_stock_chart'],
-    'county': ['county_patient_distribution_chart', 'county_patient_distribution_table'],
-    'subcounty': ['subcounty_patient_distribution_chart', 'subcounty_patient_distribution_table'],
-    'facility': ['facility_patient_distribution_chart', 'facility_patient_distribution_table'],
+    'county': ['county_patient_distribution_chart', 'county_commodity_soh_chart', 'county_patient_distribution_table'],
+    'subcounty': ['subcounty_patient_distribution_chart', 'subcounty_commodity_soh_chart', 'subcounty_patient_distribution_table'],
+    'facility': ['facility_patient_distribution_chart', 'facility_commodity_soh_chart', 'facility_patient_distribution_table'],
     'partner': ['partner_patient_distribution_chart', 'partner_patient_distribution_table'],
     'regimen': ['regimen_patient_chart', 'regimen_nrti_drugs_chart', 'regimen_nnrti_drugs_chart'],
     'adt_sites': ['adt_sites_version_chart', 'adt_sites_internet_chart', 'adt_sites_backup_chart', 'adt_sites_distribution_chart', 'adt_sites_distribution_table'],

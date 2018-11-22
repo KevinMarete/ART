@@ -100,6 +100,21 @@ $config['county_patient_distribution_chart_filters_default'] = array(
     'regimen_service' => 'ART' 
 );
 
+//county_commodity_soh_chart
+$config['county_commodity_soh_chart_chartview'] = 'charts/line_view';
+$config['county_commodity_soh_chart_title'] = 'Commodity Consumption Trend';
+$config['county_commodity_soh_chart_yaxis_title'] = 'No. of Packs';
+$config['county_commodity_soh_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['county_commodity_soh_chart_has_drilldown'] = FALSE;
+$config['county_commodity_soh_chart_filters'] = array('data_date', 'county', 'drug');
+$config['county_commodity_soh_chart_filters_default'] = array(
+    'data_date' => $config['data_date'],
+    'drug' => array(
+        'Efavirenz (EFV) 600mg Tabs',
+        'Dolutegravir (DTG) 50mg Tabs'
+    )
+);
+
 //county_patient_distribution_table
 $config['county_patient_distribution_table_chartview'] = 'charts/table_view';
 $config['county_patient_distribution_table_title'] = 'County Patient Distibution (By Facilties and AgeGroup)';
@@ -126,6 +141,21 @@ $config['subcounty_patient_distribution_chart_filters_default'] = array(
     'regimen_service' => 'ART'  
 );
 
+//subcounty_commodity_soh_chart
+$config['subcounty_commodity_soh_chart_chartview'] = 'charts/line_view';
+$config['subcounty_commodity_soh_chart_title'] = 'Commodity Consumption Trend';
+$config['subcounty_commodity_soh_chart_yaxis_title'] = 'No. of Packs';
+$config['subcounty_commodity_soh_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['subcounty_commodity_soh_chart_has_drilldown'] = FALSE;
+$config['subcounty_commodity_soh_chart_filters'] = array('data_date', 'sub_county', 'drug');
+$config['subcounty_commodity_soh_chart_filters_default'] = array(
+    'data_date' => $config['data_date'],
+    'drug' => array(
+        'Efavirenz (EFV) 600mg Tabs',
+        'Dolutegravir (DTG) 50mg Tabs'
+    )
+);
+
 //subcounty_patient_distribution_table
 $config['subcounty_patient_distribution_table_chartview'] = 'charts/table_view';
 $config['subcounty_patient_distribution_table_title'] = 'Subcounty Patient Distibution (By Facilties and AgeGroup)';
@@ -149,6 +179,21 @@ $config['facility_patient_distribution_chart_filters'] = array('data_year', 'dat
 $config['facility_patient_distribution_chart_filters_default'] = array(
 	'data_year' => $config['data_year'], 
     'data_month' => $config['data_month']
+);
+
+//facility_commodity_soh_chart
+$config['facility_commodity_soh_chart_chartview'] = 'charts/line_view';
+$config['facility_commodity_soh_chart_title'] = 'Commodity Consumption Trend';
+$config['facility_commodity_soh_chart_yaxis_title'] = 'No. of Packs';
+$config['facility_commodity_soh_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['facility_commodity_soh_chart_has_drilldown'] = FALSE;
+$config['facility_commodity_soh_chart_filters'] = array('data_date', 'facility', 'drug');
+$config['facility_commodity_soh_chart_filters_default'] = array(
+    'data_date' => $config['data_date'],
+    'drug' => array(
+        'Efavirenz (EFV) 600mg Tabs',
+        'Dolutegravir (DTG) 50mg Tabs'
+    )
 );
 
 //facility_patient_distribution_table
