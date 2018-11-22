@@ -102,7 +102,7 @@ $config['county_patient_distribution_chart_filters_default'] = array(
 
 //county_commodity_soh_chart
 $config['county_commodity_soh_chart_chartview'] = 'charts/line_view';
-$config['county_commodity_soh_chart_title'] = 'Commodity Consumption Trend';
+$config['county_commodity_soh_chart_title'] = 'County Commodity SOH Trend';
 $config['county_commodity_soh_chart_yaxis_title'] = 'No. of Packs';
 $config['county_commodity_soh_chart_source'] = 'Source: www.commodities.nascop.org';
 $config['county_commodity_soh_chart_has_drilldown'] = FALSE;
@@ -143,7 +143,7 @@ $config['subcounty_patient_distribution_chart_filters_default'] = array(
 
 //subcounty_commodity_soh_chart
 $config['subcounty_commodity_soh_chart_chartview'] = 'charts/line_view';
-$config['subcounty_commodity_soh_chart_title'] = 'Commodity Consumption Trend';
+$config['subcounty_commodity_soh_chart_title'] = 'Subcounty Commodity SOH Trend';
 $config['subcounty_commodity_soh_chart_yaxis_title'] = 'No. of Packs';
 $config['subcounty_commodity_soh_chart_source'] = 'Source: www.commodities.nascop.org';
 $config['subcounty_commodity_soh_chart_has_drilldown'] = FALSE;
@@ -183,7 +183,7 @@ $config['facility_patient_distribution_chart_filters_default'] = array(
 
 //facility_commodity_soh_chart
 $config['facility_commodity_soh_chart_chartview'] = 'charts/line_view';
-$config['facility_commodity_soh_chart_title'] = 'Commodity Consumption Trend';
+$config['facility_commodity_soh_chart_title'] = 'Facility Commodity SOH Trend';
 $config['facility_commodity_soh_chart_yaxis_title'] = 'No. of Packs';
 $config['facility_commodity_soh_chart_source'] = 'Source: www.commodities.nascop.org';
 $config['facility_commodity_soh_chart_has_drilldown'] = FALSE;

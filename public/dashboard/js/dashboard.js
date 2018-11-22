@@ -24,9 +24,9 @@ var tabFiltersURLs = {
         {'link': drugListURL, 'type': 'drug', 'filters': ['#commodity_consumption_chart_filter', '#commodity_month_stock_chart_filter']}, 
         {'link': regimenListURL, 'type': 'regimen', 'filters': ['#patients_regimen_chart_filter']}
     ],
-    'county': [],
-    'subcounty': [],
-    'facility': [],
+    'county': [{'link': drugListURL, 'type': 'drug', 'filters': ['#county_commodity_soh_chart_filter']}],
+    'subcounty': [{'link': drugListURL, 'type': 'drug', 'filters': ['#subcounty_commodity_soh_chart_filter']}],
+    'facility': [{'link': drugListURL, 'type': 'drug', 'filters': ['#facility_commodity_soh_chart_filter']}],
     'partner': [],
     'regimen': [],
     'adt_sites': [],
