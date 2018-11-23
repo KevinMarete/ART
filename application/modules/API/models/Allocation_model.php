@@ -40,6 +40,7 @@ class Allocation_model extends CI_Model {
                     ci.count,
                     ci.aggr_consumed,
                     ci.aggr_on_hand,
+                    ci.expiry_quant,
                     ci.expiry_date,
                     ci.out_of_stock
                 FROM tbl_cdrr c
@@ -68,7 +69,7 @@ class Allocation_model extends CI_Model {
                     "closing" => $value->count,
                     "aggr_dispensed" => $value->aggr_consumed, // for central sites only
                     "aggr_closing" => $value->aggr_on_hand, // for central sites only
-                    "short_expiry" => $value->expiry_date,
+                    "short_expiry" => $value->expiry_quant,
                     "expiry_date" => $value->expiry_date,
                     "months_stocked_out" => $value->out_of_stock
                 ];
