@@ -372,7 +372,7 @@ class Orders_model extends CI_Model {
                             CONCAT_WS('/', COUNT(DISTINCT t.facility_id), COUNT(DISTINCT f.id)) submitted,
                             IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), 'Reviewed', 'Unreviewed') approval,
                             IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), 'Approved', 'N/A') reviewal_status,
-                            IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), CONCAT('<a href=','../allocation/subcounty/', sc.id,'/', t.period_begin, '>View/Verify Allocation</a>'), CONCAT('<a href=','../allocation/county/', co.id,'/$currmonth','> Pending Allocation</a>')) options
+                            IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), CONCAT('<a href=','../allocation/county/', co.id,'/', t.period_begin, '>View/Verify Allocation</a>'), CONCAT('<a href=','../allocation/county/', co.id,'/$currmonth','> Pending Allocation</a>')) options
                         FROM tbl_facility f  
                         INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
                         INNER JOIN tbl_county co ON co.id = sc.county_id

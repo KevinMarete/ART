@@ -41,9 +41,6 @@ class Manager extends MX_Controller {
             }
 
             if ($module == 'orders') {
-
-
-
                 $columns = array(
                     'reports' => array(
                         'subcounty' => array('Facility Name', 'Period Beginning', 'Description', 'Status', 'Actions'),
@@ -120,7 +117,7 @@ class Manager extends MX_Controller {
                     'subcounty_reports' => array(
                         'subcounty' => array(),
                         'county' => array('MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions', 'Download'),
-                        'nascop' => array()
+                        'nascop' => array('MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions', 'Download')
                     ),
                     'county_reports' => array(
                         'subcounty' => array(),
@@ -148,7 +145,6 @@ class Manager extends MX_Controller {
                         )
                     )
                 );
-
 
                 $data['columns'] = $columns[$page][$this->session->userdata('role')];
                 $data['county'] = $this->getCountySubcounty();
