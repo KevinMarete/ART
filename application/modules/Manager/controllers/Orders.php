@@ -12,13 +12,7 @@ class Orders extends MX_Controller {
         $this->load->model('Orders_model');
         $this->load->library('email_sender');
     }
-
-    function showData() {
-        echo '<pre>';
-        print_r($this->Orders_model->getStockChart());
-        echo '</pre>';
-    }
-
+    
     function pdf() {
         $pdfBuilder = '';
         $columns = @$this->Orders_model->get_cdrr_data($this->uri->segment('4'), $this->session->userdata('scope'), $this->session->userdata('role'));

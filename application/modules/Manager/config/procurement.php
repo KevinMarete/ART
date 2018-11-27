@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 //Default values
-$config['data_year'] = date('Y');
+$config['data_year'] = date('Y', strtotime('-1 month'));
 $config['data_month'] = date('M', strtotime('-1 month'));
 $config['data_month_full'] = date('F', strtotime('-1 month'));
 $config['data_date'] = date('Y-m-01', strtotime('-1 month'));

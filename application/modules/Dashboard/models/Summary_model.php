@@ -14,6 +14,7 @@ class Summary_model extends CI_Model {
 		if(!empty($filters)){
 			foreach ($filters as $category => $filter) {
 				if ($category == 'data_date'){
+					$this->db->where("data_date >= ", date('Y-01-01', strtotime($filter . "- 1 year")));
 					$this->db->where("data_date <=", $filter);
 				}else{
                     $this->db->where_in($category, $filter);
