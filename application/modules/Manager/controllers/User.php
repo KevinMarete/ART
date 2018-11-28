@@ -166,7 +166,7 @@ class User extends MX_Controller {
 
     public function logout() {
         $this->session->sess_destroy();
-        redirect('dashboard');
+        redirect('manager');
     }
 
 }
