@@ -1,3 +1,6 @@
+.active-tab{
+    color:red;
+}
 .progress {
     margin-bottom: 0px !important;
 }

@@ -4,76 +4,59 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Manager_model extends CI_Model {
 
-    private $_objcount;
-
     public function get_reporting_rates($filters) {
-        unset($filters['data_month']);
-        unset($filters['data_date']);
-        unset($filters['county']);
-
-        //  print_r($filters);
-        // die;
         $columns = array();
-        $tmp_data = array();
-        $reporting_data = array();
-        $cat = '';
-        $fil = '';
+        $reporting_data = array(
+            array('type' => 'column', 'name' => 'Reported', 'data' => array()),
+            array('type' => 'column', 'name' => 'Not Reported', 'data' => array())
+        );
+
+        //Get total_ordering_sites
+        $scope_id = $this->session->userdata('scope');
         $role = $this->session->userdata('role');
-        $scopename = $this->session->userdata('scope_name');
-        $scope = $this->session->userdata('scope');
-        if ($role == 'subcounty') {
-            $cat = 'subcounty';
-            $fil = $scopename;
-        } else if ($role == 'county') {
-            $cat = 'county';
-            $fil = $scopename;
-        } else {
-            
-        }
-
-        $this->_objcount = $this->getFacilityCount($role, $scope);
-
-
-        $this->db->select("CONCAT_WS('/', data_month, data_year) period, COUNT(DISTINCT facility) total", FALSE);
-        $this->db->where("data_date >=", date('Y-01-01'));
         $this->db->where_in("category", array('central', 'standalone'));
-        $this->db->where_in("code", array('D-CDRR', 'F-CDRR_packs'));
+        if($role == 'subcounty'){
+            $this->db->where('subcounty_id', $scope_id);
+            $total_ordering_sites = $this->db->get('tbl_facility')->num_rows();
+        }else if($role == 'county'){
+            $this->db->from('tbl_facility f');
+            $this->db->join('tbl_subcounty sc', 'sc.id = f.subcounty_id', 'inner');
+            $this->db->where('sc.county_id', $scope_id);
+            $total_ordering_sites = $this->db->get()->num_rows();
+        }else{
+            $total_ordering_sites = $this->db->get('tbl_facility')->num_rows();
+        }
+        
+        $this->db->select("CONCAT_WS('/', data_month, data_year) period, COUNT(*) reported, ($total_ordering_sites - COUNT(*)) not_reported", FALSE);
         if (!empty($filters)) {
             foreach ($filters as $category => $filter) {
+                if ($category == 'data_date'){
+                    $this->db->where("data_date >= ", date('Y-01-01', strtotime($filter . "- 1 year")));
+                    $this->db->where("data_date <=", $filter);
+                    continue;
+                }
                 $this->db->where_in($category, $filter);
             }
         }
-        if (!empty($cat)) {
-            $this->db->where_in($cat, $fil);
-        }
+        $this->db->where_in("facility_category", array('central', 'standalone'));
         $this->db->group_by('period');
         $this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
-        $query = $this->db->get('vw_cdrr_list');
+        $query = $this->db->get('dsh_order');
         $results = $query->result_array();
-        $reported = array_map(function($m) {
-            $perc = ((int) $m['total'] / (int) $this->_objcount ) * 100;
-            return round($perc, 2);
-        }, $results);
 
-        $unreported = array_map(function($m) {
-            $perc = 100 - $m;
-            return round($perc, 2);
-        }, $reported);
-
-        foreach ($results as $result) {
-            array_push($columns, $result['period']);
+        if ($results) {
+            foreach ($results as $result) {
+                $columns[] = $result['period'];
+                foreach ($reporting_data as $index => $report) {
+                    if ($report['name'] == 'Reported') {
+                        array_push($reporting_data[$index]['data'], $result['reported']);
+                    } else if ($report['name'] == 'Not Reported') {
+                        array_push($reporting_data[$index]['data'], $result['not_reported']);
+                    } 
+                }
+            }
         }
-
-        $rep = ['name' => 'Reported', 'color' => 'green', 'dataLabels' => ['align' => 'right', 'format' => '{point.y} %'], 'data' => $reported];
-        $unrep = ['name' => 'Not Reported', 'color' => 'grey', 'dataLabels' => ['enabled' => false], 'data' => $unreported];
-        array_push($reporting_data, $unrep);
-        array_push($reporting_data, $rep);
-
-
-
-        //echo '<pre>';
-        return array('main' => $reporting_data, 'columns' => array_values(array_unique($columns)));
-        // echo '</pre>';
+        return array('main' => $reporting_data, 'columns' => $columns);
     }
 
     public function get_patient_regimen($filters) {
@@ -196,15 +179,27 @@ class Manager_model extends CI_Model {
     }
 
     public function get_drug_soh_trend($filters){
-        $this->get_drug_amc($filters);
-
         $columns = array();
-        $tmp_data = array();
-        $main_data = array();
-        $drugs = array();
-        $consumption_data = array();
-             
-        $this->db->select("drug, CONCAT_WS('/', data_month, data_year) period, SUM(total) total", FALSE);
+        $soh_data = array(
+            array(
+                'type' => 'column', 
+                'name' => 'Stock on Hand', 
+                'data' => array()),
+            array(
+                'type' => 'spline', 
+                'color' => '#9400D3', 
+                'positiveColor' => '#9400D3', 
+                'name' => 'Average Monthly Consumption (AMC)', 
+                'data' => array()),
+            array(
+                'type' => 'line', 
+                'color' => '#FF0000', 
+                'negativeColor' => '#0088FF', 
+                'name' => 'Months of Stock (MOS)', 
+                'data' => array())
+        );
+
+        $this->db->select("drug, CONCAT_WS('/', data_month, data_year) period, SUM(total) soh_total, SUM(amc_total) amc_total, (SUM(total)/SUM(amc_total)) mos_total", FALSE);
         if(!empty($filters)){
             foreach ($filters as $category => $filter) {
                 if ($category == 'data_date'){
@@ -220,205 +215,53 @@ class Manager_model extends CI_Model {
         $query = $this->db->get('dsh_stock');
         $results = $query->result_array();
 
-        foreach ($results as $result) {
-            $drug =  $result['drug'];
-            $period =  $result['period'];
-            array_push($columns, $period);
-            array_push($drugs, $drug);
-            $tmp_data[$drug][$period] = $result['total'];
+        if ($results) {
+            foreach ($results as $result) {
+                $columns[] = $result['period'];
+                foreach ($soh_data as $index => $soh) {
+                    if ($soh['name'] == 'Stock on Hand') {
+                        array_push($soh_data[$index]['data'], $result['soh_total']);
+                    } else if ($soh['name'] == 'Average Monthly Consumption (AMC)') {
+                        array_push($soh_data[$index]['data'], $result['amc_total']);
+                    } else if ($soh['name'] == 'Months of Stock (MOS)') {
+                        array_push($soh_data[$index]['data'], empty($result['mos_total']) ? 0 : $result['mos_total']);
+                    }
+                }
+            }
         }
-        
-        //Reset array values to unique
-        $columns = array_values(array_unique($columns));
-        $drugs = array_values(array_unique($drugs));
-
-        //Ensure values match for all drugs
-        foreach ($drugs as $drug) {
-            foreach($columns as $column){
-                if(isset($tmp_data[$drug][$column])){
-                    $main_data[$drug]['data'][]  =  $tmp_data[$drug][$column];
-                }else{
-                    $main_data[$drug]['data'][]  = 0;
-                }  
-            } 
-        }
-
-        $counter = 0;
-        foreach ($main_data as $name => $item) {
-            $consumption_data[$counter]['type'] = 'column';
-            $consumption_data[$counter]['name'] = $name;
-            $consumption_data[$counter]['data'] = $item['data'];
-            $counter++;
-        }
-        return array('main' => $consumption_data, 'columns' => $columns);
+        return array('main' => $soh_data, 'columns' => $columns);
     }
 
-    public function get_drug_amc($filters){
-        $no_of_mos = 6;
-        $this->db->select("drug, CONCAT_WS('/', data_month, data_year) period, (SUM(total)/6) AS amc", FALSE);
+    public function get_low_mos_commodities($filters){
+        $columns = array();
+
+        $this->db->select("drug, facility, county, sub_county Subcounty, SUM(total) balance, SUM(amc_total) amc, IFNULL((SUM(total)/SUM(amc_total)), 0) mos", FALSE);
         if(!empty($filters)){
             foreach ($filters as $category => $filter) {
-                if ($category == 'data_date'){
-                    $this->db->where("data_date >= DATE_SUB($filter, INTERVAL $no_of_mos MONTH)");
-                    $this->db->where("data_date <= ", $filter);
-                    continue;
-                }
                 $this->db->where_in($category, $filter);
             }
         }
-        $this->db->group_by("drug, period");
-        $this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
-        $query = $this->db->get('dsh_consumption');
-        echo $this->db->last_query();die();
-        $results = $query->result_array(); 
+        $this->db->group_by('drug, facility, county, sub_county');
+        $this->db->having('mos < 3');
+        $this->db->order_by('mos', 'ASC');
+        $query = $this->db->get('dsh_stock');
+        return array('main' => $query->result_array(), 'columns' => $columns);
     }
 
-
-    public function get_drug_soh_trend_old($filters) {
-        unset($filters['data_month']);
-        unset($filters['data_date']);
-        if ($filters['facility'][0] == '') {
-            unset($filters['facility']);
-        }
-        if ($filters['subcounty'][0] == '') {
-            unset($filters['subcounty']);
-        }
-        if ($filters['county'][0] == '') {
-            unset($filters['county']);
-        }
-        $cat = '';
-        $fil = '';
-        $amc = '';
-        $amcfunction = 'fn_get_national_dyn_amc';
+    public function get_high_mos_commodities($filters){
         $columns = array();
-        $tmp_data = array();
-        $reporting_data = array();
-        $role = $this->session->userdata('role');
-        $scopename = $this->session->userdata('scope_name');
-        if ($role == 'subcounty') {
-            $cat = 'subcounty';
-            $fil = $scopename;
-            $amc = "," . "'$scopename'";
-            $amcfunction = 'fn_get_subcounty_amc';
-        } else if ($role == 'county') {
-            $cat = 'county';
-            $fil = $scopename;
-            $amc = "," . "'$scopename'";
-            $amcfunction = 'fn_get_county_amc';
-        } else {
-            
-        }
-        $this->db->select("CONCAT_WS('/', data_month, data_year) name, str_to_date(concat_ws('-',`data_year`,`data_month`,'01'),'%Y-%b-%e') begin_date,drug_id,SUM(closing_bal) y", FALSE);
-        $this->db->where("data_date >=", $filters['data_year'][0] . '-01-01');
-        if (!empty($filters)) {
+
+        $this->db->select("drug, facility, county, sub_county Subcounty, SUM(total) balance, SUM(amc_total) amc, IFNULL((SUM(total)/SUM(amc_total)), 0) mos", FALSE);
+        if(!empty($filters)){
             foreach ($filters as $category => $filter) {
                 $this->db->where_in($category, $filter);
             }
         }
-        $this->db->group_by('name');
-        $this->db->order_by("data_year ASC, FIELD( data_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )");
-        $query = $this->db->get('vw_cdrr_list');
-
-
-        $results = $query->result();
-        $res_array = array();
-
-        foreach ($results as $res) {
-            $date = $res->begin_date;
-            $drug_id = $res->drug_id;
-            $no_of_mos = 3;
-            $query2 = $this->db->query("SELECT  $amcfunction($drug_id,$no_of_mos,'$date'$amc) amc")->result();
-
-            array_push($res_array, $query2[0]->amc);
-        }
-
-        foreach ($results as $result) {
-            array_push($columns, $result->name);
-            $tmp_data['Stock On Hand']['data'][] = $result->y;
-        }
-
-        $counter = 0;
-        foreach ($tmp_data as $name => $item) {
-            $reporting_data[$counter]['type'] = 'column';
-            $reporting_data[$counter]['name'] = $name;
-            $reporting_data[$counter]['data'] = $item['data'];
-            $counter++;
-        }
-
-        $mos = array_map(function($x, $y) {
-            return round($x / $y, 0);
-        }, $tmp_data['Stock On Hand']['data'], $res_array);
-
-        $AMC = ['type' => 'spline', 'color' => '#9400D3', 'positiveColor' => '#9400D3', 'name' => 'Average Monthly Consumption (AMC)', 'data' => $res_array];
-        $MOS = ['type' => 'line', 'color' => '#FF0000', 'negativeColor' => '#0088FF', 'name' => 'Months of Stock', 'data' => $mos];
-
-        array_push($reporting_data, $AMC);
-        array_push($reporting_data, $MOS);
-
-        return array('main' => $reporting_data, 'columns' => array_values(array_unique($columns)));
-    }
-
-    function getFacilityCount($role, $scope) {
-
-        if ($role == 'subcounty') {
-            $count = $this->db->query("SELECT 
-                            f.mflcode,
-                            UCASE(f.name) facility_name
-                        FROM tbl_facility f  
-                        LEFT JOIN
-                        (   SELECT c.facility_id
-                            FROM tbl_cdrr c 
-                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id AND c.code = 'D-CDRR' AND m.code = 'D-MAPS'
-                            INNER JOIN tbl_facility f ON f.id = c.facility_id AND f.id = m.facility_id AND f.category = 'central'
-                            GROUP BY c.facility_id
-                            UNION 
-                            SELECT c.facility_id
-                            FROM tbl_cdrr c 
-                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id AND c.code = 'F-CDRR' AND m.code = 'F-MAPS'
-                            INNER JOIN tbl_facility f ON f.id = c.facility_id AND f.id = m.facility_id AND f.category = 'standalone'
-
-                            GROUP BY c.facility_id
-                        ) t ON t.facility_id = f.id
-                        WHERE f.subcounty_id = $scope
-                        AND f.category != 'satellite'
-                        GROUP BY f.mflcode
-                        ORDER BY f.name ASC")->result();
-            return count($count);
-        } elseif ($role == 'county') {
-            $counter = 0;
-            $query = $this->db->query("SELECT 
-                            UCASE(sc.name) subcounty,
-                          COUNT(DISTINCT f.id) submitted
-                        FROM tbl_facility f  
-                        INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
-                        LEFT JOIN
-                        (
-                            SELECT c.facility_id
-                            FROM tbl_cdrr c 
-                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id  AND c.code = 'D-CDRR' AND m.code = 'D-MAPS'
-                            INNER JOIN tbl_facility f ON f.id = c.facility_id AND f.id = m.facility_id AND f.category = 'central'
-                            GROUP BY c.facility_id
-
-                            UNION
-
-                            SELECT c.facility_id
-                            FROM tbl_cdrr c 
-                            INNER JOIN tbl_maps m ON m.facility_id = c.facility_id AND c.code = 'F-CDRR' AND m.code = 'F-MAPS'
-                            INNER JOIN tbl_facility f ON f.id = c.facility_id AND f.id = m.facility_id AND f.category = 'standalone'
-                            GROUP BY c.facility_id
-                        ) t ON t.facility_id = f.id
-                        WHERE sc.county_id = $scope
-                        AND f.category != 'satellite'
-                        GROUP BY sc.name
-                        ORDER BY sc.name ASC;")->result();
-            foreach ($query as $q) {
-                $counter += $q->submitted;
-            }
-            return $counter;
-        } else if ($role == 'nascop') {
-
-            return 417;
-        }
+        $this->db->group_by('drug, facility, county, sub_county');
+        $this->db->having('mos > 6');
+        $this->db->order_by('mos', 'DESC');
+        $query = $this->db->get('dsh_stock');
+        return array('main' => $query->result_array(), 'columns' => $columns);
     }
 
 }

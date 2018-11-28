@@ -1,9 +1,3 @@
-<style>
-    .active-red{
-        color:red;
-    }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-</style>
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
@@ -18,9 +12,8 @@
                 <div class="container">
                     <div class="navbar-collapse collapse" id="navbar-filter">
                         <div class="navbar-form" role="search">
-
                             <div class="form-group">
-                                <a href="#advancedFilter" class="btn btn-warning" data-toggle="modal" data-target="#myModalFilter">Advanced Filter</a>
+                                <a href="#advancedFilter" class="btn btn-warning" data-toggle="modal" data-target="#advancedFilterModal">Advanced Filter</a>
                             </div>
                             <div class="form-group">
                                 <div class="filter form-control" id="year-filter">
@@ -56,6 +49,7 @@
             </div>      
         </div>
     </div><!--/filter-row-->
+    
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
@@ -71,6 +65,7 @@
                         </div>
                         <!-- /.panel-body -->
                         <div class="panel-footer">
+                        	<span class="reporting_rates_chart_heading heading"></span>
                         </div>
                     </div>
                 </div>
@@ -85,6 +80,7 @@
                         </div>
                         <!-- /.panel-body -->
                         <div class="panel-footer">
+                        	<span class="patients_by_regimen_chart_heading heading"></span>
                         </div>
                     </div>
                 </div>
@@ -103,9 +99,7 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="col-lg-12 col-md-12">
-
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             <i class="fa fa-clock-o fa-fw"></i> Stock On Hand Trend
@@ -120,100 +114,47 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="col-lg-12 col-md-12">
-                    <div class="col-lg-6">
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                <i class="fa fa-clock-o fa-fw"></i> Low MOS Commodities in Facilities
-                                <div class="nav navbar-right">
-
-                                </div>
-                            </div>
-                            <!-- /.panel-heading -->
-                            <div class="panel-body">
-                                <table class="table table-responsive table-striped" id="summaryTable2">
-                                    <thead>
-                                        <tr>
-                                            <th>Commodity</th>
-                                            <th>Balance</th>
-                                            <th>MOS</th>
-                                            <th>Facility</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr></tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- /.panel-body -->
-                            <div class="panel-footer">
-                                <span class="stock_status_ heading2">Low MOS Commodities in Facilities</span>
-                            </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <i class="fa fa-clock-o fa-fw"></i> Low MOS Commodities in Facilities
                         </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                <i class="fa fa-clock-o fa-fw"></i> High MOS Commodities in Facilities
-                                <div class="nav navbar-right">
-
-                                </div>
-                            </div>
-                            <!-- /.panel-heading -->
-                            <div class="panel-body">
-                                <table class="table table-responsive table-striped" id="summaryTable">
-                                    <thead>
-                                        <tr>
-                                            <th>Commodity</th>
-                                            <th>Balance</th>
-                                            <th>MOS</th>
-                                            <th>Facility</th>                                            
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr></tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- /.panel-body -->
-                            <div class="panel-footer">
-                                <span class="stock_status_ heading2">High MOS Commodities in Facilities</span>
-                            </div>
+                       	<!-- /.panel-heading -->
+                        <div class="panel-body">
+                        	<div id="low_mos_commodity_table"></div>
                         </div>
-                    </div>
+                        <!-- /.panel-body -->
+                        <div class="panel-footer">
+                        	<span class="low_mos_commodity_table_heading heading"></span>
+                        </div>
+                   </div>
                 </div>
-
-
-
+                <div class="col-lg-12 col-md-12">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <i class="fa fa-clock-o fa-fw"></i> High MOS Commodities in Facilities
+                        </div>
+                       	<!-- /.panel-heading -->
+                        <div class="panel-body">
+                        	<div id="high_mos_commodity_table"></div>
+                        </div>
+                        <!-- /.panel-body -->
+                        <div class="panel-footer">
+                        	<span class="high_mos_commodity_table_heading heading"></span>
+                        </div>
+                   </div>
+                </div>
             </div>
+            <!-- /.row -->
         </div>
         <!-- /.col-lg-12 -->
     </div>
     <!-- /.row -->
 </div>
 <!-- /#page-wrapper -->
-<!--Facility Modal -->
-<div id="myModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title" id="FHead"></h4>
-            </div>
-            <div class="modal-body">
-                <div id="FacilityLoader"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
 
-    </div>
-</div>
-
-<div id="myModalFilter" class="modal fade" role="dialog">
+<!--Advanced Filter Modal -->
+<div id="advancedFilterModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <input id="filterStatus" type="hidden"/>
         <!-- Filter Modal-->
@@ -224,55 +165,20 @@
                     <h4 class="modal-title">Advanced Filter</h4>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" name="data_year[]" id="dataYear" value="<?php echo date('Y'); ?>"/>
-                    <input type="hidden" name="data_month[]" id="dataMonth" value="<?php echo date('M', strtotime('-1 month')); ?>"/>
-                    <input type="hidden" name="data_date" id="dataMonth" value="<?php echo date('Y-m-d'); ?>"/>
-
+                    <input type="hidden" id="scope" value="<?php echo $this->session->userdata('scope_name'); ?>"/>
+                    <input type="hidden" id="role" value="<?php echo $this->session->userdata('role'); ?>"/>
                     <div class="form-group">
-                        <select class="form-control" id="DrugFilter"  style="width:300px !important;" name="drug[]" >
-
-                        </select>
+                        <select class="form-control drug subcounty_view county_view nascop_view hidden" data-item="drug" name="drug" multiple="multiple"></select>
                     </div>
-                    <?php
-                    $role = $this->session->userdata('role');
-                    if ($role == 'nascop' || $role == 'admin') {
-                        ?>
-                        <div class="form-group">
-                            <select class="form-control" id="CountyFilter" name="county[]"  >
-
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <select class="form-control" id="SubCountyFilter" name="subcounty[]" >
-
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <select class="form-control" id="SubCountyFacilityFilter" name="facility[]" >
-
-                            </select>
-                        </div>
-                    <?php } else if ($role == 'county') {
-                        ?>
-                        <div class="form-group">
-                            <select class="form-control" id="SubCountyFilter" name="subcounty[]" >
-
-                            </select>
-                        </div> 
-                        <div class="form-group">
-                            <select class="form-control" id="SubCountyFacilityFilter" name="facility[]" >
-
-                            </select>
-                        </div>
-                    <?php } else if ($role == 'subcounty') { ?>
-
-                        <div class="form-group">
-                            <select class="form-control" id="SubCountyFacilityFilter" name="facility[]" >
-
-                            </select>
-                        </div>
-                    <?php } ?>
-
+					<div class="form-group">
+						<select class="form-control county nascop_view hidden" data-item="county" name="county" multiple="multiple"></select>
+					</div>
+					<div class="form-group">
+						<select class="form-control subcounty county_view nascop_view hidden" data-item="sub_county" name="sub_county" multiple="multiple"></select>
+					</div>
+					<div class="form-group">
+						<select class="form-control facility subcounty_view county_view nascop_view hidden" data-item="facility" name="facility" multiple="multiple"></select>
+					</div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal"  class="btn btn-success" id="advFilter" ><i class="fa fa-filter"></i> Filter</button>
@@ -282,392 +188,5 @@
 
     </div>
 </div>
-<script>
-    var chartURL = '../Manager/get_chart'
-    var drugListURL = '../API/drug/list'
-    var filters = {}
-    $(document).ready(function () {
-        dt = new Date();
-        newmonth = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        year = dt.getFullYear(), month = newmonth[dt.getMonth()], drug = 'Dolutegravir (DTG) 50mg Tabs';
-        //alert(year + monthname)
-        role = "<?php echo $this->session->userdata('role'); ?>";
-        scope_name = "<?php echo $this->session->userdata('scope_name'); ?>";
-
-        if (role == 'subcounty') {
-            $.post("<?php echo base_url() . 'Manager/Procurement/loadMenuData/facility/subcounty/' ?>", {id: scope_name}, function (res) {
-                subcountyfacility = $('#SubCountyFacilityFilter');
-                subcountyfacility.empty();
-                $('#SubCountyFacilityFilter').append('<option value="">-Facility(None)-</option>');
-                $.each(res.data, function (i, c) {
-                    subcountyfacility.append('<option value="' + c.facility + '">' + c.facility.toUpperCase() + '</option>');
-                });
-            }, 'json');
-        } else if (role =='county') {
-            $.post("<?php echo base_url() . 'Manager/Procurement/loadMenuData/subcounty/county/' ?>", {id: scope_name}, function (res) {
-                subcounty = $('#SubCountyFilter');
-                subcounty.empty();
-                $('#SubCountyFilter').append('<option value="">-Sub-County(None)-</option>');
-                $.each(res.data, function (i, c) {
-                    subcounty.append('<option value="' + c.subcounty + '">' + c.subcounty.toUpperCase() + '</option>');
-                });
-            }, 'json');
-        }
-
-
-        $.getJSON("<?php echo base_url() . 'Manager/Procurement/loadMenuData/county/'; ?>", function (res) {
-            county = $('#CountyFilter');
-            county.empty();
-            $('#CountyFilter').append('<option value="">-County(None)-</option>');
-            $.each(res.data, function (i, c) {
-                county.append('<option value="' + c.county + '">' + c.county.toUpperCase() + '</option>');
-            });
-
-        });
-
-        $.getJSON(drugListURL, function (res) {
-            drugs = $('#DrugFilter');
-            drugs.empty();
-            $.each(res, function (i, c) {
-                drugs.append('<option value="' + c.name + '">' + c.name.toUpperCase() + '</option>');
-            });
-
-        }).done(function () {
-            $('#DrugFilter').multiselect({
-                enableFiltering: true,
-                filterBehavior: 'value'
-            });
-        });
-
-        $('#CountyFilter').change(function () {
-            id = $(this).val();
-
-            $.post("<?php echo base_url() . 'Manager/Procurement/loadMenuData/subcounty/county/' ?>", {id: id}, function (res) {
-                subcounty = $('#SubCountyFilter');
-                subcounty.empty();
-                $('#SubCountyFilter').append('<option value="">-County(None)</option>');
-                $.each(res.data, function (i, c) {
-                    subcounty.append('<option value="' + c.subcounty + '">' + c.subcounty.toUpperCase() + '</option>');
-                });
-
-            }, 'json');
-        });
-
-        $('#SubCountyFilter').change(function () {
-            id = $(this).val();
-            $.post("<?php echo base_url() . 'Manager/Procurement/loadMenuData/facility/subcounty/' ?>", {id: id}, function (res) {
-                subcountyfacility = $('#SubCountyFacilityFilter');
-                subcountyfacility.empty();
-                $('#SubCountyFacilityFilter').append('<option value="">-Facility(None)</option>');
-                $.each(res.data, function (i, c) {
-                    subcountyfacility.append('<option value="' + c.facility + '">' + c.facility.toUpperCase() + '</option>');
-                });
-
-            }, 'json');
-        });
-
-        $(document).on('click', '.LOWAMC', function () {
-            LoadSpinner('#FacilityLoader');
-            var drug = $(this).attr('data-commodity');
-            $.post("<?= base_url(); ?>Manager/orders/getFacilitiesMOS/", {drug: drug, mos: 3, level: 'Low'}, function (resp) {
-                $('#FacilityLoader,#FHead').empty();
-                $('#FHead').html("COMMODITY: " + drug);
-                $('#FacilityLoader').append(resp);
-                $('#MosTable').DataTable();
-            });
-
-        });
-
-        $(document).on('click', '.HIGHAMC', function () {
-            LoadSpinner('#FacilityLoader');
-            var drug = $(this).attr('data-commodity');
-            $.post("<?= base_url(); ?>Manager/orders/getFacilitiesMOS/", {drug: drug, mos: 6, level: 'High'}, function (resp) {
-                $('#FacilityLoader,#FHead').empty();
-                $('#FHead').html("COMMODITY: " + drug);
-                $('#FacilityLoader').append(resp);
-                $('#MosTable').DataTable();
-            });
-
-            LoadSpinner('#FacilityLoader');
-        });
-
-        $('#filter_item').change(function () {
-            drug = $('#filter_item').val();
-        });
-        $('.filter-year').click(function () {
-            $('a.filter-year').removeClass('active-red');
-            $(this).addClass('active-red');
-            year = $(this).attr('data-value');
-            $('#dataYear').val(year);
-        });
-        $('.filter-month').click(function () {
-            $('a.filter-month').removeClass('active-red');
-            $(this).addClass('active-red');
-            month = $(this).attr('data-value');
-            $('#dataMonth').val(month);
-        });
-        $('#btn_filter').click(function () {
-            // alert(drug + '---' + month + '----' + year);
-        })
-
-
-        charts = ['patients_by_regimen_chart', 'drug_consumption_allocation_trend_chart', 'stock_status_trend_chart']
-        //charts = ['drug_consumption_allocation_trend_chart','stock_status_trend_chart', 'patients_by_regimen_chart', 'reporting_rates_chart']
-
-        //Add filter to chart then load chart
-        // setChartFilter('drug_consumption_allocation_trend_chart', drugListURL)
-
-        //Load Charts
-        $.each(charts, function (key, chartName) {
-            LoadChart('#' + chartName, chartURL, chartName, {})
-        });
-
-         tables();
-        //Show dashboard sidemenu
-        $(".dashboard").closest('ul').addClass("in");
-        $(".dashboard").addClass("active active-page");
-        //Filter click Event
-        $("#btn_filter,#advFilter").on("click", MainFilterHandler);
-        //Clear click Event
-        $("#btn_clear").on("click", ClearBtnHandler);
-        $.getJSON(drugListURL, function (resp) {
-            $('#filter_item').empty();
-            $.each(resp, function (i, d) {
-                $('#filter_item').append('<option value="' + d.name + '">' + d.name + '</option>');
-            });
-        }, 'json').done(function () {
-            $('#filter_item').multiselect({
-                enableFiltering: true,
-                filterBehavior: 'value'
-            });
-        });
-        function setChartFilter(chartName, filterURL) {
-            $.ajax({
-                url: filterURL,
-                datatype: 'JSON',
-                success: function (data) {
-                    filterID = '#' + chartName + '_filter'
-                    //Create multiselect box
-                    CreateSelectBox(filterID, '100%', 10)
-                    //Add data to selectbox
-                    $(filterID + " option").remove();
-                    $.each(data, function (i, v) {
-                        $(filterID).append($("<option value='" + v.name + "'>" + v.name.toUpperCase() + "</option>"));
-                    });
-                    $(filterID).multiselect('rebuild');
-                    $(filterID).data('filter_type', 'drug');
-                },
-                complete: function () {
-                    LoadChart('#' + chartName, chartURL, chartName, {})
-                }
-            });
-        }
-
-        function CreateSelectBox(elementID, width, limit) {
-            $(elementID).val('').multiselect({
-                enableCaseInsensitiveFiltering: true,
-                enableFiltering: true,
-                disableIfEmpty: true,
-                maxHeight: 300,
-                buttonWidth: width,
-                nonSelectedText: 'None selected',
-                includeSelectAllOption: false,
-                selectAll: false,
-                onChange: function (option, checked) {
-                    //Get selected options.
-                    var selectedOptions = $(elementID + ' option:selected');
-                    if (selectedOptions.length >= limit) {
-                        //Disable all other checkboxes.
-                        var nonSelectedOptions = $(elementID + ' option').filter(function () {
-                            return !$(this).is(':selected');
-                        });
-                        nonSelectedOptions.each(function () {
-                            var input = $('input[value="' + $(this).val() + '"]');
-                            input.prop('disabled', true);
-                            input.parent('li').addClass('disabled');
-                        });
-                    } else {
-                        //Enable all checkboxes.
-                        $(elementID + ' option').each(function () {
-                            var input = $('input[value="' + $(this).val() + '"]');
-                            input.prop('disabled', false);
-                            input.parent('li').addClass('disabled');
-                        });
-                    }
-                }
-            });
-        }
-
-        function LoadSpinner(divID) {
-            var spinner = new Spinner().spin()
-            $(divID).empty('')
-            $(divID).height('auto')
-            $(divID).append(spinner.el)
-        }
-
-        function LoadChart(divID, chartURL, chartName, selectedfilters) {
-            //Load Spinner
-            LoadSpinner(divID)
-            //Load Chart*
-		    $(divID).load(chartURL, {'name':chartName, 'selectedfilters': selectedfilters}, function(){
-		        //Pre-select filters for charts
-		        $.each($(divID + '_filters').data('filters'), function(key, data){
-		            if($.inArray(key, ['data_year', 'data_month', 'data_date']) == -1){
-		                $(divID + "_filter").val(data).multiselect('refresh');
-		                //Output filters
-		                var filtermsg = '<b><u>'+key.toUpperCase()+':</u></b><br/>'
-		                if($.isArray(data)){
-		                    filtermsg += data.join('<br/>')
-		                }else{
-		                    filtermsg += data
-		                }
-		                $("."+chartName+"_heading").html(filtermsg) 
-		            }
-		        });
-		    });
-        }
-
-        function MainFilterHandler(e) {
-            $('#filterStatus').val('true');
-            var filter_year = year;
-            var filter_month = month;
-            //Add filters to request
-            filters['data_year'] = filter_year;
-            filters['data_month'] = filter_month;
-            filters['drugs'] = drug;
-            if ($("#filter_item").val() != null) {
-                filters[$("#filter_item").data("filter_type")] = $("#filter_item").val()
-            }
-
-            if (filters['data_year'] != '' || filters['data_month'] != '')
-            {
-                $('#summaryTable').DataTable().destroy();
-                $('#summaryTable > tbody').empty();
-                $('#summaryTable2').DataTable().destroy();
-                $('#summaryTable2 > tbody').empty();
-                tables();
-                $.each(charts, function (key, chartName) {
-                    chartID = '#' + chartName
-                     LoadChart(chartID, chartURL, chartName, filters)
-
-                });
-            } else {
-                alert('Filter Year or Month cannot be Blank!')
-            }
-        }
-
-        function MainClearHandler(e) {
-            //Clear filters
-            filters = {}
-            //Get default month and year
-            $.getJSON(LatestDateURL, function (data) {
-                //Set hidden values
-                $("#filter_month").val(data.month)
-                $("#filter_year").val(data.year)
-                //Display labels
-                $(".filter-month[data-value='" + data.month + "']").addClass("active-tab");
-                $(".filter-year[data-value='" + data.year + "']").addClass("active-tab");
-                //Clear filter_item dropdown multi-select
-                $('#filter_item option:selected').each(function () {
-                    $(this).prop('selected', false);
-                });
-                //Set default drug dropdeon
-                $('#filter_item').val(data.drug).multiselect('refresh');
-                //Trigger filter event
-                $("#btn_filter").trigger("click");
-            });
-        }
-
-
-        function FilterBtnHandler(e) {
-            var filterName = String($(e.target).attr("id")).replace('_btn', '')
-            var filterID = "#" + filterName
-            var filterType = $(filterID).data('filter_type')
-            var chartName = filterName.replace('_filter', '')
-            var chartID = "#" + chartName
-
-
-            if ($(filterID).val() != null) {
-                filters[filterType] = $(filterID).val()
-            }
-
-            LoadChart(chartID, chartURL, chartName, filters)
-
-            //Hide Modal
-            $(filterID + '_modal').modal('hide')
-        }
-
-        function ClearBtnHandler(e) {
-            var filterName = String($(e.target).attr("id")).replace('_clear_btn', '')
-            var filterID = "#" + filterName
-            var filterType = $(filterID).data('filter_type')
-
-            //Clear filterType
-            filters[filterType] = {}
-
-            //Filter multiple multiselect
-            $(filterID).multiselect('deselectAll', false);
-            $(filterID).multiselect('updateButtonText');
-            $(filterID).multiselect('refresh');
-            //Trigger filter event
-            $(filterID + '_btn').trigger('click');
-        }
-    });
-
-
-
-
-    function tables() {
-        $('#summaryTable').DataTable({
-            "bProcessing": true,
-            "order": [[2, "desc"]],
-            //"paging": false,
-            //"ordering": false,
-            //"info": false,
-            //"searching": false,
-            "ajax": {
-                type: 'post',
-                url: "<?= base_url(); ?>Manager/Orders/getMOS/", data: {data_year: $('#dataYear').val(), data_month: $('#dataMonth').val()},
-                dataSrc: 'high'
-            },
-            "aoColumns": [
-                {mData: 'commodity'},
-                //{mData: 'allocated'},
-                {mData: 'balance'},
-                {mData: 'dmos'},
-                {mData: null, mRender: function (data, type, row) {
-                        return '<a data-commodity="' + row.commodity + '" data-toggle="modal" data-target="#myModal" href="#facility" class="HIGHAMC">View</a>';
-                    }
-                }
-                // {mData: 'month'}
-            ]
-
-        });
-
-        $('#summaryTable2').DataTable({
-            "bProcessing": true,
-            "order": [[2, "desc"]],
-            //"paging": false,
-            //"ordering": false,
-            //"info": false,
-            //"searching": false,
-            "ajax": {
-                type: 'post',
-                url: "<?= base_url(); ?>Manager/Orders/getMOS/", data: {data_year: $('#dataYear').val(), data_month: $('#dataMonth').val()},
-                dataSrc: 'low'
-            },
-            "aoColumns": [
-                {mData: 'commodity'},
-                //{mData: 'allocated'},
-                {mData: 'balance'},
-                {mData: 'dmos'},
-                {mData: null, mRender: function (data, type, row) {
-                        return '<a data-commodity="' + row.commodity + '" data-toggle="modal" data-target="#myModal" href="#facility" class="HIGHAMC">View</a>';
-                    }
-                }
-                // {mData: 'month'}
-            ]
-
-        });
-    }
-</script>
+<!--dashboard-->
+<script type="text/javascript" src="<?php echo base_url().'public/manager/js/dashboard.js';?>"></script>

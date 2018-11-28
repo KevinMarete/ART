@@ -38,6 +38,22 @@
 		 	</div>
 		</div>
 		<div class="row">
+			<div class="col-sm-12">
+		  		<!--facility_commodity_stock_movement_table-->
+		    	<div class="chart-wrapper">
+					<div class="chart-title">
+						<strong>FACILITY COMMODITY STOCK MOVEMENT</strong>
+					</div>
+					<div class="chart-stage">
+						<div id="facility_commodity_stock_movement_table"></div>
+					</div>
+					<div class="chart-notes">
+						<span class="facility_commodity_stock_movement_table_heading heading"></span>
+					</div>
+				</div>
+		 	</div>
+	    </div>
+		<div class="row">
 		  	<div class="col-sm-12">
 		  		<!--facility_patient_distribution_table-->
 		    	<div class="chart-wrapper">

@@ -23,7 +23,7 @@ class Facility_model extends CI_Model {
 		$this->db->where_not_in('regimen_service', 'OI Only');
 		$this->db->group_by('facility');
 		$this->db->order_by('art', 'DESC');
-		$this->db->limit(50);
+		$this->db->limit(20);
 		$query = $this->db->get('dsh_patient');
         $results = $query->result_array();
 
@@ -103,6 +103,21 @@ class Facility_model extends CI_Model {
 			$counter++;
 		}
 		return array('main' => $consumption_data, 'columns' => $columns);
+	}
+
+	public function get_facility_commodity_stock_movement_numbers($filters){
+		$columns = array();
+
+		$this->db->select("facility name, drug, SUM(opening_bal_qty) opening, SUM(received_qty) received, SUM(consumed_qty) consumed, SUM(closing_bal_qty) closing", FALSE);
+		if(!empty($filters)){
+			foreach ($filters as $category => $filter) {
+				$this->db->where_in($category, $filter);
+			}
+		}
+		$this->db->group_by('name, drug');
+		$this->db->order_by('drug', 'ASC');
+		$query = $this->db->get('dsh_order_item');
+		return array('main' => $query->result_array(), 'columns' => $columns);
 	}
 
 	public function get_facility_patient_distribution_numbers($filters){

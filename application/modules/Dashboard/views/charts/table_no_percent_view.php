@@ -4,7 +4,6 @@
 	$table_data = json_decode($chart_series_data, TRUE);
 	$count = 0;
 	$tbody = "<tbody>";
-	$overall = array_sum(array_column($table_data, 'total_patients'));
 	foreach ($table_data as $row_data) {
 		$tbody .= "<tr>";
 		foreach ($row_data as $key => $value) {
@@ -19,14 +18,9 @@
 				$tbody .= "<td>".number_format($value)."</td>";
 			}
 		}
-		$percentage = round(($value/$overall)*100, 2);
-		$progress_bar = '<div class="progress"><div class="progress-bar-info" role="progressbar" aria-valuenow="'.$percentage.'" aria-valuemin="0" aria-valuemax="100" style="width:'.$percentage.'%">'.$percentage.'%</div></div>';
-		$tbody .= "<td>".$progress_bar."</td>";
 		$tbody .= "</tr>";
 		$count++;
 	}
-	//Add for percentage
-	$thead .= "<th>OVERALL PERCENTAGE</th>";
 	$thead .= "</tr></thead>";
 	$tbody .= "</tbody>";
 	$dyn_table .= $thead;
@@ -39,20 +33,12 @@
 <script type="text/javascript">
 	$(function() {
 		var table_class = "<?php echo $chart_name.'_distribution_table'; ?>";
-
-		//Add search input
-		$('.distribution_table thead th').each(function(){
-        	var title = $('.distribution_table thead th').eq($(this).index()).text();
-        	$(this).html('<input type="text" placeholder="Search '+title.toLowerCase()+'"" />');
-    	});
-
 	    //DataTable
 	    var table = $('.'+table_class).DataTable({
 	    	"bDestroy": true,
 			"pagingType": "full_numbers",
 			"ordering": false,
 			"responsive": true,
-		   	"dom": 'Bfrtip',
 	        "buttons": [
 	            'copy', 
 	            {
@@ -75,15 +61,27 @@
 	            	extend: 'print',
 	            	title: ''
 	            }
-	        ]
+	        ],
+            initComplete: function () {
+                this.api().columns([0, 1]).every(function () {
+                    var column = this;
+                    var select = $('<br/><select><option value="">Show all</option></select>')
+                            .appendTo($(column.header()))
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                        );
+                                column
+                                        .search(val ? '^' + val + '$' : '', true, false)
+                                        .draw();
+                            });
+                    column.data().unique().sort().each(function (d, j) {
+                        var val = $('<div/>').html(d).text();
+                        select.append('<option value="' + val + '">' + val + '</option>');
+                    });
+                });
+            }
 		});
-
-		//Apply the search
-    	table.columns().eq(0).each(function(colIdx){
-	        $('input', table.column(colIdx).header()).on('keyup change', function(){
-	            table.column(colIdx).search(this.value).draw();
-	        });
-    	}); 
 
 	});
 </script>

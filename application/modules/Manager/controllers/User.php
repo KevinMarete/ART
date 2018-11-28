@@ -34,11 +34,7 @@ class User extends MX_Controller {
 						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						' . $response['message'] . '</div>';
             $this->session->set_flashdata('dashboard_msg', $message);
-            if (in_array($this->session->userdata('role'), array('subcounty', 'county', 'nascop'))) {
-                redirect('manager/orders/reporting_rates');
-            } else {
-                redirect('manager/dashboard');
-            }
+            redirect('manager/dashboard');
         } else {
             //Go to login with error message
             $message = '<div class="alert alert-danger alert-dismissible" role="alert">
@@ -170,7 +166,7 @@ class User extends MX_Controller {
 
     public function logout() {
         $this->session->sess_destroy();
-        redirect('manager/login');
+        redirect('dashboard');
     }
 
 }

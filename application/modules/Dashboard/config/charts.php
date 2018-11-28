@@ -115,6 +115,18 @@ $config['county_commodity_soh_chart_filters_default'] = array(
     )
 );
 
+//county_commodity_stock_movement_table
+$config['county_commodity_stock_movement_table_chartview'] = 'charts/table_no_percent_view';
+$config['county_commodity_stock_movement_table_title'] = 'County Commodity Stock Movement';
+$config['county_commodity_stock_movement_table_yaxis_title'] = 'No. of Patients';
+$config['county_commodity_stock_movement_table_source'] = 'Source: www.commodities.nascop.org';
+$config['county_commodity_stock_movement_table_has_drilldown'] = FALSE;
+$config['county_commodity_stock_movement_table_filters'] = array('data_year', 'data_month', 'county');
+$config['county_commodity_stock_movement_table_filters_default'] = array(
+    'data_year' => $config['data_year'], 
+    'data_month' => $config['data_month']
+);
+
 //county_patient_distribution_table
 $config['county_patient_distribution_table_chartview'] = 'charts/table_view';
 $config['county_patient_distribution_table_title'] = 'County Patient Distibution (By Facilties and AgeGroup)';
@@ -156,6 +168,18 @@ $config['subcounty_commodity_soh_chart_filters_default'] = array(
     )
 );
 
+//subcounty_commodity_stock_movement_table
+$config['subcounty_commodity_stock_movement_table_chartview'] = 'charts/table_no_percent_view';
+$config['subcounty_commodity_stock_movement_table_title'] = 'Subcounty Commodity Stock Movement';
+$config['subcounty_commodity_stock_movement_table_yaxis_title'] = 'No. of Patients';
+$config['subcounty_commodity_stock_movement_table_source'] = 'Source: www.commodities.nascop.org';
+$config['subcounty_commodity_stock_movement_table_has_drilldown'] = FALSE;
+$config['subcounty_commodity_stock_movement_table_filters'] = array('data_year', 'data_month', 'sub_county');
+$config['subcounty_commodity_stock_movement_table_filters_default'] = array(
+    'data_year' => $config['data_year'], 
+    'data_month' => $config['data_month']  
+);
+
 //subcounty_patient_distribution_table
 $config['subcounty_patient_distribution_table_chartview'] = 'charts/table_view';
 $config['subcounty_patient_distribution_table_title'] = 'Subcounty Patient Distibution (By Facilties and AgeGroup)';
@@ -194,6 +218,18 @@ $config['facility_commodity_soh_chart_filters_default'] = array(
         'Efavirenz (EFV) 600mg Tabs',
         'Dolutegravir (DTG) 50mg Tabs'
     )
+);
+
+//facility_commodity_stock_movement_table
+$config['facility_commodity_stock_movement_table_chartview'] = 'charts/table_no_percent_view';
+$config['facility_commodity_stock_movement_table_title'] = 'Facility Commodity Stock Movement';
+$config['facility_commodity_stock_movement_table_yaxis_title'] = 'No. of Patients';
+$config['facility_commodity_stock_movement_table_source'] = 'Source: www.commodities.nascop.org';
+$config['facility_commodity_stock_movement_table_has_drilldown'] = FALSE;
+$config['facility_commodity_stock_movement_table_filters'] = array('data_year', 'data_month', 'facility');
+$config['facility_commodity_stock_movement_table_filters_default'] = array(
+    'data_year' => $config['data_year'], 
+    'data_month' => $config['data_month']  
 );
 
 //facility_patient_distribution_table

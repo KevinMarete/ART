@@ -174,7 +174,7 @@ class Manager extends MX_Controller {
         $chartname = $this->input->post('name');
         $selectedfilters = $this->get_filter($chartname, $this->input->post('selectedfilters'));
         //Set filters based on role and scope
-        $role = $this->session->userdata('role');
+        $role = str_ireplace('subcounty', 'sub_county', $this->session->userdata('role'));
         if (!in_array($role, array('admin', 'nascop'))) {
             $selectedfilters[$role] = $this->session->userdata('scope_name');
         }
@@ -231,13 +231,17 @@ class Manager extends MX_Controller {
 
     public function get_data($chartname, $filters) {
         if ($chartname == 'reporting_rates_chart') {
-            //$main_data = $this->manager_model->get_reporting_rates($newarr);
+            $main_data = $this->manager_model->get_reporting_rates($filters);
         } else if ($chartname == 'patients_by_regimen_chart') {
             $main_data = $this->manager_model->get_patient_regimen($filters);
         } else if ($chartname == 'drug_consumption_allocation_trend_chart') {
             $main_data = $this->manager_model->get_drug_consumption_allocation_trend($filters);
         } else if ($chartname == 'stock_status_trend_chart') {
             $main_data = $this->manager_model->get_drug_soh_trend($filters);
+        } else if ($chartname == 'low_mos_commodity_table') {
+            $main_data = $this->manager_model->get_low_mos_commodities($filters);
+        } else if ($chartname == 'high_mos_commodity_table') {
+            $main_data = $this->manager_model->get_high_mos_commodities($filters);
         }
         return $main_data;
     }

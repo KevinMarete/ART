@@ -39,6 +39,22 @@
 		</div>
 		<div class="row">
 			<div class="col-sm-12">
+		  		<!--subcounty_commodity_stock_movement_table-->
+		    	<div class="chart-wrapper">
+					<div class="chart-title">
+						<strong>SUBCOUNTY COMMODITY STOCK MOVEMENT</strong>
+					</div>
+					<div class="chart-stage">
+						<div id="subcounty_commodity_stock_movement_table"></div>
+					</div>
+					<div class="chart-notes">
+						<span class="subcounty_commodity_stock_movement_table_heading heading"></span>
+					</div>
+				</div>
+		 	</div>
+	    </div>
+		<div class="row">
+			<div class="col-sm-12">
 		  		<!--subcounty_patient_distribution_table-->
 		    	<div class="chart-wrapper">
 					<div class="chart-title">

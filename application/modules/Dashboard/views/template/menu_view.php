@@ -42,7 +42,7 @@
 					</ul>
 				</li>
 	          	<li>
-	          		<a href="<?php echo base_url().'manager'; ?>" target="_blank">
+	          		<a href="<?php echo base_url().'manager'; ?>">
 	          			<span class="glyphicon glyphicon-log-in"></span> Login
 	          		</a>
 	          	</li>

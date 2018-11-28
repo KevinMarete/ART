@@ -80,6 +80,21 @@ class Subcounty_model extends CI_Model {
 		return array('main' => $consumption_data, 'columns' => $columns);
 	}
 
+	public function get_subcounty_commodity_stock_movement_numbers($filters){
+		$columns = array();
+
+		$this->db->select("sub_county name, drug, SUM(opening_bal_qty) opening, SUM(received_qty) received, SUM(consumed_qty) consumed, SUM(losses_qty) losses, SUM(adjustment_qty) adjustments, SUM(closing_bal_qty) closing", FALSE);
+		if(!empty($filters)){
+			foreach ($filters as $category => $filter) {
+				$this->db->where_in($category, $filter);
+			}
+		}
+		$this->db->group_by('name, drug');
+		$this->db->order_by('drug', 'ASC');
+		$query = $this->db->get('dsh_order_item');
+		return array('main' => $query->result_array(), 'columns' => $columns);
+	}
+
 	public function get_subcounty_patient_distribution_numbers($filters){
 		$columns = array();
 

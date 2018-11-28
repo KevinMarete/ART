@@ -76,18 +76,24 @@ class Dashboard extends MX_Controller {
 			$main_data = $this->county_model->get_county_patient_distribution($filters);
 		}else if($chartname == 'county_commodity_soh_chart'){
 			$main_data = $this->county_model->get_county_commodity_soh($filters);
+		}else if($chartname == 'county_commodity_stock_movement_table'){
+			$main_data = $this->county_model->get_county_commodity_stock_movement_numbers($filters);
 		}else if($chartname == 'county_patient_distribution_table'){
 			$main_data = $this->county_model->get_county_patient_distribution_numbers($filters);
 		}else if($chartname == 'subcounty_patient_distribution_chart'){
 			$main_data = $this->subcounty_model->get_subcounty_patient_distribution($filters);
 		}else if($chartname == 'subcounty_commodity_soh_chart'){
 			$main_data = $this->subcounty_model->get_subcounty_commodity_soh($filters);
+		}else if($chartname == 'subcounty_commodity_stock_movement_table'){
+			$main_data = $this->subcounty_model->get_subcounty_commodity_stock_movement_numbers($filters);
 		}else if($chartname == 'subcounty_patient_distribution_table'){
 			$main_data = $this->subcounty_model->get_subcounty_patient_distribution_numbers($filters);
 		}else if($chartname == 'facility_patient_distribution_chart'){
 			$main_data = $this->facility_model->get_facility_patient_distribution($filters);
 		}else if($chartname == 'facility_commodity_soh_chart'){
 			$main_data = $this->facility_model->get_facility_commodity_soh($filters);
+		}else if($chartname == 'facility_commodity_stock_movement_table'){
+			$main_data = $this->facility_model->get_facility_commodity_stock_movement_numbers($filters);
 		}else if($chartname == 'facility_patient_distribution_table'){
 			$main_data = $this->facility_model->get_facility_patient_distribution_numbers($filters);
 		}else if($chartname == 'partner_patient_distribution_chart'){
