@@ -21,6 +21,7 @@ var LatestDateURL = '../Manager/get_default_period'
 var charts = ['reporting_rates_chart', 'patients_by_regimen_chart', 'drug_consumption_allocation_trend_chart', 'stock_status_trend_chart', 'low_mos_commodity_table', 'high_mos_commodity_table']
 var exempt_from_id = ['drug']
 var non_national_scope = ['county', 'subcounty']
+var exempt_drilldown = ['drug', 'facility']
 var filters = {}
 
 //Autoload
@@ -223,7 +224,7 @@ function MainClearHandler(e){
         var filter_option = $(this).data('item');
         var filter_element = '.'+filter_option
         var filterURL = URLs[filter_option];
-        if($.inArray(filter_option, ['drug, facility']) != -1){
+        if($.inArray(filter_option, exempt_drilldown) == -1){
             var hidden_elements = drilldownItems[filter_option]['hide'];
             //Hide all hidden_elements and hide
             $.each(hidden_elements, function(i, hidden_element) {
