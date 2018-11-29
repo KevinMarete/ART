@@ -4,8 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Facility_model extends CI_Model {
 
-    public function read() {
-        $query = $this->db->get('tbl_facility');
+    public function read($conditions) {
+        $query = $this->db->get_where('tbl_facility', $conditions);
         return $query->result_array();
     }
 

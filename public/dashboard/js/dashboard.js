@@ -213,18 +213,19 @@ function LoadChart(divID, chartURL, chartName, selectedfilters){
     //Load Chart*
     $(divID).load(chartURL, {'name':chartName, 'selectedfilters': selectedfilters}, function(){
         //Pre-select filters for charts
+        var filtermsg = ''
         $.each($(divID + '_filters').data('filters'), function(key, data){
             if($.inArray(key, ['data_year', 'data_month', 'data_date']) == -1){
                 $(divID + "_filter").val(data).multiselect('refresh');
                 //Output filters
-                var filtermsg = '<b><u>'+key.toUpperCase()+':</u></b><br/>'
+                filtermsg += '<br/><b><u>'+key.toUpperCase()+':</u></b><br/>'
                 if($.isArray(data)){
                     filtermsg += data.join('<br/>')
                 }else{
                     filtermsg += data
                 }
-                $("."+chartName+"_heading").html(filtermsg) 
             }
+            $("."+chartName+"_heading").html(filtermsg) 
         });
     });
 }

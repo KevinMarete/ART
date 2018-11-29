@@ -162,26 +162,27 @@
             <form id="AdvancedFilter">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Advanced Filter</h4>
+                    <h4 class="modal-title"><b>Advanced Filter</b></h4>
                 </div>
                 <div class="modal-body">
+                    <input type="hidden" id="scope_id" value="<?php echo $this->session->userdata('scope'); ?>"/>
                     <input type="hidden" id="scope" value="<?php echo $this->session->userdata('scope_name'); ?>"/>
                     <input type="hidden" id="role" value="<?php echo $this->session->userdata('role'); ?>"/>
                     <div class="form-group">
-                        <select class="form-control drug subcounty_view county_view nascop_view hidden" data-item="drug" name="drug" multiple="multiple"></select>
+                        <select class="form-control drug subcounty_default county_default nascop_default hidden filter_item" data-item="drug" name="drug" size="2"></select>
                     </div>
 					<div class="form-group">
-						<select class="form-control county nascop_view hidden" data-item="county" name="county" multiple="multiple"></select>
+						<select class="form-control county nascop_default hidden filter_item" data-item="county" name="county" multiple="multiple"></select>
 					</div>
 					<div class="form-group">
-						<select class="form-control subcounty county_view nascop_view hidden" data-item="sub_county" name="sub_county" multiple="multiple"></select>
+						<select class="form-control sub_county county_default hidden filter_item" data-item="sub_county" name="sub_county" multiple="multiple"></select>
 					</div>
 					<div class="form-group">
-						<select class="form-control facility subcounty_view county_view nascop_view hidden" data-item="facility" name="facility" multiple="multiple"></select>
+						<select class="form-control facility subcounty_default hidden filter_item" data-item="facility" name="facility" multiple="multiple"></select>
 					</div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" data-dismiss="modal"  class="btn btn-success" id="advFilter" ><i class="fa fa-filter"></i> Filter</button>
+                    <button type="button" data-dismiss="modal"  class="btn btn-warning" id="advFilter" ><i class="fa fa-filter"></i> Filter</button>
                 </div>
             </form>
         </div>

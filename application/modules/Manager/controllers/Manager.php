@@ -162,12 +162,14 @@ class Manager extends MX_Controller {
         }
     }
 
-    function getChart($filter = '') {
-
-        $main_data = $this->manager_model->get_reporting_rates($filters);
-        echo '<pre>';
-        print_r($main_data);
-        echo '</pre>';
+    public function get_default_period()
+    {   
+        $default_period = array(
+            'year' => $this->config->item('data_year'), 
+            'month' => $this->config->item('data_month'),
+            'drug' => $this->config->item('drug')
+        );
+        echo json_encode($default_period);
     }
 
     public function get_chart() {

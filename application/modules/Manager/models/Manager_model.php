@@ -14,18 +14,28 @@ class Manager_model extends CI_Model {
         //Get total_ordering_sites
         $scope_id = $this->session->userdata('scope');
         $role = $this->session->userdata('role');
+        $this->db->from('tbl_facility f');
+        $this->db->join('tbl_subcounty sc', 'sc.id = f.subcounty_id', 'inner');
+        $this->db->join('tbl_county c', 'c.id = sc.county_id', 'inner');
         $this->db->where_in("category", array('central', 'standalone'));
-        if($role == 'subcounty'){
-            $this->db->where('subcounty_id', $scope_id);
-            $total_ordering_sites = $this->db->get('tbl_facility')->num_rows();
-        }else if($role == 'county'){
-            $this->db->from('tbl_facility f');
-            $this->db->join('tbl_subcounty sc', 'sc.id = f.subcounty_id', 'inner');
-            $this->db->where('sc.county_id', $scope_id);
-            $total_ordering_sites = $this->db->get()->num_rows();
-        }else{
-            $total_ordering_sites = $this->db->get('tbl_facility')->num_rows();
+        if (!empty($filters)) {
+            foreach ($filters as $category => $filter) {
+                if ($category == 'county'){
+                    $this->db->where_in('c.name',  $filter);
+                }else if ($category == 'sub_county'){
+                    $this->db->where_in('sc.name',  $filter);
+                }else if ($category == 'facility'){
+                    $this->db->where_in('f.name',  $filter);
+                }
+            }
         }
+        if($role == 'subcounty'){
+            $this->db->where('f.subcounty_id', $scope_id);
+
+        }else if($role == 'county'){
+            $this->db->where('sc.county_id', $scope_id);
+        }
+        $total_ordering_sites = $this->db->get()->num_rows();
         
         $this->db->select("CONCAT_WS('/', data_month, data_year) period, COUNT(*) reported, ($total_ordering_sites - COUNT(*)) not_reported", FALSE);
         if (!empty($filters)) {

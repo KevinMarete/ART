@@ -22,11 +22,21 @@ class Facility extends \API\Libraries\REST_Controller  {
     }
 
     public function index_get()
-    {
-        // facilitys from a data store e.g. database
-        $facilitys = $this->facility_model->read();
-
+    {   
+        //Default parameters
         $id = $this->get('id');
+        $subcounty = $this->get('subcounty');
+
+        //Conditions
+        $conditions = array(
+            'id' => $id,
+            'subcounty_id' => $subcounty
+                
+        );
+        $conditions = array_filter($conditions);
+
+        // facilitys from a data store e.g. database
+        $facilitys = $this->facility_model->read($conditions);
 
         // If the id parameter doesn't exist return all the facilitys
         if ($id === NULL)
