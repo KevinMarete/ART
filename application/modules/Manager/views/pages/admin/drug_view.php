@@ -39,7 +39,7 @@
                                 <span class="help-block"></span>
                             </div>
                         </div>
-                          <div class="form-group">
+                        <div class="form-group">
                             <label class="control-label col-md-3">Category</label>
                             <div class="col-md-9">
                                 <select name="drug_category" id="drug_category" class="form-control select2">
@@ -47,25 +47,39 @@
                                 <span class="help-block"></span>
                             </div>
                         </div>
-                          <div class="form-group">
+                        <div class="form-group">
                             <label class="control-label col-md-3">Min.MOS</label>
                             <div class="col-md-9">
-                                <input name="min_mos" placeholder="3" class="form-control" type="number">
+                                <input name="min_mos" id="min_mos" placeholder="0" class="form-control" type="number">
                                 <span class="help-block"></span>
                             </div>
                         </div>
-                         <div class="form-group">
+                        <div class="form-group">
                             <label class="control-label col-md-3">Max.MOS</label>
                             <div class="col-md-9">
-                                <input name="max_mos" placeholder="15" class="form-control" type="number">
+                                <input name="max_mos" id="max_mos" placeholder="3" class="form-control" type="number">
                                 <span class="help-block"></span>
                             </div>
                         </div>
-                         <div class="form-group">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">AMC Months</label>
+                            <div class="col-md-9">
+                                <input name="amc_months" id="amc_months" placeholder="6" class="form-control" type="number">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="control-label col-md-3">Status</label>
                             <div class="col-md-9">
                                 <select name="stock_status" id="stock_status" class="form-control select2">
                                 </select>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">KEMSA Code</label>
+                            <div class="col-md-9">
+                                <input name="kemsa_code" id="kemsa_code" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -103,7 +117,7 @@
         
         $("#drug_category").empty()
         $.getJSON(drug_categoryURL, function (categories) {
-            $("#formulation_id").append($("<option value=''>Select Formulation</option>"));
+            $("#drug_category").append($("<option value=''>Select Drug Category</option>"));
             $.each(categories, function (index, category) {
                 $("#drug_category").append($("<option value='" + category.id + "'>" + category.name.toUpperCase() + "</option>"));
             });

@@ -60,7 +60,7 @@
                             <label class="control-label col-md-3">Target Element</label>
                             <div class="col-md-9">
                                 <select name="target_id" id="target_id" class="form-control select2" type="text">
-                                    <option>Select Element</option>
+                                    <option value="">Select Element</option>
                                 </select>
                                 <span class="help-block"></span>
                             </div>

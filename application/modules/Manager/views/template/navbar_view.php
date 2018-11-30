@@ -54,12 +54,12 @@
                         $_blanks = array('ftp');
                         $submodule = str_replace(' ', '_', $orig_submodule);
                         if (in_array($submodule, $_blanks)) {
-                            echo "<li><a href='" . base_url() . "ftp' target='_blank'>" . ucwords(str_replace('_', ' ', $orig_submodule . '_')) . "</a></li>";
+                            echo "<li><a href='" . base_url() . "ftp' target='_blank'>" . ucwords(str_replace('_', ' ', $orig_submodule)) . "</a></li>";
                         } else {
-                            echo "<li><a class='" . str_replace(' ', '_', $orig_submodule . '_') . "' href='" . base_url() . "manager/" . $module . "/" . $submodule . "'>" . ucwords(str_replace('_', ' ', $orig_submodule)) . "</a></li>";
+                            echo "<li><a class='" . str_replace(' ', '_', $orig_submodule) . "' href='" . base_url() . "manager/" . $module . "/" . $submodule . "'>" . ucwords(str_replace('_', ' ', $orig_submodule)) . "</a></li>";
                         }
                     }
-                    echo "</ul> </li>";
+                    echo "</ul></li>";
                 }
                 ?>
             </ul>
@@ -70,10 +70,14 @@
     <!--/.navbar-static-side -->
 </nav>
 <?php
- $date = date('d');
- $segment2=$this->uri->segment('2');
-if (strpos($this->session->userdata('role'),'subcounty')!==false && strpos($segment2,'orders')!==false && $date == 19  ) {?>
-    <div style="margin: 10px;" class="alert alert-warning pull-right"><i class="fa fa-warning"></i> <?php echo $this->session->userdata('role');?> Kindly ensure that you have already submitted your allocation report before the 20<sup>th</sup></div>
+    $date = date('d');
+    $segment2=$this->uri->segment('2');
+    if (strpos($this->session->userdata('role'),'subcounty')!==false && strpos($segment2,'orders')!==false && $date == 19) {
+?>
+    <div style="margin: 10px;" class="alert alert-warning pull-right">
+        <i class="fa fa-warning"></i> <?php echo $this->session->userdata('role');?> 
+        Kindly ensure that you have already submitted your allocation report before the 20<sup>th</sup>
+    </div>
 <?php } ?>
 
 <script>

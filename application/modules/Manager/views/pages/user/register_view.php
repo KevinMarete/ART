@@ -129,66 +129,59 @@
         <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/dist/js/sb-admin-2.js'; ?>"></script>
 
         <script type="text/javascript">
-                                            $(function () {
-                                                $("#inputpassword").on("change", validatePassword);
-                                                $("#inputcpassword").on("change", validatePassword);
-                                                $("#inputrole option[value='4']").remove();
-                                                $("#inputrole option[value='5']").remove();
+            $(function () {
+                $("#inputpassword").on("change", validatePassword);
+                $("#inputcpassword").on("change", validatePassword);
 
-                                                function validatePassword() {
-                                                    var password = $("#inputpassword").val()
-                                                    var confirm_password = $("#inputcpassword").val()
-                                                    if (password != confirm_password && confirm_password !== '') {
-                                                        alert("Passwords Don't Match");
-                                                    }
-                                                }
+                function validatePassword() {
+                    var password = $("#inputpassword").val()
+                    var confirm_password = $("#inputcpassword").val()
+                    if (password != confirm_password && confirm_password !== '') {
+                        alert("Passwords Don't Match");
+                    }
+                }
 
-                                                $('#inputemail').focusout(function () {
-                                                    check('email_address', $('#inputemail').val());
-                                                });
-                                                $('#inputphonenumber').focusout(function () {
-                                                    check('phone_number', $('#inputphonenumber').val());
-                                                });
+                $('#inputemail').focusout(function () {
+                    check('email_address', $('#inputemail').val());
+                });
+                $('#inputphonenumber').focusout(function () {
+                    check('phone_number', $('#inputphonenumber').val());
+                });
 
+                function check(c, d) {
+                    $.post('<?php echo base_url(); ?>Manager/User/checkDuplicateEmail/', {c: c, d: d}, function (resp) {
+                        if (resp == '1') {
+                            alert('exists')
+                        }
+                    });
+                }
 
-
-                                                function check(c, d) {
-                                                    $.post('<?php echo base_url(); ?>Manager/User/checkDuplicateEmail/', {c: c, d: d}, function (resp) {
-                                                        if (resp == '1') {
-                                                            alert('exists')
-                                                        } else {
-
-                                                        }
-                                                    });
-                                                }
-
-
-
-                                                //Add scopes after role is choosen
-                                                $('#inputrole').on('change', function () {
-                                                    var role = $('#inputrole :selected').text()
-                                                    $('#scope_section').empty();
-                                                    $.getJSON('<?php echo base_url(); ?>Manager/User/get_role_scope/' + role, function (data) {
-                                                        if (data.length > 0) {
-                                                            $('#scope_section').html('<div class="form-group"><label for="inputscope" class="col-sm-2 control-label">Scope</label><div class="col-sm-10"><select class="form-control" id="inputscope" name="scope_id" required><option value=" ">Select Scope</option></select></div></div>');
-                                                            $.each(data, function (i, v) {
-                                                                $('#inputscope').append($("<option value='" + v.id + "'>" + v.name + "</option>"));
-                                                            });
-                                                        }
-                                                    });
-                                                });
-                                            });
-                                            function checkScope() {
-                                                var inputscope = $('#inputrole').val();
-                                                if ($('#inputrole').length > 0) {
-                                                    if (inputscope.val() == '') {
-                                                        alert('Scope Cannot be left blank');
-                                                        return false;
-                                                    } else {
-                                                        return true;
-                                                    }
-                                                }
-                                            }
+                //Add scopes after role is choosen
+                $('#inputrole').on('change', function () {
+                    var role = $('#inputrole :selected').text()
+                    $('#scope_section').empty();
+                    //By default make scope required after role chosen
+                    $('#scope_section').html('<div class="form-group"><label for="inputscope" class="col-sm-2 control-label">Scope</label><div class="col-sm-10"><select class="form-control" id="inputscope" name="scope_id" required><option value="">Select Scope</option></select></div></div>');
+                    $.getJSON('<?php echo base_url(); ?>Manager/User/get_role_scope/' + role, function (data) {
+                        if (data.length > 0) {
+                            $.each(data, function (i, v) {
+                                $('#inputscope').append($("<option value='" + v.id + "'>" + v.name + "</option>"));
+                            });
+                        }
+                    });
+                });
+            });
+            function checkScope() {
+                var inputscope = $('#inputrole').val();
+                if ($('#inputrole').length > 0) {
+                    if (inputscope.val() == '') {
+                        alert('Scope Cannot be left blank');
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+            }
         </script>
 
     </body>

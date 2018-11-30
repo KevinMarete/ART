@@ -61,7 +61,7 @@
                             <center>
 					            <a href="<?php echo base_url().'manager/forgot_pass';?>">Forgot your Password?</a><br/>
                                 <a href="<?php echo base_url().'dashboard';?>">Go to Dashboard</a><br/>
-                                <!--<a href="<?php //echo base_url().'manager/register_account';?>">Create an Account?</a><br/>-->
+                                <!--<a href="<?php //echo base_url().'manager/register_account';?>">Create an Account</a>-->
                             </center>
                         </form>
                     </div>

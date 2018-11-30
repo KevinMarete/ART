@@ -21,7 +21,7 @@ class Admin extends MX_Controller {
 
     //function add data to db_table
     public function add_data($table) {
-        // $this->_validate();
+        $this->_validate($table);
         $this->updateSysLogs('Created  (' . $table . ')');
         $this->Admin_model->save($table, $_POST);
     }
@@ -34,7 +34,7 @@ class Admin extends MX_Controller {
 
     //function update data from db_table
     public function update_data($table) {
-        // $this->_validate();
+        $this->_validate($table);
         $id = $this->input->post('id');
         $this->Admin_model->update($table, array('id' => $id), $_POST);
         $this->updateSysLogs('Updated  (' . $table . '> Record ID ' . $id . ')');
@@ -49,112 +49,49 @@ class Admin extends MX_Controller {
     }
 
     //function form validations
-    private function _validate() {
+    private function _validate($table) {
         $data = array();
         $data['error_string'] = array();
         $data['inputerror'] = array();
         $data['status'] = TRUE;
 
-        if ($this->input->post('name') == '' &&
-                ($this->input->post('dhis_code') == '' || $this->input->post('dhis_name') == '' || $this->input->post('dhis_report') == '' || $this->input->post('target_report') == '' || $this->input->post('target_name') == '' || $this->input->post('target_category') == '' || $this->input->post('target_id') == '' ) && ($this->input->post('name') == '' || $this->input->post('value') == '' || $this->input->post('frequency') == '') && ($this->input->post('strength') == '' || $this->input->post('packsize') == '' || $this->input->post('generic_id') == '' || $this->input->post('formulation_id') == '') && ($this->input->post('name') == '' || $this->input->post('mflcode') == '' || $this->input->post('category') == '' || $this->input->post('dhiscode') == '' || $this->input->post('longitude') == '' || $this->input->post('latitude') == '' || $this->input->post('subcounty_id') == '' || $this->input->post('partner_id') == '') && ($this->input->post('name') == '' || $this->input->post('module_id') == '') && ($this->input->post('name') == '' || $this->input->post('abbreviation') == '') && ($this->input->post('facility_id') == '' || $this->input->post('version') == '' || $this->input->post('setup_date') == '' || $this->input->post('upgrade_date') == '' || $this->input->post('user_id') == '') && ($this->input->post('name') == '' || $this->input->post('icon') == '') && ($this->input->post('name') == '' || $this->input->post('code') == '' || $this->input->post('description') == '' || $this->input->post('category_id') == '' || $this->input->post('service_id') == '' || $this->input->post('line_id') == '') && ($this->input->post('drug_id') == '' || $this->input->post('regimen_id') == '') && ($this->input->post('submodule_id') == '') && ($this->input->post('name') == '' || $this->input->post('county_id') == '' )) {
-            //common to many forms
-            $data['inputerror'][] = 'name';
-            $data['error_string'][] = 'Name is required';
-            //dhis elements
-            $data['inputerror'][] = 'dhis_code';
-            $data['error_string'][] = 'Dhis Code is required';
-            $data['inputerror'][] = 'dhis_name';
-            $data['error_string'][] = 'Dhis Name is required';
-            $data['inputerror'][] = 'dhis_report';
-            $data['error_string'][] = 'Dhis Report is required';
-            $data['inputerror'][] = 'target_report';
-            $data['error_string'][] = 'Target Report is required';
-            $data['inputerror'][] = 'target_name';
-            $data['error_string'][] = 'Target Name is required';
-            $data['inputerror'][] = 'target_category';
-            $data['error_string'][] = 'Target category is required';
-            $data['inputerror'][] = 'target_id';
-            $data['error_string'][] = 'Target Elemnet is required';
-            //dose
-            $data['inputerror'][] = 'value';
-            $data['error_string'][] = 'Value is required';
-            $data['inputerror'][] = 'frequency';
-            $data['error_string'][] = 'Frequency is required';
-            //drug
-            $data['inputerror'][] = 'strength';
-            $data['error_string'][] = 'Strength is required';
-            $data['inputerror'][] = 'packsize';
-            $data['error_string'][] = 'Packsize is required';
-            $data['inputerror'][] = 'generic_id';
-            $data['error_string'][] = 'Generic is required';
-            $data['inputerror'][] = 'formulation_id';
-            $data['error_string'][] = 'Formulation is required';
-            //facility
-            $data['inputerror'][] = 'mflcode';
-            $data['error_string'][] = 'MFLcode is required';
-            $data['inputerror'][] = 'category';
-            $data['error_string'][] = 'Category is required';
-            $data['inputerror'][] = 'dhiscode';
-            $data['error_string'][] = 'DhisCode is required';
-            $data['inputerror'][] = 'longitude';
-            $data['error_string'][] = 'Longitude is required';
-            $data['inputerror'][] = 'latitude';
-            $data['error_string'][] = 'Latitude is required';
-            $data['inputerror'][] = 'subcounty_id';
-            $data['error_string'][] = 'Subcounty Name is required';
-            $data['inputerror'][] = 'partner_id';
-            $data['error_string'][] = 'Partner Name is required';
-            //generic
-            $data['inputerror'][] = 'abbreviation';
-            $data['error_string'][] = 'Abbreviation is required';
-            //install
-            $data['inputerror'][] = 'facility_id';
-            $data['error_string'][] = 'Facility Name is required';
-            $data['inputerror'][] = 'version';
-            $data['error_string'][] = 'ADT Version is required';
-            $data['inputerror'][] = 'setup_date';
-            $data['error_string'][] = 'Set Up Date is required';
-            $data['inputerror'][] = 'upgrade_date';
-            $data['error_string'][] = 'UpGrade Date is required';
-            //$data['inputerror'][] = 'contact_name';
-            //$data['error_string'][] = 'Contact Name is required';
-            //$data['inputerror'][] = 'contact_phone';
-            //$data['error_string'][] = 'Contact Phone is required';
-            //$data['inputerror'][] = 'active_patients';
-            //$data['error_string'][] = 'Active Patients is required';
-            $data['inputerror'][] = 'user_id';
-            $data['error_string'][] = 'Assignee Name is required';
-            //module
-            $data['inputerror'][] = 'icon';
-            $data['error_string'][] = 'Icon is required';
-            //regimen
-            $data['inputerror'][] = 'code';
-            $data['error_string'][] = 'Code is required';
-            $data['inputerror'][] = 'description';
-            $data['error_string'][] = 'Description is required';
-            $data['inputerror'][] = 'category_id';
-            $data['error_string'][] = 'Category is required';
-            $data['inputerror'][] = 'service_id';
-            $data['error_string'][] = 'Service Name is required';
-            $data['inputerror'][] = 'line_id';
-            $data['error_string'][] = 'Line Name is required';
-            //regimen_drug
-            $data['inputerror'][] = 'drug_id';
-            $data['error_string'][] = 'Drug is required';
-            $data['inputerror'][] = 'regimen_id';
-            $data['error_string'][] = 'Regimen is required';
-            //subcounty
-            $data['inputerror'][] = 'county_id';
-            $data['error_string'][] = 'County Name is required';
-            //submodule
-            $data['inputerror'][] = 'module_id';
-            $data['error_string'][] = 'Module Name is required';
-            $data['status'] = FALSE;
-            //role submodule
-            $data['inputerror'][] = 'role_id';
-            $data['error_string'][] = 'Role is required';
-            $data['inputerror'][] = 'submodule_id';
-            $data['error_string'][] = 'Submodule is required';
+        $required_inputs = array(
+            'category' => array('name'),
+            'change_reason' => array('name'),
+            'county' => array('name'),
+            'dhis_elements' => array('dhis_code', 'dhis_name', 'dhis_report', 'target_report', 'target_name', 'target_category', 'target_id'),
+            'dose' => array('name', 'value', 'frequency'),
+            'drug' => array('strength', 'packsize', 'generic_id', 'formulation_id', 'drug_category', 'min_mos', 'max_mos', 'amc_months', 'stock_status'),
+            'facility' => array('name', 'mflcode', 'category', 'dhiscode', 'longitude', 'latitude', 'subcounty_id', 'partner_id'),
+            'formulation' => array('name'),
+            'funding_agent' => array('name'),
+            'generic' => array('name', 'abbreviation'),
+            'install' => array('version', 'facility_id', 'setup_date', 'upgrade_date', 'user_id'),
+            'line' => array('name'),
+            'module' => array('name', 'icon'),
+            'partner' => array('name'),
+            'procurement_status' => array('name'),
+            'purpose' => array('name'),
+            'procurement_status' => array('name'),
+            'regimen' => array('name', 'code', 'description', 'category_id', 'service_id', 'line_id'),
+            'regimen_drug' => array('drug_id', 'regimen_id'),
+            'role' =>  array('name'),
+            'role_submodule' => array('role', 'submodule_id'),
+            'service' => array('name'),
+            'status' => array('name'),
+            'subcounty' => array('name', 'county_id'),
+            'submodule' => array('name', 'module_id'),
+            'supplier' => array('name'),
+            'user' => array('firstname', 'lastname', 'email_address', 'phone_number', 'password', 'role', 'scope_id')
+        );
+
+        foreach ($this->input->post() as $key => $value) {
+            $index = str_ireplace('tbl_', '', $table);
+            if(in_array($key, $required_inputs[$index]) && $value == ''){
+                $data['inputerror'][] = $key;
+                $data['error_string'][] = ucwords($key).' is required';
+                $data['status'] = FALSE;
+            }
         }
 
         if ($data['status'] === FALSE) {

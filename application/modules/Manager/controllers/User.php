@@ -48,7 +48,8 @@ class User extends MX_Controller {
     public function get_role_scope($role) {
         error_reporting(0);
         $response = array();
-        if ($role != 'admin' || $role != 'nascop') {
+
+        if (!in_array($role, array('admin', 'nascop'))) {
             $response = $this->db->order_by('name', 'ASC')->get('tbl_' . strtolower($role))->result_array();
             echo json_encode($response);
         } else {

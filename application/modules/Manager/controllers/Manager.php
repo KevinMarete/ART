@@ -18,7 +18,7 @@ class Manager extends MX_Controller {
 
     public function load_page($module = 'user', $page = 'login', $title = 'Login') {
         if ($page == 'register') {
-            $this->db->where_not_in('name', 'admin');
+            $this->db->where_in('name', array('subcounty', 'county'));
             $data['roles'] = $this->db->get('tbl_role')->result_array();
         }
 

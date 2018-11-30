@@ -1,7 +1,6 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-
             <ol class="breadcrumb page-header">
                 <?php if ($this->uri->segment(3) == 'meeting') { ?>
                     <li><a href="<?php echo base_url('manager/procurement/meeting'); ?>">Procurement</a></li>
@@ -23,13 +22,20 @@
                 <div class="panel-heading">
                     <!--Add button controls-->
                     <div class="btn-group" role="group" id="action_btn" aria-label="...">
-                        <button type="button" class="btn btn-default" onclick="add_<?php echo $page_name; ?>()"> <i class="fa fa-plus-square"></i> Add</button>
-                        <button type="button" class="btn btn-default" id="edit_btn" onclick="edit_<?php echo $page_name; ?>()"> <i class="fa fa-edit"></i> Edit</button>
-                        <button type="button" class="btn btn-default" id="del_btn" onclick="delete_<?php echo $page_name; ?>()"> <i class="fa fa-trash"></i> Remove</button>
+                        <button type="button" class="btn btn-default" onclick="add_<?php echo $page_name; ?>()"> 
+                            <i class="fa fa-plus-square"></i> Add
+                        </button>
+                        <button type="button" class="btn btn-default" id="edit_btn" onclick="edit_<?php echo $page_name; ?>()"> 
+                            <i class="fa fa-edit"></i> Edit
+                        </button>
+                        <button type="button" class="btn btn-default" id="del_btn" onclick="delete_<?php echo $page_name; ?>()"> 
+                            <i class="fa fa-trash"></i> Remove
+                        </button>
                         <?php if ($page_name == 'meeting') { ?>
-                            <button type="button" class="btn btn-default" id="view_btn" onclick="view()"> <i class="fa fa-zoom "></i> View</button>
+                            <button type="button" class="btn btn-default" id="view_btn" onclick="view()"> 
+                                <i class="fa fa-zoom "></i> View
+                            </button>
                         <?php } ?>
-                        <br/>
                         <br/>
                         <i class="label label-warning">Click on table row for Edit/Remove</i>
                     </div>
@@ -39,68 +45,41 @@
                     <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-listing">
                         <thead>
                             <tr>
-                                <?php
+                            <?php
+                                $remove_labels = array('created_at', 'updated_at', 'deleted_at');
+                                $skip_pages_names = array('install', 'dhis_elements', 'user');
+                                $replace_labels = array(
+                                    'county_id' => 'County',
+                                    'generic_id' => 'Generic',
+                                    'formulation_id' => 'Formulation',
+                                    'parent_id' => 'parent name',
+                                    'subcounty_id' => 'Subcounty',
+                                    'partner_id' => 'Partner',
+                                    'category_id' => 'Category',
+                                    'service_id' => 'Service',
+                                    'line_id' => 'Line',
+                                    'facility_id' => 'facility name',
+                                    'module_id' => 'module name',
+                                    'submodule_id' => 'submodule',
+                                    'foldername' => 'folder name',
+                                    'firstname' => 'first name',
+                                    'lastname' => 'last name',
+                                    'regimen_id' => 'regimen',
+                                    'drug_id' => 'drug name',
+                                    'role_id' => 'role'
+                                );
                                 foreach ($columns as $column) {
-                                    if ($column == 'county_id') {
-                                        $column = 'County';
+                                    //Replace labels
+                                    if(in_array($column, array_keys($replace_labels))){                                        
+                                        $column = $replace_labels[$column];
                                     }
-                                    if ($column == 'generic_id') {
-                                        $column = 'Generic';
-                                    }
-                                    if ($column == 'formulation_id') {
-                                        $column = 'Formulation';
-                                    }
-                                    if ($column == 'parent_id') {
-                                        $column = 'parent name';
-                                    }
-                                    if ($column == 'subcounty_id') {
-                                        $column = 'Subcounty';
-                                    }
-                                    if ($column == 'partner_id') {
-                                        $column = 'Partner';
-                                    }
-                                    if ($column == 'category_id') {
-                                        $column = 'Category';
-                                    }
-                                    if ($column == 'service_id') {
-                                        $column = 'Service';
-                                    }
-                                    if ($column == 'line_id') {
-                                        $column = 'Line';
-                                    }
-                                    if ($column == 'facility_id') {
-                                        $column = 'facility name';
-                                    }
-                                    if ($column == 'module_id') {
-                                        $column = 'module name';
-                                    }
-                                    if ($column == 'submodule_id') {
-                                        $column = 'submodule';
-                                    }
-                                    if ($column == 'foldername') {
-                                        $column = 'folder name';
-                                    }
-                                    if ($column == 'firstname') {
-                                        $column = 'first name';
-                                    }
-                                    if ($column == 'lastname') {
-                                        $column = 'last name';
-                                    }
-                                    if ($column == 'regimen_id') {
-                                        $column = 'regimen';
-                                    }
-                                    if ($column == 'drug_id') {
-                                        $column = 'drug name';
-                                    }
-                                    if ($column == 'role_id') {
-                                        $column = 'role';
-                                    }
-                                    if ($page_name != 'install' && $page_name != 'dhis_elements' && $page_name != 'user') {
+                                    //Remove '_' to ' ' for all headings except install, dhis_elements and user settings
+                                    if (!in_array($page_name, $skip_pages_names) && !in_array($column, $remove_labels)) {
                                         echo"<th>" . ucwords(str_replace('_', ' ', $column)) . "</th>";
                                     }
                                 }
                                 if ($page_name == 'install') {
-                                    ?>
+                                ?>
                                     <th>ID</th>
                                     <th>Version</th> 
                                     <th>Facility</th> 
@@ -112,10 +91,10 @@
                                     <th>Is Usage</th> 
                                     <th>Is Internet</th> 
                                     <th>Assignee</th> 
-                                    <?php
+                            <?php
                                 }
                                 if ($page_name == 'dhis_elements') {
-                                    ?>
+                                ?>
                                     <th>Id</th>
                                     <th>Code</th>
                                     <th>Dhis Name</th>
@@ -127,14 +106,14 @@
                                     <?php
                                 }
                                 if ($page_name == 'user') {
-                                    ?>
+                                ?>
                                     <th>Id</th>
                                     <th>First Name</th>
                                     <th>Last Name</th>
                                     <th>Email Address</th>
                                     <th>Phone Number</th>
                                     <th>Role</th>
-                                <?php } ?>
+                            <?php } ?>
 
                             </tr>
                         </thead>
@@ -168,11 +147,9 @@ if ($page_name != 'backup') {
     $('#view_btn').prop('disabled', true);
 
     //hide action_btn for table_view backup and user
-<?php if ($page_name == 'backup') { ?>
+    <?php if ($page_name == 'backup') { ?>
         $('#action_btn').hide(true);
-    <?php
-}
-?>
+    <?php } ?>
 
     $(document).ready(function () {
         table = $('#dataTables-listing').DataTable({
@@ -183,8 +160,6 @@ if ($page_name != 'backup') {
             },
         });
     });
-
-
 
     //tr.selected on tbody click
     $('#dataTables-listing tbody').on('click', 'tr', function () {
@@ -212,7 +187,6 @@ if ($page_name != 'backup') {
 
     //function add data to db_table
     function add_<?php echo $page_name; ?>() {
-
         save_method = 'add';
         $('#form')[0].reset();
         $('.form-group').removeClass('has-error');
@@ -248,7 +222,6 @@ if ($page_name != 'backup') {
             allowClear: true,
             dropdownParent: $("#modal_form")
         });
-
     }
 
     //function edit db_table data
@@ -309,7 +282,9 @@ if ($page_name != 'backup') {
                 $('[name="drug_category"]').val(data.drug_category);
                 $('[name="min_mos"]').val(data.min_mos);
                 $('[name="max_mos"]').val(data.max_mos);
+                $('[name="amc_months"]').val(data.amc_months);
                 $('[name="stock_status"]').val(data.stock_status);
+                $('[name="kemsa_code"]').val(data.kemsa_code);
                 //generic
                 $('[name="abbreviation"]').val(data.abbreviation);
                 //meeting
@@ -387,6 +362,8 @@ if ($page_name != 'backup') {
     //function refresh db_table
     function reload_table() {
         table.ajax.reload(null, false);
+        $('#edit_btn').prop('disabled', true);
+        $('#del_btn').prop('disabled', true);
     }
 
     function save() {
@@ -406,7 +383,6 @@ if ($page_name != 'backup') {
             dataType: "JSON",
             success: function (data)
             {
-
                 if (data.status)
                 {
                     $('#modal_form').modal('hide');
@@ -416,14 +392,12 @@ if ($page_name != 'backup') {
                 {
                     for (var i = 0; i < data.inputerror.length; i++)
                     {
-                        $('[name="' + data.inputerror[i] + '"]').parent().parent().addClass('has-error');
+                        $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
                         $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
                     }
                 }
                 $('#btnSave').text('save');
                 $('#btnSave').attr('disabled', false);
-
-
             },
             error: function ()
             {
@@ -437,25 +411,31 @@ if ($page_name != 'backup') {
 
     //function remove data from db_table
     function delete_<?php echo $page_name; ?>() {
-        if (confirm('Are you sure you want to delete this <?php echo str_replace('_', ' ', $page_name); ?>?'))
-        {
 
-            $.ajax({
-                url: "<?php echo base_url('Manager/Admin/delete_data/tbl_' . $page_name); ?>/" + this.selected_id,
-                type: "POST",
-                dataType: "JSON",
-                success: function ()
-                {
-                    swal('<?php echo ucwords(str_replace('_', ' ', $page_name)); ?>', 'deletion success!', 'success');
-                    $('#modal_form').modal('hide');
-                    reload_table();
-                },
-                error: function ()
-                {
-                    swal('Error', 'Error deleting <?php echo str_replace('_', ' ', $page_name); ?>!', 'error');
-                }
-            });
-
-        }
+        swal({
+            title: "Remove Alert",
+            text: "Are you sure, You want to delete this <?php echo str_replace('_', ' ', $page_name); ?>?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                $.ajax({
+                    url: "<?php echo base_url('Manager/Admin/delete_data/tbl_' . $page_name); ?>/" + this.selected_id,
+                    type: "POST",
+                    dataType: "JSON",
+                    success: function ()
+                    {
+                        swal('<?php echo ucwords(str_replace('_', ' ', $page_name)); ?>', 'deletion success!', 'success');
+                        $('#modal_form').modal('hide');
+                        reload_table();
+                    },
+                    error: function ()
+                    {
+                        swal('Error', 'Error deleting <?php echo str_replace('_', ' ', $page_name); ?>!', 'error');
+                    }
+                });
+            }
+        });
     }
 </script>

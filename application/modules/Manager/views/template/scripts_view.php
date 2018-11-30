@@ -1,6 +1,6 @@
-<script src="<?php echo base_url() . 'public/manager/js/tinymce/tinymce.min.js'; ?>"></script
-<!-- Bootstrap Core JavaScript     -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="<?php echo base_url() . 'public/manager/js/tinymce/tinymce.min.js'; ?>"></script>
+<!--Bootstrap Core JavaScript-->
+<script src="<?php echo base_url() . 'public/manager/lib/bootstrap/3.3.7/js/bootstrap.min.js'; ?>"></script>
 <!--highcharts-->
 <script src="<?php echo base_url() . 'public/dashboard/lib/highcharts/js/highcharts.js'; ?>"></script>
 <script src="<?php echo base_url() . 'public/dashboard/lib/highcharts/js/exporting.js'; ?>"></script>
@@ -56,7 +56,9 @@
 
 <script type="text/javascript">
     $(function () {
-        $('.<?= $page_name; ?>').addClass("active-page");
-        $.get("<?= base_url() ?>Manager/procurement/reminder/q");
+    	var sidemenu_class = '.<?php echo $page_name; ?>';
+        $(sidemenu_class).addClass("active-page");
+        $(sidemenu_class).closest('ul').addClass("in"); //Open Collapsed side-menu
+        $.get("<?php echo base_url() ?>Manager/procurement/reminder/q");
     });
 </script>

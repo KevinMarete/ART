@@ -25,7 +25,7 @@ class Admin_model extends CI_Model {
                 $this->db->join('tbl_county c', 'c.id = sc.county_id', 'inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_drug') {
-                $this->db->select('d.id,d.strength,d.packsize,g.name generic,f.name formulation,dc.name category,d.min_mos, d.max_mos,st.name stock_status');
+                $this->db->select('d.id,d.strength,d.packsize,g.name generic,f.name formulation,dc.name category,d.min_mos, d.max_mos, d.amc_months, st.name stock_status, d.kemsa_code');
                 $this->db->from('tbl_drug d');
                 $this->db->join('tbl_generic g', 'g.id=d.generic_id', 'inner');
                 $this->db->join('tbl_formulation f', 'f.id=d.formulation_id', 'inner');
@@ -92,6 +92,10 @@ class Admin_model extends CI_Model {
             }
             if (!empty($table_data)) {
                 foreach ($table_data as $result) {
+                    //Hide log columns
+                    unset($result['created_at']);
+                    unset($result['updated_at']);
+                    unset($result['deleted_at']);
                     $response['data'][] = array_values($result);
                 }
                 $response['message'] = 'Table data was found!';
@@ -109,7 +113,6 @@ class Admin_model extends CI_Model {
 
     //function save data to database
     public function save($table, $data) {
-
         if ($table == 'tbl_user') {
             (int) $role = $this->input->post('role');
             $user_array = [
