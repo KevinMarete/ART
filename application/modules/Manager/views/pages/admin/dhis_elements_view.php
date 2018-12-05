@@ -49,7 +49,7 @@
                             <label class="control-label col-md-3">Target Category</label>
                             <div class="col-md-9">
                                 <select name="target_category" id="target_category" class="form-control select2" type="text">
-                                    <option value="">--Select category--</option>
+                                    <option value="">Select Category</option>
                                     <option value="drug">Drug</option>
                                     <option value="regimen">Regimen</option>
                                 </select>
@@ -83,17 +83,17 @@
     $('#target_category').on('change', function () {
         if (this.value == 'drug')
         {
-            $("#target_id").empty()
+            $("#target_id").empty();
             $.getJSON(categoryURL, function (drugs) {
-                $("#target_id").append($("<option value=''>--Select Drug--</option>"));
+                $("#target_id").append($("<option value=''>Select Drug</option>"));
                 $.each(drugs, function (index, category) {
                     $("#target_id").append($("<option value='" + category.id + "'>" + category.name.toUpperCase() + "</option>"));
                 });
             });
         } else {
-            $("#target_id").empty()
+            $("#target_id").empty();
             $.getJSON(regimenURL, function (regimens) {
-                $("#target_id").append($("<option value=''>--Select Regimen--</option>"));
+                $("#target_id").append($("<option value=''>Select Regimen</option>"));
                 $.each(regimens, function (index, regimen) {
                     $("#target_id").append($("<option value='" + regimen.id + "'>" + regimen.name.toUpperCase() + "</option>"));
                 });

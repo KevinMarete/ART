@@ -231,6 +231,9 @@ if ($page_name != 'backup') {
         $('.form-group').removeClass('has-error');
         $('.help-block').empty();
 
+        //Remove required class on all DIVs
+        $('div').removeClass('has-error');
+
         //Get all facilities
         var facilityURL = '<?= base_url(); ?>API/facility';
         $.getJSON(facilityURL, function (facilities) {
@@ -383,23 +386,28 @@ if ($page_name != 'backup') {
             dataType: "JSON",
             success: function (data)
             {
-                if (data.status)
-                {
+                if (data.status){
                     $('#modal_form').modal('hide');
                     swal('<?php echo ucwords(str_replace('_', ' ', $page_name)); ?>', 'Add/updation success!', 'success');
                     reload_table();
-                } else
-                {
-                    for (var i = 0; i < data.inputerror.length; i++)
-                    {
-                        $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
-                        $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
-                    }
+                }else{
+                    if(data.message){
+                        swal('Error', data.message, 'error');
+                    }else{
+                        for (var i = 0; i < data.inputerror.length; i++)
+                        {
+                            $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
+                            $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
+                        }
+                        //Show required labels in select2
+                        $('.select2').removeClass('select2-hidden-accessible');
+                        $('span.select2-container').css('color', '#a94442');//red color for required
+                    } 
                 }
                 $('#btnSave').text('save');
                 $('#btnSave').attr('disabled', false);
             },
-            error: function ()
+            error: function (data)
             {
                 swal('Error', 'Error adding / updating <?php echo str_replace('_', ' ', $page_name); ?>', 'error');
                 $('#btnSave').text('save');

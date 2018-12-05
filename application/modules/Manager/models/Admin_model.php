@@ -124,26 +124,38 @@ class Admin_model extends CI_Model {
                 'password' => md5($this->input->post('password'))
             ];
 
-            $this->db->insert($table, $user_array);
-            $id = $this->db->insert_id();
+            //Check duplicate
+            $row_count = $this->db->get_where($table, $user_array)->num_rows();
+            if($row_count == 0){
+                $this->db->insert($table, $user_array);
+                $id = $this->db->insert_id();
 
-
-            $scope_array = [
-                'scope_id' => $this->input->post('scope_id'),
-                'role_id' => $this->input->post('role'),
-                'user_id' => $id
-            ];
-            if ($role == 5 || $role == 1 || $role == 4) {
-                
-            } else {
-                $this->db->insert($table . '_scope', $scope_array);
+                $scope_array = [
+                    'scope_id' => $this->input->post('scope_id'),
+                    'role_id' => $this->input->post('role'),
+                    'user_id' => $id
+                ];
+                if($role == 5 || $role == 1 || $role == 4) {
+                    
+                }else {
+                    $this->db->insert($table . '_scope', $scope_array);
+                }
+                $response = array('status' => TRUE, 'message' => 'Success! '.ucwords(str_ireplace('tbl_', '', $table)).' was saved successfully!');
+            }else{
+                $response = array('status' => FALSE, 'message' => 'Failed! Duplicate record exists!');
             }
         } else {
             unset($data['id']);
-            $this->db->insert($table, $data);
+            //Check duplicate
+            $row_count = $this->db->get_where($table, $data)->num_rows();
+            if($row_count == 0){
+                $this->db->insert($table, $data);
+                $response = array('status' => TRUE, 'message' => 'Success! '.ucwords(str_ireplace('tbl_', '', $table)).' was saved successfully!');
+            }else{
+                $response = array('status' => FALSE, 'message' => 'Failed! Duplicate record exists!');
+            }
         }
-        //echo $this->db->last_query();
-        echo json_encode(array("status" => TRUE));
+        return $response;
     }
 
     //function get_by_id
@@ -158,28 +170,44 @@ class Admin_model extends CI_Model {
     public function update($table, $where, $data) {
         if ($table == 'tbl_user') {
             $role = $this->input->post('role');
-            $user_array = [
+            $user_array = array(
                 'firstname' => $this->input->post('firstname'),
                 'lastname' => $this->input->post('lastname'),
                 'email_address' => $this->input->post('email_address'),
                 'phone_number' => $this->input->post('phone_number'),
                 'role_id' => $this->input->post('role'),
                 'password' => md5($this->input->post('password'))
-            ];
-            $this->db->update($table, $user_array, $where);
-            $scope_array = [
-                'scope_id' => $this->input->post('scope_id'),
-                'role_id' => $this->input->post('role'),
-            ];
-            if ($role == 5 || $role == 1 || $role == 4) {
-                
-            } else {
-                $this->db->update($table . '_scope', $scope_array, ['user_id' => $this->input->post('id')]);
+            );
+
+            //Check duplicate
+            $row_count = $this->db->get_where($table, $user_array)->num_rows();
+            if($row_count == 0){
+                $this->db->update($table, $user_array, $where);
+                //Ensure role is chosen within scope
+                if($this->input->post('scope_id')){
+                    $scope_array = array(
+                        'scope_id' => $this->input->post('scope_id'),
+                        'role_id' => $this->input->post('role')
+                    );
+                    $this->db->update('tbl_user_scope', $scope_array, array('user_id' => $this->input->post('id')));
+                }
+                $response = array('status' => TRUE, 'message' => 'Success! '.ucwords(str_ireplace('tbl_', '', $table)).' was updated successfully!');
+            }else{
+                $response = array('status' => FALSE, 'message' => 'Failed! Duplicate record exists!');
             }
         } else {
-            $this->db->update($table, $data, $where);
+            //Check duplicate
+            $filter_array = $data;
+            unset($filter_array['id']);
+            $row_count = $this->db->get_where($table, $filter_array)->num_rows();
+            if($row_count == 0){
+                $this->db->update($table, $data, $where);
+                $response = array('status' => TRUE, 'message' => 'Success! '.ucwords(str_ireplace('tbl_', '', $table)).' was updated successfully!');
+            }else{
+                $response = array('status' => FALSE, 'message' => 'Failed! Duplicate record exists!');
+            }
         }
-        return $this->db->affected_rows();
+        return $response;
     }
 
     //function delete from db_table

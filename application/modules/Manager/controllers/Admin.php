@@ -22,8 +22,11 @@ class Admin extends MX_Controller {
     //function add data to db_table
     public function add_data($table) {
         $this->_validate($table);
-        $this->updateSysLogs('Created  (' . $table . ')');
-        $this->Admin_model->save($table, $_POST);
+        $response = $this->Admin_model->save($table, $_POST);
+        if($response['status']){
+            $this->updateSysLogs('Created  (' . $table . ')');
+        }
+        echo json_encode($response);
     }
 
     //function edit data from db_table
@@ -36,9 +39,11 @@ class Admin extends MX_Controller {
     public function update_data($table) {
         $this->_validate($table);
         $id = $this->input->post('id');
-        $this->Admin_model->update($table, array('id' => $id), $_POST);
-        $this->updateSysLogs('Updated  (' . $table . '> Record ID ' . $id . ')');
-        echo json_encode(array("status" => TRUE));
+        $response = $this->Admin_model->update($table, array('id' => $id), $_POST);
+        if($response['status']){
+            $this->updateSysLogs('Updated  (' . $table . '> Record ID ' . $id . ')');
+        }
+        echo json_encode($response);
     }
 
     //function delete from db_table
@@ -62,7 +67,7 @@ class Admin extends MX_Controller {
             'dhis_elements' => array('dhis_code', 'dhis_name', 'dhis_report', 'target_report', 'target_name', 'target_category', 'target_id'),
             'dose' => array('name', 'value', 'frequency'),
             'drug' => array('strength', 'packsize', 'generic_id', 'formulation_id', 'drug_category', 'min_mos', 'max_mos', 'amc_months', 'stock_status'),
-            'facility' => array('name', 'mflcode', 'category', 'dhiscode', 'longitude', 'latitude', 'subcounty_id', 'partner_id'),
+            'facility' => array('name', 'mflcode', 'category', 'subcounty_id', 'partner_id', 'parent_id'),
             'formulation' => array('name'),
             'funding_agent' => array('name'),
             'generic' => array('name', 'abbreviation'),

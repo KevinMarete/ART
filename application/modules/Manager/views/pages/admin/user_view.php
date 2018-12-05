@@ -13,10 +13,12 @@
                         <label for="inputfirstname" class="col-sm-2 control-label">Firstname</label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="inputfirstname" placeholder="Firstname" name="firstname" required>
+                            <span class="help-block"></span>
                         </div>
                         <label for="inputlastname" class="col-sm-2 control-label">Lastname</label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="inputlastname" placeholder="Lastname" name="lastname" required>
+                            <span class="help-block"></span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -24,19 +26,20 @@
                         <div class="col-sm-10">
                             <input type="email" class="form-control" id="inputemail" placeholder="Email Address" name="email_address" required>
                             <span class="emailerror" style="color: red; font-weight: bold; display: none;">Invalid email address!</span>
+                            <span class="help-block"></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="inputphonenumber" class="col-sm-2 control-label">Phone</label>
                         <div class="col-sm-10">
                             <input type="number" class="form-control" id="inputphonenumber" placeholder="2547XXXXXXXX" name="phone_number" required>
+                            <span class="help-block"></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="inputrole" class="col-sm-2 control-label">Role</label>
                         <div class="col-sm-10">                          
-                            <select name="role" id="role" class="form-control select2">
-                            </select>
+                            <select name="role" id="role" class="form-control select2"></select>
                             <span class="help-block"></span>
                         </div>
                     </div>                    
@@ -46,6 +49,7 @@
                         <label for="inputpassword" class="col-sm-2 control-label">Password</label>
                         <div class="col-sm-10">
                             <input type="password" class="form-control" id="inputpassword" placeholder="Password" name="password" required>
+                            <span class="help-block"></span>
                         </div>
                     </div>
                     <div class="form-group">
