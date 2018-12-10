@@ -74,8 +74,6 @@
 
 <script type="text/javascript">
     $(function () {
-        //   $('#btnSave').prop('disabled','disabled');
-
         var roleURL = '../../API/Role';
         $("#role").empty();
         $.getJSON(roleURL, function (role) {
@@ -113,11 +111,10 @@
         $('#role').on('change', function () {
             var role = $('#role :selected').text()
             $('#scope_section').empty();
-            //Ensure scope is required when role is selected
-            $('#scope_section').html('<div class="form-group"><label for="inputscope" class="col-sm-2 control-label">Scope</label><div class="col-sm-10"><select class="form-control" id="inputscope" name="scope_id"><option value="">Select Scope</option></select></div></div>');
             $.getJSON("<?= base_url(); ?>Manager/User/get_role_scope/" + role, function (data) {
                 if (data.length > 0) {
-                    $("#inputscope").prop('required',true);
+                    //Ensure scope is required when role is selected
+                    $('#scope_section').html('<div class="form-group"><label for="inputscope" class="col-sm-2 control-label">Scope</label><div class="col-sm-10"><select class="form-control" id="inputscope" name="scope_id" required><option value="">Select Scope</option></select></div></div>');
                     $.each(data, function (i, v) {
                         $('#inputscope').append($("<option value='" + v.id + "'>" + v.name.toUpperCase() + "</option>"));
                     });
@@ -131,10 +128,8 @@
         var confirm_password = $("#inputcpassword").val()
         if (password != confirm_password && confirm_password !== '') {
             $('.passerror').show();
-            //  $('#btnSave').prop('disabled',false);
         } else {
             $('.passerror').hide();
-            // $('#btnSave').prop('disabled','disabled');
         }
     }
 
