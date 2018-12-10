@@ -49,7 +49,7 @@ class User extends MX_Controller {
         error_reporting(0);
         $response = array();
 
-        if (!in_array($role, array('admin', 'nascop'))) {
+        if (!in_array(strtolower($role), array('admin', 'nascop', 'kemsa'))) {
             $response = $this->db->order_by('name', 'ASC')->get('tbl_' . strtolower($role))->result_array();
             echo json_encode($response);
         } else {
