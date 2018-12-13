@@ -86,6 +86,7 @@ $route['manager/procurement/minute/(:any)/(:any)'] = 'Manager/load_template/minu
 $route['manager/procurement/commodity'] = 'Manager/load_template/procurement/commodity/Procurement Commodities/0';
 $route['manager/procurement/meeting'] = 'Manager/load_template/procurement/meeting/Procurement Meeting/0';
 $route['manager/procurement/meeting/(:any)/(:any)'] = 'Manager/load_template/procurement/minute/Procurement Meeting Minute/0';
+$route['manager/procurement/meeting/(:any)/(:any)/(:any)'] = 'Manager/load_template/procurement/minute/Procurement Meeting Minute Edit/0';
 $route['manager/procurement/tracker'] = 'Manager/load_template/procurement/tracker/Procurement Tracker/0';
 $route['manager/save_procurement'] = 'Manager/procurement/save_tracker';
 $route['manager/public/minute/(:any)'] = 'Manager/load_page/public/minute/Minute';

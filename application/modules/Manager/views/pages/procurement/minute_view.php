@@ -384,7 +384,7 @@
                                 <tbody id="MINUTEBODY">               
                                 </tbody>
                             </table>             
-                            <p id="AOB">This is AOB Section</p>                     
+                            <p id="AOB" >This is AOB Section</p>                     
                         </div>
                     </div>
 
@@ -402,8 +402,11 @@
         $(document).ready(function () {
 
             meeting_id = "<?php echo $this->uri->segment(5); ?>";
+            
+
             meeting_date = '';
             drug_id = '';
+            loadMinute(meeting_id);
             loadMembers();
             $.getJSON("<?php echo base_url(); ?>Manager/Procurement/loadMeetingDate/" + meeting_id, function (resp) {
                 meeting_date = resp[0].meeting_date;
@@ -458,6 +461,14 @@
 
 
         });
+
+        function loadMinute(id) {
+            $.getJSON('<?php echo base_url(); ?>Manager/Procurement/loadMinute/' + id, function (resp) {
+                tinymce.get('Meeting_start').setContent(resp[0].start);
+                tinymce.get('Aob').setContent(resp[0].aob);
+
+            });
+        }
 
 
         function loadMembers() {
@@ -705,7 +716,10 @@
 
         saveMinute = function (data, id) {
             var spinHandle = loadingOverlay.activate();
-            $.post('<?php echo base_url(); ?>Manager/Procurement/updateMinutes/' + id, {minute: data}, function () {
+            meeting_start = tinymce.get('Meeting_start').getContent();
+            aob = tinymce.get('Aob').getContent();
+
+            $.post('<?php echo base_url(); ?>Manager/Procurement/updateMinutes/' + id, {minute: data, start: meeting_start, aob: aob}, function () {
                 loadingOverlay.cancel(spinHandle);
                 swal({
                     title: "Minute Saved",

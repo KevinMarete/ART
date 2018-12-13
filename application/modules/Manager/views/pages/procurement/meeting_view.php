@@ -53,7 +53,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Procurement Meeting</h4>
+                    <h4 class="modal-title">Procurement Minutes</h4>
                 </div>
                 <div class="modal-body" style="padding: 10px;">
                     <div class="row" style="margin: 5px;">
@@ -72,7 +72,16 @@
 
                             </td>
                             <td>
-                                <button type="button" data-minute='' id='viewMinutes' style="margin-right: 10px; display:none" class="btn btn-primary" >View Minutes</button>
+                                <div class="row col-md-12">
+                                    <div class="col-md-6">
+                                        <button type="button" data-minute='' id='viewMinutes' style="display:none" class="btn btn-primary" >View Minute </button>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button type="button"  id='editMinutes' style=" display:none" class="btn btn-warning" >Edit Minute</button>
+
+                                    </div>
+                                </div>
 
                             </td>
                         </tr>
@@ -90,7 +99,6 @@
 
     $(document).ready(function () {
         starter = '', ender = '', dataid = '';
-
         $('.timepicker').timepicker({
             timeFormat: 'h:mm p',
             interval: 60,
@@ -102,10 +110,6 @@
             dropdown: true,
             scrollbar: true
         });
-
-
-
-
         var calendar = $('#calendar').fullCalendar({
             editable: true,
             header: {
@@ -120,15 +124,12 @@
             {
                 starter = start;
                 ender = end;
-
                 // if (start.isBefore(moment().subtract(1, "days"))) {
                 // $('#calendar').fullCalendar('unselect');
                 // return false;
                 // }
 
                 $("#myModal").modal();
-
-
             },
             editable: true,
             eventResize: function (event)
@@ -147,7 +148,6 @@
                     }
                 })
             },
-
             eventDrop: function (event)
             {
                 var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
@@ -165,7 +165,6 @@
                     }
                 });
             },
-
             eventClick: function (event) {
 
                 dataid = event.id;
@@ -175,6 +174,7 @@
                         $('#saveEdit').css('display', 'none');
                         $('#startMeeting').css('display', 'none');
                         $('#viewMinutes').css('display', 'block');
+                        $('#editMinutes').css('display', 'block');
                         $('.venue').prop('readonly', true);
                     } else {
                         $('#saveEdit').css('display', 'block');
@@ -187,11 +187,26 @@
             }
 
         });
-
         $('#viewMinutes').click(function () {
             window.open('<?php echo base_url(); ?>manager/public/minute/' + dataid, '_blank');
         });
+        $('#editMinutes').click(function () {
 
+            $.getJSON("<?php echo base_url() . 'Manager/Procurement/loadMonthYear/'; ?>" + dataid, function (resp) {
+                php = "<?php echo date('m-Y'); ?>";
+                date = resp[0].meeting_date;
+                if (date !== php) {
+                    swal({
+                        title: "Action Denied",
+                        text: "You cannot Edit this minute. Editing period is closed.",
+                        icon: "error",
+                    });
+                }else{
+                    window.location.href='<?php echo base_url(); ?>manager/procurement/meeting/minute/' + dataid;
+                }
+            });
+            
+        });
         $('#saveSchedule').click(function () {
             var venue = $('#venue').val();
             var start = $.fullCalendar.formatDate(starter, "Y-MM-DD 09:00:00");
@@ -212,8 +227,6 @@
                 }
             });
         });
-
-
         $('#saveEdit').click(function () {
             var venue = $('.venue').val();
             $.ajax({
@@ -231,19 +244,16 @@
                 }
             });
         });
-
         $('#startMeeting').click(function () {
             $.ajax({
                 url: "<?php echo base_url(); ?>Manager/Procurement/minuteAdd/" + dataid,
                 type: "GET",
                 success: function ()
                 {
-                    window.location.href = "<?php echo base_url(); ?>manager/procurement/meeting/minute/"+dataid
+                    window.location.href = "<?php echo base_url(); ?>manager/procurement/meeting/minute/" + dataid
                 }
             });
         });
-
-
     });
 
     /*var secondthursday='';

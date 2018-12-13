@@ -35,6 +35,11 @@ class Procurement extends MX_Controller {
         $this->response($query);
     }
 
+    function loadMinute($id) {
+        $query = $this->db->query("SELECT * FROM tbl_minutes WHERE meeting_id ='$id'")->result();
+        $this->response($query);
+    }
+
     function saveEvent() {
         $title = $this->input->post('title');
         $venue = $this->input->post('venue');
@@ -143,11 +148,18 @@ class Procurement extends MX_Controller {
         $date = $this->db->query("SELECT DATE_FORMAT(start_event,'%d/%m/%Y') meeting_date FROM tbl_meetings WHERE id='$id'")->result();
         $this->response($date);
     }
+    
+     function loadMonthYear($id) {
+        $date = $this->db->query("SELECT DATE_FORMAT(start_event,'%m-%Y') meeting_date FROM tbl_meetings WHERE id='$id'")->result();
+        $this->response($date);
+    }
 
     function updateMinutes($id) {
         header("Cache-Control: no-cache,no-store");
+        $start = $this->input->post('start');
+        $aob = $this->input->post('aob');
         $minute = htmlentities($this->input->post('minute'));
-        $this->db->where('meeting_id', $id)->update('tbl_minutes', ['minute' => trim($minute)]);
+        $this->db->where('meeting_id', $id)->update('tbl_minutes', ['minute' => trim($minute), 'start' => trim(strip_tags($start)), 'aob' => trim(strip_tags($aob))]);
         $this->response(['status' => 'success']);
     }
 
