@@ -908,7 +908,7 @@ class Procurement extends MX_Controller {
     <td class="tdata tg-0pky col-12">' . @$this->rv($column['status'][2][11]['quantity']) . '</td>
   </tr>
     <tr>
-    <td class="tg-0pky"><strong>Expected</strong></td>
+    <td class="tg-0pky"><strong>Call Down</strong></td>
     <td class="tdata tg-0pky col-1">' . @$this->rv($column['expected'][0]['quantity']) . ' </td>
     <td class="tdata tg-0pky col-2">' . @$this->rv($column['expected'][1]['quantity']) . '</td>
     <td class="tdata tg-0pky col-3">' . @$this->rv($column['expected'][2]['quantity']) . '</td>
