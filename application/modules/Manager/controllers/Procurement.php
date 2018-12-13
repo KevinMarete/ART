@@ -892,6 +892,21 @@ class Procurement extends MX_Controller {
     <td class="tdata tg-0pky col-11">' . @$this->rv($column['status'][1][10]['quantity']) . '</td>
     <td class="tdata tg-0pky col-12">' . @$this->rv($column['status'][1][11]['quantity']) . '</td>
   </tr>
+   <tr>
+    <td class="tg-0pky"><strong>Call Down</strong></td>
+    <td class="tdata tg-0pky col-1">' . @$this->rv($column['expected'][0]['quantity']) . ' </td>
+    <td class="tdata tg-0pky col-2">' . @$this->rv($column['expected'][1]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-3">' . @$this->rv($column['expected'][2]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-4">' . @$this->rv($column['expected'][3]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-5">' . @$this->rv($column['expected'][4]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-6">' . @$this->rv($column['expected'][5]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-7">' . @$this->rv($column['expected'][6]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-8">' . @$this->rv($column['expected'][7]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-9">' . @$this->rv($column['expected'][8]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-10">' . @$this->rv($column['expected'][9]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-11">' . @$this->rv($column['expected'][10]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-12">' . @$this->rv($column['expected'][11]['quantity']) . '</td>
+  </tr>
   <tr>
     <td class="tg-0pky"><strong>Received</strong></td>
     <td class="tdata tg-0pky col-1">' . @$this->rv($column['status'][2][0]['quantity']) . ' </td>
@@ -907,21 +922,7 @@ class Procurement extends MX_Controller {
     <td class="tdata tg-0pky col-11">' . @$this->rv($column['status'][2][10]['quantity']) . '</td>
     <td class="tdata tg-0pky col-12">' . @$this->rv($column['status'][2][11]['quantity']) . '</td>
   </tr>
-    <tr>
-    <td class="tg-0pky"><strong>Call Down</strong></td>
-    <td class="tdata tg-0pky col-1">' . @$this->rv($column['expected'][0]['quantity']) . ' </td>
-    <td class="tdata tg-0pky col-2">' . @$this->rv($column['expected'][1]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-3">' . @$this->rv($column['expected'][2]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-4">' . @$this->rv($column['expected'][3]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-5">' . @$this->rv($column['expected'][4]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-6">' . @$this->rv($column['expected'][5]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-7">' . @$this->rv($column['expected'][6]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-8">' . @$this->rv($column['expected'][7]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-9">' . @$this->rv($column['expected'][8]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-10">' . @$this->rv($column['expected'][9]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-11">' . @$this->rv($column['expected'][10]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-12">' . @$this->rv($column['expected'][11]['quantity']) . '</td>
-  </tr>
+   
   <tr>
     <td class="tg-0pky" colspan="2"><strong>Issues to Facility</strong></td>
     <td class="tdata tg-0pky col-1">' . @$this->rv($column['tracker'][0]['issues_kemsa']) . '</td>
