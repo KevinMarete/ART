@@ -464,6 +464,7 @@
 
         function loadMinute(id) {
             $.getJSON('<?php echo base_url(); ?>Manager/Procurement/loadMinute/' + id, function (resp) {
+                console.log(resp[0].start)
                 tinymce.get('Meeting_start').setContent(resp[0].start);
                 tinymce.get('Aob').setContent(resp[0].aob);
 
