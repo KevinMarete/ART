@@ -406,7 +406,7 @@
 
             meeting_date = '';
             drug_id = '';
-            loadMinute(meeting_id);
+           
             loadMembers();
             $.getJSON("<?php echo base_url(); ?>Manager/Procurement/loadMeetingDate/" + meeting_id, function (resp) {
                 meeting_date = resp[0].meeting_date;
@@ -422,6 +422,8 @@
                 image_advtab: true
 
             });
+            
+             loadMinute(meeting_id);
 
             $('#addMember').click(function () {
                 list = $('#lstBox1');
