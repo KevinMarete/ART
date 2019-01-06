@@ -195,17 +195,19 @@
             $.getJSON("<?php echo base_url() . 'Manager/Procurement/loadMonthYear/'; ?>" + dataid, function (resp) {
                 php = "<?php echo date('m-Y'); ?>";
                 date = resp[0].meeting_date;
+                window.location.href = '<?php echo base_url(); ?>manager/procurement/meeting/minute/' + dataid;
+
                 if (date !== php) {
-                    swal({
+                    /*swal({
                         title: "Action Denied",
                         text: "You cannot Edit this minute. Editing period is closed.",
                         icon: "error",
-                    });
-                }else{
-                    window.location.href='<?php echo base_url(); ?>manager/procurement/meeting/minute/' + dataid;
+                    });*/
+                } else {
+                    window.location.href = '<?php echo base_url(); ?>manager/procurement/meeting/minute/' + dataid;
                 }
             });
-            
+
         });
         $('#saveSchedule').click(function () {
             var venue = $('#venue').val();

@@ -42,6 +42,19 @@ $config['drug_consumption_allocation_trend_chart_filters_default'] = array(
 	'drug' => $config['drug']
 );
 
+//issues against consumption
+$config['issues_consumption_chart_chartview'] = 'pages/dashboard/charts/issues_consumption_view';
+$config['issues_consumption_chart_title'] = 'Issues / Consumption Trend';
+$config['issues_consumption_yaxis_title'] = 'Average Issues Against Consumption';
+$config['issues_consumption_chart_source'] = 'Source: www.commodities.nascop.org';
+$config['issues_consumption_chart_has_drilldown'] = FALSE;
+$config['issues_consumption_chart_filters'] = array('data_date', 'county', 'sub_county', 'facility', 'drug');
+$config['issues_consumption_chart_filters_default'] = array(
+	'data_date' => $config['data_date'],
+	'drug' => $config['drug']
+);
+
+
 //stock_status_trend_chart
 $config['stock_status_trend_chart_chartview'] = 'pages/dashboard/charts/combined_column_line_view_1';
 $config['stock_status_trend_chart_title'] = 'Stock On Hand / Months Of Stock (MOS) Trend';

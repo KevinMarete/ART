@@ -1,3 +1,10 @@
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css">
+<style>
+    .AVGISCON td:nth-child(2),td:nth-child(3) {
+        text-align: right;
+        font-weight: bold;
+    } 
+</style>
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
@@ -49,7 +56,7 @@
             </div>      
         </div>
     </div><!--/filter-row-->
-    
+
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
@@ -65,7 +72,7 @@
                         </div>
                         <!-- /.panel-body -->
                         <div class="panel-footer">
-                        	<span class="reporting_rates_chart_heading heading"></span>
+                            <span class="reporting_rates_chart_heading heading"></span>
                         </div>
                     </div>
                 </div>
@@ -80,7 +87,7 @@
                         </div>
                         <!-- /.panel-body -->
                         <div class="panel-footer">
-                        	<span class="patients_by_regimen_chart_heading heading"></span>
+                            <span class="patients_by_regimen_chart_heading heading"></span>
                         </div>
                     </div>
                 </div>
@@ -88,6 +95,7 @@
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             <i class="fa fa-clock-o fa-fw"></i> Drug Consumption and Allocation Trend
+                            <a href="#AvgIssues" class="btn btn-sm btn-primary pull-right"  data-toggle="modal" data-target="#advancedIssuesModal">Average Issues / Consumption</a>
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -119,30 +127,30 @@
                         <div class="panel-heading">
                             <i class="fa fa-clock-o fa-fw"></i> Low MOS Commodities in Facilities
                         </div>
-                       	<!-- /.panel-heading -->
+                        <!-- /.panel-heading -->
                         <div class="panel-body">
-                        	<div id="low_mos_commodity_table"></div>
+                            <div id="low_mos_commodity_table"></div>
                         </div>
                         <!-- /.panel-body -->
                         <div class="panel-footer">
-                        	<span class="low_mos_commodity_table_heading heading"></span>
+                            <span class="low_mos_commodity_table_heading heading"></span>
                         </div>
-                   </div>
+                    </div>
                 </div>
                 <div class="col-lg-12 col-md-12">
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             <i class="fa fa-clock-o fa-fw"></i> High MOS Commodities in Facilities
                         </div>
-                       	<!-- /.panel-heading -->
+                        <!-- /.panel-heading -->
                         <div class="panel-body">
-                        	<div id="high_mos_commodity_table"></div>
+                            <div id="high_mos_commodity_table"></div>
                         </div>
                         <!-- /.panel-body -->
                         <div class="panel-footer">
-                        	<span class="high_mos_commodity_table_heading heading"></span>
+                            <span class="high_mos_commodity_table_heading heading"></span>
                         </div>
-                   </div>
+                    </div>
                 </div>
             </div>
             <!-- /.row -->
@@ -171,15 +179,15 @@
                     <div class="form-group">
                         <select class="form-control drug subcounty_default county_default nascop_default hidden filter_item" data-item="drug" name="drug" size="2"></select>
                     </div>
-					<div class="form-group">
-						<select class="form-control county nascop_default hidden filter_item" data-item="county" name="county" multiple="multiple"></select>
-					</div>
-					<div class="form-group">
-						<select class="form-control sub_county county_default hidden filter_item" data-item="sub_county" name="sub_county" multiple="multiple"></select>
-					</div>
-					<div class="form-group">
-						<select class="form-control facility subcounty_default hidden filter_item" data-item="facility" name="facility" multiple="multiple"></select>
-					</div>
+                    <div class="form-group">
+                        <select class="form-control county nascop_default hidden filter_item" data-item="county" name="county" multiple="multiple"></select>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control sub_county county_default hidden filter_item" data-item="sub_county" name="sub_county" multiple="multiple"></select>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control facility subcounty_default hidden filter_item" data-item="facility" name="facility" multiple="multiple"></select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal"  class="btn btn-warning" id="advFilter" ><i class="fa fa-filter"></i> Filter</button>
@@ -189,5 +197,114 @@
 
     </div>
 </div>
+
+<div id="advancedIssuesModal" class="modal fade modal-lg" style="width:100%">
+    <div class="modal-dialog">
+        <input id="filterStatus" type="hidden"/>
+        <!-- Filter Modal-->
+        <div class="modal-content">
+            <form id="AvgForm">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><b>Commodity Average Issues & Consumption List</b></h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="scope_id" value="<?php echo $this->session->userdata('scope'); ?>"/>
+                    <input type="hidden" id="scope" value="<?php echo $this->session->userdata('scope_name'); ?>"/>
+                    <input type="hidden" id="role" value="<?php echo $this->session->userdata('role'); ?>"/>
+
+
+                    <div class="form-group col-lg-6">
+                        <label>Year-Month From:</label>
+                        <input type="text" name="from" id="from"  value="2018-01" class="form-control DatePickers"  placeholder="From">
+                    </div>
+
+                    <div class="form-group col-lg-6">
+                        <label>Year-Month To:</label>
+                        <input type="text" name="to" id="to" value="2018-12" class="form-control DatePickers" placeholder="To">
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <select class="form-control drug subcounty_default county_default nascop_default hidden filter_item" multiple="multiple" data-item="drug" name="drug[]" size="2"></select>
+
+                    </div>
+
+
+                    <div class="form-group col-lg-12">
+                        <center><span class="badge badge-info"></span></center>
+                    </div>
+
+
+                    <div class="form-group col-lg-12">
+                        <table class="table table-bordered table-condensed AVGISCON table-hover table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Commodity</th>
+                                    <th>Issues</th>
+                                    <th>Consumption</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-lg" id="avgFilterForm" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing Results"><i class="fa fa-filter"></i> Filter</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
 <!--dashboard-->
-<script type="text/javascript" src="<?php echo base_url().'public/manager/js/dashboard.js';?>"></script>
+<script type="text/javascript" src="<?php echo base_url() . 'public/manager/js/dashboard.js'; ?>"></script>
+<script>
+    $(function () {
+        var d = new Date();
+        year = d.getFullYear();
+        monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        // table = $('.AVGISCON').DataTable();
+        $(".DatePickers").monthpicker({
+            pattern: 'yyyy-mm',
+            selectedYear: year,
+            startYear: 2017,
+            finalYear: year
+        });
+
+        $('#avgFilterForm').click(function () {
+            from = $('#from').val();
+            to = $('#to').val();
+            monthfrom = parseInt(from.substr(-2)) - 1;
+            monthto = parseInt(to.substr(-2)) - 1;           
+            yearfrom = from.substr(0, 4);
+            yearto = to.substr(0, 4);
+            period = monthNames[monthfrom] + " " + yearfrom + " and " + monthNames[monthto] + " " + yearto;
+            $('.badge-info').text('');
+            $('.badge-info').text('Commodity Averages Issues & Consumption between ' + period);
+            var $this = $(this);
+            $this.button('loading');
+            data = $('#AvgForm').serialize();
+            $.post("<?php echo base_url(); ?>Manager/Procurement/FilterAvg", data, function (resp) {
+                if ($.fn.DataTable.isDataTable('.AVGISCON')) {
+                    $('.AVGISCON').DataTable().destroy();
+                }
+                $('.AVGISCON').DataTable({
+                    "processing": true,
+                    "data": resp,
+                    "columns": [
+                        {"data": "drug"},
+                        {"data": "issues"},
+                        {"data": "consumption"}
+                    ]
+                });
+                $this.button('reset');
+            });
+        });
+
+    })
+</script>

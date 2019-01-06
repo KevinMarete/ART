@@ -402,11 +402,11 @@
         $(document).ready(function () {
 
             meeting_id = "<?php echo $this->uri->segment(5); ?>";
-            
+
 
             meeting_date = '';
             drug_id = '';
-           
+
             loadMembers();
             $.getJSON("<?php echo base_url(); ?>Manager/Procurement/loadMeetingDate/" + meeting_id, function (resp) {
                 meeting_date = resp[0].meeting_date;
@@ -422,8 +422,8 @@
                 image_advtab: true
 
             });
-            
-             loadMinute(meeting_id);
+
+            loadMinute(meeting_id);
 
             $('#addMember').click(function () {
                 list = $('#lstBox1');
@@ -585,6 +585,8 @@
                                 $('.diskrec').show('slow');
                                 $('.DISCUSSION').html(resp[0].discussion);
                                 $('.RECOMMENDATION').html(resp[0].recommendation);
+                                tinymce.get('mdiscussion').setContent(resp[0].discussion);
+                                tinymce.get('mrecommendations').setContent(resp[0].recommendation);
                                 $('.badge-info').html('Previous Discussion Date: ' + resp[0].decision_date);
                                 $('.drugspan').html('Drug: ' + selectedItemValue);
                                 $('.SPINNER').hide();

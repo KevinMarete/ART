@@ -53,6 +53,23 @@ class Procurement extends MX_Controller {
         ]);
     }
 
+    function FilterAvg() {
+        $from = $this->input->post('from');
+        $from_ = str_replace("-", '', $from);
+        $to = $this->input->post('to');
+        $to_ = str_replace("-", '', $to);
+        $drug = $this->input->post('drug');
+        $drugs =  "'" . implode ( "', '", $drug ) . "'";
+       
+
+        $query = $this->db->query("SELECT drug,FORMAT(SUM(issues)/PERIOD_DIFF($to_,$from_),0) issues,FORMAT(SUM(consumption)/PERIOD_DIFF($to_,$from_),0) consumption 
+                                FROM vw_procurement_list
+                                WHERE data_date BETWEEN '$from-01' AND '$to-01'
+                                AND drug IN ($drugs)
+                                GROUP BY drug")->result();
+        $this->response($query);
+    }
+
     function postDiscussions() {
         $meeting_id = $this->input->post('mid');
         $discussion = $this->input->post('disc');
@@ -148,8 +165,8 @@ class Procurement extends MX_Controller {
         $date = $this->db->query("SELECT DATE_FORMAT(start_event,'%d/%m/%Y') meeting_date FROM tbl_meetings WHERE id='$id'")->result();
         $this->response($date);
     }
-    
-     function loadMonthYear($id) {
+
+    function loadMonthYear($id) {
         $date = $this->db->query("SELECT DATE_FORMAT(start_event,'%m-%Y') meeting_date FROM tbl_meetings WHERE id='$id'")->result();
         $this->response($date);
     }
