@@ -46,6 +46,7 @@
 <link href="<?php echo base_url() . 'public/manager/css/smart_wizard_theme_dots.css' ?>" rel="stylesheet" type="text/css" />
 <link href="<?php echo base_url() . 'public/manager/css/easy-autocomplete.css' ?>" rel="stylesheet" type="text/css" />
 <link href="<?php echo base_url() . 'public/manager/css/easy-autocomplete.themes.css' ?>" rel="stylesheet" type="text/css" />
+<link href="https://cdn.datatables.net/fixedheader/3.1.5/css/fixedHeader.dataTables.min.css" rel="stylesheet" type="text/css"/>
 
 <!-- jQuery js-->
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables/js/jquery-1.12.4.js'; ?>"></script>

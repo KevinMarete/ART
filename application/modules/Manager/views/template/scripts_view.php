@@ -20,6 +20,7 @@
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables/js/dataTables.select.min.js'; ?>"></script>
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables-plugins/average().js'; ?>"></script>
 <script src="<?php echo base_url() . 'public/manager/lib/sbadmin2/vendor/datatables-plugins/sum().js'; ?>"></script>
+<script src="https://cdn.datatables.net/fixedheader/3.1.2/js/dataTables.fixedHeader.min.js" type="text/javascript"></script>
 <!--select2 js-->
 <script src="<?php echo base_url() . 'public/manager/lib/select2/js/select2.js'; ?>"></script>
 <!--bootstrap-sweetalert--->

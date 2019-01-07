@@ -95,7 +95,9 @@
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             <i class="fa fa-clock-o fa-fw"></i> Drug Consumption and Allocation Trend
-                            <a href="#AvgIssues" class="btn btn-sm btn-primary pull-right"  data-toggle="modal" data-target="#advancedIssuesModal">Average Issues / Consumption</a>
+                            <?php if ($this->session->userdata('role') == 'nascop') { ?>
+                                <a href="#AvgIssues" class="btn btn-sm btn-primary pull-right"  data-toggle="modal" data-target="#advancedIssuesModal">Average Issues / Consumption</a>
+                            <?php } ?>
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -280,7 +282,7 @@
             from = $('#from').val();
             to = $('#to').val();
             monthfrom = parseInt(from.substr(-2)) - 1;
-            monthto = parseInt(to.substr(-2)) - 1;           
+            monthto = parseInt(to.substr(-2)) - 1;
             yearfrom = from.substr(0, 4);
             yearto = to.substr(0, 4);
             period = monthNames[monthfrom] + " " + yearfrom + " and " + monthNames[monthto] + " " + yearto;

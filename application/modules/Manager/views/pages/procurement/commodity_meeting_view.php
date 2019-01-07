@@ -715,6 +715,7 @@
                 });
             }
         }, 'json');
+          $('#SAVE_ORDER').prop('disabled', false);
         return false;
     });
 

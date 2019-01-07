@@ -1,6 +1,7 @@
 application/config/database.php
 application/modules/FtpService/config/ftpservice.php
 application/logs/*
+.htaccess
 
 # exclude everything
 public/uploads/*
