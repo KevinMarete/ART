@@ -4,14 +4,14 @@
         position: sticky;
         top: 0;
     }
-    thead th:nth-child(12){
+    thead .holdHeader{
         position: -webkit-sticky;
         background: #ffffff;
         text-align: center;
         position: sticky;
         left: 150px;
     }
-    tbody td:nth-child(12){
+    tbody .holdHeader{
         position: -webkit-sticky;
         background: #ffffff;
         text-align: center;
