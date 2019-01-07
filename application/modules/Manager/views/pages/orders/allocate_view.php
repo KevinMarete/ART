@@ -283,7 +283,7 @@
                                 <table class="table table-striped table-bordered table-condensed" id="mapsTableReg">
                                     <thead>
                                     <th>Code | Regimen</th>
-                                    <th title="Current Active Patient">No. of Patients</th>
+                                    <th title="Current Active Patient">No. of Patients </th>
                                     <th title="Previous Active Patient">(% Change)</th>
                                     </thead>
                                     <tbody>
@@ -652,7 +652,7 @@
         margin-bottom: 0px; 
     }
     .panel-default{
-        margin: 12px;
+        margin: 12px; 
     }
 </style>
 
