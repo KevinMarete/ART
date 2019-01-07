@@ -123,7 +123,7 @@
                                             <th>Negative Adjustments</th>
                                             <th>End Month Stock on Hand</th>
                                             <?php if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') { ?> 
-                                                <th class="holdHeader">Aggregate Consumed</th>
+                                                <th class="">Aggregate Consumed</th>
                                                 <th class="holdHeader" >Aggregate Stock on Hand</th>
                                             <?php } ?>
                                             <th colspan="2">Commodities Expiring < 6 Months</th>
@@ -214,7 +214,7 @@
                                                     if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') {
                                                         $count = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'];
                                                         ?> 
-                                                        <td class="holdHeader" title="Quantity consumed including in the satellite sites"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_consumed']; ?></td>
+                                                        <td class="" title="Quantity consumed including in the satellite sites"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_consumed']; ?></td>
                                                         <td class="aggSOH  holdHeader" title="Quantity available at the facility currently"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand']; ?></td>
                                                     <?php } ?>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_quant']; ?></td>
