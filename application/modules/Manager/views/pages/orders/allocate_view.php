@@ -613,26 +613,7 @@
                 }
             });
         });
-        if (role == '') {
-            window.location.href = "<?= base_url() ?>manager";
-        } else {
-            setInterval(function () {
-                //$(this).prop('disabled', true);
-                //Show spinner
-                // $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
-                var form = $('#orderForm');
-                var url = base_url + "Manager/Orders/updateOrder/<?= $cdrr_id . '/' . $map_id; ?>";
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: form.serialize(),
-                    success: function (response) {
-                        // swal('Allocation data saved');
-                        // $.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/pending");
-                        //window.location.href = base_url + "manager/orders/allocate/<?= $cdrr_id . '/' . $map_id; ?>";
-                    }
-                });
-            }, 60000);
+      
         }
         //Disable input fields
 <?php if (in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed')) || in_array($columns['cdrrs']['data'][0]['status'], array('pending', 'reviewed', 'rejected')) && in_array($this->session->userdata('role'), array('county', 'nascop'))) { ?>
