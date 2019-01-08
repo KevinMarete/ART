@@ -1,3 +1,8 @@
+<style>
+    #dataTables-listing_filter{
+        display: none;
+    }
+</style>
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
@@ -25,10 +30,16 @@
                         
                     } else {
                         ?>
-                        <div class="row" style="margin: 20px;">
-                            <select id="COUNTY" name="" class="form-control">
-                                <?= $county; ?>
-                            </select>
+                        <div class="row col-lg-12" style="margin: 20px;">
+                            <div class="col-lg-3">
+                                <select id="COUNTY" name="" class="form-control">
+                                    <?= $county; ?>
+                                </select>
+                            </div>
+                            <div class="col-lg-9">
+                                <input type="text" id="searchbar" name="" class="form-control" placeholder="search by mflcode or facility name.."/>
+
+                            </div>
                         </div>
                     <?php } ?>
                     <table width="100%" class="table table-striped table-bordered table-hover table-condensed display compact nowrap" id="dataTables-listing">
@@ -69,7 +80,7 @@
             'subcounty': [0, 1]
         }
         val = $("#COUNTY option:selected").text();
-        $('#dataTables-listing').DataTable({
+        oTable = $('#dataTables-listing').DataTable({
             responsive: true,
             order: [[1, "desc"]],
             pagingType: "full_numbers",
@@ -101,6 +112,11 @@
                 });
             }
         });
+
+        $('#searchbar').keyup(function () {
+            oTable.search($(this).val()).draw();
+        })
+
         $('#COUNTY').change(function () {
             val = $("#COUNTY option:selected").text();
             $('#dataTables-listing').DataTable().destroy();

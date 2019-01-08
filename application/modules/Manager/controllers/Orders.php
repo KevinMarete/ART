@@ -12,7 +12,7 @@ class Orders extends MX_Controller {
         $this->load->model('Orders_model');
         $this->load->library('email_sender');
     }
-    
+
     function pdf() {
         $pdfBuilder = '';
         $columns = @$this->Orders_model->get_cdrr_data($this->uri->segment('4'), $this->session->userdata('scope'), $this->session->userdata('role'));
@@ -173,15 +173,17 @@ class Orders extends MX_Controller {
         $message = 'You have a new allocation order request from';
         if ($action == 'rejected') {
             $rejection_reason = $this->input->post('reason');
-            $message = 'Allocation order request has been rejected, reason being that '.$rejection_reason;
+            $message = 'Allocation order request has been rejected, reason being that ' . $rejection_reason;
         } elseif ($action == 'approved') {
             $message = 'Allocation order has been approved and forwarded to Order Review Management Team at NASCOP';
         } elseif ($action == 'reviewed') {
-            $message = 'Allocation order has been reviewed. Preparation for order fulfillment is underway.';
+            $message = 'Allocation order has been sent to KEMSA. Preparation for order fulfillment is underway.';
         }
         $response = $this->Orders_model->actionOrder($orderid, $mapid, $action, $this->session->userdata('id'));
-        $this->sendMail($message, $action);
-        echo $response['message'];
+        if ($action !== 'pending') {
+            $this->sendMail($message, $action);
+            echo $response['message'];
+        }
     }
 
     public function get_orders($subcounty = '') {
@@ -290,6 +292,39 @@ class Orders extends MX_Controller {
 
     function getFacilitiesMOS() {
         $this->Orders_model->getFacilitiesMOS();
+    }
+
+    function upload() {
+        $path = "public/kemsa_templates/AllocationTemplate";
+        //$file = $path . 'kemsa.xlsx';
+       
+        $valid_formats = array("xlsx"); //add the formats you want to upload
+
+        $name = $_FILES['myfile']['name']; //get the name of the file
+
+        $size = $_FILES['myfile']['size']; //get the size of the file
+
+        if (strlen($name)) { //check if the file is selected or cancelled after pressing the browse button.
+            list($txt, $ext) = explode(".", $name); //extract the name and extension of the file
+            if (in_array($ext, $valid_formats)) { //if the file is valid go on.
+                if ($size < 2098888) { // check if the file size is more than 2 mb
+                    $file_name = $this->input->post('filename'); //get the file name
+                    $tmp = $_FILES['myfile']['tmp_name'];
+                    if (move_uploaded_file($tmp, $path . '.' . $ext)) { //check if it the file move successfully.
+                        echo "Template Successfully Uploaded";
+                    } else {
+                        echo "failed";
+                    }
+                } else {
+                    echo "File size max 2 MB";
+                }
+            } else {
+                echo "Invalid file format..";
+            }
+        } else {
+            echo "Please select a file..!";
+        }
+        exit;
     }
 
 }

@@ -18,6 +18,13 @@
                 <div class="panel-heading">
                 </div>
                 <div class="panel-body">
+                    <?php if ($this->session->userdata('role') == 'nascop') { ?>
+                        <a href="#uploadTemplateGuide" style="margin: 10px;" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" data-keyboard="false" data-backdrop="static">Upload KEMSA MOS Template Guide</a>
+
+                    <?php } else { ?>
+    
+                    <?php } ?>
+
                     <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-listing">
                         <thead>
                             <tr>

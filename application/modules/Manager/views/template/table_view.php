@@ -45,7 +45,7 @@
                     <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-listing">
                         <thead>
                             <tr>
-                            <?php
+                                <?php
                                 $remove_labels = array('created_at', 'updated_at', 'deleted_at');
                                 $skip_pages_names = array('install', 'dhis_elements', 'user');
                                 $replace_labels = array(
@@ -70,7 +70,7 @@
                                 );
                                 foreach ($columns as $column) {
                                     //Replace labels
-                                    if(in_array($column, array_keys($replace_labels))){                                        
+                                    if (in_array($column, array_keys($replace_labels))) {
                                         $column = $replace_labels[$column];
                                     }
                                     //Remove '_' to ' ' for all headings except install, dhis_elements and user settings
@@ -79,7 +79,7 @@
                                     }
                                 }
                                 if ($page_name == 'install') {
-                                ?>
+                                    ?>
                                     <th>ID</th>
                                     <th>Version</th> 
                                     <th>Facility</th> 
@@ -91,10 +91,10 @@
                                     <th>Is Usage</th> 
                                     <th>Is Internet</th> 
                                     <th>Assignee</th> 
-                            <?php
+                                    <?php
                                 }
                                 if ($page_name == 'dhis_elements') {
-                                ?>
+                                    ?>
                                     <th>Id</th>
                                     <th>Code</th>
                                     <th>Dhis Name</th>
@@ -106,14 +106,14 @@
                                     <?php
                                 }
                                 if ($page_name == 'user') {
-                                ?>
+                                    ?>
                                     <th>Id</th>
                                     <th>First Name</th>
                                     <th>Last Name</th>
                                     <th>Email Address</th>
                                     <th>Phone Number</th>
                                     <th>Role</th>
-                            <?php } ?>
+                                <?php } ?>
 
                             </tr>
                         </thead>
@@ -147,9 +147,9 @@ if ($page_name != 'backup') {
     $('#view_btn').prop('disabled', true);
 
     //hide action_btn for table_view backup and user
-    <?php if ($page_name == 'backup') { ?>
+<?php if ($page_name == 'backup') { ?>
         $('#action_btn').hide(true);
-    <?php } ?>
+<?php } ?>
 
     $(document).ready(function () {
         table = $('#dataTables-listing').DataTable({
@@ -183,7 +183,8 @@ if ($page_name != 'backup') {
 
     function view() {
         window.location.href = '<?= base_url(); ?>manager/procurement/minute/ART/' + selected_date;
-    };
+    }
+    ;
 
     //function add data to db_table
     function add_<?php echo $page_name; ?>() {
@@ -386,14 +387,14 @@ if ($page_name != 'backup') {
             dataType: "JSON",
             success: function (data)
             {
-                if (data.status){
+                if (data.status) {
                     $('#modal_form').modal('hide');
                     swal('<?php echo ucwords(str_replace('_', ' ', $page_name)); ?>', 'Add/updation success!', 'success');
                     reload_table();
-                }else{
-                    if(data.message){
+                } else {
+                    if (data.message) {
                         swal('Error', data.message, 'error');
-                    }else{
+                    } else {
                         for (var i = 0; i < data.inputerror.length; i++)
                         {
                             $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
@@ -402,7 +403,7 @@ if ($page_name != 'backup') {
                         //Show required labels in select2
                         $('.select2').removeClass('select2-hidden-accessible');
                         $('span.select2-container').css('color', '#a94442');//red color for required
-                    } 
+                    }
                 }
                 $('#btnSave').text('save');
                 $('#btnSave').attr('disabled', false);

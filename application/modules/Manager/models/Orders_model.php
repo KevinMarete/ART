@@ -128,11 +128,13 @@ class Orders_model extends CI_Model {
             }
 
             $sql = "SELECT 
+                       
                         UCASE(f.name) facility_name,
                         c.period_begin,
                         CONCAT_WS('/', c.code, m.code) description,
                         $column
                         c.status,
+                         f.mflcode,
                         CONCAT('<a href=view/', c.id,'/', m.id, '>View Order</a>') options
                     FROM tbl_facility f
                     $join

@@ -100,6 +100,8 @@
             </div>
         </div>
         <div class="row FLOATER">
+            <a href="<?= base_url(); ?>public/kemsa_templates/AllocationTemplate.xlsx" style="margin: 10px;" class="btn btn-primary btn-sm" >Download KEMSA MOS Template Guide</a>
+
             <div class="panel panel-default ">
                 <div class="panel-body">
                     <div class="col-sm-12 ">
@@ -244,7 +246,7 @@
                                                         ?>
                                                         <input type="hidden" style="width:70px;" class="MIN" value="<?= $min_mos; ?>"/>
                                                         <input type="hidden" style="width:70px;"class="MAX" value="<?= $max_mos; ?>"/>
-                                                        <input type="text"  style="width:50px; text-align: center;" class="form-control MOS AllocatedMOS" data-toggle="tooltip" <?= $disabled; ?> title="Max MOS 6months" name="qty_allocated_mos-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'] == '') ? $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'] : $mos ?>">
+                                                        <input type="text"  style="width:50px; text-align: center;" class="form-control MOS AllocatedMOS" data-toggle="tooltip" <?= $disabled; ?> title="Max MOS 3months" name="qty_allocated_mos-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'] == '') ? $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'] : $mos ?>">
                                                     </td>
 
                                                     <td title="Any feedback deemed necessary">
@@ -548,6 +550,7 @@
             $(this).prop('disabled', true);
             //Show spinner
             $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
+            updateValues();
             $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/reviewed", function (data) {
                 swal('Order Reviewed');
                 window.location.href = base_url + "manager/orders/view_allocation/<?= $cdrr_id . '/' . $map_id; ?>";
@@ -557,6 +560,7 @@
             $(this).prop('disabled', true);
             //Show spinner
             $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
+            updateValues();
             $.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/approved", function (data) {
                 swal('Order Approved');
                 window.location.href = base_url + "manager/orders/view_allocation/<?= $cdrr_id . '/' . $map_id; ?>";
@@ -591,6 +595,7 @@
             //Show spinner
             $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
             $('#save_allocation').prop('disabled', true);
+            updateValues();
             $.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/allocated", function (data) {
                 swal('Allocation order submitted to county');
                 window.location.href = base_url + "manager/orders/view_allocation/<?= $cdrr_id . '/' . $map_id; ?>";
@@ -616,7 +621,7 @@
         if (role == '') {
             window.location.href = "<?= base_url() ?>manager";
         } else {
-           /* setInterval(function () {
+            setInterval(function () {
                 //$(this).prop('disabled', true);
                 //Show spinner
                 // $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
@@ -628,22 +633,52 @@
                     data: form.serialize(),
                     success: function (response) {
                         // swal('Allocation data saved');
-                        // $.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/pending");
-                        //window.location.href = base_url + "manager/orders/allocate/<?= $cdrr_id . '/' . $map_id; ?>";
+                        //$.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/pending");
+                        // window.location.href = base_url + "manager/orders/allocate/<?= $cdrr_id . '/' . $map_id; ?>";
                     }
                 });
-            }, 60000);*/
+            }, 60000);
         }
+
+
+
         //Disable input fields
 <?php if (in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed')) || in_array($columns['cdrrs']['data'][0]['status'], array('pending', 'reviewed', 'rejected')) && in_array($this->session->userdata('role'), array('county', 'nascop'))) { ?>
     <?php if ($this->session->userdata('role') == 'nascop') { ?>
-                $('input').attr('disabled', false);
+                $('.Allocated').attr('disabled', false);
+                $('.AllocatedMOS').attr('disabled', true);
+    <?php } else if ($this->session->userdata('role') == 'county') { ?>
+                $('.Allocated').attr('disabled', true);
+                $('.AllocatedMOS').attr('disabled', false);
     <?php } else { ?>
                 $('input').attr('disabled', true);
     <?php } ?>
 
 <?php } ?>
+
+<?php if ($role == 'subcounty' && date('d') > 13) { ?>
+            $('#save_allocation,#complete_allocation').hide();
+<?php } elseif ($role == 'county' && date('d') > 15) { ?>
+            $('#approveOrder,#rejectOrder').hide();
+<?php } elseif ($role == 'nascop' && date('d') > 20) { ?>
+            $('#reviewOrder,#rejectOrder').hide();
+<?php } ?>
+
     });
+
+    function updateValues() {
+        var form = $('#orderForm');
+        var url = base_url + "Manager/Orders/updateOrder/<?= $cdrr_id . '/' . $map_id; ?>";
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: form.serialize(),
+            success: function (response) {
+                console.log('Order Updated');
+            }
+        });
+    }
+
 </script>
 
 <style type="text/css">
