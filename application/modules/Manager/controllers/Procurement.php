@@ -59,8 +59,8 @@ class Procurement extends MX_Controller {
         $to = $this->input->post('to');
         $to_ = str_replace("-", '', $to);
         $drug = $this->input->post('drug');
-        $drugs =  "'" . implode ( "', '", $drug ) . "'";
-       
+        $drugs = "'" . implode("', '", $drug) . "'";
+
 
         $query = $this->db->query("SELECT drug,FORMAT(SUM(issues)/PERIOD_DIFF($to_,$from_),0) issues,FORMAT(SUM(consumption)/PERIOD_DIFF($to_,$from_),0) consumption 
                                 FROM vw_procurement_list
@@ -835,6 +835,7 @@ class Procurement extends MX_Controller {
             $rdata = ' - ';
         } else if ($v == 0) {
             $rdata = ' - ';
+        
         } else {
             $rdata = number_format($v);
         }
@@ -856,9 +857,14 @@ class Procurement extends MX_Controller {
         return $class;
     }
 
+    function newValue($x, $y, $z) {
+        return (int) $x - (int) $y + (int) $z;
+    }
+
     public function get_transaction_table2($drug_id, $period_year) {
         $column = $this->getTransactionStatus($drug_id, $period_year);
-        $transaction_table = '
+
+        $start = $transaction_table = '
 <table class="table table-hover table-condensed table-bordered TRACKER">
   <tr style="font-weight:bold !important;">
     <th class="tg-0pky" colspan="2"><strong>Description</th>
@@ -924,17 +930,17 @@ class Procurement extends MX_Controller {
    <tr>
     <td class="tg-0pky"><strong>Call Down</strong></td>
     <td class="tdata tg-0pky col-1">' . @$this->rv($column['expected'][0]['quantity']) . ' </td>
-    <td class="tdata tg-0pky col-2">' . @$this->rv($column['expected'][1]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-3">' . @$this->rv($column['expected'][2]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-4">' . @$this->rv($column['expected'][3]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-5">' . @$this->rv($column['expected'][4]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-6">' . @$this->rv($column['expected'][5]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-7">' . @$this->rv($column['expected'][6]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-8">' . @$this->rv($column['expected'][7]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-9">' . @$this->rv($column['expected'][8]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-10">' . @$this->rv($column['expected'][9]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-11">' . @$this->rv($column['expected'][10]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-12">' . @$this->rv($column['expected'][11]['quantity']) . '</td>
+    <td class="tdata tg-0pky col-2">' . @$this->rv($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'])) . '</td>
+    <td class="tdata tg-0pky col-3">' . @$this->rv(($column['expected'][2]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] )) - $column['status'][2][1]['quantity'])) . '</td>
+    <td class="tdata tg-0pky col-4">' . @$this->rv($column['expected'][3]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] - $column['status'][2][1]['quantity'] - $column['status'][2][2]['quantity']))) . '</td>
+    <td class="tdata tg-0pky col-5">' . @$this->rv($column['expected'][4]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] - $column['status'][2][1]['quantity'] - $column['status'][2][2]['quantity'] - $column['status'][2][3]['quantity']))) . '</td>
+    <td class="tdata tg-0pky col-6">' . @$this->rv($column['expected'][5]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] - $column['status'][2][1]['quantity'] - $column['status'][2][2]['quantity'] - $column['status'][2][3]['quantity'] - $column['status'][2][4]['quantity']))) . '</td>
+    <td class="tdata tg-0pky col-7">' . @$this->rv($column['expected'][6]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] - $column['status'][2][1]['quantity'] - $column['status'][2][2]['quantity'] - $column['status'][2][3]['quantity'] - $column['status'][2][4]['quantity'] - $column['status'][2][5]['quantity']))) . '</td>
+    <td class="tdata tg-0pky col-8">' . @$this->rv($column['expected'][7]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] - $column['status'][2][1]['quantity'] - $column['status'][2][2]['quantity'] - $column['status'][2][3]['quantity'] - $column['status'][2][4]['quantity'] - $column['status'][2][5]['quantity'] - $column['status'][2][6]['quantity']))) . '</td>
+    <td class="tdata tg-0pky col-9">' . @$this->rv($column['expected'][8]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] - $column['status'][2][1]['quantity'] - $column['status'][2][2]['quantity'] - $column['status'][2][3]['quantity'] - $column['status'][2][4]['quantity'] - $column['status'][2][5]['quantity'] - $column['status'][2][6]['quantity'] - $column['status'][2][7]['quantity']))) . '</td>
+    <td class="tdata tg-0pky col-10">' . @$this->rv($column['expected'][9]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] - $column['status'][2][1]['quantity'] - $column['status'][2][2]['quantity'] - $column['status'][2][3]['quantity'] - $column['status'][2][4]['quantity'] - $column['status'][2][5]['quantity'] - $column['status'][2][6]['quantity'] - $column['status'][2][7]['quantity'] - $column['status'][2][8]['quantity']))) . '</td>
+    <td class="tdata tg-0pky col-11">' . @$this->rv($column['expected'][10]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] - $column['status'][2][1]['quantity'] - $column['status'][2][2]['quantity'] - $column['status'][2][3]['quantity'] - $column['status'][2][4]['quantity'] - $column['status'][2][5]['quantity'] - $column['status'][2][6]['quantity'] - $column['status'][2][7]['quantity'] - $column['status'][2][8]['quantity'] - $column['status'][2][9]['quantity']))) . '</td>
+    <td class="tdata tg-0pky col-12">' . @$this->rv($column['expected'][11]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] - $column['status'][2][1]['quantity'] - $column['status'][2][2]['quantity'] - $column['status'][2][3]['quantity'] - $column['status'][2][4]['quantity'] - $column['status'][2][5]['quantity'] - $column['status'][2][6]['quantity'] - $column['status'][2][7]['quantity'] - $column['status'][2][8]['quantity'] - $column['status'][2][9]['quantity'] - $column['status'][2][10]['quantity']))) . '</td>
   </tr>
   <tr>
     <td class="tg-0pky"><strong>Received</strong></td>
@@ -1126,7 +1132,7 @@ class Procurement extends MX_Controller {
             $status = strtolower($stat->name);
             $query[$status] = $this->db->query("SELECT                 
                     transaction_month data_month,                   
-                    quantity quantity                     
+                    SUM(quantity) quantity                     
                     FROM tbl_procurement_item pi
                     INNER JOIN tbl_procurement p ON p.id = pi.procurement_id
                     INNER JOIN tbl_procurement_status ps ON ps.id = pi.procurement_status_id
@@ -1135,7 +1141,7 @@ class Procurement extends MX_Controller {
                     WHERE p.drug_id = '$drugid'
                     AND transaction_year='$year'
                     AND ps.name LIKE '%$status%'
-                    GROUP BY pi.id
+                    GROUP BY data_month
                     ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )")->result_array();
         endforeach;
 
@@ -1199,7 +1205,7 @@ class Procurement extends MX_Controller {
                     LEFT JOIN tbl_supplier s ON s.id = pi.supplier_id
                     WHERE p.drug_id = '$drug'
                     AND transaction_year='$year'
-                    AND ps.name LIKE '%Expected%'
+                    AND ps.name LIKE '%Call_Down%'
                     GROUP BY transaction_month
                     ORDER BY transaction_year DESC, FIELD(transaction_month, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' )")->result_array();
 

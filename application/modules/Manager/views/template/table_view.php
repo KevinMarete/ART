@@ -323,8 +323,12 @@ if ($page_name != 'backup') {
                 $('[name="regimen_id"]').val(data.regimen_id);
                 $('[name="drug_id"]').val(data.drug_id);
                 //role_submodule
-                $('[name="role_id"]').val(data.role_id);
+                $('[name="role_id"]').val(data.role_id)
+               
+                // alert(data.role_id)
                 $('[name="submodule_id"]').val(data.submodule_id);
+                
+                //  alert(data.role_id)
 
                 //User
                 $('[name="firstname"]').val(data.firstname);

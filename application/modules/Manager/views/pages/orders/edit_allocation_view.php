@@ -40,8 +40,9 @@
 <script>
     $(document).ready(function () {
         var role = "<?php echo $this->session->userdata('role'); ?>"
+
         if (role == 'nascop') {
-            $('#dataTables-listing').DataTable({
+            dtable = $('#dataTables-listing').DataTable({
                 responsive: true,
                 order: [[1, "desc"]],
                 pagingType: "full_numbers",
@@ -64,13 +65,23 @@
                             select.append('<option value="' + val + '">' + val + '</option>');
                         });
                     });
+
                     //Show reporting rate
-                    var reporting_rate = Math.ceil(($("#dataTables-listing td:nth-child(3):not(:contains('Unreviewed'))").length / this.api().data().rows().count()) * 100)
+                    var thecount = dtable.rows().column(2).data()
+                            .filter(function (value, index) {
+                                return value !== 'Unreviewed';
+                            }).length;
+                    var reporting_rate = Math.ceil((thecount / dtable.rows().count()) * 100);
                     $('.panel-heading').html('Allocation Rate: <b>' + reporting_rate + '%</b><div class="progress"><div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="' + reporting_rate + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + reporting_rate + '%;">' + reporting_rate + '%</div></div>')
+                    alert(thecount / dtable.rows().count());
+
                 }
+
             });
+
+
         } else if (role == 'county') {
-            $('#dataTables-listing').DataTable({
+           dtable2 = $('#dataTables-listing').DataTable({
                 responsive: true,
                 order: [[1, "desc"]],
                 pagingType: "full_numbers",
@@ -94,7 +105,12 @@
                         });
                     });
                     //Show reporting rate
-                    var reporting_rate = Math.ceil(($("#dataTables-listing td:nth-child(3):not(:contains('Unallocated'))").length / this.api().data().rows().count()) * 100)
+                  //  var reporting_rate = Math.ceil(($("#dataTables-listing td:nth-child(3):not(:contains('Unallocated'))").length / this.api().data().rows().count()) * 100);
+                     var thecount = dtable2.rows().column(2).data()
+                            .filter(function (value, index) {
+                                return value !== 'Unallocated';
+                            }).length;
+                    var reporting_rate = Math.ceil((thecount / dtable2.rows().count()) * 100);
                     $('.panel-heading').html('Allocation Rate: <b>' + reporting_rate + '%</b><div class="progress"><div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="' + reporting_rate + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + reporting_rate + '%;">' + reporting_rate + '%</div></div>')
                 }
             });

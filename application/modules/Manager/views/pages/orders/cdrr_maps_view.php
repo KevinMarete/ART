@@ -50,7 +50,13 @@
                                                 <span><?= ucwords(date('F Y', strtotime($columns['cdrrs']['data'][0]['period_begin']))); ?></span>
                                             </td>
                                             <td>
-                                                <b>Status: </b> <span><?= ucwords($columns['cdrrs']['data'][0]['status']); ?></span>
+                                                <b>Status: </b> <span><?php
+                                                    if ($columns['cdrrs']['data'][0]['status'] == 'reviewed') {
+                                                        echo 'Submitted to KEMSA';
+                                                    } else {
+                                                        echo ucwords($columns['cdrrs']['data'][0]['status']);
+                                                    };
+                                                    ?></span>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -113,8 +119,8 @@
                                             if (in_array($drugid, array_keys($columns['cdrrs']['data']['cdrr_item']))) {
                                                 $count = $columns['pcdrrs']['data']['cdrr_item'][$drugid]['count'];
                                                 $balance = $columns['cdrrs']['data']['cdrr_item'][$drugid]['balance'];
-                                                empty($count)? $count = 0 : $count = $count;
-                                                empty($balance)? $balance = 0 : $balance = $balance;
+                                                empty($count) ? $count = 0 : $count = $count;
+                                                empty($balance) ? $balance = 0 : $balance = $balance;
                                                 ?>
                                                 <tr>
                                                     <td class="drug_name"><?= $drug['name']; ?></td>
@@ -123,7 +129,7 @@
                                                     <td class="balance"><?= $balance; ?>
                                                         <?php
                                                         if ($count > $balance) {
-                                                          //  $p = round((($count - $balance) / $count) * 100, 0);
+                                                            //  $p = round((($count - $balance) / $count) * 100, 0);
                                                             $p = round($count - $balance, 0);
                                                             echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '</span></sup>';
                                                         } else if ($balance > $count) {
@@ -154,23 +160,36 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="table-responsive-removed">
-                                <table class="table table-bordered table-striped table-condensed">
-                                    <thead>
-                                    <th>Status</th>
-                                    <th>User</th>
-                                    <th>Role</th>
-                                    <th>Timestamp</th>
-                                    </thead>
-                                    <?php foreach ($columns['cdrrs']['data']['cdrr_logs'] as $key => $log) { ?>
-                                        <tr>
-                                            <td><?= ucwords($log['description']); ?>  </td>
-                                            <td><?= ucwords($log['firstname'] . ' ' . $log['lastname']); ?> </td>
-                                            <td><?= ucwords($log['role']); ?> </td>
-                                            <td><?= $log['created']; ?></td>
-                                        </tr>
-                                    <?php } ?>
-                                </table>
+                            <div class="col-md-12">
+                               
+                                    <div class="table-responsive-removed">
+                                        <table class="table table-bordered table-striped table-condensed">
+                                            <thead>
+                                            <th>Status</th>
+                                            <th>User</th>
+                                            <th>Role</th>
+                                            <th>Timestamp</th>
+                                            </thead>
+                                            <?php foreach ($columns['cdrrs']['data']['cdrr_logs'] as $key => $log) { ?>
+                                                <tr>
+                                                    <td> 
+                                                        <?php
+                                                        if ($log['description'] == 'reviewed') {
+                                                            echo 'Submitted to KEMSA';
+                                                        } else {
+                                                            echo ucwords($log['description']);
+                                                        };
+                                                        ?>
+                                                    </td>
+                                                    <td><?= ucwords($log['firstname'] . ' ' . $log['lastname']); ?> </td>
+                                                    <td><?= ucwords($log['role']); ?> </td>
+                                                    <td><?= $log['created']; ?></td>
+                                                </tr>
+                                            <?php } ?>
+                                        </table>
+                                    </div>
+                                
+
                             </div>
                         </div> <!--end of cdrr-->
                         <div class="col-sm-3">
@@ -182,7 +201,11 @@
                                     <th title="Previous Active Patient">(% Change)</th>
                                     </thead>
                                     <tbody>
-                                        <?php foreach ($columns['regimens'] as $category => $regimens) { ?>
+                                        <?php
+                                        $curr_ = 0;
+                                        $prev = 0;
+                                        foreach ($columns['regimens'] as $category => $regimens) {
+                                            ?>
                                             <?php foreach ($regimens as $regimen) { ?>
                                                 <?php if (in_array($regimen['id'], array_keys($columns['maps']['data']))) { ?>
                                                     <tr>
@@ -197,18 +220,38 @@
                                                             } else if ($previous > $current) {
                                                                 $p = round((($previous - $current) / $previous) * 100, 0);
                                                                 echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
-                                                            } 
+                                                            }
                                                             ?>
 
                                                         </td>
 
                                                     </tr>
                                                     <?php
+                                                    $curr_ = $curr_ + $current;
+                                                    $prev = $prev + $previous;
                                                 }
                                             }
                                             ?>
                                         <?php } ?>
                                     </tbody>
+                                </table>
+                            </div>
+
+                            <div class="row">
+                                <?php $variance = number_format((($curr_ - $prev) / $curr_) * 100, 1); ?>
+                                <table class="table table-responsive table-bordered" >
+                                    <tr>
+                                        <td>Current Patient Numbers</td>
+                                        <td style="text-align: right; font-weight: bold;"><?= number_format($curr_, 0); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Previous Patient Numbers</td>
+                                        <td style="text-align: right;font-weight: bold;"><?= number_format($prev, 0); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Patient Numbers % Variance</td>
+                                        <td style="text-align: right;font-weight: bold;"><?= $variance; ?>%</td>
+                                    </tr>
                                 </table>
                             </div>
                         </div><!--end of maps-->

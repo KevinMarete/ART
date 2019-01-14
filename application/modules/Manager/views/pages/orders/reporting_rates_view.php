@@ -85,7 +85,8 @@
                 }
             });
         } else {
-            $('#dataTables-listing').DataTable({
+         
+            dtable2 = $('#dataTables-listing').DataTable({
                 responsive: true,
                 order: [[1, "asc"]],
                 pagingType: "full_numbers",
@@ -109,11 +110,18 @@
                         });
                     });
                     //Show reporting rate
-                    var reporting_rate = Math.ceil(($("#dataTables-listing td:nth-child(3):not(:contains('PENDING'))").length / this.api().data().rows().count()) * 100)
+                     var thecount = dtable2.rows().column(2).data()
+                            .filter(function (value, index) {
+                                return value !== 'PENDING';
+                            }).length;
+                    var reporting_rate = Math.ceil((thecount / dtable2.rows().count()) * 100);
+                   // var reporting_rate = Math.ceil(($("#dataTables-listing td:nth-child(3):not(:contains('PENDING'))").length / this.api().data().rows().count()) * 100)
                     reporting_rate = reporting_rate || 0
-                    $('.panel-heading').html('Reporting Rate: <b>' + reporting_rate + '%</b><div class="progress"><div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="' + reporting_rate + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + reporting_rate + '%;">' + reporting_rate + '%</div></div>')
+                   $('.panel-heading').html('Reporting Rate: <b>' + reporting_rate + '%</b><div class="progress"><div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="' + reporting_rate + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + reporting_rate + '%;">' + reporting_rate + '%</div></div>')
+                //alert(dtable.rows().count());
                 }
             });
+           
         }
 
         //Show reporting_rates sidemenu

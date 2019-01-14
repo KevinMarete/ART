@@ -64,11 +64,11 @@ class Admin_model extends CI_Model {
                 $this->db->join('vw_drug_list vdl', 'vdl.id=rg.drug_id', 'inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_role_submodule') {
-                $this->db->select('rsbm.id,r.name,sbm.name submodule_name');
-                $this->db->from('tbl_role_submodule rsbm');
-                $this->db->join('tbl_role r', 'r.id=rsbm.role_id', 'inner');
-                $this->db->join('tbl_submodule sbm', 'sbm.module_id=rsbm.submodule_id', 'inner');
-                $table_data = $this->db->get()->result_array();
+                $table_data=$this->db->query("SELECT sbm.id, r.name role, sb.name submodule
+                                    FROM tbl_role_submodule sbm
+                                    INNER JOIN tbl_role r ON r.id = sbm.role_id
+                                    INNER JOIN tbl_submodule sb ON sb.id = sbm.submodule_id")->result_array();                
+               
             } else if ($table == 'tbl_submodule') {
                 $this->db->select('sbm.id,sbm.name,m.name module_name');
                 $this->db->from('tbl_submodule sbm');

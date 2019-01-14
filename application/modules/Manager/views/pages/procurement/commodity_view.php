@@ -229,6 +229,7 @@
     currentMonth = GetMonthName((new Date).getMonth());
     newdate = new Date(now.setMonth(now.getMonth() - 1));
     lastMonth = GetMonthName((newdate.getMonth()));
+   
     function GetMonthName(monthNumber) {
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         return months[monthNumber];

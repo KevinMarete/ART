@@ -81,7 +81,7 @@ class Manager extends MX_Controller {
                     'allocation' => array(
                         'subcounty' => array('MFL Code', 'Facility Name', 'Period', 'Description', 'Status', 'Actions'),
                         'county' => array('Period', 'Approved', 'Status', 'Actions'),
-                        'nascop' => array('Period', 'Reviewed', 'Status', 'Actions')
+                        'nascop' => array('Period', 'Submitted to KEMSA', 'Status', 'Actions')
                     ),
                     'allocate' => array(
                         'subcounty' => array(

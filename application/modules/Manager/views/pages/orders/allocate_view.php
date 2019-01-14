@@ -88,7 +88,13 @@
                                             <span><?= ucwords(date('F Y', strtotime($columns['cdrrs']['data'][0]['period_begin']))); ?></span>
                                         </td>
                                         <td>
-                                            <b>Status: </b> <span><?= ucwords($columns['cdrrs']['data'][0]['status']); ?></span>
+                                            <b>Status: </b> <span><?php
+                                                if ($columns['cdrrs']['data'][0]['status'] == 'reviewed') {
+                                                    echo 'Submitted to KEMSA';
+                                                } else {
+                                                    echo ucwords($columns['cdrrs']['data'][0]['status']);
+                                                };
+                                                ?></span>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -289,22 +295,28 @@
                                     <th title="Previous Active Patient">(% Change)</th>
                                     </thead>
                                     <tbody>
-                                        <?php foreach ($columns['regimens'] as $category => $regimens) { ?>
+                                        <?php
+                                        $curr_ = 0;
+                                        $prev = 0;
+                                        foreach ($columns['regimens'] as $category => $regimens) {
+                                            ?>
                                             <?php foreach ($regimens as $regimen) { ?>
                                                 <?php if (in_array($regimen['id'], array_keys($columns['maps']['data']))) { ?>
                                                     <tr>
                                                         <td><?= $regimen['name']; ?></td>
                                                         <td><?php echo $current = $columns['maps']['data'][$regimen['id']]; ?></td>
                                                         <td><?php
-                                                            echo $previous = $columns['previousmaps']['data'][$regimen['id']];
-                                                            if ($current > $previous) {
-                                                                $p = round((($current - $previous) / $current) * 100, 0);
-                                                                echo '<sup><span style="background: green; font-size:9px;" class="badge"> +' . $p . '%</span></sup>';
-                                                            } else if ($previous > $current) {
-                                                                $p = round((($previous - $current) / $previous) * 100, 0);
-                                                                echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
-                                                            }
-                                                            ?>
+                                        echo $previous = $columns['previousmaps']['data'][$regimen['id']];
+                                        if ($current > $previous) {
+                                            $p = round((($current - $previous) / $current) * 100, 0);
+                                            echo '<sup><span style="background: green; font-size:9px;" class="badge"> +' . $p . '%</span></sup>';
+                                        } else if ($previous > $current) {
+                                            $p = round((($previous - $current) / $previous) * 100, 0);
+                                            echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
+                                        }
+                                        $curr_ = $curr_ + $current;
+                                        $prev = $prev + $previous;
+                                                    ?>
 
                                                         </td>
 
@@ -315,7 +327,9 @@
                                             ?>
                                         <?php } ?>
                                     </tbody>
-                                </table>
+                                </table>                  
+
+
                             </div>
                         </div>
                     </div>
@@ -338,7 +352,13 @@
                                 <tbody>
                                     <?php foreach ($columns['cdrrs']['data']['cdrr_logs'] as $key => $log) { ?>
                                         <tr>
-                                            <td><?= ucwords($log['description']); ?>  </td>
+                                            <td><?php
+                                        if ($log['description'] == 'reviewed') {
+                                            echo 'Submitted to KEMSA';
+                                        } else {
+                                            echo ucwords($log['description']);
+                                        };
+                                        ?>  </td>
                                             <td><?= ucwords($log['firstname'] . ' ' . $log['lastname']); ?> </td>
                                             <td><?= ucwords($log['role']); ?> </td>
                                             <td class="start_date"><?= $log['created']; ?><input type="hidden" class="end_date"/></td>
@@ -349,18 +369,40 @@
                             </table>
                         </div>
                     </div>
+                    <div class="col-sm-3">
+                        <?php $variance = number_format((($curr_ - $prev) / $curr_) * 100, 1); ?>
+                        <table class="table table-responsive table-bordered" >
+                            <tr>
+                                <td>Current Patient Numbers</td>
+                                <td style="text-align: right; font-weight: bold;"><?= number_format($curr_, 0); ?></td>
+                            </tr>
+                            <tr>
+                                <td>Previous Patient Numbers</td>
+                                <td style="text-align: right;font-weight: bold;"><?= number_format($prev, 0); ?></td>
+                            </tr>
+                            <tr>
+                                <td>Patient Numbers % Variance</td>
+                                <td style="text-align: right;font-weight: bold;"><?= $variance; ?>%</td>
+                            </tr>
+                        </table>
+                    </div>
 
 
                 </div> <!--end of cdrr-->
                 <div class="panel-footer">
-                    <?php if ($role == 'subcounty' && date('d') <= 30 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
-                        <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
-                        <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
-                    <?php } else if ($role == 'subcounty' && date('d') > 30 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
-                        <p><div class="alert alert-warning"><strong>NB: Allocation period has ended. No more allocations allowed beyond the 20<sup>th</sup> of each month. </strong></div></p>
-                    <?php } else {
-                        ?>
-                        <p><div class = "alert alert-warning"><strong>NB: Allocation Complete. </strong></div></p>
+                    <?php if (abs($variance) > 2) { ?>
+                        <div class = "alert alert-danger"><i class="fa fa-exclamation-triangle"></i> <strong>Patient Numbers % Variance is over 2%, Allocation not allowed!</strong></div>
+                    <?php } else { ?>
+
+                        <?php if ($role == 'subcounty' && date('d') <= 30 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
+                            <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
+                            <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
+                        <?php } else if ($role == 'subcounty' && date('d') > 30 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
+                            <p><div class="alert alert-warning"><strong>NB: Allocation period has ended. No more allocations allowed beyond the 20<sup>th</sup> of each month. </strong></div></p>
+                        <?php } else {
+                            ?>
+                            <p><div class = "alert alert-warning"><strong>NB: Allocation Complete. </strong></div></p>
+                        <?php } ?>
                     <?php } ?>
                 </div>
             </div>

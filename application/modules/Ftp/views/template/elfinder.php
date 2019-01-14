@@ -12,17 +12,23 @@
             // Documentation for client options:
             // https://github.com/Studio-42/elFinder/wiki/Client-configuration-options
             $(document).ready(function () {
+                if (navigator.onLine) { // true|false
+                    $.notify('Connection Active, Intitalizing...', 'success');
+                } else {
+                    $.notify('You are offline Please go online and refresh page.., ', 'error');
+                }
                 $('#elfinder').elfinder({
                     url: path + 'public/ftp/file_manager/php/connector.minimal.php' // connector URL (REQUIRED)
                 });
             });
+
         </script>
     </head>
     <body>
-            <!--navbar-->
-            <?php $this->load->view('navbar_view'); ?>
-            <!-- Element where elFinder will be created (REQUIRED) -->
-            <div id="elfinder"></div>
-             <?php $this->load->view('scripts_view'); ?>
+        <!--navbar-->
+        <?php $this->load->view('navbar_view'); ?>
+        <!-- Element where elFinder will be created (REQUIRED) -->
+        <div id="elfinder"></div>
+        <?php $this->load->view('scripts_view'); ?>
     </body>
 </html>

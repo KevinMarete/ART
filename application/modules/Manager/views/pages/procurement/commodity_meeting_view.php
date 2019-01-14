@@ -112,7 +112,8 @@
                             <div class="form-group row">
                                 <div class="col-sm-12">
                                     <button type="button" class="btn btn-danger readonly2" data-dismiss="modal"><i class="fa fa-remove"></i> Close</button>
-                                    <button type="button" class="btn btn-primary readonly2 " id="SAVE_ORDER"><i class="fa fa-save"></i> Save Order</button>
+                                    <button type="button" class="btn btn-primary" id="SAVE_ORDER" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Saving Procurement Item.."><i class="fa fa-save"></i> Save Order</button>
+
                                 </div>
                             </div>
 
@@ -201,6 +202,11 @@
     currentMonth = GetMonthName((new Date).getMonth());
     newdate = new Date(now.setMonth(now.getMonth() - 1));
     lastMonth = GetMonthName((newdate.getMonth()));
+
+    //alert(lastMonth);
+    if (lastMonth == 'December') {
+        currentYear = currentYear - 1;
+    }
     function GetMonthName(monthNumber) {
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         return months[monthNumber];
@@ -626,7 +632,7 @@
             var now = new Date();
             var end = new Date(date);
 
-            if (end > now && received == 'Received') {
+           /* if (end > now && received == 'Received') {
                 swal({
                     title: "Invalid!",
                     text: "You cannot receive this order at this time.",
@@ -634,7 +640,7 @@
                 });
                 row.find('[name="procurement_status_id"] option:eq(1)').prop('selected', true);
                 return false;
-            }
+            }*/
         });
 
         //Procurement status change event
@@ -700,7 +706,8 @@
     });
 
     $('#SAVE_ORDER').click(function () {
-        $('#SAVE_ORDER').prop('disabled', 'disabled');
+        var $this = $(this);
+        $this.button('loading');
         var drug_id = $('#tracker').attr('data-drug_id');
         $.post("<?php echo base_url() . 'manager/save_procurement'; ?>", $('#PROC_FORM').serialize(), function (resp) {
             if (resp.status == 'success') {
@@ -715,7 +722,7 @@
                 });
             }
         }, 'json');
-          $('#SAVE_ORDER').prop('disabled', false);
+        $this.button('reset');
         return false;
     });
 

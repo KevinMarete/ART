@@ -133,9 +133,9 @@ class Orders_model extends CI_Model {
                         c.period_begin,
                         CONCAT_WS('/', c.code, m.code) description,
                         $column
-                        c.status,
-                         f.mflcode,
-                        CONCAT('<a href=view/', c.id,'/', m.id, '>View Order</a>') options
+                         REPLACE(c.status,'reviewed','SUBMITTED TO KEMSA') status,                        
+                        CONCAT('<a href=view/', c.id,'/', m.id, '>View Order</a>') options,
+                         f.mflcode
                     FROM tbl_facility f
                     $join
                     INNER JOIN tbl_cdrr c ON c.facility_id = f.id 
@@ -233,7 +233,7 @@ class Orders_model extends CI_Model {
                 $sql = "SELECT 
                             f.mflcode,
                             UCASE(f.name) facility_name,
-                            IF(t.period_begin IS NOT NULL, UCASE(t.status), 'PENDING') reporting_status,
+                            IF(t.period_begin IS NOT NULL, UCASE(REPLACE(t.status,'reviewed','SUBMITTED TO KEMSA')), 'PENDING') reporting_status,
                             IF(t.period_begin IS NOT NULL, t.description, 'N/A') description,
                             ? period,
                             IF(t.period_begin IS NOT NULL, CONCAT('<a href=$allocation_url/',t.cdrr_id,'/',t.maps_id,'>View Order</a>'), 'Not Reported') options
@@ -286,7 +286,7 @@ class Orders_model extends CI_Model {
                             DATE_FORMAT(c.period_begin, '%M-%Y') period,
                             CONCAT_WS('/', SUM(IF(c.status = 'reviewed', 1, 0)) , sb.total) reviewed,
                             IF(SUM(IF(c.status = 'reviewed', 1, 0)) != sb.total, 'Incomplete', 'Complete') status,
-                            CONCAT('<a href=edit_allocation/', c.period_begin, '>View/Edit</a>')  options
+                            CONCAT('<a href=edit_allocation/', c.period_begin, '>View</a>')  options
                         FROM tbl_cdrr c 
                         INNER JOIN tbl_maps m ON c.facility_id = m.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status IN('allocated', 'approved', 'reviewed') AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1) AND c.period_begin=? AND c.period_end=?
                         INNER JOIN tbl_facility f ON c.facility_id = f.id,  
@@ -300,7 +300,7 @@ class Orders_model extends CI_Model {
                             DATE_FORMAT(c.period_begin, '%M-%Y') period,
                             CONCAT_WS('/', SUM(IF(c.status IN ('approved', 'reviewed'), 1, 0)) , sb.total) approved,
                             IF(SUM(IF(c.status IN ('approved', 'reviewed'), 1, 0)) != sb.total, 'Incomplete', 'Complete') status,
-                            CONCAT('<a href=edit_allocation/', c.period_begin, '>View/Edit</a>')  options
+                            CONCAT('<a href=edit_allocation/', c.period_begin, '>View</a>')  options
                         FROM tbl_cdrr c 
                         INNER JOIN tbl_maps m ON c.facility_id = m.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status IN('allocated', 'approved', 'reviewed') AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1)
                         INNER JOIN tbl_facility f ON c.facility_id = f.id  
@@ -317,7 +317,7 @@ class Orders_model extends CI_Model {
                             UCASE(f.name) facility_name,
                             IF(t.period_begin IS NULL, DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%M-%Y') , DATE_FORMAT(t.period_begin, '%M-%Y')) period,
                             IF(t.period_begin IS NOT NULL, t.description, 'N/A') description,
-                            IF(t.status IS NULL, 'PENDING', UCASE(t.status)) reporting_status,
+                            IF(t.status IS NULL, 'PENDING', UCASE(REPLACE(t.status,'reviewed','SUBMITTED TO KEMSA'))) reporting_status,
                             CASE 
                                 WHEN t.status = 'pending' THEN CONCAT('<a href=allocate/', t.cdrr_id,'/', t.maps_id, '> Allocate Order</a>')
                                 WHEN t.status != 'pending' THEN CONCAT('<a href=view_allocation/', t.cdrr_id,'/', t.maps_id, '> View Allocation</a>') 
@@ -372,7 +372,7 @@ class Orders_model extends CI_Model {
                 $sql = "SELECT 
                             UCASE(co.name) county,
                             CONCAT_WS('/', COUNT(DISTINCT t.facility_id), COUNT(DISTINCT f.id)) submitted,
-                            IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), 'Reviewed', 'Unreviewed') approval,
+                            IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), 'SUBMITTED TO KEMSA', 'Unreviewed') approval,
                             IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), 'Approved', 'N/A') reviewal_status,
                             IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), CONCAT('<a href=','../allocation/county/', co.id,'/', t.period_begin, '>View/Verify Allocation</a>'), CONCAT('<a href=','../allocation/county/', co.id,'/$currmonth','> Pending Allocation</a>')) options
                         FROM tbl_facility f  
@@ -795,7 +795,7 @@ class Orders_model extends CI_Model {
                         f.mflcode,
                         UCASE(f.name) facility_name,
                         IF(t.period_begin IS NOT NULL, t.description, 'N/A') description,
-                        IF(t.period_begin IS NOT NULL, UCASE(t.status), 'N/A') reporting_status,
+                        IF(t.period_begin IS NOT NULL, REPLACE(t.status,'reviewed','SUBMITTED TO KEMSA'), 'N/A') reporting_status,
                         ? period,
                         IF(t.period_begin IS NOT NULL, CONCAT('<a href=$allocation_url/',t.cdrr_id,'/',t.maps_id,'>View Order</a>'), 'Not Reported') options,
                         IF(t.period_begin IS NOT NULL, CONCAT('<a href=$base_url/',t.cdrr_id,'/',t.maps_id,'>Download Order</a>'), 'Not Action') download
