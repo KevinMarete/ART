@@ -191,7 +191,7 @@ class Orders extends MX_Controller {
         echo json_encode(array('data' => $response['data']));
     }
 
-    public function get_reporting_rates($role = null, $scope = null, $allocation = null) {
+    public function get_reporting_rates($role = null, $scope = null, $allocation = null) { 
         $role = ($role) ? $role : $this->session->userdata('role');
         $scope = ($scope) ? $scope : $this->session->userdata('scope');
         $allocation = ($allocation) ? TRUE : FALSE;

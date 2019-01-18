@@ -468,7 +468,7 @@ class Orders_model extends CI_Model {
         }
 
         try {
-            $sql = "SELECT 
+            $sql = "SELECT  
                         *, d.name AS drug_name, f.name AS facility_name, co.name AS county, sc.name AS subcounty, ci.id AS cdrr_item_id
                     FROM tbl_cdrr c 
                     INNER JOIN tbl_cdrr_item ci ON ci.cdrr_id = c.id
