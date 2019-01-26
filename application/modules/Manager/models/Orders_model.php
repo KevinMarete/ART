@@ -100,14 +100,15 @@ class Orders_model extends CI_Model {
     }
 
     public function get_order_data($scope, $role, $subcounty) {
-        $post = $this->input->post('subcounty');      
-        
+        $post = $this->input->post('subcounty');
+        $post = $this->input->post('subcounty');
+
         $response = array('data' => array());
         $column = "";
         $join = "";
         $filter = "";
         $sql = '';
-        $sql2 ='';
+        $sql2 = '';
         if (!empty($post)) {
             $sql2 .= " AND sc.name='$post'";
         } else {
@@ -230,13 +231,17 @@ class Orders_model extends CI_Model {
             } else {
                 $allocation_url = ($allocation) ? "../../../view_allocation" : "view";
 
-                $sql = "SELECT 
+                $sql = "SELECT
                             f.mflcode,
                             UCASE(f.name) facility_name,
                             IF(t.period_begin IS NOT NULL, UCASE(REPLACE(t.status,'reviewed','SUBMITTED TO KEMSA')), 'PENDING') reporting_status,
                             IF(t.period_begin IS NOT NULL, t.description, 'N/A') description,
                             ? period,
-                            IF(t.period_begin IS NOT NULL, CONCAT('<a href=$allocation_url/',t.cdrr_id,'/',t.maps_id,'>View Order</a>'), 'Not Reported') options
+                            CASE 
+                                WHEN t.cdrr_id IS NULL THEN CONCAT('D-CDRR Pending')
+                                WHEN t.cdrr_id IS NULL THEN CONCAT('D-MAPS Pending')
+                                ELSE CONCAT('<a href=$allocation_url/',t.cdrr_id,'/',t.maps_id,'>View Order</a>') 
+                                END AS options
                         FROM tbl_facility f  
                         LEFT JOIN
                         (
@@ -288,13 +293,13 @@ class Orders_model extends CI_Model {
                             IF(SUM(IF(c.status = 'reviewed', 1, 0)) != sb.total, 'Incomplete', 'Complete') status,
                             CONCAT('<a href=edit_allocation/', c.period_begin, '>View</a>')  options
                         FROM tbl_cdrr c 
-                        INNER JOIN tbl_maps m ON c.facility_id = m.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status IN('allocated', 'approved', 'reviewed') AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1) AND c.period_begin=? AND c.period_end=?
+                        INNER JOIN tbl_maps m ON c.facility_id = m.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status IN('allocated', 'approved', 'reviewed') AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1) 
                         INNER JOIN tbl_facility f ON c.facility_id = f.id,  
                         (SELECT COUNT(DISTINCT fc.name) total FROM tbl_facility fc WHERE fc.category != 'satellite') sb
                         WHERE f.category != 'satellite'
                         GROUP BY period
                         ORDER BY period ASC";
-                $table_data = $this->db->query($sql, array($period_begin, $period_end))->result_array();
+                $table_data = $this->db->query($sql)->result_array();
             } else if ($role == 'county') {
                 $sql = "SELECT 
                             DATE_FORMAT(c.period_begin, '%M-%Y') period,
@@ -321,6 +326,8 @@ class Orders_model extends CI_Model {
                             CASE 
                                 WHEN t.status = 'pending' THEN CONCAT('<a href=allocate/', t.cdrr_id,'/', t.maps_id, '> Allocate Order</a>')
                                 WHEN t.status != 'pending' THEN CONCAT('<a href=view_allocation/', t.cdrr_id,'/', t.maps_id, '> View Allocation</a>') 
+                                WHEN t.cdrr_id IS NULL THEN CONCAT('D-CDRR Pending')
+                                WHEN t.cdrr_id IS NULL THEN CONCAT('D-MAPS Pending')
                                 ELSE 'Not Reported'
                             END AS options
                         FROM tbl_facility f
@@ -468,15 +475,21 @@ class Orders_model extends CI_Model {
         }
 
         try {
-            $sql = "SELECT  
-                        *, d.name AS drug_name, f.name AS facility_name, co.name AS county, sc.name AS subcounty, ci.id AS cdrr_item_id
-                    FROM tbl_cdrr c 
-                    INNER JOIN tbl_cdrr_item ci ON ci.cdrr_id = c.id
-                    INNER JOIN vw_drug_list d ON d.id = ci.drug_id
-                    INNER JOIN tbl_facility f ON f.id = c.facility_id
-                    INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
-                    INNER JOIN tbl_county co ON co.id = sc.county_id
-                    WHERE c.id = ?  " . $role_cond;
+
+            $sql = "SELECT *,
+                       d.name AS drug_name,
+                       f.name AS facility_name,
+                       co.name AS county,
+                       sc.name AS subcounty,
+                       ci.id AS cdrr_item_id
+                     
+                FROM tbl_cdrr c
+                INNER JOIN tbl_cdrr_item ci ON ci.cdrr_id = c.id
+                INNER JOIN vw_drug_list d ON d.id = ci.drug_id
+                INNER JOIN tbl_facility f ON f.id = c.facility_id
+                INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
+                INNER JOIN tbl_county co ON co.id = sc.county_id           
+                WHERE c.id = ?  " . $role_cond . " ORDER BY d.regimen_category ASC";
             $table_data = $this->db->query($sql, array($cdrr_id))->result_array();
 
             $logs_sql = "SELECT 
@@ -536,6 +549,7 @@ class Orders_model extends CI_Model {
                         'qty_allocated_mos' => $result['qty_allocated_mos'],
                         'max_mos' => $result['max_mos'],
                         'min_mos' => $result['min_mos'],
+                        'amc_months' => $result['amc_months'],
                         'stock_status' => $result['stock_status'],
                         'feedback' => $result['feedback']
                     );
@@ -629,6 +643,7 @@ class Orders_model extends CI_Model {
                         'publish' => $result['publish'],
                         'drugamc' => $this->get_drug_amc($result['facility_id'], $result['period_begin'], $result['drug_id'], $result['code']),
                         'cdrr_id' => $result['cdrr_id'],
+                        'facility_amc' => $result['facility_amc'],
                         'drug_id' => $result['drug_id'],
                         'qty_allocated' => $result['qty_allocated'],
                         'qty_allocated_mos' => $result['qty_allocated_mos'],
@@ -655,9 +670,10 @@ class Orders_model extends CI_Model {
         $amc = 0;
 
         $sql = "SELECT 
-                    ROUND(SUM(ci.dispensed_packs) / 3) as dispensed_packs,
-                    ROUND(SUM(ci.aggr_consumed) / 3) as aggr_consumed
+                    ROUND(SUM(ci.dispensed_packs) /  d.facility_amc) as dispensed_packs,
+                    ROUND(SUM(ci.aggr_consumed) / d.facility_amc) as aggr_consumed
                 FROM tbl_cdrr_item ci 
+                INNER JOIN vw_drug_list d ON d.id = ci.drug_id
                 INNER JOIN (
                     SELECT 
                         id, period_begin, code

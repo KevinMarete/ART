@@ -178,6 +178,11 @@
             }
         }
     }
+
+    .AVGISCON td:nth-child(2),td:nth-child(3) {
+        text-align: right;
+        font-weight: bold;
+    } 
 </style>
 <div id="page-wrapper">
     <!--row-->
@@ -273,13 +278,15 @@
                         </div>
                     </div>
                     <div id="step-3" class="">
-                        <h3 class="border-bottom border-gray pb-2">Step 3 Item Discussions & Recommendations</h3>
+                        <h3 class="border-bottom border-gray pb-2">Step 3 Item Discussions & Recommendations                                     <a href="#AvgIssues" class="btn btn-sm btn-primary pull-right" style="position: relative; margin: 10px;"  data-toggle="modal" data-target="#advancedIssuesModal">Average Issues / Consumption</a>
+                        </h3>
                         <div class="container2" style="margin-top: 1em;">
 
                             <div class="card person-card ">
                                 <div class="card-body">
 
                                     <div class="row">
+
 
                                         <div class="form-group col-md-12">
                                             <input id="commodityName" style="height: 50px; font-size: 14px; width: 98%;" type="text" class="form-control" placeholder="Type name of Commodity...e.g Abacavir (ABC) 300mg Tabs" >
@@ -351,6 +358,7 @@
                                     </div>
                                     <div class="row">
                                         <button class="btn btn-primary btn-lg" id="SaveCommodity" style="margin-left:30px;">Save</button>
+
                                     </div>
                                 </div>  
                             </div>
@@ -392,6 +400,68 @@
             </div>
         </div>
 
+        <div id="advancedIssuesModal" class="modal fade modal-lg" style="width:100%">
+            <div class="modal-dialog">
+                <input id="filterStatus" type="hidden"/>
+                <!-- Filter Modal-->
+                <div class="modal-content">
+                    <form id="AvgForm">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title"><b>Commodity Average Issues & Consumption List</b></h4>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="scope_id" value="<?php echo $this->session->userdata('scope'); ?>"/>
+                            <input type="hidden" id="scope" value="<?php echo $this->session->userdata('scope_name'); ?>"/>
+                            <input type="hidden" id="role" value="<?php echo $this->session->userdata('role'); ?>"/>
+
+
+                            <div class="form-group col-lg-6">
+                                <label>Year-Month From:</label>
+                                <input type="text" name="from" id="from"  value="2018-01" class="form-control DatePickers"  placeholder="From">
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                <label>Year-Month To:</label>
+                                <input type="text" name="to" id="to" value="2018-12" class="form-control DatePickers" placeholder="To">
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <select style="width:100% !important;" class="form-control drug " multiple="multiple" data-item="drug" name="drug[]"></select>
+
+                            </div>
+
+
+                            <div class="form-group col-lg-12">
+                                <center><span class="badge badge-info iinfo" style=""></span></center>
+                            </div>
+
+
+                            <div class="form-group col-lg-12">
+                                <table class="table table-bordered table-condensed AVGISCON table-hover table-responsive">
+                                    <thead>
+                                        <tr>
+                                            <th>Commodity</th>
+                                            <th>Issues</th>
+                                            <th>Consumption</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary btn-lg" id="avgFilterForm" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing Results"><i class="fa fa-filter"></i> Filter</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
 
         <?php $this->load->view('pages/procurement/commodity_meeting_view'); ?>
 
@@ -406,6 +476,51 @@
 
             meeting_date = '';
             drug_id = '';
+
+
+            var d = new Date();
+            year = d.getFullYear();
+            monthNames = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+            // table = $('.AVGISCON').DataTable();
+            $(".DatePickers").monthpicker({
+                pattern: 'yyyy-mm',
+                selectedYear: year,
+                startYear: 2017,
+                finalYear: year
+            });
+
+            $('#avgFilterForm').click(function () {
+                from = $('#from').val();
+                to = $('#to').val();
+                monthfrom = parseInt(from.substr(-2)) - 1;
+                monthto = parseInt(to.substr(-2)) - 1;
+                yearfrom = from.substr(0, 4);
+                yearto = to.substr(0, 4);
+                period = monthNames[monthfrom] + " " + yearfrom + " and " + monthNames[monthto] + " " + yearto;
+                $('.iinfo').text('');
+                $('.iinfo').text('Commodity Averages Issues & Consumption between ' + period);
+                var $this = $(this);
+                $this.button('loading');
+                data = $('#AvgForm').serialize();
+                $.post("<?php echo base_url(); ?>Manager/Procurement/FilterAvg", data, function (resp) {
+                    if ($.fn.DataTable.isDataTable('.AVGISCON')) {
+                        $('.AVGISCON').DataTable().destroy();
+                    }
+                    $('.AVGISCON').DataTable({
+                        "processing": true,
+                        "data": resp,
+                        "columns": [
+                            {"data": "drug"},
+                            {"data": "issues"},
+                            {"data": "consumption"}
+                        ]
+                    });
+                    $this.button('reset');
+                });
+            });
+
 
             loadMembers();
             $.getJSON("<?php echo base_url(); ?>Manager/Procurement/loadMeetingDate/" + meeting_id, function (resp) {
@@ -424,6 +539,22 @@
             });
 
             loadMinute(meeting_id);
+            loadDrugs();
+
+
+            function loadDrugs() {
+                $.getJSON('<?php echo base_url(); ?>Manager/Procurement/getAllDrugs/', function (resp) {
+                    $('.drug').empty();
+                    $.each(resp, function (i, j) {
+                        $('.drug').append('<option value="' + j.name + '">' + j.name + '</option>');
+                    });
+
+                    $('.drug').multiselect({
+                        enableFiltering: true,
+                        filterBehavior: 'value'
+                    });
+                });
+            }
 
             $('#addMember').click(function () {
                 list = $('#lstBox1');

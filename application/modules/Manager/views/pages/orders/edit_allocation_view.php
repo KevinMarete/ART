@@ -73,7 +73,7 @@
                             }).length;
                     var reporting_rate = Math.ceil((thecount / dtable.rows().count()) * 100);
                     $('.panel-heading').html('Allocation Rate: <b>' + reporting_rate + '%</b><div class="progress"><div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="' + reporting_rate + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + reporting_rate + '%;">' + reporting_rate + '%</div></div>')
-                    alert(thecount / dtable.rows().count());
+                   // alert(thecount / dtable.rows().count());
 
                 }
 

@@ -1,3 +1,9 @@
+<style type="text/css">
+    .dangerClass{
+        background: lightsalmon;
+        color:white;
+    }
+</style>
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
@@ -42,7 +48,13 @@
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-listing">
+                    <table width="100%" class="table <?php
+                    if ($this->uri->segment(3) == 'drug') {
+                        
+                    } else {
+                        echo 'table-striped';
+                    };
+                    ?> table-bordered table-hover" id="dataTables-listing">
                         <thead>
                             <tr>
                                 <?php
@@ -113,7 +125,7 @@
                                     <th>Email Address</th>
                                     <th>Phone Number</th>
                                     <th>Role</th>
-                                <?php } ?>
+<?php } ?>
 
                             </tr>
                         </thead>
@@ -153,7 +165,19 @@ if ($page_name != 'backup') {
 
     $(document).ready(function () {
         table = $('#dataTables-listing').DataTable({
-            responsive: true,
+            //responsive: true,
+            "scrollX": true,
+            "createdRow": function (row, data, dataIndex) {
+                if (data[12] >= '0' && data[12] <= '2') {
+                    $(row).addClass('dangerClass');
+                } else if (data[12] >= '2' && data[12] <= '4') {
+                    $(row).addClass('warningClass');
+                } else if (data[12] >= '4' && data[12] <= '6') {
+                    $(row).addClass('infoClass');
+                } else {
+                    $(row).addClass('noClass');
+                }
+            },
             ajax: "<?php echo base_url() . 'Manager/Admin/get_data/tbl_' . $page_name . '/'; ?>",
             select: {
                 style: 'single',
@@ -289,6 +313,10 @@ if ($page_name != 'backup') {
                 $('[name="amc_months"]').val(data.amc_months);
                 $('[name="stock_status"]').val(data.stock_status);
                 $('[name="kemsa_code"]').val(data.kemsa_code);
+                $('[name="facility_amc"]').val(data.facility_amc);
+                $('[name="short_expiry"]').val(data.short_expiry);
+                $('[name="expiry_date"]').val(data.expiry_date);
+                $('[name="regimen_category"]').val(data.regimen_category);
                 //generic
                 $('[name="abbreviation"]').val(data.abbreviation);
                 //meeting
@@ -324,10 +352,10 @@ if ($page_name != 'backup') {
                 $('[name="drug_id"]').val(data.drug_id);
                 //role_submodule
                 $('[name="role_id"]').val(data.role_id)
-               
+
                 // alert(data.role_id)
                 $('[name="submodule_id"]').val(data.submodule_id);
-                
+
                 //  alert(data.role_id)
 
                 //User
@@ -375,8 +403,8 @@ if ($page_name != 'backup') {
     }
 
     function save() {
-        $('#btnSave').text('saving...');
-        $('#btnSave').attr('disabled', true);
+        //$('#btnSave').text('saving...');
+       // $('#btnSave').attr('disabled', true);
         var url;
 
         if (save_method == 'add') {

@@ -91,6 +91,7 @@
                                             <th colspan="2">Commodities Expiring < 6 Months</th>
                                             <th>Days out of Stock</th>
                                             <th>Resupply Quantity</th>
+                                            <th>Category</th>
                                         </tr>
                                         <tr>
                                             <th></th>
@@ -109,10 +110,12 @@
                                             <th>Expiry Date</th>
                                             <th>K</th>
                                             <th>L</th>
+                                            <th>M</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     <form name="orderForm" id="orderForm">
+
                                         <?php
                                         foreach ($columns['drugs'] as $key => $drug) {
                                             $drugid = $drug['id'];
@@ -153,6 +156,7 @@
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_date']; ?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['out_of_stock']; ?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply']; ?></td>
+                                                    <td><?= $drug['regimen_category']; ?></td>
                                                 <?php } ?>
                                             </tr>
                                         <?php } ?>
@@ -161,34 +165,34 @@
                                 </table>
                             </div>
                             <div class="col-md-12">
-                               
-                                    <div class="table-responsive-removed">
-                                        <table class="table table-bordered table-striped table-condensed">
-                                            <thead>
-                                            <th>Status</th>
-                                            <th>User</th>
-                                            <th>Role</th>
-                                            <th>Timestamp</th>
-                                            </thead>
-                                            <?php foreach ($columns['cdrrs']['data']['cdrr_logs'] as $key => $log) { ?>
-                                                <tr>
-                                                    <td> 
-                                                        <?php
-                                                        if ($log['description'] == 'reviewed') {
-                                                            echo 'Submitted to KEMSA';
-                                                        } else {
-                                                            echo ucwords($log['description']);
-                                                        };
-                                                        ?>
-                                                    </td>
-                                                    <td><?= ucwords($log['firstname'] . ' ' . $log['lastname']); ?> </td>
-                                                    <td><?= ucwords($log['role']); ?> </td>
-                                                    <td><?= $log['created']; ?></td>
-                                                </tr>
-                                            <?php } ?>
-                                        </table>
-                                    </div>
-                                
+
+                                <div class="table-responsive-removed">
+                                    <table class="table table-bordered table-striped table-condensed">
+                                        <thead>
+                                        <th>Status</th>
+                                        <th>User</th>
+                                        <th>Role</th>
+                                        <th>Timestamp</th>
+                                        </thead>
+                                        <?php foreach ($columns['cdrrs']['data']['cdrr_logs'] as $key => $log) { ?>
+                                            <tr>
+                                                <td> 
+                                                    <?php
+                                                    if ($log['description'] == 'reviewed') {
+                                                        echo 'Submitted to KEMSA';
+                                                    } else {
+                                                        echo ucwords($log['description']);
+                                                    };
+                                                    ?>
+                                                </td>
+                                                <td><?= ucwords($log['firstname'] . ' ' . $log['lastname']); ?> </td>
+                                                <td><?= ucwords($log['role']); ?> </td>
+                                                <td><?= $log['created']; ?></td>
+                                            </tr>
+                                        <?php } ?>
+                                    </table>
+                                </div>
+
 
                             </div>
                         </div> <!--end of cdrr-->
@@ -199,6 +203,7 @@
                                     <th>Code | Regimen</th>
                                     <th title="Current Active Patient">No. of Patients</th>
                                     <th title="Previous Active Patient">(% Change)</th>
+                                    <th title="Category">Category</th>
                                     </thead>
                                     <tbody>
                                         <?php
@@ -224,6 +229,7 @@
                                                             ?>
 
                                                         </td>
+                                                        <td><?= $category ?></td>
 
                                                     </tr>
                                                     <?php
@@ -271,14 +277,33 @@
     $(function () {
         $('#side-menu').remove();
 
-        $('#MapsData,#mapsTable').DataTable({
+        $('#MapsData').DataTable({
             scrollY: "500px",
             scrollX: true,
             scrollCollapse: true,
             paging: false,
             fixedColumns: true,
             searching: false,
-            info: false
+            order: [[16, "asc"]],
+            info: false,
+            drawCallback: function (settings) {
+                var api = this.api();
+                var rows = api.rows({page: 'current'}).nodes();
+                var last = null;
+
+                api.column(16, {page: 'current'}).data().each(function (group, i) {
+
+                    if (last !== group) {
+
+                        $(rows).eq(i).before(
+                                '<tr class="group" style="background:green; color:white;font-weight:bold;"><td colspan="24">' + group.toUpperCase() + '</td></tr>'
+                                );
+
+                        last = group;
+                    }
+                });
+                api.column(16).visible(false);
+            }
         });
 
         $('#mapsTable').DataTable({
@@ -288,8 +313,27 @@
             paging: false,
             fixedColumns: true,
             searching: false,
-            info: false
+            info: false,
+            drawCallback: function (settings) {
+                var api = this.api();
+                var rows = api.rows({page: 'current'}).nodes();
+                var last = null;
+
+                api.column(3, {page: 'current'}).data().each(function (group, i) {
+
+                    if (last !== group) {
+
+                        $(rows).eq(i).before(
+                                '<tr class="group" style="background:green; color:white;font-weight:bold;"><td colspan="3">' + group.toUpperCase() + '</td></tr>'
+                                );
+
+                        last = group;
+                    }
+                });
+                api.column(3).visible(false);
+            }
         });
+
 
         $('.balance').click(function () {
             row = $(this).closest('tr');

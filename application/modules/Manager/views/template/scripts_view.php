@@ -47,7 +47,6 @@
 <script type="text/javascript" src="<?php echo base_url() . 'public/manager/lib/jexcel/js/excel-formula.min.js'; ?>"></script>
 <script type="text/javascript" src="<?php echo base_url() . 'public/manager/lib/jexcel/js/jquery.jexcel.js'; ?>"></script>
 <script type="text/javascript" src="<?php echo base_url() . 'public/dashboard/js/jquery.tabletojson.js'; ?>"></script>
-<!--<script type="text/javascript" src="<?php echo base_url() . 'public/manager/js/gridviewscroll.js'; ?>"></script>-->
 <script type="text/javascript" src="<?php echo base_url() . 'public/manager/js/jquery.smartWizard.js'; ?>"></script>
 <script type="text/javascript" src="<?php echo base_url() . 'public/manager/js/jquery.easy-autocomplete.min.js'; ?>"></script>
 <script type="text/javascript" src="<?php echo base_url() . 'public/manager/lib/timepicker/js/jquery.timepicker.min.js'; ?>"></script>

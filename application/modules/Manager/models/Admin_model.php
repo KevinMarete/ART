@@ -25,12 +25,13 @@ class Admin_model extends CI_Model {
                 $this->db->join('tbl_county c', 'c.id = sc.county_id', 'inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_drug') {
-                $this->db->select('d.id,d.strength,d.packsize,g.name generic,f.name formulation,dc.name category,d.min_mos, d.max_mos, d.amc_months, st.name stock_status, d.kemsa_code');
+                $this->db->select('d.id,d.strength,d.packsize,g.name generic,f.name formulation,dc.name category, d.min_mos, d.max_mos, d.amc_months, d.facility_amc, st.name stock_status, d.kemsa_code,d.short_expiry,r.Name regimen_category');
                 $this->db->from('tbl_drug d');
                 $this->db->join('tbl_generic g', 'g.id=d.generic_id', 'inner');
                 $this->db->join('tbl_formulation f', 'f.id=d.formulation_id', 'inner');
                 $this->db->join('tbl_drug_category dc', 'dc.id=d.drug_category', 'inner');
                 $this->db->join('tbl_stock_status st', 'd.stock_status=st.id', 'inner');
+                $this->db->join('tbl_regimen_category r', 'd.regimen_category=r.id', 'left');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_mailing_list') {
                 $this->db->select('ml.id,ml.name name, ml.email,c.name category,ml.sent_date , s.name status');
@@ -64,11 +65,10 @@ class Admin_model extends CI_Model {
                 $this->db->join('vw_drug_list vdl', 'vdl.id=rg.drug_id', 'inner');
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_role_submodule') {
-                $table_data=$this->db->query("SELECT sbm.id, r.name role, sb.name submodule
+                $table_data = $this->db->query("SELECT sbm.id, r.name role, sb.name submodule
                                     FROM tbl_role_submodule sbm
                                     INNER JOIN tbl_role r ON r.id = sbm.role_id
-                                    INNER JOIN tbl_submodule sb ON sb.id = sbm.submodule_id")->result_array();                
-               
+                                    INNER JOIN tbl_submodule sb ON sb.id = sbm.submodule_id")->result_array();
             } else if ($table == 'tbl_submodule') {
                 $this->db->select('sbm.id,sbm.name,m.name module_name');
                 $this->db->from('tbl_submodule sbm');
@@ -81,7 +81,7 @@ class Admin_model extends CI_Model {
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_meeting') {
                 // DATE_FORMAT(meeting_date,'%W %D %b, %Y') meeting_date
-                $table_data = $this->db->query("SELECT id,meeting_date FROM tbl_meeting ORDER BY id DESC ")->result_array();                
+                $table_data = $this->db->query("SELECT id,meeting_date FROM tbl_meeting ORDER BY id DESC ")->result_array();
             } else if ($table == 'tbl_syslogs') {
                 $table_data = $this->db->query("SELECT sy.id,sy.log_date,sy.action,sy.module,CONCAT_WS(' ',u.firstname,u.lastname) user
                                                                                FROM tbl_syslogs sy LEFT JOIN tbl_user u ON sy.user = u.id
@@ -126,7 +126,8 @@ class Admin_model extends CI_Model {
 
             //Check duplicate
             $row_count = $this->db->get_where($table, $user_array)->num_rows();
-            if($row_count == 0){
+           
+            if ($row_count == 0) {
                 $this->db->insert($table, $user_array);
                 $id = $this->db->insert_id();
 
@@ -135,23 +136,23 @@ class Admin_model extends CI_Model {
                     'role_id' => $this->input->post('role'),
                     'user_id' => $id
                 ];
-                if($role == 5 || $role == 1 || $role == 4) {
+                if ($role == 5 || $role == 1 || $role == 4 || $role == 6) {
                     
-                }else {
+                } else {
                     $this->db->insert($table . '_scope', $scope_array);
                 }
-                $response = array('status' => TRUE, 'message' => 'Success! '.ucwords(str_ireplace('tbl_', '', $table)).' was saved successfully!');
-            }else{
+                $response = array('status' => TRUE, 'message' => 'Success! ' . ucwords(str_ireplace('tbl_', '', $table)) . ' was saved successfully!');
+            } else {
                 $response = array('status' => FALSE, 'message' => 'Failed! Duplicate record exists!');
             }
         } else {
             unset($data['id']);
             //Check duplicate
             $row_count = $this->db->get_where($table, $data)->num_rows();
-            if($row_count == 0){
+            if ($row_count == 0) {
                 $this->db->insert($table, $data);
-                $response = array('status' => TRUE, 'message' => 'Success! '.ucwords(str_ireplace('tbl_', '', $table)).' was saved successfully!');
-            }else{
+                $response = array('status' => TRUE, 'message' => 'Success! ' . ucwords(str_ireplace('tbl_', '', $table)) . ' was saved successfully!');
+            } else {
                 $response = array('status' => FALSE, 'message' => 'Failed! Duplicate record exists!');
             }
         }
@@ -181,18 +182,18 @@ class Admin_model extends CI_Model {
 
             //Check duplicate
             $row_count = $this->db->get_where($table, $user_array)->num_rows();
-            if($row_count == 0){
+            if ($row_count == 0) {
                 $this->db->update($table, $user_array, $where);
                 //Ensure role is chosen within scope
-                if($this->input->post('scope_id')){
+                if ($this->input->post('scope_id')) {
                     $scope_array = array(
                         'scope_id' => $this->input->post('scope_id'),
                         'role_id' => $this->input->post('role')
                     );
                     $this->db->update('tbl_user_scope', $scope_array, array('user_id' => $this->input->post('id')));
                 }
-                $response = array('status' => TRUE, 'message' => 'Success! '.ucwords(str_ireplace('tbl_', '', $table)).' was updated successfully!');
-            }else{
+                $response = array('status' => TRUE, 'message' => 'Success! ' . ucwords(str_ireplace('tbl_', '', $table)) . ' was updated successfully!');
+            } else {
                 $response = array('status' => FALSE, 'message' => 'Failed! Duplicate record exists!');
             }
         } else {
@@ -200,10 +201,10 @@ class Admin_model extends CI_Model {
             $filter_array = $data;
             unset($filter_array['id']);
             $row_count = $this->db->get_where($table, $filter_array)->num_rows();
-            if($row_count == 0){
+            if ($row_count == 0) {
                 $this->db->update($table, $data, $where);
-                $response = array('status' => TRUE, 'message' => 'Success! '.ucwords(str_ireplace('tbl_', '', $table)).' was updated successfully!');
-            }else{
+                $response = array('status' => TRUE, 'message' => 'Success! ' . ucwords(str_ireplace('tbl_', '', $table)) . ' was updated successfully!');
+            } else {
                 $response = array('status' => FALSE, 'message' => 'Failed! Duplicate record exists!');
             }
         }

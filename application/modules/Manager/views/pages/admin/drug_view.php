@@ -40,9 +40,17 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Category</label>
+                            <label class="control-label col-md-3">Drug Category</label>
                             <div class="col-md-9">
                                 <select name="drug_category" id="drug_category" class="form-control select2">
+                                </select>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Regimen Category</label>
+                            <div class="col-md-9">
+                                <select name="regimen_category" id="regimen_category" class="form-control select2">
                                 </select>
                                 <span class="help-block"></span>
                             </div>
@@ -69,6 +77,13 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="control-label col-md-3">Facility AMC</label>
+                            <div class="col-md-9">
+                                <input name="facility_amc" id="facility_amc" placeholder="0 = No AMC" class="form-control" type="number">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="control-label col-md-3">Status</label>
                             <div class="col-md-9">
                                 <select name="stock_status" id="stock_status" class="form-control select2">
@@ -83,6 +98,16 @@
                                 <span class="help-block"></span>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Short Expiry</label>
+                            <div class="col-md-9">
+                                <input name="short_expiry" id="short_expiry" class="form-control" placeholder="No of Months" type="number">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+
+
                     </div>
                 </form>
             </div>
@@ -100,6 +125,7 @@
         var formulationURL = '../../API/formulation';
         var drug_categoryURL = '../../API/Drug_category';
         var stockStatusURL = '../../API/Stock_status';
+
         $("#generic_id").empty()
         $.getJSON(genericURL, function (generics) {
             $("#generic_id").append($("<option value=''>Select Generic</option>"));
@@ -114,7 +140,7 @@
                 $("#formulation_id").append($("<option value='" + formulation.id + "'>" + formulation.name.toUpperCase() + "</option>"));
             });
         });
-        
+
         $("#drug_category").empty()
         $.getJSON(drug_categoryURL, function (categories) {
             $("#drug_category").append($("<option value=''>Select Drug Category</option>"));
@@ -122,7 +148,16 @@
                 $("#drug_category").append($("<option value='" + category.id + "'>" + category.name.toUpperCase() + "</option>"));
             });
         });
-        
+
+        $("#regimen_category").empty()
+        $.getJSON("<?=base_url();?>Manager/Orders/regimen_category", function (regimen) {
+            $("#regimen_category").append($("<option value=''>Select Regimen Category</option>"));
+            $.each(regimen, function (index, category) {
+                $("#regimen_category").append($("<option value='" + category.id + "'>" + category.Name.toUpperCase() + "</option>"));
+            });
+        });
+
+
         $("#stock_status").empty()
         $.getJSON(stockStatusURL, function (categories) {
             $("#stock_status").append($("<option value=''>Select Status</option>"));
@@ -130,6 +165,6 @@
                 $("#stock_status").append($("<option value='" + category.id + "'>" + category.name.toUpperCase() + "</option>"));
             });
         });
-        
+
     });
 </script>

@@ -13,6 +13,10 @@ class Orders extends MX_Controller {
         $this->load->library('email_sender');
     }
 
+    function regimen_category() {
+        $this->response($this->query("SELECT * FROM tbl_regimen_category ORDER BY name ASC"));
+    }
+
     function pdf() {
         $pdfBuilder = '';
         $columns = @$this->Orders_model->get_cdrr_data($this->uri->segment('4'), $this->session->userdata('scope'), $this->session->userdata('role'));
@@ -191,7 +195,7 @@ class Orders extends MX_Controller {
         echo json_encode(array('data' => $response['data']));
     }
 
-    public function get_reporting_rates($role = null, $scope = null, $allocation = null) { 
+    public function get_reporting_rates($role = null, $scope = null, $allocation = null) {
         $role = ($role) ? $role : $this->session->userdata('role');
         $scope = ($scope) ? $scope : $this->session->userdata('scope');
         $allocation = ($allocation) ? TRUE : FALSE;
@@ -297,7 +301,7 @@ class Orders extends MX_Controller {
     function upload() {
         $path = "public/kemsa_templates/AllocationTemplate";
         //$file = $path . 'kemsa.xlsx';
-       
+
         $valid_formats = array("xlsx"); //add the formats you want to upload
 
         $name = $_FILES['myfile']['name']; //get the name of the file
@@ -325,6 +329,110 @@ class Orders extends MX_Controller {
             echo "Please select a file..!";
         }
         exit;
+    }
+
+    //CRONTAB
+    //crontab -e
+    //0 22 20 * * wget http://commodities.nascop.org/Manager/Orders/AllocateUnallocatedOrders20thMonthlyAt10pm
+    //0 23 20 * * wget http://commodities.nascop.org/Manager/Orders/ApproveUnapprovedOrders20thMonthlyAt11pm
+    //0 00 20 * * wget http://commodities.nascop.org/Manager/Orders/ApproveUnapprovedOrders20thMonthlyAt11pm
+
+    function AllocateUnallocatedOrders20thMonthlyAt10pm() {
+        $this->db->query("UPDATE tbl_cdrr SET status='allocated' WHERE id IN (SELECT t.id FROM (SELECT * FROM tbl_cdrr) t WHERE t.period_begin =  concat(date_format(LAST_DAY(now() - interval 1 month),'%Y-%m-'),'01') AND t.status='pending')");
+        $this->db->query("UPDATE tbl_maps SET status='allocated' WHERE id IN (SELECT t.id FROM (SELECT * FROM tbl_maps) t WHERE t.period_begin =  concat(date_format(LAST_DAY(now() - interval 1 month),'%Y-%m-'),'01') AND t.status='pending')");
+        $cdrr_id = $this->db->query("SELECT id FROM tbl_cdrr WHERE period_begin =  concat(date_format(LAST_DAY(now() - interval 1 month),'%Y-%m-'),'01') AND status='allocated'")->result();
+        foreach ($cdrr_id as $id):
+            $array = array(
+                'description' => 'allocated',
+                'user_id' => '1',
+                'cdrr_id' => $id->id,
+                'created' => date('Y-m-d H:i:s')
+            );
+            $this->db->set($array);
+            $this->db->replace('tbl_cdrr_log');
+        endforeach;
+
+        $maps_id = $this->db->query("SELECT id FROM tbl_maps WHERE period_begin =  concat(date_format(LAST_DAY(now() - interval 1 month),'%Y-%m-'),'01') AND status='allocated'")->result();
+        foreach ($maps_id as $id):
+            $array = array(
+                'description' => 'allocated',
+                'user_id' => '1',
+                'maps_id' => $id->id,
+                'created' => date('Y-m-d H:i:s')
+            );
+            $this->db->set($array);
+            $this->db->replace('tbl_maps_log');
+        endforeach;
+
+        $this->response(['status' => '1', 'message' => 'Allocated Successfull!']);
+    }
+
+    //CRONTAB
+    //crontab -e
+    //0 23 20 * * wget http://commodities.nascop.org/Manager/Orders/ApproveUnapprovedOrders20thMonthlyAt11pm
+
+    function ApproveUnapprovedOrders20thMonthlyAt11pm() {
+        $this->db->query("UPDATE tbl_cdrr SET status='approved' WHERE id IN (SELECT t.id FROM (SELECT * FROM tbl_cdrr) t WHERE t.period_begin =  concat(date_format(LAST_DAY(now() - interval 1 month),'%Y-%m-'),'01') AND t.status='allocated')");
+        $this->db->query("UPDATE tbl_maps SET status='approved' WHERE id IN (SELECT t.id FROM (SELECT * FROM tbl_maps) t WHERE t.period_begin =  concat(date_format(LAST_DAY(now() - interval 1 month),'%Y-%m-'),'01') AND t.status='allocated')");
+        $cdrr_id = $this->db->query("SELECT id FROM tbl_cdrr WHERE period_begin =  concat(date_format(LAST_DAY(now() - interval 1 month),'%Y-%m-'),'01') AND status='approved'")->result();
+        foreach ($cdrr_id as $id):
+            $array = array(
+                'description' => 'approved',
+                'user_id' => '1',
+                'cdrr_id' => $id->id,
+                'created' => date('Y-m-d H:i:s')
+            );
+            $this->db->set($array);
+            $this->db->replace('tbl_cdrr_log');
+        endforeach;
+
+        $maps_id = $this->db->query("SELECT id FROM tbl_maps WHERE period_begin =  concat(date_format(LAST_DAY(now() - interval 1 month),'%Y-%m-'),'01') AND status='approved'")->result();
+        foreach ($maps_id as $id):
+            $array = array(
+                'description' => 'approved',
+                'user_id' => '1',
+                'maps_id' => $id->id,
+                'created' => date('Y-m-d H:i:s')
+            );
+            $this->db->set($array);
+            $this->db->replace('tbl_maps_log');
+        endforeach;
+
+        $this->response(['status' => '1', 'message' => 'Approvals Successfull!']);
+    }
+
+    //CRONTAB
+    //crontab -e
+    //0 00 20 * * wget http://commodities.nascop.org/Manager/Orders/ApproveUnapprovedOrders20thMonthlyAt11pm
+
+    function ReviewUnreviewedOrders20thMonthlyAt12pm() {
+        $this->db->query("UPDATE tbl_cdrr SET status='reviewed' WHERE id IN (SELECT t.id FROM (SELECT * FROM tbl_cdrr) t WHERE t.period_begin =  concat(date_format(LAST_DAY(now() - interval 1 month),'%Y-%m-'),'01') AND t.status='approved')");
+        $this->db->query("UPDATE tbl_maps SET status='reviewed' WHERE id IN (SELECT t.id FROM (SELECT * FROM tbl_maps) t WHERE t.period_begin =  concat(date_format(LAST_DAY(now() - interval 1 month),'%Y-%m-'),'01') AND t.status='approved')");
+        $cdrr_id = $this->db->query("SELECT id FROM tbl_cdrr WHERE period_begin =  concat(date_format(LAST_DAY(now() - interval 1 month),'%Y-%m-'),'01') AND status='reviewed'")->result();
+        foreach ($cdrr_id as $id):
+            $array = array(
+                'description' => 'reviewed',
+                'user_id' => '1',
+                'cdrr_id' => $id->id,
+                'created' => date('Y-m-d H:i:s')
+            );
+            $this->db->set($array);
+            $this->db->replace('tbl_cdrr_log');
+        endforeach;
+
+        $maps_id = $this->db->query("SELECT id FROM tbl_maps WHERE period_begin =  concat(date_format(LAST_DAY(now() - interval 1 month),'%Y-%m-'),'01') AND status='reviewed'")->result();
+        foreach ($maps_id as $id):
+            $array = array(
+                'description' => 'reviewed',
+                'user_id' => '1',
+                'maps_id' => $id->id,
+                'created' => date('Y-m-d H:i:s')
+            );
+            $this->db->set($array);
+            $this->db->replace('tbl_maps_log');
+        endforeach;
+
+        $this->response(['status' => '1', 'message' => 'Review Successfull!']);
     }
 
 }

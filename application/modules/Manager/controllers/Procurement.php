@@ -929,7 +929,7 @@ class Procurement extends MX_Controller {
   </tr>
    <tr>
     <td class="tg-0pky"><strong>Call Down</strong></td>
-    <td class="tdata tg-0pky col-1">' . @$this->rv($column['expected'][0]['quantity']) . ' </td>
+    <td class="tdata tg-0pky col-1">' . @$this->rv($column['expected'][0]['quantity'] + ($column['expected'][11]['quantity'] - $column['status'][2][0]['quantity'])) . ' </td>
     <td class="tdata tg-0pky col-2">' . @$this->rv($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'])) . '</td>
     <td class="tdata tg-0pky col-3">' . @$this->rv(($column['expected'][2]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] )) - $column['status'][2][1]['quantity'])) . '</td>
     <td class="tdata tg-0pky col-4">' . @$this->rv($column['expected'][3]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] - $column['status'][2][1]['quantity'] - $column['status'][2][2]['quantity']))) . '</td>

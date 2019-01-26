@@ -62,6 +62,15 @@ class MX_Controller {
         return CI::$APP->$class;
     }
 
+    function response($result) {
+        header("Content-Type: application/json; charset=UTF-8");
+        echo json_encode($result);
+    }
+    
+    function query($string){
+       return $this->db->query($string)->result(); 
+    }
+
     function updateSysLogs($action) {
         $data = [
             'log_date' => date('Y-m-d H:i:s'),

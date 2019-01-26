@@ -18,6 +18,22 @@
         position: sticky;
         left: 150px;
     }
+    tbody .stickyColumn{
+        position: -webkit-sticky;
+        background: #ffffff;
+        text-align: center;
+        position: sticky;
+        left: 2px;
+    }
+    thead .stickyColumn{
+        position: -webkit-sticky;
+        background: #ffffff;
+        text-align: center;
+        position: sticky;
+        left: 2px;
+    }
+
+
 
 
 
@@ -116,7 +132,7 @@
                                 <table class="table table-striped table-bordered table-condensed" id="AllocationTable">
                                     <thead id="THEAD" >
                                         <tr>
-                                            <th>Drug Name</th>
+                                            <th class="stickyColumn" style="background: #FFFFFF;">Drug Name</th>
                                             <th>Pack Size</th>
                                             <th>Previous Closing Balance</th>
                                             <th>Beginning Balance</th>
@@ -144,9 +160,10 @@
                                             <th>Total MOS</th>
                                             <th>Comments</th>
                                             <th>Decision</th>
+                                            <th>regimen</th>
                                         </tr>
                                         <tr>
-                                            <th>A</th>
+                                            <th class="stickyColumn" style="background: #ffffff;">A</th>
                                             <th></th>
                                             <th>B</th>
                                             <th>C</th>
@@ -171,6 +188,7 @@
                                             <th>S</th>
                                             <th>T</th>
                                             <th>U</th>
+                                            <th>Y</th>
                                         </tr>
                                     </thead>
                                     <tbody id="TBODY">
@@ -184,6 +202,7 @@
                                                 $drugamc = $columns['cdrrs']['data']['cdrr_item'][$drugid]['drugamc'];
                                                 $consumed = $columns['cdrrs']['data']['cdrr_item'][$drugid]['dispensed_packs'];
                                                 $count = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'];
+                                                $amc_months = $drug['facility_amc'];
                                                 empty($pcount) ? $pcount = 0 : $pcount = $pcount;
                                                 empty($balance) ? $balance = 0 : $balance = $balance;
                                                 ?>
@@ -229,18 +248,24 @@
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_date']; ?></td>
                                                     <td title="No of days commodity has been out of stock"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['out_of_stock']; ?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply']; ?></td>
-                                                    <td class="AMC" title="Average Monthly Consumption for the last 3 Months"><?= $drugamc; ?></td>
-                                                    <?php
-                                                    $allocated = '';
-                                                    if ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'] >= 0) {
-                                                        $allocated = $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'];
-                                                    } else {
-                                                        $allocated = $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply'];
-                                                    }
-                                                    $sSOH = $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand'];
-                                                    ?>
-                                                    <td title="Aggregate Stock on Hand / AMC (K/O)"><?= $mos = ($count > 0 && $drugamc > 0) ? number_format($allocation + $sSOH / $drugamc, 2) : 0; ?></td>
-                                                    <td title="Resupply Quantity which is AMC by three less stock on hand ((AMC(O)*3)-J)"><?= (($drugamc * 3) - $count) > 0 ? (($drugamc * 3) - $count) : 0; ?></td>
+                                                    <?php if ($amc_months == '0') { ?>
+                                                        <td style="" class="AMC" title="Average Monthly Consumption for the last 3 Months">No AMC</td>                                                       
+                                                        <td style="" title="Aggregate Stock on Hand / AMC (K/O)">No AMC</td>
+                                                        <td style="" title="Resupply Quantity which is AMC by three less stock on hand ((AMC(O)*3)-J)">No AMC</td>                                                       
+                                                    <?php } else { ?>                                                    
+                                                        <td class="AMC" title="Average Monthly Consumption for the last 3 Months"><?= $drugamc; ?></td>
+                                                        <?php
+                                                        $allocated = '';
+                                                        if ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'] >= 0) {
+                                                            $allocated = $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'];
+                                                        } else {
+                                                            $allocated = $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply'];
+                                                        }
+                                                        $sSOH = $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand'];
+                                                        ?>
+                                                        <td title="Aggregate Stock on Hand / AMC (K/O)"><?= $mos = ($count > 0 && $drugamc > 0) ? number_format($allocation + $sSOH / $drugamc, 2) : 0; ?></td>
+                                                        <td title="Resupply Quantity which is AMC by three less stock on hand ((AMC(O)*3)-J)"><?= (($drugamc * 3) - $count) > 0 ? (($drugamc * 3) - $count) : 0; ?></td>
+                                                    <?php } ?>
                                                     <td title="Actual order quantity to allocate">
 
                                                         <input type="text" style="width:80px; text-align: center;" class="form-control AMOS Allocated"  data-toggle="tooltip" title="" <?= $disabled; ?> data-drug="<?= $drugid ?>"  name="qty_allocated-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= $allocated ?>">
@@ -252,11 +277,15 @@
                                                         ?>
                                                         <input type="hidden" style="width:70px;" class="MIN" value="<?= $min_mos; ?>"/>
                                                         <input type="hidden" style="width:70px;"class="MAX" value="<?= $max_mos; ?>"/>
-                                                        <input type="text"  style="width:50px; text-align: center;" class="form-control MOS AllocatedMOS" data-toggle="tooltip" <?= $disabled; ?> title="Max MOS 3months" name="qty_allocated_mos-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'] == '') ? $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'] : $mos ?>">
+                                                        <?php if ($amc_months !== '0') { ?>
+                                                            <input type="text"   style="width:50px; text-align: center;" class="form-control MOS AllocatedMOS" data-toggle="tooltip" <?= $disabled; ?> title="Max MOS 3months" name="qty_allocated_mos-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'] == '') ? $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'] : $mos ?>">
+                                                        <?php }else{ ?>
+                                                            No AMC
+                                                        <?php }?>
                                                     </td>
 
                                                     <td title="Any feedback deemed necessary">
-                                                        <textarea type="text" style="width:100px;" class="form-control comment" <?= $disabled; ?> name="feedback-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" ><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['feedback']; ?></textarea>
+                                                        <textarea type="text" style="width:100px;" class="form-control comment" <?= $disabled; ?> name="feedback-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" ><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['regimen_category']; ?></textarea>
                                                     </td>
 
 
@@ -275,6 +304,7 @@
                                                         }
                                                         ?>
                                                     </td>
+                                                    <td><?= $drug['regimen_category']; ?></td>
                                                 </tr>
                                                 <?php
                                             }
@@ -293,11 +323,13 @@
                                     <th>Code | Regimen</th>
                                     <th title="Current Active Patient">No. of Patients </th>
                                     <th title="Previous Active Patient">(% Change)</th>
+                                    <th title="Regimen Line">Regimen Type</th>
                                     </thead>
                                     <tbody>
                                         <?php
                                         $curr_ = 0;
                                         $prev = 0;
+
                                         foreach ($columns['regimens'] as $category => $regimens) {
                                             ?>
                                             <?php foreach ($regimens as $regimen) { ?>
@@ -306,26 +338,27 @@
                                                         <td><?= $regimen['name']; ?></td>
                                                         <td><?php echo $current = $columns['maps']['data'][$regimen['id']]; ?></td>
                                                         <td><?php
-                                        echo $previous = $columns['previousmaps']['data'][$regimen['id']];
-                                        if ($current > $previous) {
-                                            $p = round((($current - $previous) / $current) * 100, 0);
-                                            echo '<sup><span style="background: green; font-size:9px;" class="badge"> +' . $p . '%</span></sup>';
-                                        } else if ($previous > $current) {
-                                            $p = round((($previous - $current) / $previous) * 100, 0);
-                                            echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
-                                        }
-                                        $curr_ = $curr_ + $current;
-                                        $prev = $prev + $previous;
-                                                    ?>
+                                                            echo $previous = $columns['previousmaps']['data'][$regimen['id']];
+                                                            if ($current > $previous) {
+                                                                $p = round((($current - $previous) / $current) * 100, 0);
+                                                                echo '<sup><span style="background: green; font-size:9px;" class="badge"> +' . $p . '%</span></sup>';
+                                                            } else if ($previous > $current) {
+                                                                $p = round((($previous - $current) / $previous) * 100, 0);
+                                                                echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
+                                                            }
+                                                            $curr_ = $curr_ + $current;
+                                                            $prev = $prev + $previous;
+                                                            ?>
 
                                                         </td>
+                                                        <td><?= $category ?></td>
 
                                                     </tr>
                                                     <?php
                                                 }
                                             }
                                             ?>
-                                        <?php } ?> 
+                                        <?php } ?>
                                     </tbody>
                                 </table>                  
 
@@ -337,7 +370,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="panel panel-default" style="background: #ffffff;  z-index: 999999999; position:relative;">
+            <div class="panel panel-default" style="background: #ffffff;  z-index: 999999999; position:relative; ma">
                 <div class="panel-body" style="background: #ffffff;">
                     <div class="col-sm-9" style="margin-top: 20px;" >
                         <div class="table-responsive">
@@ -353,12 +386,12 @@
                                     <?php foreach ($columns['cdrrs']['data']['cdrr_logs'] as $key => $log) { ?>
                                         <tr>
                                             <td><?php
-                                        if ($log['description'] == 'reviewed') {
-                                            echo 'Submitted to KEMSA';
-                                        } else {
-                                            echo ucwords($log['description']);
-                                        };
-                                        ?>  </td>
+                                                if ($log['description'] == 'reviewed') {
+                                                    echo 'Submitted to KEMSA';
+                                                } else {
+                                                    echo ucwords($log['description']);
+                                                };
+                                                ?>  </td>
                                             <td><?= ucwords($log['firstname'] . ' ' . $log['lastname']); ?> </td>
                                             <td><?= ucwords($log['role']); ?> </td>
                                             <td class="start_date"><?= $log['created']; ?><input type="hidden" class="end_date"/></td>
@@ -411,23 +444,55 @@
     </div>
     <!-- /.col-lg-12 -->
 </div>
+<?php
+if (empty($columns['maps']['data'])) {
+    $maps = 'nomaps';
+};
+?>
 <!-- /#page-wrapper -->
 
 <script type="text/javascript">
     $(function () {
+        maps = "<?= $maps; ?>";
         role = "<?= $this->session->userdata('role'); ?>";
+        if (maps == 'nomaps') {
+            swal({
+                title: "MISSING MAPPS",
+                text: "MAPPS data not found, please update your mapps",
+                icon: "info",
+            });
+        }
 
         var base_url = "<?php echo base_url(); ?>";
         $('[data-toggle="tooltip"]').tooltip();
 
         var table = $('#AllocationTable').DataTable({
-            scrollY: "400px",
+            scrollY: "380px",
             scrollX: true,
             scrollCollapse: true,
             paging: false,
             searching: false,
             info: false,
-            fixedColumns: true
+            order: [[23, "asc"]],
+            fixedColumns: true,
+            drawCallback: function (settings) {
+                var api = this.api();
+                var rows = api.rows({page: 'current'}).nodes();
+                var last = null;
+
+                api.column(23, {page: 'current'}).data().each(function (group, i) {
+
+                    if (last !== group) {
+
+                        $(rows).eq(i).before(
+                                '<tr class="group" style="background:green; color:white;font-weight:bold;"><td colspan="24">' + group.toUpperCase() + '</td></tr>'
+                                );
+
+                        last = group;
+                    }
+                });
+                api.column(23).visible(false);
+            }
 
         });
 
@@ -438,7 +503,25 @@
             paging: false,
             fixedColumns: true,
             searching: false,
-            info: false
+            info: false,
+            drawCallback: function (settings) {
+                var api = this.api();
+                var rows = api.rows({page: 'current'}).nodes();
+                var last = null;
+
+                api.column(3, {page: 'current'}).data().each(function (group, i) {
+
+                    if (last !== group) {
+
+                        $(rows).eq(i).before(
+                                '<tr class="group" style="background:green; color:white;font-weight:bold;"><td colspan="3">' + group.toUpperCase() + '</td></tr>'
+                                );
+
+                        last = group;
+                    }
+                });
+                api.column(3).visible(false);
+            }
         });
 
         $('#AllocationTable tr').hover(function () {

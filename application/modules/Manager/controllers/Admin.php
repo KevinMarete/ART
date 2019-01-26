@@ -81,7 +81,7 @@ class Admin extends MX_Controller {
             'regimen' => array('name', 'code', 'description', 'category_id', 'service_id', 'line_id'),
             'regimen_drug' => array('drug_id', 'regimen_id'),
             'role' =>  array('name'),
-            'role_submodule' => array('role', 'submodule_id'),
+            'role_submodule' => array('role_id', 'submodule_id'),
             'service' => array('name'),
             'status' => array('name'),
             'subcounty' => array('name', 'county_id'),
