@@ -202,11 +202,7 @@
                                                 $drugamc = $columns['cdrrs']['data']['cdrr_item'][$drugid]['drugamc'];
                                                 $consumed = $columns['cdrrs']['data']['cdrr_item'][$drugid]['dispensed_packs'];
                                                 $count = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'];
-<<<<<<< HEAD
                                                 $amc_months = $drug['facility_amc'];
-=======
-                                                $amc_months = $columns['cdrrs']['data']['cdrr_item'][$drugid]['amc_months'];
->>>>>>> c2a0ec09bc05debc1e791a3bb9b4bb39a2ba3e3c
                                                 empty($pcount) ? $pcount = 0 : $pcount = $pcount;
                                                 empty($balance) ? $balance = 0 : $balance = $balance;
                                                 ?>
@@ -252,7 +248,6 @@
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_date']; ?></td>
                                                     <td title="No of days commodity has been out of stock"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['out_of_stock']; ?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply']; ?></td>
-<<<<<<< HEAD
                                                     <?php if ($amc_months == '0') { ?>
                                                         <td style="" class="AMC" title="Average Monthly Consumption for the last 3 Months">No AMC</td>                                                       
                                                         <td style="" title="Aggregate Stock on Hand / AMC (K/O)">No AMC</td>
@@ -271,42 +266,6 @@
                                                         <td title="Aggregate Stock on Hand / AMC (K/O)"><?= $mos = ($count > 0 && $drugamc > 0) ? number_format($allocation + $sSOH / $drugamc, 2) : 0; ?></td>
                                                         <td title="Resupply Quantity which is AMC by three less stock on hand ((AMC(O)*3)-J)"><?= (($drugamc * 3) - $count) > 0 ? (($drugamc * 3) - $count) : 0; ?></td>
                                                     <?php } ?>
-=======
-                                                    <td class="AMC" title="Average Monthly Consumption for the last 3 Months"><?php
-                                                        if ($amc_months == 0) {
-                                                            echo 'N/A';
-                                                        } else {
-                                                            echo $drugamc;
-                                                        };
-                                                        ?></td>
-                                                    <?php
-                                                    $allocated = '';
-                                                    if ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'] >= 0) {
-                                                        $allocated = $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'];
-                                                    } else {
-                                                        $allocated = $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply'];
-                                                    }
-                                                    $sSOH = $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand'];
-                                                    ?>
-                                                    <td title="Aggregate Stock on Hand / AMC (K/O)"><?php
-                                                        if ($amc_months == 0) {
-                                                            if ($count > 0) {
-                                                                echo number_format($allocation + $sSOH, 2);
-                                                            } else {
-                                                                echo '0.00';
-                                                            };
-                                                        } else {
-                                                            $mos = ($count > 0 && $drugamc > 0) ? number_format($allocation + $sSOH / $drugamc, 2) : 0;
-                                                        }
-                                                        ?></td>
-                                                    <td title="Resupply Quantity which is AMC by three less stock on hand ((AMC(O)*3)-J)"><?php
-                                                        if ($amc_months == 0) {
-                                                            $count;
-                                                        } else {
-                                                            (($drugamc * 3) - $count) > 0 ? (($drugamc * 3) - $count) : 0;
-                                                        }
-                                                        ?></td>
->>>>>>> c2a0ec09bc05debc1e791a3bb9b4bb39a2ba3e3c
                                                     <td title="Actual order quantity to allocate">
 
                                                         <input type="text" style="width:80px; text-align: center;" class="form-control AMOS Allocated"  data-toggle="tooltip" title="" <?= $disabled; ?> data-drug="<?= $drugid ?>"  name="qty_allocated-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= $allocated ?>">
@@ -318,15 +277,11 @@
                                                         ?>
                                                         <input type="hidden" style="width:70px;" class="MIN" value="<?= $min_mos; ?>"/>
                                                         <input type="hidden" style="width:70px;"class="MAX" value="<?= $max_mos; ?>"/>
-<<<<<<< HEAD
                                                         <?php if ($amc_months !== '0') { ?>
                                                             <input type="text"   style="width:50px; text-align: center;" class="form-control MOS AllocatedMOS" data-toggle="tooltip" <?= $disabled; ?> title="Max MOS 3months" name="qty_allocated_mos-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'] == '') ? $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'] : $mos ?>">
                                                         <?php } else { ?>
                                                             No AMC
                                                         <?php } ?>
-=======
-                                                        <input type="text"   style="width:50px; text-align: center;" class="form-control MOS AllocatedMOS" data-toggle="tooltip" <?= $disabled; ?> title="Max MOS 3months" name="qty_allocated_mos-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'] == '') ? $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'] : $mos ?>">
->>>>>>> c2a0ec09bc05debc1e791a3bb9b4bb39a2ba3e3c
                                                     </td>
 
                                                     <td title="Any feedback deemed necessary">
@@ -365,7 +320,6 @@
                             <div class="table-responsive-removed">
                                 <table class="table table-striped table-bordered table-condensed" id="mapsTableReg">
                                     <thead>
-<<<<<<< HEAD
                                         <tr>
                                             <th colspan="3"><a href="#MapsNo" class="btn btn-info btn-block"  data-toggle="modal" data-target="#myModal">View Patient Numbers / Drugs</a></th>
                                         </tr>
@@ -375,12 +329,6 @@
                                             <th title="Previous Active Patient">(% Change)</th>
                                             <th title="Regimen Line">Regimen Type</th>
                                         </tr>
-=======
-                                    <th>Code | Regimen</th>
-                                    <th title="Current Active Patient">No. of Patients </th>
-                                    <th title="Previous Active Patient">(% Change)</th>
-                                    <th title="Regimen Line">Regimen Type</th>
->>>>>>> c2a0ec09bc05debc1e791a3bb9b4bb39a2ba3e3c
                                     </thead>
                                     <tbody>
                                         <?php
@@ -569,10 +517,7 @@ if (empty($columns['maps']['data'])) {
             paging: false,
             searching: false,
             info: false,
-<<<<<<< HEAD
             order: [[23, "asc"]],
-=======
->>>>>>> c2a0ec09bc05debc1e791a3bb9b4bb39a2ba3e3c
             fixedColumns: true,
             drawCallback: function (settings) {
                 var api = this.api();
@@ -621,7 +566,6 @@ if (empty($columns['maps']['data'])) {
                 });
                 api.column(3).visible(false);
             }
-<<<<<<< HEAD
         });
 
 
@@ -653,8 +597,6 @@ if (empty($columns['maps']['data'])) {
                 api.column(3).visible(false);
             }
 
-=======
->>>>>>> c2a0ec09bc05debc1e791a3bb9b4bb39a2ba3e3c
         });
 
         $('#AllocationTable tr').hover(function () {
