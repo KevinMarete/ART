@@ -85,7 +85,7 @@ class Manager extends MX_Controller {
                     ),
                     'allocate' => array(
                         'subcounty' => array(
-                            'drugs' => $this->Orders_model->get_drugs(), 
+                            'drugs' => $this->Orders_model->get_drugs(),
                             'regimens' => $this->Orders_model->get_regimens(),
                             'cdrrs' => $this->Orders_model->get_cdrr_data($this->uri->segment('4'), $this->session->userdata('scope'), $this->session->userdata('role')),
                             'pcdrrs' => $this->Orders_model->get_cdrr_data_previous($this->uri->segment('4'), $this->session->userdata('scope'), $this->session->userdata('role')),
@@ -148,6 +148,7 @@ class Manager extends MX_Controller {
 
                 $data['columns'] = $columns[$page][$this->session->userdata('role')];
                 $data['county'] = $this->getCountySubcounty();
+                $data['data_maps'] = $this->Orders_model->get_maps_data_patients_against_regimen($this->uri->segment('5'), $this->session->userdata('scope'), $this->session->userdata('role'));
                 $data['role'] = $this->session->userdata('role');
                 $data['cdrr_id'] = $this->uri->segment('4');
                 $data['map_id'] = $this->uri->segment('5');
@@ -155,6 +156,7 @@ class Manager extends MX_Controller {
                 $data['seg_5'] = $this->uri->segment('5');
                 $data['seg_6'] = $this->uri->segment('6');
             }
+
             $data['page_title'] = 'ART | ' . ucwords($title);
             $this->load->view('template/template_view', $data);
         } else {
@@ -162,15 +164,16 @@ class Manager extends MX_Controller {
         }
     }
 
-    public function get_default_period()
-    {   
+    public function get_default_period() {
         $default_period = array(
-            'year' => $this->config->item('data_year'), 
+            'year' => $this->config->item('data_year'),
             'month' => $this->config->item('data_month'),
             'drug' => $this->config->item('drug')
         );
         echo json_encode($default_period);
     }
+
+    
 
     public function get_chart() {
         $chartname = $this->input->post('name');

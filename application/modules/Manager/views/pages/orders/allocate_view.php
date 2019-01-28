@@ -279,9 +279,9 @@
                                                         <input type="hidden" style="width:70px;"class="MAX" value="<?= $max_mos; ?>"/>
                                                         <?php if ($amc_months !== '0') { ?>
                                                             <input type="text"   style="width:50px; text-align: center;" class="form-control MOS AllocatedMOS" data-toggle="tooltip" <?= $disabled; ?> title="Max MOS 3months" name="qty_allocated_mos-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'] == '') ? $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'] : $mos ?>">
-                                                        <?php }else{ ?>
+                                                        <?php } else { ?>
                                                             No AMC
-                                                        <?php }?>
+                                                        <?php } ?>
                                                     </td>
 
                                                     <td title="Any feedback deemed necessary">
@@ -320,10 +320,15 @@
                             <div class="table-responsive-removed">
                                 <table class="table table-striped table-bordered table-condensed" id="mapsTableReg">
                                     <thead>
-                                    <th>Code | Regimen</th>
-                                    <th title="Current Active Patient">No. of Patients </th>
-                                    <th title="Previous Active Patient">(% Change)</th>
-                                    <th title="Regimen Line">Regimen Type</th>
+                                        <tr>
+                                            <th colspan="3"><a href="#MapsNo" class="btn btn-info btn-block"  data-toggle="modal" data-target="#myModal">View Patient Numbers / Drugs</a></th>
+                                        </tr>
+                                        <tr>
+                                            <th>Code | Regimen</th>
+                                            <th title="Current Active Patient">No. of Patients </th>
+                                            <th title="Previous Active Patient">(% Change)</th>
+                                            <th title="Regimen Line">Regimen Type</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         <?php
@@ -370,7 +375,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="panel panel-default" style="background: #ffffff;  z-index: 999999999; position:relative; ma">
+            <div class="panel panel-default" style="background: #ffffff;   position:relative; ma">
                 <div class="panel-body" style="background: #ffffff;">
                     <div class="col-sm-9" style="margin-top: 20px;" >
                         <div class="table-responsive">
@@ -443,6 +448,45 @@
         </div>
     </div>
     <!-- /.col-lg-12 -->
+
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Patient Numbers Per Regimen against Drugs</h4>
+                </div>
+                <div class="modal-body">
+                    <table id="REGTABLE" class="table table-bordered table-condensed table-striped">
+                        <thead>
+                        <th>Regimen</th>
+                        <th>Patient NOs</th>
+                        <th>Issued Drugs</th>
+                        <th>Category</th>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($data_maps as $p): ?>
+                                <tr>
+                                    <td style="font-weight: bold;"><?= $p['regimen']; ?></td>
+                                    <td style="text-align: right; font-weight: bold;"><?= number_format($p['total']); ?></td>
+                                    <td style="text-align: right; font-weight: bold;"><?= number_format($p['total_drugs']); ?></td>
+                                    <td><?= $p['category']; ?></td>
+                                </tr> 
+                            <?php endforeach;
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
 <?php
 if (empty($columns['maps']['data'])) {
@@ -464,7 +508,7 @@ if (empty($columns['maps']['data'])) {
         }
 
         var base_url = "<?php echo base_url(); ?>";
-        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle = "tooltip"]').tooltip();
 
         var table = $('#AllocationTable').DataTable({
             scrollY: "380px",
@@ -522,6 +566,37 @@ if (empty($columns['maps']['data'])) {
                 });
                 api.column(3).visible(false);
             }
+        });
+
+
+        var table = $('#REGTABLE').DataTable({
+            scrollY: "380px",
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+            searching: false,
+            info: false,
+            order: [[3, "asc"]],
+            fixedColumns: true,
+            drawCallback: function (settings) {
+                var api = this.api();
+                var rows = api.rows({page: 'current'}).nodes();
+                var last = null;
+
+                api.column(3, {page: 'current'}).data().each(function (group, i) {
+
+                    if (last !== group) {
+
+                        $(rows).eq(i).before(
+                                '<tr class="group" style="background:green; color:white;font-weight:bold;"><td colspan="3">' + group.toUpperCase() + '</td></tr>'
+                                );
+
+                        last = group;
+                    }
+                });
+                api.column(3).visible(false);
+            }
+
         });
 
         $('#AllocationTable tr').hover(function () {
@@ -758,7 +833,8 @@ if (empty($columns['maps']['data'])) {
                     data: form.serialize(),
                     success: function (response) {
                         // swal('Allocation data saved');
-                        //$.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/pending");
+                        //$.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id;
+?>/pending");
                         // window.location.href = base_url + "manager/orders/allocate/<?= $cdrr_id . '/' . $map_id; ?>";
                     }
                 });
