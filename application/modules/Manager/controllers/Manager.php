@@ -85,7 +85,11 @@ class Manager extends MX_Controller {
                     ),
                     'allocate' => array(
                         'subcounty' => array(
+<<<<<<< HEAD
                             'drugs' => $this->Orders_model->get_drugs(),
+=======
+                            'drugs' => $this->Orders_model->get_drugs(),  
+>>>>>>> c2a0ec09bc05debc1e791a3bb9b4bb39a2ba3e3c
                             'regimens' => $this->Orders_model->get_regimens(),
                             'cdrrs' => $this->Orders_model->get_cdrr_data($this->uri->segment('4'), $this->session->userdata('scope'), $this->session->userdata('role')),
                             'pcdrrs' => $this->Orders_model->get_cdrr_data_previous($this->uri->segment('4'), $this->session->userdata('scope'), $this->session->userdata('role')),

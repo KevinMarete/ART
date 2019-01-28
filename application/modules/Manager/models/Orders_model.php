@@ -475,6 +475,7 @@ class Orders_model extends CI_Model {
         }
 
         try {
+<<<<<<< HEAD
 
             $sql = "SELECT *,
                        d.name AS drug_name,
@@ -490,6 +491,17 @@ class Orders_model extends CI_Model {
                 INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
                 INNER JOIN tbl_county co ON co.id = sc.county_id           
                 WHERE c.id = ?  " . $role_cond . " ORDER BY d.regimen_category ASC";
+=======
+            $sql = "SELECT   
+                        *, d.name AS drug_name, f.name AS facility_name, co.name AS county, sc.name AS subcounty, ci.id AS cdrr_item_id
+                    FROM tbl_cdrr c 
+                    INNER JOIN tbl_cdrr_item ci ON ci.cdrr_id = c.id
+                    INNER JOIN vw_drug_list d ON d.id = ci.drug_id
+                    INNER JOIN tbl_facility f ON f.id = c.facility_id
+                    INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
+                    INNER JOIN tbl_county co ON co.id = sc.county_id
+                    WHERE c.id = ?  " . $role_cond;
+>>>>>>> c2a0ec09bc05debc1e791a3bb9b4bb39a2ba3e3c
             $table_data = $this->db->query($sql, array($cdrr_id))->result_array();
 
             $logs_sql = "SELECT 
