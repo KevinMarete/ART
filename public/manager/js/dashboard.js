@@ -215,7 +215,7 @@ function MainFilterHandler(e) {
             filters[$(this).data("item")] = selected;
         }
 
-        //  console.log(selected);
+        console.log(filters);
 
     });
 

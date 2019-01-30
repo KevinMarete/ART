@@ -226,7 +226,7 @@
                         <input type="text" name="to" id="to" value="2018-12" class="form-control DatePickers" placeholder="To">
                     </div>
                     <div class="form-group col-lg-12">
-                        <select class="form-control drug subcounty_default county_default nascop_default hidden filter_item" multiple="multiple" data-item="drug" name="drug[]" size="2"></select>
+                        <select class="form-control national_drug subcounty_default county_default nascop_default hidden filter_item" multiple="multiple" data-item="drug" name="drug[]" size="2"></select>
 
                     </div>
 

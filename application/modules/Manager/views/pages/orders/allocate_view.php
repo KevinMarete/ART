@@ -460,12 +460,14 @@
                     <h4 class="modal-title">Patient Numbers Per Regimen against Drugs</h4>
                 </div>
                 <div class="modal-body">
-                    <table id="REGTABLE" class="table table-bordered table-condensed table-striped">
-                        <thead>
-                        <th>Regimen</th>
-                        <th>Patient NOs</th>
-                        <th>Issued Drugs</th>
-                        <th>Category</th>
+                    <table id="REGTABLE" class="table table-bordered  table-striped " style="width:100%;">
+                        <thead style="width:100%;">
+                            <tr>
+                                <th>Regimen</th>
+                                <th>Patient NOs</th>
+                                <th>Issued Drugs</th>
+                                <th>Category</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($data_maps as $p): ?>
@@ -578,7 +580,7 @@ if (empty($columns['maps']['data'])) {
             info: false,
             order: [[3, "asc"]],
             fixedColumns: true,
-            drawCallback: function (settings) {
+           /* drawCallback: function (settings) {
                 var api = this.api();
                 var rows = api.rows({page: 'current'}).nodes();
                 var last = null;
@@ -588,14 +590,14 @@ if (empty($columns['maps']['data'])) {
                     if (last !== group) {
 
                         $(rows).eq(i).before(
-                                '<tr class="group" style="background:green; color:white;font-weight:bold;"><td colspan="3">' + group.toUpperCase() + '</td></tr>'
+                                '<tr class="group" style="background:green; color:white;font-weight:bold;"><td colspan="4">' + group.toUpperCase() + '</td></tr>'
                                 );
 
                         last = group;
                     }
                 });
                 api.column(3).visible(false);
-            }
+            }*/
 
         });
 
