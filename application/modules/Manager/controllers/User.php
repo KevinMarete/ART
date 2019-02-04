@@ -98,6 +98,9 @@ class User extends MX_Controller {
             redirect('manager/forgot_pass');
         }
     }
+    
+    
+     
 
     public function send_password($receipent_name, $email_address, $password) {
         $config['mailtype'] = 'html';

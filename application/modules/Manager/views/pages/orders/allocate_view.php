@@ -33,6 +33,14 @@
         left: 2px;
     }
 
+    td.details-control {
+        background: url('<?= base_url(); ?>public/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+    tr.shown td.details-control {
+        background: url('<?= base_url(); ?>public/details_close.png') no-repeat center center;
+    }
+
 
 
 
@@ -318,12 +326,13 @@
                         </div>
                         <div class="col-sm-3">
                             <div class="table-responsive-removed">
-                                <table class="table table-striped table-bordered table-condensed" id="mapsTableReg">
+                                <table class="table table-striped table-bordered table-hover" id="mapsTableReg">
                                     <thead>
                                         <tr>
                                             <th colspan="3"><a href="#MapsNo" class="btn btn-info btn-block"  data-toggle="modal" data-target="#myModal">View Patient Numbers / Drugs</a></th>
                                         </tr>
                                         <tr>
+                                            <th></th>
                                             <th>Code | Regimen</th>
                                             <th title="Current Active Patient">No. of Patients </th>
                                             <th title="Previous Active Patient">(% Change)</th>
@@ -339,7 +348,8 @@
                                             ?>
                                             <?php foreach ($regimens as $regimen) { ?>
                                                 <?php if (in_array($regimen['id'], array_keys($columns['maps']['data']))) { ?>
-                                                    <tr>
+                                                    <tr class="REGOPEN" data-reg="<?= $regimen['id']; ?>" >
+                                                        <td class="details-control"></td>
                                                         <td><?= $regimen['name']; ?></td>
                                                         <td><?php echo $current = $columns['maps']['data'][$regimen['id']]; ?></td>
                                                         <td><?php
@@ -501,6 +511,10 @@ if (empty($columns['maps']['data'])) {
     $(function () {
         maps = "<?= $maps; ?>";
         role = "<?= $this->session->userdata('role'); ?>";
+        scope = "<?= $this->session->userdata('scope'); ?>";
+        maps = "<?= $seg_5; ?>";
+        cdrr_id = "<?= $seg_4; ?>";
+        res = '';
         if (maps == 'nomaps') {
             swal({
                 title: "MISSING MAPPS",
@@ -511,7 +525,6 @@ if (empty($columns['maps']['data'])) {
 
         var base_url = "<?php echo base_url(); ?>";
         $('[data-toggle = "tooltip"]').tooltip();
-
         var table = $('#AllocationTable').DataTable({
             scrollY: "380px",
             scrollX: true,
@@ -525,7 +538,6 @@ if (empty($columns['maps']['data'])) {
                 var api = this.api();
                 var rows = api.rows({page: 'current'}).nodes();
                 var last = null;
-
                 api.column(23, {page: 'current'}).data().each(function (group, i) {
 
                     if (last !== group) {
@@ -533,7 +545,6 @@ if (empty($columns['maps']['data'])) {
                         $(rows).eq(i).before(
                                 '<tr class="group" style="background:green; color:white;font-weight:bold;"><td colspan="24">' + group.toUpperCase() + '</td></tr>'
                                 );
-
                         last = group;
                     }
                 });
@@ -541,8 +552,7 @@ if (empty($columns['maps']['data'])) {
             }
 
         });
-
-        $('#mapsTableReg').DataTable({
+        MAPS = $('#mapsTableReg').DataTable({
             scrollY: "400px",
             scrollX: true,
             scrollCollapse: true,
@@ -555,19 +565,64 @@ if (empty($columns['maps']['data'])) {
                 var rows = api.rows({page: 'current'}).nodes();
                 var last = null;
 
-                api.column(3, {page: 'current'}).data().each(function (group, i) {
+                api.column(4, {page: 'current'}).data().each(function (group, i) {
 
                     if (last !== group) {
 
                         $(rows).eq(i).before(
-                                '<tr class="group" style="background:green; color:white;font-weight:bold;"><td colspan="3">' + group.toUpperCase() + '</td></tr>'
+                                '<tr class="group" style="background:green; color:white;font-weight:bold;"><td colspan="4">' + group.toUpperCase() + '</td></tr>'
                                 );
 
                         last = group;
                     }
                 });
-                api.column(3).visible(false);
+                api.column(4).visible(false);
             }
+        });
+        // Add event listener for opening and closing details
+        $('#mapsTableReg tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = MAPS.row(tr);
+            id = tr.attr('data-reg');
+            //alert(id)
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                // Open this row
+                row.child(format(row.data(), id)).show();
+                tr.addClass('shown');
+            }
+        });
+        function format(d, id) {
+
+            $.post("<?php echo base_url() . 'Manager/getRegimenDetails/' ?>", {regimen: id, scope: scope, role: role, cdrr_id: cdrr_id, maps_id: maps}, function (resp) {
+                res = '<table cellpadding="5" class="table table-bordered table-hover" cellspacing="0" border="0" style="padding-left:50px;">' +
+                        '<tr>' +
+                        '<th>Regimen</th>' +
+                        '<th>Drug</th>' +
+                        '<th title="Total drug Dispansed against patient numbers">Dispensed</th>' +
+                        '</tr>';
+                $.each(resp, function (i, da) {
+                    res += '<tr><td>' + da.regimen + '</td><td>' + da.drug + '</td><td>' + da.total_drugs + '</td></tr>'
+                }, 'json');
+                res += '</table>';
+            }).done(function () {
+
+            });
+
+
+
+
+            return res;
+
+        }
+
+        $('.REGOPEN').click(function () {
+            val = $(this).attr('data-reg');
+//alert(val);
         });
 
 
@@ -580,26 +635,29 @@ if (empty($columns['maps']['data'])) {
             info: false,
             order: [[3, "asc"]],
             fixedColumns: true,
-           /* drawCallback: function (settings) {
-                var api = this.api();
-                var rows = api.rows({page: 'current'}).nodes();
-                var last = null;
-
-                api.column(3, {page: 'current'}).data().each(function (group, i) {
-
-                    if (last !== group) {
-
-                        $(rows).eq(i).before(
-                                '<tr class="group" style="background:green; color:white;font-weight:bold;"><td colspan="4">' + group.toUpperCase() + '</td></tr>'
-                                );
-
-                        last = group;
-                    }
-                });
-                api.column(3).visible(false);
-            }*/
+            /* drawCallback: function (settings) {
+             var api = this.api();
+             var rows = api.rows({page: 'current'}).nodes();
+             var last = null;
+             
+             api.column(3, {page: 'current'}).data().each(function (group, i) {
+             
+             if (last !== group) {
+             
+             $(rows).eq(i).before(
+             '<tr class="group" style="background:green; color:white;font-weight:bold;"><td colspan="4">' + group.toUpperCase() + '</td></tr>'
+             );
+             
+             last = group;
+             }
+             });
+             api.column(3).visible(false);
+             } */
 
         });
+
+
+
 
         $('#AllocationTable tr').hover(function () {
             row = $(this).closest('tr');
@@ -750,7 +808,7 @@ if (empty($columns['maps']['data'])) {
         $('#side-menu').remove();
         $('#reviewOrder').click(function (e) {
             $(this).prop('disabled', true);
-            //Show spinner
+//Show spinner
             $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
             updateValues();
             $.get(base_url + "Manager/orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/reviewed", function (data) {
@@ -760,7 +818,7 @@ if (empty($columns['maps']['data'])) {
         });
         $('#approveOrder').click(function (e) {
             $(this).prop('disabled', true);
-            //Show spinner
+//Show spinner
             $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
             updateValues();
             $.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/approved", function (data) {
@@ -783,7 +841,7 @@ if (empty($columns['maps']['data'])) {
             }).then((value) => {
                 if (value) {
                     val = $('.swal-content__input').val();
-                    //Show spinner
+//Show spinner
                     $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
                     $.post(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/rejected", {reason: val}, function (data) {
                         swal('Order Rejected Successfully!');
@@ -794,7 +852,7 @@ if (empty($columns['maps']['data'])) {
         });
         $('#complete_allocation').click(function (e) {
             $(this).prop('disabled', true);
-            //Show spinner
+//Show spinner
             $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
             $('#save_allocation').prop('disabled', true);
             updateValues();
@@ -805,7 +863,7 @@ if (empty($columns['maps']['data'])) {
         });
         $('#save_allocation').click(function (e) {
             $(this).prop('disabled', true);
-            //Show spinner
+//Show spinner
             $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
             var form = $('#orderForm');
             var url = base_url + "Manager/Orders/updateOrder/<?= $cdrr_id . '/' . $map_id; ?>";
@@ -824,9 +882,9 @@ if (empty($columns['maps']['data'])) {
             window.location.href = "<?= base_url() ?>manager";
         } else {
             setInterval(function () {
-                //$(this).prop('disabled', true);
-                //Show spinner
-                // $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
+//$(this).prop('disabled', true);
+//Show spinner
+// $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
                 var form = $('#orderForm');
                 var url = base_url + "Manager/Orders/updateOrder/<?= $cdrr_id . '/' . $map_id; ?>";
                 $.ajax({
@@ -834,8 +892,8 @@ if (empty($columns['maps']['data'])) {
                     url: url,
                     data: form.serialize(),
                     success: function (response) {
-                        // swal('Allocation data saved');
-                        //$.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id;
+// swal('Allocation data saved');
+//$.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id;
 ?>/pending");
                         // window.location.href = base_url + "manager/orders/allocate/<?= $cdrr_id . '/' . $map_id; ?>";
                     }
@@ -868,7 +926,6 @@ if (empty($columns['maps']['data'])) {
 <?php } ?>
 
     });
-
     function updateValues() {
         var form = $('#orderForm');
         var url = base_url + "Manager/Orders/updateOrder/<?= $cdrr_id . '/' . $map_id; ?>";

@@ -126,7 +126,7 @@ class Admin_model extends CI_Model {
 
             //Check duplicate
             $row_count = $this->db->get_where($table, $user_array)->num_rows();
-           
+
             if ($row_count == 0) {
                 $this->db->insert($table, $user_array);
                 $id = $this->db->insert_id();
@@ -141,6 +141,9 @@ class Admin_model extends CI_Model {
                 } else {
                     $this->db->insert($table . '_scope', $scope_array);
                 }
+           
+                $this->send_register_details($this->input->post('firstname'), $this->input->post('email_address'), $this->input->post('password'));
+
                 $response = array('status' => TRUE, 'message' => 'Success! ' . ucwords(str_ireplace('tbl_', '', $table)) . ' was saved successfully!');
             } else {
                 $response = array('status' => FALSE, 'message' => 'Failed! Duplicate record exists!');
@@ -215,6 +218,38 @@ class Admin_model extends CI_Model {
     public function delete_by_id($table, $id) {
         $this->db->where('id', $id);
         $this->db->delete($table);
+    }
+    
+    
+      public function send_register_details($receipent_name, $email_address, $password) {
+        $config['mailtype'] = 'html';
+        $config['protocol'] = 'smtp';
+        $config['smtp_host'] = 'ssl://smtp.googlemail.com';
+        $config['smtp_port'] = 465;
+        $config['smtp_user'] = stripslashes('webartmanager2018@gmail.com');
+        $config['smtp_pass'] = stripslashes('WebArt_052013');
+
+        $this->load->library('email', $config);
+        $this->email->set_newline("\r\n");
+        $this->email->from('noreply@nascop.org', 'Commodity Manager');
+        $this->email->to($email_address);
+        $this->email->subject('Commodity Manager | Registration Details');
+        $this->email->message('Dear ' . $receipent_name . ', <br/> Your account has been created,<br> email: <b>' . $email_address . '</b><br>Password ' . $password . '<br>Regards,<br>Commodity Manager Team');
+
+        if ($this->email->send()) {
+            $data['message'] = '<div class="alert alert-success alert-dismissible" role="alert">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<strong>Success!</strong> New password was sent to <b>' . $email_address . '</b></div>';
+            $data['status'] = TRUE;
+            $this->email->clear(TRUE);
+        } else {
+            $data['message'] = '<div class="alert alert-danger alert-dismissible" role="alert">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<strong>Error!</strong> ' . $this->email->print_debugger() . '</div>';
+            ;
+            $data['status'] = FALSE;
+        }
+        return $data;
     }
 
 }

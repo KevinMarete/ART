@@ -747,8 +747,50 @@ class Orders_model extends CI_Model {
         return $response;
     }
 
+    public function get_maps_data_patients_against_drugs() {
+        $maps_id =  $this->input->post('maps_id');
+        $cdrr_id =  $this->input->post('cdrr_id');
+        $regimen = $this->input->post('regimen');
+        $scope = $this->session->userdata('scope');
+        $role = $this->session->userdata('role');
+        $conditions = array(
+            "national" => "",
+            "county" => " AND sc.county_id = '$scope'",
+            "subcounty" => " AND f.subcounty_id = '$scope'"
+        );
+
+        $role_cond = $conditions[$role];
+        //print_r($role_cond);
+
+
+            $sql = "SELECT
+                    rdl.regimen,
+                    mi.total,
+                    rdl.drug,
+                    ci.dispensed_packs total_drugs,
+                    reg.category
+                    FROM tbl_maps m
+                    INNER JOIN tbl_maps_item mi ON mi.maps_id = m.id
+                    INNER JOIN tbl_facility f ON f.id = m.facility_id
+                    INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
+                    INNER JOIN tbl_county co ON co.id = sc.county_id
+                    INNER JOIN vw_regimen_drug_list rdl ON  mi.regimen_id = rdl.id
+                    LEFT JOIN tbl_cdrr_item ci ON ci.drug_id = rdl.drug_id
+                    LEFT JOIN vw_regimen_list reg ON mi.regimen_id = reg.id
+                    WHERE mi.maps_id = ?
+                    AND ci.cdrr_id =? 
+                    $role_cond
+                    AND mi.regimen_id='$regimen'";
+
+
+            $table_data = $this->db->query($sql, array($maps_id, $cdrr_id))->result_array();
+            return $table_data;
+      
+    }
+
     public function get_maps_data_patients_against_regimen($maps_id, $scope = null, $role = null) {
         $cdrr_id = $this->uri->segment(4);
+          $regimen = $this->input->post('regimen');
         $conditions = array(
             "national" => "",
             "county" => " AND sc.county_id = '$scope'",
@@ -771,7 +813,7 @@ class Orders_model extends CI_Model {
             $sql = "SELECT
                     rdl.regimen,
                     mi.total,
-                    SUM(ci.dispensed_packs) total_drugs,
+                    ci.dispensed_packs total_drugs,
                     reg.category
                     FROM tbl_maps m
                     INNER JOIN tbl_maps_item mi ON mi.maps_id = m.id
@@ -783,8 +825,8 @@ class Orders_model extends CI_Model {
                     LEFT JOIN vw_regimen_list reg ON mi.regimen_id = reg.id
                     WHERE mi.maps_id = ?
                     AND ci.cdrr_id =? 
-                   $role_cond
-                    GROUP BY mi.regimen_id";
+                    $role_cond
+                    AND rdl.regimen='$regimen'";
 
 
             $table_data = $this->db->query($sql, array($maps_id, $cdrr_id))->result_array();
