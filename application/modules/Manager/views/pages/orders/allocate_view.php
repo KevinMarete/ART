@@ -154,10 +154,10 @@
                                             <th>Positive Adjustments</th>
                                             <th>Negative Adjustments</th>
                                             <th>End Month Stock on Hand</th>
-                                            <?php if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') { ?> 
-                                                <th class="">Aggregate Consumed</th>
-                                                <th class="holdHeader" >Aggregate Stock on Hand</th>
-                                            <?php } ?>
+
+                                            <th class="">Aggregate Consumed</th>
+                                            <th class="holdHeader" >Aggregate Stock on Hand</th>
+
                                             <th colspan="2">Commodities Expiring < 6 Months</th>
                                             <th>Days out of Stock</th>
                                             <th>Resupply Quantity</th>
@@ -179,10 +179,11 @@
                                             <th>E</th>
                                             <th>F</th>
                                             <th>G</th>
-                                            <?php if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') { ?> 
-                                                <th>I</th>
-                                                <th>J</th>
-                                            <?php } ?>
+
+                                            <th>I</th>
+                                            <th>J</th>
+
+
                                             <th>Quantity</th>
                                             <th class="holdHeader" style="background: #ffffff;">K</th>
                                             <th>L</th>
@@ -245,13 +246,10 @@
                                                     <td title="Positive (+) ajustment on commodity quantity"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['adjustments']; ?></td>
                                                     <td title="Negative (-) ajustment on commodity quantity"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['adjustments_neg']; ?></td>
                                                     <td class="eMOSH" title="Beginning balance less Quantity Issued (C - E)"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['count']; ?></td>
-                                                    <?php
-                                                    if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') {
-                                                        $count = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count'];
-                                                        ?> 
-                                                        <td class="" title="Quantity consumed including in the satellite sites"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_consumed']; ?></td>
-                                                        <td class="aggSOH  holdHeader" title="Quantity available at the facility currently"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand']; ?></td>
-                                                    <?php } ?>
+
+                                                    <td class="" title="Quantity consumed including in the satellite sites"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_consumed']; ?></td>
+                                                    <td class="aggSOH  holdHeader" title="Quantity available at the facility currently"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand']; ?></td>
+
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_quant']; ?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_date']; ?></td>
                                                     <td title="No of days commodity has been out of stock"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['out_of_stock']; ?></td>
@@ -324,7 +322,7 @@
                                 </table>
                             </form>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-3" >
                             <div class="table-responsive-removed">
                                 <table class="table table-striped table-bordered table-hover" id="mapsTableReg">
                                     <thead>
