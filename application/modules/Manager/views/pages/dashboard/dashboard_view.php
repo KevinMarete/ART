@@ -26,10 +26,12 @@
                                 <div class="filter form-control" id="year-filter">
                                     <input type="hidden" name="filter_year" id="filter_year" value="" />
                                     Year: 
-                                    <a href="#" class="filter-year" data-value="2015"> 2015 </a>|
-                                    <a href="#" class="filter-year" data-value="2016"> 2016 </a>|
-                                    <a href="#" class="filter-year" data-value="2017"> 2017 </a>|
-                                    <a href="#" class="filter-year" data-value="2018"> 2018 </a>
+                                     <?php
+                                    $start = (int)date('Y')-4;
+                                    $current=(int)date('Y');
+                                    for($i=$start;$i<=$current;$i++){ ?>                                              
+                                    <a href="#" class="filter-year" data-value="<?=$i;?>"> <?=$i;?> </a>|                                 
+                                    <?php } ?>
                                 </div>
                                 <div class="filter form-control" id="month-filter">
                                     <input type="hidden" name="filter_month" id="filter_month" value="" />
