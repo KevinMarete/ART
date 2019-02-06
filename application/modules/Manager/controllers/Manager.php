@@ -45,12 +45,14 @@ class Manager extends MX_Controller {
                     'reports' => array(
                         'subcounty' => array('Facility Name', 'Period Beginning', 'Description', 'Status', 'Actions'),
                         'county' => array('Facility Name', 'Period Beginning', 'Description', 'Subcounty', 'Status', 'Actions'),
-                        'nascop' => array('Facility Name', 'Period Beginning', 'Description', 'County', 'Subcounty', 'Status', 'Actions')
+                        'nascop' => array('Facility Name', 'Period Beginning', 'Description', 'County', 'Subcounty', 'Status', 'Actions'),
+                        'partner' => array('Facility Name', 'Period Beginning', 'Description', 'County', 'Subcounty', 'Status', 'Actions')
                     ),
                     'reporting_rates' => array(
                         'subcounty' => array('MFL Code', 'Facility Name', 'Status', 'Description', 'Period', 'Actions'),
                         'county' => array('Subcounty', 'Submitted', 'Progress'),
-                        'nascop' => array('County', 'Submitted', 'Progress')
+                        'nascop' => array('County', 'Submitted', 'Progress'),
+                        'partner' => array('County', 'Submitted', 'Progress')
                     ),
                     'cdrr_maps' => array(
                         'subcounty' => array(
@@ -70,6 +72,14 @@ class Manager extends MX_Controller {
                             'previousmaps' => $this->Orders_model->get_previous_maps_data($this->uri->segment('5'), $this->session->userdata('scope'), $this->session->userdata('role'))
                         ),
                         'nascop' => array(
+                            'drugs' => $this->Orders_model->get_drugs(),
+                            'regimens' => $this->Orders_model->get_regimens(),
+                            'cdrrs' => $this->Orders_model->get_cdrr_data($this->uri->segment('4'), $this->session->userdata('scope'), $this->session->userdata('role')),
+                            'pcdrrs' => $this->Orders_model->get_cdrr_data_previous($this->uri->segment('4'), $this->session->userdata('scope'), $this->session->userdata('role')),
+                            'maps' => $this->Orders_model->get_maps_data($this->uri->segment('5'), $this->session->userdata('scope'), $this->session->userdata('role')),
+                            'previousmaps' => $this->Orders_model->get_previous_maps_data($this->uri->segment('5'), $this->session->userdata('scope'), $this->session->userdata('role'))
+                        ),
+                        'partner' => array(
                             'drugs' => $this->Orders_model->get_drugs(),
                             'regimens' => $this->Orders_model->get_regimens(),
                             'cdrrs' => $this->Orders_model->get_cdrr_data($this->uri->segment('4'), $this->session->userdata('scope'), $this->session->userdata('role')),
@@ -142,6 +152,12 @@ class Manager extends MX_Controller {
                             'regimens' => $this->Orders_model->get_regimens(),
                             'cdrrs' => $this->Orders_model->get_satellite_cdrr($this->uri->segment('4')),
                             'maps' => $this->Orders_model->get_satellite_maps($this->uri->segment('5'))
+                        ),
+                        'partner' => array(
+                            'drugs' => $this->Orders_model->get_drugs(),
+                            'regimens' => $this->Orders_model->get_regimens(),
+                            'cdrrs' => $this->Orders_model->get_satellite_cdrr($this->uri->segment('4')),
+                            'maps' => $this->Orders_model->get_satellite_maps($this->uri->segment('5'))
                         )
                     )
                 );
@@ -166,7 +182,7 @@ class Manager extends MX_Controller {
     }
 
     function getRegimenDetails() {
-       echo $this->response($this->Orders_model->get_maps_data_patients_against_drugs());
+        echo $this->response($this->Orders_model->get_maps_data_patients_against_drugs());
     }
 
     public function get_default_period() {

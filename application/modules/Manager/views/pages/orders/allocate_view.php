@@ -68,12 +68,12 @@
                 <!-- /.panel-heading -->
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-md-12">      
+                        <div class="col-md-12" style="margin: 10px;">      
                             <?php if ($role == 'county' && date('d') <= 30 && $columns['cdrrs']['data'][0]['status'] == 'allocated') { ?>
                                 <button type="submit" class="btn btn-success" id="approveOrder">Approve Order</button>
                                 <button type="submit" class="btn btn-danger" id="rejectOrder">Reject Order</button>
                             <?php } else if ($role == 'nascop' && date('d') <= 30 && $columns['cdrrs']['data'][0]['status'] == 'approved') { ?>
-                                <button type="submit" class="btn btn-success" id="reviewOrder">Review Order</button>
+                                <button type="submit" class="btn btn-success" id="reviewOrder">Submit to KEMSA</button>
                                 <button type="submit" class="btn btn-danger" id="rejectOrder">Reject Order</button>
                             <?php } ?>
                         </div>
@@ -328,9 +328,9 @@
                             <div class="table-responsive-removed">
                                 <table class="table table-striped table-bordered table-hover" id="mapsTableReg">
                                     <thead>
-                                        <tr>
+<!--                                        <tr>
                                             <th colspan="3"><a href="#MapsNo" class="btn btn-info btn-block"  data-toggle="modal" data-target="#myModal">View Patient Numbers / Drugs</a></th>
-                                        </tr>
+                                        </tr>-->
                                         <tr>
                                             <th></th>
                                             <th>Code | Regimen</th>
