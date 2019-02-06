@@ -26,11 +26,12 @@
                                 <div class="filter form-control" id="year-filter">
                                     <input type="hidden" name="filter_year" id="filter_year" value="" />
                                     Year: 
-                                     <?php
-                                    $start = (int)date('Y')-4;
-                                    $current=(int)date('Y');
-                                    for($i=$start;$i<=$current;$i++){ ?>                                              
-                                    <a href="#" class="filter-year" data-value="<?=$i;?>"> <?=$i;?> </a>|                                 
+                                    <?php
+                                    $start = (int) date('Y') - 4;
+                                    $current = (int) date('Y');
+                                    for ($i = $start; $i <= $current; $i++) {
+                                        ?>                                              
+                                        <a href="#" class="filter-year" data-value="<?= $i; ?>"> <?= $i; ?> </a>|                                 
                                     <?php } ?>
                                 </div>
                                 <div class="filter form-control" id="month-filter">
@@ -228,7 +229,7 @@
                         <input type="text" name="to" id="to" value="2018-12" class="form-control DatePickers" placeholder="To">
                     </div>
                     <div class="form-group col-lg-12">
-                        <select class="form-control national_drug subcounty_default county_default nascop_default hidden filter_item" multiple="multiple" data-item="drug" name="drug[]" size="2"></select>
+                        <select class="form-control national_DRUG subcounty_default county_default nascop_default hidden filter_item" multiple="multiple" data-item="drug" name="drug[]" size="2"></select>
 
                     </div>
 
@@ -267,6 +268,18 @@
 <script type="text/javascript" src="<?php echo base_url() . 'public/manager/js/dashboard.js'; ?>"></script>
 <script>
     $(function () {
+        $.getJSON("<?= base_url(); ?>Manager/Procurement/getAllDrugs", function (resp) {
+            $('.national_DRUG').empty();
+            $.each(resp, function (i, d) {
+                $('.national_DRUG').append('<option value="' + d.name + '">' + d.name + '</option>');
+            });
+            $('.national_DRUG').multiselect({
+                enableFiltering: true,
+                filterBehavior: 'value'
+            });
+
+        }
+        , 'json');
         var d = new Date();
         year = d.getFullYear();
         monthNames = ["January", "February", "March", "April", "May", "June",

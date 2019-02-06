@@ -142,7 +142,7 @@ class Admin_model extends CI_Model {
                     $this->db->insert($table . '_scope', $scope_array);
                 }
            
-                $this->send_register_details($this->input->post('firstname'), $this->input->post('email_address'), $this->input->post('password'));
+                $this->send_register_details($this->input->post('firstname'), $this->input->post('email_address'), $this->input->post('password'),$this->input->post('role'));
 
                 $response = array('status' => TRUE, 'message' => 'Success! ' . ucwords(str_ireplace('tbl_', '', $table)) . ' was saved successfully!');
             } else {
@@ -221,7 +221,7 @@ class Admin_model extends CI_Model {
     }
     
     
-      public function send_register_details($receipent_name, $email_address, $password) {
+      public function send_register_details($receipent_name, $email_address, $password,$id) {
         $config['mailtype'] = 'html';
         $config['protocol'] = 'smtp';
         $config['smtp_host'] = 'ssl://smtp.googlemail.com';
@@ -234,7 +234,7 @@ class Admin_model extends CI_Model {
         $this->email->from('noreply@nascop.org', 'Commodity Manager');
         $this->email->to($email_address);
         $this->email->subject('Commodity Manager | Registration Details');
-        $this->email->message('Dear ' . $receipent_name . ', <br/> Your account has been created,<br> email: <b>' . $email_address . '</b><br>Password ' . $password . '<br>Regards,<br>Commodity Manager Team');
+        $this->email->message('Dear ' . $receipent_name . '<br>Your account has been created and your role is '.$this->getRoleName($id).', <br/> Please Access the ART Tool here http://commodities.nascop.org/manager <br> Email: <b>' . $email_address . '</b><br>Password ' . $password . '<br>Regards,<br>Commodity Manager Team');
 
         if ($this->email->send()) {
             $data['message'] = '<div class="alert alert-success alert-dismissible" role="alert">
@@ -250,6 +250,10 @@ class Admin_model extends CI_Model {
             $data['status'] = FALSE;
         }
         return $data;
+    }
+    
+    function getRoleName($id){
+        return $this->db->where('id',$id)->get('tbl_role')->result()[0]->name;
     }
 
 }

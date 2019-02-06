@@ -50,7 +50,7 @@
                         <form role="form" action="<?php echo base_url().'user/authenticate';?>" method="POST">
                             <fieldset>
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="E-mail" name="email_address" type="email" autofocus required>
+                                    <input class="form-control" placeholder="E-mail" name="email_address" type="email" value="<?php echo isset($_POST['email_address']) ? $_POST['email_address'] : '' ?>" required>
                                 </div>
                                 <div class="form-group">
                                     <input class="form-control" placeholder="Password" name="password" type="password" value="" required>

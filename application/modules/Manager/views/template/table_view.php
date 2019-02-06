@@ -297,8 +297,8 @@ if ($page_name != 'backup') {
                 $('[name="dhis_report"]').val(data.dhis_report);
                 $('[name="target_report"]').val(data.target_report);
                 $('[name="target_name"]').val(data.target_name);
-                $('[name="target_category"]').val(data.target_category);
-                $('[name="target_id"]').val(data.target_id);
+                $('[name="target_category"] option:selected').text(data.target_category);
+                $('[name="target_id"] option:selected').val(data.target_id);
                 //dose
                 $('[name="value"]').val(data.value);
                 $('[name="frequency"]').val(data.frequency);
@@ -403,7 +403,7 @@ if ($page_name != 'backup') {
     }
 
     function save() {
-        //$('#btnSave').text('saving...');
+        $('#btnSave').text('Saving,Please Wait...');
        // $('#btnSave').attr('disabled', true);
         var url;
 
@@ -437,8 +437,8 @@ if ($page_name != 'backup') {
                         $('span.select2-container').css('color', '#a94442');//red color for required
                     }
                 }
-                $('#btnSave').text('save');
-                $('#btnSave').attr('disabled', false);
+                $('#btnSave').text('Save');
+                //$('#btnSave').attr('disabled', false);
             },
             error: function (data)
             {

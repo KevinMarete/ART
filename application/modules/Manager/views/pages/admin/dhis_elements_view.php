@@ -48,7 +48,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Target Category</label>
                             <div class="col-md-9">
-                                <select name="target_category" id="target_category" class="form-control select2" type="text">
+                                <select name="target_category" id="target_category" class="form-control " type="text">
                                     <option value="">Select Category</option>
                                     <option value="drug">Drug</option>
                                     <option value="regimen">Regimen</option>
@@ -59,7 +59,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Target Element</label>
                             <div class="col-md-9">
-                                <select name="target_id" id="target_id" class="form-control select2" type="text">
+                                <select name="target_id" id="target_id" class="form-control " type="text">
                                     <option value="">Select Element</option>
                                 </select>
                                 <span class="help-block"></span>
