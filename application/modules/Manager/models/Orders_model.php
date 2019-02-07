@@ -593,7 +593,7 @@ class Orders_model extends CI_Model {
                     INNER JOIN tbl_facility f ON f.id = c.facility_id
                     INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
                     INNER JOIN tbl_county co ON co.id = sc.county_id
-                    WHERE c.period_begin = ? AND c.facility_id = ? AND c.code = ?" . $role_cond;
+                    WHERE c.period_begin = ? AND c.facility_id = ? AND c.cod = ?" . $role_cond;
             $table_data = $this->db->query($sql, array($previous_period_begin, $previous['facility_id'], $previous['code']))->result_array();
 
             if (!empty($table_data)) {
