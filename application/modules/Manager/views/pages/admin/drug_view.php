@@ -27,14 +27,14 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Generic</label>
                             <div class="col-md-9">
-                                <select name="generic_id" id="generic_id" class="form-control select2"></select>
+                                <select name="generic_id" id="generic_id" class="form-control "></select>
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Formulation</label>
                             <div class="col-md-9">
-                                <select name="formulation_id" id="formulation_id" class="form-control select2">
+                                <select name="formulation_id" id="formulation_id" class="form-control ">
                                 </select>
                                 <span class="help-block"></span>
                             </div>
@@ -42,7 +42,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Drug Category</label>
                             <div class="col-md-9">
-                                <select name="drug_category" id="drug_category" class="form-control select2">
+                                <select name="drug_category" id="drug_category" class="form-control ">
                                 </select>
                                 <span class="help-block"></span>
                             </div>
@@ -50,7 +50,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Regimen Category</label>
                             <div class="col-md-9">
-                                <select name="regimen_category" id="regimen_category" class="form-control select2">
+                                <select name="regimen_category" id="regimen_category" class="form-control ">
                                 </select>
                                 <span class="help-block"></span>
                             </div>
@@ -86,7 +86,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Status</label>
                             <div class="col-md-9">
-                                <select name="stock_status" id="stock_status" class="form-control select2">
+                                <select name="stock_status" id="stock_status" class="form-control ">
                                 </select>
                                 <span class="help-block"></span>
                             </div>
