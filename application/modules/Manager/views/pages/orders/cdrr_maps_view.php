@@ -102,10 +102,8 @@
                                             <th>E</th>
                                             <th>F</th>
                                             <th>G</th>
-                                            <?php if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') { ?> 
                                                 <th>I</th>
                                                 <th>J</th>
-                                            <?php } ?>
                                             <th>Quantity</th>
                                             <th>Expiry Date</th>
                                             <th>K</th>
@@ -148,10 +146,8 @@
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['adjustments']; ?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['adjustments_neg']; ?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['count']; ?></td>
-                                                    <?php if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') { ?> 
                                                         <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_consumed']; ?></td>
                                                         <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand']; ?></td>
-                                                    <?php } ?>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_quant']; ?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_date']; ?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['out_of_stock']; ?></td>
