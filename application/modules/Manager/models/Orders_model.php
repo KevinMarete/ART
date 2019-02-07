@@ -583,6 +583,8 @@ class Orders_model extends CI_Model {
 
         try {
             $previous = $this->db->select('period_begin, facility_id, code')->get_where('tbl_cdrr', array('id' => $cdrr_id))->row_array();
+            //print_r($previous);
+           // die;
             $previous_period_begin = date('Y-m-d', strtotime($previous['period_begin'] . " -1 month"));
 
             $sql = "SELECT 
