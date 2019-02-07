@@ -84,10 +84,8 @@
                                             <th>Positive Adjustments</th>
                                             <th>Negative Adjustments</th>
                                             <th>End Month Stock on Hand</th>
-                                            <?php if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') { ?> 
                                                 <th >Aggregate Consumed</th>
                                                 <th >Aggregate Stock on Hand</th>
-                                            <?php } ?>
                                             <th colspan="2">Commodities Expiring < 6 Months</th>
                                             <th>Days out of Stock</th>
                                             <th>Resupply Quantity</th>
