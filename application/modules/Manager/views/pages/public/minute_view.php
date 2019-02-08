@@ -57,9 +57,9 @@
                         </div>
                         <div class="panel-body" id="panel-head" >
                             <div id="step-5" class="">
-                                <a href="#dispatch" class="btn btn-primary btn-sm pull-right DISPATCH">Dispatch Emails</a> 
+<!--                                <a href="#dispatch" class="btn btn-primary btn-sm pull-right DISPATCH">Dispatch Emails</a> -->
                                 <?php echo html_entity_decode($minutes[0]->minute); ?>
-                                <a href="#dispatch" class="btn btn-primary btn-sm pull-right DISPATCH">Dispatch Emails</a>
+<!--                                <a href="#dispatch" class="btn btn-primary btn-sm pull-right DISPATCH">Dispatch Emails</a>-->
                             </div>
                         </div>
                     </div>

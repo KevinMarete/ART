@@ -437,7 +437,9 @@
                 </div> <!--end of cdrr-->
                 <div class="panel-footer">
                     <?php if (abs($variance) > 2) { ?>
-                        <div class = "alert alert-danger"><i class="fa fa-exclamation-triangle"></i> <strong>Patient Numbers % Variance is over 2%, Allocation not allowed!</strong></div>
+                        <div class = "alert alert-warning"><i class="fa fa-exclamation-triangle"></i> <strong>Patient Numbers % Variance is over 2%, Allocation not allowed!</strong></div>
+                        <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
+                        <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
                     <?php } else { ?>
 
                         <?php if ($role == 'subcounty' && date('d') <= 30 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
@@ -507,8 +509,8 @@ if (empty($columns['maps']['data'])) {
 
 <script type="text/javascript">
     $(function () {
-		 base_url = "<?php echo base_url(); ?>";
-		
+        base_url = "<?php echo base_url(); ?>";
+
         maps = "<?= $maps; ?>";
         role = "<?= $this->session->userdata('role'); ?>";
         scope = "<?= $this->session->userdata('scope'); ?>";
@@ -523,7 +525,7 @@ if (empty($columns['maps']['data'])) {
             });
         }
 
-       
+
         $('[data-toggle = "tooltip"]').tooltip();
         var table = $('#AllocationTable').DataTable({
             scrollY: "380px",
