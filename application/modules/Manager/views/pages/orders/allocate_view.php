@@ -507,6 +507,8 @@ if (empty($columns['maps']['data'])) {
 
 <script type="text/javascript">
     $(function () {
+		 base_url = "<?php echo base_url(); ?>";
+		
         maps = "<?= $maps; ?>";
         role = "<?= $this->session->userdata('role'); ?>";
         scope = "<?= $this->session->userdata('scope'); ?>";
@@ -521,7 +523,7 @@ if (empty($columns['maps']['data'])) {
             });
         }
 
-        var base_url = "<?php echo base_url(); ?>";
+       
         $('[data-toggle = "tooltip"]').tooltip();
         var table = $('#AllocationTable').DataTable({
             scrollY: "380px",
