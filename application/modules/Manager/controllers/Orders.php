@@ -313,7 +313,7 @@ class Orders extends MX_Controller {
         if (strlen($name)) { //check if the file is selected or cancelled after pressing the browse button.
             list($txt, $ext) = explode(".", $name); //extract the name and extension of the file
             if (in_array($ext, $valid_formats)) { //if the file is valid go on.
-                if ($size < 2098888) { // check if the file size is more than 2 mb
+                if ($size < 10098888) { // check if the file size is more than 2 mb
                     $file_name = $this->input->post('filename'); //get the file name
                     $tmp = $_FILES['myfile']['tmp_name'];
                     if (move_uploaded_file($tmp, $path . '.' . $ext)) { //check if it the file move successfully.
@@ -322,7 +322,7 @@ class Orders extends MX_Controller {
                         echo "failed";
                     }
                 } else {
-                    echo "File size max 2 MB";
+                    echo "File size max 10 MB";
                 }
             } else {
                 echo "Invalid file format..";
