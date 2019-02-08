@@ -47,9 +47,10 @@
     $(document).ready(function () {
         $('#dataTables-listing').DataTable({
             responsive: true,
-            order: [[1, "asc"]],
+            orderable: false,
+            "bSort": false,
             pagingType: "full_numbers",
-            ajax: "<?php echo base_url() . 'Manager/Orders/get_reporting_rates' . $retVal = ($seg_4 == "subcounty") ? "/subcounty/" . $seg_5 . "/allocation" : ""; ?>",
+            ajax: "<?php echo base_url() . 'Manager/Orders/get_reporting_rates' . $retVal = ($seg_4 == "subcounty") ? "/subcounty/" . $seg_5 . "/allocation/" . $seg_6 : ""; ?>",
             initComplete: function () {
                 this.api().columns([1, 2]).every(function () {
                     var column = this;

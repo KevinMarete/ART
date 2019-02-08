@@ -126,13 +126,13 @@ class Manager extends MX_Controller {
                     ),
                     'subcounty_reports' => array(
                         'subcounty' => array(),
-                        'county' => array('MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions', 'Download'),
-                        'nascop' => array('MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions', 'Download')
+                        'county' => array('MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions' ),
+                        'nascop' => array('MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions')
                     ),
                     'county_reports' => array(
                         'subcounty' => array(),
                         'county' => array(),
-                        'nascop' => array('SubCounty', 'MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions', 'Download')
+                        'nascop' => array('SubCounty', 'MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions')
                     ),
                     'satellites' => array(
                         'subcounty' => array(
@@ -164,7 +164,7 @@ class Manager extends MX_Controller {
 
                 $data['columns'] = $columns[$page][$this->session->userdata('role')];
                 $data['county'] = $this->getCountySubcounty();
-                $data['data_maps'] = $this->Orders_model->get_maps_data_patients_against_regimen($this->uri->segment('5'), $this->session->userdata('scope'), $this->session->userdata('role'));
+                //$data['data_maps'] = $this->Orders_model->get_maps_data_patients_against_regimen($this->uri->segment('5'), $this->session->userdata('scope'), $this->session->userdata('role'));
                 $data['role'] = $this->session->userdata('role');
                 $data['scope'] = $this->session->userdata('scope');
                 $data['cdrr_id'] = $this->uri->segment('4');

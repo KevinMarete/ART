@@ -168,6 +168,7 @@ class Orders_model extends CI_Model {
     }
 
     public function get_reporting_data($scope, $role, $period_begin, $period_end, $allocation = false) {
+       //echo $r
         $response = array('data' => array());
         try {
             $month_name = date('F Y', strtotime($period_begin));
@@ -210,7 +211,7 @@ class Orders_model extends CI_Model {
                         LEFT JOIN
                         (
                             SELECT c.facility_id, c.period_begin, c.period_end, c.code
-                            FROM tbl_cdrr c 
+                            FROM tbl_cdrr c
                             INNER JOIN tbl_maps m ON m.facility_id = c.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.code = 'D-CDRR' AND m.code = 'D-MAPS'
                             INNER JOIN tbl_facility f ON f.id = c.facility_id AND f.id = m.facility_id AND f.category = 'central'
                             WHERE c.period_begin = ? AND c.period_end = ?
@@ -314,7 +315,7 @@ class Orders_model extends CI_Model {
                         WHERE sc.county_id = ?
                         AND f.category != 'satellite'
                         GROUP BY period
-                        ORDER BY period ASC";
+                        ORDER BY c.id DESC";
                 $table_data = $this->db->query($sql, array($scope, $scope))->result_array();
             } else {
                 $sql = "SELECT                      
@@ -327,7 +328,7 @@ class Orders_model extends CI_Model {
                                 WHEN t.status = 'pending' THEN CONCAT('<a href=allocate/', t.cdrr_id,'/', t.maps_id, '> Allocate Order</a>')
                                 WHEN t.status != 'pending' THEN CONCAT('<a href=view_allocation/', t.cdrr_id,'/', t.maps_id, '> View Allocation</a>') 
                                 WHEN t.cdrr_id IS NULL THEN CONCAT('D-CDRR Pending')
-                                WHEN t.cdrr_id IS NULL THEN CONCAT('D-MAPS Pending')
+                                WHEN t.maps_id IS NULL THEN CONCAT('D-MAPS Pending')
                                 ELSE 'Not Reported'
                             END AS options
                         FROM tbl_facility f

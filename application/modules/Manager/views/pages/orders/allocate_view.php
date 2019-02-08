@@ -9,15 +9,31 @@
         background: #ffffff;
         text-align: center;
         position: sticky;
-        left: 150px;
+        left: 220px;
     }
     tbody .holdHeader{
         position: -webkit-sticky;
         background: #ffffff;
         text-align: center;
         position: sticky;
+        left: 220px;
+    }
+    
+      thead .holdHeader2{
+        position: -webkit-sticky;
+        background: #ffffff;
+        text-align: center;
+        position: sticky;
         left: 150px;
     }
+    tbody .holdHeader2{
+        position: -webkit-sticky;
+        background: #ffffff;
+        text-align: center;
+        position: sticky;
+        left: 150px;
+    }
+    
     tbody .stickyColumn{
         position: -webkit-sticky;
         background: #ffffff;
@@ -153,7 +169,7 @@
                                             <th>Losses & Wastage</th>
                                             <th>Positive Adjustments</th>
                                             <th>Negative Adjustments</th>
-                                            <th>End Month Stock on Hand</th>
+                                            <th class="holdHeader2" style="background: #ffffff;">End Month Stock on Hand</th>
 
                                             <th class="">Aggregate Consumed</th>
                                             <th class="holdHeader" >Aggregate Stock on Hand</th>
@@ -181,7 +197,7 @@
                                             <th>G</th>
 
                                             <th>I</th>
-                                            <th>J</th>
+                                            <th class="holdHeader2" style="background: #ffffff;">J</th>
 
 
                                             <th>Quantity</th>
@@ -245,7 +261,7 @@
                                                     <td title="Quantity of commodity lost or wasted"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['losses']; ?></td>
                                                     <td title="Positive (+) ajustment on commodity quantity"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['adjustments']; ?></td>
                                                     <td title="Negative (-) ajustment on commodity quantity"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['adjustments_neg']; ?></td>
-                                                    <td class="eMOSH" title="Beginning balance less Quantity Issued (C - E)"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['count']; ?></td>
+                                                    <td class="eMOSH holdHeader2" style="background: #ffffff;" title="Beginning balance less Quantity Issued (C - E)"><?= $eMSOH = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count']; ?></td>
 
                                                     <td class="" title="Quantity consumed including in the satellite sites"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_consumed']; ?></td>
                                                     <td class="aggSOH  holdHeader" title="Quantity available at the facility currently"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand']; ?></td>
@@ -269,7 +285,15 @@
                                                         }
                                                         $sSOH = $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand'];
                                                         ?>
-                                                        <td title="Aggregate Stock on Hand / AMC (K/O)"><?= $mos = ($count > 0 && $drugamc > 0) ? number_format($allocation + $sSOH / $drugamc, 2) : 0; ?></td>
+                                                        <td title="Aggregate Stock on Hand / AMC (K/O)">
+                                                            <?php
+                                                            if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') {
+                                                                echo $mos = ($count > 0 && $drugamc > 0) ? number_format($allocation + $sSOH / $drugamc, 2) : 0;
+                                                            } else {
+                                                                echo  number_format($eMSOH / $drugamc, 2);
+                                                            }
+                                                            ?>                                                        
+                                                        </td>
                                                         <td title="Resupply Quantity which is AMC by three less stock on hand ((AMC(O)*3)-J)"><?= (($drugamc * 3) - $count) > 0 ? (($drugamc * 3) - $count) : 0; ?></td>
                                                     <?php } ?>
                                                     <td title="Actual order quantity to allocate">
@@ -351,17 +375,17 @@
                                                         <td><?= $regimen['name']; ?></td>
                                                         <td><?php echo $current = $columns['maps']['data'][$regimen['id']]; ?></td>
                                                         <td><?php
-                                                            echo $previous = $columns['previousmaps']['data'][$regimen['id']];
-                                                            if ($current > $previous) {
-                                                                $p = round((($current - $previous) / $current) * 100, 0);
-                                                                echo '<sup><span style="background: green; font-size:9px;" class="badge"> +' . $p . '%</span></sup>';
-                                                            } else if ($previous > $current) {
-                                                                $p = round((($previous - $current) / $previous) * 100, 0);
-                                                                echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
-                                                            }
-                                                            $curr_ = $curr_ + $current;
-                                                            $prev = $prev + $previous;
-                                                            ?>
+                                        echo $previous = $columns['previousmaps']['data'][$regimen['id']];
+                                        if ($current > $previous) {
+                                            $p = round((($current - $previous) / $current) * 100, 0);
+                                            echo '<sup><span style="background: green; font-size:9px;" class="badge"> +' . $p . '%</span></sup>';
+                                        } else if ($previous > $current) {
+                                            $p = round((($previous - $current) / $previous) * 100, 0);
+                                            echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
+                                        }
+                                        $curr_ = $curr_ + $current;
+                                        $prev = $prev + $previous;
+                                                    ?>
 
                                                         </td>
                                                         <td><?= $category ?></td>
@@ -399,12 +423,12 @@
                                     <?php foreach ($columns['cdrrs']['data']['cdrr_logs'] as $key => $log) { ?>
                                         <tr>
                                             <td><?php
-                                                if ($log['description'] == 'reviewed') {
-                                                    echo 'Submitted to KEMSA';
-                                                } else {
-                                                    echo ucwords($log['description']);
-                                                };
-                                                ?>  </td>
+                                        if ($log['description'] == 'reviewed') {
+                                            echo 'Submitted to KEMSA';
+                                        } else {
+                                            echo ucwords($log['description']);
+                                        };
+                                        ?>  </td>
                                             <td><?= ucwords($log['firstname'] . ' ' . $log['lastname']); ?> </td>
                                             <td><?= ucwords($log['role']); ?> </td>
                                             <td class="start_date"><?= $log['created']; ?><input type="hidden" class="end_date"/></td>
@@ -437,7 +461,7 @@
                 </div> <!--end of cdrr-->
                 <div class="panel-footer">
                     <?php if (abs($variance) > 2) { ?>
-                        <div class = "alert alert-warning"><i class="fa fa-exclamation-triangle"></i> <strong>Patient Numbers % Variance is over 2%, Allocation not allowed!</strong></div>
+                        <div class = "alert alert-warning"><i class="fa fa-exclamation-triangle"></i> <strong>Patient Numbers % Variance is over 2%, It's advisable to take note of the variance</strong></div>
                         <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
                         <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
                     <?php } else { ?>
