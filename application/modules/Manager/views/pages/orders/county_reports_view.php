@@ -49,7 +49,7 @@
             responsive: true,
             order: [[4, "desc"]],
             pagingType: "full_numbers",
-            ajax: "<?php echo base_url() . 'Manager/Orders/get_county_reporting_rates' . $retVal = ($seg_4 == "county") ? "/county/" . $seg_5 . "/allocation" : ""; ?>",
+            ajax: "<?php echo base_url() . 'Manager/Orders/get_county_reporting_rates' . $retVal = ($seg_4 == "county") ? "/county/" . $seg_5 . "/allocation/".$seg_6 : ""; ?>",
             initComplete: function () {
                 this.api().columns([0, 1, 2]).every(function () {
                     var column = this;

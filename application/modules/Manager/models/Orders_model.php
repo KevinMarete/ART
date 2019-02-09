@@ -373,6 +373,7 @@ class Orders_model extends CI_Model {
     }
 
     public function get_county_allocation_data($scope, $role, $period_begin, $period_end) {
+        
         $response = array('data' => array());
         $currmonth = date('Y-m-d', strtotime('first day of last month'));
         try {
@@ -891,18 +892,22 @@ class Orders_model extends CI_Model {
         $response = array('data' => array());
         try {
             $month_name = date('F Y', strtotime($period_begin));
-            $base_url = base_url() . 'manager/orders/pdf';
+            //$base_url = base_url() . 'manager/orders/pdf';
             $allocation_url = ($allocation) ? "../../../view_allocation" : "view";
 
             $sql = "SELECT
                         UCASE(sc.name) subcounty,
-                        f.mflcode,
+                       
                         UCASE(f.name) facility_name,
                         IF(t.period_begin IS NOT NULL, t.description, 'N/A') description,
                         IF(t.period_begin IS NOT NULL, REPLACE(t.status,'reviewed','SUBMITTED TO KEMSA'), 'N/A') reporting_status,
                         ? period,
-                        IF(t.period_begin IS NOT NULL, CONCAT('<a href=$allocation_url/',t.cdrr_id,'/',t.maps_id,'>View Order</a>'), 'Not Reported') options,
-                        IF(t.period_begin IS NOT NULL, CONCAT('<a href=$base_url/',t.cdrr_id,'/',t.maps_id,'>Download Order</a>'), 'Not Action') download
+                        CASE 
+                                WHEN t.period_begin IS NOT NULL THEN CONCAT('<a href=$allocation_url/',t.cdrr_id,'/',t.maps_id,'>View Order</a>') 
+                                WHEN t.cdrr_id IS NULL THEN CONCAT('D-CDRR Pending')
+                                WHEN t.maps_id IS NULL THEN CONCAT('D-MAPS Pending')
+                                ELSE 'Not Reported'
+                            END AS options
                     FROM tbl_facility f
                     INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
                     LEFT JOIN
