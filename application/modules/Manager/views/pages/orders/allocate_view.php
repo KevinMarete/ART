@@ -18,8 +18,8 @@
         position: sticky;
         left: 220px;
     }
-    
-      thead .holdHeader2{
+
+    thead .holdHeader2{
         position: -webkit-sticky;
         background: #ffffff;
         text-align: center;
@@ -33,7 +33,7 @@
         position: sticky;
         left: 150px;
     }
-    
+
     tbody .stickyColumn{
         position: -webkit-sticky;
         background: #ffffff;
@@ -55,6 +55,10 @@
     }
     tr.shown td.details-control {
         background: url('<?= base_url(); ?>public/details_close.png') no-repeat center center;
+    }
+
+    td:hover {
+        background-color: #ffff99;
     }
 
 
@@ -153,7 +157,7 @@
                     <div class="col-sm-12 ">
                         <div class="col-sm-9">
                             <form name="orderForm" id="orderForm">
-                                <table class="table table-striped table-bordered table-condensed" id="AllocationTable">
+                                <table class="table table-striped table-bordered table-condensed table-hover" id="AllocationTable">
                                     <thead id="THEAD" >
                                         <tr>
                                             <th class="stickyColumn" style="background: #FFFFFF;">Drug Name</th>
@@ -264,7 +268,7 @@
                                                     <td class="eMOSH holdHeader2" style="background: #ffffff;" title="Beginning balance less Quantity Issued (C - E)"><?= $eMSOH = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count']; ?></td>
 
                                                     <td class="" title="Quantity consumed including in the satellite sites"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_consumed']; ?></td>
-                                                    <td class="aggSOH  holdHeader" title="Quantity available at the facility currently"><?= $aggSOH=$columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand']; ?></td>
+                                                    <td class="aggSOH  holdHeader" title="Quantity available at the facility currently"><?= $aggSOH = $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand']; ?></td>
 
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_quant']; ?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_date']; ?></td>
@@ -288,15 +292,25 @@
                                                         <td title="Aggregate Stock on Hand / AMC (K/O)">
                                                             <?php
                                                             if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') {
-                                                                echo $mos =  number_format(($count + $sSOH)/$drugamc,2);
+                                                                echo $mos = number_format(($count + $sSOH) / $drugamc, 2);
                                                             } else {
                                                                 echo $mos = number_format($eMSOH / $drugamc, 2);
                                                             }
-                                                            
                                                             ?>
-                                                            <input class="FacilityMOS" type="hidden" value="<?=$mos;?>"/>
+                                                            <input class="FacilityMOS" type="hidden" value="<?= $mos; ?>"/>
                                                         </td>
-                                                        <td title="Resupply Quantity which is AMC by three less stock on hand ((AMC(O)*3)-J)"><?= (($drugamc * 3) - $count) > 0 ? (($drugamc * 3) - $count) : 0; ?></td>
+                                                        
+                                                          <?php
+                                                            if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') {
+                                                                $ressuply = ((($columns['cdrrs']['data']['cdrr_item'][$drugid]['dispensed_packs'] + $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_consumed'])*3) -($count + $aggSOH));
+                                                            } else {
+                                                                 $ressuply =  (($drugamc * 3) - $count);
+                                                            }
+                                                            if($ressuply < 0){
+                                                                $ressuply = 0;
+                                                            }
+                                                            ?>
+                                                        <td title="Resupply Quantity which is AMC by three less stock on hand ((AMC(O)*3)-J)"><?=   $ressuply  ?></td>
                                                     <?php } ?>
                                                     <td title="Actual order quantity to allocate">
 
@@ -310,7 +324,7 @@
                                                         <input type="hidden" style="width:70px;" class="MIN" value="<?= $min_mos; ?>"/>
                                                         <input type="hidden" style="width:70px;"class="MAX" value="<?= $max_mos; ?>"/>
                                                         <?php if ($amc_months !== '0') { ?>
-                                                            <input type="text"   style="width:50px; text-align: center;" class="form-control MOS AllocatedMOS" data-toggle="tooltip" <?= $disabled; ?> title="Max MOS 3months" name="qty_allocated_mos-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= number_format($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'],2) ?>">
+                                                            <input type="text"   style="width:50px; text-align: center;" class="form-control MOS AllocatedMOS" data-toggle="tooltip" <?= $disabled; ?> title="Max MOS 3months" name="qty_allocated_mos-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= number_format($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'], 2) ?>">
                                                         <?php } else { ?>
                                                             No AMC
                                                         <?php } ?>
@@ -739,7 +753,7 @@ if (empty($columns['maps']['data'])) {
                 })
                         .then((value) => {
                             if (value == null) {
-                                $(this).val((max_mos * AMC));
+                                $(this).val(((max_mos - FacMOS) * AMC));
                                 $(this).trigger('change');
                             } else {
                                 row.find('.comment').val(value);
@@ -757,6 +771,7 @@ if (empty($columns['maps']['data'])) {
             AMC = parseInt(row.find('.AMC').text());
             eMOSH = row.find('.eMOSH').text();
             aggSOH = row.find('.aggSOH').text();
+            FacMOS = row.find('.FacilityMOS').val();
 
             if (isNaN(eMOSH) || eMOSH == '') {
                 eMOSH = 0;
@@ -783,7 +798,7 @@ if (empty($columns['maps']['data'])) {
                     icon: "error",
                 });
                 return false;
-            } else if (input_val > max_mos) {
+            } else if (input_val > (max_mos - FacMOS)) {
                 swal("Write Reason Here:", {
                     title: "Excess Allocation MOS",
                     text: "The highest that can be allocated is " + max_mos + " MOS",
@@ -800,7 +815,7 @@ if (empty($columns['maps']['data'])) {
                 })
                         .then((value) => {
                             if (value == null) {
-                                $(this).val(max_mos);
+                                $(this).val(max_mos - FacMOS);
                                 $(this).trigger('change');
                             } else {
                                 row.find('.comment').val(value);
@@ -941,7 +956,7 @@ if (empty($columns['maps']['data'])) {
                 $('.Allocated').attr('disabled', true);
                 $('.AllocatedMOS').attr('disabled', false);
     <?php } else { ?>
-                $('input').attr('disabled', true);
+                // $('input').attr('disabled', true);
     <?php } ?>
 
 <?php } ?>
