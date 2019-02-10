@@ -10,6 +10,9 @@ class Manager extends MX_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Orders_model');
+        if($this->session->userdata('role')==''){            
+            $this->index();
+        }
     }
 
     public function index() {
