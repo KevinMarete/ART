@@ -217,10 +217,10 @@ class Orders extends MX_Controller {
         echo json_encode(array('data' => $response['data']));
     }
 
-    public function get_county_reporting_rates($role = null, $scope = null, $allocation = null) {
-         $begin= $this->uri->segment(7);
-        $end= substr($this->uri->segment(7),0,-2).'31';
-        
+    public function get_county_reporting_rates($role = null, $scope = null, $allocation = null) {        
+        $begin= $this->uri->segment(7);
+        $end= substr($this->uri->segment(7),0,-2).'31';      
+       
         $role = ($role) ? $role : $this->session->userdata('role');
         $scope = ($scope) ? $scope : $this->session->userdata('scope');
         $allocation = ($allocation) ? TRUE : FALSE;

@@ -379,7 +379,7 @@ class Orders_model extends CI_Model {
         
 
         //$begin = $this->uri->segment(7);
-        $end = substr($period_begin, 0, -2) . '31';
+        //$end = substr($period_begin, 0, -2) . '31';
 
         $response = array('data' => array());
         $currmonth = date('Y-m-d', strtotime('first day of last month'));
@@ -390,7 +390,7 @@ class Orders_model extends CI_Model {
                             CONCAT_WS('/', COUNT(DISTINCT t.facility_id), COUNT(DISTINCT f.id)) submitted,
                             IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), 'SUBMITTED TO KEMSA', 'Unreviewed') approval,
                             IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), 'Approved', 'N/A') reviewal_status,
-                            IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), CONCAT('<a href=','../allocation/county/', co.id,'/', t.period_begin, '>View/Verify Allocation</a>'), CONCAT('<a href=','../allocation/county/', co.id,'/$currmonth','> Pending Allocation</a>')) options
+                            IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), CONCAT('<a href=','../allocation/county/', co.id,'/', t.period_begin, '>View/Verify Allocation</a>'), CONCAT('<a href=','../allocation/county/', co.id,'/$period_begin','> Pending Allocation</a>')) options
                         FROM tbl_facility f  
                         INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
                         INNER JOIN tbl_county co ON co.id = sc.county_id
@@ -407,14 +407,14 @@ class Orders_model extends CI_Model {
                         WHERE f.category != 'satellite'
                         GROUP BY co.name
                         ORDER BY co.name ASC";
-                $table_data = $this->db->query($sql, array($period_begin, $end))->result_array();
+                $table_data = $this->db->query($sql, array($period_begin, $period_end))->result_array();
             } else if ($role == 'county') {
                 $sql = "SELECT 
                             UCASE(sc.name) subcounty,
                             CONCAT_WS('/', COUNT(DISTINCT t.facility_id), COUNT(DISTINCT f.id)) submitted,
                             IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), 'Allocated', 'Unallocated') allocation,
                             IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), 'Approved', 'N/A') approval_status,
-                            IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), CONCAT('<a href=','../allocation/subcounty/', sc.id,'/', t.period_begin, '>View/Verify Allocation</a>'), CONCAT('<a href=','../allocation/subcounty/', sc.id,'/$currmonth','> Pending Allocation</a>')) options
+                            IF(COUNT(DISTINCT t.facility_id) = COUNT(DISTINCT f.id), CONCAT('<a href=','../allocation/subcounty/', sc.id,'/', t.period_begin, '>View/Verify Allocation</a>'), CONCAT('<a href=','../allocation/subcounty/', sc.id,'/$period_begin','> Pending Allocation</a>')) options
                         FROM tbl_facility f  
                         INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
                         LEFT JOIN
@@ -895,6 +895,9 @@ class Orders_model extends CI_Model {
     }
 
     public function get_county_reporting_data($scope, $role, $period_begin, $period_end, $allocation = false) {
+         $begin= $this->uri->segment(7);
+        $end= substr($this->uri->segment(7),0,-2).'31';  
+       // echo $end;
         $response = array('data' => array());
         try {
             $month_name = date('F Y', strtotime($period_begin));
@@ -936,7 +939,7 @@ class Orders_model extends CI_Model {
                     AND f.category != 'satellite'
                     GROUP BY f.mflcode
                     ORDER BY f.name ASC";
-            $table_data = $this->db->query($sql, array($month_name, $period_begin, $period_end, $period_begin, $period_end, $scope))->result_array();
+            $table_data = $this->db->query($sql, array($month_name, $begin, $end, $begin, $end, $scope))->result_array();
 
             if (!empty($table_data)) {
                 foreach ($table_data as $result) {
