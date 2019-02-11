@@ -886,7 +886,7 @@ if (empty($columns['maps']['data'])) {
             }).then((value) => {
                 if (value) {
                     val = $('.swal-content__input').val();
-//Show spinner
+//Show spinner      
                     $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
                     $.post(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/rejected", {reason: val}, function (data) {
                         swal('Order Rejected Successfully!');

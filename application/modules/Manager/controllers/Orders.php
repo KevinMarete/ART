@@ -195,11 +195,15 @@ class Orders extends MX_Controller {
         echo json_encode(array('data' => $response['data']));
     }
 
-
     public function get_reporting_rates($role = null, $scope = null, $allocation = null) {
-        $begin= $this->uri->segment(7);
-        $end= substr($this->uri->segment(7),0,-2).'31';
-        
+        if ($this->session->userdata('role') !== 'subcounty') {
+            $begin = $this->uri->segment(7);
+            $end = substr($this->uri->segment(7), 0, -2) . '31';
+        } else {
+            $begin =  date("Y-m-d", mktime(0, 0, 0, date("m")-1, 1));
+            $end = date("Y-m-d", mktime(0, 0, 0, date("m"), 0));
+        }
+
         $role = ($role) ? $role : $this->session->userdata('role');
         $scope = ($scope) ? $scope : $this->session->userdata('scope');
         $allocation = ($allocation) ? TRUE : FALSE;
@@ -217,14 +221,14 @@ class Orders extends MX_Controller {
         echo json_encode(array('data' => $response['data']));
     }
 
-    public function get_county_reporting_rates($role = null, $scope = null, $allocation = null) {        
-        $begin= $this->uri->segment(7);
-        $end= substr($this->uri->segment(7),0,-2).'31';      
-       
+    public function get_county_reporting_rates($role = null, $scope = null, $allocation = null) {
+        $begin = $this->uri->segment(7);
+        $end = substr($this->uri->segment(7), 0, -2) . '31';
+
         $role = ($role) ? $role : $this->session->userdata('role');
         $scope = ($scope) ? $scope : $this->session->userdata('scope');
         $allocation = ($allocation) ? TRUE : FALSE;
-        $response = $this->Orders_model->get_county_reporting_data($scope, $role,$begin,$end, $allocation);
+        $response = $this->Orders_model->get_county_reporting_data($scope, $role, $begin, $end, $allocation);
         echo json_encode(array('data' => $response['data']));
     }
 
