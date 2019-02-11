@@ -68,7 +68,8 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>  
+    <p></p>
 
     <!-- jQuery -->
     <script src="<?php echo base_url().'public/manager/lib/sbadmin2/vendor/jquery/jquery.min.js';?>"></script>

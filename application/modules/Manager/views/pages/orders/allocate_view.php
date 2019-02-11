@@ -88,7 +88,8 @@
                 <!-- /.panel-heading -->
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-md-12" style="margin: 10px;">      
+                        <div class="col-md-12" style="margin: 10px;"> 
+                            
                             <?php if ($role == 'county' && date('d') <= 30 && $columns['cdrrs']['data'][0]['status'] == 'allocated') { ?>
                                 <button type="submit" class="btn btn-success" id="approveOrder">Approve Order</button>
                                 <button type="submit" class="btn btn-danger" id="rejectOrder">Reject Order</button>
@@ -299,18 +300,18 @@
                                                             ?>
                                                             <input class="FacilityMOS" type="hidden" value="<?= $mos; ?>"/>
                                                         </td>
-                                                        
-                                                          <?php
-                                                            if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') {
-                                                                $ressuply = ((($columns['cdrrs']['data']['cdrr_item'][$drugid]['dispensed_packs'] + $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_consumed'])*3) -($count + $aggSOH));
-                                                            } else {
-                                                                 $ressuply =  (($drugamc * 3) - $count);
-                                                            }
-                                                            if($ressuply < 0){
-                                                                $ressuply = 0;
-                                                            }
-                                                            ?>
-                                                        <td title="Resupply Quantity which is AMC by three less stock on hand ((AMC(O)*3)-J)"><?=   $ressuply  ?></td>
+
+                                                        <?php
+                                                        if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') {
+                                                            $ressuply = ((($columns['cdrrs']['data']['cdrr_item'][$drugid]['dispensed_packs'] + $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_consumed']) * 3) - ($count + $aggSOH));
+                                                        } else {
+                                                            $ressuply = (($drugamc * 3) - $count);
+                                                        }
+                                                        if ($ressuply < 0) {
+                                                            $ressuply = 0;
+                                                        }
+                                                        ?>
+                                                        <td title="Resupply Quantity which is AMC by three less stock on hand ((AMC(O)*3)-J)"><?= $ressuply ?></td>
                                                     <?php } ?>
                                                     <td title="Actual order quantity to allocate">
 
@@ -391,17 +392,17 @@
                                                         <td><?= $regimen['name']; ?></td>
                                                         <td><?php echo $current = $columns['maps']['data'][$regimen['id']]; ?></td>
                                                         <td><?php
-                                        echo $previous = $columns['previousmaps']['data'][$regimen['id']];
-                                        if ($current > $previous) {
-                                            $p = round((($current - $previous) / $current) * 100, 0);
-                                            echo '<sup><span style="background: green; font-size:9px;" class="badge"> +' . $p . '%</span></sup>';
-                                        } else if ($previous > $current) {
-                                            $p = round((($previous - $current) / $previous) * 100, 0);
-                                            echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
-                                        }
-                                        $curr_ = $curr_ + $current;
-                                        $prev = $prev + $previous;
-                                                    ?>
+                                                            echo $previous = $columns['previousmaps']['data'][$regimen['id']];
+                                                            if ($current > $previous) {
+                                                                $p = round((($current - $previous) / $current) * 100, 0);
+                                                                echo '<sup><span style="background: green; font-size:9px;" class="badge"> +' . $p . '%</span></sup>';
+                                                            } else if ($previous > $current) {
+                                                                $p = round((($previous - $current) / $previous) * 100, 0);
+                                                                echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
+                                                            }
+                                                            $curr_ = $curr_ + $current;
+                                                            $prev = $prev + $previous;
+                                                            ?>
 
                                                         </td>
                                                         <td><?= $category ?></td>
@@ -439,12 +440,12 @@
                                     <?php foreach ($columns['cdrrs']['data']['cdrr_logs'] as $key => $log) { ?>
                                         <tr>
                                             <td><?php
-                                        if ($log['description'] == 'reviewed') {
-                                            echo 'Submitted to KEMSA';
-                                        } else {
-                                            echo ucwords($log['description']);
-                                        };
-                                        ?>  </td>
+                                                if ($log['description'] == 'reviewed') {
+                                                    echo 'Submitted to KEMSA';
+                                                } else {
+                                                    echo ucwords($log['description']);
+                                                };
+                                                ?>  </td>
                                             <td><?= ucwords($log['firstname'] . ' ' . $log['lastname']); ?> </td>
                                             <td><?= ucwords($log['role']); ?> </td>
                                             <td class="start_date"><?= $log['created']; ?><input type="hidden" class="end_date"/></td>

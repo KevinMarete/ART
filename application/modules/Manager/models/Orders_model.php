@@ -168,7 +168,7 @@ class Orders_model extends CI_Model {
     }
 
     public function get_reporting_data($scope, $role, $period_begin, $period_end, $allocation = false) {
-       //echo $r
+        //echo $r
         $response = array('data' => array());
         try {
             $month_name = date('F Y', strtotime($period_begin));
@@ -374,6 +374,13 @@ class Orders_model extends CI_Model {
 
     public function get_county_allocation_data($scope, $role, $period_begin, $period_end) {
         
+        //echo $period_begin;
+        
+        
+
+        //$begin = $this->uri->segment(7);
+        $end = substr($period_begin, 0, -2) . '31';
+
         $response = array('data' => array());
         $currmonth = date('Y-m-d', strtotime('first day of last month'));
         try {
@@ -400,7 +407,7 @@ class Orders_model extends CI_Model {
                         WHERE f.category != 'satellite'
                         GROUP BY co.name
                         ORDER BY co.name ASC";
-                $table_data = $this->db->query($sql, array($period_begin, $period_end))->result_array();
+                $table_data = $this->db->query($sql, array($period_begin, $end))->result_array();
             } else if ($role == 'county') {
                 $sql = "SELECT 
                             UCASE(sc.name) subcounty,
@@ -586,7 +593,7 @@ class Orders_model extends CI_Model {
         try {
             $previous = $this->db->select('period_begin, facility_id, code')->get_where('tbl_cdrr', array('id' => $cdrr_id))->row_array();
             //print_r($previous);
-           // die;
+            // die;
             $previous_period_begin = date('Y-m-d', strtotime($previous['period_begin'] . " -1 month"));
 
             $sql = "SELECT 
@@ -752,8 +759,8 @@ class Orders_model extends CI_Model {
     }
 
     public function get_maps_data_patients_against_drugs() {
-        $maps_id =  $this->input->post('maps_id');
-        $cdrr_id =  $this->input->post('cdrr_id');
+        $maps_id = $this->input->post('maps_id');
+        $cdrr_id = $this->input->post('cdrr_id');
         $regimen = $this->input->post('regimen');
         $scope = $this->session->userdata('scope');
         $role = $this->session->userdata('role');
@@ -767,7 +774,7 @@ class Orders_model extends CI_Model {
         //print_r($role_cond);
 
 
-            $sql = "SELECT
+        $sql = "SELECT
                     rdl.regimen,
                     mi.total,
                     rdl.drug,
@@ -787,14 +794,13 @@ class Orders_model extends CI_Model {
                     AND mi.regimen_id='$regimen'";
 
 
-            $table_data = $this->db->query($sql, array($maps_id, $cdrr_id))->result_array();
-            return $table_data;
-      
+        $table_data = $this->db->query($sql, array($maps_id, $cdrr_id))->result_array();
+        return $table_data;
     }
 
     public function get_maps_data_patients_against_regimen($maps_id, $scope = null, $role = null) {
         $cdrr_id = $this->uri->segment(4);
-          $regimen = $this->input->post('regimen');
+        $regimen = $this->input->post('regimen');
         $conditions = array(
             "national" => "",
             "county" => " AND sc.county_id = '$scope'",
