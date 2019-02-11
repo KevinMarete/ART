@@ -382,7 +382,7 @@ class Orders_model extends CI_Model {
         //$end = substr($period_begin, 0, -2) . '31';
 
         $response = array('data' => array());
-        $currmonth = date('Y-m-d', strtotime('first day of last month'));
+        //$currmonth = date('Y-m-d', strtotime('first day of last month'));
         try {
             if ($role == 'nascop') {
                 $sql = "SELECT 
