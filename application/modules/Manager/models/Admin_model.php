@@ -124,6 +124,7 @@ class Admin_model extends CI_Model {
                 'password' => md5($this->input->post('password'))
             ];
 
+
             //Check duplicate
             $row_count = $this->db->get_where($table, $user_array)->num_rows();
 
@@ -141,8 +142,8 @@ class Admin_model extends CI_Model {
                 } else {
                     $this->db->insert($table . '_scope', $scope_array);
                 }
-           
-                $this->send_register_details($this->input->post('firstname'), $this->input->post('email_address'), $this->input->post('password'),$this->input->post('role'));
+
+                $this->send_register_details($this->input->post('firstname'), $this->input->post('email_address'), $this->input->post('password'), $this->input->post('role'));
 
                 $response = array('status' => TRUE, 'message' => 'Success! ' . ucwords(str_ireplace('tbl_', '', $table)) . ' was saved successfully!');
             } else {
@@ -183,33 +184,22 @@ class Admin_model extends CI_Model {
                 'password' => md5($this->input->post('password'))
             );
 
-            //Check duplicate
-            $row_count = $this->db->get_where($table, $user_array)->num_rows();
-            if ($row_count == 0) {
-                $this->db->update($table, $user_array, $where);
-                //Ensure role is chosen within scope
-                if ($this->input->post('scope_id')) {
-                    $scope_array = array(
-                        'scope_id' => $this->input->post('scope_id'),
-                        'role_id' => $this->input->post('role')
-                    );
-                    $this->db->update('tbl_user_scope', $scope_array, array('user_id' => $this->input->post('id')));
-                }
-                $response = array('status' => TRUE, 'message' => 'Success! ' . ucwords(str_ireplace('tbl_', '', $table)) . ' was updated successfully!');
-            } else {
-                $response = array('status' => FALSE, 'message' => 'Failed! Duplicate record exists!');
+
+
+            $this->db->update($table, $user_array, $where);
+            //Ensure role is chosen within scope
+            if ($this->input->post('scope_id')) {
+                $scope_array = array(
+                    'scope_id' => $this->input->post('scope_id'),
+                    'role_id' => $this->input->post('role')
+                );
+                $this->db->update('tbl_user_scope', $scope_array, array('user_id' => $this->input->post('id')));
             }
+            $response = array('status' => TRUE, 'message' => 'Success! ' . ucwords(str_ireplace('tbl_', '', $table)) . ' was updated successfully!');
         } else {
-            //Check duplicate
-            $filter_array = $data;
-            unset($filter_array['id']);
-            $row_count = $this->db->get_where($table, $filter_array)->num_rows();
-            if ($row_count == 0) {
-                $this->db->update($table, $data, $where);
-                $response = array('status' => TRUE, 'message' => 'Success! ' . ucwords(str_ireplace('tbl_', '', $table)) . ' was updated successfully!');
-            } else {
-                $response = array('status' => FALSE, 'message' => 'Failed! Duplicate record exists!');
-            }
+
+            $this->db->update($table, $data, $where);
+            $response = array('status' => TRUE, 'message' => 'Success! ' . ucwords(str_ireplace('tbl_', '', $table)) . ' was updated successfully!');
         }
         return $response;
     }
@@ -219,9 +209,8 @@ class Admin_model extends CI_Model {
         $this->db->where('id', $id);
         $this->db->delete($table);
     }
-    
-    
-      public function send_register_details($receipent_name, $email_address, $password,$id) {
+
+    public function send_register_details($receipent_name, $email_address, $password, $id) {
         $config['mailtype'] = 'html';
         $config['protocol'] = 'smtp';
         $config['smtp_host'] = 'ssl://smtp.googlemail.com';
@@ -234,7 +223,7 @@ class Admin_model extends CI_Model {
         $this->email->from('noreply@nascop.org', 'Commodity Manager');
         $this->email->to($email_address);
         $this->email->subject('Commodity Manager | Registration Details');
-        $this->email->message('Dear ' . $receipent_name . '<br>Your account has been created and your role is '.$this->getRoleName($id).', <br/> Please Access the ART Tool here http://commodities.nascop.org/manager <br> Email: <b>' . $email_address . '</b><br>Password ' . $password . '<br>Regards,<br>Commodity Manager Team');
+        $this->email->message('Dear ' . $receipent_name . '<br>Your account has been created and your role is ' . $this->getRoleName($id) . ', <br/> Please Access the ART Tool here http://commodities.nascop.org/manager <br> Email: <b>' . $email_address . '</b><br>Password ' . $password . '<br>Regards,<br>Commodity Manager Team');
 
         if ($this->email->send()) {
             $data['message'] = '<div class="alert alert-success alert-dismissible" role="alert">
@@ -251,9 +240,9 @@ class Admin_model extends CI_Model {
         }
         return $data;
     }
-    
-    function getRoleName($id){
-        return $this->db->where('id',$id)->get('tbl_role')->result()[0]->name;
+
+    function getRoleName($id) {
+        return $this->db->where('id', $id)->get('tbl_role')->result()[0]->name;
     }
 
 }
