@@ -373,14 +373,6 @@ class Orders_model extends CI_Model {
     }
 
     public function get_county_allocation_data($scope, $role, $period_begin, $period_end) {
-        
-        //echo $period_begin;
-        
-        
-
-        //$begin = $this->uri->segment(7);
-        //$end = substr($period_begin, 0, -2) . '31';
-
         $response = array('data' => array());
         //$currmonth = date('Y-m-d', strtotime('first day of last month'));
         try {
