@@ -14,7 +14,7 @@ class Admin extends MX_Controller {
         $response = $this->Admin_model->get_table_data($table);
         if ($response['status']) {
             echo json_encode(array('data' => $response['data']));
-        }else{
+        } else {
             echo json_encode(array('data' => array()));
         }
     }
@@ -23,7 +23,7 @@ class Admin extends MX_Controller {
     public function add_data($table) {
         $this->_validate($table);
         $response = $this->Admin_model->save($table, $_POST);
-        if($response['status']){
+        if ($response['status']) {
             $this->updateSysLogs('Created  (' . $table . ')');
         }
         echo json_encode($response);
@@ -40,7 +40,7 @@ class Admin extends MX_Controller {
         $this->_validate($table);
         $id = $this->input->post('id');
         $response = $this->Admin_model->update($table, array('id' => $id), $_POST);
-        if($response['status']){
+        if ($response['status']) {
             $this->updateSysLogs('Updated  (' . $table . '> Record ID ' . $id . ')');
         }
         echo json_encode($response);
@@ -66,7 +66,7 @@ class Admin extends MX_Controller {
             'county' => array('name'),
             'dhis_elements' => array('dhis_code', 'dhis_name', 'dhis_report', 'target_report', 'target_name', 'target_category', 'target_id'),
             'dose' => array('name', 'value', 'frequency'),
-            'drug' => array('strength', 'packsize', 'generic_id', 'formulation_id', 'drug_category', 'min_mos','regimen_category', 'max_mos', 'amc_months', 'stock_status', 'facility_amc', 'kemsa_code', 'short_expiry'),
+            'drug' => array('strength', 'packsize', 'generic_id', 'formulation_id', 'drug_category', 'min_mos', 'regimen_category', 'max_mos', 'amc_months', 'stock_status', 'facility_amc', 'kemsa_code', 'short_expiry'),
             'facility' => array('name', 'mflcode', 'category', 'subcounty_id', 'partner_id', 'parent_id'),
             'formulation' => array('name'),
             'funding_agent' => array('name'),
@@ -80,21 +80,21 @@ class Admin extends MX_Controller {
             'procurement_status' => array('name'),
             'regimen' => array('name', 'code', 'description', 'category_id', 'service_id', 'line_id'),
             'regimen_drug' => array('drug_id', 'regimen_id'),
-            'role' =>  array('name'),
+            'role' => array('name'),
             'role_submodule' => array('role_id', 'submodule_id'),
             'service' => array('name'),
             'status' => array('name'),
             'subcounty' => array('name', 'county_id'),
             'submodule' => array('name', 'module_id'),
             'supplier' => array('name'),
-            'user' => array('firstname', 'lastname', 'email_address', 'phone_number', 'password', 'role', 'scope_id')
+            'user' => array('firstname', 'lastname', 'email_address', 'phone_number', 'role', 'scope_id')
         );
 
         foreach ($this->input->post() as $key => $value) {
             $index = str_ireplace('tbl_', '', $table);
-            if(in_array($key, $required_inputs[$index]) && $value == ''){
+            if (in_array($key, $required_inputs[$index]) && $value == '') {
                 $data['inputerror'][] = $key;
-                $data['error_string'][] = ucwords($key).' is required';
+                $data['error_string'][] = ucwords($key) . ' is required';
                 $data['status'] = FALSE;
             }
         }
@@ -103,6 +103,12 @@ class Admin extends MX_Controller {
             echo json_encode($data);
             exit();
         }
+    }
+
+    function updatePassword($id) {
+        $password = $this->input->post('password');
+        $this->db->where('id',$id)->update('tbl_user', ['password' => md5($password)]);
+        echo json_encode(['status' => 'success']);
     }
 
 }

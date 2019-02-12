@@ -39,33 +39,43 @@
                     <div class="form-group">
                         <label for="inputrole" class="col-sm-2 control-label">Role</label>
                         <div class="col-sm-10">                          
-                            <select name="role" id="role" class="form-control select2"></select>
+                            <select name="role" id="role" class="form-control "></select>
                             <span class="help-block"></span>
                         </div>
-                    </div>                    
+                    </div> 
+
                     <span id="scope_section"></span>
-                    <hr/>
-                    <div class="form-group">
-                        <label for="inputpassword" class="col-sm-2 control-label">Password</label>
-                        <div class="col-sm-10">
-                            <input type="password" class="form-control" id="inputpassword" placeholder="Password" name="password" required>
-                            <span class="help-block"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputcpassword" class="col-sm-2 control-label"> Confirm Password</label>
-                        <div class="col-sm-10">
-                            <input type="password" class="form-control" id="inputcpassword" placeholder="Confirm Password" name="cpassword" required>
-                            <span class="passerror" style="color: red; font-weight: bold; display: none;">Passwords do not match!</span>
-                        </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" id="btnSave" onclick="save()" class="btn btn-default">Save Profile</button>
                     </div>
 
+
                 </form>
+
+
+
+                <div class="form-group">
+                    <label for="inputpassword" class="col-sm-2 control-label">Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="inputpassword" placeholder="Password" name="password" required>
+                        <span class="help-block"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputcpassword" class="col-sm-2 control-label"> Confirm Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="inputcpassword" placeholder="Confirm Password" name="cpassword" required>
+                        <span class="passerror" style="color: red; font-weight: bold; display: none;">Passwords do not match!</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnSave" onclick="updatePass()" class="btn btn-default">Update Password</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" id="btnSave" onclick="save()" class="btn btn-default">Save</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            </div>
+
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
@@ -150,6 +160,7 @@
         }
         return false;
     }
+
 </script>
 
 </body>

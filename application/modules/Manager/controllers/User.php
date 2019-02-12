@@ -25,6 +25,8 @@ class User extends MX_Controller {
         }
     }
 
+   
+
     public function authenticate() {
         $response = $this->User_model->check_user($this->input->post());
         if ($response['status']) {
@@ -98,9 +100,6 @@ class User extends MX_Controller {
             redirect('manager/forgot_pass');
         }
     }
-    
-    
-     
 
     public function send_password($receipent_name, $email_address, $password) {
         $config['mailtype'] = 'html';

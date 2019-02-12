@@ -125,7 +125,7 @@
                                     <th>Email Address</th>
                                     <th>Phone Number</th>
                                     <th>Role</th>
-<?php } ?>
+                                <?php } ?>
 
                             </tr>
                         </thead>
@@ -404,7 +404,7 @@ if ($page_name != 'backup') {
 
     function save() {
         $('#btnSave').text('Saving,Please Wait...');
-       // $('#btnSave').attr('disabled', true);
+        // $('#btnSave').attr('disabled', true);
         var url;
 
         if (save_method == 'add') {
@@ -478,5 +478,32 @@ if ($page_name != 'backup') {
                 });
             }
         });
+
+    }
+
+
+
+    function updatePass(pass) {
+
+        pass = $('#inputpassword').val();
+        cpass = $('#inputcpassword').val();
+
+        if (pass == '' || cpass == '') {
+            swal('Error', 'Please fill all password fields', 'error');
+
+            return false;
+        } else if (pass !== cpass) {
+            swal('Error', 'Passwords do not match', 'error');
+            return false;
+        } else {
+
+            $.post('<?php echo base_url(); ?>Manager/Admin/updatePassword/' + id, {password: $('#inputpassword').val()}, function (resp) {
+                if (resp.status == 'success') {
+                    swal('Success', 'Password Changed', 'success');
+                } else {
+                    swal('Error', 'Passwords could not be changed', 'error');
+                }
+            });
+        }
     }
 </script>

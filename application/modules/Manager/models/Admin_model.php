@@ -181,7 +181,7 @@ class Admin_model extends CI_Model {
                 'email_address' => $this->input->post('email_address'),
                 'phone_number' => $this->input->post('phone_number'),
                 'role_id' => $this->input->post('role'),
-                'password' => md5($this->input->post('password'))
+               // 'password' => md5($this->input->post('password'))
             );
 
 
@@ -203,6 +203,8 @@ class Admin_model extends CI_Model {
         }
         return $response;
     }
+    
+  
 
     //function delete from db_table
     public function delete_by_id($table, $id) {
