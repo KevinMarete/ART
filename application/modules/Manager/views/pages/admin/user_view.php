@@ -39,23 +39,13 @@
                     <div class="form-group">
                         <label for="inputrole" class="col-sm-2 control-label">Role</label>
                         <div class="col-sm-10">                          
-                            <select name="role" id="role" class="form-control "></select>
+                            <select name="role" id="role" class="form-control select2"></select>
                             <span class="help-block"></span>
                         </div>
                     </div> 
 
                     <span id="scope_section"></span>
-
-
-                    <div class="modal-footer">
-                        <button type="button" id="btnSave" onclick="save()" class="btn btn-default">Save Profile</button>
-                    </div>
-
-
-                </form>
-
-
-
+                    <hr/>
                 <div class="form-group">
                     <label for="inputpassword" class="col-sm-2 control-label">Password</label>
                     <div class="col-sm-10">
@@ -70,12 +60,13 @@
                         <span class="passerror" style="color: red; font-weight: bold; display: none;">Passwords do not match!</span>
                     </div>
                 </div>
+
+                </form>
+            </div>
                 <div class="modal-footer">
-                    <button type="button" id="btnSave" onclick="updatePass()" class="btn btn-default">Update Password</button>
+                <button type="button" id="btnSave" onclick="save()" class="btn btn-default">Save</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
-            </div>
-
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
