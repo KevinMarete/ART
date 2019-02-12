@@ -69,7 +69,7 @@
 
 <?php //$role = $this->session->userdata('role');?>
 <div id="container" class="container-fluid">
- 
+
     <div class="col-lg-12">
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
@@ -393,17 +393,17 @@
                                                         <td><?= $regimen['name']; ?></td>
                                                         <td><?php echo $current = $columns['maps']['data'][$regimen['id']]; ?></td>
                                                         <td><?php
-                                        echo $previous = $columns['previousmaps']['data'][$regimen['id']];
-                                        if ($current > $previous) {
-                                            $p = round((($current - $previous) / $current) * 100, 0);
-                                            echo '<sup><span style="background: green; font-size:9px;" class="badge"> +' . $p . '%</span></sup>';
-                                        } else if ($previous > $current) {
-                                            $p = round((($previous - $current) / $previous) * 100, 0);
-                                            echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
-                                        }
-                                        $curr_ = $curr_ + $current;
-                                        $prev = $prev + $previous;
-                                                    ?>
+                                                            echo $previous = $columns['previousmaps']['data'][$regimen['id']];
+                                                            if ($current > $previous) {
+                                                                $p = round((($current - $previous) / $current) * 100, 0);
+                                                                echo '<sup><span style="background: green; font-size:9px;" class="badge"> +' . $p . '%</span></sup>';
+                                                            } else if ($previous > $current) {
+                                                                $p = round((($previous - $current) / $previous) * 100, 0);
+                                                                echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
+                                                            }
+                                                            $curr_ = $curr_ + $current;
+                                                            $prev = $prev + $previous;
+                                                            ?>
 
                                                         </td>
                                                         <td><?= $category ?></td>
@@ -441,12 +441,12 @@
                                     <?php foreach ($columns['cdrrs']['data']['cdrr_logs'] as $key => $log) { ?>
                                         <tr>
                                             <td><?php
-                                        if ($log['description'] == 'reviewed') {
-                                            echo 'Submitted to KEMSA';
-                                        } else {
-                                            echo ucwords($log['description']);
-                                        };
-                                        ?>  </td>
+                                                if ($log['description'] == 'reviewed') {
+                                                    echo 'Submitted to KEMSA';
+                                                } else {
+                                                    echo ucwords($log['description']);
+                                                };
+                                                ?>  </td>
                                             <td><?= ucwords($log['firstname'] . ' ' . $log['lastname']); ?> </td>
                                             <td><?= ucwords($log['role']); ?> </td>
                                             <td class="start_date"><?= $log['created']; ?><input type="hidden" class="end_date"/></td>
@@ -478,10 +478,12 @@
 
                 </div> <!--end of cdrr-->
                 <div class="panel-footer">
+                    <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
+                    <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
                     <?php if (abs($variance) > 2) { ?>
                         <div class = "alert alert-warning"><i class="fa fa-exclamation-triangle"></i> <strong>Patient Numbers % Variance is over 2%, It's advisable to take note of the variance</strong></div>
-<!--                        <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
-                        <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>-->
+                        <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
+                        <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
                     <?php } else { ?>
 
                         <?php if ($role == 'subcounty' && date('d') <= 30 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
