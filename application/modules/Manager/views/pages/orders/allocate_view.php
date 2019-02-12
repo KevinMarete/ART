@@ -478,8 +478,8 @@
                 <div class="panel-footer">
                     <?php if (abs($variance) > 2) { ?>
                         <div class = "alert alert-warning"><i class="fa fa-exclamation-triangle"></i> <strong>Patient Numbers % Variance is over 2%, It's advisable to take note of the variance</strong></div>
-                        <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
-                        <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
+<!--                        <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
+                        <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>-->
                     <?php } else { ?>
 
                         <?php if ($role == 'subcounty' && date('d') <= 30 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
@@ -899,7 +899,7 @@ if (empty($columns['maps']['data'])) {
 //Show spinner
             $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
             $('#save_allocation').prop('disabled', true);
-            updateValues();
+            //updateValues();
             $.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/allocated", function (data) {
                 swal('Allocation order submitted to county');
                 window.location.href = base_url + "manager/orders/view_allocation/<?= $cdrr_id . '/' . $map_id; ?>";
