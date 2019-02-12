@@ -478,23 +478,19 @@
 
                 </div> <!--end of cdrr-->
                 <div class="panel-footer">
-                  
-                    <?php if (abs($variance) > 2) { ?>
-                        <div class = "alert alert-warning"><i class="fa fa-exclamation-triangle"></i> <strong>Patient Numbers % Variance is over 2%, It's advisable to take note of the variance</strong></div>
+
+
+
+                    <?php if ($role == 'subcounty' && date('d') <= 30 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
                         <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
                         <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
-                    <?php } else { ?>
-
-                        <?php if ($role == 'subcounty' && date('d') <= 30 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
-                            <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
-                            <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
-                        <?php } else if ($role == 'subcounty' && date('d') > 30 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
-                            <p><div class="alert alert-warning"><strong>NB: Allocation period has ended. No more allocations allowed beyond the 20<sup>th</sup> of each month. </strong></div></p>
-                        <?php } else {
-                            ?>
-                            <p><div class = "alert alert-warning"><strong>NB: Allocation Complete. </strong></div></p>
-                        <?php } ?>
+                    <?php } else if ($role == 'subcounty' && date('d') > 30 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
+                        <p><div class="alert alert-warning"><strong>NB: Allocation period has ended. No more allocations allowed beyond the 20<sup>th</sup> of each month. </strong></div></p>
+                    <?php } else {
+                        ?>
+                        <p><div class = "alert alert-warning"><strong>NB: Allocation Complete. </strong></div></p>
                     <?php } ?>
+
                 </div>
             </div>
             <!-- /.panel-body -->
