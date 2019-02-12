@@ -478,8 +478,7 @@
 
                 </div> <!--end of cdrr-->
                 <div class="panel-footer">
-                    <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
-                    <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
+                  
                     <?php if (abs($variance) > 2) { ?>
                         <div class = "alert alert-warning"><i class="fa fa-exclamation-triangle"></i> <strong>Patient Numbers % Variance is over 2%, It's advisable to take note of the variance</strong></div>
                         <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
