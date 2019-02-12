@@ -37,7 +37,7 @@ class Admin extends MX_Controller {
 
     //function update data from db_table
     public function update_data($table) {
-        print_r($_POST);
+       // print_r($_POST);
         $this->_validate($table);
         $id = $this->input->post('id');
         $response = $this->Admin_model->update($table, array('id' => $id), $_POST);

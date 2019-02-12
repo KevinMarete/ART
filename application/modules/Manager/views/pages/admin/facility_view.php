@@ -114,7 +114,8 @@
         $.getJSON(parentURL, function (parent_id) {
             $("#parent").append($("<option value=''>Select Parent</option>"));
             $.each(parent_id, function (index, parent) {
-                $("#parent").append($("<option value='" + parent.parent_id + "'>" + parent.name.toUpperCase() + "</option>"));
+                
+                $("#parent").append($("<option value='" + parent.id + "'>" + parent.name.toUpperCase() + "</option>"));
             });
         });
     });
