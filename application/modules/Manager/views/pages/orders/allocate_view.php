@@ -66,8 +66,10 @@
 
 
 </style>
-<div id="container" class="container-fluid">
 
+<?php $role = $this->session->userdata('role');?>
+<div id="container" class="container-fluid">
+ 
     <div class="col-lg-12">
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('manager/dashboard'); ?>">Dashboard</a></li>
