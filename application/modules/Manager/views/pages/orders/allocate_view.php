@@ -355,7 +355,7 @@
                                                     </td>
 
                                                     <td title="Any feedback deemed necessary">
-                                                        <textarea type="text" style="width:100px;" class="form-control comment" <?= $disabled; ?> name="feedback-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" ><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['regimen_category']; ?></textarea>
+                                                        <textarea type="text" style="width:100px;" class="form-control comment" <?= $disabled; ?> name="feedback-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" ><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['feedback']; ?></textarea>
                                                     </td>
 
 

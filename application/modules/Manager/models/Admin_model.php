@@ -41,10 +41,10 @@ class Admin_model extends CI_Model {
                 $table_data = $this->db->get()->result_array();
             } else if ($table == 'tbl_facility') {
                 $sql = "SELECT f.id,f.name,f.mflcode,f.category,f.dhiscode,f.longitude,f.latitude,sc.name subcounty,p.name partner,k.name fname 
-                      FROM tbl_facility f 
+                    FROM tbl_facility f 
                     LEFT JOIN tbl_subcounty sc ON sc.id=f.subcounty_id 
-                      LEFT JOIN tbl_partner p ON p.id=f.partner_id
-LEFT JOIN tbl_facility k ON k.id = f.parent_id";
+                    LEFT JOIN tbl_partner p ON p.id=f.partner_id
+                    LEFT JOIN tbl_facility k ON k.id = f.parent_id";
                 $table_data = $this->db->query($sql)->result_array();
             } else if ($table == 'tbl_install') {
                 $this->db->select('i.id,i.version,UCASE(f.name)facility_name,i.setup_date,i.contact_name,i.contact_phone,i.emrs_used,i.active_patients,IF(`is_usage`=1,"Yes","No"),IF(`is_internet`=1,"Yes","No"),u.firstname user_name');
