@@ -61,8 +61,30 @@
         background-color: #ffff99;
     }
 
-
-
+    .groups {
+        height: 70px;	
+        overflow: hidden;
+        position: relative;
+    }
+    .groups  {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        line-height: 50px;
+        animation: example1 15s linear infinite;  /* Apply the animation */
+    }
+    /* Define the animation */
+    @keyframes groups {
+        from {
+            margin-left: 667px;
+            width: 300%;
+        }
+        to {
+            margin-left: -100%;
+            width: 100%;
+        }
+    }
 
 
 </style>
@@ -179,16 +201,16 @@
                                             <th class="holdHeader2" style="background: #ffffff;">End Month Stock on Hand</th>
 
                                             <th class="">Aggregate Consumed</th>
-                                            <th class="holdHeader" >Aggregate Stock on Hand</th>
+                                            <th >Aggregate Stock on Hand</th>
 
                                             <th colspan="2">Commodities Expiring < 6 Months</th>
                                             <th>Days out of Stock</th>
                                             <th>Resupply Quantity</th>
-                                            <th>AMC</th>
+                                            <th class="holdHeader" >AMC</th>
                                             <th>Facility MOS</th>
                                             <th>AutoCalc Resupply</th>
                                             <th>Allocated</th>
-                                            <th>Total MOS</th>
+                                            <th>Allocated MOS</th>
                                             <th>Comments</th>
                                             <th>Decision</th>
                                             <th>regimen</th>
@@ -208,12 +230,12 @@
 
 
                                             <th>Quantity</th>
-                                            <th class="holdHeader" style="background: #ffffff;">K</th>
+                                            <th>K</th>
                                             <th>L</th>
                                             <th>Expiry Date</th>
                                             <th>M</th>
                                             <th>N</th>
-                                            <th>O</th>
+                                            <th class="holdHeader" style="background: #ffffff;">O</th>
                                             <th>P</th>
                                             <th>Q</th>
                                             <th>R</th>
@@ -271,18 +293,18 @@
                                                     <td class="eMOSH holdHeader2" style="background: #ffffff;" title="Beginning balance less Quantity Issued (C - E)"><?= $eMSOH = $columns['cdrrs']['data']['cdrr_item'][$drugid]['count']; ?></td>
 
                                                     <td class="" title="Quantity consumed including in the satellite sites"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_consumed']; ?></td>
-                                                    <td class="aggSOH  holdHeader" title="Quantity available at the facility currently"><?= $aggSOH = $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand']; ?></td>
+                                                    <td class="aggSOH  " title="Quantity available at the facility currently"><?= $aggSOH = $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand']; ?></td>
 
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_quant']; ?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['expiry_date']; ?></td>
                                                     <td title="No of days commodity has been out of stock"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['out_of_stock']; ?></td>
                                                     <td><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['resupply']; ?></td>
                                                     <?php if ($amc_months == '0') { ?>
-                                                        <td style="" class="AMC" title="Average Monthly Consumption for the last 3 Months">No AMC</td>                                                       
+                                                        <td style="background: #ffffff" class="AMC holdHeader" title="Average Monthly Consumption for the last 3 Months">No AMC</td>                                                       
                                                         <td style="" title="Aggregate Stock on Hand / AMC (K/O)">No AMC</td>
                                                         <td style="" title="Resupply Quantity which is AMC by three less stock on hand ((AMC(O)*3)-J)">No AMC</td>                                                       
                                                     <?php } else { ?>                                                    
-                                                        <td class="AMC" title="Average Monthly Consumption for the last 3 Months"><?= $drugamc; ?></td>
+                                                        <td style="background: #ffffff" class="AMC holdHeader" title="Average Monthly Consumption for the last 3 Months"><?= $drugamc; ?></td>
                                                         <?php
                                                         $allocated = '';
                                                         if ($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated'] >= 0) {
@@ -611,7 +633,7 @@ if (empty($columns['maps']['data'])) {
                     if (last !== group) {
 
                         $(rows).eq(i).before(
-                                '<tr class="group" style="background:green; color:white;font-weight:bold;"><td colspan="4">' + group.toUpperCase() + '</td></tr>'
+                                '<tr class="group" style="background:green; color:white;font-weight:bold;"><td colspan="4"><span id="groups">' + group.toUpperCase() + '</span></td></tr>'
                                 );
 
                         last = group;
@@ -736,8 +758,8 @@ if (empty($columns['maps']['data'])) {
                 });
                 return false;
             } else if (AllMOS > (max_mos - FacMOS)) {
-                swal("Write Reason Here:", {
-                    title: "Excess Allocation MOS",
+                swal("Write Reason Here :", {
+                    title: "Excess Allocation MOS 1",
                     text: "The highest that can be allocated is " + max_mos + " MOS",
                     content: "input",
                     icon: "error",
@@ -755,7 +777,12 @@ if (empty($columns['maps']['data'])) {
                                 $(this).val(((max_mos - FacMOS) * AMC));
                                 $(this).trigger('change');
                             } else {
-                                row.find('.comment').val(value);
+                                if (value == '') {
+                                    swal("Warning", 'Please enter a reason', 'error');
+                                    return false;
+                                } else {
+                                    row.find('.comment').val(value);
+                                }
                             }
                         });
                 return false;
@@ -799,6 +826,7 @@ if (empty($columns['maps']['data'])) {
                 return false;
             } else if (input_val > (max_mos - FacMOS)) {
                 swal("Write Reason Here:", {
+                    closeOnClickOutside: false,
                     title: "Excess Allocation MOS",
                     text: "The highest that can be allocated is " + max_mos + " MOS",
                     content: "input",
@@ -810,17 +838,22 @@ if (empty($columns['maps']['data'])) {
                             type: "text",
                         },
                     },
-                    buttons: true,
+                    //buttons: true,
                 })
                         .then((value) => {
                             if (value == null) {
                                 $(this).val(max_mos - FacMOS);
                                 $(this).trigger('change');
                             } else {
-                                row.find('.comment').val(value);
+                                if (value == '') {
+                                    alert("Warning", 'Please enter a reason', 'error');
+                                    return false;
+                                } else {
+                                    row.find('.comment').val(value);
+                                }
                             }
                         });
-                return false;
+                return true;
             }
         });
 
