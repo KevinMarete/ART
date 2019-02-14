@@ -89,10 +89,7 @@
 
 </style>
 
-<?php
-echo $role;
-//$role = $this->session->userdata('role');
-?>
+
 <div id="container" class="container-fluid">
 
     <div class="col-lg-12">

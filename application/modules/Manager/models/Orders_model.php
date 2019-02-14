@@ -240,7 +240,7 @@ class Orders_model extends CI_Model {
                             ? period,
                             CASE 
                                 WHEN t.cdrr_id IS NULL THEN CONCAT('D-CDRR Pending')
-                                WHEN t.cdrr_id IS NULL THEN CONCAT('D-MAPS Pending')
+                                WHEN t.maps_id IS NULL THEN CONCAT('D-MAPS Pending')
                                 ELSE CONCAT('<a href=$allocation_url/',t.cdrr_id,'/',t.maps_id,'>View Order</a>') 
                                 END AS options
                         FROM tbl_facility f  
