@@ -501,7 +501,7 @@
                 </div> <!--end of cdrr-->
                 <div class="panel-footer">
                     
-                    <?php if ($role == 'subcounty' && date('d') <= 30 && $columns['cdrrs']['data'][0]['status'] == 'pending') { ?>
+                    <?php if ($role == 'subcounty' && date('d') <= 30 && $columns['cdrrs']['data'][0]['status'] == 'pending' ||  $columns['cdrrs']['data'][0]['status'] == 'rejected') { ?>
                         <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
                         <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
                     <?php } else if ($role == 'subcounty' && date('d') >= 10 && $columns['cdrrs']['data'][0]['status'] == 'pending') { ?>
