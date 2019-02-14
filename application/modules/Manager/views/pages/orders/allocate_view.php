@@ -89,7 +89,10 @@
 
 </style>
 
-<?php //$role = $this->session->userdata('role');?>
+<?php
+echo $role;
+//$role = $this->session->userdata('role');
+?>
 <div id="container" class="container-fluid">
 
     <div class="col-lg-12">
@@ -500,17 +503,16 @@
 
                 </div> <!--end of cdrr-->
                 <div class="panel-footer">
-
-
-
-                    <?php if ($role == 'subcounty' && date('d') <= 30 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
+                    
+                    <?php if ($role == 'subcounty' && date('d') <= 30 && $columns['cdrrs']['data'][0]['status'] == 'pending') { ?>
                         <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
                         <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
-                    <?php } else if ($role == 'subcounty' && date('d') > 30 && !in_array($columns['cdrrs']['data'][0]['status'], array('allocated', 'approved', 'reviewed'))) { ?>
+                    <?php } else if ($role == 'subcounty' && date('d') >= 10 && $columns['cdrrs']['data'][0]['status'] == 'pending') { ?>
                         <p><div class="alert alert-warning"><strong>NB: Allocation period has ended. No more allocations allowed beyond the 20<sup>th</sup> of each month. </strong></div></p>
-                    <?php } else {
-                        ?>
+
+                    <?php } else { ?>
                         <p><div class = "alert alert-warning"><strong>NB: Allocation Complete. </strong></div></p>
+
                     <?php } ?>
 
                 </div>
@@ -994,11 +996,11 @@ if (empty($columns['maps']['data'])) {
 <?php } ?>
 
 <?php if ($role == 'subcounty' && date('d') > 13) { ?>
-            $('#save_allocation,#complete_allocation').hide();
+           // $('#save_allocation,#complete_allocation').hide();
 <?php } elseif ($role == 'county' && date('d') > 15) { ?>
-            $('#approveOrder,#rejectOrder').hide();
+           // $('#approveOrder,#rejectOrder').hide();
 <?php } elseif ($role == 'nascop' && date('d') > 20) { ?>
-            $('#reviewOrder,#rejectOrder').hide();
+           // $('#reviewOrder,#rejectOrder').hide();
 <?php } ?>
 
     });
