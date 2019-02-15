@@ -479,7 +479,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+<!--                    <div class="col-sm-3">
                         <?php $variance = number_format((($curr_ - $prev) / $curr_) * 100, 1); ?>
                         <table class="table table-responsive table-bordered" >
                             <tr>
@@ -495,7 +495,7 @@
                                 <td style="text-align: right;font-weight: bold;"><?= $variance; ?>%</td>
                             </tr>
                         </table>
-                    </div>
+                    </div>-->
 
 
                 </div> <!--end of cdrr-->
