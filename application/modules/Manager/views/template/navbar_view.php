@@ -12,11 +12,17 @@
     </div>
     <!-- /.navbar-header -->
     <ul class="nav navbar-top-links navbar-right">
+        
+         <li> 
+             <a class="" href="<?=base_url();?>Dashboard"><i class="fa fa-dashboard"> Main Dashboard</i></a>
+        </li>
+        
         <li>
             <small>
                 <b><?php echo strtoupper($this->session->userdata('role')); ?>: </b> <?php echo ucwords($this->session->userdata('scope_name')); ?>
             </small> 
         </li>
+       
 
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -37,6 +43,8 @@
             </ul>
             <!-- /.dropdown-user -->
         </li>
+        
+         
         <!-- /.dropdown -->
     </ul>
     <!-- /.navbar-top-links -->

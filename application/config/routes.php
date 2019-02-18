@@ -51,7 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   |		my-controller/my-method	-> my_controller/my_method
  */
 /*lowercase for linux*/
-$route['default_controller'] = 'Dashboard';
+$route['default_controller'] = 'Manager';
 $route['api'] = 'API';
 $route['dashboard'] = 'Dashboard';
 $route['ftp'] = 'Ftp';
