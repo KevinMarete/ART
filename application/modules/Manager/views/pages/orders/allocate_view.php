@@ -957,6 +957,7 @@ if (empty($columns['maps']['data'])) {
             window.location.href = "<?= base_url() ?>manager";
         } else {
             setInterval(function () {
+                //alert(role);
 //$(this).prop('disabled', true);
 //Show spinner
 // $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});

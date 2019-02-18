@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body form">
                 <form action="#" id="form" class="form-horizontal">
-                    <input type="hidden" value="" name="id"/> 
+                    <input type="hidden" value="" name="id" id="user_id"/> 
                     <div class="form-group">
                         <label for="inputfirstname" class="col-sm-2 control-label">Firstname</label>
                         <div class="col-sm-4">
@@ -46,27 +46,17 @@
 
                     <span id="scope_section"></span>
                     <hr/>
-                <div class="form-group">
-                    <label for="inputpassword" class="col-sm-2 control-label">Password</label>
-                    <div class="col-sm-10">
-                        <input type="password" class="form-control" id="inputpassword" placeholder="Password" name="password" required>
-                        <span class="help-block"></span>
+                    <div id="PassChanger">
+                        
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputcpassword" class="col-sm-2 control-label"> Confirm Password</label>
-                    <div class="col-sm-10">
-                        <input type="password" class="form-control" id="inputcpassword" placeholder="Confirm Password" name="cpassword" required>
-                        <span class="passerror" style="color: red; font-weight: bold; display: none;">Passwords do not match!</span>
-                    </div>
-                </div>
 
                 </form>
             </div>
-                <div class="modal-footer">
+
+            <div class="modal-footer">
                 <button type="button" id="btnSave" onclick="save()" class="btn btn-default">Save</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                </div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
@@ -75,6 +65,8 @@
 
 <script type="text/javascript">
     $(function () {
+        
+        
         var roleURL = '../../API/Role';
         $("#role").empty();
         $.getJSON(roleURL, function (role) {
@@ -82,7 +74,12 @@
             $.each(role, function (index, role) {
                 $("#role").append($("<option value='" + role.id + "'>" + role.name.toUpperCase() + "</option>"));
             });
+
+
+
         });
+
+
 
         $("#inputemail").keyup("click", validate);
         $("#inputcpassword").on("keyup", validatePassword);
@@ -93,6 +90,8 @@
         $('#inputphonenumber').focusout(function () {
             check('phone_number', $('#inputphonenumber').val());
         });
+        
+        
 
 
 
@@ -120,6 +119,7 @@
                         $('#inputscope').append($("<option value='" + v.id + "'>" + v.name.toUpperCase() + "</option>"));
                     });
                 }
+                $('#inputscope').select2();
             });
         });
     });

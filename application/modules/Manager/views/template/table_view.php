@@ -164,6 +164,10 @@ if ($page_name != 'backup') {
 <?php } ?>
 
     $(document).ready(function () {
+        $('#PassChanger').empty();
+        password = '<div class="form-group"><label for="inputpassword" class="col-sm-2 control-label">Password</label><div class="col-sm-10"><input type="password" class="form-control" id="inputpassword" placeholder="Password" name="password" required><span class="help-block"></span></div></div>';
+        password += '<div class="form-group"><label for="inputcpassword" class="col-sm-2 control-label"> Confirm Password</label><div class="col-sm-10"><input type="password" class="form-control" id="inputcpassword" placeholder="Confirm Password" name="cpassword" required><span class="passerror" style="color: red; font-weight: bold; display: none;">Passwords do not match!</span></div></div>'
+
         table = $('#dataTables-listing').DataTable({
             //responsive: true,
             "scrollX": true,
@@ -212,6 +216,9 @@ if ($page_name != 'backup') {
 
     //function add data to db_table
     function add_<?php echo $page_name; ?>() {
+        $('#PassUpdate').hide();
+        $('#PassChanger').empty();
+        $('#PassChanger').append(password);
         save_method = 'add';
         $('#form')[0].reset();
         $('.form-group').removeClass('has-error');
@@ -251,6 +258,8 @@ if ($page_name != 'backup') {
 
     //function edit db_table data
     function edit_<?php echo $page_name; ?>() {
+        $('#PassUpdate').show();
+        $('#PassChanger').empty();
         save_method = 'update';
         $('#form')[0].reset();
         $('.form-group').removeClass('has-error');
@@ -364,6 +373,11 @@ if ($page_name != 'backup') {
                 $('[name="email_address"]').val(data.email_address);
                 $('[name="phone_number"]').val(data.phone_number);
                 $('[name="role"]').val(data.role_id);
+                setTimeout(function () {
+                    $('[name="scope_id"]').val(data.scope_id);
+                    $('[name="scope_id"]').select2();
+                }, 1000);
+
 
 
                 //facility

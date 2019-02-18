@@ -15,6 +15,27 @@ class Procurement extends MX_Controller {
         $this->email = new Email_sender;
     }
 
+    function getStockMovement() {
+//Server url
+        $url = "https://api.kemsa.co.ke/p_productmovements?filter[where][lmis_tool_id]=1000000&filter[where][startdate]=20190101";
+        $apiKey = '$2y$10$S0JuZi5EAxAsuMaV2r4Nh.1HyC.nIfSW9Pnf1UPkPsapni6Vv/xLC'; // should match with Server key
+        $headers = array(
+            'apitoken:' . $apiKey
+        );
+// Send request to Server
+        $ch = curl_init($url);
+// To save response in a variable from server, set headers;
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+// Get response
+        $response = curl_exec($ch);
+// Decode
+        $result = json_decode($response);
+         echo '<pre>';
+        print_r($result);
+         echo '</pre>';
+    }
+
     function Reminder() {
         $this->sendReminder();
     }
@@ -835,7 +856,6 @@ class Procurement extends MX_Controller {
             $rdata = ' - ';
         } else if ($v == 0) {
             $rdata = ' - ';
-        
         } else {
             $rdata = number_format($v);
         }

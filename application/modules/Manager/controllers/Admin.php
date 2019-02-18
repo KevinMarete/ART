@@ -18,6 +18,10 @@ class Admin extends MX_Controller {
             echo json_encode(array('data' => array()));
         }
     }
+    
+    function getUserSubRole($email){
+        
+    }
 
     //function add data to db_table
     public function add_data($table) {
@@ -88,7 +92,7 @@ class Admin extends MX_Controller {
             'subcounty' => array('name', 'county_id'),
             'submodule' => array('name', 'module_id'),
             'supplier' => array('name'),
-            'user' => array('firstname', 'lastname', 'email_address', 'phone_number', 'role', 'scope_id')
+            'user' => array('firstname', 'lastname', 'email_address', 'phone_number', 'role', 'scope_id','password','cpassword')
         );
 
         foreach ($this->input->post() as $key => $value) {

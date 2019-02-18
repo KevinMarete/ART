@@ -166,26 +166,36 @@ class Admin_model extends CI_Model {
 
     //function get_by_id
     public function get_by_id($table, $id) {
-        $this->db->from($table);
-        $this->db->where('id', $id);
-        $query = $this->db->get();
-        return $query->row();
+        if ($table == 'tbl_user') {
+            return $this->db->query("SELECT u.*,s.scope_id
+                    FROM tbl_user u 
+                    LEFT JOIN tbl_user_scope s ON u.id = s.user_id
+                    WHERE u.id ='$id'")->row();
+        } else {
+            $this->db->from($table);
+            $this->db->where('id', $id);
+            $query = $this->db->get();
+            return $query->row();
+        }
     }
 
     //function update db_table
     public function update($table, $where, $data) {
         if ($table == 'tbl_user') {
             $role = $this->input->post('role');
+            $pass = ['password' => md5($this->input->post('password'))];
+
             $user_array = array(
                 'firstname' => $this->input->post('firstname'),
                 'lastname' => $this->input->post('lastname'),
                 'email_address' => $this->input->post('email_address'),
                 'phone_number' => $this->input->post('phone_number'),
                 'role_id' => $this->input->post('role'),
-               // 'password' => md5($this->input->post('password'))
             );
 
-
+            if (!empty($this->input->post('password'))) {
+                $this->db->update($table, $pass, $where);
+            }
 
             $this->db->update($table, $user_array, $where);
             //Ensure role is chosen within scope
@@ -204,8 +214,6 @@ class Admin_model extends CI_Model {
         }
         return $response;
     }
-    
-  
 
     //function delete from db_table
     public function delete_by_id($table, $id) {
