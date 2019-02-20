@@ -18,6 +18,14 @@
         position: sticky;
         left: 220px;
     }
+    
+      tbody .holdHeaderGroup{
+        position: -webkit-sticky;       
+        text-align: center;
+        position: sticky;
+        left: 0;
+        border:0;
+    }
 
     thead .holdHeader2{
         position: -webkit-sticky;
@@ -605,7 +613,7 @@ if (empty($columns['maps']['data'])) {
                     if (last !== group) {
 
                         $(rows).eq(i).before(
-                                '<tr class="group" style="background:green; color:white;font-weight:bold;"><td colspan="24">' + group.toUpperCase() + '</td></tr>'
+                                '<tr class="" style="background:green;  color:white;font-weight:bold;"><td colspan="2" style="border:0;" class="holdHeaderGroup">' + group.toUpperCase() + '</td><td style="border:0;" colspan="21"></td></tr>'
                                 );
                         last = group;
                     }

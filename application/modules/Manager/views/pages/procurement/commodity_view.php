@@ -229,7 +229,7 @@
     currentMonth = GetMonthName((new Date).getMonth());
     newdate = new Date(now.setMonth(now.getMonth() - 1));
     lastMonth = GetMonthName((newdate.getMonth()));
-   
+
     function GetMonthName(monthNumber) {
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         return months[monthNumber];
@@ -343,6 +343,12 @@
                     $("#" + key).val(value)
                 });
 
+                value = $('#commodity_mos').val();
+                if (value < 0) {
+                    $('#commodity_mos').val(0);
+                }
+
+
                 if (json.data.length < 1) {
                     $('#productTitle1,#productTitle2,#productTitle3,#productTitle4').text("No data found for this product.");
                     $('#decisionModalTitle').text('Add Decisions and Reccomendations for this product');
@@ -352,6 +358,8 @@
                 }
                 $("#procurement_loader").empty(); //Kill Loader
                 $('#actual_qty').val('');
+
+
             });
             $('.productTitle').empty();
             getDecisions(id, "#decision_tbl_procurement");
@@ -408,6 +416,11 @@
                 $.each(json.data, function (key, value) {
                     $("#" + key).val(value)
                 });
+
+                value = $('#commodity_mos').val();
+                if (value < 0) {
+                    $('#commodity_mos').val(0);
+                }
 
                 if (json.data.length < 1) {
                     $('#productTitle1,#productTitle2,#productTitle3,#productTitle4').text("No data found for this product");

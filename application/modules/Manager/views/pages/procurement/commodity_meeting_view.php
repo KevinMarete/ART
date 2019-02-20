@@ -324,6 +324,11 @@
                     $("#" + key).val(value)
                 });
 
+                value = $('#commodity_mos').val();
+                if (value < 0) {
+                    $('#commodity_mos').val(0);
+                }
+
                 if (json.data.length < 1) {
                     $('#productTitle1,#productTitle2,#productTitle3,#productTitle4').text("No data found for this product");
                     $('#decisionModalTitle').text('Add Decisions and Reccomendations for this product');
@@ -389,6 +394,11 @@
                 $.each(json.data, function (key, value) {
                     $("#" + key).val(value)
                 });
+
+                value = $('#commodity_mos').val();
+                if (value < 0) {
+                    $('#commodity_mos').val(0);
+                }
 
                 if (json.data.length < 1) {
                     $('#productTitle1,#productTitle2,#productTitle3,#productTitle4').text("No data found for this product");
@@ -632,15 +642,15 @@
             var now = new Date();
             var end = new Date(date);
 
-           /* if (end > now && received == 'Received') {
-                swal({
-                    title: "Invalid!",
-                    text: "You cannot receive this order at this time.",
-                    icon: "error",
-                });
-                row.find('[name="procurement_status_id"] option:eq(1)').prop('selected', true);
-                return false;
-            }*/
+            /* if (end > now && received == 'Received') {
+             swal({
+             title: "Invalid!",
+             text: "You cannot receive this order at this time.",
+             icon: "error",
+             });
+             row.find('[name="procurement_status_id"] option:eq(1)').prop('selected', true);
+             return false;
+             }*/
         });
 
         //Procurement status change event

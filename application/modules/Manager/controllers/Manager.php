@@ -10,7 +10,6 @@ class Manager extends MX_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Orders_model');
-      
     }
 
     public function index() {
@@ -127,7 +126,7 @@ class Manager extends MX_Controller {
                     ),
                     'subcounty_reports' => array(
                         'subcounty' => array(),
-                        'county' => array('MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions' ),
+                        'county' => array('MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions'),
                         'nascop' => array('MFL Code', 'Facility Name', 'Description', 'Status', 'Period', 'Actions')
                     ),
                     'county_reports' => array(
@@ -252,6 +251,35 @@ class Manager extends MX_Controller {
         $output = $dompdf->output();
         unlink('public/minutes_pdf/minutes.pdf');
         file_put_contents('public/minutes_pdf/minutes.pdf', $output);
+    }
+
+    public function sendEmail() {
+        $config['mailtype'] = 'html';
+        $config['protocol'] = 'smtp';
+        $config['smtp_host'] = 'ssl://smtp.googlemail.com';
+        $config['smtp_port'] = 465;
+        $config['smtp_user'] = stripslashes('webartmanager2018@gmail.com');
+        $config['smtp_pass'] = stripslashes('WebArt_052013');
+
+        $requester = $this->input->post('name');
+        $reason = $this->input->post('message');
+        $phone = $this->input->post('phone');
+        $email = $this->input->post('email');
+
+        $this->load->library('email', $config);
+        $this->email->set_newline("\r\n");
+        $this->email->from('noreply@nascop.org', 'Commodity Manager');
+        $this->email->to('webartmanager2018@gmail.com,alpho07@gmail.com');
+        $this->email->subject('Commodity Manager | New Account Creation Request');
+        $this->email->message('Dear NASCOP Commodity Manager <br> ' . $requester . ' is seeking to have access to the commodity platform for the reason stated below.<br>'
+                . ' <strong>' . $reason . '</strong><br>'
+                . '<p>Phone: ' . $phone . '<br> Email: ' . $email);
+
+        if ($this->email->send()) {
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'fail']);
+        }
     }
 
     public function get_data($chartname, $filters) {

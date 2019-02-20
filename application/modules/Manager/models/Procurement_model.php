@@ -43,8 +43,8 @@ class Procurement_model extends CI_Model {
                         drug commodity_name, 
                         IF(close_kemsa < 0, 0, FORMAT(close_kemsa, 0)) commodity_soh, 
                         ROUND(close_kemsa/avg_issues) commodity_mos, 
-                        IF(((avg_issues * 9) - close_kemsa) < 0, 0, FORMAT(((avg_issues * 9) - close_kemsa), 0)) expected_qty,
-                        IF(((avg_issues * 9) - close_kemsa)  < 0, 0, ((avg_issues * 9) - close_kemsa)) actual_qty 
+                        IF(((avg_issues * 15) - close_kemsa) < 0, 0, FORMAT(((avg_issues * 15) - close_kemsa), 0)) expected_qty,
+                        IF(((avg_issues * 15) - close_kemsa)  < 0, 0, ((avg_issues * 15) - close_kemsa)) actual_qty 
                     FROM vw_procurement_list
                     WHERE drug_id = ? 
                     AND data_date = ?";
