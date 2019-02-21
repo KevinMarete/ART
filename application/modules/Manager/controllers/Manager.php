@@ -269,7 +269,7 @@ class Manager extends MX_Controller {
         $this->load->library('email', $config);
         $this->email->set_newline("\r\n");
         $this->email->from('noreply@nascop.org', 'Commodity Manager');
-        $this->email->to('webartmanager2018@gmail.com,alpho07@gmail.com');
+        $this->email->to('webartmanager2018@gmail.com,alpho07@gmail.com,kmarete@clintonhealthaccess.org,kmugambi@clintonhealthaccess.org ');
         $this->email->subject('Commodity Manager | New Account Creation Request');
         $this->email->message('Dear NASCOP Commodity Manager <br> ' . $requester . ' is seeking to have access to the commodity platform for the reason stated below.<br>'
                 . ' <strong>' . $reason . '</strong><br>'
