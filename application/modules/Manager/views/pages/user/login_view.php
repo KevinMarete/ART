@@ -147,7 +147,7 @@
                         };
                         $(this).prop('disabled', true);
                         $(this).prop('value', 'Please Wait...');
-                        $.post("<?= base_url(); ?>Manager/sendEmail/", data, function (resp) {
+                        $.post("<?= base_url(); ?>Manager/newAccountRequestForOpening/", data, function (resp) {
                             if (resp.status == 'success') {
                                 alert('Thank You, We have received your request and will get back to you as soow as possible');
                                 window.location.href = "";
