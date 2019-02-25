@@ -18,8 +18,8 @@
         position: sticky;
         left: 220px;
     }
-    
-      tbody .holdHeaderGroup{
+
+    tbody .holdHeaderGroup{
         position: -webkit-sticky;       
         text-align: center;
         position: sticky;
@@ -487,33 +487,36 @@
                             </table>
                         </div>
                     </div>
-<!--                    <div class="col-sm-3">
-                        <?php $variance = number_format((($curr_ - $prev) / $curr_) * 100, 1); ?>
-                        <table class="table table-responsive table-bordered" >
-                            <tr>
-                                <td>Current Patient Numbers</td>
-                                <td style="text-align: right; font-weight: bold;"><?= number_format($curr_, 0); ?></td>
-                            </tr>
-                            <tr>
-                                <td>Previous Patient Numbers</td>
-                                <td style="text-align: right;font-weight: bold;"><?= number_format($prev, 0); ?></td>
-                            </tr>
-                            <tr>
-                                <td>Patient Numbers % Variance</td>
-                                <td style="text-align: right;font-weight: bold;"><?= $variance; ?>%</td>
-                            </tr>
-                        </table>
-                    </div>-->
+                    <!--                    <div class="col-sm-3">
+                    <?php $variance = number_format((($curr_ - $prev) / $curr_) * 100, 1); ?>
+                                            <table class="table table-responsive table-bordered" >
+                                                <tr>
+                                                    <td>Current Patient Numbers</td>
+                                                    <td style="text-align: right; font-weight: bold;"><?= number_format($curr_, 0); ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Previous Patient Numbers</td>
+                                                    <td style="text-align: right;font-weight: bold;"><?= number_format($prev, 0); ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Patient Numbers % Variance</td>
+                                                    <td style="text-align: right;font-weight: bold;"><?= $variance; ?>%</td>
+                                                </tr>
+                                            </table>
+                                        </div>-->
 
 
                 </div> <!--end of cdrr-->
                 <div class="panel-footer">
-                    
-                    <?php if ($role == 'subcounty' && date('d') <= 30 && $columns['cdrrs']['data'][0]['status'] == 'pending' ||  $columns['cdrrs']['data'][0]['status'] == 'rejected') { ?>
+
+                    <?php if ($role == 'subcounty' && date('d') <= 30 && $columns['cdrrs']['data'][0]['status'] == 'pending' || $columns['cdrrs']['data'][0]['status'] == 'rejected') { ?>
                         <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
                         <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
                     <?php } else if ($role == 'subcounty' && date('d') >= 10 && $columns['cdrrs']['data'][0]['status'] == 'pending') { ?>
                         <p><div class="alert alert-warning"><strong>NB: Allocation period has ended. No more allocations allowed beyond the 20<sup>th</sup> of each month. </strong></div></p>
+
+                    <?php }  else if ($role == 'county' && $columns['cdrrs']['data'][0]['status'] == 'allocated') { ?>
+                        <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation Edit</button>
 
                     <?php } else { ?>
                         <p><div class = "alert alert-warning"><strong>NB: Allocation Complete. </strong></div></p>
@@ -574,9 +577,9 @@ if (empty($columns['maps']['data'])) {
 };
 ?>
 <!-- /#page-wrapper -->
-
 <script type="text/javascript">
     $(function () {
+       
         base_url = "<?php echo base_url(); ?>";
 
         maps = "<?= $maps; ?>";
@@ -784,7 +787,7 @@ if (empty($columns['maps']['data'])) {
                                 $(this).val(((max_mos - FacMOS) * AMC));
                                 $(this).trigger('change');
                             } else {
-                                if (value == '') {
+                                if (!value) {
                                     swal("Warning", 'Please enter a reason', 'error');
                                     return false;
                                 } else {
@@ -993,7 +996,7 @@ if (empty($columns['maps']['data'])) {
                 $('.Allocated').attr('disabled', false);
                 $('.AllocatedMOS').attr('disabled', true);
     <?php } else if ($this->session->userdata('role') == 'county') { ?>
-                $('.Allocated').attr('disabled', true);
+                $('.Allocated').attr('disabled', false);
                 $('.AllocatedMOS').attr('disabled', false);
     <?php } else { ?>
                 // $('input').attr('disabled', true);
@@ -1002,11 +1005,11 @@ if (empty($columns['maps']['data'])) {
 <?php } ?>
 
 <?php if ($role == 'subcounty' && date('d') > 13) { ?>
-           // $('#save_allocation,#complete_allocation').hide();
+            // $('#save_allocation,#complete_allocation').hide();
 <?php } elseif ($role == 'county' && date('d') > 15) { ?>
-           // $('#approveOrder,#rejectOrder').hide();
+            // $('#approveOrder,#rejectOrder').hide();
 <?php } elseif ($role == 'nascop' && date('d') > 20) { ?>
-           // $('#reviewOrder,#rejectOrder').hide();
+            // $('#reviewOrder,#rejectOrder').hide();
 <?php } ?>
 
     });

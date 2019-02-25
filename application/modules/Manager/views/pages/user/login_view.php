@@ -149,7 +149,7 @@
                         $(this).prop('value', 'Please Wait...');
                         $.post("<?= base_url(); ?>Manager/newAccountRequestForOpening/", data, function (resp) {
                             if (resp.status == 'success') {
-                                alert('Thank You, We have received your request and will get back to you as soow as possible');
+                                alert('We have received your request and will respond as soon as possible. \nThank you.');
                                 window.location.href = "";
                             } else {
                                 alert('Error: An error occured while submitting your request. Please try again later');
