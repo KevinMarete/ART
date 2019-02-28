@@ -15,9 +15,18 @@ class Procurement extends MX_Controller {
         $this->email = new Email_sender;
     }
 
-    function getStockMovement() {
+    function look() {
+        echo (int) 01;
+    }
+
+    function usm() {
 //Server url
-        $url = "https://api.kemsa.co.ke/p_productmovements?filter[where][lmis_tool_id]=1000000&filter[where][startdate]=20190101";
+        $period = date('Ymd', strtotime('first day of previous month'));
+        $workingMonth = date('M');
+        $workingYear = date('Y');
+        $this->db->query("UPDATE tbl_procurement p SET kemsa_code = (SELECT kemsa_code FROM tbl_drug  WHERE id = p.drug_id)");
+
+        $url = "https://api.kemsa.co.ke/p_productmovements?filter[where][lmis_tool_id]=1000000&filter[where][startdate]=$period";
         $apiKey = '$2y$10$S0JuZi5EAxAsuMaV2r4Nh.1HyC.nIfSW9Pnf1UPkPsapni6Vv/xLC'; // should match with Server key
         $headers = array(
             'apitoken:' . $apiKey
@@ -31,9 +40,52 @@ class Procurement extends MX_Controller {
         $response = curl_exec($ch);
 // Decode
         $result = json_decode($response);
-         echo '<pre>';
+        for ($i = 0; $i < count($result); $i++) {
+            $update_data = [
+                'open_kemsa' => $result[$i]->openingbal,
+                'receipts_kemsa' => $result[$i]->receipts,
+                'issues_kemsa' => $result[$i]->issues,
+                'close_kemsa' => $result[$i]->stocks,
+                'monthly_consumption' => $result[$i]->consumption,
+                'adj_losses' => $result[$i]->adjustments
+            ];
+            $this->db
+                    ->where('kemsa_code', $result[$i]->value)
+                    ->where('transaction_year', $workingYear)
+                    ->where('transaction_month', 'Jan')
+                    ->update('tbl_procurement', $update_data);
+        }
+
+        echo 'Stock Movement ';
+    }
+
+    function stockMovement() {
+//Server url
+        $period = date('Ymd', strtotime('first day of previous month'));
+        $workingMonth = date('M');
+        $workingYear = date('Y');
+
+        $this->db->query("UPDATE tbl_procurement p SET kemsa_code = (SELECT kemsa_code FROM tbl_drug  WHERE id = p.drug_id)");
+
+        $url = "https://api.kemsa.co.ke/p_productmovements?filter[where][lmis_tool_id]=1000000&filter[where][startdate]=$period";
+        $apiKey = '$2y$10$S0JuZi5EAxAsuMaV2r4Nh.1HyC.nIfSW9Pnf1UPkPsapni6Vv/xLC'; // should match with Server key
+        $headers = array(
+            'apitoken:' . $apiKey
+        );
+// Send request to Server
+        $ch = curl_init($url);
+// To save response in a variable from server, set headers;
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+// Get response
+        $response = curl_exec($ch);
+// Decode
+        $result = json_decode($response);
+        echo '<pre>';
         print_r($result);
-         echo '</pre>';
+        echo '</pre>';
+
+        echo 'Stock Movement ';
     }
 
     function Reminder() {
@@ -883,8 +935,11 @@ class Procurement extends MX_Controller {
 
     public function get_transaction_table2($drug_id, $period_year) {
         $column = $this->getTransactionStatus($drug_id, $period_year);
+        $month = (int) date('m');
+        $previousCount = $month - 1;
+        $full = 11;
 
-        $start = $transaction_table = '
+        $transaction_table = '
 <table class="table table-hover table-condensed table-bordered TRACKER">
   <tr style="font-weight:bold !important;">
     <th class="tg-0pky" colspan="2"><strong>Description</th>
@@ -902,204 +957,299 @@ class Procurement extends MX_Controller {
     <th class="tg-0pky"><strong>Dec-' . $period_year . '</strong></th>
   </tr>
   <tr>
-    <td class="tg-0pky" colspan="2"><strong>Opening Balance</strong></td>
-    <td class="tdata tg-0pky col-1">' . @$this->rv($column['tracker'][0]['open_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-2">' . @$this->rv($column['tracker'][1]['open_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-3">' . @$this->rv($column['tracker'][2]['open_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-4">' . @$this->rv($column['tracker'][3]['open_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-5">' . @$this->rv($column['tracker'][4]['open_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-6">' . @$this->rv($column['tracker'][5]['open_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-7">' . @$this->rv($column['tracker'][6]['open_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-8">' . @$this->rv($column['tracker'][7]['open_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-9">' . @$this->rv($column['tracker'][8]['open_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-10">' . @$this->rv($column['tracker'][9]['open_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-11">' . @$this->rv($column['tracker'][10]['open_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-12">' . @$this->rv($column['tracker'][11]['open_kemsa']) . '</td>
-  </tr>
-  <tr>
-    <td class="tg-0pky" rowspan="4" vertical-align="middle"><strong>Receipts from Suppliers</strong></td>
-    <td class="tg-0pky"><strong>Proposed</strong></td>
-    <td class="tdata tg-0pky col-1">' . @$this->rv($column['status'][0][0]['quantity']) . ' </td>
-    <td class="tdata tg-0pky col-2">' . @$this->rv($column['status'][0][1]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-3">' . @$this->rv($column['status'][0][2]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-4">' . @$this->rv($column['status'][0][3]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-5">' . @$this->rv($column['status'][0][4]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-6">' . @$this->rv($column['status'][0][5]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-7">' . @$this->rv($column['status'][0][6]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-8">' . @$this->rv($column['status'][0][7]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-9">' . @$this->rv($column['status'][0][8]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-10">' . @$this->rv($column['status'][0][9]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-11">' . @$this->rv($column['status'][0][10]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-12">' . @$this->rv($column['status'][0][11]['quantity']) . '</td>
-  </tr>
-  <tr>
-    <td class="tg-0pky"><strong>Contracted</strong></td>
-    <td class="tdata tg-0pky col-1">' . @$this->rv($column['status'][1][0]['quantity']) . ' </td>
-    <td class="tdata tg-0pky col-2">' . @$this->rv($column['status'][1][1]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-3">' . @$this->rv($column['status'][1][2]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-4">' . @$this->rv($column['status'][1][3]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-5">' . @$this->rv($column['status'][1][4]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-6">' . @$this->rv($column['status'][1][5]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-7">' . @$this->rv($column['status'][1][6]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-8">' . @$this->rv($column['status'][1][7]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-9">' . @$this->rv($column['status'][1][8]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-10">' . @$this->rv($column['status'][1][9]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-11">' . @$this->rv($column['status'][1][10]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-12">' . @$this->rv($column['status'][1][11]['quantity']) . '</td>
-  </tr>
-   <tr>
-    <td class="tg-0pky"><strong>Call Down</strong></td>
-    <td class="tdata tg-0pky col-1">' . @$this->rv($column['expected'][0]['quantity'] + ($column['expected'][11]['quantity'] - $column['status'][2][0]['quantity'])) . ' </td>
-    <td class="tdata tg-0pky col-2">' . @$this->rv($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'])) . '</td>
-    <td class="tdata tg-0pky col-3">' . @$this->rv(($column['expected'][2]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] )) - $column['status'][2][1]['quantity'])) . '</td>
-    <td class="tdata tg-0pky col-4">' . @$this->rv($column['expected'][3]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] - $column['status'][2][1]['quantity'] - $column['status'][2][2]['quantity']))) . '</td>
-    <td class="tdata tg-0pky col-5">' . @$this->rv($column['expected'][4]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] - $column['status'][2][1]['quantity'] - $column['status'][2][2]['quantity'] - $column['status'][2][3]['quantity']))) . '</td>
-    <td class="tdata tg-0pky col-6">' . @$this->rv($column['expected'][5]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] - $column['status'][2][1]['quantity'] - $column['status'][2][2]['quantity'] - $column['status'][2][3]['quantity'] - $column['status'][2][4]['quantity']))) . '</td>
-    <td class="tdata tg-0pky col-7">' . @$this->rv($column['expected'][6]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] - $column['status'][2][1]['quantity'] - $column['status'][2][2]['quantity'] - $column['status'][2][3]['quantity'] - $column['status'][2][4]['quantity'] - $column['status'][2][5]['quantity']))) . '</td>
-    <td class="tdata tg-0pky col-8">' . @$this->rv($column['expected'][7]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] - $column['status'][2][1]['quantity'] - $column['status'][2][2]['quantity'] - $column['status'][2][3]['quantity'] - $column['status'][2][4]['quantity'] - $column['status'][2][5]['quantity'] - $column['status'][2][6]['quantity']))) . '</td>
-    <td class="tdata tg-0pky col-9">' . @$this->rv($column['expected'][8]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] - $column['status'][2][1]['quantity'] - $column['status'][2][2]['quantity'] - $column['status'][2][3]['quantity'] - $column['status'][2][4]['quantity'] - $column['status'][2][5]['quantity'] - $column['status'][2][6]['quantity'] - $column['status'][2][7]['quantity']))) . '</td>
-    <td class="tdata tg-0pky col-10">' . @$this->rv($column['expected'][9]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] - $column['status'][2][1]['quantity'] - $column['status'][2][2]['quantity'] - $column['status'][2][3]['quantity'] - $column['status'][2][4]['quantity'] - $column['status'][2][5]['quantity'] - $column['status'][2][6]['quantity'] - $column['status'][2][7]['quantity'] - $column['status'][2][8]['quantity']))) . '</td>
-    <td class="tdata tg-0pky col-11">' . @$this->rv($column['expected'][10]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] - $column['status'][2][1]['quantity'] - $column['status'][2][2]['quantity'] - $column['status'][2][3]['quantity'] - $column['status'][2][4]['quantity'] - $column['status'][2][5]['quantity'] - $column['status'][2][6]['quantity'] - $column['status'][2][7]['quantity'] - $column['status'][2][8]['quantity'] - $column['status'][2][9]['quantity']))) . '</td>
-    <td class="tdata tg-0pky col-12">' . @$this->rv($column['expected'][11]['quantity'] + ($column['expected'][1]['quantity'] + ($column['expected'][0]['quantity'] - $column['status'][2][0]['quantity'] - $column['status'][2][1]['quantity'] - $column['status'][2][2]['quantity'] - $column['status'][2][3]['quantity'] - $column['status'][2][4]['quantity'] - $column['status'][2][5]['quantity'] - $column['status'][2][6]['quantity'] - $column['status'][2][7]['quantity'] - $column['status'][2][8]['quantity'] - $column['status'][2][9]['quantity'] - $column['status'][2][10]['quantity']))) . '</td>
-  </tr>
-  <tr>
-    <td class="tg-0pky"><strong>Received</strong></td>
-    <td class="tdata tg-0pky col-1">' . @$this->rv($column['status'][2][0]['quantity']) . ' </td>
-    <td class="tdata tg-0pky col-2">' . @$this->rv($column['status'][2][1]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-3">' . @$this->rv($column['status'][2][2]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-4">' . @$this->rv($column['status'][2][3]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-5">' . @$this->rv($column['status'][2][4]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-6">' . @$this->rv($column['status'][2][5]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-7">' . @$this->rv($column['status'][2][6]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-8">' . @$this->rv($column['status'][2][7]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-9">' . @$this->rv($column['status'][2][8]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-10">' . @$this->rv($column['status'][2][9]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-11">' . @$this->rv($column['status'][2][10]['quantity']) . '</td>
-    <td class="tdata tg-0pky col-12">' . @$this->rv($column['status'][2][11]['quantity']) . '</td>
-  </tr>
-   
-  <tr>
-    <td class="tg-0pky" colspan="2"><strong>Issues to Facility</strong></td>
-    <td class="tdata tg-0pky col-1">' . @$this->rv($column['tracker'][0]['issues_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-2">' . @$this->rv($column['tracker'][1]['issues_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-3">' . @$this->rv($column['tracker'][2]['issues_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-4">' . @$this->rv($column['tracker'][3]['issues_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-5">' . @$this->rv($column['tracker'][4]['issues_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-6">' . @$this->rv($column['tracker'][5]['issues_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-7">' . @$this->rv($column['tracker'][6]['issues_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-8">' . @$this->rv($column['tracker'][7]['issues_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-9">' . @$this->rv($column['tracker'][8]['issues_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-10">' . @$this->rv($column['tracker'][9]['issues_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-11">' . @$this->rv($column['tracker'][10]['issues_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-12">' . @$this->rv($column['tracker'][11]['issues_kemsa']) . '</td>
-  </tr>
-  <tr>
-    <td class="tg-0pky" colspan="2"><strong>Adjustments/Losses (+/-)</strong></td>
-    <td class="tdata tg-0pky col-1">' . @$this->rv($column['tracker'][0]['adj_losses']) . '</td>
-    <td class="tdata tg-0pky col-2">' . @$this->rv($column['tracker'][1]['adj_losses']) . '</td>
-    <td class="tdata tg-0pky col-3">' . @$this->rv($column['tracker'][2]['adj_losses']) . '</td>
-    <td class="tdata tg-0pky col-4">' . @$this->rv($column['tracker'][3]['adj_losses']) . '</td>
-    <td class="tdata tg-0pky col-5">' . @$this->rv($column['tracker'][4]['adj_losses']) . '</td>
-    <td class="tdata tg-0pky col-6">' . @$this->rv($column['tracker'][5]['adj_losses']) . '</td>
-    <td class="tdata tg-0pky col-7">' . @$this->rv($column['tracker'][6]['adj_losses']) . '</td>
-    <td class="tdata tg-0pky col-8">' . @$this->rv($column['tracker'][7]['adj_losses']) . '</td>
-    <td class="tdata tg-0pky col-9">' . @$this->rv($column['tracker'][8]['adj_losses']) . '</td>
-    <td class="tdata tg-0pky col-10">' . @$this->rv($column['tracker'][9]['adj_losses']) . '</td>
-    <td class="tdata tg-0pky col-11">' . @$this->rv($column['tracker'][10]['adj_losses']) . '</td>
-    <td class="tdata tg-0pky col-12">' . @$this->rv($column['tracker'][11]['adj_losses']) . '</td>
-  </tr>
-  <tr>
-    <td class="tg-0pky" colspan="2"><strong>Closing Balance</strong></td>
-    <td class="tdata tg-0pky col-1">' . @$this->rv($column['tracker'][0]['close_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-2">' . @$this->rv($column['tracker'][1]['close_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-3">' . @$this->rv($column['tracker'][2]['close_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-4">' . @$this->rv($column['tracker'][3]['close_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-5">' . @$this->rv($column['tracker'][4]['close_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-6">' . @$this->rv($column['tracker'][5]['close_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-7">' . @$this->rv($column['tracker'][6]['close_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-8">' . @$this->rv($column['tracker'][7]['close_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-9">' . @$this->rv($column['tracker'][8]['close_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-10">' . @$this->rv($column['tracker'][9]['close_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-11">' . @$this->rv($column['tracker'][10]['close_kemsa']) . '</td>
-    <td class="tdata tg-0pky col-12">' . @$this->rv($column['tracker'][11]['close_kemsa']) . '</td>
-  </tr>
-  <tr>
-    <td class="tg-0pky" colspan="2"><strong>Monthly Consumption</strong></td>
-    <td class="tdata tg-0pky col-1">' . @$this->rv($column['tracker'][0]['monthly_consumption']) . '</td>
-    <td class="tdata tg-0pky col-2">' . @$this->rv($column['tracker'][1]['monthly_consumption']) . '</td>
-    <td class="tdata tg-0pky col-3">' . @$this->rv($column['tracker'][2]['monthly_consumption']) . '</td>
-    <td class="tdata tg-0pky col-4">' . @$this->rv($column['tracker'][3]['monthly_consumption']) . '</td>
-    <td class="tdata tg-0pky col-5">' . @$this->rv($column['tracker'][4]['monthly_consumption']) . '</td>
-    <td class="tdata tg-0pky col-6">' . @$this->rv($column['tracker'][5]['monthly_consumption']) . '</td>
-    <td class="tdata tg-0pky col-7">' . @$this->rv($column['tracker'][6]['monthly_consumption']) . '</td>
-    <td class="tdata tg-0pky col-8">' . @$this->rv($column['tracker'][7]['monthly_consumption']) . '</td>
-    <td class="tdata tg-0pky col-9">' . @$this->rv($column['tracker'][8]['monthly_consumption']) . '</td>
-    <td class="tdata tg-0pky col-10">' . @$this->rv($column['tracker'][9]['monthly_consumption']) . '</td>
-    <td class="tdata tg-0pky col-11">' . @$this->rv($column['tracker'][10]['monthly_consumption']) . '</td>
-    <td class="tdata tg-0pky col-12">' . @$this->rv($column['tracker'][11]['monthly_consumption']) . '</td>
-  </tr>
-  <tr>
-    <td class="tg-0pky" colspan="2"><strong>Average Issues</strong></td>
-    <td class="tdata tg-0pky col-1">' . @$this->rv($column['tracker'][0]['avg_issues']) . '</td>
-    <td class="tdata tg-0pky col-2">' . @$this->rv($column['tracker'][1]['avg_issues']) . '</td>
-    <td class="tdata tg-0pky col-3">' . @$this->rv($column['tracker'][2]['avg_issues']) . '</td>
-    <td class="tdata tg-0pky col-4">' . @$this->rv($column['tracker'][3]['avg_issues']) . '</td>
-    <td class="tdata tg-0pky col-5">' . @$this->rv($column['tracker'][4]['avg_issues']) . '</td>
-    <td class="tdata tg-0pky col-6">' . @$this->rv($column['tracker'][5]['avg_issues']) . '</td>
-    <td class="tdata tg-0pky col-7">' . @$this->rv($column['tracker'][6]['avg_issues']) . '</td>
-    <td class="tdata tg-0pky col-8">' . @$this->rv($column['tracker'][7]['avg_issues']) . '</td>
-    <td class="tdata tg-0pky col-9">' . @$this->rv($column['tracker'][8]['avg_issues']) . '</td>
-    <td class="tdata tg-0pky col-10">' . @$this->rv($column['tracker'][9]['avg_issues']) . '</td>
-    <td class="tdata tg-0pky col-11">' . @$this->rv($column['tracker'][10]['avg_issues']) . '</td>
-    <td class="tdata tg-0pky col-12">' . @$this->rv($column['tracker'][11]['avg_issues']) . '</td>
-  </tr>
-  <tr>
-    <td class="tg-0pky" colspan="2"><strong>Average Consumption</strong></td>
-    <td class="tdata tg-0pky col-1">' . @$this->rv($column['tracker'][0]['avg_consumption']) . '</td>
-    <td class="tdata tg-0pky col-2">' . @$this->rv($column['tracker'][1]['avg_consumption']) . '</td>
-    <td class="tdata tg-0pky col-3">' . @$this->rv($column['tracker'][2]['avg_consumption']) . '</td>
-    <td class="tdata tg-0pky col-4">' . @$this->rv($column['tracker'][3]['avg_consumption']) . '</td>
-    <td class="tdata tg-0pky col-5">' . @$this->rv($column['tracker'][4]['avg_consumption']) . '</td>
-    <td class="tdata tg-0pky col-6">' . @$this->rv($column['tracker'][5]['avg_consumption']) . '</td>
-    <td class="tdata tg-0pky col-7">' . @$this->rv($column['tracker'][6]['avg_consumption']) . '</td>
-    <td class="tdata tg-0pky col-8">' . @$this->rv($column['tracker'][7]['avg_consumption']) . '</td>
-    <td class="tdata tg-0pky col-9">' . @$this->rv($column['tracker'][8]['avg_consumption']) . '</td>
-    <td class="tdata tg-0pky col-10">' . @$this->rv($column['tracker'][9]['avg_consumption']) . '</td>
-    <td class="tdata tg-0pky col-11">' . @$this->rv($column['tracker'][10]['avg_consumption']) . '</td>
-    <td class="tdata tg-0pky col-12">' . @$this->rv($column['tracker'][11]['avg_consumption']) . '</td>
-  </tr>
-  <tr>
-    <td class="tg-0pky" colspan="2"><strong>MOS (Issues Based)</strong></td>
-    <td class="tdata col-1 ' . @$this->cc($column['tracker'][0]['mos']) . ' tg-0pky">' . @$this->rv($column['tracker'][0]['mos']) . '</td>
-    <td class="tdata col-2 ' . @$this->cc($column['tracker'][1]['mos']) . ' tg-0pky">' . @$this->rv($column['tracker'][1]['mos']) . '</td>
-    <td class="tdata col-3 ' . @$this->cc($column['tracker'][2]['mos']) . ' tg-0pky">' . @$this->rv($column['tracker'][2]['mos']) . '</td>
-    <td class="tdata col-4 ' . @$this->cc($column['tracker'][3]['mos']) . ' tg-0pky">' . @$this->rv($column['tracker'][3]['mos']) . '</td>
-    <td class="tdata col-5 ' . @$this->cc($column['tracker'][4]['mos']) . ' tg-0pky">' . @$this->rv($column['tracker'][4]['mos']) . '</td>
-    <td class="tdata col-6 ' . @$this->cc($column['tracker'][5]['mos']) . ' tg-0pky">' . @$this->rv($column['tracker'][5]['mos']) . '</td>
-    <td class="tdata col-7 ' . @$this->cc($column['tracker'][6]['mos']) . ' tg-0pky">' . @$this->rv($column['tracker'][6]['mos']) . '</td>
-    <td class="tdata col-8 ' . @$this->cc($column['tracker'][7]['mos']) . ' tg-0pky">' . @$this->rv($column['tracker'][7]['mos']) . '</td>
-    <td class="tdata col-9 ' . @$this->cc($column['tracker'][8]['mos']) . ' tg-0pky">' . @$this->rv($column['tracker'][8]['mos']) . '</td>
-    <td class="tdata col-10 ' . @$this->cc($column['tracker'][9]['mos']) . ' tg-0pky">' . @$this->rv($column['tracker'][9]['mos']) . '</td>
-    <td class="tdata col-11 ' . @$this->cc($column['tracker'][10]['mos']) . ' tg-0pky">' . @$this->rv($column['tracker'][10]['mos']) . '</td>
-    <td class="tdata col-12 ' . @$this->cc($column['tracker'][11]['mos']) . ' tg-0pky">' . @$this->rv($column['tracker'][11]['mos']) . '</td>
-  </tr>
-  <tr>
-    <td class="tg-0pky" colspan="2"><strong>MOS (Consumption Based)</strong></td>
-    <td class="tdata col-1 ' . @$this->cc($column['tracker'][0]['cmos']) . ' tg-0pky">' . @$this->rv($column['tracker'][0]['cmos']) . '</td>
-    <td class="tdata col-2 ' . @$this->cc($column['tracker'][1]['cmos']) . ' tg-0pky">' . @$this->rv($column['tracker'][1]['cmos']) . '</td>
-    <td class="tdata col-3 ' . @$this->cc($column['tracker'][2]['cmos']) . ' tg-0pky">' . @$this->rv($column['tracker'][2]['cmos']) . '</td>
-    <td class="tdata col-4 ' . @$this->cc($column['tracker'][3]['cmos']) . ' tg-0pky">' . @$this->rv($column['tracker'][3]['cmos']) . '</td>
-    <td class="tdata col-5 ' . @$this->cc($column['tracker'][4]['cmos']) . ' tg-0pky">' . @$this->rv($column['tracker'][4]['cmos']) . '</td>
-    <td class="tdata col-6 ' . @$this->cc($column['tracker'][5]['cmos']) . ' tg-0pky">' . @$this->rv($column['tracker'][5]['cmos']) . '</td>
-    <td class="tdata col-7 ' . @$this->cc($column['tracker'][6]['cmos']) . ' tg-0pky">' . @$this->rv($column['tracker'][6]['cmos']) . '</td>
-    <td class="tdata col-8 ' . @$this->cc($column['tracker'][7]['cmos']) . ' tg-0pky">' . @$this->rv($column['tracker'][7]['cmos']) . '</td>
-    <td class="tdata col-9 ' . @$this->cc($column['tracker'][8]['cmos']) . ' tg-0pky">' . @$this->rv($column['tracker'][8]['cmos']) . '</td>
-    <td class="tdata col-10 ' . @$this->cc($column['tracker'][9]['cmos']) . ' tg-0pky">' . @$this->rv($column['tracker'][9]['cmos']) . '</td>
-    <td class="tdata col-11 ' . @$this->cc($column['tracker'][10]['cmos']) . ' tg-0pky">' . @$this->rv($column['tracker'][10]['cmos']) . '</td>
-    <td class="tdata col-12 ' . @$this->cc($column['tracker'][11]['cmos']) . ' tg-0pky">' . @$this->rv($column['tracker'][11]['cmos']) . '</td>
-  </tr>
+    <td class="tg-0pky" colspan="2"><strong>Opening Balance</strong></td>';
+        //opening balance
+        if ($period_year != date('Y')) {
+            for ($i = 0; $i <= $full; $i++) {
+                $col = (int) $i + 1;
+                $transaction_table .= '<td class="tdata tg-0pky col-' . $col . '">' . @$this->rv($column['tracker'][$i]['open_kemsa']) . '</td>';
+            }
+        } else {
 
-</table>';
+            for ($i = 0; $i <= $previousCount; $i++) {
+                $col = (int) $i + 1;
+                $transaction_table .= '<td class="tdata tg-0pky col-' . $col . '">' . @$this->rv($column['tracker'][$i]['open_kemsa']) . '</td>';
+            }
+            for ($i = $month; $i <= $full; $i++) {
+                $transaction_table .= '<td class="tdata tg-0pky col-' . $col . '">' . @$this->rv(0) . '</td>';
+            }
+        }
+
+        $transaction_table .= '</tr>
+  <tr>
+    <td class="tg-0pky" rowspan="6" vertical-align="middle"><strong>Receipts from Suppliers</strong></td>
+     <td class="tt"></td>
+     <td class="tt"></td>
+     <td class="tt"></td>
+     <td class="tt"></td>
+     <td class="tt"></td>
+     <td class="tt"></td>
+     <td class="tt"></td>
+     <td class="tt"></td>
+     <td class="tt"></td>
+     <td class="tt"></td>
+     <td class="tt"></td>
+     <td class="tt"></td>
+     <td class="tt"></td>';
+
+
+        $transaction_table .= '</tr>
+            <tr>
+    <td class="tg-0pky"><strong>Proposed</strong></td>';
+        //proposed quantity
+        if ($period_year != date('Y')) {
+            for ($j = 0; $j <= $full; $j++) {
+                $col1 = (int) $j + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col1 . '">' . @$this->rv($column['status'][0][$j]['quantity']) . ' </td>';
+            }
+        } else {
+            for ($j = 0; $j <= $previousCount; $j++) {
+                $col1 = (int) $j + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col1 . '">' . @$this->rv($column['status'][0][$j]['quantity']) . ' </td>';
+            }
+
+            for ($j = $month; $j <= $full; $j++) {
+                $transaction_table .= '<td class="tdata tg-0pky col-' . $col1 . '">' . @$this->rv(0) . '</td>';
+            }
+        }
+
+        $transaction_table .= '</tr>
+        <tr>
+        <td class = "tg-0pky"><strong>Contracted</strong></td>';
+        //contracted quantity
+        if ($period_year != date('Y')) {
+            for ($k = 0; $k <= $full; $k++) {
+                $col2 = (int) $k + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col2 . '">' . @$this->rv($column['status'][1][$k]['quantity']) . ' </td>';
+            }
+        } else {
+            for ($k = 0; $k <= $previousCount; $k++) {
+                $col2 = (int) $k + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col2 . '">' . @$this->rv($column['status'][1][$k]['quantity']) . ' </td>';
+            }
+
+            for ($co = $month; $co <= $full; $co++) {
+                $transaction_table .= '<td class="tdata tg-0pky col-' . $col2 . '">' . @$this->rv(0) . '</td>';
+            }
+        }
+        $transaction_table .= '</tr>
+        <tr>
+        <td class = "tg-0pky"><strong>Call Down</strong></td>';
+        //call down quantity
+        if ($period_year != date('Y')) {
+            for ($l = 0; $l <= $full; $l++) {
+                $col3 = (int) $l + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col3 . '">' . @$this->rv($column['expected'][$l]['quantity']) . ' </td>';
+            }
+        } else {
+            for ($l = 0; $l <= $previousCount; $l++) {
+                $col3 = (int) $l + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col3 . '">' . @$this->rv($column['expected'][$l]['quantity']) . ' </td>';
+            }
+
+            for ($co1 = $month; $co1 <= $full; $co1++) {
+                $transaction_table .= '<td class="tdata tg-0pky col-' . $col3 . '">' . @$this->rv(0) . '</td>';
+            }
+        }
+        $transaction_table .= '</tr>
+        <tr>
+        <td class = "tg-0pky"><strong>Received</strong></td>';
+        //received  quantity
+        if ($period_year != date('Y')) {
+            for ($m1 = 0; $m1 <= $full; $m1++) {
+                $col4 = (int) $m1 + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col4 . '">' . @$this->rv($column['status'][2][$m1]['quantity']) . ' </td>';
+            }
+        } else {
+            for ($m1 = 0; $m1 <= $previousCount; $m1++) {
+                $col4 = (int) $m1 + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col4 . '">' . @$this->rv($column['status'][2][$m1]['quantity']) . ' </td>';
+            }
+
+            for ($co2 = $month; $co2 <= $full; $co2++) {
+                $transaction_table .= '<td class="tdata tg-0pky col-' . $col4 . '">' . @$this->rv(0) . '</td>';
+            }
+        }
+        $transaction_table .= '</tr>
+
+        <tr>
+        <td class = "tg-0pky"><strong>Pending</strong></td>';
+        //pending quantity
+        if ($period_year != date('Y')) {
+            for ($m = 0; $m <= $full; $m++) {
+                $col4 = (int) $m + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col4 . '">' . @$this->rv(((int) $column['status'][1][$m]['quantity'] - (int) $column['expected'][$m]['quantity']) + ((int) $column['expected'][$m]['quantity'] - (int) $column['status'][2][$m]['quantity'] )) . ' </td>';
+            }
+        } else {
+            for ($m = 0; $m <= $previousCount; $m++) {
+                $col4 = (int) $m + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col4 . '">' . @$this->rv(((int) $column['status'][1][$m]['quantity'] - (int) $column['expected'][$m]['quantity']) + ((int) $column['expected'][$m]['quantity'] - (int) $column['status'][2][$m]['quantity'] )) . ' </td>';
+            }
+
+            for ($co2 = $month; $co2 <= $full; $co2++) {
+                $transaction_table .= '<td class="tdata tg-0pky col-' . $col4 . '">' . @$this->rv(0) . '</td>';
+            }
+        }
+        $transaction_table .= '</tr>
+
+        <tr>
+        <td class = "tg-0pky" colspan = "2"><strong>Issues to Facility</strong></td>';
+        //issues quantity
+        if ($period_year != date('Y')) {
+            for ($n = 0; $n <= $full; $n++) {
+                $col5 = (int) $n + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col5 . '">' . @$this->rv($column['tracker'][$n]['issues_kemsa']) . ' </td>';
+            }
+        } else {
+            for ($n = 0; $n <= $previousCount; $n++) {
+                $col5 = (int) $n + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col5 . '">' . @$this->rv($column['tracker'][$n]['issues_kemsa']) . ' </td>';
+            }
+
+            for ($co3 = $month; $co3 <= $full; $co3++) {
+                $transaction_table .= '<td class="tdata tg-0pky col-' . $col5 . '">' . @$this->rv(0) . '</td>';
+            }
+        }
+        $transaction_table .= '</tr>
+        
+        <tr>
+        <td class = "tg-0pky" colspan = "2"><strong>Adjustments/Losses (+/-)</strong></td>';
+        //loss/adj quantity
+        if ($period_year != date('Y')) {
+            for ($o = 0; $o <= $full; $o++) {
+                $col6 = (int) $o + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col6 . '">' . @$this->rv($column['tracker'][$o]['adj_losses']) . ' </td>';
+            }
+        } else {
+            for ($o = 0; $o <= $previousCount; $o++) {
+                $col6 = (int) $o + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col6 . '">' . @$this->rv($column['tracker'][$o]['adj_losses']) . ' </td>';
+            }
+
+            for ($co7 = $month; $co7 <= $full; $co7++) {
+                $transaction_table .= '<td class="tdata tg-0pky col-' . $col6 . '">' . @$this->rv(0) . '</td>';
+            }
+        }
+        $transaction_table .= '</tr>        
+        <tr>
+        <td class = "tg-0pky" colspan = "2"><strong>Closing Balance</strong></td>';
+        //Closing Balance
+        if ($period_year != date('Y')) {
+            for ($p = 0; $p <= $full; $p++) {
+                $col7 = (int) $p + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col7 . '">' . @$this->rv($column['tracker'][$p]['close_kemsa']) . ' </td>';
+            }
+        } else {
+            for ($p = 0; $p <= $previousCount; $p++) {
+                $col7 = (int) $p + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col7 . '">' . @$this->rv($column['tracker'][$p]['close_kemsa']) . ' </td>';
+            }
+
+            for ($co8 = $month; $co8 <= $full; $co8++) {
+                $transaction_table .= '<td class="tdata tg-0pky col-' . $col7 . '">' . @$this->rv(0) . '</td>';
+            }
+        }
+        $transaction_table .= '</tr>       
+        <tr>
+        <td class = "tg-0pky" colspan = "2"><strong>Monthly Consumption</strong></td>';
+        //Monthly Consumptions
+        if ($period_year != date('Y')) {
+            for ($q = 0; $q <= $full; $q++) {
+                $col8 = (int) $q + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col8 . '">' . @$this->rv($column['tracker'][$q]['monthly_consumption']) . ' </td>';
+            }
+        } else {
+            for ($q = 0; $q <= $previousCount; $q++) {
+                $col8 = (int) $q + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col8 . '">' . @$this->rv($column['tracker'][$q]['monthly_consumption']) . ' </td>';
+            }
+
+            for ($co9 = $month; $co9 <= $full; $co9++) {
+                $transaction_table .= '<td class="tdata tg-0pky col-' . $col8 . '">' . @$this->rv(0) . '</td>';
+            }
+        }
+        $transaction_table .= '</tr>  
+        
+        <tr>
+        <td class = "tg-0pky" colspan = "2"><strong>Average Issues</strong></td>';
+        //Average Issues
+        if ($period_year != date('Y')) {
+            for ($r = 0; $r <= $full; $r++) {
+                $col9 = (int) $r + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col9 . '">' . @$this->rv($column['tracker'][$r]['avg_issues']) . ' </td>';
+            }
+        } else {
+            for ($r = 0; $r <= $previousCount; $r++) {
+                $col9 = (int) $r + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col9 . '">' . @$this->rv($column['tracker'][$r]['avg_issues']) . ' </td>';
+            }
+
+            for ($co10 = $month; $co10 <= $full; $co10++) {
+                $transaction_table .= '<td class="tdata tg-0pky col-' . $col9 . '">' . @$this->rv(0) . '</td>';
+            }
+        }
+        $transaction_table .= '</tr>  
+        
+        <tr>
+        <td class = "tg-0pky" colspan = "2"><strong>Average Consumption</strong></td>';
+        //Average Consumption
+        if ($period_year != date('Y')) {
+            for ($s = 0; $s <= $full; $s++) {
+                $coll0 = (int) $s + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $coll0 . '">' . @$this->rv($column['tracker'][$s]['avg_consumption']) . ' </td>';
+            }
+        } else {
+            for ($s = 0; $s <= $previousCount; $s++) {
+                $coll0 = (int) $s + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $coll0 . '">' . @$this->rv($column['tracker'][$s]['avg_consumption']) . ' </td>';
+            }
+
+            for ($co11 = $month; $co11 <= $full; $co11++) {
+                $transaction_table .= '<td class="tdata tg-0pky col-' . $coll0 . '">' . @$this->rv(0) . '</td>';
+            }
+        }
+        $transaction_table .= '</tr> 
+        
+        <tr>
+        <td class = "tg-0pky" colspan = "2"><strong>MOS (Issues Based)</strong></td>';
+        //Issues Based
+        if ($period_year != date('Y')) {
+            for ($t = 0; $t <= $full; $t++) {
+                $col11 = (int) $t + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col11 . ' ' . @$this->cc($column['tracker'][$t]['mos']) . '">' . @$this->rv($column['tracker'][$t]['mos']) . ' </td>';
+            }
+        } else {
+            for ($t = 0; $t <= $previousCount; $t++) {
+                $col11 = (int) $t + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col11 . ' ' . @$this->cc($column['tracker'][$t]['mos']) . '">' . @$this->rv($column['tracker'][$t]['mos']) . ' </td>';
+            }
+
+            for ($co11 = $month; $co11 <= $full; $co11++) {
+                $transaction_table .= '<td class="tdata tg-0pky col-' . $col11 . '">' . @$this->rv(0) . '</td>';
+            }
+        }
+        $transaction_table .= '</tr>         
+        <tr>
+        <td class = "tg-0pky" colspan = "2"><strong>MOS (Consumption Based)</strong></td>';
+        //Consumption Based
+        if ($period_year != date('Y')) {
+            for ($u = 0; $u <= $full; $u++) {
+                $col12 = (int) $t + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col12 . ' ' . @$this->cc($column['tracker'][0]['cmos']) . '">' . @$this->rv($column['tracker'][$u]['cmos']) . ' </td>';
+            }
+        } else {
+            for ($u = 0; $u <= $previousCount; $u++) {
+                $col12 = (int) $t + 1;
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col12 . ' ' . @$this->cc($column['tracker'][0]['cmos']) . '">' . @$this->rv($column['tracker'][$u]['cmos']) . ' </td>';
+            }
+
+            for ($co12 = $month; $co12 <= $full; $co12++) {
+                $transaction_table .= '<td class="tdata tg-0pky col-' . $col12 . '">' . @$this->rv(0) . '</td>';
+            }
+        }
+        $transaction_table .= '</tr>        
+
+        </table>';
         echo $transaction_table;
     }
 
@@ -1293,13 +1443,13 @@ class Procurement extends MX_Controller {
                 $drug_name = $value['drug'];
                 $responses['open_kemsa'][] = $value['open_kemsa'];
             } else {
-                $responses['open_kemsa'][] = '=' . $column_indices[$key - 1] . '4';
+                $responses['open_kemsa'][] = ' = ' . $column_indices[$key - 1] . '4';
             }
             $responses['proposed'][] = $value['receipts_kemsa'];
             $responses['contracted'][] = $value['receipts_kemsa'];
             $responses['received'][] = $value['receipts_kemsa'];
             $responses['issues_kemsa'][] = $value['issues_kemsa'];
-            $responses['close_kemsa'][] = '=' . $column_indices[$key] . '1+' . $column_indices[$key] . '2-' . $column_indices[$key] . '3';
+            $responses['close_kemsa'][] = ' = ' . $column_indices[$key] . '1+' . $column_indices[$key] . '2-' . $column_indices[$key] . '3';
             $responses['monthly_consumption'][] = $value['monthly_consumption'];
             $responses['adjustments_loss'][] = $value['monthly_consumption'];
             $responses['avg_issues'][] = $value['avg_issues'];
@@ -1322,7 +1472,7 @@ class Procurement extends MX_Controller {
     public function get_order_table($drug_id) {
         $response = $this->Procurement_model->get_order_data($drug_id);
 
-        $html_table = '<table class="table table-condensed table-striped table-bordered order_tbl">';
+        $html_table = '<table class = "table table-condensed table-striped table-bordered order_tbl">';
         $thead = '<thead><tr>';
         $tbody = '<tbody>';
         foreach ($response['data'] as $count => $values) {
@@ -1345,7 +1495,7 @@ class Procurement extends MX_Controller {
     public function get_order_table_history($drug_id) {
         $response = $this->Procurement_model->get_history_data($drug_id);
 
-        $html_table = '<table class="table table-condensed table-striped table-bordered order_tbl_history">';
+        $html_table = '<table class = "table table-condensed table-striped table-bordered order_tbl_history">';
         $thead = '<thead><tr>';
         $tbody = '<tbody>';
         foreach ($response['data'] as $count => $values) {
@@ -1367,7 +1517,7 @@ class Procurement extends MX_Controller {
 
     public function get_log_table($drug_id) {
         $response = $this->Procurement_model->get_log_data($drug_id);
-        $html_table = '<table class="table table-condensed table-striped table-bordered log_tbl">';
+        $html_table = '<table class = "table table-condensed table-striped table-bordered log_tbl">';
         $thead = '<thead><tr>';
         $tbody = '<tbody>';
         foreach ($response['data'] as $count => $values) {
@@ -1462,13 +1612,13 @@ class Procurement extends MX_Controller {
         if ($input['action'] == 'edit') {
             unset($input['action']);
             $this->Procurement_model->edit_procurement_item($input);
-            $this->updateSysLogs('Updated  (Order edited )');
+            $this->updateSysLogs('Updated (Order edited )');
             $input['action'] = 'edit';
         } else if ($input['action'] == 'delete') {
             unset($input['action']);
             $this->Procurement_model->delete_procurement_item($input['id']);
             $input['action'] = 'delete';
-            $this->updateSysLogs('Deleted  (Order deleted )');
+            $this->updateSysLogs('Deleted (Order deleted )');
         }
         echo json_encode($input);
     }
@@ -1543,7 +1693,9 @@ class Procurement extends MX_Controller {
 
         $present = $this->db->where('present', '0')->get('tbl_mailing_list')->result();
         $absent = $this->db->where('present', '1')->get('tbl_mailing_list')->result();
-        $result = ['present' => $present, 'absent' => $absent];
+        $result = ['present' => $present, 'absent
+
+        ' => $absent];
         $this->response($result);
     }
 

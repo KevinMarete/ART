@@ -8,10 +8,13 @@
     .class4{background:#87CEFA}
     .TRACKER th{text-align: center;}
     .col-<?php echo date('m') - 1 ?>{
-        background:#FFDEAD;
+        // background:#FFDEAD;
+    }
+    .tt{
+        display:none;
     }
 
-    #transaction_tbl tr:gt(5){background:red};
+    /*#transaction_tbl tr:gt(5){background:red};*/
 </style>
 <div class="modal fade" id="add_procurement_modal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-xl" role="document">
@@ -58,7 +61,7 @@
                                 <div class="col-sm-3">
                                     <input type="text" readonly class="form-control" id="expected_qty">
                                 </div>
-                                <label for="receipts_usaid" class="col-sm-3 col-form-label">Proposed Order Quantity</label>
+                                <label for="receipts_usaid" class="col-sm-3 col-form-label">Order Quantity</label>
                                 <div class="col-sm-3">
                                     <input type="number" class="form-control" id="actual_qty" name="receipt_total_qty" required="">
                                 </div>
@@ -785,6 +788,7 @@
 
     function getTransactionsTable(drugID, periodYear, tableID) {
         month = "<?php echo date('m') - 1; ?>";
+        next = parseInt(month) + 1;
         //Load Spinner
         LoadSpinner(tableID)
         //Load tableData
@@ -792,59 +796,24 @@
         $.get(transactionURL, function (tableData) {
             $('#transaction_tbl').empty();
             $('#transaction_tbl').append(tableData);
-            $("#transaction_tbl tr:eq(6)").find('td:gt(' + month + ')').css('background', '#c6ff00');
-            $("#transaction_tbl tr:eq(6)").find('td:lt(' + month + '):gt(0)').css('background', '#fff176');
+            //$("#transaction_tbl tr:eq(8)").find('td:gt(' + month + ')').css('background', '#c6ff00');
+            $("#transaction_tbl tr:eq(8)").find('td:lt(' + month + '):gt(0)').css('background', '#fff176');
+            $("#transaction_tbl ").find('tr').each(function () {
+                var td = $(this).children('td').eq(month);
+                var nexttd = $(this).children('td').eq(next);
+                td.css("background", 'yellow');
+                td.css("color", 'black');
+                td.css("font-weight", 'bold');
+
+                nexttd.text("-");
+                nexttd.css("background", 'white');
+            });
+            //$('#transaction_tbl').find('td').eq(3).css( "background", "red" );
+            // $( "#transaction_tbl td:eq(1 )" ).css( "color", "red" );
+
         });
     }
 
-    /* function getTransactionsTable(drugID, periodYear, tableID) {
-     //Load Spinner
-     LoadSpinner(tableID)
-     //Load tableData
-     var transactionURL = "<?php echo base_url() . 'Manager/Procurement/get_transaction_table/'; ?>" + drugID + '/' + periodYear
-     $.get(transactionURL, function (tableData) {
-     var readonlyRows = ['0', '1', '2', '3', '5', '6', '7', '8', '9', '10', '11'];
-     months = ['Sep 2018'];
-     //Create table
-     $(tableID).jexcel($.parseJSON(tableData));
-     //Settings for table
-     $(tableID).jexcel('updateSettings', {
-     table: function (instance, cell, col, row, val, id) {
-     //Make rows readonly
-     m = "<?= date("n", strtotime("-1 month")); ?>";
-     mcol = parseInt(m);
-     
-     
-     if (row == 4 && col > mcol) {
-     $(cell).css('background-color', '#ffe0b2');
-     }
-     
-     if ($.inArray(row, readonlyRows) != -1) {
-     $(cell).addClass('readonly');
-     }
-     
-     
-     
-     
-     //Add colors to mos row
-     if (row == 10 && col > 0 || row == 11 && col > 0) {
-     if (val >= 6 && val <= 9) {
-     $(cell).css('background-color', '#32CD32');
-     } else if (val >= 4 && val <= 5) {
-     $(cell).css('background-color', '#CCCC00');
-     } else if (val <= 3) {
-     $(cell).css('background-color', '#DC143C');
-     } else {
-     $(cell).css('background-color', '#87CEFA');
-     }
-     $(cell).css('color', '#000');
-     }
-     
-     $('.c' + mcol).css('background-color', '#e67e22');
-     }
-     });
-     });
-     }*/
 
     function getDrugOrders(drugID, tableID) {
         //Load Spinner

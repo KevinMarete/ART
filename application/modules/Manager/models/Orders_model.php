@@ -239,8 +239,8 @@ class Orders_model extends CI_Model {
                             IF(t.period_begin IS NOT NULL, t.description, 'N/A') description,
                             ? period,
                             CASE 
-                                WHEN t.cdrr_id IS NULL THEN CONCAT('FCDRR Pending')
-                                WHEN t.maps_id IS NULL THEN CONCAT('FMAPS Pending')
+                                WHEN t.cdrr_id IS NULL THEN CONCAT('F-CDRR Pending')
+                                WHEN t.maps_id IS NULL THEN CONCAT('F-MAPS Pending')
                                 ELSE CONCAT('<a href=$allocation_url/',t.cdrr_id,'/',t.maps_id,'>View Order</a>') 
                                 END AS options
                         FROM tbl_facility f  
@@ -327,8 +327,8 @@ class Orders_model extends CI_Model {
                             CASE 
                                 WHEN t.status = 'pending' THEN CONCAT('<a href=allocate/', t.cdrr_id,'/', t.maps_id, '> Allocate Order</a>')
                                 WHEN t.status != 'pending' THEN CONCAT('<a href=view_allocation/', t.cdrr_id,'/', t.maps_id, '> View Allocation</a>') 
-                                WHEN t.cdrr_id IS NULL THEN CONCAT('FCDRR Pending')
-                                WHEN t.maps_id IS NULL THEN CONCAT('FMAPS Pending')
+                                WHEN t.cdrr_id IS NULL THEN CONCAT('F-CDRR Pending')
+                                WHEN t.maps_id IS NULL THEN CONCAT('F-MAPS Pending')
                                 ELSE 'Not Reported'
                             END AS options
                         FROM tbl_facility f
@@ -905,8 +905,8 @@ class Orders_model extends CI_Model {
                         ? period,
                         CASE 
                                 WHEN t.period_begin IS NOT NULL THEN CONCAT('<a href=$allocation_url/',t.cdrr_id,'/',t.maps_id,'>View Order</a>') 
-                                WHEN t.cdrr_id IS NULL THEN CONCAT('D-CDRR Pending')
-                                WHEN t.maps_id IS NULL THEN CONCAT('D-MAPS Pending')
+                                WHEN t.cdrr_id IS NULL THEN CONCAT('F-CDRR Pending')
+                                WHEN t.maps_id IS NULL THEN CONCAT('F-MAPS Pending')
                                 ELSE 'Not Reported'
                             END AS options
                     FROM tbl_facility f

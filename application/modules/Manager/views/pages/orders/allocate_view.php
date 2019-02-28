@@ -515,8 +515,8 @@
                     <?php } else if ($role == 'subcounty' && date('d') >= 10 && $columns['cdrrs']['data'][0]['status'] == 'pending') { ?>
                         <p><div class="alert alert-warning"><strong>NB: Allocation period has ended. No more allocations allowed beyond the 20<sup>th</sup> of each month. </strong></div></p>
 
-                    <?php }  else if ($role == 'county' && $columns['cdrrs']['data'][0]['status'] == 'allocated') { ?>
-                        <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation Edit</button>
+                    <?php } else if ($role == 'county' && $columns['cdrrs']['data'][0]['status'] == 'allocated') { ?>
+                        <button type="submit" class="btn btn-info" id="save_allocation_2">Save Allocation Edit</button>
 
                     <?php } else { ?>
                         <p><div class = "alert alert-warning"><strong>NB: Allocation Complete. </strong></div></p>
@@ -579,12 +579,23 @@ if (empty($columns['maps']['data'])) {
 <!-- /#page-wrapper -->
 <script type="text/javascript">
     $(function () {
-       
+
         base_url = "<?php echo base_url(); ?>";
 
         maps = "<?= $maps; ?>";
         role = "<?= $this->session->userdata('role'); ?>";
         scope = "<?= $this->session->userdata('scope'); ?>";
+        setInterval(function () {
+            if (role == '') {
+                swal({
+                    title: "Inactive Session",
+                    text: "You session has been idle for a while. You will need to login to activate session",
+                    icon: "info",
+                });
+                window.location.href = "";
+            }
+        }, 3000);
+
         maps = "<?= $seg_5; ?>";
         cdrr_id = "<?= $seg_4; ?>";
         res = '';
@@ -964,6 +975,26 @@ if (empty($columns['maps']['data'])) {
                 }
             });
         });
+
+
+        $('#save_allocation_2').click(function (e) {
+            //$(this).prop('disabled', true);
+//Show spinner
+            $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
+            var form = $('#orderForm');
+            var url = base_url + "Manager/Orders/updateOrder/<?= $cdrr_id . '/' . $map_id; ?>";
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: form.serialize(),
+                success: function (response) {
+                    swal('Allocation data saved');
+                    $.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/allocated");
+                    window.location.href = base_url + "manager/orders/allocate/<?= $cdrr_id . '/' . $map_id; ?>";
+                }
+            });
+        });
+
         if (role == '') {
             window.location.href = "<?= base_url() ?>manager";
         } else {
