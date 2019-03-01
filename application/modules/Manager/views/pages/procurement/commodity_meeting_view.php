@@ -11,8 +11,10 @@
         // background:#FFDEAD;
     }
     .tt{
-        display:none;
-    }
+        display:none;  
+    } 
+    
+    .ouma{}
 
     /*#transaction_tbl tr:gt(5){background:red};*/
 </style>

@@ -66,6 +66,8 @@
      .tt{
         display:none;
     }
+    
+     .ouma{}
 
 
 

@@ -18,6 +18,8 @@ class Procurement extends MX_Controller {
     function look() {
         echo (int) 01;
     }
+    
+    //
 
     function usm() {
 //Server url
