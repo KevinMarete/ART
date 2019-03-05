@@ -94,6 +94,10 @@
         }
     }
 
+    .swal-button--confirm{
+        display: none;
+    }
+
 
 </style>
 
@@ -127,7 +131,7 @@
                                 <button type="submit" class="btn btn-danger" id="rejectOrder">Reject Order</button>
                             <?php } else if ($role == 'nascop' && date('d') <= 30 && $columns['cdrrs']['data'][0]['status'] == 'approved') { ?>
                                 <button type="submit" class="btn btn-success" id="reviewOrder">Submit to KEMSA</button>
-                                <button type="submit" class="btn btn-danger" id="rejectOrder">Reject Order</button>
+                                <button type="submit" class="btn btn-danger" id="rejectOrderNASCOP">Reject Order</button>
                             <?php } ?>
                         </div>
                     </div>
@@ -288,9 +292,9 @@
                                                     $disabled = '';
                                                     $comment = '';
                                                     $status = $columns['cdrrs']['data']['cdrr_item'][$drugid]['stock_status'];
-                                                    if ($status == 2) {
+                                                    if ($status == 3) {
                                                         $disabled = 'disabled';
-                                                        $comment = 'Stocked Out';
+                                                        $comment = 'Phased Out';
                                                     }
                                                     ?>
                                                     <td title="Commodity quantity received"><?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['received']; ?></td>
@@ -413,14 +417,20 @@
                                         <?php
                                         $curr_ = 0;
                                         $prev = 0;
+                                       
+                                        //$curr1_ = 0;
+                                        //$prev1 = 0;
+                                       
 
                                         foreach ($columns['regimens'] as $category => $regimens) {
+                                           
                                             ?>
                                             <?php foreach ($regimens as $regimen) { ?>
-                                                <?php if (in_array($regimen['id'], array_keys($columns['maps']['data']))) { ?>
+                                                <?php if (in_array($regimen['id'], array_keys($columns['maps']['data']))) {   $cat= strtoupper($regimen['service']); ?>
                                                     <tr class="REGOPEN" data-reg="<?= $regimen['id']; ?>" >
                                                         <td class="details-control"></td>
                                                         <td><?= $regimen['name']; ?></td>
+
                                                         <td><?php echo $current = $columns['maps']['data'][$regimen['id']]; ?></td>
                                                         <td><?php
                                                             echo $previous = $columns['previousmaps']['data'][$regimen['id']];
@@ -431,8 +441,16 @@
                                                                 $p = round((($previous - $current) / $previous) * 100, 0);
                                                                 echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
                                                             }
-                                                            $curr_ = $curr_ + $current;
-                                                            $prev = $prev + $previous;
+                                                         
+                                                            
+                                                            if ($cat == 'ART' ) {
+                                                                $curr_ = $curr_ + $current;
+                                                                $prev = $prev + $previous;
+                                                            }
+                                                            if ($cat == 'PMTCT') {
+                                                                $curr1_ = $curr1_ + $current;
+                                                                $prev1 = $prev1 + $previous;
+                                                            }
                                                             ?>
 
                                                         </td>
@@ -487,23 +505,36 @@
                             </table>
                         </div>
                     </div>
-                    <!--                    <div class="col-sm-3">
-                    <?php $variance = number_format((($curr_ - $prev) / $curr_) * 100, 1); ?>
-                                            <table class="table table-responsive table-bordered" >
-                                                <tr>
-                                                    <td>Current Patient Numbers</td>
-                                                    <td style="text-align: right; font-weight: bold;"><?= number_format($curr_, 0); ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Previous Patient Numbers</td>
-                                                    <td style="text-align: right;font-weight: bold;"><?= number_format($prev, 0); ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Patient Numbers % Variance</td>
-                                                    <td style="text-align: right;font-weight: bold;"><?= $variance; ?>%</td>
-                                                </tr>
-                                            </table>
-                                        </div>-->
+                    <div class="col-sm-3">
+                        <?php $variance = number_format((($curr_ - $prev) / $curr_) * 100, 1); ?>
+                        <table class="table table-responsive table-bordered" >
+                            <thead>
+                            <th></th>
+                            <th>ART</th>
+                            <th>PMTCT</th>                            
+                            </thead>
+                            <tr>
+                                <td>Current Patient Numbers</td>
+                                <td style="text-align: right; font-weight: bold;"><?= number_format($curr_, 0); ?></td>
+                                <td style="text-align: right; font-weight: bold;"><?= number_format($curr1_, 0); ?></td>
+                            </tr>
+                            <tr>
+                                <td>Previous Patient Numbers</td>
+                                <td style="text-align: right;font-weight: bold;"><?= number_format($prev, 0); ?></td>
+                                <td style="text-align: right;font-weight: bold;"><?= number_format($prev1, 0); ?></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="text-align: right;font-weight: bold;"></td>
+                                <td style="text-align: right;font-weight: bold;"></td>
+                            </tr>
+<!--                              <tr>
+                                <td>Patient Numbers % Variance</td>
+                                <td style="text-align: right;font-weight: bold;"><?= $variance; ?>%</td>
+                                <td style="text-align: right;font-weight: bold;"><?= $variance; ?>%</td>
+                            </tr>-->
+                        </table>
+                    </div>
 
 
                 </div> <!--end of cdrr-->
@@ -606,6 +637,15 @@ if (empty($columns['maps']['data'])) {
                 icon: "info",
             });
         }
+
+        $(document).on('keyup', '.swal-content__input', function () {
+            val = $(this).val()
+            if (val == '') {
+                $('.swal-button--confirm').hide();
+            } else {
+                $('.swal-button--confirm').show();
+            }
+        });
 
 
         $('[data-toggle = "tooltip"]').tooltip();
@@ -781,7 +821,7 @@ if (empty($columns['maps']['data'])) {
             } else if (AllMOS > (max_mos - FacMOS)) {
                 swal("Write Reason Here :", {
                     title: "Excess Allocation MOS 1",
-                    text: "The highest that can be allocated is " + max_mos + " MOS",
+                    text: "The highest that can be allocated is " + max_mos - FacMOS + " MOS",
                     content: "input",
                     icon: "error",
                     content: {
@@ -849,7 +889,7 @@ if (empty($columns['maps']['data'])) {
                 swal("Write Reason Here:", {
                     closeOnClickOutside: false,
                     title: "Excess Allocation MOS",
-                    text: "The highest that can be allocated is " + max_mos + " MOS",
+                    text: "The highest that can be allocated is " + max_mos - FacMOS + " MOS",
                     content: "input",
                     icon: "error",
                     content: {
@@ -947,6 +987,32 @@ if (empty($columns['maps']['data'])) {
                 }
             });
         });
+        
+        
+          $('#rejectOrderNASCOP').click(function (e) {
+            swal("Write something here:", {
+                title: "Are you sure?",
+                text: "Please enter your reason behind this order rejection",
+                icon: "warning",
+                buttons: ["Cancel", "Reject Order"],
+                dangerMode: true,
+                content: "input",
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+                allowOutsideClick: false
+            }).then((value) => {
+                if (value) {
+                    val = $('.swal-content__input').val();
+//Show spinner      
+                    //$.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
+                    $.post(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/rejected", {reason: val}, function (data) {
+                        swal('Order Rejected Successfully!');
+                       // window.location.href = base_url + "manager/orders/view_allocation/<?= $cdrr_id . '/' . $map_id; ?>";
+                    });
+                }
+            });
+        });
+        
         $('#complete_allocation').click(function (e) {
             $(this).prop('disabled', true);
 //Show spinner

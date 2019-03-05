@@ -31,6 +31,7 @@ class Orders_model extends CI_Model {
     }
 
     public function actionOrder($orderid, $mapid, $action, $user) {
+       
         $response = array();
 
         try {
@@ -168,12 +169,15 @@ class Orders_model extends CI_Model {
     }
 
     public function get_reporting_data($scope, $role, $period_begin, $period_end, $allocation = false) {
+        
+
         //echo $r
         $response = array('data' => array());
         try {
             $month_name = date('F Y', strtotime($period_begin));
 
             if ($role == 'nascop') {
+
                 $sql = "SELECT 
                             UCASE(co.name) county,
                             CONCAT_WS('/', COUNT(DISTINCT t.facility_id), COUNT(DISTINCT f.id)) submitted,
@@ -373,6 +377,9 @@ class Orders_model extends CI_Model {
     }
 
     public function get_county_allocation_data($scope, $role, $period_begin, $period_end) {
+       // echo $period_begin;
+        
+       // die;
         $response = array('data' => array());
         //$currmonth = date('Y-m-d', strtotime('first day of last month'));
         try {
@@ -453,7 +460,8 @@ class Orders_model extends CI_Model {
             $response[$regimen['category']][] = array(
                 'id' => $regimen['id'],
                 'code' => $regimen['code'],
-                'name' => $regimen['name']
+                'name' => $regimen['name'],
+                'service' => $regimen['service']
             );
         }
         return $response;
@@ -485,7 +493,7 @@ class Orders_model extends CI_Model {
                     INNER JOIN tbl_facility f ON f.id = c.facility_id
                     INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id
                     INNER JOIN tbl_county co ON co.id = sc.county_id
-                    WHERE c.id = ?  " . $role_cond ." ORDER BY d.regimen_category ASC";
+                    WHERE c.id = ?  " . $role_cond . " ORDER BY d.regimen_category ASC";
 
             $table_data = $this->db->query($sql, array($cdrr_id))->result_array();
 
@@ -887,9 +895,10 @@ class Orders_model extends CI_Model {
     }
 
     public function get_county_reporting_data($scope, $role, $period_begin, $period_end, $allocation = false) {
-         $begin= $this->uri->segment(7);
-        $end= substr($this->uri->segment(7),0,-2).'31';  
-       // echo $end;
+        //die;
+        $begin = $this->uri->segment(7);
+        $end = substr($this->uri->segment(7), 0, -2) . '31';
+        // echo $end;
         $response = array('data' => array());
         try {
             $month_name = date('F Y', strtotime($period_begin));
@@ -898,7 +907,7 @@ class Orders_model extends CI_Model {
 
             $sql = "SELECT
                         UCASE(sc.name) subcounty,
-                       
+                        f.mflcode,
                         UCASE(f.name) facility_name,
                         IF(t.period_begin IS NOT NULL, t.description, 'N/A') description,
                         IF(t.period_begin IS NOT NULL, REPLACE(t.status,'reviewed','SUBMITTED TO KEMSA'), 'N/A') reporting_status,

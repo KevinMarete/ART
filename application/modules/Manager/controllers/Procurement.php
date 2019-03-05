@@ -28,7 +28,8 @@ class Procurement extends MX_Controller {
         $workingYear = date('Y');
         $this->db->query("UPDATE tbl_procurement p SET kemsa_code = (SELECT kemsa_code FROM tbl_drug  WHERE id = p.drug_id)");
 
-        $url = "https://api.kemsa.co.ke/p_productmovements?filter[where][lmis_tool_id]=1000000&filter[where][startdate]=$period";
+        $url = "https://api.kemsa.co.ke/p_productmovements?filter[where][lmis_tool_id]=1000000&filter[where][startdate]=20180101";
+        //$url = "https://api.kemsa.co.ke/p_productmovements?filter[where][lmis_tool_id]=1000000&filter[where][startdate]=$period";
         $apiKey = '$2y$10$S0JuZi5EAxAsuMaV2r4Nh.1HyC.nIfSW9Pnf1UPkPsapni6Vv/xLC'; // should match with Server key
         $headers = array(
             'apitoken:' . $apiKey

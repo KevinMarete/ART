@@ -46,14 +46,15 @@
 <script>
     $(document).ready(function () {
         $('#dataTables-listing').DataTable({
-            responsive: true,
+           
+            "scrollX": true,
             order: [[4, "desc"]],
             pagingType: "full_numbers",
-            ajax: "<?php echo base_url() . 'Manager/Orders/get_county_reporting_rates' . $retVal = ($seg_4 == "county") ? "/county/" . $seg_5 . "/allocation/".$seg_6 : ""; ?>",
+            ajax: "<?php echo base_url() . 'Manager/Orders/get_county_reporting_rates' . $retVal = ($seg_4 == "county") ? "/county/" . $seg_5 . "/allocation/" . $seg_6 : ""; ?>",
             initComplete: function () {
                 this.api().columns([0, 1, 2]).every(function () {
                     var column = this;
-                    var select = $('<br/><select><option value="">Show all</option></select>')
+                    var select = $('<br/><select style="width:100%;"><option value="">Show all</option></select>')
                             .appendTo($(column.header()))
                             .on('change', function () {
                                 var val = $.fn.dataTable.util.escapeRegex(
@@ -69,7 +70,7 @@
                     });
                 });
                 //Show reporting rate
-                var reporting_rate = Math.ceil(($("#dataTables-listing td:nth-child(5):contains('REVIEWED')").length / this.api().data().rows().count()) * 100)
+                var reporting_rate = Math.ceil(($("#dataTables-listing td:nth-child(5):contains('SUBMITTED TO KEMSA')").length / this.api().data().rows().count()) * 100)
                 $('.panel-heading').html('Reporting Rate: <b>' + reporting_rate + '%</b><div class="progress"><div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="' + reporting_rate + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + reporting_rate + '%;">' + reporting_rate + '%</div></div>')
             }
         });

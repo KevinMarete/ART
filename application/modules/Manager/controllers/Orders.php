@@ -138,10 +138,11 @@ class Orders extends MX_Controller {
             $final_string = '<p>Hello ' . $pharmacist . ',<br>' . $message . ' | <a href="http://commodities.nascop.org/manager" target="_blank">Login Here</a></p>';
             $this->email_sender->sendEmail('ART Allocation Order ' . $act . ' - ' . $facility, 'Allocation Order', $requester, $approver, $final_string);
         } elseif ($role == 'nascop') {
+           
             $cdrr_id = $this->uri->segment(4);
-            $get_pharmacist_user = $this->db->query("SELECT CONCAT_WS(' ',firstname,lastname) pharmacist,email_address FROM tbl_user WHERE id IN(SELECT user_id FROM tbl_cdrr_log WHERE description IN('allocated','approved') AND cdrr_id='$cdrr_id')")->result();
+            $get_pharmacist_user = $this->db->query("SELECT CONCAT_WS(' ',firstname,lastname) pharmacist,email_address FROM tbl_user WHERE id IN(SELECT user_id FROM tbl_cdrr_log WHERE description IN('approved') AND cdrr_id='$cdrr_id')")->result();
             $approver = $get_pharmacist_user[0]->email_address . ',' . $get_pharmacist_user[1]->email_address;
-            $final_string = '<p>Hello All ,<br>' . $message . ' | <a href="http://commodities.nascop.org/manager" target="_blank">Login Here</a></p>';
+            $final_string = '<p>Hello Sir / Madam,  <br>' . $message . ' | <a href="http://commodities.nascop.org/manager" target="_blank">Login Here</a></p>';
             $this->email_sender->sendEmail('ART Allocation Order ' . $act . ' - ' . $facility, 'Allocation Order', $requester, $approver, $final_string);
         }
     }
@@ -195,14 +196,28 @@ class Orders extends MX_Controller {
         echo json_encode(array('data' => $response['data']));
     }
 
-    public function get_reporting_rates($role = null, $scope = null, $allocation = null) {
-        if ($this->session->userdata('role') !== 'subcounty') {
-            $begin = $this->uri->segment(7);
-            $end = substr($this->uri->segment(7), 0, -2) . '31';
+
+    public function get_reporting_rates($period_='') {
+        if ($this->session->userdata('role') == 'county' || $this->session->userdata('role') == 'nascop') {         
+
+
+            if ($period_ == '') {
+
+                $begin = date("Y-m-d", mktime(0, 0, 0, date("m") - 1, 1));
+                $end = date("Y-m-d", mktime(0, 0, 0, date("m"), 0));
+            } else {
+
+                $begin = $period_ . '-01';
+                $end = $period_ . '-31';
+            }
+            // echo 'Used';
         } else {
-            $begin =  date("Y-m-d", mktime(0, 0, 0, date("m")-1, 1));
+            $begin = date("Y-m-d", mktime(0, 0, 0, date("m") - 1, 1));
             $end = date("Y-m-d", mktime(0, 0, 0, date("m"), 0));
+            //  echo 'Unused';
         }
+
+
 
         $role = ($role) ? $role : $this->session->userdata('role');
         $scope = ($scope) ? $scope : $this->session->userdata('scope');
