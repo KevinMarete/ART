@@ -293,10 +293,10 @@ class Orders_model extends CI_Model {
         try {
             if ($role == 'nascop') {
                 $sql = "SELECT 
-                            DATE_FORMAT(c.period_begin, '%M-%Y') period,
-                            CONCAT_WS('/', SUM(IF(c.status = 'reviewed', 1, 0)) , sb.total) reviewed,
-                            IF(SUM(IF(c.status = 'reviewed', 1, 0)) != sb.total, 'Incomplete', 'Complete') status,
-                            CONCAT('<a href=edit_allocation/', c.period_begin, '>View</a>')  options
+                        DATE_FORMAT(c.period_begin, '%M-%Y') period,
+                        CONCAT_WS('/', SUM(IF(c.status = 'reviewed', 1, 0)) , sb.total) reviewed,
+                        IF(SUM(IF(c.status = 'reviewed', 1, 0)) != sb.total, 'Incomplete', 'Complete') status,
+                        CONCAT('<a href=edit_allocation/', c.period_begin, '>View</a>')  options
                         FROM tbl_cdrr c 
                         INNER JOIN tbl_maps m ON c.facility_id = m.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status IN('allocated', 'approved', 'reviewed') AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1) 
                         INNER JOIN tbl_facility f ON c.facility_id = f.id,  
