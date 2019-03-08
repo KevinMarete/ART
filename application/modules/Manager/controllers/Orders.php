@@ -97,13 +97,13 @@ class Orders extends MX_Controller {
                               <span style="page-break-after:always;"></span>';
 
 
-        // echo $pdfBuilder;
-        // echo htmlspecialchars($pdfBuilder);
-        //  exit;
+// echo $pdfBuilder;
+// echo htmlspecialchars($pdfBuilder);
+//  exit;
 
 
         $dompdf = new Dompdf;
-        // Load HTML content
+// Load HTML content
         $dompdf->loadHtml($pdfBuilder);
         $dompdf->set_option('isHtml5ParserEnabled', true);
 // (Optional) Setup the paper size and orientation
@@ -138,7 +138,7 @@ class Orders extends MX_Controller {
             $final_string = '<p>Hello ' . $pharmacist . ',<br>' . $message . ' | <a href="http://commodities.nascop.org/manager" target="_blank">Login Here</a></p>';
             $this->email_sender->sendEmail('ART Allocation Order ' . $act . ' - ' . $facility, 'Allocation Order', $requester, $approver, $final_string);
         } elseif ($role == 'nascop') {
-           
+
             $cdrr_id = $this->uri->segment(4);
             $get_pharmacist_user = $this->db->query("SELECT CONCAT_WS(' ',firstname,lastname) pharmacist,email_address FROM tbl_user WHERE id IN(SELECT user_id FROM tbl_cdrr_log WHERE description IN('approved') AND cdrr_id='$cdrr_id')")->result();
             $approver = $get_pharmacist_user[0]->email_address . ',' . $get_pharmacist_user[1]->email_address;
@@ -196,30 +196,19 @@ class Orders extends MX_Controller {
         echo json_encode(array('data' => $response['data']));
     }
 
-
-    public function get_reporting_rates($period_='') {
-        if ($this->session->userdata('role') == 'county' || $this->session->userdata('role') == 'nascop') {         
-
-
-            if ($period_ == '') {
-
-                $begin = date("Y-m-d", mktime(0, 0, 0, date("m") - 1, 1));
-                $end = date("Y-m-d", mktime(0, 0, 0, date("m"), 0));
-            } else {
-
-                $begin = $period_ . '-01';
-                $end = $period_ . '-31';
-            }
-            // echo 'Used';
+    public function get_reporting_rates($role = null, $scope = null, $allocation = null) {
+        $role = ($role) ? $role : $this->session->userdata('role');
+        $begin = $this->uri->segment(7);
+        $lastDay = date('Y-m-t', strtotime($begin));
+        $default = date('Y-m-d');
+        if ($role == 'subcounty') {
+            $end = $lastDay;
         } else {
-            $begin = date("Y-m-d", mktime(0, 0, 0, date("m") - 1, 1));
-            $end = date("Y-m-d", mktime(0, 0, 0, date("m"), 0));
-            //  echo 'Unused';
+            $begin = $default;
+            $end = date('Y-m-t', strtotime($default));
         }
 
 
-
-        $role = ($role) ? $role : $this->session->userdata('role');
         $scope = ($scope) ? $scope : $this->session->userdata('scope');
         $allocation = ($allocation) ? TRUE : FALSE;
         $response = $this->Orders_model->get_reporting_data($scope, $role, $begin, $end, $allocation);
@@ -238,7 +227,8 @@ class Orders extends MX_Controller {
 
     public function get_county_reporting_rates($role = null, $scope = null, $allocation = null) {
         $begin = $this->uri->segment(7);
-        $end = substr($this->uri->segment(7), 0, -2) . '31';
+         $end = date('Y-m-t', strtotime($begin));
+        
 
         $role = ($role) ? $role : $this->session->userdata('role');
         $scope = ($scope) ? $scope : $this->session->userdata('scope');
@@ -308,7 +298,7 @@ class Orders extends MX_Controller {
                 unset($low[$i]);
             }
         }
-        // print_r($sub_res);
+// print_r($sub_res);
         echo json_encode(['high' => array_values($high), 'low' => array_values($low)]);
     }
 
@@ -326,7 +316,7 @@ class Orders extends MX_Controller {
 
     function upload() {
         $path = "public/kemsa_templates/AllocationTemplate";
-        //$file = $path . 'kemsa.xlsx';
+//$file = $path . 'kemsa.xlsx';
 
         $valid_formats = array("xlsx"); //add the formats you want to upload
 
@@ -357,11 +347,11 @@ class Orders extends MX_Controller {
         exit;
     }
 
-    //CRONTAB
-    //crontab -e
-    //0 22 20 * * wget http://commodities.nascop.org/Manager/Orders/AllocateUnallocatedOrders20thMonthlyAt10pm
-    //0 23 20 * * wget http://commodities.nascop.org/Manager/Orders/ApproveUnapprovedOrders20thMonthlyAt11pm
-    //0 00 20 * * wget http://commodities.nascop.org/Manager/Orders/ApproveUnapprovedOrders20thMonthlyAt11pm
+//CRONTAB
+//crontab -e
+//0 22 20 * * wget http://commodities.nascop.org/Manager/Orders/AllocateUnallocatedOrders20thMonthlyAt10pm
+//0 23 20 * * wget http://commodities.nascop.org/Manager/Orders/ApproveUnapprovedOrders20thMonthlyAt11pm
+//0 00 20 * * wget http://commodities.nascop.org/Manager/Orders/ApproveUnapprovedOrders20thMonthlyAt11pm
 
     function AllocateUnallocatedOrders20thMonthlyAt10pm() {
         $this->db->query("UPDATE tbl_cdrr SET status='allocated' WHERE id IN (SELECT t.id FROM (SELECT * FROM tbl_cdrr) t WHERE t.period_begin =  concat(date_format(LAST_DAY(now() - interval 1 month),'%Y-%m-'),'01') AND t.status='pending')");
@@ -393,9 +383,9 @@ class Orders extends MX_Controller {
         $this->response(['status' => '1', 'message' => 'Allocated Successfull!']);
     }
 
-    //CRONTAB
-    //crontab -e
-    //0 23 20 * * wget http://commodities.nascop.org/Manager/Orders/ApproveUnapprovedOrders20thMonthlyAt11pm
+//CRONTAB
+//crontab -e
+//0 23 20 * * wget http://commodities.nascop.org/Manager/Orders/ApproveUnapprovedOrders20thMonthlyAt11pm
 
     function ApproveUnapprovedOrders20thMonthlyAt11pm() {
         $this->db->query("UPDATE tbl_cdrr SET status='approved' WHERE id IN (SELECT t.id FROM (SELECT * FROM tbl_cdrr) t WHERE t.period_begin =  concat(date_format(LAST_DAY(now() - interval 1 month),'%Y-%m-'),'01') AND t.status='allocated')");
@@ -427,9 +417,9 @@ class Orders extends MX_Controller {
         $this->response(['status' => '1', 'message' => 'Approvals Successfull!']);
     }
 
-    //CRONTAB
-    //crontab -e
-    //0 00 20 * * wget http://commodities.nascop.org/Manager/Orders/ApproveUnapprovedOrders20thMonthlyAt11pm
+//CRONTAB
+//crontab -e
+//0 00 20 * * wget http://commodities.nascop.org/Manager/Orders/ApproveUnapprovedOrders20thMonthlyAt11pm
 
     function ReviewUnreviewedOrders20thMonthlyAt12pm() {
         $this->db->query("UPDATE tbl_cdrr SET status='reviewed' WHERE id IN (SELECT t.id FROM (SELECT * FROM tbl_cdrr) t WHERE t.period_begin =  concat(date_format(LAST_DAY(now() - interval 1 month),'%Y-%m-'),'01') AND t.status='approved')");

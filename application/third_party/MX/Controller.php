@@ -155,5 +155,9 @@ class MX_Controller {
         ];
         return $months;
     }
+    
+    function disableForeignKeyChecks(){
+        return $this->db->query("SET FOREIGN_KEY_CHECKS=0;");
+    }
 
 }

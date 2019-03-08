@@ -69,7 +69,7 @@
     </div>
     <!-- /.row -->
     <div class="row">
-        <div class="row col-md-12" style="margin: 10px;">
+<!--        <div class="row col-md-12" style="margin: 10px;">
             <div class="col-md-2">
                 <input id="pickadate" class="form-control" placeholder="Select Period" value="<?= @$this->session->userdata('periodData'); ?>"/>                       
             </div>
@@ -77,7 +77,7 @@
                 <button id="pickdate" class="btn btn-primary btn-sm"> Refresh</button>
             </div>
 
-        </div>
+        </div>-->
         <div class="col-lg-12">
 
             <div class="panel panel-default">

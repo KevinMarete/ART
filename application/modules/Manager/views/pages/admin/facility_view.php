@@ -32,6 +32,7 @@
                                     <option value="central">Central</option>
                                     <option value="satellite">Satellite</option>
                                     <option value="standalone">Standalone</option>
+                                    <option value="store">Store</option>
                                 </select>
                                 <span class="help-block"></span>
                             </div>
@@ -95,7 +96,7 @@
         var subcountyURL = '../../API/subcounty';
         var parnerURL = '../../API/partner';
         var parentURL = '../../API/facility';
-        
+
         $("#subcounty").empty()
         $.getJSON(subcountyURL, function (subcounties) {
             $("#subcounty").append($("<option value=''>Select SubCounty</option>"));
@@ -114,7 +115,7 @@
         $.getJSON(parentURL, function (parent_id) {
             $("#parent").append($("<option value=''>Select Parent</option>"));
             $.each(parent_id, function (index, parent) {
-                
+
                 $("#parent").append($("<option value='" + parent.id + "'>" + parent.name.toUpperCase() + "</option>"));
             });
         });

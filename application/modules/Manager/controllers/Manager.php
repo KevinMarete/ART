@@ -33,7 +33,7 @@ class Manager extends MX_Controller {
         $this->session->set_userdata('minute', '');
 
         if ($this->session->userdata('id')) {
-            $data['page_name'] = $page;
+            $data['page_name'] = $page;            
             $data['content_view'] = 'pages/' . $module . '/' . $page . '_view';
             if ($is_table) {
                 $data['columns'] = $this->db->list_fields('tbl_' . $page);
