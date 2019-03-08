@@ -200,14 +200,14 @@ class Orders extends MX_Controller {
         $role = ($role) ? $role : $this->session->userdata('role');
         $begin = $this->uri->segment(7);
         $lastDay = date('Y-m-t', strtotime($begin));
-        $default = date('Y-m-d');
-        if ($role == 'subcounty') {
+        
+        if ($role == 'subcounty' && !empty($begin)) {           
             $end = $lastDay;
-        } else {
-            $begin = $default;
-            $end = date('Y-m-t', strtotime($default));
+        } else {            
+            $begin = date('Y-m-d', strtotime('first day of last month'));
+            $end = date('Y-m-t', strtotime($begin));
         }
-
+       
 
         $scope = ($scope) ? $scope : $this->session->userdata('scope');
         $allocation = ($allocation) ? TRUE : FALSE;
@@ -227,8 +227,8 @@ class Orders extends MX_Controller {
 
     public function get_county_reporting_rates($role = null, $scope = null, $allocation = null) {
         $begin = $this->uri->segment(7);
-         $end = date('Y-m-t', strtotime($begin));
-        
+        $end = date('Y-m-t', strtotime($begin));
+
 
         $role = ($role) ? $role : $this->session->userdata('role');
         $scope = ($scope) ? $scope : $this->session->userdata('scope');

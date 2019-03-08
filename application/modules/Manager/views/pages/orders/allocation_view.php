@@ -38,15 +38,13 @@
                         <tbody>
 
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="6" style="color:blue; font-weight: bold;">
-                                    **Description "Report Incomplete" - Either D-CDRR, D-MAPS, F-CDRR, F-MAPS has not been reported <br>
-                                    All the **4 reports **must first be dully entered in DHIS2 so as to enable Allocation.
-                                </td>
-                            </tr>
-                        </tfoot>
+
                     </table>
+
+                    <span style="color:blue; font-weight: bold;">
+                        **Description "Report Incomplete" - Either D-CDRR, D-MAPS, F-CDRR, F-MAPS has not been reported <br>
+                        All the **4 reports **must first be dully entered in DHIS2 so as to enable Allocation.
+                    </span>
                 </div>
             </div><!--end panel default-->
         </div>
