@@ -12,17 +12,14 @@
     </div>
     <!-- /.navbar-header -->
     <ul class="nav navbar-top-links navbar-right">
-        
-         <li> 
-             <a class="" href="<?=base_url();?>Dashboard"><i class="fa fa-dashboard"> Main Dashboard</i></a>
-        </li>
-        
+
+       
         <li>
             <small>
                 <b><?php echo strtoupper($this->session->userdata('role')); ?>: </b> <?php echo ucwords($this->session->userdata('scope_name')); ?>
             </small> 
         </li>
-       
+
 
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -43,8 +40,8 @@
             </ul>
             <!-- /.dropdown-user -->
         </li>
-        
-         
+
+
         <!-- /.dropdown -->
     </ul>
     <!-- /.navbar-top-links -->
@@ -52,12 +49,18 @@
     <div class="navbar-default sidebar" role="navigation">
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
+                <?php if ($this->session->userdata('role') == 'nascop') {
+                                  ; ?>
+                    <li>
+                        <a class="dashboard" href="<?php echo base_url() . 'Dashboard'; ?>"><i class="fa fa-dashboard fa-fw"></i> Main Dashboard</a>
+                    </li>
+              <?php } ?>
                 <li>
-                    <a class="dashboard" href="<?php echo base_url() . 'manager/dashboard'; ?>"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                    <a class="dashboard" href="<?php echo base_url() . 'manager/dashboard'; ?>"><i class="fa fa-dashboard fa-fw"></i> Allocation Dashboard</a>
                 </li>
                 <?php
                 foreach ($this->session->userdata('modules') as $module => $value) {
-                    
+
                     echo "<li><a href='#'><i class='" . $value['icon'] . "'></i> " . ucwords($module) . "<span class='fa arrow'></span></a><ul class='nav nav-second-level' id='settings_nav_links'>";
                     foreach ($value['submodules'] as $orig_submodule) {
                         $_blanks = array('ftp');
@@ -65,7 +68,7 @@
                         if (in_array($submodule, $_blanks)) {
                             echo "<li><a href='" . base_url() . "ftp' target='_blank'>" . ucwords(str_replace('_', ' ', $orig_submodule)) . "</a></li>";
                         } else {
-                            echo "<li><a class='" . str_replace([' ','drug'], '_', $orig_submodule) . "' href='" . base_url() . "manager/" . $module . "/" . $submodule . "'>" . ucwords(str_replace('_', ' ', $orig_submodule)) . "</a></li>";
+                            echo "<li><a class='" . str_replace([' ', 'drug'], '_', $orig_submodule) . "' href='" . base_url() . "manager/" . $module . "/" . $submodule . "'>" . ucwords(str_replace('_', ' ', $orig_submodule)) . "</a></li>";
                         }
                     }
                     echo "</ul></li>";
@@ -79,12 +82,12 @@
     <!--/.navbar-static-side -->
 </nav>
 <?php
-    $date = date('d');
-    $segment2=$this->uri->segment('2');
-    if (strpos($this->session->userdata('role'),'subcounty')!==false && strpos($segment2,'orders')!==false && $date == 19) {
-?>
+$date = date('d');
+$segment2 = $this->uri->segment('2');
+if (strpos($this->session->userdata('role'), 'subcounty') !== false && strpos($segment2, 'orders') !== false && $date == 19) {
+    ?>
     <div style="margin: 10px;" class="alert alert-warning pull-right">
-        <i class="fa fa-warning"></i> <?php echo $this->session->userdata('role');?> 
+        <i class="fa fa-warning"></i> <?php echo $this->session->userdata('role'); ?> 
         Kindly ensure that you have already submitted your allocation report before the 20<sup>th</sup>
     </div>
 <?php } ?>

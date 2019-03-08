@@ -22,7 +22,7 @@
                         <a href="#uploadTemplateGuide" style="margin: 10px;" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" data-keyboard="false" data-backdrop="static">Upload KEMSA MOS Template Guide</a>
 
                     <?php } else { ?>
-    
+
                     <?php } ?>
 
                     <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-listing">
@@ -38,6 +38,14 @@
                         <tbody>
 
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="6" style="color:blue; font-weight: bold;">
+                                    **Description "Report Incomplete" - Either D-CDRR, D-MAPS, F-CDRR, F-MAPS has not been reported <br>
+                                    All the **4 reports **must first be dully entered in DHIS2 so as to enable Allocation.
+                                </td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div><!--end panel default-->
@@ -74,7 +82,7 @@
                 }
             });
         } else {
-          dtable=  $('#dataTables-listing').DataTable({
+            dtable = $('#dataTables-listing').DataTable({
                 responsive: true,
                 order: [[1, "asc"]],
                 pagingType: "full_numbers",
@@ -98,12 +106,12 @@
                         });
                     });
                     //Show reporting rate
-                     var thecount = dtable.rows().column(4).data()
+                    var thecount = dtable.rows().column(4).data()
                             .filter(function (value, index) {
                                 return value !== 'PENDING';
                             }).length;
                     var reporting_rate = Math.ceil((thecount / dtable.rows().count()) * 100);
-                   // var reporting_rate = Math.ceil(($("#dataTables-listing td:nth-child(5):contains('allocated'),#dataTables-listing td:nth-child(5):not(:contains('PENDING'))").length / this.api().data().rows().count()) * 100)
+                    // var reporting_rate = Math.ceil(($("#dataTables-listing td:nth-child(5):contains('allocated'),#dataTables-listing td:nth-child(5):not(:contains('PENDING'))").length / this.api().data().rows().count()) * 100)
                     $('.panel-heading').html('Allocation Rate: <b>' + reporting_rate + '%</b><div class="progress"><div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="' + reporting_rate + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + reporting_rate + '%;">' + reporting_rate + '%</div></div>')
                 }
             });

@@ -333,13 +333,13 @@ class Orders_model extends CI_Model {
                             f.mflcode,
                             UCASE(f.name) facility_name,
                             IF(t.period_begin IS NULL, DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%M-%Y') , DATE_FORMAT(t.period_begin, '%M-%Y')) period,
-                            IF(t.period_begin IS NOT NULL, t.description, 'N/A') description,
+                            IF(t.period_begin IS NOT NULL, t.description, 'Report Incomplete') description,
                             IF(t.status IS NULL, 'PENDING', UCASE(REPLACE(t.status,'reviewed','SUBMITTED TO KEMSA'))) reporting_status,
                             CASE 
                                 WHEN t.status = 'pending' THEN CONCAT('<a href=allocate/', t.cdrr_id,'/', t.maps_id, '> Allocate Order</a>')
-                                WHEN t.status != 'pending' THEN CONCAT('<a href=view_allocation/', t.cdrr_id,'/', t.maps_id, '> View Allocation</a>') 
-                                WHEN t.period_begin IS NULL  THEN 'D-CDRR Pending'                               
-                                ELSE 'Not Reported'
+                                WHEN t.status != 'pending' THEN CONCAT('<a href=view_allocation/', t.cdrr_id,'/', t.maps_id, '> View Allocation</a>')                               
+                                WHEN (t.period_begin IS NULL AND category='standalone'  OR category='store') THEN 'F-CDRR/F-MAPS Pending'
+                                WHEN (t.period_begin IS NULL AND category='central') THEN 'D-CDRR/D-MAPS Pending' 
                             END AS options
                         FROM tbl_facility f
                         LEFT JOIN
