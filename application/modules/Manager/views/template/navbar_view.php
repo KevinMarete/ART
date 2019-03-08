@@ -13,7 +13,7 @@
     <!-- /.navbar-header -->
     <ul class="nav navbar-top-links navbar-right">
 
-       
+
         <li>
             <small>
                 <b><?php echo strtoupper($this->session->userdata('role')); ?>: </b> <?php echo ucwords($this->session->userdata('scope_name')); ?>
@@ -49,12 +49,14 @@
     <div class="navbar-default sidebar" role="navigation">
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
-                <?php if ($this->session->userdata('role') == 'nascop') {
-                                  ; ?>
+                <?php
+                if ($this->session->userdata('role') == 'nascop') {
+                    ;
+                    ?>
                     <li>
                         <a class="dashboard" href="<?php echo base_url() . 'Dashboard'; ?>"><i class="fa fa-dashboard fa-fw"></i> Main Dashboard</a>
                     </li>
-              <?php } ?>
+<?php } ?>
                 <li>
                     <a class="dashboard" href="<?php echo base_url() . 'manager/dashboard'; ?>"><i class="fa fa-dashboard fa-fw"></i> Allocation Dashboard</a>
                 </li>
@@ -74,6 +76,14 @@
                     echo "</ul></li>";
                 }
                 ?>
+                <?php
+                if ($this->session->userdata('role') == 'subcounty') {
+                    ;
+                    ?>
+                    <li>
+                        <a class="" href="<?php echo base_url() . 'manager/section/faq/download'; ?>"><i class="fa fa-question-circle-o "></i> FAQs</a>
+                    </li>
+<?php } ?>
             </ul>
 
         </div>

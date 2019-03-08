@@ -91,6 +91,7 @@ $route['manager/procurement/tracker'] = 'Manager/load_template/procurement/track
 $route['manager/save_procurement'] = 'Manager/procurement/save_tracker';
 $route['manager/public/minute/(:any)'] = 'Manager/load_page/public/minute/Minute';
 $route['manager/create/pdf/(:any)'] = 'Manager/generateMinute';
+$route['manager/section/faq/download'] = 'Manager/getFaq';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
