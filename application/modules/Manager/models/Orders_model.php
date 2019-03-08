@@ -319,7 +319,7 @@ class Orders_model extends CI_Model {
                             IF(SUM(IF(c.status IN ('approved', 'reviewed'), 1, 0)) != sb.total, 'Incomplete', 'Complete') status,
                             CONCAT('<a href=edit_allocation/', c.period_begin, '>View</a>')  options
                         FROM tbl_cdrr c 
-                        INNER JOIN tbl_maps m ON c.facility_id = m.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status IN('pending','allocated', 'approved', 'reviewed') AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1)
+                        INNER JOIN tbl_maps m ON c.facility_id = m.facility_id AND c.period_begin = m.period_begin AND c.period_end = m.period_end AND c.status IN('allocated', 'approved', 'reviewed') AND SUBSTRING(c.code, 1, 1) = SUBSTRING(m.code, 1, 1)
                         INNER JOIN tbl_facility f ON c.facility_id = f.id  
                         INNER JOIN tbl_subcounty sc ON sc.id = f.subcounty_id,
                         (SELECT COUNT(DISTINCT fc.name) total FROM tbl_facility fc INNER JOIN tbl_subcounty sb ON fc.subcounty_id = sb.id WHERE sb.county_id = ? AND fc.category != 'satellite') sb
