@@ -54,11 +54,11 @@
                     ;
                     ?>
                     <li>
-                        <a class="dashboard" href="<?php echo base_url() . 'Dashboard'; ?>"><i class="fa fa-dashboard fa-fw"></i> Main Dashboard</a>
+                        <a class="" href="<?php echo base_url() . 'Dashboard'; ?>"><i class="fa fa-bar-chart"></i> Main Dashboard</a>
                     </li>
 <?php } ?>
                 <li>
-                    <a class="dashboard" href="<?php echo base_url() . 'manager/dashboard'; ?>"><i class="fa fa-dashboard fa-fw"></i> Allocation Dashboard</a>
+                    <a class="dashboard" href="<?php echo base_url() . 'manager/dashboard'; ?>"><i class="fa fa-line-chart"></i> Commodity Dashboard</a>
                 </li>
                 <?php
                 foreach ($this->session->userdata('modules') as $module => $value) {
