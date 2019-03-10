@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Manager_model extends CI_Model {
 
-    public function get_reporting_rates($filters) {
+   public function get_reporting_rates($filters) {
         $columns = array();
         $reporting_data = array(
             array('type' => 'column', 'name' => 'Reported', 'data' => array()),
@@ -15,8 +15,8 @@ class Manager_model extends CI_Model {
         $scope_id = $this->session->userdata('scope');
         $role = $this->session->userdata('role');
         $this->db->from('tbl_facility f');
-        $this->db->join('tbl_subcounty sc', 'sc.id = f.subcounty_id', 'left');
-        $this->db->join('tbl_county c', 'c.id = sc.county_id', 'left');
+        $this->db->join('tbl_subcounty sc', 'sc.id = f.subcounty_id', 'inner');
+        $this->db->join('tbl_county c', 'c.id = sc.county_id', 'inner');
         $this->db->where_in("category", array('central', 'standalone'));
         if (!empty($filters)) {
             foreach ($filters as $category => $filter) {
@@ -36,7 +36,6 @@ class Manager_model extends CI_Model {
             $this->db->where('sc.county_id', $scope_id);
         }
         $total_ordering_sites = $this->db->get()->num_rows();
-        die;
         
         $this->db->select("CONCAT_WS('/', data_month, data_year) period, COUNT(*) reported, ($total_ordering_sites - COUNT(*)) not_reported", FALSE);
         if (!empty($filters)) {

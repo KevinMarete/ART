@@ -28,7 +28,7 @@ class Admin extends MX_Controller {
         $this->_validate($table);
         $response = $this->Admin_model->save($table, $_POST);
         if ($response['status']) {
-            $this->updateSysLogs('Created  (' . $table . ')');
+           // $this->updateSysLogs('Created  (' . $table . ')');
         }
         echo json_encode($response);
     }
