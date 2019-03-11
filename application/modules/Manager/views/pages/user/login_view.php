@@ -61,7 +61,7 @@
                                 <center>
                                     <a href="<?php echo base_url() . 'manager/forgot_pass'; ?>">Forgot your Password?</a><br/>
                                     <a href="#Request-Account" data-toggle="modal" data-target="#RequestAccount">Request an Account from NASCOP Commodity Manager</a><br/>
-                                    <a href="#Register Account" data-toggle="modal" data-target="#modal_register">Register Account</a><br/>
+<!--                                    <a href="#Register Account" data-toggle="modal" data-target="#modal_register">Register Account</a><br/>-->
                                 </center>
                             </form>
                         </div>

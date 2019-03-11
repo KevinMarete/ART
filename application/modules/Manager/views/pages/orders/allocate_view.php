@@ -326,7 +326,7 @@
                                                         }
                                                         $sSOH = $columns['cdrrs']['data']['cdrr_item'][$drugid]['aggr_on_hand'];
                                                         ?>
-                                                        <td title="Aggregate Stock on Hand / AMC (K/O)">
+                                                        <td title="Stock on Hand / AMC (K/O)">
                                                             <?php
                                                             if ($columns['cdrrs']['data'][0]['code'] == 'D-CDRR') {
                                                                 echo $mos = number_format(($count) / $drugamc, 2);
@@ -350,17 +350,19 @@
                                                     <?php } ?>
                                                     <td title="Actual order quantity to allocate">
 
-                                                        <input type="text" style="width:80px; text-align: center;" class="form-control AMOS Allocated"  data-toggle="tooltip" title="" <?= $disabled; ?> data-drug="<?= $drugid ?>"  name="qty_allocated-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= $allocated ?>">
+                                                        <input type="text" style="width:80px; text-align: center;" class="form-control AMOS Allocated"  data-toggle="tooltip" title="" <?= $disabled; ?> data-drug="<?= $drugid ?>"  name="qty_allocated-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= empty($allocated) ? $resupply : $allocated; ?>">
                                                     </td>
                                                     <td title="Total Months of stock that will be available after allocation is done">
                                                         <?php
                                                         $min_mos = $columns['cdrrs']['data']['cdrr_item'][$drugid]['min_mos'];
                                                         $max_mos = $columns['cdrrs']['data']['cdrr_item'][$drugid]['max_mos'];
+                                                        $maxx_mos = ($max_mos - $mos) < 0 ? 0 : ($max_mos - $mos);
+                                                        $allocated_mos = $columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'];
                                                         ?>
                                                         <input type="hidden" style="width:70px;" class="MIN" value="<?= $min_mos; ?>"/>
                                                         <input type="hidden" style="width:70px;"class="MAX" value="<?= $max_mos; ?>"/>
                                                         <?php if ($amc_months !== '0') { ?>
-                                                            <input type="text"   style="width:50px; text-align: center;" class="form-control MOS AllocatedMOS" data-toggle="tooltip" <?= $disabled; ?> title="Max MOS 3months" name="qty_allocated_mos-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= number_format($columns['cdrrs']['data']['cdrr_item'][$drugid]['qty_allocated_mos'], 2) ?>">
+                                                            <input type="text"   style="width:50px; text-align: center;" class="form-control MOS AllocatedMOS" data-toggle="tooltip" <?= $disabled; ?> title="Max MOS <?= $maxx_mos.'/'.$max_mos; ?> months" name="qty_allocated_mos-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= empty($allocated_mos) ? $maxx_mos : $allocated_mos; ?>">
                                                         <?php } else { ?>
                                                             No AMC
                                                         <?php } ?>
@@ -417,16 +419,18 @@
                                         <?php
                                         $curr_ = 0;
                                         $prev = 0;
-                                       
+
                                         //$curr1_ = 0;
                                         //$prev1 = 0;
-                                       
+
 
                                         foreach ($columns['regimens'] as $category => $regimens) {
-                                           
                                             ?>
                                             <?php foreach ($regimens as $regimen) { ?>
-                                                <?php if (in_array($regimen['id'], array_keys($columns['maps']['data']))) {   $cat= strtoupper($regimen['service']); ?>
+                                                <?php
+                                                if (in_array($regimen['id'], array_keys($columns['maps']['data']))) {
+                                                    $cat = strtoupper($regimen['service']);
+                                                    ?>
                                                     <tr class="REGOPEN" data-reg="<?= $regimen['id']; ?>" >
                                                         <td class="details-control"></td>
                                                         <td><?= $regimen['name']; ?></td>
@@ -441,9 +445,9 @@
                                                                 $p = round((($previous - $current) / $previous) * 100, 0);
                                                                 echo '<sup><span style="background: red; font-size:9px;" class="badge"> -' . $p . '%</span></sup>';
                                                             }
-                                                         
-                                                            
-                                                            if ($cat == 'ART' ) {
+
+
+                                                            if ($cat == 'ART') {
                                                                 $curr_ = $curr_ + $current;
                                                                 $prev = $prev + $previous;
                                                             }
@@ -796,6 +800,12 @@ if (empty($columns['maps']['data'])) {
             AMC = parseInt(row.find('.AMC').text());
             eMOSH = row.find('.eMOSH').text();
             aggSOH = row.find('.aggSOH').text();
+            allowable = '';
+            res = '';
+
+            if (allowable < 0) {
+                allowable = 0;
+            }
 
             if (isNaN(eMOSH) || eMOSH == '') {
                 eMOSH = 0;
@@ -805,12 +815,18 @@ if (empty($columns['maps']['data'])) {
             }
 
             cMOS = (parseInt(input_val) / AMC).toFixed(2);
+            
+             if(cMOS < 0){
+                alert(0)
+            }
             if (AMC == 0) {
                 cMOS = 0;
             }
             row.find('.AllocatedMOS').val(cMOS);
             AllMOS = row.find('.AllocatedMOS').val();
             FacMOS = row.find('.FacilityMOS').val();
+            allowable = max_mos - FacMOS;
+
             if (AllMOS < min_mos) {
                 swal({
                     title: "Low Allocation MOS",
@@ -818,10 +834,10 @@ if (empty($columns['maps']['data'])) {
                     icon: "error",
                 });
                 return false;
-            } else if (AllMOS > (max_mos - FacMOS)) {
+            } else if (AllMOS > allowable) {
                 swal("Write Reason Here :", {
-                    title: "Excess Allocation MOS 1",
-                    text: "The highest that can be allocated is " + max_mos - FacMOS + " MOS",
+                    title: "Excess Allocation MOS ",
+                    text: "The highest that can be allocated is " + allowable.toFixed(2) + " MOS",
                     content: "input",
                     icon: "error",
                     content: {
@@ -835,8 +851,10 @@ if (empty($columns['maps']['data'])) {
                 })
                         .then((value) => {
                             if (value == null) {
-                                $(this).val(((max_mos - FacMOS) * AMC));
-                                $(this).trigger('change');
+                                var res2 = (allowable * AMC)
+                                $(this).val(Math.ceil(res2));
+                                row.find('.AllocatedMOS').val(allowable.toFixed(2));
+                                // $(this).trigger('change');
                             } else {
                                 if (!value) {
                                     swal("Warning", 'Please enter a reason', 'error');
@@ -846,6 +864,13 @@ if (empty($columns['maps']['data'])) {
                                 }
                             }
                         });
+                if (row.find('.FacilityMOS').val() < 0) {
+                    row.find('.FacilityMOS').val(0);
+                }
+
+                if (row.find('.AllocatedMOS').val() < 0) {
+                    row.find('.AllocatedMOS').val(0)
+                }
                 return false;
             }
         });
@@ -859,6 +884,11 @@ if (empty($columns['maps']['data'])) {
             eMOSH = row.find('.eMOSH').text();
             aggSOH = row.find('.aggSOH').text();
             FacMOS = row.find('.FacilityMOS').val();
+            allowable = max_mos - FacMOS;
+
+            if (allowable < 0) {
+                allowable = 0;
+            }
 
             if (isNaN(eMOSH) || eMOSH == '') {
                 eMOSH = 0;
@@ -869,6 +899,9 @@ if (empty($columns['maps']['data'])) {
 
 
             cMOS = (parseInt(input_val) * parseInt(AMC));
+            if(cMOS < 0){
+                alert(0)
+            }
 
 
             cMOS = (parseInt(input_val) * AMC);
@@ -885,11 +918,11 @@ if (empty($columns['maps']['data'])) {
                     icon: "error",
                 });
                 return false;
-            } else if (input_val > (max_mos - FacMOS)) {
+            } else if (input_val > allowable) {
                 swal("Write Reason Here:", {
                     closeOnClickOutside: false,
                     title: "Excess Allocation MOS",
-                    text: "The highest that can be allocated is " + max_mos - FacMOS + " MOS",
+                    text: "The highest that can be allocated is " + allowable + " MOS",
                     content: "input",
                     icon: "error",
                     content: {
@@ -902,9 +935,11 @@ if (empty($columns['maps']['data'])) {
                     //buttons: true,
                 })
                         .then((value) => {
+                            alert(AMC);
                             if (value == null) {
-                                $(this).val(max_mos - FacMOS);
-                                $(this).trigger('change');
+                                $(this).val(allowable * AMC);
+                                row.find('.AllocatedMOS').val(allowable);
+                                //  $(this).trigger('change');
                             } else {
                                 if (value == '') {
                                     alert("Warning", 'Please enter a reason', 'error');
@@ -914,6 +949,7 @@ if (empty($columns['maps']['data'])) {
                                 }
                             }
                         });
+                
                 return true;
             }
         });
@@ -987,9 +1023,9 @@ if (empty($columns['maps']['data'])) {
                 }
             });
         });
-        
-        
-          $('#rejectOrderNASCOP').click(function (e) {
+
+
+        $('#rejectOrderNASCOP').click(function (e) {
             swal("Write something here:", {
                 title: "Are you sure?",
                 text: "Please enter your reason behind this order rejection",
@@ -1007,12 +1043,12 @@ if (empty($columns['maps']['data'])) {
                     //$.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
                     $.post(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id; ?>/rejected", {reason: val}, function (data) {
                         swal('Order Rejected Successfully!');
-                       // window.location.href = base_url + "manager/orders/view_allocation/<?= $cdrr_id . '/' . $map_id; ?>";
+                        // window.location.href = base_url + "manager/orders/view_allocation/<?= $cdrr_id . '/' . $map_id; ?>";
                     });
                 }
             });
         });
-        
+
         $('#complete_allocation').click(function (e) {
             $(this).prop('disabled', true);
 //Show spinner
@@ -1064,25 +1100,25 @@ if (empty($columns['maps']['data'])) {
         if (role == '') {
             window.location.href = "<?= base_url() ?>manager";
         } else {
-            setInterval(function () {
-                //alert(role);
-//$(this).prop('disabled', true);
-//Show spinner
-// $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
-                var form = $('#orderForm');
-                var url = base_url + "Manager/Orders/updateOrder/<?= $cdrr_id . '/' . $map_id; ?>";
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: form.serialize(),
-                    success: function (response) {
-// swal('Allocation data saved');
-//$.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id;
+            /* setInterval(function () {
+             //alert(role);
+             //$(this).prop('disabled', true);
+             //Show spinner
+             // $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
+             var form = $('#orderForm');
+             var url = base_url + "Manager/Orders/updateOrder/<?= $cdrr_id . '/' . $map_id; ?>";
+             $.ajax({
+             type: "POST",
+             url: url,
+             data: form.serialize(),
+             success: function (response) {
+             // swal('Allocation data saved');
+             //$.get(base_url + "Manager/Orders/actionOrder/<?= $cdrr_id . '/' . $map_id;
 ?>/pending");
-                        // window.location.href = base_url + "manager/orders/allocate/<?= $cdrr_id . '/' . $map_id; ?>";
-                    }
-                });
-            }, 60000);
+             // window.location.href = base_url + "manager/orders/allocate/<?= $cdrr_id . '/' . $map_id; ?>";
+             }
+             });
+             }, 60000);*/
         }
 
 
