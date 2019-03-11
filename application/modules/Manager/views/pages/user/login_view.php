@@ -248,7 +248,7 @@
 
                             $(function () {
 
-                                var roleURL = '<?php echo base_url(); ?>/API/Role';
+                                var roleURL = '<?php echo base_url(); ?>API/Role';
                                 $("#role").empty();
                                 $.getJSON(roleURL, function (role) {
                                     $("#role").append($("<option value=''>Select Role</option>"));
