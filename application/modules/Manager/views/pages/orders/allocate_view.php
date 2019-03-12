@@ -549,7 +549,7 @@
                     <?php } else if ($role == 'subcounty' && date('d') >= 10 && $columns['cdrrs']['data'][0]['status'] == 'pending') { ?>
                         <p><div class="alert alert-warning"><strong>NB: Allocation period has ended. No more allocations allowed beyond the 20<sup>th</sup> of each month. </strong></div></p>
 
-                    <?php } else if ($role == 'county' || $role=='nascop') { ?>
+                    <?php } else if ($role == 'county' && $columns['cdrrs']['data'][0]['status'] !== 'reviewed'|| $role=='nascop' && $columns['cdrrs']['data'][0]['status'] !== 'reviewed' ) { ?>
                         <button type="submit" class="btn btn-info" id="save_allocation_2">Save Allocation Edit</button>
 
                     <?php } else { ?>
