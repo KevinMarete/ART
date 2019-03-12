@@ -362,7 +362,7 @@
                                                         <input type="hidden" style="width:70px;" class="MIN" value="<?= $min_mos; ?>"/>
                                                         <input type="hidden" style="width:70px;"class="MAX" value="<?= $max_mos; ?>"/>
                                                         <?php if ($amc_months !== '0') { ?>
-                                                            <input type="text"   style="width:50px; text-align: center;" class="form-control MOS AllocatedMOS" data-toggle="tooltip" <?= $disabled; ?> title="Max MOS <?= $maxx_mos.'/'.$max_mos; ?> months" name="qty_allocated_mos-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= empty($allocated_mos) ? $maxx_mos : $allocated_mos; ?>">
+                                                            <input type="text"   style="width:50px; text-align: center;" class="form-control MOS AllocatedMOS" data-toggle="tooltip" <?= $disabled; ?> title="Max MOS <?= $maxx_mos . '/' . $max_mos; ?> months" name="qty_allocated_mos-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= empty($allocated_mos) ? $maxx_mos : $allocated_mos; ?>">
                                                         <?php } else { ?>
                                                             No AMC
                                                         <?php } ?>
@@ -815,9 +815,9 @@ if (empty($columns['maps']['data'])) {
             }
 
             cMOS = (parseInt(input_val) / AMC).toFixed(2);
-            
-             if(cMOS < 0){
-                alert(0)
+
+            if (cMOS < 0) {
+               // alert(0)
             }
             if (AMC == 0) {
                 cMOS = 0;
@@ -899,8 +899,8 @@ if (empty($columns['maps']['data'])) {
 
 
             cMOS = (parseInt(input_val) * parseInt(AMC));
-            if(cMOS < 0){
-                alert(0)
+            if (cMOS < 0) {
+                //alert(0)
             }
 
 
@@ -935,7 +935,7 @@ if (empty($columns['maps']['data'])) {
                     //buttons: true,
                 })
                         .then((value) => {
-                            alert(AMC);
+                            //alert(AMC);
                             if (value == null) {
                                 $(this).val(allowable * AMC);
                                 row.find('.AllocatedMOS').val(allowable);
@@ -949,7 +949,7 @@ if (empty($columns['maps']['data'])) {
                                 }
                             }
                         });
-                
+
                 return true;
             }
         });
@@ -1050,6 +1050,7 @@ if (empty($columns['maps']['data'])) {
         });
 
         $('#complete_allocation').click(function (e) {
+            updateValues();
             $(this).prop('disabled', true);
 //Show spinner
             $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
@@ -1061,6 +1062,7 @@ if (empty($columns['maps']['data'])) {
             });
         });
         $('#save_allocation').click(function (e) {
+
             $(this).prop('disabled', true);
 //Show spinner
             $.blockUI({message: '<h1><img src="' + base_url + 'public/spinner.gif" /> Working...</h1>'});
