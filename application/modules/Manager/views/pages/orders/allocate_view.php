@@ -350,7 +350,7 @@
                                                     <?php } ?>
                                                     <td title="Actual order quantity to allocate">
 
-                                                        <input type="text" style="width:80px; text-align: center;" class="form-control AMOS Allocated"  data-toggle="tooltip" title="" <?= $disabled; ?> data-drug="<?= $drugid ?>"  name="qty_allocated-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= empty($allocated) ? $resupply : $allocated; ?>">
+                                                        <input type="text" style="width:80px; text-align: center;" class="form-control AMOS Allocated"  data-toggle="tooltip" title="" <?= $disabled; ?> data-drug="<?= $drugid ?>"  name="qty_allocated-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= $allocated; ?>">
                                                     </td>
                                                     <td title="Total Months of stock that will be available after allocation is done">
                                                         <?php
@@ -362,7 +362,7 @@
                                                         <input type="hidden" style="width:70px;" class="MIN" value="<?= $min_mos; ?>"/>
                                                         <input type="hidden" style="width:70px;"class="MAX" value="<?= $max_mos; ?>"/>
                                                         <?php if ($amc_months !== '0') { ?>
-                                                            <input type="text"   style="width:50px; text-align: center;" class="form-control MOS AllocatedMOS" data-toggle="tooltip" <?= $disabled; ?> title="Max MOS <?= $maxx_mos . '/' . $max_mos; ?> months" name="qty_allocated_mos-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= empty($allocated_mos) ? $maxx_mos : $allocated_mos; ?>">
+                                                            <input type="text"   style="width:50px; text-align: center;" class="form-control MOS AllocatedMOS" data-toggle="tooltip" <?= $disabled; ?> title="Max MOS <?= $maxx_mos . '/' . $max_mos; ?> months" name="qty_allocated_mos-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?=  $allocated_mos; ?>">
                                                         <?php } else { ?>
                                                             No AMC
                                                         <?php } ?>
@@ -543,14 +543,13 @@
 
                 </div> <!--end of cdrr-->
                 <div class="panel-footer">
-
                     <?php if ($role == 'subcounty' && date('d') <= 30 && $columns['cdrrs']['data'][0]['status'] == 'pending' || $columns['cdrrs']['data'][0]['status'] == 'rejected') { ?>
-                        <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
+                        <!--                        <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>-->
                         <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
                     <?php } else if ($role == 'subcounty' && date('d') >= 10 && $columns['cdrrs']['data'][0]['status'] == 'pending') { ?>
                         <p><div class="alert alert-warning"><strong>NB: Allocation period has ended. No more allocations allowed beyond the 20<sup>th</sup> of each month. </strong></div></p>
 
-                    <?php } else if ($role == 'county' && $columns['cdrrs']['data'][0]['status'] == 'allocated') { ?>
+                    <?php } else if ($role == 'county' || $role=='nascop') { ?>
                         <button type="submit" class="btn btn-info" id="save_allocation_2">Save Allocation Edit</button>
 
                     <?php } else { ?>
@@ -817,7 +816,7 @@ if (empty($columns['maps']['data'])) {
             cMOS = (parseInt(input_val) / AMC).toFixed(2);
 
             if (cMOS < 0) {
-               // alert(0)
+                // alert(0)
             }
             if (AMC == 0) {
                 cMOS = 0;
