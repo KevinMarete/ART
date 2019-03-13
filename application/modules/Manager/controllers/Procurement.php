@@ -28,7 +28,7 @@ class Procurement extends MX_Controller {
         $workingYear = date('Y');
         $this->db->query("UPDATE tbl_procurement p SET kemsa_code = (SELECT kemsa_code FROM tbl_drug  WHERE id = p.drug_id)");
 
-        $url = "https://api.kemsa.co.ke/p_productmovements?filter[where][lmis_tool_id]=1000000&filter[where][startdate]=20180101";
+        $url = "https://api.kemsa.co.ke/p_productmovements?filter[where][lmis_tool_id]=1000000&filter[where][startdate]='$period'";
         //$url = "https://api.kemsa.co.ke/p_productmovements?filter[where][lmis_tool_id]=1000000&filter[where][startdate]=$period";
         $apiKey = '$2y$10$S0JuZi5EAxAsuMaV2r4Nh.1HyC.nIfSW9Pnf1UPkPsapni6Vv/xLC'; // should match with Server key
         $headers = array(
@@ -288,7 +288,7 @@ class Procurement extends MX_Controller {
     function sendPlanningEmail($filename, $mail_title) {
 
         $list = '';
-        $mailing_list = $this->db->where('email_type', '1')->get('tbl_mailing_list')->result();
+        $mailing_list = $this->db->where('present', '0')->get('tbl_mailing_list')->result();
         foreach ($mailing_list as $m) {
             $list .= $m->email . ',';
         }
@@ -1696,9 +1696,7 @@ class Procurement extends MX_Controller {
 
         $present = $this->db->where('present', '0')->get('tbl_mailing_list')->result();
         $absent = $this->db->where('present', '1')->get('tbl_mailing_list')->result();
-        $result = ['present' => $present, 'absent
-
-        ' => $absent];
+        $result = ['present' => $present, 'absent' => $absent];
         $this->response($result);
     }
 

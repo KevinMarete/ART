@@ -362,7 +362,7 @@
                                                         <input type="hidden" style="width:70px;" class="MIN" value="<?= $min_mos; ?>"/>
                                                         <input type="hidden" style="width:70px;"class="MAX" value="<?= $max_mos; ?>"/>
                                                         <?php if ($amc_months !== '0') { ?>
-                                                            <input type="text"   style="width:50px; text-align: center;" class="form-control MOS AllocatedMOS" data-toggle="tooltip" <?= $disabled; ?> title="Max MOS <?= $maxx_mos . '/' . $max_mos; ?> months" name="qty_allocated_mos-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?=  $allocated_mos; ?>">
+                                                            <input type="text"   style="width:50px; text-align: center;" class="form-control MOS AllocatedMOS" data-toggle="tooltip" <?= $disabled; ?> title="Max MOS <?= $maxx_mos . '/' . $max_mos; ?> months" name="qty_allocated_mos-<?= $columns['cdrrs']['data']['cdrr_item'][$drugid]['cdrr_item_id']; ?>" value="<?= $allocated_mos; ?>">
                                                         <?php } else { ?>
                                                             No AMC
                                                         <?php } ?>
@@ -544,12 +544,12 @@
                 </div> <!--end of cdrr-->
                 <div class="panel-footer">
                     <?php if ($role == 'subcounty' && date('d') <= 30 && $columns['cdrrs']['data'][0]['status'] == 'pending' || $columns['cdrrs']['data'][0]['status'] == 'rejected') { ?>
-                                                <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
+                        <button type="submit" class="btn btn-info" id="save_allocation">Save Allocation</button>
                         <button type="submit" class="btn btn-success" id="complete_allocation">Complete Allocation</button>
                     <?php } else if ($role == 'subcounty' && date('d') >= 10 && $columns['cdrrs']['data'][0]['status'] == 'pending') { ?>
                         <p><div class="alert alert-warning"><strong>NB: Allocation period has ended. No more allocations allowed beyond the 20<sup>th</sup> of each month. </strong></div></p>
 
-                    <?php } else if ($role == 'county' && $columns['cdrrs']['data'][0]['status'] !== 'reviewed'|| $role=='nascop' && $columns['cdrrs']['data'][0]['status'] !== 'reviewed' ) { ?>
+                    <?php } else if ($role == 'county' && $columns['cdrrs']['data'][0]['status'] !== 'reviewed' || $role == 'nascop' && $columns['cdrrs']['data'][0]['status'] !== 'reviewed') { ?>
                         <button type="submit" class="btn btn-info" id="save_allocation_2">Save Allocation Edit</button>
 
                     <?php } else { ?>
@@ -833,7 +833,7 @@ if (empty($columns['maps']['data'])) {
                     icon: "error",
                 });
                 return false;
-            } else if (AllMOS > allowable) {
+            } else if (AllMOS > allowable ) {
                 swal("Write Reason Here :", {
                     title: "Excess Allocation MOS ",
                     text: "The highest that can be allocated is " + allowable.toFixed(2) + " MOS",
@@ -863,13 +863,9 @@ if (empty($columns['maps']['data'])) {
                                 }
                             }
                         });
-                if (row.find('.FacilityMOS').val() < 0) {
-                    row.find('.FacilityMOS').val(0);
-                }
 
-                if (row.find('.AllocatedMOS').val() < 0) {
-                    row.find('.AllocatedMOS').val(0)
-                }
+
+
                 return false;
             }
         });
@@ -917,7 +913,7 @@ if (empty($columns['maps']['data'])) {
                     icon: "error",
                 });
                 return false;
-            } else if (input_val > allowable) {
+            } else if (input_val > allowable && input_val >= 0) {
                 swal("Write Reason Here:", {
                     closeOnClickOutside: false,
                     title: "Excess Allocation MOS",
@@ -931,6 +927,7 @@ if (empty($columns['maps']['data'])) {
                             type: "text",
                         },
                     },
+
                     //buttons: true,
                 })
                         .then((value) => {
@@ -948,6 +945,10 @@ if (empty($columns['maps']['data'])) {
                                 }
                             }
                         });
+
+                if (input_val == '0') {
+                    swal.close();
+                }
 
                 return true;
             }

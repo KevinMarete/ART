@@ -179,10 +179,10 @@
         }
     }
 
-    .AVGISCON td:nth-child(2),td:nth-child(3) {
+    /*.AVGISCON td:nth-child(2),td:nth-child(3) {
         text-align: right;
         font-weight: bold;
-    } 
+    } */
 </style>
 <div id="page-wrapper">
     <!--row-->
