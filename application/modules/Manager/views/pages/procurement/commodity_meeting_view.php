@@ -435,8 +435,8 @@
 
         //Add datepicker
         $(".transaction_date").datepicker({
-            format: 'yyyy-mm-dd',
-            startDate: '1d'
+            format: 'yyyy-mm-dd'
+           // startDate: '1d'
         });
 
         /* $("#actual_qty").on('keyup', function () {
@@ -563,8 +563,8 @@
                     cloned_row.find('select,input').val('');
                     cloned_row.insertAfter(last_row);
                     $(".transaction_date").datepicker({
-                        format: 'yyyy-mm-dd',
-                        startDate: '1d'
+                        format: 'yyyy-mm-dd'
+                       // startDate: '1d'
                     });
                     cloned_row.find('.contracted').hide();
                 }

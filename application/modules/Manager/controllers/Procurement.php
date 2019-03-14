@@ -2,6 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . 'libraries/dompdf/autoload.inc.php';
+require APPPATH . 'libraries/PHPExcel.php';
 
 use Dompdf\Dompdf;
 
@@ -18,7 +19,7 @@ class Procurement extends MX_Controller {
     function look() {
         echo (int) 01;
     }
-    
+
     //
 
     function usm() {
@@ -28,7 +29,7 @@ class Procurement extends MX_Controller {
         $workingYear = date('Y');
         $this->db->query("UPDATE tbl_procurement p SET kemsa_code = (SELECT kemsa_code FROM tbl_drug  WHERE id = p.drug_id)");
 
-        $url = "https://api.kemsa.co.ke/p_productmovements?filter[where][lmis_tool_id]=1000000&filter[where][startdate]='$period'";
+        $url = "https://api.kemsa.co.ke/p_productmovements?filter[where][lmis_tool_id]=1000000&filter[where][startdate]='20190201'";
         //$url = "https://api.kemsa.co.ke/p_productmovements?filter[where][lmis_tool_id]=1000000&filter[where][startdate]=$period";
         $apiKey = '$2y$10$S0JuZi5EAxAsuMaV2r4Nh.1HyC.nIfSW9Pnf1UPkPsapni6Vv/xLC'; // should match with Server key
         $headers = array(
@@ -55,7 +56,7 @@ class Procurement extends MX_Controller {
             $this->db
                     ->where('kemsa_code', $result[$i]->value)
                     ->where('transaction_year', $workingYear)
-                    ->where('transaction_month', 'Jan')
+                    ->where('transaction_month', 'Feb')
                     ->update('tbl_procurement', $update_data);
         }
 
@@ -70,7 +71,7 @@ class Procurement extends MX_Controller {
 
         $this->db->query("UPDATE tbl_procurement p SET kemsa_code = (SELECT kemsa_code FROM tbl_drug  WHERE id = p.drug_id)");
 
-        $url = "https://api.kemsa.co.ke/p_productmovements?filter[where][lmis_tool_id]=1000000&filter[where][startdate]=$period";
+        $url = "https://api.kemsa.co.ke/p_productmovements?filter[where][lmis_tool_id]=1000000&filter[where][startdate]='20190201'";
         $apiKey = '$2y$10$S0JuZi5EAxAsuMaV2r4Nh.1HyC.nIfSW9Pnf1UPkPsapni6Vv/xLC'; // should match with Server key
         $headers = array(
             'apitoken:' . $apiKey
@@ -89,6 +90,38 @@ class Procurement extends MX_Controller {
         echo '</pre>';
 
         echo 'Stock Movement ';
+    }
+
+    function stockMovementReader() {
+       // $this->db->query("UPDATE tbl_procurement p SET kemsa_code = (SELECT kemsa_code FROM tbl_drug  WHERE id = p.drug_id)");
+
+        $objPHPExcel = PHPExcel_IOFactory::load("public/kemsa_templates/stock_movement.xlsx");
+        foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
+            $highestRow = $worksheet->getHighestRow(); // e.g. 10
+            $highestColumn = $worksheet->getHighestColumn(); // e.g 'F'
+            $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);
+
+            for ($row = 6; $row <= $highestRow; ++$row) {
+                for ($col = 1; $col < $highestColumnIndex; ++$col) {
+                    $cell = $worksheet->getCellByColumnAndRow($col, $row);
+                    $val = $cell->getCalculatedValue();
+                    $dataArr[$row][$col] = $val;
+                }
+            }
+        }
+
+        unset($dataArr[1]);
+
+        $year = date('Y');
+        echo $month = date('M', strtotime('first day of previous month'));
+
+        $this->db->query("SET @@foreign_key_checks = 0;");
+        foreach ($dataArr as $val) {
+            $code = $val['1'];
+            $this->db->query("UPDATE tbl_procurement SET  open_kemsa = '" . $val['5'] . "',receipts_kemsa = '" . $val['6'] . "',issues_kemsa = '" . $val['7'] . "',close_kemsa = '" . $val['13'] . "',adj_losses = '" . $val['8'] . "',monthly_consumption = '" . $val['14'] . "' WHERE kemsa_code='$code' AND transaction_year='$year' AND transaction_month='$month'");
+        }
+
+        echo "Stock Status updated";
     }
 
     function Reminder() {
@@ -1081,12 +1114,20 @@ class Procurement extends MX_Controller {
         if ($period_year != date('Y')) {
             for ($m = 0; $m <= $full; $m++) {
                 $col4 = (int) $m + 1;
-                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col4 . '">' . @$this->rv(((int) $column['status'][1][$m]['quantity'] - (int) $column['expected'][$m]['quantity']) + ((int) $column['expected'][$m]['quantity'] - (int) $column['status'][2][$m]['quantity'] )) . ' </td>';
+                $res1 = ((int) $column['status'][1][$m]['quantity'] - (int) $column['expected'][$m]['quantity']) + ((int) $column['expected'][$m]['quantity'] - (int) $column['status'][2][$m]['quantity'] );
+                if ($res1 < 0) {
+                    $res = 0;
+                }
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col4 . '">' . @$this->rv($res1) . ' </td>';
             }
         } else {
             for ($m = 0; $m <= $previousCount; $m++) {
                 $col4 = (int) $m + 1;
-                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col4 . '">' . @$this->rv(((int) $column['status'][1][$m]['quantity'] - (int) $column['expected'][$m]['quantity']) + ((int) $column['expected'][$m]['quantity'] - (int) $column['status'][2][$m]['quantity'] )) . ' </td>';
+                $res = ((int) $column['status'][1][$m]['quantity'] - (int) $column['expected'][$m]['quantity']) + ((int) $column['expected'][$m]['quantity'] - (int) $column['status'][2][$m]['quantity'] );
+                if ($res < 0) {
+                    $res = 0;
+                }
+                $transaction_table .= '<td class = "tdata tg-0pky col-' . $col4 . '">' . @$this->rv($res) . ' </td>';
             }
 
             for ($co2 = $month; $co2 <= $full; $co2++) {
@@ -1703,6 +1744,18 @@ class Procurement extends MX_Controller {
     function response($result) {
         header("Content-Type: application/json; charset=UTF-8");
         echo json_encode($result);
+    }
+
+    function createTracker($drug) {
+        $year = date('Y');
+        $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        for ($i = 0; $i < count($months); $i++) {
+            $this->db->query("SET FOREIGN_KEY_CHECKS = 0 ");
+            $this->db->query("INSERT INTO `tbl_procurement` (`open_kemsa`, `receipts_kemsa`, `receipts_usaid`, `receipts_gf`, `receipts_cpf`, `issues_kemsa`, `close_kemsa`, `monthly_consumption`, `transaction_year`, `transaction_month`, `drug_id`, `adj_losses`, `kemsa_code`)
+             VALUES ('0', '0', '0', '0', '0', '0', '0', '0', '$year', '$months[$i]', '$drug', '0', '');");
+        }
+        echo 'Updated Tracker Year';
     }
 
 }
