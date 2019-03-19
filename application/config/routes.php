@@ -90,6 +90,7 @@ $route['manager/procurement/meeting/(:any)/(:any)/(:any)'] = 'Manager/load_templ
 $route['manager/procurement/tracker'] = 'Manager/load_template/procurement/tracker/Procurement Tracker/0';
 $route['manager/save_procurement'] = 'Manager/procurement/save_tracker';
 $route['manager/public/minute/(:any)'] = 'Manager/load_page/public/minute/Minute';
+$route['manager/public/procurement_template/(:any)'] = 'Manager/load_page/procurement/procurement_template/Template';
 $route['manager/create/pdf/(:any)'] = 'Manager/generateMinute';
 $route['manager/section/faq/download'] = 'Manager/getFaq';
 
