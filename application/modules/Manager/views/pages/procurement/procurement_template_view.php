@@ -23,7 +23,7 @@
             </thead>
             <tr>
                 <td colspan="2">Proposed</td>
-                <td><input type="number" class="form-control" name='proposed' id='proposed' value='300000' placeholder="Enter Proposed Quantity"/></td>
+                <td><input type="number" class="form-control" name='proposed' id='proposed' value='400000' placeholder="Enter Proposed Quantity"/></td>
                 <td><input type="text" class="form-control" name='date' id='date' value="01-03-2019" placeholder="Select Date"/></td>
                 <td><textarea class="form-control comments" placeholder="Enter Comment"></textarea></td>
             </tr>
