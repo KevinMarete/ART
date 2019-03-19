@@ -72,6 +72,7 @@
             <tr>
                 <td colspan="2">
                     <select class="form-control" >
+                        <option value="Scheduled">Scheduled</option>
                         <option value="Partial">Partial Delivery</option>
                         <option value="Full">Full Delivery</option>
                     </select>
